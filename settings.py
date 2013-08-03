@@ -1,7 +1,13 @@
 # Django settings for channeli project.
 
+import os
+import sys
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+# Add apps to python path
+sys.path.append('apps')
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -124,6 +130,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'nucleus'
 )
 
 # A sample logging configuration. The only tangible logging
