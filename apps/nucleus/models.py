@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from core import models
 import api.model_constants as MC
@@ -13,6 +13,15 @@ class CUser(User):
   gender = models.CharField(max_length=1, choices=MC.GENDER_CHOICES, blank=True)
   birth_date = models.DateField(blank=True, null=True, verbose_name='Date of Birth')
   contact_no = models.CharField(max_length=12, blank=True, verbose_name='Contact No')
+
+  def __unicode__(self):
+    return str(self.username) + ':' + self.name
+
+  def save(self, *args, **kwargs):
+    result = super(CUser, self).save(*args, **kwargs)
+    if hasattr(self, 'role'):
+      self.groups.add(Group.objects.get(name=getattr(self, 'role')))
+    return result
 
 
 class WebmailAccount(models.Model):
@@ -33,6 +42,7 @@ class Branch(models.Model):
 
 
 class Student(CUser):
+  role = 'Student'
   semester = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.SEMESTER_CHOICES)
   branch = models.ForeignKey(Branch)
   admission_year = models.CharField(max_length=4)
@@ -42,9 +52,6 @@ class Student(CUser):
 
   class Meta:
     ordering = ['semester','branch']
-
-  def __unicode__(self):
-    return str(self.user) + ':' + self.name
 
 
 class StudentInfo(Student):
@@ -74,11 +81,9 @@ class StudentInfo(Student):
   resident = models.BooleanField(default=True, blank=True)
   license_no = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
 
-  def __unicode__(self):
-        return unicode(self.student)
-
 
 class Alumni(CUser):
+  role = 'Alumni'
   branch = models.ForeignKey(Branch)
   admission_year = models.CharField(max_length=4)
   cgpa = models.CharField(max_length=6, blank=True)
