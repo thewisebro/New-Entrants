@@ -9,6 +9,9 @@ TEMPLATE_DEBUG = DEBUG
 # Add apps to python path
 sys.path.append('apps')
 
+# Add third_party_apps to python path
+sys.path.append('third_party_apps')
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -119,19 +122,27 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-INSTALLED_APPS = (
+DJANGO_CONTRIB_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'nucleus'
 )
+
+THIRD_PARTY_APPS = (
+    'rest_framework',
+)    
+
+CHANNELI_APPS = (
+    'nucleus',
+)
+
+INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

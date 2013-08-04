@@ -14,6 +14,10 @@ class CUser(User):
   birth_date = models.DateField(blank=True, null=True, verbose_name='Date of Birth')
   contact_no = models.CharField(max_length=12, blank=True, verbose_name='Contact No')
 
+  class Meta:
+    verbose_name = 'Channeli User'
+    verbose_name_plural = 'Channeli Users'
+
   def __unicode__(self):
     return str(self.username) + ':' + self.name
 
@@ -36,6 +40,9 @@ class Branch(models.Model):
   department = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.DEPARTMENT_CHOICES)
   graduation = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.GRADUATION_CHOICES)
   duration = models.IntegerField() # no of semesters
+
+  class Meta:
+    verbose_name_plural = 'Branches'
 
   def __unicode__(self):
     return self.code + ':' + self.name + '(' + self.graduation + ')'
@@ -81,6 +88,9 @@ class StudentInfo(Student):
   resident = models.BooleanField(default=True, blank=True)
   license_no = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
 
+  class Meta:
+    verbose_name = 'Student Information'
+    verbose_name_plural = 'Students Information'
 
 class Alumni(CUser):
   role = 'Alumni'
