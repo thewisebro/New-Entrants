@@ -3,6 +3,15 @@
 import os
 import sys
 
+PROJECT_ROOT = os.path.dirname(__file__)
+
+# Email Settings
+EMAIL_HOST='192.168.180.11'
+EMAIL_PORT=25
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASS = ''
+
+LOGIN_URL = '/login/'
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -34,17 +43,27 @@ DATABASES = {
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
 
+# POP3 Server host
+POP3_HOST = '192.168.180.11'
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
-# In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Chicago'
+# On Unix systems, a value of None will cause Django to use the same
+# timezone as the operating system.
+# If running in a Windows environment this must be set to the same as your
+# system time zone.
+TIME_ZONE = 'Asia/Kolkata'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
+
+DATE_INPUT_FORMATS = ('%d-%m-%Y', '%d/%m/%Y')
+DATETIME_INPUT_FORMATS = ('%d-%m-%Y %H:%M', '%d/%m/%Y %H:%M')
+TIME_INPUT_FORMATS = ('%H:%M','%H:%M:%S')
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -58,29 +77,41 @@ USE_L10N = True
 USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/var/www/example.com/media/"
-MEDIA_ROOT = ''
+# Example: "/home/media/media.lawrence.com/media/"
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media') + os.sep
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
-# Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = ''
+# Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
+MEDIA_URL = '/media/'
 
+# Absolute filesystem path to NAS media.
+NAS_MEDIA_ROOT = '/home/apps/nas/'
+
+# Public URL of NAS folder
+NAS_PUBLIC_URL = 'http://www.iitr.ac.in/media/'
+ 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
+# Example: "/home/media/media.lawrence.com/static/"
+# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static_root') + os.sep
 
 # URL prefix for static files.
-# Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = '/static/'
+# Example: "http://media.lawrence.com/static/"
+STATIC_URL = '/static/' # This should be /static/ to make admin's static files available.
+
+# URL prefix for admin static files -- CSS, JavaScript and images.
+# Make sure to use a trailing slash.
+# Examples: "http://foo.com/static/admin/", "/static/admin/".
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+  # Put strings here, like "/home/html/static" or "C:/www/django/static".
+  # Always use forward slashes, even on Windows.
+  # Don't forget to use absolute paths, not relative paths.
+  os.path.join(PROJECT_ROOT, 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -120,6 +151,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_ROOT, 'templates'),
 )
 
 DJANGO_CONTRIB_APPS = (
@@ -130,19 +162,23 @@ DJANGO_CONTRIB_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.humanize',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
 
 THIRD_PARTY_APPS = (
     'rest_framework',
-)    
+    'crispy_forms',
+)
 
 CHANNELI_APPS = (
     'nucleus',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
+
+CRISPY_TEMPLATE_PACK = 'uni_form'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
