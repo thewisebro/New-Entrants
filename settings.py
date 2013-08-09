@@ -178,6 +178,8 @@ CHANNELI_APPS = (
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
 
+AUTH_USER_MODEL = 'nucleus.User'
+
 CRISPY_TEMPLATE_PACK = 'uni_form'
 
 # A sample logging configuration. The only tangible logging
