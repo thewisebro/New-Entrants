@@ -1,28 +1,25 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import AbstractUser, Group
 
 from core import models
 import api.model_constants as MC
 
 
-class CUser(User):
+class User(AbstractUser):
   """
-  CUser = Channeli User
+  User = Channeli User
   """
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   photo = models.ImageField(upload_to='nucleus/photo/', blank=True)
   gender = models.CharField(max_length=1, choices=MC.GENDER_CHOICES, blank=True)
   birth_date = models.DateField(blank=True, null=True, verbose_name='Date of Birth')
   contact_no = models.CharField(max_length=12, blank=True, verbose_name='Contact No')
-
-  class Meta:
-    verbose_name = 'Channeli User'
-    verbose_name_plural = 'Channeli Users'
+  delegates = models.ManyToManyField('User', blank=True, null=True, related_name='delegated_users')
 
   def __unicode__(self):
     return str(self.username) + ':' + self.name
 
   def save(self, *args, **kwargs):
-    result = super(CUser, self).save(*args, **kwargs)
+    result = super(User, self).save(*args, **kwargs)
     if hasattr(self, 'role'):
       self.groups.add(Group.objects.get(name=getattr(self, 'role')))
     return result
@@ -30,7 +27,7 @@ class CUser(User):
 
 class WebmailAccount(models.Model):
   webmail_id = models.CharField(max_length=15, primary_key=True)
-  cuser = models.ForeignKey(CUser)
+  user = models.ForeignKey(User)
 
 
 class Branch(models.Model):
@@ -39,7 +36,7 @@ class Branch(models.Model):
   degree = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.DEGREE_CHOICES)
   department = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.DEPARTMENT_CHOICES)
   graduation = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.GRADUATION_CHOICES)
-  duration = models.IntegerField() # no of semesters
+  duration = models.IntegerField(null=True, blank=True) # no of semesters
 
   class Meta:
     verbose_name_plural = 'Branches'
@@ -48,7 +45,7 @@ class Branch(models.Model):
     return self.code + ':' + self.name + '(' + self.graduation + ')'
 
 
-class Student(CUser):
+class Student(User):
   role = 'Student'
   semester = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.SEMESTER_CHOICES)
   branch = models.ForeignKey(Branch)
@@ -61,7 +58,8 @@ class Student(CUser):
     ordering = ['semester','branch']
 
 
-class StudentInfo(Student):
+class StudentInfo(models.Model):
+  student = models.OneToOneField(Student, primary_key=True)
   fathers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   fathers_occupation = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   fathers_office_address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
@@ -92,7 +90,8 @@ class StudentInfo(Student):
     verbose_name = 'Student Information'
     verbose_name_plural = 'Students Information'
 
-class Alumni(CUser):
+
+class Alumni(User):
   role = 'Alumni'
   branch = models.ForeignKey(Branch)
   admission_year = models.CharField(max_length=4)
