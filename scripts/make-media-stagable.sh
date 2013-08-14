@@ -6,7 +6,7 @@ recursive_func() {
   for d in *; do
     if [ -d $d ]; then
       cp $media_dir/.gitignore $d/
-      chmod 777 $d
+      chmod 775 $d
       (cd $d; recursive_func)
     fi
   done
