@@ -1,7 +1,8 @@
 from django.contrib.auth.models import AbstractUser, Group
 
 from core import models
-import api.model_constants as MC
+from api import model_constants as MC
+from facapp import constants as FC
 
 
 class User(AbstractUser):
@@ -91,6 +92,20 @@ class StudentInfo(models.Model):
     verbose_name_plural = 'Students Information'
 
 
+class Faculty(User):
+  role = 'Faculty'
+  department = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.DEPARTMENT_CHOICES)
+  resume = models.FileField(upload_to='facapp/resumes', null=True, blank=True)
+  designation = models.CharField(max_length=MC.CODE_LENGTH, choices=FC.DESIGNATION_CHOICES)
+  address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True, null=True)
+  employee_code = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
+  date_of_joining = models.CharField(max_length=MC.CODE_LENGTH, blank=True, null=True)
+  home_page = models.URLField(blank=True, null=True)
+
+  class Meta:
+    verbose_name_plural = 'Faculties'
+
+
 class Alumni(User):
   role = 'Alumni'
   branch = models.ForeignKey(Branch)
@@ -100,3 +115,37 @@ class Alumni(User):
   address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   pincode = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
 
+
+class Course(models.Model):
+  code = models.CharField(max_length=MC.CODE_LENGTH, primary_key=True)
+  name = models.CharField(max_length=MC.TEXT_LENGTH)
+  pre_requisites = models.ManyToManyField('Course', null=True, blank=True)
+
+  def __unicode__(self):
+    return self.course_code + ':' + self.course_name
+
+
+class RegisteredCourse(models.Model):
+  student = models.ForeignKey(Student)
+  course = models.ForeignKey(Course)
+  credits = models.IntegerField()
+  registered_date = models.DateField(blank=True, null=True)
+  semester = models.CharField(max_length=MC.TEXT_LENGTH, choices=MC.SEMESTER_CHOICES)
+  subject_area = models.CharField(max_length=MC.CODE_LENGTH)
+  cleared_status = models.CharField(max_length=MC.CODE_LENGTH, default='NXT') # TODO set default based on choices
+  grade = models.CharField(max_length=2, choices=MC.GRADE_CHOICES, default='-')
+  klass = models.ForeignKey('Class', blank=True, null=True)
+
+  def __unicode__(self):
+    return unicode(self.student) + ':' + unicode(self.course)
+
+
+class Class(models.Model):
+  name = models.CharField(max_length=MC.TEXT_LENGTH)
+  faculties = models.ManyToManyField(Faculty, blank=True, null=True)
+  semester_type = models.CharField(max_length=1, choices=MC.SEMESTER_TYPE_CHOICES)
+  year = models.CharField(max_length=4)
+  course = models.ForeignKey(Course)
+
+  def __unicode__(self):
+    return self.name + ':' + unicode(self.course)
