@@ -54,6 +54,7 @@ class Student(User):
   cgpa = models.CharField(max_length=6, blank=True)
   bhawan = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.BHAWAN_CHOICES, null=True, blank=True, default=None)
   room_no = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
+  courses = models.ManyToManyField('Course', through='RegisteredCourse', blank=True, null=True)
 
   class Meta:
     ordering = ['semester','branch']
@@ -134,7 +135,6 @@ class RegisteredCourse(models.Model):
   subject_area = models.CharField(max_length=MC.CODE_LENGTH)
   cleared_status = models.CharField(max_length=MC.CODE_LENGTH, default='NXT') # TODO set default based on choices
   grade = models.CharField(max_length=2, choices=MC.GRADE_CHOICES, default='-')
-  klass = models.ForeignKey('Class', blank=True, null=True)
 
   def __unicode__(self):
     return unicode(self.student) + ':' + unicode(self.course)
@@ -146,6 +146,7 @@ class Class(models.Model):
   semester_type = models.CharField(max_length=1, choices=MC.SEMESTER_TYPE_CHOICES)
   year = models.CharField(max_length=4)
   course = models.ForeignKey(Course)
+  students = models.ManyToManyField(Student, blank=True, null=True)
 
   def __unicode__(self):
     return self.name + ':' + unicode(self.course)
