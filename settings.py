@@ -171,6 +171,9 @@ DJANGO_CONTRIB_APPS = (
 THIRD_PARTY_APPS = (
   'rest_framework',
   'crispy_forms',
+  'taggit',
+  'taggit_autocomplete',
+  'threadedcomments',
 )
 
 CHANNELI_APPS = (
