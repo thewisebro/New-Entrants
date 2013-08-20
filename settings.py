@@ -6,8 +6,8 @@ import sys
 PROJECT_ROOT = os.path.dirname(__file__)
 
 # Email Settings
-EMAIL_HOST='192.168.180.11'
-EMAIL_PORT=25
+EMAIL_HOST = '192.168.180.11'
+EMAIL_PORT = 25
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASS = ''
 
@@ -28,15 +28,15 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'channeli',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': 'channeli',
-        'PASSWORD': 'channeli',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+    'NAME': 'channeli',                   # Or path to database file if using sqlite3.
+                                          # The following settings are not used with sqlite3:
+    'USER': 'channeli',
+    'PASSWORD': 'channeli',
+    'HOST': '',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+    'PORT': '',                           # Set to empty string for default.
+  }
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -90,7 +90,7 @@ NAS_MEDIA_ROOT = '/home/apps/nas/'
 
 # Public URL of NAS folder
 NAS_PUBLIC_URL = 'http://www.iitr.ac.in/media/'
- 
+
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -111,15 +111,16 @@ STATICFILES_DIRS = (
   # Put strings here, like "/home/html/static" or "C:/www/django/static".
   # Always use forward slashes, even on Windows.
   # Don't forget to use absolute paths, not relative paths.
+  os.path.join(PROJECT_ROOT, 'sass_static'),
   os.path.join(PROJECT_ROOT, 'static'),
 )
 
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+  'django.contrib.staticfiles.finders.FileSystemFinder',
+  'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+# 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -127,19 +128,19 @@ SECRET_KEY = '!v@yt*jnnatgsh$t2!d0-9*mh(6tm4dxst*ypwp6)gxo2qg-em'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+  'django.template.loaders.filesystem.Loader',
+  'django.template.loaders.app_directories.Loader',
+# 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+  'django.middleware.common.CommonMiddleware',
+  'django.contrib.sessions.middleware.SessionMiddleware',
+  'django.middleware.csrf.CsrfViewMiddleware',
+  'django.contrib.auth.middleware.AuthenticationMiddleware',
+  'django.contrib.messages.middleware.MessageMiddleware',
+  # Uncomment the next line for simple clickjacking protection:
+  # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -148,36 +149,43 @@ ROOT_URLCONF = 'urls'
 WSGI_APPLICATION = 'wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, 'templates'),
+  # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+  # Always use forward slashes, even on Windows.
+  # Don't forget to use absolute paths, not relative paths.
+  os.path.join(PROJECT_ROOT, 'templates'),
 )
 
 DJANGO_CONTRIB_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.admin',
-    'django.contrib.humanize',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+  'django.contrib.auth',
+  'django.contrib.contenttypes',
+  'django.contrib.sessions',
+  'django.contrib.sites',
+  'django.contrib.messages',
+  'django.contrib.staticfiles',
+  'django.contrib.admin',
+  'django.contrib.humanize',
+  # Uncomment the next line to enable admin documentation:
+  # 'django.contrib.admindocs',
 )
 
 THIRD_PARTY_APPS = (
-    'rest_framework',
-    'crispy_forms',
+  'rest_framework',
+  'crispy_forms',
+  'taggit',
+  'taggit_autocomplete',
+  'threadedcomments',
+  # placed here because threadedcomments is to be placed before it
+  'django.contrib.comments',
 )
 
 CHANNELI_APPS = (
-    'nucleus',
-    'jukebox',
+  'nucleus',
+  'jukebox',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
+
+COMMENTS_APP = 'threadedcomments'
 
 AUTH_USER_MODEL = 'nucleus.User'
 
@@ -189,25 +197,25 @@ CRISPY_TEMPLATE_PACK = 'uni_form'
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
+  'version': 1,
+  'disable_existing_loggers': False,
+  'filters': {
+    'require_debug_false': {
+      '()': 'django.utils.log.RequireDebugFalse'
     }
+  },
+  'handlers': {
+    'mail_admins': {
+      'level': 'ERROR',
+      'filters': ['require_debug_false'],
+      'class': 'django.utils.log.AdminEmailHandler'
+    }
+  },
+  'loggers': {
+    'django.request': {
+      'handlers': ['mail_admins'],
+      'level': 'ERROR',
+      'propagate': True,
+    },
+  }
 }
