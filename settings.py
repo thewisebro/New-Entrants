@@ -90,7 +90,7 @@ NAS_MEDIA_ROOT = '/home/apps/nas/'
 
 # Public URL of NAS folder
 NAS_PUBLIC_URL = 'http://www.iitr.ac.in/media/'
- 
+
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -171,6 +171,11 @@ DJANGO_CONTRIB_APPS = (
 THIRD_PARTY_APPS = (
   'rest_framework',
   'crispy_forms',
+  'taggit',
+  'taggit_autocomplete',
+  'threadedcomments',
+  # placed here because threadedcomments is to be placed before it
+  'django.contrib.comments',
 )
 
 CHANNELI_APPS = (
@@ -179,6 +184,8 @@ CHANNELI_APPS = (
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
+
+COMMENTS_APP = 'threadedcomments'
 
 AUTH_USER_MODEL = 'nucleus.User'
 
