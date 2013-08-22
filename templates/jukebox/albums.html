@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title> Albums </title>
+  </head>
+
+  <body>
+    Albums:
+    <br>
+    {% for album in albums %}
+      <p>Album Name --- {{album.album}}</p>
+      Artist ---
+      {% for artist in album.artists.all %}
+        {{artist}} , &nbsp;
+      {% endfor %}
+      <br><br>
+    {% endfor %}
+    
+  </body>
+<html>

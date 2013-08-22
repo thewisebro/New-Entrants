@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title> Trending Songs </title>
+  </head>
+
+  <body>
+    Trending Songs:
+    <br>
+    {% for song in trending %}
+      <p>Song Name --- {{song.song}}</p>
+      <p>Album ---{{song.album}}</p>
+      Artist ---
+      {% for artist in song.artists.all %}
+        {{artist}} , &nbsp;
+      {% endfor %}
+      <p>Count --- {{song.count}}</p>
+      <br><br>
+    {% endfor %}
+    
+  </body>
+<html>
