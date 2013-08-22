@@ -43,7 +43,28 @@ class SearchView(ListView):
 
 
 
+class TrendingView(ListView):
+  template_name = 'jukebox/trending.html'
+  model = Song
+  context_object_name = 'trending'
+  def get_queryset(self):
+    return Song.objects.order_by('-count')[:25]
 
+
+class ArtistsView(ListView):
+  template_name = 'jukebox/artists.html'
+  model = Artist
+  context_object_name = 'artists'
+  def get_queryset(self):
+    return Artist.objects.all()
+
+
+class AlbumsView(ListView):
+  template_name = 'jukebox/albums.html'
+  model = Album
+  context_object_name = 'albums'
+  def get_queryset(self):
+    return Album.objects.all()
 
 
 

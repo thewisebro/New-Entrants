@@ -9,4 +9,7 @@ urlpatterns = patterns('',
 
     url(r'^$', IndexView.as_view(), name='index'),
     url(r'^search/', SearchView.as_view(), name='search'),
+    url(r'^trending/', TrendingView.as_view(), name='trending'),
+    url(r'^artists/', ArtistsView.as_view(), name='artists'),
+    url(r'^albums/', AlbumsView.as_view(), name='albums'),
 )
