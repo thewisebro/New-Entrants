@@ -60,6 +60,34 @@ class Song(models.Model):
   def __unicode__(self):
     return self.song
 
+  def save(self, *args, **kwargs):
+    """
+      To save extra artists in respective Album object
+    """
+    super(Song,self).save(*args, **kwargs)              # Save the usual way
+    album_artists = set(self.album.artists.all())       # Set used as list '-' was creating problem
+    artists = set(self.artists.all())
+    diff = list(artists-album_artists)
+    album_artists = list(album_artists) + diff          # list addition
+    self.album.artists = album_artists
+    self.album.save()
+
+  def delete(self,*args,**kwargs):
+    """
+      To delete extra artists in respective Album object
+    """
+    rm_songs = self.album.song_set.all().exclude(id = self.id)      # rm -> Remaining things
+    rm_artists_id = rm_songs.values_list('artists',flat='true')
+    rm_artists = set(Artist.objects.filter(id__in=rm_artists_id))
+    album_artists = set(self.album.artists.all())
+    artists = set(self.artists.all())
+    diff = artists - rm_artists
+    album_artists = album_artists - diff
+    self.album.artists = list(album_artists)
+    self.album.save()
+    super(Song,self).delete(*args,**kwargs)                         # delete the usual way
+
+
 class Playlist(models.Model):
   person = models.ForeignKey(nucleus.models.User, related_name='jukebox_person')
   name = models.CharField(max_length=MC.TEXT_LENGTH)
