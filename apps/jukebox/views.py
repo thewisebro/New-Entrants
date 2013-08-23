@@ -18,7 +18,7 @@ class IndexView(TemplateView):
 
 
 class SearchView(ListView):
-  template_name='jukebox/songlist.html'
+  template_name='jukebox/search.html'
   model = Song
   def get_context_data(self,**kwargs):
     q = self.request.GET.get('q')                       # q -> Search String coming
@@ -66,6 +66,27 @@ class AlbumsView(ListView):
   def get_queryset(self):
     return Album.objects.all()
 
+
+class AlbumDescView(ListView):
+  template_name = 'jukebox/albumdesc.html'
+  model = Album
+  context_object_name = 'album'
+  def get_queryset(self,**kwargs):
+    if 'album' in self.kwargs:
+      album_coming = self.kwargs['album']
+      album = Album.objects.get(album = album_coming)
+      return album
+
+
+class ArtistDescView(ListView):
+  template_name = 'jukebox/artistdesc.html'
+  model = Artist
+  context_object_name = 'artist'
+  def get_queryset(self,**kwargs):
+    if 'artist' in self.kwargs:
+      artist_coming = self.kwargs['artist']
+      artist = Artist.objects.get(artist = artist_coming)
+      return artist
 
 
 

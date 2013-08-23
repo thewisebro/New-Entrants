@@ -14,8 +14,9 @@
         {{artist}} , &nbsp;
       {% endfor %}
       <p>Count --- {{song.count}}</p>
-      <br><br>
+      <img src="{{ MEDIA_URL }}{{song.album.album_art}}" width="100px" height="100px"></img>
+      <br>
+    </div>
     {% endfor %}
-    
   </body>
 <html>

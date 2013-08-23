@@ -1,13 +1,11 @@
 <html>
   <head>
-    <title> Albums </title>
+    <title> {{album.album}} </title>
   </head>
 
   <body>
     Albums:
     <br>
-    {% for album in albums %}
-    <div onclick="location.href='{{ album.album }}/'">
       <p>Album Name --- {{album.album}}</p>
       Artist ---
       {% for artist in album.artists.all %}
@@ -16,7 +14,11 @@
       <br><br>
       <img src="{{ MEDIA_URL }}{{album.album_art}}" width="100px" height="100px"></img>
       <br><br>
-      </div>
-    {% endfor %}
+      Songs:
+      <br>
+      {% for song in album.song_set.all %}
+        {{song.song}} <br>
+      {% endfor %}
+    </div>
   </body>
 <html>
