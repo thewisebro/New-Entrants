@@ -14,6 +14,8 @@ EMAIL_HOST_PASS = ''
 LOGIN_URL = '/login/'
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+COMPRESS_ENABLED = False
+COMPRESS_OFFLINE = False
 
 # Add apps to python path
 sys.path.append('apps')
@@ -95,7 +97,7 @@ NAS_PUBLIC_URL = 'http://www.iitr.ac.in/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static_root') + os.sep
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static_root') + os.sep
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -111,7 +113,6 @@ STATICFILES_DIRS = (
   # Put strings here, like "/home/html/static" or "C:/www/django/static".
   # Always use forward slashes, even on Windows.
   # Don't forget to use absolute paths, not relative paths.
-  os.path.join(PROJECT_ROOT, 'sass_static'),
   os.path.join(PROJECT_ROOT, 'static'),
 )
 
@@ -121,6 +122,7 @@ STATICFILES_FINDERS = (
   'django.contrib.staticfiles.finders.FileSystemFinder',
   'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
+  'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -176,6 +178,7 @@ THIRD_PARTY_APPS = (
   'threadedcomments',
   # placed here because threadedcomments is to be placed before it
   'django.contrib.comments',
+  'compressor',
 )
 
 CHANNELI_APPS = (
@@ -189,6 +192,10 @@ COMMENTS_APP = 'threadedcomments'
 AUTH_USER_MODEL = 'nucleus.User'
 
 CRISPY_TEMPLATE_PACK = 'uni_form'
+
+COMPRESS_PRECOMPILERS = (
+  ('text/sass', 'sass -I static/ --compass {infile} {outfile}'),
+)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
