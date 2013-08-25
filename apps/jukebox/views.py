@@ -2,7 +2,7 @@
   Jukebox Views
 """
 
-from core.views.generic import ListView,TemplateView,View,DetailView
+from core.views.generic import ListView,TemplateView,View,DetailView, RedirectView
 from django.core import serializers
 from django.http import HttpResponse
 import simplejson
@@ -15,9 +15,13 @@ class IndexView(TemplateView):
     For index page, i.e., starting page : For now -> Trending page
   """
   template_name='jukebox/base.html'
+#url = 'search/'
 
 
 class SearchView(ListView):
+  """
+    For three way search :  Song, Album, Artist
+  """
   template_name='jukebox/search.html'
   model = Song
   def get_context_data(self,**kwargs):
@@ -44,6 +48,9 @@ class SearchView(ListView):
 
 
 class TrendingView(ListView):
+  """
+    For trending songs, i.e., count is maximum
+  """
   template_name = 'jukebox/trending.html'
   model = Song
   context_object_name = 'trending'
@@ -52,6 +59,9 @@ class TrendingView(ListView):
 
 
 class ArtistsView(ListView):
+  """
+    To show a list of artists
+  """
   template_name = 'jukebox/artists.html'
   model = Artist
   context_object_name = 'artists'
@@ -60,6 +70,9 @@ class ArtistsView(ListView):
 
 
 class AlbumsView(ListView):
+  """
+    To show a list of albums
+  """
   template_name = 'jukebox/albums.html'
   model = Album
   context_object_name = 'albums'
@@ -68,6 +81,9 @@ class AlbumsView(ListView):
 
 
 class AlbumDescView(ListView):
+  """
+    To show description of an Album, i.e., Artist, Songs, album_art
+  """
   template_name = 'jukebox/albumdesc.html'
   model = Album
   context_object_name = 'album'
@@ -79,6 +95,9 @@ class AlbumDescView(ListView):
 
 
 class ArtistDescView(ListView):
+  """
+    To show description of an Artist, i.e., Albums, cover_pic
+  """
   template_name = 'jukebox/artistdesc.html'
   model = Artist
   context_object_name = 'artist'
@@ -87,6 +106,18 @@ class ArtistDescView(ListView):
       artist_coming = self.kwargs['artist']
       artist = Artist.objects.get(artist = artist_coming)
       return artist
+
+
+class PlayView(View):
+  """
+    For Increasing the count
+  """
+  def get(self,request):
+    song_id = self.request.GET['song_id']
+    song = Song.objects.get(id=int(song_id))
+    song.count += 1
+    song.save()
+    return HttpResponse('')
 
 
 

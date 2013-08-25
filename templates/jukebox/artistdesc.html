@@ -9,7 +9,7 @@
       <p>Artist Name --- {{artist.artist}}</p>
       <img src="{{ MEDIA_URL }}{{artist.cover_pic}}" width="200px" height="200px">
       <br><br>
-      Albums: ---
+      Albums: --- {{ artist.album_set.count }}
       <br>
       {% for album in artist.album_set.all %}
         {{album.album}}
