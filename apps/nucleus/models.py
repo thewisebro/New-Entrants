@@ -25,6 +25,9 @@ class User(AbstractUser):
       self.groups.add(Group.objects.get(name=getattr(self, 'role')))
     return result
 
+  def in_group(self, name):
+    return self.groups.filter(name=name).exists()
+
 
 class WebmailAccount(models.Model):
   webmail_id = models.CharField(max_length=15, primary_key=True)
