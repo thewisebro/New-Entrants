@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <title> Playlists </title>
+  </head>
+
+  <body>
+    Playlists:
+    <br>
+    {% for playlist in playlists %}
+    <div onclick="location.href='{{ playlist.name }}/'">
+      <p>Playlist Name --- {{ playlist.name }}</p>
+    </div>
+    {% endfor %}
+  </body>
+<html>

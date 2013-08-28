@@ -12,6 +12,19 @@
     <a href="trending/">Trending</a>
     <a href="artists/">Artists</a>
     <a href="albums/">Albums</a>
+    <br>
+    {% if user.is_active %}
+      {{ user.username }}
+      <br>
+      <form action="playlist/create/" method="get">
+        <input type="text" name="name">
+        <input type="submit" value="Create">
+      </form>
+      <a href="logout/">Logout</a>
+    {% else %}
+      <a href="login/">Login</a>
+    {% endif %}
+
 
 
 

@@ -5,10 +5,12 @@
 from core.views.generic import ListView,TemplateView,View,DetailView, RedirectView
 from django.core import serializers
 from django.http import HttpResponse
+from django.core.urlresolvers import reverse
 import simplejson
 import json
 
-from jukebox.models import Album,Artist,Song
+from jukebox.models import *
+from nucleus.models import User
 
 class IndexView(TemplateView):
   """
@@ -118,6 +120,33 @@ class PlayView(View):
     song.count += 1
     song.save()
     return HttpResponse('')
+
+
+"""
+  Views for Playlists
+"""
+
+class PlaylistCreateView(RedirectView) :
+  def get_redirect_url(self):
+    user = self.request.user
+    name = self.request.GET.get('name')                       # name -> name of Playlist Coming
+    playlist = Playlist.objects.create(person=user, name=name)
+    return reverse('playlist_all', kwargs={'user':user.username})
+
+class PlaylistAllView(ListView):
+  template_name = 'jukebox/playlists.html'
+  context_object_name = 'playlists'
+  def get_queryset(self,**kwargs):
+    if 'user' in self.kwargs:
+      user_coming = self.kwargs['user']
+      user = User.objects.get(username=user_coming)
+      playlists = Playlist.objects.filter(person=user.id)
+      return playlists
+    else:
+      pass
+
+
+
 
 
 
