@@ -18,8 +18,10 @@
       <br>
       <form action="playlist/create/" method="get">
         <input type="text" name="name">
+        <input type="checkbox" name="private" checked>Private
         <input type="submit" value="Create">
       </form>
+      <a href="playlist/{{user.username}}/">Playlists</a>
       <a href="logout/">Logout</a>
     {% else %}
       <a href="login/">Login</a>

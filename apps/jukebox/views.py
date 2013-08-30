@@ -130,7 +130,8 @@ class PlaylistCreateView(RedirectView) :
   def get_redirect_url(self):
     user = self.request.user
     name = self.request.GET.get('name')                       # name -> name of Playlist Coming
-    playlist = Playlist.objects.create(person=user, name=name)
+    private = self.request.GET.get('private',False)                       # name -> name of Playlist Coming
+    playlist = Playlist.objects.create(person=user, name=name, private=private)
     return reverse('playlist_all', kwargs={'user':user.username})
 
 class PlaylistAllView(ListView):
@@ -138,12 +139,31 @@ class PlaylistAllView(ListView):
   context_object_name = 'playlists'
   def get_queryset(self,**kwargs):
     if 'user' in self.kwargs:
-      user_coming = self.kwargs['user']
-      user = User.objects.get(username=user_coming)
-      playlists = Playlist.objects.filter(person=user.id)
+      user_coming = self.kwargs['user']                      # user_coming --> user coming in url
+      user_came = User.objects.get(username=user_coming)     # user_came = user object, user coming
+      if self.request.user.is_active :
+        user = self.request.user                             # user logged in
+        if user.id == user_came.id :                         # If same user logged in... show all playlists
+          playlists = Playlist.objects.filter(person=user.id)
+        else :
+          playlists = Playlist.objects.filter(person=user_came.id).exclude(private=True)  # If different user or no user logged in... show public playlists
+      else :
+        playlists = Playlist.objects.filter(person=user_came.id).exclude(private=True)
       return playlists
     else:
       pass
+
+
+class PlaylistDescView(ListView):
+  template_name = 'jukebox/playlistdesc.html'
+  context_object_name = 'playlist'
+  def get_queryset(self,**kwargs):
+    if 'playlist' in self.kwargs:
+      playlist_coming = self.kwargs['playlist']
+      playlist = Playlist.objects.get(name = playlist_coming)
+      return playlist
+
+
 
 
 

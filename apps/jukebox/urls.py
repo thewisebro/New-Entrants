@@ -7,6 +7,7 @@ playlist_patterns = patterns('',
 
     url(r'^create/', PlaylistCreateView.as_view(), name='create_playlist'),
     url(r'^(?P<user>[\w\ ]+)/$', PlaylistAllView.as_view(), name='playlist_all'),
+    url(r'^(?P<user>[\w\ ]+)/(?P<playlist>[\w\ ]+)/$', PlaylistDescView.as_view(), name='playlist_desc'),
 
 )
 
