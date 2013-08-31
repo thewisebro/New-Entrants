@@ -163,16 +163,17 @@ class Command(NoArgsCommand):
             extends_node = template.nodelist[0]
             if not context:
                 context = Context()
-            parent_node = extends_node.get_parent(context)
-            blocks = dict([(n.name, n) for n in template.nodelist.get_nodes_by_type(BlockNode)])
-            context.render_context[BLOCK_CONTEXT_KEY] = BlockContext()
+                block_context = BlockContext()
+                context.render_context[BLOCK_CONTEXT_KEY] = block_context
+                block_context.add_blocks(dict([(n.name, n) for n in\
+                      template.nodelist.get_nodes_by_type(BlockNode)]))
+            parent_template = extends_node.get_parent(context)
             block_context = context.render_context[BLOCK_CONTEXT_KEY]
-            block_context.add_blocks(blocks)
             block_context.add_blocks(extends_node.blocks)
             block_context.add_blocks(dict([(n.name, n) for n in\
-                  parent_node.nodelist.get_nodes_by_type(BlockNode)]))
-            parent_node._context = context
-            return self.get_template(parent_node)
+                  parent_template.nodelist.get_nodes_by_type(BlockNode)]))
+            parent_template._context = context
+            return self.get_template(parent_template, context)
         else:
             return template
 
@@ -235,7 +236,6 @@ class Command(NoArgsCommand):
                 try:
                     template = Template(template_file.read().decode(
                                         settings.FILE_CHARSET))
-                    actual_template = template
                     temp_template = self.get_template(template)
                     if not template is temp_template:
                         template._parent_template = temp_template
@@ -281,7 +281,6 @@ class Command(NoArgsCommand):
         results = []
         offline_manifest = SortedDict()
         for template, nodes in compressor_nodes.iteritems():
-            actual_template = template
             context = Context()
             if hasattr(template, '_parent_template'):
               template = template._parent_template
@@ -302,9 +301,7 @@ class Command(NoArgsCommand):
                     context['block'] = context.render_context[BLOCK_CONTEXT_KEY].get_block(node._block_name)
                     if context['block']:
                         context['block'].context = context
-                print "Node:\n",node.nodelist.render(context)
                 key = get_offline_hexdigest(node.nodelist.render(context))
-                print "Key:",key
                 try:
                     result = node.render(context, forced=True)
                 except Exception, e:
