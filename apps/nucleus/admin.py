@@ -60,7 +60,7 @@ class UserAdmin(AuthUserAdmin):
       (None, {'fields': ('username', 'password')}),
       ('Personal info', {'fields': ('first_name', 'last_name', 'email',
                                     'name', 'photo', 'gender', 'birth_date',
-                                    'contact_no', 'delegates')}),
+                                    'contact_no')}),
       ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser',
                                      'groups', 'user_permissions')}),
       ('Important dates', {'fields': ('last_login', 'date_joined')}),
@@ -68,7 +68,7 @@ class UserAdmin(AuthUserAdmin):
   ordering = ('username',)
   filter_horizontal = ('groups', 'user_permissions',)
   search_fields = ['username', 'name']
- 
+
 class BranchAdmin(admin.ModelAdmin):
   search_fields = ['code', 'name', 'department']
 

@@ -1,3 +1,3 @@
 from django.db.models import *
 
-from mixins import Taggable
+from base import Model, Manager

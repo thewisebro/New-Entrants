@@ -143,8 +143,15 @@ MIDDLEWARE_CLASSES = (
   'django.middleware.csrf.CsrfViewMiddleware',
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
+  'api.middlewares.DelegateMiddleware',
   # Uncomment the next line for simple clickjacking protection:
   # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+import django.conf.global_settings as DEFAULT_SETTINGS
+
+TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
+  'api.context_processors.custom',
 )
 
 ROOT_URLCONF = 'urls'
@@ -185,6 +192,8 @@ THIRD_PARTY_APPS = (
 
 CHANNELI_APPS = (
   'nucleus',
+  'api',
+  'reporting',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
