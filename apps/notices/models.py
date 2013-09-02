@@ -14,5 +14,4 @@ class Category(models.Model):
 class Upload_NoticeForm(ModelForm):
   class Meta:
     model = Upload_Notice
-    fields = '__all__'
 
