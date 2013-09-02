@@ -175,7 +175,7 @@ DJANGO_CONTRIB_APPS = (
   'django.contrib.staticfiles',
   'django.contrib.admin',
   'django.contrib.humanize',
-  # Uncomment the next line to enable admin documentation:
+# Uncomment the next line to enable admin documentation:
   # 'django.contrib.admindocs',
 )
 
@@ -194,6 +194,7 @@ CHANNELI_APPS = (
   'nucleus',
   'api',
   'reporting',
+  'notices',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
