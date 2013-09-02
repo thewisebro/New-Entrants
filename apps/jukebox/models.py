@@ -1,5 +1,6 @@
 import nucleus
 import settings
+import utils
 
 from core import models
 from django.core.files.storage import FileSystemStorage
@@ -7,7 +8,6 @@ from api import model_constants as MC
 from jukebox import constants as JC
 
 # jukebox.models starts
-
 
 
 
@@ -36,6 +36,7 @@ class Album(models.Model):
   album = models.CharField(max_length=MC.TEXT_LENGTH)
   artists = models.ManyToManyField(Artist, blank=True, null=True)              # Multiple Artists (feat.)
 #genres = models.ManyToManyField(Genre)                # Multiple Genres
+  year = models.IntegerField(max_length=4)
   album_art = models.ImageField(upload_to=JC.ALBUMART_DIR, max_length=MC.TEXT_LENGTH)
   def __unicode__(self):
     return self.album
@@ -53,8 +54,8 @@ class Song(models.Model):
       ('hindi' , 'Hindi')
   )
   language = models.CharField(max_length=10, choices=lang_choices)
-  date_added = models.DateField(auto_now_add=True)        # For the date item is added
-  date_created = models.DateField()                       # For the date mentioned in the album
+#  date_added = models.DateField(auto_now_add=True)        # For the date item is added
+#  date_created = models.DateField()                       # For the date mentioned in the album
   count = models.PositiveIntegerField(default=0)
   score = models.PositiveIntegerField(default=0)          # For Trending Songs
   def __unicode__(self):
@@ -91,8 +92,35 @@ class Song(models.Model):
 class Playlist(models.Model):
   person = models.ForeignKey(nucleus.models.User, related_name='jukebox_person')
   name = models.CharField(max_length=MC.TEXT_LENGTH)
-  songs = models.ManyToManyField(Song)
+  songs = models.TextField()                                     # TextField:-> Large amount of songs with 'b' in between
   private = models.BooleanField(default=True)
   liked_by = models.ManyToManyField(nucleus.models.User, related_name='jukebox_playlist_likes')
   def __unicode__(self):
     return self.name
+
+  def insert(self, songs_pk, index):
+    """
+      To insert songs in playlist(self) at index=index
+      songs_pk is the list of selected songs primary key
+    """
+    songs_in = self.songs.split('b')
+    songs_in = map(int, songs_in)
+    songs_diff = list(utils.unique(songs_pk, songs_in))         # unique in utils.py, songs_diff-> songs to be added
+    songs = songs_in[:index] + songs_diff + songs_in[index:]
+    songs = 'b'.join(str(v) for v in songs)
+    self.songs = songs
+    self.save()
+
+  def remove(self,songs_pk):
+    """
+      To remove songs in playlist(self) : no index required
+      songs_pk is the list of selected songs primary key
+    """
+    songs_in = self.songs.split('b')
+    songs_in = map(int, songs_in)
+    songs_diff = list(utils.unique(songs_in, songs_pk))         # unique in utils.py, songs_diff-> remaining songs
+    songs = 'b'.join(str(v) for v in songs_diff)
+    self.songs = songs
+    self.save()
+
+
