@@ -42,7 +42,7 @@ class Owner(models.Model):
 class CustomUserManager(UserManager, models.Manager):
   pass
 
-class User(AbstractUser):
+class User(AbstractUser, models.Model):
   """
   User = Channeli User
   """
