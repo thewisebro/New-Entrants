@@ -2,6 +2,8 @@
 <!doctype html>
 {% endblock DTD %}
 
+{% load compress %}
+
 <html>
   <head>
     <meta charset="utf-8">
@@ -13,19 +15,28 @@
       {% endblock title %}
     </title>
     <link rel="shortcut icon" href="{% block favicon_url %}{{ STATIC_URL }}images/favicon.ico{% endblock %}">
-    <!--[if IE]>
-      <script type="text/javascript" src="{{ STATIC_URL }}js/es5-shim.min.js"></script>
-    <![endif]-->
     {% block head %}
     {% endblock head %}
-    {% block styles %}
-    {% endblock styles %}
+    {% compress css file %}
+      {% block styles %}
+      {% endblock styles %}
+    {% endcompress %}
+    {% compress js %}
+      {% block pre_scripts %}
+      {% endblock pre_scripts %}
+    {% endcompress %}
+
   </head>
   <body>
     {% block body %}
     {% endblock body %}
-    <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
-    {% block scripts %}
-    {% endblock scripts %}
+    {% compress js %}
+      <!--[if IE]>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/es5-shim.min.js"></script>
+      <![endif]-->
+      {% block scripts %}
+        <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+      {% endblock scripts %}
+    {% endcompress %}
   </body>
 </html>

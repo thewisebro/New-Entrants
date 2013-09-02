@@ -1,11 +1,48 @@
-from django.contrib.auth.models import AbstractUser, Group
+from django.contrib.auth.models import AbstractUser, UserManager, Group
 
 from core import models
+
 from api import model_constants as MC
 from facapp import constants as FC
 
 
-class User(AbstractUser):
+class OwnerActiveManager(models.Manager):
+  def get_query_set(self):
+    return super(OwnerActiveManager, self).get_query_set().filter(active=True)
+
+class Owner(models.Model):
+  account = models.ForeignKey('User', related_name='account_owners')
+  user = models.ForeignKey('User', related_name='user_owners')
+  active = models.BooleanField(default=True)
+  objects = OwnerActiveManager()
+  all_objects = models.Manager()
+
+  class Meta:
+    unique_together = ['account', 'user']
+
+  def __unicode__(self):
+    return 'account: ' + str(self.account.username) + ' -> ' +\
+           'user: ' + str(self.user.username)
+
+  @classmethod
+  def add(cls, account, user):
+    owner, created = cls.all_objects.get_or_create(account=account, user=user)
+    if not created:
+      owner.active = True
+      owner.save()
+
+  @classmethod
+  def remove(cls, account, user):
+    owner = cls.all_objects.get_or_none(account=account, user=user)
+    if owner:
+      owner.active = False
+      owner.save()
+
+
+class CustomUserManager(UserManager, models.Manager):
+  pass
+
+class User(AbstractUser, models.Model):
   """
   User = Channeli User
   """
@@ -14,7 +51,8 @@ class User(AbstractUser):
   gender = models.CharField(max_length=1, choices=MC.GENDER_CHOICES, blank=True)
   birth_date = models.DateField(blank=True, null=True, verbose_name='Date of Birth')
   contact_no = models.CharField(max_length=12, blank=True, verbose_name='Contact No')
-  delegates = models.ManyToManyField('User', blank=True, null=True, related_name='delegated_users')
+  connections = models.ManyToManyField('self', blank=True, null=True)
+  objects = CustomUserManager()
 
   def __unicode__(self):
     return str(self.username) + ':' + self.name
@@ -24,6 +62,23 @@ class User(AbstractUser):
     if hasattr(self, 'role'):
       self.groups.add(Group.objects.get(name=getattr(self, 'role')))
     return result
+
+  def in_group(self, name):
+    return self.groups.filter(name=name).exists()
+
+  def owner(self, account=None):
+    if account is None:
+      return Owner.objects.get_or_create(account=self, user=self)[0]
+    else:
+      return Owner.objects.get(account=account, user=self)
+
+  @property
+  def delegates(self):
+    return User.objects.filter(user_owners__account=self, user_owners__active=True)
+
+  @property
+  def accounts(self):
+    return User.objects.filter(account_owners__user=self, account_owners__active=True)
 
 
 class WebmailAccount(models.Model):
