@@ -160,7 +160,7 @@ class PlaylistDescView(ListView):
   def get_queryset(self,**kwargs):
     if 'playlist' in self.kwargs:
       playlist_coming = self.kwargs['playlist']
-      playlist = Playlist.objects.get(name = playlist_coming)
+      playlist = Playlist.objects.get(id = playlist_coming)
       return playlist
 
 

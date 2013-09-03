@@ -98,18 +98,27 @@ class Playlist(models.Model):
   def __unicode__(self):
     return self.name
 
-  def insert(self, songs_pk, index):
+  def insert(self, songs_pk, index=-1):
     """
       To insert songs in playlist(self) at index=index
       songs_pk is the list of selected songs primary key
     """
-    songs_in = self.songs.split('b')
-    songs_in = map(int, songs_in)
-    songs_diff = list(utils.unique(songs_pk, songs_in))         # unique in utils.py, songs_diff-> songs to be added
-    songs = songs_in[:index] + songs_diff + songs_in[index:]
-    songs = 'b'.join(str(v) for v in songs)
-    self.songs = songs
-    self.save()
+    if self.songs == '':
+      songs = songs_pk
+      songs = 'b'.join(str(v) for v in songs)
+      self.songs = songs
+      self.save()
+    else:
+      songs_in = self.songs.split('b')
+      songs_in = map(int, songs_in)
+      songs_diff = list(utils.unique(songs_pk, songs_in))         # unique in utils.py, songs_diff-> songs to be added
+      if index == -1 :
+        songs = songs_in + songs_diff
+      else:
+        songs = songs_in[:index] + songs_diff + songs_in[index:]
+      songs = 'b'.join(str(v) for v in songs)
+      self.songs = songs
+      self.save()
 
   def remove(self,songs_pk):
     """
