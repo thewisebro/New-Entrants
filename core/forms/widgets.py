@@ -64,35 +64,71 @@ class DateTimeMedia:
 
 
 class DateWidget(forms.TextInput):
+  def __init__(self, *args, **kwargs):
+    attrs = kwargs.pop('attrs', {})
+    cls = attrs.pop('class','')
+    attrs.update({'class': cls + ' iDateField'})
+    kwargs['attrs'] = attrs
+    super(DateWidget, self).__init__(*args, **kwargs)
+
   def render(self, name, value, attrs=None):
     if isinstance(value, datetime.date):
-      value=value.strftime(settings.DATE_INPUT_FORMATS[0])
-    if type(attrs) == dict:
-      attrs.update({'class': 'iDateField'})
-    else:
-      attrs = {'class': 'iDateField'}
+      value = value.strftime(settings.DATE_INPUT_FORMATS[0])
     return super(DateWidget, self).render(name, value, attrs)
 
   Media = DateTimeMedia
 
 class TimeWidget(forms.TextInput):
+  def __init__(self, *args, **kwargs):
+    attrs = kwargs.pop('attrs', {})
+    cls = attrs.pop('class','')
+    attrs.update({'class': cls + ' iTimeField'})
+    kwargs['attrs'] = attrs
+    super(TimeWidget, self).__init__(*args, **kwargs)
+
   def render(self, name, value, attrs=None):
     if isinstance(value, datetime.time):
-      value=value.strftime(settings.TIME_INPUT_FORMATS[0])
-    if type(attrs) == dict:
-      attrs.update({'class': 'iTimeField'})
-    else:
-      attrs = {'class': 'iTimeField'}
+      value = value.strftime(settings.TIME_INPUT_FORMATS[0])
     return super(TimeWidget, self).render(name, value, attrs)
 
   Media = DateTimeMedia
 
 class DateTimeWidget(forms.TextInput):
-  def render(self, name, value, attrs=None):
-    if type(attrs) == dict:
-      attrs.update({'class': 'iDateTimeField'})
-    else:
-      attrs = {'class': 'iDateTimeField'}
-    return super(DateTimeWidget, self).render(name, value, attrs)
+  def __init__(self, *args, **kwargs):
+    attrs = kwargs.pop('attrs', {})
+    cls = attrs.pop('class','')
+    attrs.update({'class': cls + ' iDateTimeField'})
+    kwargs['attrs'] = attrs
+    super(DateTimeWidget, self).__init__(*args, **kwargs)
 
   Media = DateTimeMedia
+
+
+## Select Widgets
+
+class ChosenSelectBase(object):
+  def _render(self, *args, **kwargs):
+    attrs = kwargs.pop('attrs', {})
+    cls = attrs.pop('class','')
+    attrs.update({'class': cls + ' chosen-select'})
+    kwargs['attrs'] = attrs
+    return super(type(self), self).render(*args, **kwargs)
+
+  class Media:
+    js = (
+      'jquery/jquery.min.js',
+      'chosen/chosen.jquery.min.js',
+      'jquery/jquery-init.js',
+    )
+    css = {'all':(
+      'chosen/chosen.min.css',
+      'jquery/custom.css',
+    )}
+
+class ChosenSelect(forms.Select, ChosenSelectBase):
+  def render(self, *args, **kwargs):
+    return self._render(*args, **kwargs)
+
+class ChosenSelectMultiple(forms.SelectMultiple, ChosenSelectBase):
+  def render(self, *args, **kwargs):
+    return self._render(*args, **kwargs)

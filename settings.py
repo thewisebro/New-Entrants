@@ -75,7 +75,7 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = True
+USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
@@ -203,6 +203,12 @@ COMMENTS_APP = 'threadedcomments'
 AUTH_USER_MODEL = 'nucleus.User'
 
 CRISPY_TEMPLATE_PACK = 'uni_form'
+
+CRISPY_CLASS_CONVERTERS = {
+  'datewidget': "textinput textInput",
+  'timewidget': "textinput textInput",
+  'datetimewidget': "textinput textInput",
+}
 
 COMPRESS_PRECOMPILERS = (
   ('text/sass', 'sass -I static/ --compass {infile} {outfile}'),
