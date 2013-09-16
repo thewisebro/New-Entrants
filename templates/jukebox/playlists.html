@@ -7,7 +7,7 @@
     Playlists:
     <br>
     {% for playlist in playlists %}
-    <div onclick="location.href='{{ playlist.name }}/'">
+    <div onclick="location.href='{{ playlist.id }}/'">
       <p>Playlist Name --- {{ playlist.name }}</p>
     </div>
     {% endfor %}
