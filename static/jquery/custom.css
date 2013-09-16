@@ -47,3 +47,32 @@
   background:#eee;
   border-color:#b6cee6;
 }
+
+.chosen-results
+{
+  width: auto !important;
+  float: none !important;
+}
+
+.chosen-container
+{
+  font-family: sans-serif;
+}
+
+.uniForm label
+{
+  float: left !important;
+  width: 200px !important;
+  margin-top: 3px !important;
+}
+
+.cke
+{
+  clear: both;
+}
+
+.uniForm ul.tagit li
+{
+  margin: 2px 1px 2px 2px;
+}
+
