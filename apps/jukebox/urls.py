@@ -29,6 +29,9 @@ urlpatterns = patterns('',
     url(r'^login/$','django.contrib.auth.views.login' , {'template_name':'jukebox/login.html'}),
     url(r'^logout/$','django.contrib.auth.views.logout' , {'next_page':'/jukebox/login'}),
     url(r'^playlist/', include(playlist_patterns)),
+
+    url(r'^trending/new/$', TemplateView.as_view(template_name='jukebox/trending_json.html')), # for practice
+    url(r'^trending/json/$', TrendingJsonView.as_view()),
 )
 
 

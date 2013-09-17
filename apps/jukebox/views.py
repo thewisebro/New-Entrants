@@ -12,6 +12,9 @@ import json
 from jukebox.models import *
 from nucleus.models import User
 
+from jukebox.serializers import *
+from rest_framework.generics import ListCreateAPIView
+
 class IndexView(TemplateView):
   """
     For index page, i.e., starting page : For now -> Trending page
@@ -170,8 +173,12 @@ class PlaylistDescView(ListView):
 
 
 
-
-
+"""
+  For JSON Response
+"""
+class TrendingJsonView(ListCreateAPIView):
+  queryset = Song.objects.order_by('-count')[:25]
+  serializer_class = SongSerializer
 
 
 
@@ -185,7 +192,7 @@ class JSONResponseMixin(object):
 
   def get_json_response(self, content, **httpresponse_kwargs):  
     "Construct an `HttpResponse` object."  
-    return http.HttpResponse(content,  
+    return HttpResponse(content,  
         content_type='application/json',  
         **httpresponse_kwargs)  
 
