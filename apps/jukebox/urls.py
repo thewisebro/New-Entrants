@@ -25,7 +25,7 @@ urlpatterns = patterns('',
 #    url(r'^albums/$', AlbumsView.as_view(), name='albums'),
 #    url(r'^albums/(?P<album>[\w\ ]+)/$', AlbumDescView.as_view(), name='album_desc'),
 #    url(r'^artists/(?P<artist>[\w\ ]+)/$', ArtistDescView.as_view(), name='artist_desc'),
-    url(r'^trending/play/$', PlayView.as_view(), name='count'),
+#    url(r'^trending/play/$', PlayView.as_view(), name='count'),
     url(r'^login/$','django.contrib.auth.views.login' , {'template_name':'jukebox/login.html'}),
     url(r'^logout/$','django.contrib.auth.views.logout' , {'next_page':'/jukebox/login'}),
     url(r'^playlist/', include(playlist_patterns)),
@@ -37,6 +37,7 @@ urlpatterns = patterns('',
     url(r'^albums/$', AlbumsJsonView.as_view(), name='albums'),
     url(r'^albums/(?P<id>[\d]+)/$', AlbumDescJsonView.as_view(), name='album_desc'),
     url(r'^artists/(?P<id>[\d]+)/$', ArtistDescJsonView.as_view(), name='artist_desc'),
+    url(r'^play/$', PlayView.as_view(), name='count'),
 )
 
 

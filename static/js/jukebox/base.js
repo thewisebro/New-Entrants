@@ -90,9 +90,9 @@ function get_song_html(song)
   {
     html += song.artists[j].artist + ", ";
   }
-  html += "<br> Count: " + song.count + "<br>" +
+  html += "<br> Count: <p id='song_" + song.id + "'>" + song.count + "</p> " +
     "<img src=\'\/media\/" + song.album.album_art + "\' width='100px' height='100px'>" +
-    "<br><br><br>";
+    "<br> <a href='#' onclick='play(" + song.id + ");'>Play </a> <br><br>";
   return html;
 }
 
@@ -121,4 +121,14 @@ function get_album_html(album)
     html += "<br> <img src=\'\/media\/" + album.album_art + "\' width='100px' height='100px'>" +
     "<br><br><br>";
   return html;
+}
+
+function play(id)
+{
+  var url = "play/?song_id=" + id;
+  var song_id = "#song_" + id;
+  $.ajax(url,contentType= "application/json").done( function(data){
+    var song = data[0];
+    $(song_id).html(song.count);
+  });
 }

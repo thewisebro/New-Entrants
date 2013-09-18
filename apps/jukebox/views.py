@@ -85,12 +85,12 @@ class AlbumsView(ListView):
   context_object_name = 'albums'
   def get_queryset(self):
     return Album.objects.all()
-"""
+
 
 class AlbumDescView(ListView):
-  """
+  ""
     To show description of an Album, i.e., Artist, Songs, album_art
-  """
+  ""
   template_name = 'jukebox/albumdesc.html'
   model = Album
   context_object_name = 'album'
@@ -102,9 +102,9 @@ class AlbumDescView(ListView):
 
 
 class ArtistDescView(ListView):
-  """
+  ""
     To show description of an Artist, i.e., Albums, cover_pic
-  """
+  ""
   template_name = 'jukebox/artistdesc.html'
   model = Artist
   context_object_name = 'artist'
@@ -113,18 +113,8 @@ class ArtistDescView(ListView):
       artist_coming = self.kwargs['artist']
       artist = Artist.objects.get(artist = artist_coming)
       return artist
+"""
 
-
-class PlayView(View):
-  """
-    For Increasing the count
-  """
-  def get(self,request):
-    song_id = self.request.GET['song_id']
-    song = Song.objects.get(id=int(song_id))
-    song.count += 1
-    song.save()
-    return HttpResponse('')
 
 
 """
@@ -224,6 +214,17 @@ class ArtistDescJsonView(ListAPIView):
 
 
 
+class PlayView(ListAPIView):
+  """
+    For Increasing the count
+  """
+  serializer_class = SongSerializer
+  def get_queryset(self):
+    song_id = self.request.GET['song_id']
+    song = Song.objects.get(id=int(song_id))
+    song.count += 1
+    song.save()
+    return Song.objects.filter(id=int(song_id))
 
 
 

@@ -6,7 +6,7 @@ from jukebox.models import Song,Artist,Album
 class SongSerializer(serializers.ModelSerializer):
   class Meta:
     model = Song
-    fields = ('song', 'album', 'artists', 'count')
+    fields = ('id', 'song', 'album', 'artists', 'count')
     depth = 1
 
 
