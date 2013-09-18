@@ -10,8 +10,8 @@
     </form>
     <br>
     <a id="trending" href="#append">Trending</a>
-    <a href="artists/">Artists</a>
-    <a href="albums/">Albums</a>
+    <a id="artists" href="#append">Artists</a>
+    <a id="albums" href="#append">Albums</a>
     <br>
     {% if user.is_active %}
       {{ user.username }}
@@ -37,48 +37,9 @@
 
 
 
-<!--    <div id="append">
-    <input type="text" id="q">
-    </div>
-  </body>
-  <script type="text/javascript" src="{{STATIC_URL}}jquery/jquery.min.js"></script>
-  <script>
-    $("#q").keyup(
-        function(){
-          $.get("example/",
-            function(data){
-                  alert("data: "+data.success);
-                });
-              });
-  </script>
--->
 </body>
- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
   </script>
-  <script>
-  var items=[];
-  function trending() {
-    $.ajax("trending/json/",contentType= "application/json").done( function(data){ items=data; } );
-    $("#append").empty();
-   for (var i=0; i<items.length; i++){
-     $("#append").append(get_song_html(items[i]));
-   }
-
-  }
-  function get_song_html(song)
-  {
-    html = "<br> Song: "+ song.song+ "<br> Album: " + song.album.album +"<br> Artist: ";
-    for (var j=0; j<song.artists.length; j++)
-    {
-      html += song.artists[j].artist + ", ";
-    }
-    html += "<br> Count: " + song.count + "<br>" +
-      "<img src=\'{{MEDIA_URL}}" + song.album.album_art + "\' width='100px' height='100px'>" +
-      "<br><br><br>";
-    return html;
-  }
-  $("#trending").click(trending);
-
+  <script src="{{ STATIC_URL }}js/jukebox/base.js">
   </script>
-
 </html>

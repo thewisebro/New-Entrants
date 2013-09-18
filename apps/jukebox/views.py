@@ -13,7 +13,7 @@ from jukebox.models import *
 from nucleus.models import User
 
 from jukebox.serializers import *
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListAPIView
 
 class IndexView(TemplateView):
   """
@@ -51,11 +51,13 @@ class SearchView(ListView):
 
 
 
+"""
+Old Views: Without django rest framework
 
 class TrendingView(ListView):
-  """
+  ""
     For trending songs, i.e., count is maximum
-  """
+  ""
   template_name = 'jukebox/trending.html'
   model = Song
   context_object_name = 'trending'
@@ -64,9 +66,9 @@ class TrendingView(ListView):
 
 
 class ArtistsView(ListView):
-  """
+  ""
     To show a list of artists
-  """
+  ""
   template_name = 'jukebox/artists.html'
   model = Artist
   context_object_name = 'artists'
@@ -75,15 +77,15 @@ class ArtistsView(ListView):
 
 
 class AlbumsView(ListView):
-  """
+  ""
     To show a list of albums
-  """
+  ""
   template_name = 'jukebox/albums.html'
   model = Album
   context_object_name = 'albums'
   def get_queryset(self):
     return Album.objects.all()
-
+"""
 
 class AlbumDescView(ListView):
   """
@@ -176,9 +178,67 @@ class PlaylistDescView(ListView):
 """
   For JSON Response
 """
-class TrendingJsonView(ListCreateAPIView):
+class TrendingJsonView(ListAPIView):
   queryset = Song.objects.order_by('-count')[:25]
   serializer_class = SongSerializer
+
+
+class ArtistsJsonView(ListAPIView):
+  """
+    To show a list of artists
+  """
+  queryset = Artist.objects.all()
+  serializer_class = ArtistSerializer
+
+
+class AlbumsJsonView(ListAPIView):
+  """
+    To show a list of albums
+  """
+  queryset = Album.objects.all()
+  serializer_class = AlbumSerializer
+
+
+class AlbumDescJsonView(ListAPIView):
+  """
+    To show description of an Album, i.e., Artist, Songs, album_art
+  """
+  serializer_class = AlbumSerializer
+  def get_queryset(self):
+    if 'id' in self.kwargs:
+      album_coming = self.kwargs['id']
+      album = Album.objects.filter(id = album_coming)
+      return album
+
+
+class ArtistDescJsonView(ListAPIView):
+  """
+    To show description of an Artist, i.e., Albums, cover_pic
+  """
+  serializer_class = ArtistSerializer
+  def get_queryset(self):
+    if 'id' in self.kwargs:
+      artist_coming = self.kwargs['id']
+      artist = Artist.objects.filter(id = artist_coming)
+      return artist
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
