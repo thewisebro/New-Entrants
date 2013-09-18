@@ -1,3 +1,5 @@
 from django.db.models import *
 
-from mixins import Taggable
+from base import Model, Manager
+
+from fields import CKEditorField, DateField, TimeField, DateTimeField
