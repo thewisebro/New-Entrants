@@ -14,7 +14,9 @@ from nucleus.models import User
 
 from jukebox.serializers import *
 from jukebox.permissions import *
-from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveAPIView
+from rest_framework.response import Response
+
 
 class IndexView(TemplateView):
   """
@@ -148,7 +150,7 @@ class PlaylistAllView(ListView):
       return playlists
     else:
       pass
-"""
+
 
 class PlaylistDescView(ListView):
   template_name = 'jukebox/playlistdesc.html'
@@ -159,7 +161,7 @@ class PlaylistDescView(ListView):
       playlist = Playlist.objects.get(id = playlist_coming)
       return playlist
 
-
+"""
 
 
 
@@ -254,8 +256,31 @@ class PlaylistAllJsonView(ListCreateAPIView):
     obj.private = self.request.POST.get('private',False)
 
 
+class PlaylistDescView(RetrieveAPIView):
+  queryset = Playlist.objects.all()
+  serializer_class = PlaylistSerializer
+
+class GetSongView(RetrieveAPIView):
+  queryset = Song.objects.all()
+  serializer_class = SongSerializer
 
 
+class SearchJsonView(ListAPIView):
+  """
+    For three way search :  Song, Album, Artist
+  """
+  def get(self, request, format=None):
+    context = {}
+    q = self.request.GET.get('q')                       # q -> Search String coming
+    songs = SongSerializer(Song.objects.filter(song__icontains=q)[:5],many=True)
+    albums = AlbumSerializer(Album.objects.filter(album__icontains=q)[:5],many=True)
+    artists = ArtistSerializer(Artist.objects.filter(artist__icontains=q)[:5], many=True)
+    context.update({                                    # For multiple models and lists usage in ListView
+        'songs' : songs.data,
+        'albums' : albums.data,
+        'artists' : artists.data,
+    })
+    return Response(context)
 
 
 

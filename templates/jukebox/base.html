@@ -4,7 +4,7 @@
   </head>
 
   <body>
-    <form action="search/" method="get">
+    <form id="search" action="search/" method="get">
       <input type="text" name="q">
       <input type="submit" value="Search">
     </form>
@@ -16,7 +16,7 @@
     {% if user.is_active %}
       {{ user.username }}
       <br>
-      <form action="playlist/" method="post">
+      <form id="playlist" action="playlist/" method="post">
       {% csrf_token %}
         <input type="hidden" name="user" id="username" value="{{ user.username }}">
         <input type="text" name="name">

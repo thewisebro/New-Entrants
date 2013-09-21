@@ -3,6 +3,8 @@ from rest_framework import serializers
 from jukebox.models import Song,Artist,Album, Playlist
 
 
+
+
 class SongSerializer(serializers.ModelSerializer):
   class Meta:
     model = Song
@@ -30,6 +32,7 @@ class PlaylistSerializer(serializers.ModelSerializer):
     model = Playlist
     fields = ('id', 'songs', 'person', 'name', 'private')
     depth = 1
-  
+
   def pre_save(self, obj):
     obj.person = self.request.user
+

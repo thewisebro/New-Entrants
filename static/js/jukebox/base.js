@@ -4,14 +4,44 @@
 $("#trending").click(function(){ display("trending"); });
 $("#artists").click(function(){ display("artists"); });
 $("#albums").click(function(){ display("albums"); });
-$('form').on('submit', function(e) {
+$('form#playlist').on('submit', function(e) {
   $.ajax({
       type: 'post',
       url: 'playlist/',
-      data: $('form').serialize(),
+      data: $(this).serialize(),
       success: function () {
         display_playlists($('#username').val());
-        $('form').trigger('reset');
+       $('form#playlist').trigger('reset');
+      }
+      });
+  e.preventDefault();
+});
+
+
+
+$('form#search').on('submit', function(e) {
+  $.ajax({
+      type: 'get',
+      url: 'search/',
+      data: $(this).serialize(),
+      success: function (data) {
+       $("#append").empty();
+       $("#append").append("<br> Songs: <br>")
+       for(var i=0; i<data.songs.length; i++)
+       {
+         $("#append").append(get_song_html(data.songs[i]))
+       }
+       $("#append").append("<br><hr><br> Albums: <br>")
+       for(var i=0; i<data.albums.length; i++)
+       {
+         $("#append").append(get_album_html(data.albums[i]))
+       }
+       $("#append").append("<br><hr><br> Artists: <br>")
+       for(var i=0; i<data.artists.length; i++)
+       {
+         $("#append").append(get_artist_html(data.artists[i]))
+       }
+       $('form#search').trigger('reset');
       }
       });
   e.preventDefault();
@@ -104,6 +134,31 @@ function display_playlists(user){
   });
 }
 
+function display_playlist(id){
+  url = "playlist/" + id;
+    $.ajax(url,contentType= "application/json").done( function(data){
+      playlist = data;
+      $("#append").empty();
+      if(playlist.songs){
+        songs = playlist.songs.split('b')
+        html = "<br> playlist Name: <br>" + playlist.name + "<br> Songs: " + songs.length;
+        $("#append").append(html);
+        for(var i=0; i<songs.length; i++)
+        {
+          url = 'song/' + Number(songs[i]);
+          $.ajax(url,contentType= "application/json").done( function(data){
+            html = "<br>" + data.song + "<br>";
+            $("#append").append(html); // append must be in callback as it would be called after ajax request
+          });
+        }
+      }
+      else{
+      $("#append").append("No Songs");
+      }
+    });
+
+}
+
 
 // for 1 song html
 function get_song_html(song)
@@ -155,3 +210,4 @@ function play(id)
     $(song_id).html(song.count);
   });
 }
+
