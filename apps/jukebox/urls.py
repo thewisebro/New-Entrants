@@ -5,10 +5,13 @@ import django
 
 playlist_patterns = patterns('',
 
-    url(r'^create/', PlaylistCreateView.as_view(), name='create_playlist'),
-    url(r'^(?P<user>[\w\ ]+)/$', PlaylistAllView.as_view(), name='playlist_all'),
+#    url(r'^create/', PlaylistCreateView.as_view(), name='create_playlist'),
+#    url(r'^(?P<user>[\w\ ]+)/$', PlaylistAllView.as_view(), name='playlist_all'),
     url(r'^(?P<user>[\w\ ]+)/(?P<playlist>[\w\ ]+)/$', PlaylistDescView.as_view(), name='playlist_desc'),
 
+
+# Json starting
+    url(r'^$', PlaylistAllJsonView.as_view(), name='playlist_all'),
 )
 
 
@@ -37,7 +40,7 @@ urlpatterns = patterns('',
     url(r'^albums/$', AlbumsJsonView.as_view(), name='albums'),
     url(r'^albums/(?P<id>[\d]+)/$', AlbumDescJsonView.as_view(), name='album_desc'),
     url(r'^artists/(?P<id>[\d]+)/$', ArtistDescJsonView.as_view(), name='artist_desc'),
-    url(r'^play/$', PlayView.as_view(), name='count'),
+    url(r'^play/$', PlayJsonView.as_view(), name='count'),
 )
 
 

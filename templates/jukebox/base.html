@@ -16,12 +16,13 @@
     {% if user.is_active %}
       {{ user.username }}
       <br>
-      <form action="playlist/create/" method="get">
+      <form action="playlist/" method="post">
+      {% csrf_token %}
         <input type="text" name="name">
         <input type="checkbox" name="private" checked>Private
         <input type="submit" value="Create">
       </form>
-      <a href="playlist/{{user.username}}/">Playlists</a>
+      <a href="#append" id="playlists" onclick="display_playlists('{{user.username}}');">Playlists</a>
       <a href="logout/">Logout</a>
     {% else %}
       <a href="login/">Login</a>

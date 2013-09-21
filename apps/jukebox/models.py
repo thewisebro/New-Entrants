@@ -92,7 +92,7 @@ class Song(models.Model):
 class Playlist(models.Model):
   person = models.ForeignKey(nucleus.models.User, related_name='jukebox_person')
   name = models.CharField(max_length=MC.TEXT_LENGTH)
-  songs = models.TextField()                                     # TextField:-> Large amount of songs with 'b' in between
+  songs = models.TextField(null=True, blank=True)                                     # TextField:-> Large amount of songs with 'b' in between
   private = models.BooleanField(default=True)
   liked_by = models.ManyToManyField(nucleus.models.User, related_name='jukebox_playlist_likes')
   def __unicode__(self):

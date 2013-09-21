@@ -46,7 +46,7 @@ function display_album(id){
       html = "<br> Album Name: <br>" + album.album + "<br> Artists: ";
       for(var j=0; j<album.artists.length; j++)
       {
-        html += "" + album.artists[j].artist + ", ";
+        html +="<div onclick='display_artist(" + album.artists[j].id + ");'>" + album.artists[j].artist + "</div> ";
       }
         html += "<br> <img src='/media/"+ album.album_art + "' width='300px' height='300px'> <br> <br> Songs: <br>";
       for(var j=0; j<album.song_set.length; j++)
@@ -81,6 +81,18 @@ function display_artist(id){
 }
 
 
+function display_playlists(user){
+  url = 'playlist/';
+  $.ajax(url,{ type:"GET", data: {user:user} } ,contentType= "application/json").done( function(data){
+    $("#append").empty();
+    html = 'Playlists: ';
+    for(var i=0; i<data.length; i++){
+      html += "<div onclick='display_playlist(" + data[i].id + ");'> Playlist Name: " + data[i].name + "</div>";
+    }
+    $("#append").append(html);
+  });
+}
+
 
 // for 1 song html
 function get_song_html(song)
@@ -92,7 +104,7 @@ function get_song_html(song)
   }
   html += "<br> Count: <p id='song_" + song.id + "'>" + song.count + "</p> " +
     "<img src=\'\/media\/" + song.album.album_art + "\' width='100px' height='100px'>" +
-    "<br> <a href='#' onclick='play(" + song.id + ");'>Play </a> <br><br>";
+    "<br> <a href='#song_" + song.id + "' onclick='play(" + song.id + ");'>Play </a> <br><br>";
   return html;
 }
 
@@ -116,7 +128,7 @@ function get_album_html(album)
     "<br> Album: "+ album.album + "<br> Artists:  ";
   for (var j=0; j<album.artists.length; j++)
   {
-    html += album.artists[j].artist + ", ";
+    html +=  album.artists[j].artist + ", ";
   }
     html += "<br> <img src=\'\/media\/" + album.album_art + "\' width='100px' height='100px'>" +
     "<br><br><br>";

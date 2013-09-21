@@ -13,7 +13,8 @@ from jukebox.models import *
 from nucleus.models import User
 
 from jukebox.serializers import *
-from rest_framework.generics import ListAPIView
+from jukebox.permissions import *
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 
 class IndexView(TemplateView):
   """
@@ -128,7 +129,7 @@ class PlaylistCreateView(RedirectView) :
     private = self.request.GET.get('private',False)                       # name -> name of Playlist Coming
     playlist = Playlist.objects.create(person=user, name=name, private=private)
     return reverse('playlist_all', kwargs={'user':user.username})
-
+"""
 class PlaylistAllView(ListView):
   template_name = 'jukebox/playlists.html'
   context_object_name = 'playlists'
@@ -147,7 +148,7 @@ class PlaylistAllView(ListView):
       return playlists
     else:
       pass
-
+"""
 
 class PlaylistDescView(ListView):
   template_name = 'jukebox/playlistdesc.html'
@@ -214,7 +215,7 @@ class ArtistDescJsonView(ListAPIView):
 
 
 
-class PlayView(ListAPIView):
+class PlayJsonView(ListAPIView):
   """
     For Increasing the count
   """
@@ -228,6 +229,29 @@ class PlayView(ListAPIView):
 
 
 
+class PlaylistAllJsonView(ListCreateAPIView):
+  serializer_class = PlaylistSerializer
+  permission_classes = (IsOwnerOrReadOnly,)
+  def get_queryset(self):
+    if 'user' in self.request.GET:
+      user_coming = self.request.GET['user']                      # user_coming --> user coming in url
+      user_came = User.objects.get(username=user_coming)     # user_came = user object, user coming
+      if self.request.user.is_active :
+        user = self.request.user                             # user logged in
+        if user.id == user_came.id :                         # If same user logged in... show all playlists
+          playlists = Playlist.objects.filter(person=user.id)
+        else :
+          playlists = Playlist.objects.filter(person=user_came.id).exclude(private=True)  # If different user or no user logged in... show public playlists
+      else :
+        playlists = Playlist.objects.filter(person=user_came.id).exclude(private=True)
+      return playlists
+    else:
+      pass
+
+  def pre_save(self, obj):
+    obj.person = self.request.user
+    obj.songs = ''
+    obj.private = self.request.POST.get('private',False)
 
 
 
