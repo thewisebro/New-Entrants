@@ -4,7 +4,18 @@
 $("#trending").click(function(){ display("trending"); });
 $("#artists").click(function(){ display("artists"); });
 $("#albums").click(function(){ display("albums"); });
-
+$('form').on('submit', function(e) {
+  $.ajax({
+      type: 'post',
+      url: 'playlist/',
+      data: $('form').serialize(),
+      success: function () {
+        display_playlists($('#username').val());
+        $('form').trigger('reset');
+      }
+      });
+  e.preventDefault();
+});
 
 
 
