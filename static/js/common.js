@@ -27,6 +27,7 @@ function dialog_iframe(data){
       sticky: true,
       close: function(event, ui){
         eval('delete '+data.name);
+        $('#'+data.name+'-div').remove();
       },
       open: function(event, ui){
         $('#'+data.name+'-div').html(""+
@@ -35,7 +36,7 @@ function dialog_iframe(data){
       }
     };
     if('close' in data)
-      dialog_options.close = data.close;
+      dialog_options.beforeClose = data.close;
     $dialog = $('#'+data.name+'-div')
                 .html('<p>Loading...</p>')
                 .dialog(dialog_options);
