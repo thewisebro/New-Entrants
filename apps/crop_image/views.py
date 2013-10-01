@@ -22,17 +22,14 @@ def upload_image(request, unique_name, pk):
         cropping_done = True
       photoform = PhotoForm(request.POST, request.FILES)
       if photoform.is_valid():
-        save_count = 0
-        if image_field and os.path.exists(image_field.path):
-          filename = save_count = image_field.name.split('/')[-1].split('.')[0]
-          if len(filename.split('_')) > 1:
-            save_count = int(filename.split('_')[-1]) + 1
+        f = request.FILES['photo']
+        fname = request.FILES['photo'].name
+        if hasattr(Class, 'file_name'):
+          fname = Class.file_name(image_field, fname)
         if image_field:
           if os.path.exists(image_field.path):
             os.remove(image_field.path)
           image_field.delete()
-        f = request.FILES['photo']
-        fname = request.user.username + '_' + str(save_count) + '.' + f.name.split('.')[-1]
         image_field.save(fname,f,save=True)
         image_url = Class.get_image_url(image_field)
         crop = True

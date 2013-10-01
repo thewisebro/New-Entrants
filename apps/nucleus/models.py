@@ -1,6 +1,7 @@
+import os
+
 from django.contrib.auth.models import AbstractUser, UserManager, Group
 from django.conf import settings
-
 from core import models
 
 from api import model_constants as MC
@@ -62,6 +63,17 @@ class UserPhoto(CropImage):
       return image_field.url
     else:
       return settings.STATIC_URL + 'images/nucleus/default_dp.png'
+
+  @classmethod
+  def file_name(cls, image_field, fname):
+    save_count = 0
+    if image_field and os.path.exists(image_field.path):
+      filename = save_count = image_field.name.split('/')[-1].split('.')[0]
+      if len(filename.split('_')) > 1:
+        save_count = int(filename.split('_')[-1]) + 1
+    fname = image_field.instance.username + '_' + str(save_count) + '.' + fname.split('.')[-1]
+    return fname
+
 
 class User(AbstractUser, models.Model):
   """
