@@ -33,6 +33,4 @@ class PlaylistSerializer(serializers.ModelSerializer):
     fields = ('id', 'songs', 'person', 'name', 'private')
     depth = 1
 
-  def pre_save(self, obj):
-    obj.person = self.request.user
 

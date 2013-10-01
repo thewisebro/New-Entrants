@@ -9,9 +9,9 @@
       <input type="submit" value="Search">
     </form>
     <br>
-    <a id="trending" href="#append">Trending</a>
-    <a id="artists" href="#append">Artists</a>
-    <a id="albums" href="#append">Albums</a>
+    <span id="trending">Trending</span>
+    <span id="artists" >Artists</span>
+    <span id="albums" >Albums</span>
     <br>
     {% if user.is_active %}
       {{ user.username }}
@@ -23,7 +23,7 @@
         <input type="checkbox" name="private" checked>Private
         <input type="submit" value="Create">
       </form>
-      <a href="#append" id="playlists" onclick="display_playlists('{{user.username}}');">Playlists</a>
+      <span id="playlists" onclick="display_playlists('{{user.username}}');">Playlists</span>
       <a href="logout/">Logout</a>
     {% else %}
       <a href="login/">Login</a>

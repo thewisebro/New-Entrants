@@ -1,5 +1,13 @@
 /* Base.js for basic javascript of jukebox*/
-
+/*
+   hash ={
+   trending/[song/<id>]
+   artists/[<id>/][song/<id>]
+   albums/[<id>/][song/<id>]
+   playlists/<username>/[<id>/][song/<id>]
+   search/<search_string>[/song/<id>]
+   }
+*/
 
 $("#trending").click(function(){ display("trending"); });
 $("#artists").click(function(){ display("artists"); });
@@ -20,6 +28,9 @@ $('form#playlist').on('submit', function(e) {
 
 
 $('form#search').on('submit', function(e) {
+    q = $(this).find("input").val();
+    href = '#search/' + q;
+    document.location.href = href;
   $.ajax({
       type: 'get',
       url: 'search/',
@@ -63,6 +74,9 @@ var names = {
 // display function for display of list of either songs, artists or albums
 function display(name){
   if (name in names){
+    // for hashtags
+    href = '#' + name;
+    document.location.href = href;
     var show = names[name];
     var url = show[0];
     var func = window[show[1]];
@@ -80,6 +94,8 @@ function display(name){
 
 // display_album for displaying a specific album
 function display_album(id){
+  href = '#albums/'+ id;
+  document.location.href = href;
   url = "albums/" + id;
     $.ajax(url,contentType= "application/json").done( function(data){
       album = data[0];
@@ -103,6 +119,8 @@ function display_album(id){
 
 // display_artist for displaying a specific artist
 function display_artist(id){
+  href = '#artists/'+ id;
+  document.location.href = href;
   url = "artists/" + id;
     $.ajax(url,contentType= "application/json").done( function(data){
       artist = data[0];
@@ -123,18 +141,22 @@ function display_artist(id){
 
 
 function display_playlists(user){
+  href = '#playlists/' + user;
+  document.location.href = href;
   url = 'playlist/';
   $.ajax(url,{ type:"GET", data: {user:user} } ,contentType= "application/json").done( function(data){
     $("#append").empty();
     html = 'Playlists: ';
     for(var i=0; i<data.length; i++){
-      html += "<div onclick='display_playlist(" + data[i].id + ");'> Playlist Name: " + data[i].name + "</div>";
+      html += "<div onclick='display_playlist("  + data[i].id + ");'> Playlist Name: " + data[i].name + "</div>";
     }
     $("#append").append(html);
   });
 }
 
 function display_playlist(id){
+  href = '#playlist/' + id;
+  document.location.href = href;
   url = "playlist/" + id;
     $.ajax(url,contentType= "application/json").done( function(data){
       playlist = data;
@@ -147,7 +169,7 @@ function display_playlist(id){
         {
           url = 'song/' + Number(songs[i]);
           $.ajax(url,contentType= "application/json").done( function(data){
-            html = "<br>" + data.song + "<br>";
+            html = "<br> i=" + data.id + " : "+ data.song + "<br>";
             $("#append").append(html); // append must be in callback as it would be called after ajax request
           });
         }
@@ -170,7 +192,7 @@ function get_song_html(song)
   }
   html += "<br> Count: <p id='song_" + song.id + "'>" + song.count + "</p> " +
     "<img src=\'\/media\/" + song.album.album_art + "\' width='100px' height='100px'>" +
-    "<br> <a href='#song_" + song.id + "' onclick='play(" + song.id + ");'>Play </a> <br><br>";
+    "<br> <span onclick='play(" + song.id + ");'>Play </span> <br><br>";
   return html;
 }
 
@@ -203,6 +225,15 @@ function get_album_html(album)
 
 function play(id)
 {
+  hash = document.location.href.split('#')[1];
+  hash = hash.split('/');
+  if((i=hash.indexOf('song')) >=0 ){
+    hash[i+1] = id;
+    document.location.href = "#" +hash.join('/');
+  }
+  else{
+    document.location.href += '/song/' + id;
+  }
   var url = "play/?song_id=" + id;
   var song_id = "#song_" + id;
   $.ajax(url,contentType= "application/json").done( function(data){
@@ -210,4 +241,43 @@ function play(id)
     $(song_id).html(song.count);
   });
 }
+
+
+
+
+function split_hash(){
+  hash = document.location.href.split('#')[1];
+  hash = hash.split('/');
+  name = hash[0];
+  song = hash.indexOf('song');
+  if ( Object.keys(names).indexOf(name) >= 0){
+    if(hash.length == 2){
+      if(name == 'artists') display_artist(hash[1]);
+      if(name == 'albums') display_album(hash[1]);
+    }
+    else{
+      display(name);
+    }
+  }
+  if( name == 'playlists') display_playlists(hash[1]);
+  if( name == 'playlist' ) display_playlist(Number(hash[1]));
+  if( name== 'search'){
+    $("form#search").find("input[type=text]").val(hash[1]);
+    $("form#search").submit();
+  }
+  if (song >= 0){
+    play(hash[song+1]);
+  }
+}
+
+
+window.onload = split_hash();
+window.onhashchange = split_hash(); // For IE<8 and safari
+$(window).on('hashchange', function() {split_hash();});
+
+
+
+
+
+
 
