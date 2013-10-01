@@ -273,7 +273,7 @@ function split_hash(){
 
 window.onload = split_hash();
 window.onhashchange = split_hash(); // For IE<8 and safari
-$(window).on('hashchange', function() {split_hash();});
+//$(window).on('hashchange', function() {split_hash();});
 
 
 
