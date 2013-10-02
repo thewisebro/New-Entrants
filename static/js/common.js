@@ -52,7 +52,9 @@ function close_dialog(dialog_name){
 
 function load_pagelets(dom_elem){
   $(dom_elem).find('.pagelet').each(function(){
+    var pagelet_name = $(this).attr('id');
     $(this).load($(this).attr('pagelet-url'),function(){
+      $(document).trigger("pagelet_loaded_"+pagelet_name);
       load_pagelets(this);
     });
   });
@@ -61,6 +63,7 @@ function load_pagelets(dom_elem){
 function load_pagelet(pagelet_name){
   var $elem = $('.pagelet#'+pagelet_name);
   $elem.load($elem.attr('pagelet-url'),function(){
+    $(document).trigger("pagelet_loaded_"+pagelet_name);
     load_pagelets($elem);
   });
 }
@@ -68,3 +71,12 @@ function load_pagelet(pagelet_name){
 $(document).ready(function(){
   load_pagelets(document);
 });
+
+jQuery.cachedScript = function(url, options){
+  options = $.extend(options || {},{
+    dataType: "script",
+    cache: true,
+    url: url
+  });
+  return jQuery.ajax(options);
+};
