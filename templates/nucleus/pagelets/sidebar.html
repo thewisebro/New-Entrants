@@ -1,0 +1,6 @@
+<div id="sidebar-tabs">
+  {% for tab in tabs %}
+    <div id="{{ tab }}-tab" class="tab" onclick="tab_clicked('{{ tab }}');">{{ tab|title }}</div>
+  {% endfor %}
+  <div id="tab-arrow"><div></div></div>
+</div>

@@ -197,6 +197,7 @@ CHANNELI_APPS = (
   'notices',
   'api',
   'reporting',
+  'crop_image',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
