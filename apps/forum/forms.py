@@ -1,6 +1,9 @@
 from core import forms
+from forum.models import Question
 
-class Ask_Question_Form(forms.Form):
-  title = forms.CharField(max_length=100)
-  description = forms.CharField()
+class Ask_Question_Form(forms.ModelForm):
+  class Meta:
+    model = Question
+    fields = ['title','description']
+
 

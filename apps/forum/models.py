@@ -1,15 +1,16 @@
 import datetime
 
 from core import models
+from core.models import mixins
 from django.contrib.contenttypes.models import ContentType
-from django.contib.contenttypes import generic
+from django.contrib.contenttypes import generic
 from nucleus.models import Student
 from api import model_constants as MC
 
 from taggit_autocomplete.managers import TaggableManager
 
-class Question(models.Taggable):
-  profile = models.ForeignKey(Profile)
+class Question(mixins.Taggable):
+  profile = models.ForeignKey('Profile')
   datetime = models.DateTimeField(auto_now_add=True)
   description = models.TextField()
   title = models.CharField(max_length=MC.TEXT_LENGTH)
@@ -21,9 +22,9 @@ class Question(models.Taggable):
 class Profile(models.Model):
   student = models.OneToOneField(Student, primary_key=True)
   tags_followed = TaggableManager()
-  questions_followed = models.ManyToManyField(Question,null=True, blank=True)
-  answers_up = models.ManyToManyField(Answer, null=True, blank=True, related_name='upvoted_by')
-  answers_down = models.ManyToManyField(Answer, null=True, blank=True, related_name='downvoted_by')
+  questions_followed = models.ManyToManyField(Question, null=True, blank=True, related_name='following_profiles')
+  answers_up = models.ManyToManyField('Answer', null=True, blank=True, related_name='upvoted_by')
+  answers_down = models.ManyToManyField('Answer', null=True, blank=True, related_name='downvoted_by')
 
   def __unicode__(self):
     return self.student.username
@@ -52,7 +53,7 @@ class Activity(models.Model):
   )
   activity_type = models.CharField(max_length=MC.CODE_LENGTH, choices=ACTIVITY_CHOICES)
   content_type = models.ForeignKey(ContentType)
-  object_id = models.PostiveIntegerField()
+  object_id = models.IntegerField()
   content = generic.GenericForeignKey('content_type','object_id')
   profile = models.ForeignKey(Profile)
   datetime = models.DateTimeField(auto_now_add=True)
