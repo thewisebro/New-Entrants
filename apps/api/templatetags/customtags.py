@@ -1,5 +1,6 @@
 from django.template import Library
 from django.template.defaulttags import url as default_url
+from django.core.urlresolvers import reverse
 
 register = Library()
 
@@ -15,3 +16,8 @@ def url(parser, token):
       return actual_render(context)
   urlnode.render = custom_render
   return urlnode
+
+@register.simple_tag(takes_context=True)
+def pagelet(context, pagelet_name, *args, **kwargs):
+  return """<div id="%s" class="pagelet" pagelet-url="%s"></div>""" % \
+           (pagelet_name, reverse(pagelet_name, args=args, kwargs=kwargs))

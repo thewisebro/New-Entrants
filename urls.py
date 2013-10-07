@@ -1,12 +1,15 @@
 from django.conf.urls import patterns, include, url
-
+from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
 actual_urlpatterns = patterns('',
   url(r'', include('nucleus.urls')),
+  url(r'^crop_image/', include('crop_image.urls')),
   url(r'^admin/', include(admin.site.urls)),
   url(r'^forum/', include('forum.urls')),
+  url(r'^taggit_autocomplete/', include('taggit_autocomplete.urls')),
+  url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 )
 
 urlpatterns = patterns('',
