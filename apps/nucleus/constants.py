@@ -5,4 +5,5 @@ tabs = [
   ('games', True, ['Student']),
   ('groups', False, []),
   ('links', False, []),
+  ('forum', True, ['Student']),
 ]
