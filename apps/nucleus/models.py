@@ -1,10 +1,12 @@
-from django.contrib.auth.models import AbstractUser, UserManager, Group
+import os
 
+from django.contrib.auth.models import AbstractUser, UserManager, Group
+from django.conf import settings
 from core import models
 
 from api import model_constants as MC
 from facapp import constants as FC
-
+from crop_image import CropImage
 
 class OwnerActiveManager(models.Manager):
   def get_query_set(self):
@@ -42,12 +44,43 @@ class Owner(models.Model):
 class CustomUserManager(UserManager, models.Manager):
   pass
 
+class UserPhoto(CropImage):
+  unique_name = 'user_photo'
+  field_name = 'photo'
+  width = 100
+  height = 100
+
+  @classmethod
+  def get_instance(cls, request, pk):
+    if request.user.is_superuser:
+      return User.objects.get(pk=pk)
+    else:
+      return request.user
+
+  @classmethod
+  def get_image_url(cls, image_field):
+    if image_field:
+      return image_field.url
+    else:
+      return settings.STATIC_URL + 'images/nucleus/default_dp.png'
+
+  @classmethod
+  def file_name(cls, image_field, fname):
+    save_count = 0
+    if image_field and os.path.exists(image_field.path):
+      filename = save_count = image_field.name.split('/')[-1].split('.')[0]
+      if len(filename.split('_')) > 1:
+        save_count = int(filename.split('_')[-1]) + 1
+    fname = image_field.instance.username + '_' + str(save_count) + '.' + fname.split('.')[-1]
+    return fname
+
+
 class User(AbstractUser, models.Model):
   """
   User = Channeli User
   """
   name = models.CharField(max_length=MC.TEXT_LENGTH)
-  photo = models.ImageField(upload_to='nucleus/photo/', blank=True)
+  photo = UserPhoto.ModelField(upload_to='nucleus/photo/', blank=True)
   gender = models.CharField(max_length=1, choices=MC.GENDER_CHOICES, blank=True)
   birth_date = models.DateField(blank=True, null=True, verbose_name='Date of Birth')
   contact_no = models.CharField(max_length=12, blank=True, verbose_name='Contact No')

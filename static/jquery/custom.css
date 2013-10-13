@@ -12,7 +12,7 @@
 }
 
 .ui-dialog-title{
-  font:16px "Tahoma";
+  font:16px "Tahoma","Arial";
   color:#dd4b39;
 }
 
@@ -37,7 +37,7 @@
 
 .ui-menu-item a
 {
-  font:13px "Tahoma";
+  font:13px "Tahoma","Arial";
   color:#333;
   border-radius:0px;
 }
