@@ -29,6 +29,12 @@ class Profile(models.Model):
   def __unicode__(self):
     return self.student.username
 
+  @staticmethod  
+  def get_profile(student):
+    try:
+      return student.profile
+    except Profile.DoesNotExist:
+      return Profile.objects.create(student=student)
 
 class Answer(models.Model):
   profile = models.ForeignKey(Profile)

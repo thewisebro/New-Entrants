@@ -7,7 +7,9 @@ def ask_question(request):
   if request.method == 'POST':
     form = Ask_Question_Form(request.POST)
     if form.is_valid():
-      new_question = form.save()
+      new_question = form.save(commit=False)
+      new_question.profile = Profile.get_profile(request.user.student)
+      new_question.save()
       return  HttpResponse("Question added")
 
   else:
