@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <title> Notice board </title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+    </script>
+    <script src="{{ STATIC_URL }}js/notices/base.js">
+    </script>
+  </head>
+
+  <body>
+  Welcome to Notice Board!
+    {% if privelege%}
+      <a href="/notices/upload">Upload</a>
+    {% endif %}
+  {% if notice_list %}
+    <div id="list"></div>
+<!--  {% for selection in notice_list %}
+    <li><a href="{{ selection.reference }}">{{selection.subject}}</a></li>
+  {% endfor %} -->
+  {% endif %}
+  </body>
+

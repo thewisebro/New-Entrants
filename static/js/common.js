@@ -45,8 +45,10 @@ function dialog_iframe(data){
   $dialog.dialog('open');
   eval(data.name+'=$dialog;')
 }
-
+var temp;
 function close_dialog(dialog_name){
+  temp = dialog_name;
+  console.log(dialog_name);
   eval(dialog_name).dialog('close');
 }
 

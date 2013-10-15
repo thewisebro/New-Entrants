@@ -1,0 +1,65 @@
+$(document).on("load_app_notices", function(e, hash1, hash2){
+  $('#content').html('Welcome To Notice Board!');
+  console.log("hello");
+  get_privelege();
+  get_me_the_bar_of_page_nos_yo();
+});
+
+function get_privelege(){
+  $.ajax({
+    type: 'get',
+    url : 'notices/privelege/',
+    success: function (data) {
+    if(data.privelege){
+      html = '<a href="notices/upload/">Upload</a>';
+      $('#content').append(html);
+    }
+    }
+    });
+}
+
+function get_me_the_bar_of_page_nos_yo(){
+  $.ajax({
+    type: 'get',
+    url : 'notices/max_notices/',
+    success: function (data) {
+      html = '<div id="numbers">';
+      var l = data.total_notices%10;
+      var t = Math.floor(data.total_notices/10) ;
+      if(l == 0)
+      l += 10;
+      if (l > 0){
+        t++;
+        }
+      for(var i=0; i<t-1; i++){
+      html += '<span class="numbers_list" onclick="list_notices('+ (i+1) + ',' + 10 + ')">' + (i+1) +'</span>';
+      }
+      html += '<span class="numbers_list" onclick="list_notices('+ t + ',' + l + ')">' + t + '</span>';
+      html += '</div>';
+      $('#content').append(html);
+      if(t == 1){ 
+      list_notices(1, l);
+      }
+      else{
+      list_notices(1, 10);
+      }
+      }
+      });
+}
+
+function list_notices(page_no, rem){
+  href = '#notices/' + page_no;
+  document.location.href = href;
+  $.ajax({
+    type: 'get',
+    url : 'notices/list_notices/' + page_no,
+    success: function (data) {
+      html = '';
+      for(var i=0; i<rem; i++){
+      html += '<div class="notice_info">' + data[i].subject + '</div>'
+      }
+      $('#content').append(html);
+      }
+      });
+}
+

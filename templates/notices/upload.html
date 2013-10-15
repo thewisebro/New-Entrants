@@ -1,0 +1,18 @@
+{% block styles %}
+{{form.media.css}}
+{% endblock %}
+
+{% block body %}
+{% if privelege %}
+  <form action"/notices/" method="post">{% csrf_token %}
+  {{ form.uniform }}
+  <input type="submit" value="Upload"></input>
+  </form>
+{% else %}
+<p>You are not authorised.</p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{{form.media.js}}
+{% endblock %}

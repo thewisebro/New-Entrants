@@ -3,6 +3,9 @@ var loaded_scripts_apps = [];
 var apps_scripts = {
   'home':[
     '/static/js/nucleus/feeds.js'
+  ],
+  'notices':[
+    '/static/js/notices/base.js'
   ]
 }
 
