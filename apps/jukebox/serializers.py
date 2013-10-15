@@ -28,9 +28,22 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 class PlaylistSerializer(serializers.ModelSerializer):
   person = serializers.Field(source='person.username')
+  songs_list = serializers.SerializerMethodField('get_songs_list')
   class Meta:
     model = Playlist
-    fields = ('id', 'songs', 'person', 'name', 'private')
-    depth = 1
+    fields = ('id', 'songs', 'person', 'name', 'private','songs_list')
+    depth = 2
+
+  def get_songs_list(self, obj):
+    if(obj==None):
+      return []
+    songs = obj.songs
+    if(songs == ''):
+      return []
+    songs_id = songs.split('b')
+    lsongs = Song.objects.in_bulk(songs_id)
+    return lsongs
+
+
 
 

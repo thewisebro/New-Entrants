@@ -162,16 +162,14 @@ function display_playlist(id){
       playlist = data;
       $("#append").empty();
       if(playlist.songs){
-        songs = playlist.songs.split('b')
+        songs = playlist.songs.split('b');
+        songs_list = playlist.songs_list;
         html = "<br> playlist Name: <br>" + playlist.name + "<br> Songs: " + songs.length;
         $("#append").append(html);
         for(var i=0; i<songs.length; i++)
         {
-          url = 'song/' + Number(songs[i]);
-          $.ajax(url,contentType= "application/json").done( function(data){
-            html = "<br> i=" + data.id + " : "+ data.song + "<br>";
+            html = "<br> i=" + songs[i] + " : "+ playlist.songs_list[songs[i]] + "<br>";
             $("#append").append(html); // append must be in callback as it would be called after ajax request
-          });
         }
       }
       else{
