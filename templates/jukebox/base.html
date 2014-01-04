@@ -23,7 +23,7 @@
         <input type="checkbox" name="private" checked>Private
         <input type="submit" value="Create">
       </form>
-      <span id="playlists" onclick="display_playlists('{{user.username}}');">Playlists</span>
+      <span id="playlists" onclick="hash_change('playlists','{{user.username}}');">Playlists</span>
       <a href="logout/">Logout</a>
     {% else %}
       <a href="login/">Login</a>
@@ -40,6 +40,8 @@
 
 
 </body>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
   <script src="{{ STATIC_URL }}jquery/jquery.min.js">
   </script>
   <script src="{{ STATIC_URL }}js/jukebox/base.js">

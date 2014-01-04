@@ -1,6 +1,7 @@
 import nucleus
 import settings
 import utils
+import datetime
 
 from core import models
 from django.core.files.storage import FileSystemStorage
@@ -36,7 +37,7 @@ class Album(models.Model):
   album = models.CharField(max_length=MC.TEXT_LENGTH)
   artists = models.ManyToManyField(Artist, blank=True, null=True)              # Multiple Artists (feat.)
 #genres = models.ManyToManyField(Genre)                # Multiple Genres
-  year = models.IntegerField(max_length=4)
+  year = models.IntegerField(max_length=4, default = datetime.datetime.today().year)
   album_art = models.ImageField(upload_to=JC.ALBUMART_DIR, max_length=MC.TEXT_LENGTH)
   def __unicode__(self):
     return self.album
@@ -44,7 +45,7 @@ class Album(models.Model):
 class Song(models.Model):
   upload_storage = FileSystemStorage(location=JC.SONG_DIR, base_url='/uploads')
   song = models.CharField(max_length=MC.TEXT_LENGTH)          # Dispay name of Song
-  file_name = models.FileField(upload_to=content_file_name, storage=upload_storage, max_length=MC.TEXT_LENGTH)     # Name of The Song on the disk
+  file_name = models.FileField(upload_to=content_file_name, storage=upload_storage, max_length=1000)     # Name of The Song on the disk
   album = models.ForeignKey(Album, null=True)
   # ^ export album_art
   artists = models.ManyToManyField(Artist)              # Multiple Artists (feat.)
@@ -66,26 +67,28 @@ class Song(models.Model):
       To save extra artists in respective Album object
     """
     super(Song,self).save(*args, **kwargs)              # Save the usual way
-    album_artists = set(self.album.artists.all())       # Set used as list '-' was creating problem
-    artists = set(self.artists.all())
-    diff = list(artists-album_artists)
-    album_artists = list(album_artists) + diff          # list addition
-    self.album.artists = album_artists
-    self.album.save()
+    if self.album:
+      album_artists = set(self.album.artists.all())       # Set used as list '-' was creating problem
+      artists = set(self.artists.all())
+      diff = list(artists-album_artists)
+      album_artists = list(album_artists) + diff          # list addition
+      self.album.artists = album_artists
+      self.album.save()
 
   def delete(self,*args,**kwargs):
     """
       To delete extra artists in respective Album object
     """
-    rm_songs = self.album.song_set.all().exclude(id = self.id)      # rm -> Remaining things
-    rm_artists_id = rm_songs.values_list('artists',flat='true')
-    rm_artists = set(Artist.objects.filter(id__in=rm_artists_id))
-    album_artists = set(self.album.artists.all())
-    artists = set(self.artists.all())
-    diff = artists - rm_artists
-    album_artists = album_artists - diff
-    self.album.artists = list(album_artists)
-    self.album.save()
+    if self.album:
+      rm_songs = self.album.song_set.all().exclude(id = self.id)      # rm -> Remaining things
+      rm_artists_id = rm_songs.values_list('artists',flat='true')
+      rm_artists = set(Artist.objects.filter(id__in=rm_artists_id))
+      album_artists = set(self.album.artists.all())
+      artists = set(self.artists.all())
+      diff = artists - rm_artists
+      album_artists = album_artists - diff
+      self.album.artists = list(album_artists)
+      self.album.save()
     super(Song,self).delete(*args,**kwargs)                         # delete the usual way
 
 
