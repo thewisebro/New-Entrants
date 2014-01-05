@@ -194,7 +194,7 @@ function get_song_html(song)
 {
   var album=song.album;
   var album_art;
-  if(album){ album= album.album; album_art = album.album_art;}
+  if(album){ album_art = album.album_art; album= album.album; }
   else{ album=" "; album_art=" ";}
   html = "<br> Song: "+ song.song+ "<br> Album: " + album +"<br> Artist: ";
   for (var j=0; j<song.artists.length; j++)
@@ -203,7 +203,7 @@ function get_song_html(song)
   }
   var k=song.id;
   html += "<br> Count: <p id='count_"+k+"'>" + song.count + "</p> " +
-    "<img src=\'\/media\/" + album_art + "\' width='100px' height='100px'>" +
+    "<img src=\'\/media\/" + album_art + "\' width='300px' height='300px'>" +
     "<br> <span class='song' id='song_" + k + "'>Play </span> <br><br>";
   return html;
 }
@@ -215,7 +215,7 @@ function get_artist_html(artist)
 {
   html = "<div class='artist' id='artist_"+artist.id+"'>" +
     "<br> Artist: "+ artist.artist +
-    "<br> <img src='/media/" + artist.cover_pic + "' width='100px' height='100px'>" +
+    "<br> <img src='/media/" + artist.cover_pic + "' width='1000px' height='400px'>" +
     "<br><br><br></div>";
   return html;
 }
@@ -230,7 +230,7 @@ function get_album_html(album)
   {
     html +=  album.artists[j].artist + ", ";
   }
-    html += "<br> <img src=\'\/media\/" + album.album_art + "\' width='100px' height='100px'>" +
+    html += "<br> <img src=\'\/media\/" + album.album_art + "\' width='300px' height='300px'>" +
     "<br><br><br>";
   return html;
 }
