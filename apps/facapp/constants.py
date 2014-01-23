@@ -39,7 +39,7 @@ DESIGNATION_CHOICES = (
   ('ASP', 'Associate Professor'),
   ('EF', 'Ex Faculty'),
   ('EMF', 'Emeritus Fellows'),
-  ('APC', 'Assistant Professor (Contract)'), 
+  ('APC', 'Assistant Professor (Contract)'),
 )
 
 PROJECT_STATUS_CHOICES = (

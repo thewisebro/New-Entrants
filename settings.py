@@ -180,6 +180,7 @@ DJANGO_CONTRIB_APPS = (
 )
 
 THIRD_PARTY_APPS = (
+  'debug_toolbar',
   'rest_framework',
   'crispy_forms',
   'taggit',
@@ -188,6 +189,7 @@ THIRD_PARTY_APPS = (
   # placed here because threadedcomments is to be placed before it
   'django.contrib.comments',
   'compressor',
+  'django_extensions',
 )
 
 CHANNELI_APPS = (
