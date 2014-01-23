@@ -1,15 +1,219 @@
 <html>
   <head>
     <title>JukeBox</title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css"><!-- lato regular font import -->
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/main.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/cssmainbody.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artists.css"><!-- artists link -->
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artistslist.css">
+    <!-- font aw -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jukebox/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jukebox/nanoscroller.css">
+
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="./css/font-awesome-ie7.min.css">
+    <![endif]-->
+   <!-- <link href='http://fonts.googleapis.com/css?family=Raleway:500' rel='stylesheet' type='text/css'>-->
+    <!--<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artistslist.css">-->
+   <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css">-->
+
   </head>
 
   <body>
-    <form id="search" action="search/" method="get">
+  <div id="bigwrapper">
+<!--    <form id="search" action="search/" method="get">
       <input type="text" name="q">
       <input type="submit" value="Search">
     </form>
     <br>
-    <span id="trending">Trending</span>
+-->
+			<div id="searchDivcss" class="searchLightboxClose">
+				<div id="searchHeader">
+					<div>SEARCH JUKEBOX</div>
+					<div id="startTyping">Start Typing...</div>
+				</div>
+				<!-- input -->
+				<div id="inputSearchBig">
+					<input id="searchBig" type="text"/></input>
+				</div>
+				<!-- see more results -->
+				<div id="quickResults">
+					<div id="songSearch">
+						<div class="searchHeading">SONGS<span> (2,349)</span></div>
+						<div>
+							<ul class="searchResultList">
+								<li>
+									<div class="searchItemImg"></div>
+									<div class="searchItemDetails">
+										<div class="itemName">Song Name</div>
+										<div class="itemSubDetail">Rihanna</div>
+									</div>
+								</li>
+								<li>
+									<div class="searchItemImg"></div>
+									<div class="searchItemDetails">
+										<div class="itemName">Song Name</div>
+										<div class="itemSubDetail">Rihanna</div>
+									</div>
+								</li>
+								<li>
+									<div class="searchItemImg"></div>
+									<div class="searchItemDetails">
+										<div class="itemName">Song Name</div>
+										<div class="itemSubDetail">Rihanna</div>
+									</div>
+								</li>
+								<li>
+									<div class="searchItemImg"></div>
+									<div class="searchItemDetails">
+										<div class="itemName">Song Name</div>
+										<div class="itemSubDetail">Rihanna</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div id="albumSearch">
+						<div class="searchHeading">ALBUMS<span> (349)</span></div>
+						<div>
+							<ul class="searchResultList">
+								<li>
+									<div class="searchItemImg"></div>
+									<div class="searchItemDetails">
+										<div class="itemName">Song Name</div>
+										<div class="itemSubDetail">Rihanna</div>
+									</div>
+								</li>
+								<li>
+									<div class="searchItemImg"></div>
+									<div class="searchItemDetails">
+										<div class="itemName">Song Name</div>
+										<div class="itemSubDetail">Rihanna</div>
+									</div>
+								</li>
+								<li>
+									<div class="searchItemImg"></div>
+									<div class="searchItemDetails">
+										<div class="itemName">Song Name</div>
+										<div class="itemSubDetail">Rihanna</div>
+									</div>
+								</li>
+								<li>
+									<div class="searchItemImg"></div>
+									<div class="searchItemDetails">
+										<div class="itemName">Song Name</div>
+										<div class="itemSubDetail">Rihanna</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div id="artistSearch">
+						<div class="searchHeading">ARTISTS<span> (49)</span></div>
+						<div>
+							<ul class="searchResultList">
+								<li>
+									<div class="searchItemImg"></div>
+									<div class="searchItemDetails">
+										<div class="itemName">Song Name</div>
+										<div class="itemSubDetail">Rihanna</div>
+									</div>
+								</li>
+								<li>
+									<div class="searchItemImg"></div>
+									<div class="searchItemDetails">
+										<div class="itemName">Song Name</div>
+										<div class="itemSubDetail">Rihanna</div>
+									</div>
+								</li>
+								<li>
+									<div class="searchItemImg"></div>
+									<div class="searchItemDetails">
+										<div class="itemName">Song Name</div>
+										<div class="itemSubDetail">Rihanna</div>
+									</div>
+								</li>
+								<li>
+									<div class="searchItemImg"></div>
+									<div class="searchItemDetails">
+										<div class="itemName">Song Name</div>
+										<div class="itemSubDetail">Rihanna</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div id="seeMore">
+					See All Results
+				</div>
+
+	
+			</div>
+			<div id="sidebar">
+				<div id="logo">
+					<div id="jblogo"><i class="icon-play"></i></div>
+	
+				</div>
+
+				
+
+				<div id="navigation">
+					
+					
+
+					
+						<a id="trending_link">
+							<div id="trending_icon"><i class="icon-fire"></i></div>
+							<div id="trending_text">Trending</div>
+						</a>
+					
+
+					
+						<a id="artists_link" >
+							<div id="artists_icon"><i class="icon-star"></i></div>
+							<div id="artists_text">Artists</div>
+						</a>
+
+						<a id="albums_link" >
+							<div id="albums_icon"><i class="icon-music"></i></div>
+							<div id="albums_text">Albums</div>
+						</a>	
+
+						<a id="albums_link" onClick="lStumble();">
+							<div id="albums_icon"><i class=" icon-spinner"></i></div>
+							<div id="albums_text">Stumble</div>
+						</a>
+
+					<div id="playlists">	
+						
+							<a id="home_link">
+								<!-- icon-align-justify   icon-bookmark  -->
+							<div id="home_icon"><i class="icon-heart" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
+							<div id="home_text" style="margin-left: 16px;">My Playlists</div>
+							</a>
+					</div>	<!-- playlists -->
+					<div id="playlist_view">
+						<a href="">Favsongs</a>
+						<a href="">my songs</a>
+						<a href="">happy time</a>
+						<a href="">Favsongs</a>
+						
+							<div id="create_new" >
+								<a style="padding-right:0px;" href="">
+									<div style="font-weight:bold;">Create New</div>
+									<div style="margin-left:5px;">
+									<i class="icon-plus" style="display:inline-block;"></i>
+									</div>
+								</a>
+							</div>
+					</div>
+
+				</div>
+
+			</div>
+<!--    <span id="trending">Trending</span>
     <span id="artists" >Artists</span>
     <span id="albums" >Albums</span>
     <br>
@@ -28,22 +232,178 @@
     {% else %}
       <a href="login/">Login</a>
     {% endif %}
+-->
 
+<!-- main body data here -->
+    <div id="mainbody">
 
+      <div id="centerdata">
+
+      </div>  <!-- #centerdata ends -->
+    </div> <!-- #mainbody ends -->
 
 
 
 <div id="append">
 </div>
 
+<div id="rightside" style="display:none; ">    <!-- got to change after clicking -->
+<div id="popular_artists">
+<a id="qa">
+<div id="play_queue">Popular Artists</div>
+</a>
+</div>
+<div id="popular_artists_list">
+<div class="qitem">
+
+<div class="qimage">
+</div>
+<div class="qinfo">
+<a href="">
+<div class="qsong">Diamonds</div>
+<div class="qartist">Rihanna</div>
+</a>
+</div>	
+</div>
+
+<div class="qitem">
+
+<div class="qimage">
+</div>
+<div class="qinfo">
+<a href="">
+<div class="qsong">Diamonds</div>
+<div class="qartist">Rihanna</div>
+</a>
+</div>			
+</div>
+
+<div class="qitem">
+
+<div class="qimage">
+</div>
+<div class="qinfo">
+<a href="">
+<div class="qsong">Diamonds</div>
+<div class="qartist">Rihanna</div>
+</a>
+</div>		
+</div>
+
+<div class="qitem">
+
+<div class="qimage">
+</div>
+<div class="qinfo">
+<a href="">
+<div class="qsong">Diamonds</div>
+<div class="qartist">Rihanna</div>
+</a>
+</div>		
+</div>	
+</div>
+
+</div>   <!-- #rightside ends -->
+<div id="bottom">
+	<div id="bLeft">
+		<div id="bLeftLeft">
+			<img src="{{ STATIC_URL }}images/jukebox/bleftleft.png">
+		</div>
+		<div id="bLeftPlay">
+			<img src="{{ STATIC_URL }}images/jukebox/bleftplay.png">
+		</div>
+		<div id="bLeftRight">
+			<img src="{{ STATIC_URL }}images/jukebox/bleftright.png">
+		</div>
+	</div>
+	<div id="bMiddle">
+	<div id="musicbar">
+	<div id="musicPlayerPic">
+	<img src="./img/musicplayerpic.png">
+	</div>
+	<div id="musicPlayerSlider">
+	<div id="musicPlayerInfo">
+	<div id="infoLeft">
+	<div id="ilSong"><b>Suit & Tie</b></div>
+	<div id="ilArtist">- Justin Timberlake</div>
+	</div>
+	<div id="timeRight">
+	2:15 / 3:36
+	</div>
+	</div>
+
+	<div id="musicSlider"></div>
+	<div id="songLoaded"></div>
+	<div id="borderMusicSlider"></div> 
 
 
+	</div>
+	<div id="divisiondark">
+	<div id="divisionlight"></div>
+	</div>
+	<div id="musicbarSide">
+	<div id="looppic">
+	<img src="{{ STATIC_URL }}images/jukebox/looppic.png">
+	</div>
+	<div id="shufflepic">
+	<img src="{{ STATIC_URL }}images/jukebox/shufflepic.png">
+	</div>
+	</div>
+	</div>
+	<div id="bordermusicbar"></div>
+	<!-- search icon -->
+	<div id="searchButton" class="notOpen" onclick="searchView(this);">
+	<i class="icon-search"></i>
+	</div>
 
+	</div>
+	<div id="bRight">
+		<section id="volumesection">    
+		<div id="slider"></div> 
+		<div id="borderVolume"></div> 
+		<span id="volumeicons"><i class="icon-volume-up"></i></span>  
+		</section>  
+	</div>
+</div>
+ 
+
+  </div> <!-- div #bigwrapper ends -->
 </body>
-  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-  <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-  <script src="{{ STATIC_URL }}jquery/jquery.min.js">
-  </script>
+  <!--  <script src="{{ STATIC_URL }}jquery/jquery.min.js"></script>-->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery.nanoscroller.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/resize.js"></script> 
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/music.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-ui-1.10.3.custom.js"></script>
+   <!-- <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/musicplayerbottom.js"></script>
+<!--    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/soundmanager2.js"></script>  
+-->
+<!-- would add after adding music player bottom -->
+
+
+    <script type="text/javascript">
+    $( document ).ready(function() {
+		    // put id to the large slider to change its color to blue
+
+		    $( "#musicSlider" ).find('.ui-slider-range').attr('id','musicBlueSlider');
+
+		    $( "#slider" ).find('a').attr('id','ui-slidersmall-handle');
+		    $( "#musicSlider" ).find('a').attr('id','ui-sliderlarge-handle');
+
+		    });
+$('#centerdata').css('width',$(window).width()-180-240);
+// to erase the rightside on homeview and strech the centerdiv
+// $('#centerdata').css('width',$(window).width()-180-240);
+
+</script>
+
+
+<!--    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/soundedit.js"></script>   -->
+ <!-- <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
+ <!-- <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>-->
+
   <script src="{{ STATIC_URL }}js/jukebox/base.js">
   </script>
 </html>

@@ -1,0 +1,81 @@
+
+#oneAlbumOpened{
+	margin: 15px;
+}
+
+#oneAlbumHeader{
+	position: relative;
+	margin-top: 45px;
+	margin-bottom: 10px;
+
+	height: 30px;
+
+	border-bottom: 1px solid lightGrey;
+	font-family: "Lato Bold";
+	font-size: 18px;
+
+}
+#oaoWrapper{
+	width: 100%;
+	min-height: 100%;
+
+}
+#oaoWrapper>div{
+	display:block;
+	float: left;
+
+}
+#oaoLeft{
+	position: relative;
+
+	min-height: 100%;
+
+	width: 300px;
+
+}
+#oaoLInfo{
+	margin-top: 10px;
+	width: 300px;
+	padding-bottom: 7px;
+}
+#oaoLinfo div:nth-child(1){
+	font-size: 19px;
+	font-family: "Lato Bold";
+}
+#oaoLinfo div:nth-child(2){
+	font-size: 15px;
+}
+#oaoRight{
+	margin-left: 20px;
+	right: 15px;
+	left: 310px;
+	position: absolute;
+	max-width: 600px;
+}
+
+.oaoRListItem{
+	font-size: 14px;
+	padding: 3px;
+	padding-left: 10px;
+}
+
+.oaoRListItem:hover{
+	background-color: white;
+	cursor: pointer;
+
+}
+.miniIcons{
+	display: inline-block;
+	float: right;
+}
+.miniIcons a{
+	padding-left: 10px;
+	opacity: 0;
+}
+
+.oaoRListItem:hover .miniIcons a{
+	opacity: 1;
+}
+.miniIcons a:nth-child(3){
+	margin-right: 5px;
+};

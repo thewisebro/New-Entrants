@@ -15,6 +15,19 @@ class SongSerializer(serializers.ModelSerializer):
 class ArtistSerializer(serializers.ModelSerializer):
   class Meta:
     model = Artist
+    fields = ('id', 'artist')
+    depth = 1
+
+class AlbumDescSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Album
+    fields = ('id', 'song_set', 'album', 'artists', 'album_art')
+    depth = 1
+
+class ArtistDescSerializer(serializers.ModelSerializer):
+  album_set = AlbumDescSerializer(many=True)
+  class Meta:
+    model = Artist
     fields = ('id', 'album_set', 'artist', 'cover_pic')
     depth = 1
 
@@ -22,7 +35,7 @@ class ArtistSerializer(serializers.ModelSerializer):
 class AlbumSerializer(serializers.ModelSerializer):
   class Meta:
     model = Album
-    fields = ('id', 'song_set', 'album', 'artists', 'album_art')
+    fields = ('id', 'album', 'artists')
     depth = 1
 
 

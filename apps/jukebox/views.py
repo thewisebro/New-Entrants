@@ -180,7 +180,7 @@ class ArtistsJsonView(ListAPIView):
   """
     To show a list of artists
   """
-  queryset = Artist.objects.all()
+  queryset = Artist.objects.order_by('artist')
   serializer_class = ArtistSerializer
 
 
@@ -188,7 +188,7 @@ class AlbumsJsonView(ListAPIView):
   """
     To show a list of albums
   """
-  queryset = Album.objects.all()
+  queryset = Album.objects.order_by('album')[:100]
   serializer_class = AlbumSerializer
 
 
@@ -196,7 +196,7 @@ class AlbumDescJsonView(ListAPIView):
   """
     To show description of an Album, i.e., Artist, Songs, album_art
   """
-  serializer_class = AlbumSerializer
+  serializer_class = AlbumDescSerializer
   def get_queryset(self):
     if 'id' in self.kwargs:
       album_coming = self.kwargs['id']
@@ -208,7 +208,7 @@ class ArtistDescJsonView(ListAPIView):
   """
     To show description of an Artist, i.e., Albums, cover_pic
   """
-  serializer_class = ArtistSerializer
+  serializer_class = ArtistDescSerializer
   def get_queryset(self):
     if 'id' in self.kwargs:
       artist_coming = self.kwargs['id']

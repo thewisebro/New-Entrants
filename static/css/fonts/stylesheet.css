@@ -1,0 +1,44 @@
+﻿/* @font-face kit by Fonts2u (http://www.fonts2u.com) */ 
+
+
+
+/*@font-face {
+    font-family:"ProximaNova-Regular";src:url("ProximaNova-Regular.eot?") format("eot"),
+    url("ProximaNova-Regular.woff") format("woff"),
+    url("ProximaNova-Regular.ttf") format("truetype"),
+    url("ProximaNova-Regular.svg#ProximaNova-Regular") format("svg");
+    font-weight:normal;font-style:normal;
+}
+
+
+@font-face {
+  font-family: 'Myriad Pro';
+  font-style: normal;
+  font-weight: normal;
+  src:url("MYRIADPRO-REGULAR.OTF?") format("opentype")
+}
+*/
+@font-face {
+  font-family: 'ProximaNova-Regular';
+ 
+  src:url("ProximaNova-Regular.OTF?") format("opentype")
+}
+@font-face {
+  font-family: 'ProximaNova-Semibold';
+ 
+  src:url("ProximaNova-Semibold.OTF?") format("opentype")
+}
+
+@font-face {
+  font-family: 'ProximaNova-Regular';
+ 
+  src:url("ProximaNova-Regular.OTF?") format("opentype")
+}
+
+
+
+
+
+
+
+
