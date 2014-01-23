@@ -127,11 +127,11 @@ class WebmailAccount(models.Model):
 def Role(group_name):
   class SubUser(models.Model):
     user = models.OneToOneField(User, primary_key=True)
-    __metaclass__ = models.base.ModelBase    
+    __metaclass__ = models.base.ModelBase
     @property
     def role(self):
       return group_name
-    
+
     @staticmethod
     def post_save_receiver(sender, **kwargs):
       instance = kwargs['instance']
@@ -141,7 +141,7 @@ def Role(group_name):
 
     def __unicode__(self):
       return self.role + ':' + unicode(self.user)
-    
+
     class Meta:
       abstract = True
   return SubUser
@@ -179,7 +179,7 @@ class StudentBase(Role('Student')):
   bhawan = models.CharField(max_length=MC.CODE_LENGTH,
             choices=MC.BHAWAN_CHOICES, null=True, blank=True, default=None)
   room_no = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
-  
+
   class Meta:
     ordering = ['semester','branch']
     abstract = True
@@ -245,7 +245,7 @@ class StudentInfoBase(models.Model):
 
 class StudentInfo(StudentInfoBase):
   student = models.OneToOneField(Student, primary_key=True)
-  
+
   class Meta:
     verbose_name = 'Student Information'
     verbose_name_plural = 'Students Information'
@@ -253,7 +253,7 @@ class StudentInfo(StudentInfoBase):
 
 class StudentAlumniInfo(StudentInfoBase):
   studentalumni = models.OneToOneField(StudentAlumni, primary_key=True)
-  
+
   class Meta:
     verbose_name = 'StudentAlumni Information'
     verbose_name_plural = 'StudentAlumnis Information'
@@ -267,7 +267,7 @@ class Course(models.Model):
   pre_requisites = models.ManyToManyField('Course', null=True, blank=True)
   semtype = models.CharField(max_length=1, choices=MC.SEMESTER_TYPE_CHOICES)
   year = models.IntegerField()
-  
+
   def __unicode__(self):
     return self.course_code + ':' + self.course_name + '(' + self.semtype +\
             ',' + self.year + ')'
@@ -278,7 +278,7 @@ class RegisteredBranchCourse(models.Model):
   course = models.ForeignKey(Course)
   semester_no = models.IntegerField()
   credits = models.IntegerField(null=True, blank=True)
-  
+
   def __unicode__(self):
     return unicode(self.branch) + ',' + unicode(self.semester_no) + ':' +\
            unicode(self.course)

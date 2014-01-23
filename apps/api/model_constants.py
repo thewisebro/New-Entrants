@@ -185,7 +185,7 @@ DEGREES= {
   'UG':['B.Tech.','B.Arch.','IDD','IMT','IMSc'],
   'PG':['M.Tech.','M.Arch.','MURP','PGDip','MBA','MCA','MSc'],
   'PHD':['PHD']
-}    
+}
 
 GRADUATION_CHOICES = (
     ('UG','Under Graduate'),

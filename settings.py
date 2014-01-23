@@ -217,8 +217,6 @@ COMPRESS_PRECOMPILERS = (
   ('text/sass', 'sass -I static/ --compass {infile} {outfile}'),
 )
 
-INTERNAL_IPS = ['192.168.121.5']
-
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
