@@ -12,7 +12,7 @@ class DelegateMiddleware(object):
         account = User.objects.get_or_none(username=account_username)
         if account and request.user.accounts.filter(username=account.username).exists():
           request.owner = request.user.owner(account)
-          request.user =  request.owner.account
+          request.user = request.owner.account
           request.account_username = account_username
         else:
           raise Http404

@@ -14,6 +14,7 @@ class Taggable(models.Model):
 
 
 class TrashableManager(models.Manager):
+  use_for_related_fields = True
   def get_query_set(self):
     return super(TrashableManager, self).get_query_set().filter(trashed=False)
 
