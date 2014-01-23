@@ -9,6 +9,7 @@ actual_urlpatterns = patterns('',
   url(r'^admin/', include(admin.site.urls)),
   url(r'^taggit_autocomplete/', include('taggit_autocomplete.urls')),
   url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+  url(r'^facapp/', include('facapp.urls')),
 )
 
 urlpatterns = patterns('',
