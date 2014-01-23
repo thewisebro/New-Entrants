@@ -12,11 +12,12 @@ YES_NO_CHOICES = (
 DEPARTMENT_CHOICES = (
     # End all department names with 'D'
     ('AHEC', 'Alternate Hydro Energy Centre'),
+    ('ASED', 'Applied Science and Engineering Department'),
     ('CNT', 'Centre for Nanotechnology'),
-    ('ARCD', 'Architecture Department'),
+    ('ARCD', 'Architecture and Planning Department'),
     ('BTD', 'Biotechnology Department'),
     ('CHED', 'Chemical Engineering Department'),
-    ('CDM', 'Centre of Disaster Mitigation'),
+    ('CDM', 'Centre of Excellence in Disaster Mitigation and Management'),
     ('CYD', 'Chemistry Department'),
     ('CED','Civil Engineering Department'),
     ('CSED','Computer Science and Engineering Department'),
@@ -32,6 +33,7 @@ DEPARTMENT_CHOICES = (
     ('MIED','Mechanical and Industrial Engineering Department'),
     ('MMED','Metallurgical and Materials Engineering Department'),
     ('PTD','Paper Technology Department'),
+    ('PPED','Polymer and Process Engineering Department'),
     ('PHD','Physics Department'),
     ('WRDMD','Water Resources Development and Management Department'),
     ('CDM','Centre for Disaster Mitigation'),
@@ -96,10 +98,8 @@ SEMESTER_CHOICES = (
   ('UG0' , 'UG Overall'),
   ('DPLM', 'Diploma'),
   ('PG0' , 'PG Overall'),
-  ('PHD0' , 'PHD Overall'),
   ('10TH', 'Tenth'  ),
   ('12TH', 'Twelfth'),
-  ('UG00', 'UG(New Entrants)'),
   ('UG10', 'UG(I Year I Semester)'),
   ('UG11', 'UG(I Year II Semester)'),
   ('UG20', 'UG(II Year I Semester)'),
@@ -138,6 +138,8 @@ SEMESTER_CHOICES = (
   ('PHD81', 'PHD(VIII Year II Semester)'),
   ('PHD90', 'PHD(IX Year I Semester)'),
   ('PHD91', 'PHD(IX Year II Semester)'),
+  ('PHD0' , 'PHD Overall'),
+  ('UG00', 'UG(New Entrants)')
   )
 
 # Can consist of : alphabets (small and capital) + digits + dot character(.)
@@ -177,9 +179,8 @@ SIMPLIFIED_DEGREE = {
 BANK_NAME= (
     ('PNB','Punjab National Bank'),
     ('SBI', 'State Bank Of India'),
-    )
+)
 
-# TODO: Fill with real data.
 DEGREES= {
   'UG':['B.Tech.','B.Arch.','IDD','IMT','IMSc'],
   'PG':['M.Tech.','M.Arch.','MURP','PGDip','MBA','MCA','MSc'],
@@ -190,6 +191,11 @@ GRADUATION_CHOICES = (
     ('UG','Under Graduate'),
     ('PG','Post Graduate'),
     ('PHD','PhD')
+)
+
+COURSE_CHANGE_CHOICES = (
+  ('ADD', 'Course Added'),
+  ('DRP', 'Course Dropped'),
 )
 
 BHAWAN_CHOICES = (

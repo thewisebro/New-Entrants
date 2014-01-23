@@ -1,12 +1,18 @@
 import os
+import re
 
 from django.contrib.auth.models import AbstractUser, UserManager, Group
 from django.conf import settings
+from django.core import validators
+from django.db.models.base import ModelBase
 from core import models
 
 from api import model_constants as MC
 from facapp import constants as FC
 from crop_image import CropImage
+
+
+############################# Base Models #############################
 
 class OwnerActiveManager(models.Manager):
   def get_query_set(self):
@@ -71,7 +77,8 @@ class UserPhoto(CropImage):
       filename = save_count = image_field.name.split('/')[-1].split('.')[0]
       if len(filename.split('_')) > 1:
         save_count = int(filename.split('_')[-1]) + 1
-    fname = image_field.instance.username + '_' + str(save_count) + '.' + fname.split('.')[-1]
+    fname = image_field.instance.username + '_' + str(save_count) + \
+             '.' + fname.split('.')[-1]
     return fname
 
 
@@ -82,19 +89,15 @@ class User(AbstractUser, models.Model):
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   photo = UserPhoto.ModelField(upload_to='nucleus/photo/', blank=True)
   gender = models.CharField(max_length=1, choices=MC.GENDER_CHOICES, blank=True)
-  birth_date = models.DateField(blank=True, null=True, verbose_name='Date of Birth')
-  contact_no = models.CharField(max_length=12, blank=True, verbose_name='Contact No')
+  birth_date = models.DateField(blank=True, null=True,
+                                verbose_name='Date of Birth')
+  contact_no = models.CharField(max_length=12, blank=True,
+                                verbose_name='Contact No')
   connections = models.ManyToManyField('self', blank=True, null=True)
   objects = CustomUserManager()
 
   def __unicode__(self):
     return str(self.username) + ':' + self.name
-
-  def save(self, *args, **kwargs):
-    result = super(User, self).save(*args, **kwargs)
-    if hasattr(self, 'role'):
-      self.groups.add(Group.objects.get(name=getattr(self, 'role')))
-    return result
 
   def in_group(self, name):
     return self.groups.filter(name=name).exists()
@@ -107,11 +110,13 @@ class User(AbstractUser, models.Model):
 
   @property
   def delegates(self):
-    return User.objects.filter(user_owners__account=self, user_owners__active=True)
+    return User.objects.filter(user_owners__account=self,
+                                user_owners__active=True)
 
   @property
   def accounts(self):
-    return User.objects.filter(account_owners__user=self, account_owners__active=True)
+    return User.objects.filter(account_owners__user=self,
+                                account_owners__active=True)
 
 
 class WebmailAccount(models.Model):
@@ -119,12 +124,40 @@ class WebmailAccount(models.Model):
   user = models.ForeignKey(User)
 
 
+def Role(group_name):
+  class SubUser(models.Model):
+    user = models.OneToOneField(User, primary_key=True)
+    __metaclass__ = models.base.ModelBase    
+    @property
+    def role(self):
+      return group_name
+    
+    @staticmethod
+    def post_save_receiver(sender, **kwargs):
+      instance = kwargs['instance']
+      if kwargs['created']:
+        instance.user.groups.add(Group.objects.get_or_create(
+                                               name=instance.role)[0])
+
+    def __unicode__(self):
+      return self.role + ':' + unicode(self.user)
+    
+    class Meta:
+      abstract = True
+  return SubUser
+
+
+########################## Student Models #############################
+
 class Branch(models.Model):
   code = models.CharField(max_length=MC.CODE_LENGTH, primary_key=True)
   name = models.CharField(max_length=MC.TEXT_LENGTH)
-  degree = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.DEGREE_CHOICES)
-  department = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.DEPARTMENT_CHOICES)
-  graduation = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.GRADUATION_CHOICES)
+  degree = models.CharField(max_length=MC.CODE_LENGTH,
+                            choices=MC.DEGREE_CHOICES)
+  department = models.CharField(max_length=MC.CODE_LENGTH,
+                                choices=MC.DEPARTMENT_CHOICES)
+  graduation = models.CharField(max_length=MC.CODE_LENGTH,
+                                choices=MC.GRADUATION_CHOICES)
   duration = models.IntegerField(null=True, blank=True) # no of semesters
 
   class Meta:
@@ -134,25 +167,50 @@ class Branch(models.Model):
     return self.code + ':' + self.name + '(' + self.graduation + ')'
 
 
-class Student(User):
-  role = 'Student'
-  semester = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.SEMESTER_CHOICES)
+class StudentBase(Role('Student')):
+  # semester field for backward compatibility, never change it's value
+  # directly.
+  semester = models.CharField(max_length=MC.CODE_LENGTH,
+                              choices=MC.SEMESTER_CHOICES)
+  semester_no = models.IntegerField()
   branch = models.ForeignKey(Branch)
-  admission_year = models.CharField(max_length=4)
+  admission_year = models.IntegerField()
   cgpa = models.CharField(max_length=6, blank=True)
-  bhawan = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.BHAWAN_CHOICES, null=True, blank=True, default=None)
+  bhawan = models.CharField(max_length=MC.CODE_LENGTH,
+            choices=MC.BHAWAN_CHOICES, null=True, blank=True, default=None)
   room_no = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
-  courses = models.ManyToManyField('Course', through='RegisteredCourse', blank=True, null=True)
-
+  
   class Meta:
     ordering = ['semester','branch']
+    abstract = True
+
+  def save(self, *args, **kwargs):
+    # Change semester value automatically on save.
+    if self.semester_no > 0:
+      year = (self.semester_no + 1)/2
+      semtype_int = (self.semester_no + 1)%2
+      self.semester = self.branch.graduation + str(year) + str(semtype_int)
+    return super(StudentBase, self).save(*args, **kwargs)
+
+  @property
+  def name(self):
+    return self.user.name
 
 
-class StudentInfo(models.Model):
-  student = models.OneToOneField(Student, primary_key=True)
+class Student(StudentBase):
+  pass
+
+class StudentAlumni(StudentBase):
+  @property
+  def role(self):
+    return 'Alumni'
+
+
+class StudentInfoBase(models.Model):
   fathers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   fathers_occupation = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  fathers_office_address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
+  fathers_office_address = models.CharField(max_length=MC.TEXT_LENGTH,
+                                            blank=True)
   fathers_office_phone_no = models.CharField(max_length=12, blank=True)
   mothers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   permanent_address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
@@ -163,78 +221,145 @@ class StudentInfo(models.Model):
   bank_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   bank_account_no = models.CharField(max_length=25, blank=True)
   passport_no = models.CharField(max_length=25, blank=True)
-  nearest_station = models.CharField(max_length=MC.TEXT_LENGTH, blank=True, choices=MC.RAILWAY_CHOICES)
+  nearest_station = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                                      choices=MC.RAILWAY_CHOICES)
   local_guardian_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  local_guardian_address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
+  local_guardian_address = models.CharField(max_length=MC.TEXT_LENGTH,
+                                            blank=True)
   local_guardian_contact_no = models.CharField(max_length=12, blank=True)
-  category = models.CharField(max_length=3, choices=MC.CATEGORY_CHOICES, blank=True)
+  category = models.CharField(max_length=3, choices=MC.CATEGORY_CHOICES,
+                              blank=True)
   nationality = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  marital_status = models.CharField(max_length=3, choices=MC.MARITAL_STATUS_CHOICES, blank=True)
-  blood_group = models.CharField(max_length=3, choices=MC.BLOOD_GROUP_CHOICES, blank=True)
+  marital_status = models.CharField(max_length=3,
+                            choices=MC.MARITAL_STATUS_CHOICES, blank=True)
+  blood_group = models.CharField(max_length=3, choices=MC.BLOOD_GROUP_CHOICES,
+                                  blank=True)
   physically_disabled = models.BooleanField(default=False, blank=True)
   fulltime = models.BooleanField(default=False, blank=True)
   resident = models.BooleanField(default=True, blank=True)
   license_no = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
 
   class Meta:
+    abstract = True
+
+
+class StudentInfo(StudentInfoBase):
+  student = models.OneToOneField(Student, primary_key=True)
+  
+  class Meta:
     verbose_name = 'Student Information'
     verbose_name_plural = 'Students Information'
 
 
-class Faculty(User):
-  role = 'Faculty'
-  department = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.DEPARTMENT_CHOICES)
+class StudentAlumniInfo(StudentInfoBase):
+  studentalumni = models.OneToOneField(StudentAlumni, primary_key=True)
+  
+  class Meta:
+    verbose_name = 'StudentAlumni Information'
+    verbose_name_plural = 'StudentAlumnis Information'
+
+
+class Course(models.Model):
+  code = models.CharField(max_length=MC.CODE_LENGTH, primary_key=True)
+  name = models.CharField(max_length=MC.TEXT_LENGTH)
+  credits = models.IntegerField()
+  subject_area = models.CharField(max_length=MC.CODE_LENGTH)
+  pre_requisites = models.ManyToManyField('Course', null=True, blank=True)
+  semtype = models.CharField(max_length=1, choices=MC.SEMESTER_TYPE_CHOICES)
+  year = models.IntegerField()
+  
+  def __unicode__(self):
+    return self.course_code + ':' + self.course_name + '(' + self.semtype +\
+            ',' + self.year + ')'
+
+
+class RegisteredBranchCourse(models.Model):
+  branch = models.ForeignKey(Branch)
+  course = models.ForeignKey(Course)
+  semester_no = models.IntegerField()
+  credits = models.IntegerField(null=True, blank=True)
+  
+  def __unicode__(self):
+    return unicode(self.branch) + ',' + unicode(self.semester_no) + ':' +\
+           unicode(self.course)
+
+
+class RegisteredCourseChangeBase(models.Model):
+  course = models.ForeignKey(Course)
+  credits = models.IntegerField(null=True, blank=True)
+  change = models.CharField(max_length=3, choices=MC.COURSE_CHANGE_CHOICES)
+
+  class Meta:
+    abstract = True
+
+class RegisteredCourseChange(RegisteredCourseChangeBase):
+  student = models.ForeignKey(Student)
+
+  def __unicode__(self):
+    return unicode(self.student) + ':' + unicode(self.course) +\
+           ':' + self.change
+
+class RegisteredCourseChangeAlumni(RegisteredCourseChangeBase):
+  studentalumni = models.ForeignKey(StudentAlumni)
+
+  def __unicode__(self):
+    return unicode(self.studentalumni) + ':' + unicode(self.course)
+
+
+class Batch(models.Model):
+  name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
+  faculties = models.ManyToManyField('Faculty', blank=True, null=True)
+  semtype = models.CharField(max_length=1, choices=MC.SEMESTER_TYPE_CHOICES)
+  year = models.IntegerField()
+  course = models.ForeignKey(Course)
+  students = models.ManyToManyField(Student, blank=True, null=True)
+
+  def __unicode__(self):
+    return self.name + ':' + unicode(self.course)
+
+
+########################### Other Roles  ##############################
+
+class Faculty(Role('Faculty')):
+  department = models.CharField(max_length=MC.CODE_LENGTH,
+                                choices=MC.DEPARTMENT_CHOICES)
   resume = models.FileField(upload_to='facapp/resumes', null=True, blank=True)
-  designation = models.CharField(max_length=MC.CODE_LENGTH, choices=FC.DESIGNATION_CHOICES)
+  designation = models.CharField(max_length=MC.CODE_LENGTH,
+                                  choices=FC.DESIGNATION_CHOICES)
   address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True, null=True)
   employee_code = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
-  date_of_joining = models.CharField(max_length=MC.CODE_LENGTH, blank=True, null=True)
+  date_of_joining = models.CharField(max_length=MC.CODE_LENGTH, blank=True,
+                                      null=True)
   home_page = models.URLField(blank=True, null=True)
 
   class Meta:
     verbose_name_plural = 'Faculties'
 
 
-class Alumni(User):
-  role = 'Alumni'
+class Alumni(Role('Alumni')):
   branch = models.ForeignKey(Branch)
-  admission_year = models.CharField(max_length=4)
+  admission_year = models.IntegerField()
   cgpa = models.CharField(max_length=6, blank=True)
-  passout_year = models.CharField(max_length=4, blank=True)
+  passout_year = models.IntegerField(null=True, blank=True)
   address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   pincode = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
 
 
-class Course(models.Model):
-  code = models.CharField(max_length=MC.CODE_LENGTH, primary_key=True)
-  name = models.CharField(max_length=MC.TEXT_LENGTH)
-  pre_requisites = models.ManyToManyField('Course', null=True, blank=True)
+########################## Other useful Models ########################
+
+class GlobalVarMeta(ModelBase):
+  def __getitem__(cls, key):
+    return cls.objects.get(key=key).value
+
+  def __setitem__(cls, key, value):
+    pair = cls.objects.get_or_create(key=key)[0]
+    pair.value = value
+    pair.save()
+
+class GlobalVar(models.Model):
+  key = models.CharField(max_length=MC.TEXT_LENGTH)
+  value = models.CharField(max_length=MC.TEXT_LENGTH)
+  __metaclass__ = GlobalVarMeta
 
   def __unicode__(self):
-    return self.course_code + ':' + self.course_name
-
-
-class RegisteredCourse(models.Model):
-  student = models.ForeignKey(Student)
-  course = models.ForeignKey(Course)
-  credits = models.IntegerField()
-  registered_date = models.DateField(blank=True, null=True)
-  semester = models.CharField(max_length=MC.TEXT_LENGTH, choices=MC.SEMESTER_CHOICES)
-  subject_area = models.CharField(max_length=MC.CODE_LENGTH)
-  cleared_status = models.CharField(max_length=MC.CODE_LENGTH, default='NXT') # TODO set default based on choices
-  grade = models.CharField(max_length=2, choices=MC.GRADE_CHOICES, default='-')
-
-  def __unicode__(self):
-    return unicode(self.student) + ':' + unicode(self.course)
-
-
-class Class(models.Model):
-  name = models.CharField(max_length=MC.TEXT_LENGTH)
-  faculties = models.ManyToManyField(Faculty, blank=True, null=True)
-  semester_type = models.CharField(max_length=1, choices=MC.SEMESTER_TYPE_CHOICES)
-  year = models.CharField(max_length=4)
-  course = models.ForeignKey(Course)
-  students = models.ManyToManyField(Student, blank=True, null=True)
-
-  def __unicode__(self):
-    return self.name + ':' + unicode(self.course)
+    return self.key + ':' + self.value
