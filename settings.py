@@ -180,6 +180,7 @@ DJANGO_CONTRIB_APPS = (
 )
 
 THIRD_PARTY_APPS = (
+  'debug_toolbar',
   'rest_framework',
   'crispy_forms',
   'taggit',
@@ -188,6 +189,7 @@ THIRD_PARTY_APPS = (
   # placed here because threadedcomments is to be placed before it
   'django.contrib.comments',
   'compressor',
+  'django_extensions',
 )
 
 CHANNELI_APPS = (
@@ -214,6 +216,8 @@ CRISPY_CLASS_CONVERTERS = {
 COMPRESS_PRECOMPILERS = (
   ('text/sass', 'sass -I static/ --compass {infile} {outfile}'),
 )
+
+INTERNAL_IPS = ['192.168.121.5']
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

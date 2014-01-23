@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
+from django_extensions.admin import ForeignKeyAutocompleteAdmin as ModelAdmin
 from core import forms
 from nucleus.models import *
 
@@ -69,11 +70,15 @@ class UserAdmin(AuthUserAdmin):
   filter_horizontal = ('groups', 'user_permissions',)
   search_fields = ['username', 'name']
 
-class BranchAdmin(admin.ModelAdmin):
+class BranchAdmin(ModelAdmin):
   search_fields = ['code', 'name', 'department']
 
-class StudentAdmin(admin.ModelAdmin):
+class StudentAdmin(ModelAdmin):
   exclude = ['semester']
+  search_fields = ['user__name', 'user__username']
+  related_search_fields = {
+    'user':('username',),
+  }
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Owner)

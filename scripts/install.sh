@@ -15,9 +15,12 @@ ln -s /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib/libjpeg.so
 ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/libfreetype.so
 pip install PIL
 
-# django-compressor dependency 
+# django-compressor dependency
 pip install django-appconf
 pip install versiontools
 
 # Installing compass
 gem install compass
+
+# django-debug-toolbar
+pip install sqlparse
