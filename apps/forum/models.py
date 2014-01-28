@@ -29,7 +29,7 @@ class Profile(models.Model):
   def __unicode__(self):
     return self.student.username
 
-  @staticmethod  
+  @staticmethod
   def get_profile(student):
     try:
       return student.profile

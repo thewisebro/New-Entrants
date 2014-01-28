@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from forum.models import *
 from forum.forms import *
 from django.utils import simplejson
 
-
+@login_required
 def ask_question(request):
   if request.method == 'POST':
     form = Ask_Question_Form(request.POST)
@@ -34,7 +35,7 @@ def answer_dict(answer):
     'question_id': answer.question.pk,
     'description': answer.description
   }
-    		
+
 
 def fetch_questions(request):
   questions = Question.objects.all()
@@ -53,10 +54,19 @@ def add_answer(request):
   question_id = request.POST['question_id']
   description = request.POST['description']
   question = Question.objects.get(id=question_id)
-  answer = question.answer_set.create(description=description)
-  answer.save(commit=False)
-  answer.profile = Profile.get_profile(request.user.student)
-  answer.save()
-  json_data = simplejson.dumps({'question':question_dict(question),'answers':map(answer_dict,answers)})
+  profile = Profile.get_profile(request.user.student)
+  answer = question.answer_set.create(description=description, profile=profile)
+  json_data = simplejson.dumps({'answer':answer_dict(answer)})
   return HttpResponse(json_data, mimetype='application/json')
+
+def fetch_answer(request):
+  answer_id = request.GET['answer_id']
+  answer = Answer.objects.get(id=answer_id)
+  json_data = simplejson.dumps({'answer':answer_dict(answer)})
+  return HttpResponse(json_data, mimetype='application/json')
+
+def follow_question(request):
+  question_id = request.GET['question_id']
+  question = Question.objects.get(id=question_id)
+  profile = Profile.get_profile(request.user.student)
 
