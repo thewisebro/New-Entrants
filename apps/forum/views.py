@@ -69,4 +69,4 @@ def follow_question(request):
   question_id = request.GET['question_id']
   question = Question.objects.get(id=question_id)
   profile = Profile.get_profile(request.user.student)
-
+  profile.question_followed.add(question)

@@ -111,3 +111,9 @@ function display_answer(answer_id){
       $('#content').append(html);
     });
 }
+
+function follow_question(question_id){
+  $.get('forum/follow_question/',
+    {
+      'question_id': question_id
+    },function(data)
