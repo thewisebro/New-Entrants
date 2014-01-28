@@ -6,6 +6,9 @@ var apps_scripts = {
   ],
   'forum':[
     '/static/js/forum/base.js'
+  ],
+  'events':[
+    '/static/js/events/events.js'
   ]
 }
 

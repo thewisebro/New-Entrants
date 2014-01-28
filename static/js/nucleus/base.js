@@ -9,8 +9,17 @@ function open_login_dialog(){
     height: 200,
     src: '/login_dialog/?next=/close_dialog/login_dialog/',
     close: function(){
+      user_logged_in = true;
       $(document).trigger("login");
     }
+  });
+}
+
+function logout(){
+  $.get('/logout_ajax/',{
+    },function(data){
+      user_logged_in = false;
+      $(document).trigger("logout");
   });
 }
 
@@ -19,11 +28,19 @@ $(document).on("login", function(){
   load_pagelet("sidebar");
 });
 
+$(document).on("logout", function(){
+  load_pagelet("header");
+  load_pagelet("sidebar");
+});
+
 $(document).on("pagelet_loaded_sidebar",function(){
   tabs = $('.tab').map(function(){return this.id.split('-')[0];});
   tabs_parent_top = $('#sidebar-tabs').position().top;
+  var load = true;
+  if(current_tab)
+    load = false;
   current_tab = undefined;
-  hashchangeCallback();
+  hashchangeCallback(load);
 });
 
 $('#loading-div')
@@ -41,13 +58,15 @@ function tab_clicked(tab){
     location.hash = tab;
 }
 
-function hashchangeCallback(){
+function hashchangeCallback(load){
   var hashtags = location.hash.substr(1).split('/');
   var first_hashtag = hashtags.shift();
   if(!first_hashtag)first_hashtag = tabs[0];
-  load_app(first_hashtag,function(){
-    $(document).trigger("load_app_"+first_hashtag, hashtags);
-  });
+  if(load)
+    load_app(first_hashtag,function(){
+      $(document).trigger("load_app_"+first_hashtag, hashtags);
+      $('.nano').nanoScroller();
+    });
   if($.inArray(first_hashtag, tabs) > -1){
     var tab = first_hashtag;
     if(current_tab!=tab){
@@ -66,3 +85,15 @@ function hashchangeCallback(){
 }
 
 $(window).bind('hashchange', hashchangeCallback);
+
+function get_current_app(){
+  var hashtags = location.hash.substr(1).split('/');
+  var first_hashtag = hashtags.shift();
+  return first_hashtag;
+}
+
+function get_app_hashtags(){
+  var hashtags = location.hash.substr(1).split('/');
+  var first_hashtag = hashtags.shift();
+  return hashtags;
+}

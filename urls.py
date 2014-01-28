@@ -5,6 +5,7 @@ admin.autodiscover()
 
 actual_urlpatterns = patterns('',
   url(r'', include('nucleus.urls')),
+  url(r'^events/', include('events.urls')),
   url(r'^crop_image/', include('crop_image.urls')),
   url(r'^admin/', include(admin.site.urls)),
   url(r'^forum/', include('forum.urls')),

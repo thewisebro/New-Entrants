@@ -1,0 +1,319 @@
+@import '../base'
+
+#calendar-div
+  margin-top: 20px
+
+#calendar
+  width: 100%
+  padding-bottom: 5px
+  border-bottom: 1px solid $border-light-gray
+
+#month-bar
+  width: 100%
+  height: 20px
+  border-bottom: 1px solid $border-light-gray
+
+#month-name
+  float: left
+  font-family: "Tahoma"
+  font-size: 14px
+  color: $blue-link
+  cursor: pointer
+
+#month-nav
+  float: left
+  font-family: "Tahoma"
+  font-size: 14px
+  color: $blue-link
+  cursor: pointer
+  float: right
+  div
+    margin-right: 10px
+    float: left
+    cursor: pointer
+
+#week-bar, #date-matrix
+  margin: 0px auto
+  width: 189px
+  height: 26px
+
+#week-bar
+  margin-top: 10px
+  div
+    width: 27px
+    height: 27px
+    float: left
+    font-family: "Tahoma"
+    font-size: 11px
+    text-align: center
+    color: #606060
+
+#date-matrix
+  div
+    width: 27px
+    height: 27px
+    float: left
+    font-family: "Tahoma"
+    font-size: 11px
+    text-align: center
+    color: #606060
+    margin: 3px
+    padding-top: 4px
+    height: 17px
+    width: 21px
+  .today
+    background: $red
+    color: $white
+  .event-day
+    background: #FFE2CB
+    cursor: pointer
+  height: 162px
+
+#labels
+  width: 100%
+  margin-top: 15px
+
+#labels-header
+  width: 100%
+  height: 20px
+  font-family: "Tahoma"
+  font-size: 14px
+  color: #404040
+  border-bottom: 1px solid $border-light-gray
+
+.label, .active-label
+  width: 100%
+  margin-top: 4px
+  height: 15px
+  cursor: pointer
+  padding: 4px 0px
+  color: #606060
+
+.label:hover
+  background: #f4f4f4
+
+.label-name
+  float: left
+  margin-left: 8px
+  font-size: 13px
+  font-family: "Tahoma"
+  line-height: 15px
+
+.active-label
+  color: #333
+  background: #e8e8e8
+  &:hover
+    color: #333
+    background: #e8e8e8
+
+#events-type-header
+  font-size: 14px
+  font-family: "Tahoma"
+  color: $red
+  margin-bottom: 10px
+  float: left
+
+#events-head
+  padding: 10px 0px 0px 5px
+  color: $blue-link
+  font: 14px "Tahoma"
+
+.event-container
+  margin-top: 10px
+
+.event-type-head
+  height: 16px
+  background-color: #eee
+  border-top: 1px solid $border-light-gray
+  padding: 3px 0px 3px 5px
+  font-family: "Tahoma"
+  font-size: 13px
+  line-height: 16px
+  color: #202020
+
+.event
+  max-width: 500px
+  margin-top: 15px
+  margin-bottom: 30px
+
+.event-shown-calendar-name
+  margin-right: 2px
+  float: right
+  font-family: "Tahoma"
+  font-size: 12px
+  color: $gray-text
+
+.event-time-title
+  width: 100%
+  min-height: 16px
+  border-bottom: 1px solid $border-light-gray
+
+.event-time
+  float: left
+  width: 60px
+  min-height: 20px
+  padding: 0px 5px 0px 5px
+  background-color: #eee
+  font-size: 12px
+  line-height: 20px
+  font-family: "Tahoma"
+  color: $blue-link
+  text-align: center
+
+.event-name
+  float: left
+  min-height: 16px
+  margin-left: 15px
+  font-family: "Arial",sans-serif
+  font-size: 13px
+  font-weight: bold
+  line-height: 16px
+  color: #575757
+  max-width: 415px
+  padding-bottom: 4px
+  overflow-x: hidden
+
+.event-by, .event-place, .event-short-description, .event-duration
+  margin-left: 56px
+  padding: 4px 0px
+  border-bottom: 1px solid #e9e9e9
+
+.event-by, .event-place, .event-duration
+  min-height: 14px
+  margin-top: 4px
+  margin-bottom: 2px
+
+.event-short-description
+  margin-top: 4px
+  margin-bottom: 2px
+
+.event-place-icon
+  background: url('/static/images/nucleus/css_sprites.png') 0px -100px
+  width: 11px
+  height: 14px
+
+.event-detail-icon
+  position: relative
+  top: 2px
+  background: url('/static/images/nucleus/css_sprites.png') -20px -100px
+  width: 11px
+  height: 14px
+
+.event-left
+  float: left
+  font-size: 12px
+  font-family: "Tahoma"
+  color: #404040
+  line-height: 15px
+  height: 12px
+  width: 12px
+
+.event-duration
+  margin-left: 25px
+  .event-left
+    width: 43px
+    text-align: right
+
+.event-right
+  float: left
+  margin-left: 16px
+  font-size: 12px
+  font-family: "Tahoma"
+  color: #505050
+  overflow: hidden
+  text-align: justify
+  max-width: 400px
+  a
+    text-decoration: none
+    color: $blue-link
+
+.event-short-description .event-right
+  margin-bottom: 4px
+  overflow: visible
+  img
+    width: 250px !important
+    height: auto !important
+    border: 1px solid $border-light-gray
+    cursor: pointer
+
+#add-event-div
+  margin-top: 8px
+  font-family: "Tahoma"
+  font-size: 13px
+  color: $blue-link
+  cursor: pointer
+  padding-bottom: 8px
+  border-bottom: 1px solid $border-light-gray
+  div
+    width: 90px
+
+#add-event
+  font-size: 13px
+  label
+    width: 120px
+    display: block
+    float: left
+  form div
+    margin-top: 10px
+  input
+    width: 300px
+
+.event-options-icon-wrapper, .event-options-icon-wrapper-inside
+  width: 17px
+  height: 17px
+  float: right
+
+.event-options-icon
+  display: none
+  padding: 0px 1px 0px 2px
+  color: #bbb
+  cursor: pointer
+  float: right
+  width: 12px
+  height: 15px
+  font-size: 11px
+  border: 1px solid #d5d5df
+  background: $white
+  box-shadow: -1px 1px 1px #efefef
+  &:hover
+    border: 1px solid #bbc
+    color: #aac
+
+.shown-cal-name
+  float: right
+  margin-right: 10px
+
+.event-options-pop-up
+  display: none
+  width: 55px
+  position: relative
+  top: 1px
+  left: -40px
+  z-index: 20
+  border: 1px solid #bbb
+  background: $white
+  font-size: 13px
+  div
+    padding: 2px 0px 2px 7px
+    height: 16px
+    border-bottom: 1px solid #d5d5d5
+    cursor: pointer
+    &:hover
+      color: $blue-link
+
+#events-header
+  height: 22px
+  margin-top: 10px
+
+.button-div
+  margin-left: 5px
+  float: right
+
+#home-button-div
+  display: none
+
+.no-events
+  margin-top: 150px
+  text-align: center
+  font-size: 40px
+  color: $border-light-gray
