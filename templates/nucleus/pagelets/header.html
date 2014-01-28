@@ -1,7 +1,7 @@
 <div id="header-title">Channel i</div>
 <div id="header-options">
   {% if user.is_authenticated %}
-    <a href="/logout/" id="logout" class="header-option">Sign Out</a>
+    <div id="logout" class="header-option" onclick="logout();">Sign Out</div>
   {% else %}
     <div id="login" class="header-option" onclick="open_login_dialog();">Sign In</div>
   {% endif %}

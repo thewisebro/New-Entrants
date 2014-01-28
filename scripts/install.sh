@@ -1,6 +1,7 @@
 #!/bin/bash
 
 apt-get install gcc
+apt-get install libapache2-mod-wsgi
 apt-get install python-pip
 apt-get install rubygems
 apt-get install python-mysqldb

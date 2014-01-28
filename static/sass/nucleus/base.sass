@@ -1,9 +1,13 @@
+@import '../base'
+
 *
   margin: 0
   padding: 0
-  font-family: sans-serif
-  font-size: 14px
-  color: #000
+  font-family: 'Tahoma', sans-serif
+  font-size: 13px
+
+body
+  overflow-y: scroll
 
 #header
   position: fixed
@@ -14,15 +18,17 @@
   height: 40px
   line-height: 40px
   background-color: #f8f8f8
+  box-shadow: 0px 0px 2px 1px #DDDDDD
 
   #header-title
     float: left
     margin-left: 10px
     font-size: 24px
-    color: #0072DC
+    color: $blue-link
 
   #header-options
     float: right
+    font-size: 14px
 
     .header-option
       float: right
@@ -33,6 +39,7 @@
   #user-account
     float: right
     margin-right: 20px
+    font-size: 14px
 
 #sidebar-tabs
   position: fixed
@@ -50,6 +57,7 @@
     line-height: 20px
     cursor: pointer
     color: #fff
+    font-size: 14px
     &:hover
       background-color: rgba(0, 0, 0, 0.25)
 
@@ -70,14 +78,14 @@
     div
       width: 100%
       height: 20px
-      background: url('http://channeli.in/static/images/nucleus/css_sprites.png') -45px -70px
+      background: url('/static/images/nucleus/css_sprites.png') -45px -70px
 
 #content, #content-back
   min-width: 450px
   max-width: 630px
   width: 48%
   margin-left: 120px
-  padding-left: 10px
+  padding-left: 20px
   margin-top: 40px
   padding-top: 10px
   height: 100%
@@ -95,9 +103,29 @@
     margin-top: 0
     padding-top: 0
 
-  #right-column
-    float: left
-    width: 220px
-    z-index: 50
-    overflow-y: auto
-    height: 100%
+#right-column
+  position: fixed
+  top: 40px
+  bottom: 0px
+  left: 63%
+  width: 220px
+  z-index: 50
+  overflow-y: auto
+  border-right: 1px solid $border-light-gray
+
+#bg-right-wrapper
+  position: fixed
+  top: 40px
+  bottom: 0px
+  left: 63%
+  right: 0px
+  z-index: 25
+  overflow-y: auto
+
+  #bg-right
+    position: absolute
+    left: 221px
+    right: 0px
+    top: 0px
+    bottom: 0px
+    background: #eee
