@@ -69,4 +69,4 @@ DEPARTMENTS = (
   ('wtr','Water Resources Development and Management'),
   ('icc','Institute Computer Centre'),
   )
-  
+

@@ -1,0 +1,109 @@
+{% load tags %}
+<div style="max-width:850px;min-width:800px;">
+  <div style="min-height:36px;background:#3d7cb2;color:#ffffff;border-top-left-radius:5px;border-top-right-radius:5px;">
+    <table style="border-spacing:0px;width:100%"><tbody><tr>
+      <td style="padding:12px 6px 6px 6px;font-size:13px;">
+        <table style="border-spacing:0px;">
+        <tbody style="color:#ffffff;font-size:14px;vertical-align:top">
+        <tr>             
+     <td style="width:42px;padding-left:7px"><b>Title :</b></td>
+     <td style=""> {{ event.title }}
+     </td>
+        </tr>
+        </tbody> 
+        </table>
+      </td>
+      <td style="width:100px;vertical-align:top">
+          <img src="{{ PeopleProxyUrl }}channeli_static/images/email/event.png" style="font-weight:bold;font-size:15px;color:#ffffff;" alt="Event"/>
+      </td>
+    </tr></tbody></table>
+  </div>
+  <div style="background:#f0f0f0;padding:12px;font-size:12px;">
+    <table style="border-spacing:0px;width:100%;border-collapse:collapse">
+      <tbody style="color:#505050;font-size:12px;vertical-align:top">
+        {% if event.added_by %}
+          <tr style="border-bottom:1px solid #D1D1D1;">             
+            <td style="width:100px;height:25px;line-height:25px"><b>By <span style="float:right;padding-right:10px">:</span></b></td>
+            <td style="height:25px;line-height:25px"> {{ event.added_by|safe }}
+            </td>
+          </tr>
+        {% else %}
+          <tr style="border-bottom:1px solid #D1D1D1;">             
+            <td style="width:100px;height:25px;line-height:25px"><b>Calendar <span style="float:right;padding-right:10px">:</span></b></td>
+            <td style="height:25px;line-height:25px"> {{ event.shown_calendar_name }}
+            </td>
+          </tr>          
+        {% endif %}
+        <tr style="border-bottom:1px solid #D1D1D1;">             
+          <td style="width:100px;height:25px;line-height:25px"><b>Date {% if event.time %}& Time {% endif %}<span style="float:right;padding-right:10px">:</span></b></td>
+          <td style="height:25px;line-height:25px"> {{ event.date }} {{ event.time }}
+          </td>
+        </tr>
+        {% if event.duration %}
+          <tr style="border-bottom:1px solid #D1D1D1;">             
+            <td style="width:100px;height:25px;line-height:25px"><b>Duration <span style="float:right;padding-right:10px">:</span></b></td>
+            <td style="height:25px;line-height:25px"> {{ event.duration }}
+            </td>
+          </tr>
+        {% endif %}
+        {% if event.place %}
+          <tr style="border-bottom:1px solid #D1D1D1;">             
+            <td style="width:100px;height:25px;line-height:25px"><b>Venue <span style="float:right;padding-right:10px">:</span></b></td>
+            <td style="height:25px;line-height:25px"> {{ event.place }}
+            </td>
+          </tr>
+        {% endif %}
+        {% if event.description %}
+          <tr>             
+            <td style="width:100px;padding-top:5px"><b>Description <span style="float:right;padding-right:10px">:</span></b></td>
+            <td style="padding-top:5px">{{ event.description|safe }}
+            </td>
+          </tr>
+        {% endif %}  
+      </tbody> 
+    </table>
+  </div>
+  <div style="height:18px;background:#3d7cb2;padding:8px 6px 6px 6px;font-size:13px;color:#ffffff;">
+    <div style="padding-right:6px;float:left;">
+      <a href="http://channeli.in/settings/email/" style="text-decoration:none;color:#ffffff;" target="_blank">
+        <b>Change Preferences / Unsubscribe</b>
+      </a>	
+    </div>  
+  </div>
+  <div style="padding:10px 6px;background:#2e5c84;color:#ffffff;">
+    <div style="height:70px;padding-bottom:6px;padding-top:16px;">
+      <table style="border-spacing:0px;width:100%"><tbody style="color:#ffffff;font-size:13px;"><tr>
+      <td style="vertical-align:top;">
+      <div style="height:20px;">
+        <b>Email :</b>
+        <a href="mailto:img.iitr.img@gmail.com" style="color:#ffffff;text-decoration:none;" target="_blank">img.iitr.img@gmail.com</a>
+      </div>
+      <div style="height:20px;">
+        <b>Phone :</b> 01332 - 284521
+      </div>
+      <div style="height:20px;padding-top:5px">
+        <b>Like us on</b> 
+        <a href="https://www.facebook.com/IMGIITRoorkee" style="margin-left:0px 5px;text-decoration:none" target="_blank">
+          <span style="background:#3b5998;color:white;font:bold 13px sans-serif;margin:2px 0px;padding:1px 5px 2px 5px">facebook</span>
+        </a>
+      </div>
+      </td>
+      <td style="width:100px;vertical-align:top;">
+       <b>POWERED BY</b>
+      </td>
+      <td style="width:78px;vertical-align:top">
+        <a href="{% link_url "imglink" %}" style="text-decoration:none;color:#ffffff;" target="_blank">
+          <img src="{{ PeopleProxyUrl }}channeli_static/images/email/imglogo.png" style="font-family:verdana;font-size:30px;font-weight:bold;line-height:26px" alt="IMG"
+    title="Information Management Group"/>
+        </a>
+      </td> 
+      </tr></tbody></table> 
+    </div>
+    <div style="height:14px;border-top:1px solid #3d7cb2;padding-top:6px;font-size:11px;">
+      Copyright {% now "Y" %}. All Rights Reserved. 
+      <a href="{% link_url "imglink" %}" style="text-decoration:none;color:#ffffff;" target="_blank">
+        Information Management Group
+      </a>
+    </div>
+  </div>
+</div>

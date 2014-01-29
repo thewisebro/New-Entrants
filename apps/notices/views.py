@@ -25,7 +25,6 @@ def index(request):
 def upload(request):
   NoticeForm = GenerateNoticeForm(request.user)
   privelege = request.user.uploader_set.all().exists()
-  if request.method == 'POST' :
   if request.method == 'POST' and privelege:
     form = NoticeForm(request.POST)
     if form.is_valid():

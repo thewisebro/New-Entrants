@@ -6,6 +6,9 @@ var apps_scripts = {
   ],
   'notices':[
     '/static/js/notices/base.js'
+  ],
+  'events':[
+    '/static/js/events/events.js'
   ]
 }
 

@@ -20,10 +20,10 @@ COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 
 # Add apps to python path
-sys.path.append('apps')
+sys.path.append(PROJECT_ROOT + '/apps')
 
 # Add third_party_apps to python path
-sys.path.append('third_party_apps')
+sys.path.append(PROJECT_ROOT + '/third_party_apps')
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -180,6 +180,7 @@ DJANGO_CONTRIB_APPS = (
 )
 
 THIRD_PARTY_APPS = (
+#  'debug_toolbar',
   'rest_framework',
   'crispy_forms',
   'taggit',
@@ -188,6 +189,7 @@ THIRD_PARTY_APPS = (
   # placed here because threadedcomments is to be placed before it
   'django.contrib.comments',
   'compressor',
+  'django_extensions',
 )
 
 CHANNELI_APPS = (
@@ -198,6 +200,8 @@ CHANNELI_APPS = (
   'api',
   'reporting',
   'crop_image',
+  'groups',
+  'events',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
@@ -215,8 +219,14 @@ CRISPY_CLASS_CONVERTERS = {
 }
 
 COMPRESS_PRECOMPILERS = (
-  ('text/sass', 'sass -I static/ --compass {infile} {outfile}'),
+  ('text/sass', 'sass -I '+PROJECT_ROOT+'/static/ --cache-location '+\
+   PROJECT_ROOT+'/.sass-cache --compass {infile} {outfile}'),
 )
+
+SHELL_PLUS = "ipython"
+
+SESSION_COOKIE_NAME = 'PHPSESSID'
+SESSION_ENGINE = 'nucleus.session'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

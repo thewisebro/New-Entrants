@@ -5,7 +5,6 @@ from datetime import datetime
 from core.models.fields import CKEditorField
 from notices.constants import *
 
-class Notice(models.Model):
 class AbstractNotice(models.Model):
   subject = models.CharField(max_length=100)
   reference = models.CharField(max_length=100, blank=True)
@@ -15,12 +14,6 @@ class AbstractNotice(models.Model):
   emailsend = models.BooleanField(default=False)
   re_edited = models.BooleanField(default=False)
   expired_status = models.BooleanField(default=True)
-  datetime_modified = models.DateTimeField(auto_now=True)
-
-  def __unicode__(self):
-    return unicode(self.pk)
-
-  expired_status = models.BooleanField(default=False)
   datetime_modified = models.DateTimeField(auto_now=True)
 
   class Meta:

@@ -6,7 +6,7 @@ def header(request):
   return render(request, 'nucleus/pagelets/header.html')
 
 def sidebar(request):
-  if request.user.is_authenticated:
+  if request.user.is_authenticated():
     group_names = request.user.groups.values_list('name', flat=True)
     itabs = filter(lambda t: t[2]==[] or (set(t[2]) & set(group_names)), tabs)
     print itabs
