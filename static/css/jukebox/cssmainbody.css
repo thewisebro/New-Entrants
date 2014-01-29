@@ -2,8 +2,7 @@
 #trending_div{
 	position: relative;
 /*	border-bottom: 1px solid lightGrey;
-*/	font-family: "Lato Bold";
-	font-size: 18px;
+*/font-size: 18px;
 	/*left: 10px;*/
 
 }
@@ -29,7 +28,6 @@
 	display:block;
 	width:190px;
 	height:190px;
-	border-radius: 3px;
 	background-size: cover;	
 }
 
@@ -121,7 +119,7 @@ opacity: 0;
 	color: #FFF;
 }
 .song_name{
-	font-family: "Arial","sans-serif";
+	font-family: "helvetica_neue_medium","Arial","sans-serif";
 	font-size: 13px;
 	 -webkit-font-smoothing: antialiased;
 	  color: #464646;
@@ -132,7 +130,7 @@ opacity: 0;
 	white-space: nowrap;
 }
 .artist_name{
-	font-family: "Arial","sans-serif";
+	font-family: "helvetica_neue_regular","Arial","sans-serif";
 	font-size: 12px;
 	 -webkit-font-smoothing: antialiased;
 	   cursor: pointer;
@@ -150,7 +148,6 @@ width: inherit;
 height: inherit;
 background-color: rgba(0, 0, 0, 0.6);
 opacity: 0;
-border-radius: 3px;
 }
 
 .item_wrapper:hover #faint{

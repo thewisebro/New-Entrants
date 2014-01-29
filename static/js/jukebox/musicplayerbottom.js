@@ -24,7 +24,7 @@ $(function() {
     slider.slider({
         range: "min",
         min: 1,
-        value: 75,
+        value: 50,
     });
 
     // smooth animation of the handle

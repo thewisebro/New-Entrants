@@ -2,24 +2,25 @@ function Player() {
   var self = this;
   var sm = soundManager; // soundManager instance
   var isIE = (navigator.userAgent.match(/msie/i));
-  var sound;
- 
+  var sound; 
   var checkmute = 0;
   var prevVolume;
+  var duration=null;
   this.prevSound = null;
   this.currentSound = null;
   this.nextSound = null;
-
   this.events = {
 
     // handlers for sound events as they're started/stopped/played
 
     play: function() {
-      
+       $('#'+sound.id).find('.play_icon i').removeClass('icon-play').addClass('icon-pause');
+       console.log("--------------"+sound.id); 
     },
 
     stop: function() {
-     
+      $('#'+sound.id).find('.play_icon i').removeClass('icon-pause').addClass('icon-play');
+
     },
 
     pause: function() {
@@ -31,16 +32,46 @@ function Player() {
     },
 
     finish: function() {
-  
+       $("#songLoaded").css('width', '0');
+       $("#musicBlueSlider").css('width','0');
+       $("#ui-sliderlarge-handle").css('left','0');
+       $("#timePlayed").html(min+':'+leftzero(sec));
+      // $('#'+sound.id).find('.play_icon i').removeClass('icon-pause').addClass('icon-play');
+
     },
     loading:function(){
-       soundManager._writeDebug(this.id + ': loading ' + this.bytesLoaded + ' / ' + this.bytesTotal);
-        soundManager._writeDebug('position = ' + this.position);
+      //  soundManager._writeDebug(this.id + ': loading ' + this.bytesLoaded + ' / ' + this.bytesTotal);
+        //soundManager._writeDebug('position = ' + this.position);
 
-        var fullDuration = 240000;//200 sec 4 min
-        var played = 4 - (fullDuration - this.position)/60000;//min
-        console.log(played);
+       // var duuration = this.duration;
+        var seekbarPositionLoaded =  (this.bytesLoaded/this.bytesTotal)* ($("#musicSlider").width());//min
+      // console.log("seekbarLoaded:"+seekbarPositionLoaded);
+      //   $("#musicBlueSlider").css('width', ((this.position/this.duration) *  ($("#musicSlider").width()))); 
+       // $("#ui-sliderlarge-handle").animate({left: ((this.position/this.duration) *($("#musicSlider").width()))});
+         $("#songLoaded").css('width',seekbarPositionLoaded + 'px');
+
+
+       // console.log("sadsadsadsad"+pars+":::duration=="+this.duration);
     },
+    whileplaying: function(){
+       $("#musicBlueSlider").css('width', ((this.position/this.duration) *  ($("#musicSlider").width())));
+        $("#ui-sliderlarge-handle").css('left', ((this.position/this.duration) *($("#musicSlider").width())));
+          
+
+          var seconds = Math.round(this.position/1000);
+          var min=Math.round(seconds/60);
+          var sec=Math.round(seconds%60);
+
+          var tseconds= Math.round(this.duration/1000);
+          var tmin = Math.round(tseconds/60);
+          var tsec=Math.round(tseconds%60);
+          function leftzero(n){
+                return n > 9 ? "" + n: "0" + n;
+          }
+         $("#timePlayed").html(min+':'+leftzero(sec));
+         $("#totalTime").html(tmin+':'+leftzero(tsec));
+
+      }
 
   }
 
@@ -49,10 +80,78 @@ function Player() {
       //define later to create a new sound object
   }
 
-  this.handleClick = function(e) {
-    
-      $(document).on("click",".playable",function(){
+  this.play_url = function(idback,urlback){
+
+
           $this = $(this);
+          //check if sound is currently playing
+
+          if(self.currentSound){//check if sound exist and is playing
+            if(idback==sound.id){
+               console.log('playing sound found state toggled');
+              // sound.togglePause();
+            }
+            else{
+              //the clicked div is some other sound 
+              //stop and unload it
+
+              sound.stop();
+              sound.unload();
+             // sound.destruct();
+              //the sound will not be destroyed it will start from there only
+              //+++++maybe we can use destruct here .. doubt .. if it loads the sound again 
+              //CHECK LATER sound.destroy()
+              sound = soundManager.createSound({
+               id:idback,
+               url:urlback,
+               autoLoad: true,
+               onplay:self.events.play,
+               onstop:self.events.stop,
+               onpause:self.events.pause,
+               onresume:self.events.resume,
+               onfinish:self.events.finish,
+               whileloading:self.events.loading,
+               whileplaying:self.events.whileplaying,
+            });
+
+            // tack on some custom data if needed
+            sound._data = {};
+            //create a check if sound is playable or not 
+            sound.play();
+            //set the currentSound to id of the sound currently playing
+            self.currentSound=sound.id;
+            }
+           
+          }
+          else{
+            sound = soundManager.createSound({
+               id:idback,
+               url:urlback,
+               autoLoad: true,
+               onplay:self.events.play,
+               onstop:self.events.stop,
+               onpause:self.events.pause,
+               onresume:self.events.resume,
+               onfinish:self.events.finish,
+               whileloading:self.events.loading,
+               whileplaying:self.events.whileplaying,
+            });
+
+            // tack on some custom data if needed
+            sound._data = {};
+            //create a check if sound is playable or not 
+            sound.play();
+            //set the currentSound to id of the sound currently playing
+            self.currentSound=sound.id;
+
+          }//outer else
+  }
+
+
+  this.handleClick = function(e) {
+   /* 
+      $(document).on("click",".song",function(){
+           $this = $(this);
           //not checked if right click
           //check if sound is currently playing 
           id_div_clicked = $this.attr('id');
@@ -113,8 +212,8 @@ function Player() {
 
           }//outer else
 
-       });//documenton click
-
+      });//documenton click
+*/
 
     //on click events on the bottom bar
     //PLAY PAUSE NEXT PREV
@@ -266,7 +365,7 @@ soundManager.setup({
   preferFlash: false,
   useFlashBlock: true,
   // path to directory containing SM2 SWF
-  url: '../../swf/',
+  url:'/static/swf/jukebox/',
   // optional: enable MPEG-4/AAC support (requires flash 9)
   flashVersion: 9
 });

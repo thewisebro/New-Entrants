@@ -3,14 +3,12 @@
 	padding:0px;
 }
 body{
-	font-family: "Arial","sans-serif";
+	font-family:"helvetica_neue_medium","Arial","sans-serif";
 	overflow-x:hidden;
 	overflow-y:scroll;
 	background-color: #F5F5F5;
 }
-img{
-	border-radius: 3px;
-}
+
 ul{
 	list-style-type: none;
 }
@@ -80,12 +78,11 @@ ul{
 {
 	width: 40px;
 	height: 28px;
-	background-color: #4D7ADA;
+	background-color: #008DDE;
 	color: #FFF;
 	text-align: center;
 	padding-top: 12px;
 	float: left;
-	-webkit-animation: huerotator 3s infinite alternate;
 }
 
 /*=========================================nav bar================================*/
@@ -94,6 +91,8 @@ ul{
 	font-size: 12px;
 	position: relative;
 	margin: 20px 0px 20px 0px;
+          font-family: arial;
+          font-weight: bold;
 }
 
 #navigation>a {
@@ -141,7 +140,6 @@ ul{
 
 #navigation>a :nth-child(2){
 	font-size: 13px;
-	font-weight: bold;
 }
 
 #navigation>a :nth-child(1){
@@ -203,7 +201,7 @@ ul{
 }
 /*#albums_link:hover #albums_icon{
 	
-}
+};
 #albums_link:hover #albums_text{
 	color:#444444;	
 }*/
@@ -224,9 +222,9 @@ ul{
 #playlists{
 	position: relative;
 	font-size: 13px;
-	font-weight: bold;
+	/*font-weight: bold;*/
 	margin-top: 15px;
-	border-top: 1px solid #616161;
+/*	border-top: 1px solid #616161;*/
 }
 
 #playlist_view{
@@ -234,7 +232,7 @@ ul{
 	display: none;
 	font-size: 13px;
 }
-#playlist_view a{
+#playlist_view a{ 
 	display: block;
 	padding: 6px 37px;
 	cursor: pointer;
@@ -258,8 +256,9 @@ ul{
 	position: absolute;
 	margin: 0 auto;
 	margin-left: 201px;
-	/* 201 some error */
-	/*padding-bottom: 60px;*/
+  box-shadow: 1px 1px 1px #EEE;
+  border-right: 1px solid #DDD;
+  background-color:#FFF;
 }
 
 #centerdata{
@@ -281,6 +280,7 @@ ul{
 	background-color:#474747; 
 	z-index: 2;
 	border-top: 1px solid #101010;
+  box-shadow: inset 0px 1px 1px #666;
 }
 #bottom>div{
 	display: inline-block;
@@ -301,24 +301,24 @@ ul{
 }
 #bLeftLeft{
 	position: relative;
-	width: 27px;
-	height: 23px;
-	margin-right: 19px;
-
+	width: 24px;
+	height: 24px;
+	margin-right: 5px;
+  background-color: #FFF;
 
 }
 #bLeftPlay{
 	position: relative;
-	width: 19px;
-	height: 23px;
-	margin-right: 19px;
-
+	width: 24px;
+	height: 24px;
+	margin-right: 5px;
+  background-color: #FFF;
 }
 #bLeftRight{
 	position: relative;
-	width: 27px;
-	height: 23px;
-
+	width: 24px;
+	height: 24px;
+  background-color: #FFF;
 }
 
 /* ==============b Right ==================*/
@@ -350,15 +350,16 @@ ul{
 .ui-slider-handle {  
 	position: absolute;
 	z-index: 2;
-	width: 10px;
-	height: 10px;
+	width: 9px;
+	height: 9px;
 	cursor: pointer;
 	font-weight: bold;
 	color: #1C94C4;
 	outline: none;
 	top: -4px;
-	border-radius: 5px;
+	border-radius: 8px;
 	background-color: #C3C3C3;
+  border: 1px solid #101010;
 }
 
 #ui-slidersmall-handle:hover,:active { 
@@ -373,7 +374,7 @@ ul{
 	height: 3px;
 	border: 1px solid black;
 	z-index: 1;
-	border-radius: 2px;
+	border-radius: 4px;
 }  
 #borderVolume{
 	border-bottom: 1px solid #565656;
@@ -396,19 +397,20 @@ ul{
 /*====================b middle============================*/
 #bMiddle{
 	position: absolute;
-	height: 45px;
+	height: 44px;
 	left: 200px;
-	right: 270px;	
+	right: 264px;	
 	z-index: 1;
 }
 #musicbar{
 	position: absolute;
 	width: 100%;
-	height: 37px;
+	height: 36px;
 	margin: 3px 0px;
 	background-color: #2a2a2a;
 	border: 1px solid #101010;
-	border-radius:3px;
+	border-radius:2px;
+  box-shadow: 0px 1px 1px #707070;
 }
 #musicbar>div{
 	display: inline-block;
@@ -416,7 +418,7 @@ ul{
 #musicPlayerPic{
 	width: 33px;
 	height: 31px;
-	margin: 3px;
+	margin: 2px;
 	display: inline-block;
 	cursor: pointer;
 }
@@ -435,28 +437,26 @@ cursor: pointer;
 top: 24px;
 left: 47px;
 right: 97px;
-border-radius: 2px;
+border-radius: 4px;
 }
 
 #songLoaded{
 	border: 1px solid black;
 	position: absolute;
 	height: 3px;
-	/*background-color: #747474;*/
+	background-color: #747474;
 	cursor: pointer;
 	top: 24px;
 	left: 47px;
 	right: 97px;
-	border-radius: 2px;
+	border-radius: 4px;
 	z-index: 0;
 }
 
 #infoLeft{
 
 }
-#timeRight{
 
-}
 #musicbarSide{
 	float: right;
 	padding-left: 15px;
@@ -475,7 +475,7 @@ border-radius: 2px;
 	float: right;
 	position: absolute;
 	right: 89px;
-	top: 5px;
+	top: 3px;
 }
 
 #divisionlight{
@@ -521,14 +521,7 @@ border-radius: 2px;
 	right: 98px;
 	
 }
-#bordermusicbar{
-	border-bottom: 1px solid #5e5e5e;
-	position: absolute;
-	height: 1px;
-	bottom: 2px;
-	left: 3px;
-	right: -2px;
-}
+
 #iLSong{
 	font-family: "Arial","sans-serif";
 	font-size: 11px;
@@ -552,9 +545,10 @@ border-radius: 2px;
 	font-family: "Arial","sans-serif";
 	font-size: 11px;
 	display: inline-block;
-	color: #ecf0f1;
+	color: #ECF0F1;
 	top: 6px;
 	right: 100px;
+
 }
 
 
@@ -593,6 +587,9 @@ border-radius: 2px;
 
 #popular_artists{
 	margin-top: 10px;
+  background-color:#FFF;
+  padding: 0px 5px 0px 5px;
+  margin-bottom: 10px;
 }
 
 #popular_artists_list{
@@ -600,25 +597,19 @@ border-radius: 2px;
 }
 
 #popular_artists a{
-	display: block;
+	font-family:"helvetica_neue_bold";
+  display: block;
 	padding: 10px 4px;
-	cursor: pointer;
 	font-size: 13px;
-	font-weight: bold;
 	text-decoration: none;
-	color: #444;
+	color: #686868;
 }
 
 .qitem{
 	height: 40px;
-	cursor: pointer;
-	border-bottom: 1px solid #f3f3f3;
-	border-top: 1px solid #f3f3f3;
+	border-top: 1px solid #666;
 }
 .qitem:hover{
-	background-color: #fff;
-	border-bottom: 1px solid #E0E0E0;
-	border-top: 1px solid #E0E0E0;
 	-webkit-transition-property:color, text;
 	-webkit-transition-duration: 0.3s, 0.3s;
 	-webkit-transition-timing-function: ease-in ,linear,ease-out;
@@ -654,21 +645,16 @@ color: #757575;
 
 .qsong{
 	font-size: 12px;
-	font-weight: bold;
 }
 .qartist{
 	font-size: 11px;
 }
 
 .qsong:hover{
-	color:#2A2A2A;
+	color:#008DDE;
 	/*color: #D8511D;*/
-	text-decoration: underline;
 }
 .qartist:hover{
-	color: #2A2A2A;
-	/*color: #D8511D;*/
-	text-decoration: underline;
 }
 
 #qlist{
@@ -819,13 +805,20 @@ cursor: pointer;
 
 /*search button and page*/
 #searchButton{
-	position: absolute;
-	right: -34px;
-	color: #C3C3C3;
-	font-size: 16px;
-	top: 15px;
-	cursor: pointer;
-	padding-bottom: 3px;
+        position: absolute;
+        right: -44px;
+        color: #AAA;
+        font-size: 16px;
+        top: 3px;
+        cursor: pointer;
+        width: 36px;
+        height: 26px;
+        background-color: #2A2A2A;
+        text-align: center;
+        border-radius: 2px;
+        padding-top: 10px;
+        box-shadow: 0px 1px 1px #707070;
+        border: 1px solid #101010;
 }
 
 .activeSearch{
@@ -877,7 +870,7 @@ cursor: pointer;
 	color: #505050;
 	font-size: 96px;
 	width: 100%;
-	font-weight: bolder;
+	font-family: "helvetica_neue_bold","Arial","sans-serif";
 	background-color: #E0E0E0;
 	border: 0px;
 	text-transform: uppercase;
@@ -899,31 +892,39 @@ cursor: pointer;
 	left: 230px;
 	right: 250px;
 	overflow: hidden;
-	display:-moz-box; /* Firefox */
-	display:-webkit-box; /* Safari and Chrome */
-	display:-ms-flexbox; /* Internet Explorer 10 */
-	display:box;
+  display: -moz-box;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: box;         
 }
 
 #quickResults>div{
-	display: block;
-	padding-right: 20px;
-	-moz-box-flex:1.0; /* Firefox */
-	-webkit-box-flex:1.0; /* Safari and Chrome */
-	-ms-flex:1.0; /* Internet Explorer 10 */
-	box-flex:1.0;
+           display: block;
+           padding-right: 20px;
+           -moz-box-flex: 1.0;
+           -webkit-box-flex: 1.0;
+           -ms-flex: 1.0;
+           box-flex: 1.0;
+           width: 1%;
+}
+
+#songSearch{
+  padding-right:20px;
+}
+
+#albumSearch{
+  padding-right:20px;
 }
 
 .searchHeading{
 	padding-bottom: 5px;
 	font-size: 12px;
 	border-bottom: 1px solid #CECECE;
-	font-weight: bold;
 	color: #555;
 }
 
 .searchHeading>span{
-	color: #999;
+	color: #555;
 }
 
 .searchResultList{
@@ -947,12 +948,17 @@ cursor: pointer;
 
 .itemName{
 	font-size: 12px;
-	font-weight: bold;
+  max-width: 200px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  color:#303030;
 }
 
 
 .itemSubDetail{
 	font-size: 11px;
+  color:#636363;
 }
 
 .searchResultList li{
@@ -982,7 +988,6 @@ cursor: pointer;
 	border-radius: 3px;
 	box-shadow: 0px 1px 0px #D6D6D6;
 	text-align: center;
-	font-weight: bold;
 	text-shadow:0px 1px 1px #fff;
 	cursor:pointer;
 }
@@ -991,13 +996,13 @@ cursor: pointer;
 	color: #008DDE;
 	background-color: #f0f0f0;
 	-webkit-transition-property:color, text;
-	-webkit-transition-duration: 0.2s, 0.2s;
+	-webkit-transition-duration: 0.1s, 0.1s;
 	-webkit-transition-timing-function: ease-in ,linear,ease-out;
 	-moz-transition-property:color, text;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:0.1s;
 	-moz-transition-timing-function: linear, ease-in;
 	-o-transition-property:color, text;
-	-o-transition-duration:0.2s;
+	-o-transition-duration:0.1s;
 	-o-transition-timing-function: linear, ease-in;
 }
 
@@ -1140,3 +1145,77 @@ cursor: pointer;
 	padding: 8px 0 0 10px;
 	font-size: 12px;
 }
+
+/*Playlist view */
+#playlist_new{
+       width: 170px;
+       height: 30px;
+       background-color: #666;
+       color: #FFF;
+       line-height: 30px;
+       border-radius: 2px;
+       padding-left: 10px;
+       margin-bottom: 5px;
+        cursor:pointer;
+}
+#playlist_new>div{
+        display:inline-block;
+        padding-right: 5px;
+        padding-top: 1px;
+}
+#plus_icon{
+          position: absolute;
+          margin-left: 150px;
+          margin-top: 9px;
+          display:block;
+}
+
+#icon-remove-color{
+      color:#727272;;
+      display:block;
+      /*  transform: rotate(45deg);
+      -ms-transform: rotate(45deg);  IE 9
+      -webkit-transform: rotate(45deg); Safari and Chrome */
+}
+
+#create_new_play{
+        width: 180px;
+        margin-left: -10px;
+        height: 30px;
+        border-radius: 2px;
+        border: 0px;
+        outline:0px;        
+        padding-left:10px;       
+}
+#playlists li{
+        text-transform: capitalize;
+}
+
+/*placeholder -- create playlist*/
+
+#create_new_play::-webkit-input-placeholder {
+     color:#AAA;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+     color: #AAA;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+     color: #AAA;  
+}
+
+:-ms-input-placeholder {  
+     color: #AAA;
+}
+
+/* queue*/
+#queue_trash{
+  float: right;
+  position: relative;
+  top: -28px;
+  color: #686868;
+  cursor: pointer;
+  right: 5px;
+}
+

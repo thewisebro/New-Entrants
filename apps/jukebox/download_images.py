@@ -27,7 +27,7 @@ from django.core.files.temp import NamedTemporaryFile
 
 def add_error(err,line):
   try:
-    error = open('/home/pankaj/jukebox_scripts/images_artist_error.txt','a+')
+    error = open('/home/pankaj/jukebox_scripts/new/images/images_artist_error.txt','a+')
     htm = HTMLParser()
     error.write(str(err)+'\t'+str(htm.unescape(line))+'\n')
     error.close()
@@ -53,7 +53,7 @@ def get_artist_pic(artist):
   if(artist.cover_pic):
     print "yo!!!!! album_art is present for  "+artist.artist
     return
-  url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+urllib.quote_plus(artist.artist)+"+wide+wallpaper"
+  url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+urllib.quote_plus(artist.artist)+"+high+resolution"
   url = urllib2.urlopen(url,timeout=5).read()
   js = json.loads(url)
   minwidth = 10000

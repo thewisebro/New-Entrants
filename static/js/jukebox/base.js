@@ -19,14 +19,20 @@ var albumtag_count=0;
 var prev_artist = 'thers';
 var artisttag_count=0;
 var prev_hash="";
-
+var album_open=false;
+var artist_open=false;
+var trending_open=false;
+var now_display='trending';
+var album_html = '';
+var artist_html = '';
+var trending_html='';
 
 
 
 
 
 var song_playing;
-$('form#playlist').on('submit', function(e) {
+/*$('form#playlist').on('submit', function(e) {
   $.ajax({
       type: 'post',
       url: 'playlist/',
@@ -38,7 +44,7 @@ $('form#playlist').on('submit', function(e) {
       });
   e.preventDefault();
 });
-
+*/
 /*
 
 $('form#search').on('submit', function(e) {
@@ -83,38 +89,44 @@ $('#searchBig').bind("keyup", function (event) {
 });
 function search(q)
 {
+  if (q=='')
+  {
+    $("#songSearch").empty();
+    $("#albumSearch").empty();
+    $("#artistSearch").empty();
+  }
   $.ajax({
       type: 'get',
       url: 'search?q='+q,
       success: function (data) {
        $("#songSearch").empty();
-       $("#songSearch").append('<div class="searchHeading">SONGS<span> (2,349)</span></div>');
+       $("#songSearch").append('<div class="searchHeading">SONGS<span> ('+data.songs.length+')</span></div>');
        $("#songSearch").append('<div> <ul  id="songSearchSpan" class="searchResultList" > </ul> </div>');
        for(var i=0; i<data.songs.length; i++)
        {
-         var html = '<li class="item song" id="song_'+data.songs[i].id+'"><div class="searchItemImg" ></div>'
+         var html = '<li class="song" id="song_'+data.songs[i].id+'"><div class="searchItemImg" ></div>'
                   +  '<div class="searchItemDetails">'
 		              +   '<div class="itemName">'+ data.songs[i].song+'</div>'
 		              +    '<div class="itemSubDetail">'+data.songs[i].artists[0].artist+'</div></div></li>';
          $("#songSearchSpan").append(html);
        }
        $("#albumSearch").empty();
-       $("#albumSearch").append('<div class="searchHeading">Albums<span> (2,349)</span></div>');
+       $("#albumSearch").append('<div class="searchHeading">Albums<span> ('+data.albums.length+')</span></div>');
        $("#albumSearch").append('<div> <ul  id="albumSearchSpan" class="searchResultList" > </ul> </div>');
        for(var i=0; i<data.albums.length; i++)
        {
-         var html = '<li><div class="searchItemImg"></div>'
+         var html = '<li class="album" id="album_'+data.albums[i].id+'"><div class="searchItemImg"></div>'
                   +  '<div class="searchItemDetails">'
 		              +   '<div class="itemName">'+ data.albums[i].album+'</div>'
 		              +    '<div class="itemSubDetail">'+data.albums[i].artists[0].artist+'</div></div></li>';
          $("#albumSearchSpan").append(html);
        }
        $("#artistSearch").empty();
-       $("#artistSearch").append('<div class="searchHeading">Artists<span> (2,349)</span></div>');
+       $("#artistSearch").append('<div class="searchHeading">Artists<span> ('+data.artists.length+')</span></div>');
        $("#artistSearch").append('<div> <ul  id="artistSearchSpan" class="searchResultList" > </ul> </div>');
        for(var i=0; i<data.artists.length; i++)
        {
-         var html = '<li><div class="searchItemImg"></div>'
+         var html = '<li class="artist" id="artist_'+data.artists[i].id+'"><div class="searchItemImg"></div>'
                   +  '<div class="searchItemDetails">'
 		              +   '<div class="itemName">'+ data.artists[i].artist+'</div>'
 		              +    '</div></li>';
@@ -123,6 +135,15 @@ function search(q)
       artist_ready();
       album_ready();
       song_ready();
+      hash = document.location.href.split('#')[1];
+      if(!hash) hash="";
+      hash = hash.split('/');
+      if(hash[1]=='') 
+      {
+        $("#songSearch").empty();
+        $("#albumSearch").empty();
+        $("#artistSearch").empty();
+      }
       }
     });
 }
@@ -158,12 +179,30 @@ function display(name){
   if (name in names){
     if(name=='trending')
     {
-       $("#rightside").css('display','none');
+      if(trending_open)
+      {
+        $('#centerdata').html(trending_html);
+        lTrending();
+        song_ready();
+        return;
+      }
      }
     if(name=='artists' || name=='albums')
-    {
-       $("#rightside").css('display','block');
-      // console.log($(wi))
+    { 
+      if(album_open && name=='albums')
+      {
+        $('#centerdata').html(album_html);
+        lAlbums();
+        album_ready();
+        return;
+      }
+      if(artist_open && name=='artists')
+      {
+        $('#centerdata').html(artist_html);
+        lArtists();
+        artist_ready();
+        return;
+      }
      }
     // for hashtags
     var show = names[name];
@@ -190,7 +229,7 @@ function display(name){
 	      {
 		$("#container").append(func(items[i]));
 	      }
-	      if(name=='albums' || name=='artists')
+        else if(name=='albums' || name=='artists')
 	      {
 		func(items[i]);
 	      }
@@ -205,6 +244,8 @@ function display(name){
       {
    //     $("#centerdata").append('</div></div>');
         lTrending();
+        trending_html = $("#centerdata").html();
+        trending_open=true;
       }
       if(name=='albums')
       {
@@ -213,6 +254,8 @@ function display(name){
         $("#albumsList").append('<div id="oneAlbumOpened"><div id="oaoWrapper"></div></div>');
         $("#oneAlbumOpened").append('<div id="album_panel_hide"><i class="icon-reorder"></i></div>');
         lAlbums();
+        album_html = $("#centerdata").html();
+        album_open=true;
       }
       if(name=='artists')
       {
@@ -221,6 +264,8 @@ function display(name){
         $("#artistsList").append('<div id="artist_view"></div>');
         $("#artistsList").append('<div id="artist_panel_hide"><i class="icon-reorder"></i></div>');
         lArtists();
+        artist_html = $("#centerdata").html();
+        artist_open=true;
       }
     });
   }
@@ -247,7 +292,7 @@ function display_album(id){
       for(var j=0; j<album.song_set.length; j++)
       {
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class="popular_item"> <div id="p_song_name">'+ album.song_set[j].song +'</div>'
+        html += '<li class="popular_item song" id="song_'+album.song_set[j].id+'"> <div id="p_song_name">'+album.song_set[j].id_no+' ' +album.song_set[j].song +'</div>'
                 +   ' <div class="miniIcons" id="p_alb_controls">'
                 +       '<a href=""></a>' 
                 +       '<a href=""></a>' 
@@ -258,6 +303,7 @@ function display_album(id){
       $("#popular_list").append(html);
 
       artist_ready();
+      song_ready();
     });
 
 }
@@ -288,7 +334,7 @@ function display_artist(id){
       for(var k=0; k<artist.album_set[j].song_set.length; k++)
       {
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class="popular_item"> <div id="p_song_name">'+ artist.album_set[j].song_set[k].song +'</div>'
+        html += '<li class=" song popular_item" id="song_'+artist.album_set[j].song_set[k].id+'"> <div id="p_song_name">'+ artist.album_set[j].song_set[k].id_no +' '+ artist.album_set[j].song_set[k].song +'</div>'
                 +   ' <div class="miniIcons" id="p_alb_controls">'
                 +       '<a href=""></a>' 
                 +       '<a href=""></a>' 
@@ -318,28 +364,137 @@ function display_artist(id){
       $("#append").append(html);
       */
       album_ready();
+      song_ready();
     });
 
 }
 
 
-function display_playlists(user){
+/*
+var load_playQueue = function(){
+      $('#playQueue').empty();
+      $('#qList').html('<div class="qitem"><div class="qimage"></div><div class="qinfo"><div class="qsong">Diamonds</div><div class="qartist">Rihanna</div></div></div>');
+}
+
+*/
+
+
+
+
+
+
+
+
+
+var select = false;
+
+var create_playlist = function() {
+ 
+      $("#playlist_new").empty();
+      $("#playlist_new").html('<div id="plus_icon"><i id="icon-remove-color" class="icon-remove"></i></div><input placeholder="Playlist name" type="text" id="create_new_play"></input>').find('#create_new_play').animate({opacity:'1'});
+      $("#create_new_play").focus();
+      select = true;
+      $('#create_new_play').keypress(function(e) {
+            if (e.which == 13) {
+                    var val = $("#create_new_play").val();
+                   // alert(val);
+                   // if(val){
+                    var html = $('#playlists').html();
+                    $('#playlists').prepend('<li><span>'+val+'</span></li>');
+                   // $('#playlist_new').empty();
+                     $('#playlist_new').html('<div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div>');
+                   /*  $.ajax({
+                        type: 'post',
+                        url: 'playlist/',
+                        data: {'name':val} 
+                       });
+                     */
+                   $.post('playlist/',{name:val});  
+                     val=null;
+
+                     //   }
+                     $("#playlist_new").bind("click",create_playlist);
+                  // console.log($('#create_new'));
+                        }
+                       
+                        });
+      $('#create_new_play').focus(function() {
+                     select = true;
+                       }).blur(function(){
+                     select = false;
+
+                   $('#playlist_new').html('<div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div>');
+                    $("#playlist_new").bind("click",create_playlist);
+
+                        });
+          }
+
+
+
+function display_playlists(){
   url = 'playlist/';
-  $.ajax(url,{ type:"GET", data: {user:user} } ,contentType= "application/json").done( function(data){
-    $("#append").empty();
-    html = 'Playlists: ';
-    for(var i=0; i<data.length; i++){
-      html += "<div onclick='hash_change('playlist',"  + data[i].id + ");'> Playlist Name: " + data[i].name + "</div>";
+  $.ajax(url,{ type:"GET" } ,contentType= "application/json").done( function(data){
+      $("#centerdata").empty();
+        $("#centerdata").append('<div id="playlistsList">  <div class="nano" id="left_playlist_list">  <div id="contentList" class="content"> </div></div></div>');
+      if(data.active)
+      {
+        html = '<div class="start"><div class="list_alpha"><div class="playlist" id="playlist_new"><div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div></div> <ul id= "playlists"></ul></div></div>';
+      $("#contentList").append(html);
+      for(var i=0; i<data.playlists.length; i++){
+        var playlist = data.playlists[i];
+        $("#playlists").append('<li><span class="playlist" id="playlist_'+ playlist.id +'">'+playlist.name+'</span></li>');
+      }
+          $("#playlistsList").append('<div id="playlist_view"></div>');
+          $("#playlistsList").append('<div id="playlist_panel_hide"><i class="icon-reorder"></i></div>');
+          lPlaylists();
+      $("#playlist_new").bind("click",create_playlist);
+      playlist_ready();
     }
-    $("#append").append(html);
+    else
+    {
+       
+      $("#contentList").append('Login Required');
+    }
+    /*
+    $("#create_new").on('click',function(){
+      alert('sad');
+      $("#playlist_new").empty();
+      $("#playlist_new").html('<input type="text" id="create_new_play"></input>');
+      $("#create_new_play").focus();
+      select = true;
+      $('#create_new_play').keypress(function(e) {
+            if (e.which == 13) {
+                    var val = $("#create_new_play").val();
+                   // alert(val);
+                   // if(val){
+                    $('#playlists').append('<li><span>'+val+'</span></li>');
+                   // $('#playlist_new').empty();
+                    $('#playlist_new').html('<a id="create_new">+ Create New</a>');
+                        val=null;
+                     //   }
+                        }
+                       
+                        });
+            $('#create_new_play').focus(function() {
+                      select = true;
+                      
+                          }).blur(function(){
+                                  select = false;
+                                        });
+    }); 
+    /**/
   });
 }
 
 function display_playlist(id){
   url = "playlist/" + id;
     $.ajax(url,contentType= "application/json").done( function(data){
-      playlist = data;
-      $("#append").empty();
+      if(!data.active)
+      {
+        console.log('No playlist Bro');
+       return; 
+      }
+      playlist = data.playlist;
       if(playlist.songs){
         songs = playlist.songs.split('b');
         songs_list = playlist.songs_list;
@@ -384,16 +539,16 @@ function get_song_html(song)
    ' </div>' +
    ' <div class="artist_data">' +
    ' <div class="details">' +
-   ' <div class="song_name"><b>' + album + '</b></div>' +
+   ' <div class="song_name">' + song.song + '</div>' +
    ' <div class="artist_name">';  
    for (var j=0; j<song.artists.length; j++)
    {
-     html1 += song.artists[j].artist + ", ";
+     html1 += song.artists[j].artist;
    }
    html1 += '</div>'+
     '</div>' +
     '</div>';
-    console.log(html1);
+  //  console.log(html1);
   html = html1
   return html;
 }
@@ -410,10 +565,10 @@ function get_artist_html(artist)
   return html;
 */
   html = "";
-  tagg = 'Others';
+  tagg = '#';
   if(!artist.artist) return;
   var name = capitalize(artist.artist);
-  if(!name[0].match(/^[A-Z]+$/)) tagg='Others';
+  if(!name[0].match(/^[A-Z]+$/)) tagg='#';
   else tagg=name[0];
 
   if(prev_artist!=tagg)
@@ -438,10 +593,10 @@ function get_artist_html(artist)
 function get_album_html(album)
 {
   html = "";
-  tagg = 'Others';
+  tagg = '#';
   if(!album.album) return;
   var name = capitalize(album.album);
-  if(!name[0].match(/^[A-Z]+$/)) tagg='Others';
+  if(!name[0].match(/^[A-Z]+$/)) tagg='#';
   else tagg=name[0];
 
   if(prev_album!=tagg)
@@ -479,6 +634,7 @@ function play(id)
     var song = data[0];
     $("#musicPlayerPic").empty();
    $("#musicPlayerPic").append('<img src="\/media\/' + song.album.album_art +  '" style="width: 32px; height: 32px;" >');
+   Jukebox.play_url('song_'+id,'http://192.168.121.5'+song.file_name)
  $("#ilSong").html('<b>'+song.song+'</b>');
   var art = [];
   for(i=0;i<song.artists.length && i<5; i++) art.push(song.artists[i].artist);
@@ -494,29 +650,35 @@ function check_hash( name )
 {
   hash = document.location.href.split('#')[1];
   if(!hash) hash="";
+  hash = hash.replace(/\/$/, '');
   if(!prev_hash) prev_hash="";
+  prev_hash = prev_hash.replace(/\/$/, '');
   console.log('prev_hash i123 '+ prev_hash);
   console.log('hash '+ hash);
   hash = hash.split('/');
   phash = prev_hash.split('/');
   if(name=='song')
   {
-  if(hash.length == phash.length)
-  {
-    for(i=0;i<hash.length-1;i++)
-      if(hash[i]!=phash[i] ) return false;
-    return true;
-  }
+    if(hash.length == phash.length)
+    {
+      for(i=0;i<hash.length-1;i++)
+        if(hash[i]!=phash[i] ) return false;
+      return true;
+    }
   return false;
+  }
+  else if(name=='artists' || name=='albums')
+  {
+     if(hash[0]==phash[0]) return true;
   }
   else
   {
-  if(hash.length == phash.length)
-  {
-    for(i=0;i<1;i++)
-      if(hash[i]!=phash[i] ) return false;
-    return true;
-  }
+    if(hash.length == phash.length)
+    {
+      for(i=0;i<1;i++)
+        if(hash[i]!=phash[i] ) return false;
+      return true;
+    }
   return false;
   }
 }
@@ -525,12 +687,22 @@ function check_hash( name )
 function split_hash(){
   hash = document.location.href.split('#')[1];
   if(!hash) hash="";
+  hash = hash.replace(/\/$/, '');
+  console.log('hash      '+hash);
   hash = hash.split('/');
   name = hash[0];
   song = hash.indexOf('song');
   console.log(check_hash('song'));
   if(song>=0 && check_hash('song')){ play(hash[song+1]); prev_hash=document.location.href.split('#')[1]; console.log(hash[song+1]); return;}
   if ( Object.keys(names).indexOf(name) >= 0){
+            if(!check_hash(name))
+            {
+               $('#navigation').find('a').each(function(){
+                if($(this).hasClass('selected'))
+                  $(this).removeClass('selected');
+                  });
+             $('#'+name+'_link').addClass('selected');
+            }
     if(hash.length == 2 || hash.length == 4){
       if(name == 'artists'){ if(!check_hash('artists')) display('artists'); display_artist(hash[1]); }
       if(name == 'albums'){ if(!check_hash('albums')) display('albums');  display_album(hash[1]); }
@@ -539,12 +711,21 @@ function split_hash(){
       display(name);
     }
   }
-  if( name == 'playlists') display_playlists(hash[1]);
+  if( name == 'playlists') display_playlists();
   if( name == 'playlist' ) display_playlist(Number(hash[1]));
   if( name== 'search'){
     //$('#searchButton').click();
-    alert('hash   '+hash[1]);
-    search(hash[1]);
+    //alert('hash   '+hash[1]);
+    if(hash[1]=='') 
+    {
+      $("#songSearch").empty();
+      $("#albumSearch").empty();
+      $("#artistSearch").empty();
+    }
+    else
+    {
+      search(hash[1]);
+    }
   }
   if (song >= 0){
     play(hash[song+1]);
@@ -552,6 +733,15 @@ function split_hash(){
   prev_hash = document.location.href.split('#')[1];
 }
 
+
+$( document ).ready(function() {
+  hash = document.location.href.split('#')[1];
+  if(!hash)
+  {
+    hash_change('trending');
+  }
+
+  });
 
 window.onload = split_hash();
 window.onhashchange = split_hash(); // For IE<8 and safari
@@ -566,6 +756,7 @@ $(window).on('hashchange', function() {split_hash();});
 $("#trending_link").click(function(){ hash_change("trending"); });  // changes hash when trending is clicked
 $("#artists_link").click(function(){ hash_change("artists"); });    // changes hash when Artist is clicked
 $("#albums_link").click(function(){ hash_change("albums"); });      // changes hash when Albums is clicked
+$("#playlists_link").click(function(){ hash_change("playlists"); });      // changes hash when Albums is clicked
 
 function artist_ready(){
   $(".artist").on('click',function(){
@@ -578,6 +769,13 @@ function album_ready(){
   $(".album").on('click',function(){
       id = $(this).attr('id').split('_')[1];
       hash_change('albums',id);
+    });
+}
+
+function playlist_ready(){
+  $(".playlist").on('click',function(){
+      id = $(this).attr('id').split('_')[1];
+      hash_change('playlist',id);
     });
 }
 

@@ -1,14 +1,19 @@
 from django.forms import widgets
 from rest_framework import serializers
 from jukebox.models import Song,Artist,Album, Playlist
+from HTMLParser import HTMLParser
 
-
-
+class HyperlinkedFileField(serializers.FileField):
+  def to_native(self, value):
+    request = self.context.get('request', None)
+    htm = HTMLParser()
+    return htm.unescape('/songs/'+str(value.name))
 
 class SongSerializer(serializers.ModelSerializer):
+  file_name = HyperlinkedFileField(source='file_name')
   class Meta:
     model = Song
-    fields = ('id', 'song', 'album', 'artists', 'count')
+    fields = ('id', 'id_no', 'song', 'album', 'artists', 'count','file_name')
     depth = 1
 
 

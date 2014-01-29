@@ -50,20 +50,22 @@
         break;
       }
   //     y = 20;
-       console.log(y);
-        console.log(x);
-         console.log("--------------");
-    
+      // console.log(y);
+      //  console.log(x);
+     //    console.log("--------------");
+      console.log(width+" : "+x+" : "+n)
     }
-    console.log(y);
-    console.log(x);
+   // console.log(y);
+ //   console.log(x);
     $("."+itemwrapper+"").css("padding-right", y);
     $("."+itemwrapper+"").css("margin-top", y);
-
+console.log(n+"final");
    var k =1;
    var noOfItems = $("."+itemwrapper+"").length;
-   for (i=0; i<=noOfItems-1 ; i=i+n){
-
+   for (i=0; i<=noOfItems-1 ; i=i+n-1){
+     var lol = $($("."+itemwrapper+"")[i]).attr('id');
+    // console.log(lol);
+      
        $($("."+itemwrapper+"")[i]).css("padding-left", y);
 
    }
@@ -159,6 +161,13 @@
 
   $( document ).ready(function() {
 
+
+  //  $("#centerdata").on("click",".list_alpha ul li",function(){
+   // var h = ($('#artist_banner').width()/8)*3;
+    //$('#artist_banner').css("height", h);
+
+    //  });
+
       // hide show
     $("#centerdata").on("click","#artist_panel_hide",function(){
     
@@ -167,13 +176,13 @@
                $this.removeClass("selectedthing");
                $("#artist_view").animate({left:'220', right:'0'},200);
               $("#artist_panel_hide").animate({left:'420', top:'145'},200);
-              $("#rightside").animate({right:'0'},200);
+             // $("#rightside").animate({right:'0'},200);
             }
             else{
               $this.addClass("selectedthing");
               $("#artist_view").animate({left:'0', right:'220'},200);
               $("#artist_panel_hide").animate({left:'200', top:'145'},200);
-              $("#rightside").animate({right:'220'},200);
+             // $("#rightside").animate({right:'220'},200);
             }
 
     });
@@ -185,7 +194,7 @@
                $this.removeClass("selectedthing");
                $("#oneAlbumOpened").animate({left:'220', right:'0'},200);
                 $("#album_panel_hide").animate({left:'420', top:'182'},200);
-                  $("#rightside").animate({right:'0'},200);
+               //   $("#rightside").animate({right:'0'},200);
               
 
             }
@@ -193,30 +202,31 @@
               $this.addClass("selectedthing");
               $("#oneAlbumOpened").animate({left:'0', right:'220'},200);
               $("#album_panel_hide").animate({left:'200', top:'182'},200);
-                 $("#rightside").animate({right:'220'},200);
+                // $("#rightside").animate({right:'220'},200);
             }
 
     });
    
  
-   
-
-    //play-pause button toggle in trending page 
-    $("#centerdata").on("click",".song-icon-play",function(){
+    $("#centerdata").on("click","#playlist_panel_hide",function(){
     
-          var $this = $(this);
-          if($this.hasClass("icon-play"))
-          {
-            $this.removeClass("icon-play").addClass("icon-pause");
-          }
-          else{
-            $this.removeClass("icon-pause").addClass("icon-play");
-          }
+           var $this = $(this);
+            if($this.hasClass('selectedthing')){
+              $this.removeClass("selectedthing");
+              $("#playlist_view").animate({left:'220', right:'0'},200);
+              $("#playlist_panel_hide").animate({left:'420', top:'145'},200);
+            //  $("#rightside").animate({right:'0'},200);
+            }
+            else{
+              $this.addClass("selectedthing");
+              $("#playlist_view").animate({left:'0', right:'220'},200);
+              $("#playlist_panel_hide").animate({left:'200', top:'145'},200);
+             // $("#rightside").animate({right:'220'},200);
+            }
 
     });
+      
    
-
-
 
     //delete a item from queue
     $(".trash").click(function(){

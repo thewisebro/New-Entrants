@@ -43,6 +43,7 @@ class Album(models.Model):
     return self.album
 
 class Song(models.Model):
+  id_no = models.IntegerField(max_length=MC.TEXT_LENGTH)
   upload_storage = FileSystemStorage(location=JC.SONG_DIR, base_url='/uploads')
   song = models.CharField(max_length=MC.TEXT_LENGTH)          # Dispay name of Song
   file_name = models.FileField(upload_to=content_file_name, storage=upload_storage, max_length=1000)     # Name of The Song on the disk

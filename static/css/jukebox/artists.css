@@ -57,13 +57,13 @@ padding: 30px 20px 0px 30px;
 }
 #oaoLinfo div:nth-child(1){
 font-size: 30px;
-font-weight: bold;
+font-family:"helvetica_neue_bold";
 color: #444;
 }
 #oaoLinfo div:nth-child(2){
-font-size: 15px;
-font-weight: bold;
-color: #888;
+font-size: 24px;
+font-family:"helvetica_neue_light";
+color: #757575;
 }
 #oaoRight{
 margin-left: 20px;

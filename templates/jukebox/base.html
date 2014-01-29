@@ -20,13 +20,15 @@
   </head>
 
   <body>
+  <!-- just for loading -->
+  <div id="center_trending" style="display:none;"></div>
+  <div id="center_artists" style="display:none;"></div>
+  <div id="center_albums" style="display:none;"></div>
+  <div id="center_playlist" style="display:none;"></div>
+  <div id="center_search" style="display:none;"></div>
+
+
   <div id="bigwrapper">
-<!--    <form id="search" action="search/" method="get">
-      <input type="text" name="q">
-      <input type="submit" value="Search">
-    </form>
-    <br>
--->
 			<div id="searchDivcss" class="searchLightboxClose">
 				<div id="searchHeader">
 					<div>SEARCH JUKEBOX</div>
@@ -185,21 +187,26 @@
 							<div id="albums_icon"><i class=" icon-spinner"></i></div>
 							<div id="albums_text">Stumble</div>
 						</a>
+						
+            <a id="playlists_link">
+							<div id="home_icon"><i class="icon-heart" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
+							<div id="home_text" style="">My Playlists</div>
+						</a>
 
-					<div id="playlists">	
+				<!--	<div id="playlists">	
 						
 							<a id="home_link">
-								<!-- icon-align-justify   icon-bookmark  -->
+								  icon-align-justify   icon-bookmark  
 							<div id="home_icon"><i class="icon-heart" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
 							<div id="home_text" style="margin-left: 16px;">My Playlists</div>
 							</a>
-					</div>	<!-- playlists -->
-					<div id="playlist_view">
+					</div> -->	<!-- playlists -->
+				<!--	<div id="playlist_view">
 						<a href="">Favsongs</a>
 						<a href="">my songs</a>
 						<a href="">happy time</a>
 						<a href="">Favsongs</a>
-						
+					
 							<div id="create_new" >
 								<a style="padding-right:0px;" href="">
 									<div style="font-weight:bold;">Create New</div>
@@ -209,6 +216,7 @@
 								</a>
 							</div>
 					</div>
+          -->
 
 				</div>
 
@@ -247,11 +255,12 @@
 <div id="append">
 </div>
 
-<div id="rightside" style="display:none; ">    <!-- got to change after clicking -->
+<div id="rightside">    <!-- got to change after clicking -->
 <div id="popular_artists">
 <a id="qa">
-<div id="play_queue">Popular Artists</div>
+<div id="play_queue">Play Queue</div>
 </a>
+<span id="queue_trash"><i class="icon-sort-down"></i></span>
 </div>
 <div id="popular_artists_list">
 <div class="qitem">
@@ -307,28 +316,28 @@
 <div id="bottom">
 	<div id="bLeft">
 		<div id="bLeftLeft">
-			<img src="{{ STATIC_URL }}images/jukebox/bleftleft.png">
+			<img src="{{ STATIC_URL }}images/jukebox/prevItem.png">
 		</div>
 		<div id="bLeftPlay">
-			<img src="{{ STATIC_URL }}images/jukebox/bleftplay.png">
+			<img src="{{ STATIC_URL }}images/jukebox/playSong.png">
 		</div>
 		<div id="bLeftRight">
-			<img src="{{ STATIC_URL }}images/jukebox/bleftright.png">
+			<img src="{{ STATIC_URL }}images/jukebox/nextItem.png">
 		</div>
 	</div>
 	<div id="bMiddle">
 	<div id="musicbar">
 	<div id="musicPlayerPic">
-	<img src="./img/musicplayerpic.png">
+	<img src="">
 	</div>
 	<div id="musicPlayerSlider">
 	<div id="musicPlayerInfo">
 	<div id="infoLeft">
-	<div id="ilSong"><b>Suit & Tie</b></div>
-	<div id="ilArtist">- Justin Timberlake</div>
+	<div id="ilSong"><b></b></div>
+	<div id="ilArtist"></div>
 	</div>
 	<div id="timeRight">
-	2:15 / 3:36
+	<span id="timePlayed">0:00</span> / <span id="totalTime">0:00</span>
 	</div>
 	</div>
 
@@ -369,13 +378,15 @@
 
   </div> <!-- div #bigwrapper ends -->
 </body>
-  <!--  <script src="{{ STATIC_URL }}jquery/jquery.min.js"></script>-->
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-1.10.2.min.js"></script>
+    <script src="{{ STATIC_URL }}js/csrf.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery.nanoscroller.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/resize.js"></script> 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/music.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-ui-1.10.3.custom.js"></script>
    <!-- <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/soundmanager2.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/soundedit.js"></script>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/musicplayerbottom.js"></script>
 <!--    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/soundmanager2.js"></script>  
