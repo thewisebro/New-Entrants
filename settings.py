@@ -220,6 +220,11 @@ COMPRESS_PRECOMPILERS = (
    PROJECT_ROOT+'/.sass-cache --compass {infile} {outfile}'),
 )
 
+SHELL_PLUS = "ipython"
+
+SESSION_COOKIE_NAME = 'PHPSESSID'
+SESSION_ENGINE = 'nucleus.session'
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.

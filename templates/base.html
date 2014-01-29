@@ -34,9 +34,6 @@
       <!--[if IE]>
         <script type="text/javascript" src="{{ STATIC_URL }}js/es5-shim.min.js"></script>
       <![endif]-->
-      <script type="text/javascript">
-        var user_logged_in = {% if user.is_authenticated %}true{% else %}false{% endif %};
-      </script>
       {% block scripts %}
         <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
       {% endblock scripts %}

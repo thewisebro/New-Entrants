@@ -3,6 +3,7 @@
 apt-get install gcc
 apt-get install libapache2-mod-wsgi
 apt-get install python-pip
+apt-get install php5
 apt-get install rubygems
 apt-get install python-mysqldb
 
@@ -25,3 +26,7 @@ gem install compass
 
 # django-debug-toolbar
 pip install sqlparse
+
+# django-php-bridge
+pip install phpserialize
+pip install deliverance

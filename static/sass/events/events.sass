@@ -2,6 +2,10 @@
 
 #calendar-div
   margin-top: 20px
+  background: $white
+  padding: 15px
+  border: 1px solid $border-gray
+  border-radius: 2px
 
 #calendar
   width: 100%
@@ -108,7 +112,8 @@
 
 #events-type-header
   font-size: 14px
-  font-family: "Tahoma"
+  font-family: $sans-serif
+  font-weight: bold
   color: $red
   margin-bottom: 10px
   float: left
@@ -120,11 +125,14 @@
 
 .event-container
   margin-top: 10px
+  background: $white
+  border: 1px solid $border-gray
+  border-radius: 2px
+  padding: 20px
+  margin-bottom: 20px
 
 .event-type-head
   height: 16px
-  background-color: #eee
-  border-top: 1px solid $border-light-gray
   padding: 3px 0px 3px 5px
   font-family: "Tahoma"
   font-size: 13px
@@ -132,9 +140,8 @@
   color: #202020
 
 .event
-  max-width: 500px
   margin-top: 15px
-  margin-bottom: 30px
+  margin-bottom: 10px
 
 .event-shown-calendar-name
   margin-right: 2px
@@ -153,7 +160,6 @@
   width: 60px
   min-height: 20px
   padding: 0px 5px 0px 5px
-  background-color: #eee
   font-size: 12px
   line-height: 20px
   font-family: "Tahoma"
@@ -176,7 +182,7 @@
 .event-by, .event-place, .event-short-description, .event-duration
   margin-left: 56px
   padding: 4px 0px
-  border-bottom: 1px solid #e9e9e9
+  border-bottom: 1px solid $border-light-gray
 
 .event-by, .event-place, .event-duration
   min-height: 14px
@@ -274,7 +280,6 @@
   font-size: 11px
   border: 1px solid #d5d5df
   background: $white
-  box-shadow: -1px 1px 1px #efefef
   &:hover
     border: 1px solid #bbc
     color: #aac

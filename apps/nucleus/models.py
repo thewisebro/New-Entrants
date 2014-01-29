@@ -347,6 +347,19 @@ class Alumni(Role('Alumni')):
 
 ########################## Other useful Models ########################
 
+class PHPSession(models.Model):
+  session_key = models.CharField(max_length=40, primary_key=True)
+  session_data = models.TextField()
+  expire_date = models.DateTimeField(db_index=True)
+  username = models.CharField(max_length=15)
+
+  class Meta:
+    db_table = 'nucleus_php_session'
+
+  def __unicode__(self):
+    return self.session_key
+
+
 class GlobalVarMeta(ModelBase):
   def __getitem__(cls, key):
     return cls.objects.get(key=key).value
