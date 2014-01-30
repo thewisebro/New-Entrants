@@ -1,13 +1,13 @@
+from HTMLParser import HTMLParser
 from django.forms import widgets
 from rest_framework import serializers
-from jukebox.models import Song,Artist,Album, Playlist
-from HTMLParser import HTMLParser
+from jukebox.models import Song, Artist, Album, Playlist
 
 class HyperlinkedFileField(serializers.FileField):
   def to_native(self, value):
     request = self.context.get('request', None)
     htm = HTMLParser()
-    return htm.unescape('/songs/'+str(value.name))
+    return htm.unescape(str(value.name))
 
 class SongSerializer(serializers.ModelSerializer):
   file_name = HyperlinkedFileField(source='file_name')

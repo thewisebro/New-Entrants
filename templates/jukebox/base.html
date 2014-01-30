@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artistslist.css">
     <!-- font aw -->
     <link rel="stylesheet" href="{{ STATIC_URL }}css/jukebox/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/jukebox/nanoscroller.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/nanoscroller/nanoscroller.css">
 
     <!--[if IE 7]>
     <link rel="stylesheet" href="./css/font-awesome-ie7.min.css">
@@ -20,15 +20,14 @@
   </head>
 
   <body>
-  <!-- just for loading -->
+  
   <div id="center_trending" style="display:none;"></div>
   <div id="center_artists" style="display:none;"></div>
   <div id="center_albums" style="display:none;"></div>
   <div id="center_playlist" style="display:none;"></div>
   <div id="center_search" style="display:none;"></div>
 
-
-  <div id="bigwrapper">
+  <!-- search div -->
 			<div id="searchDivcss" class="searchLightboxClose">
 				<div id="searchHeader">
 					<div>SEARCH JUKEBOX</div>
@@ -41,138 +40,30 @@
 				<!-- see more results -->
 				<div id="quickResults">
 					<div id="songSearch">
-						<div class="searchHeading">SONGS<span> (2,349)</span></div>
-						<div>
-							<ul class="searchResultList">
-								<li>
-									<div class="searchItemImg"></div>
-									<div class="searchItemDetails">
-										<div class="itemName">Song Name</div>
-										<div class="itemSubDetail">Rihanna</div>
-									</div>
-								</li>
-								<li>
-									<div class="searchItemImg"></div>
-									<div class="searchItemDetails">
-										<div class="itemName">Song Name</div>
-										<div class="itemSubDetail">Rihanna</div>
-									</div>
-								</li>
-								<li>
-									<div class="searchItemImg"></div>
-									<div class="searchItemDetails">
-										<div class="itemName">Song Name</div>
-										<div class="itemSubDetail">Rihanna</div>
-									</div>
-								</li>
-								<li>
-									<div class="searchItemImg"></div>
-									<div class="searchItemDetails">
-										<div class="itemName">Song Name</div>
-										<div class="itemSubDetail">Rihanna</div>
-									</div>
-								</li>
-							</ul>
-						</div>
 					</div>
 					<div id="albumSearch">
-						<div class="searchHeading">ALBUMS<span> (349)</span></div>
-						<div>
-							<ul class="searchResultList">
-								<li>
-									<div class="searchItemImg"></div>
-									<div class="searchItemDetails">
-										<div class="itemName">Song Name</div>
-										<div class="itemSubDetail">Rihanna</div>
-									</div>
-								</li>
-								<li>
-									<div class="searchItemImg"></div>
-									<div class="searchItemDetails">
-										<div class="itemName">Song Name</div>
-										<div class="itemSubDetail">Rihanna</div>
-									</div>
-								</li>
-								<li>
-									<div class="searchItemImg"></div>
-									<div class="searchItemDetails">
-										<div class="itemName">Song Name</div>
-										<div class="itemSubDetail">Rihanna</div>
-									</div>
-								</li>
-								<li>
-									<div class="searchItemImg"></div>
-									<div class="searchItemDetails">
-										<div class="itemName">Song Name</div>
-										<div class="itemSubDetail">Rihanna</div>
-									</div>
-								</li>
-							</ul>
-						</div>
 					</div>
 					<div id="artistSearch">
-						<div class="searchHeading">ARTISTS<span> (49)</span></div>
-						<div>
-							<ul class="searchResultList">
-								<li>
-									<div class="searchItemImg"></div>
-									<div class="searchItemDetails">
-										<div class="itemName">Song Name</div>
-										<div class="itemSubDetail">Rihanna</div>
-									</div>
-								</li>
-								<li>
-									<div class="searchItemImg"></div>
-									<div class="searchItemDetails">
-										<div class="itemName">Song Name</div>
-										<div class="itemSubDetail">Rihanna</div>
-									</div>
-								</li>
-								<li>
-									<div class="searchItemImg"></div>
-									<div class="searchItemDetails">
-										<div class="itemName">Song Name</div>
-										<div class="itemSubDetail">Rihanna</div>
-									</div>
-								</li>
-								<li>
-									<div class="searchItemImg"></div>
-									<div class="searchItemDetails">
-										<div class="itemName">Song Name</div>
-										<div class="itemSubDetail">Rihanna</div>
-									</div>
-								</li>
-							</ul>
-						</div>
 					</div>
-				</div>
+        </div>
 
 				<div id="seeMore">
 					See All Results
 				</div>
-
-	
 			</div>
+
+  <div id="bigwrapper">
+
 			<div id="sidebar">
 				<div id="logo">
 					<div id="jblogo"><i class="icon-play"></i></div>
-	
 				</div>
 
-				
-
 				<div id="navigation">
-					
-					
-
-					
 						<a id="trending_link">
 							<div id="trending_icon"><i class="icon-fire"></i></div>
 							<div id="trending_text">Trending</div>
 						</a>
-					
-
-					
 						<a id="artists_link" >
 							<div id="artists_icon"><i class="icon-star"></i></div>
 							<div id="artists_text">Artists</div>
@@ -246,7 +137,6 @@
     <div id="mainbody">
 
       <div id="centerdata">
-
       </div>  <!-- #centerdata ends -->
     </div> <!-- #mainbody ends -->
 
@@ -263,56 +153,15 @@
 <span id="queue_trash"><i class="icon-sort-down"></i></span>
 </div>
 <div id="popular_artists_list">
-<div class="qitem">
 
-<div class="qimage">
-</div>
-<div class="qinfo">
-<a href="">
-<div class="qsong">Diamonds</div>
-<div class="qartist">Rihanna</div>
-</a>
-</div>	
-</div>
-
-<div class="qitem">
-
-<div class="qimage">
-</div>
-<div class="qinfo">
-<a href="">
-<div class="qsong">Diamonds</div>
-<div class="qartist">Rihanna</div>
-</a>
-</div>			
-</div>
-
-<div class="qitem">
-
-<div class="qimage">
-</div>
-<div class="qinfo">
-<a href="">
-<div class="qsong">Diamonds</div>
-<div class="qartist">Rihanna</div>
-</a>
-</div>		
-</div>
-
-<div class="qitem">
-
-<div class="qimage">
-</div>
-<div class="qinfo">
-<a href="">
-<div class="qsong">Diamonds</div>
-<div class="qartist">Rihanna</div>
-</a>
-</div>		
-</div>	
 </div>
 
 </div>   <!-- #rightside ends -->
+</div>
+
+
+<!--bottombar-->
+
 <div id="bottom">
 	<div id="bLeft">
 		<div id="bLeftLeft">
@@ -373,14 +222,16 @@
 		<span id="volumeicons"><i class="icon-volume-up"></i></span>  
 		</section>  
 	</div>
-</div>
- 
+
+
+
+
 
   </div> <!-- div #bigwrapper ends -->
 </body>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-1.10.2.min.js"></script>
     <script src="{{ STATIC_URL }}js/csrf.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery.nanoscroller.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery/nanoscroller/jquery.nanoscroller.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/resize.js"></script> 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/music.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-ui-1.10.3.custom.js"></script>
@@ -399,7 +250,8 @@
 		    // put id to the large slider to change its color to blue
 
 		    $( "#musicSlider" ).find('.ui-slider-range').attr('id','musicBlueSlider');
-
+        //play queue css ellipsis
+       // $(".qsong").width($(".qitem").width()-50);
 		    $( "#slider" ).find('a').attr('id','ui-slidersmall-handle');
 		    $( "#musicSlider" ).find('a').attr('id','ui-sliderlarge-handle');
 

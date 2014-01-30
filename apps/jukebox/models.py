@@ -1,4 +1,3 @@
-import nucleus
 import settings
 import utils
 import datetime
@@ -6,7 +5,9 @@ import datetime
 from core import models
 from django.core.files.storage import FileSystemStorage
 from api import model_constants as MC
+
 from jukebox import constants as JC
+import nucleus
 
 # jukebox.models starts
 

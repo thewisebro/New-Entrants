@@ -19,6 +19,11 @@ TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 
+
+JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
+JUKEBOX_MEDIA_URL = '/songsmedia/'
+JUKEBOX_SONGS_BASEURL = '/songs/'
+
 # Add apps to python path
 sys.path.append('apps')
 

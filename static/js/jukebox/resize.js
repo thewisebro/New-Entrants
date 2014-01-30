@@ -29,7 +29,7 @@
     // class of the complete item .. "itemwrapper"  item_wrapperAlb
     //class of the item image .. "itemimage"   itemAlb
   // get width of the container
-  var width= $("#"+divwidth+"").width();
+  var width= $("#"+divwidth+"").width()-3;
  // var width = document.getElementById(""+divwidth+"").offsetWidth;
   // x=width of box to be resized , y=distance b/n 2 boxes
     var x,y,n=0;
@@ -39,30 +39,33 @@
 
     // setting the lower limit to 170 and going upto 240 .. and in each loop checking 
     // if the y satisfies our condition for that particular width of the box.
-    for(x = 140 ; x <= 200 ; x=x+5){
-      n = Math.floor(width/x) ;
+    for(x = 140 ; x <= 250 ; x=x+5){
+      n = Math.floor(width/x);
       // n is the max no of boxes that can be fit into the container length when
       // width of the box is x
       // finding the value of y
 
-      y = (width%x)/(n+1);
+      ypre = (width%x)/(n+1);
+      y = Math.floor(ypre*10)/10;
       if(y>20 && y<30){
         break;
       }
+     // y = 20;
   //     y = 20;
       // console.log(y);
       //  console.log(x);
      //    console.log("--------------");
-      console.log(width+" : "+x+" : "+n)
+     // console.log(width+" : "+x+" : "+n)
     }
    // console.log(y);
  //   console.log(x);
+     console.log(width+" : "+x+" : "+n);
     $("."+itemwrapper+"").css("padding-right", y);
     $("."+itemwrapper+"").css("margin-top", y);
 console.log(n+"final");
    var k =1;
    var noOfItems = $("."+itemwrapper+"").length;
-   for (i=0; i<=noOfItems-1 ; i=i+n-1){
+   for (i=0; i<=noOfItems-1 ; i=i+n){
      var lol = $($("."+itemwrapper+"")[i]).attr('id');
     // console.log(lol);
       
@@ -74,6 +77,7 @@ console.log(n+"final");
   // console.log(y);
     $("."+itemimage+"").css( "width", x );
      $("."+itemimage+"").css( "height", x );
+     $(".artist_data").css("width",x);
 }
 
 

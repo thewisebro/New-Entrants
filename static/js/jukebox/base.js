@@ -26,12 +26,13 @@ var now_display='trending';
 var album_html = '';
 var artist_html = '';
 var trending_html='';
+var queue = '';
+var in_queue = false;
 
 
 
 
-
-var song_playing;
+var song_playing=0;
 /*$('form#playlist').on('submit', function(e) {
   $.ajax({
       type: 'post',
@@ -244,6 +245,7 @@ function display(name){
       {
    //     $("#centerdata").append('</div></div>');
         lTrending();
+        dragging();
         trending_html = $("#centerdata").html();
         trending_open=true;
       }
@@ -279,7 +281,7 @@ function display_album(id){
       album = data[0];
       $("#oaoWrapper").empty();
       $("#oaoWrapper").append('<div id="oaoLeft"></div>    <div id="oaoRight"> <div id="popular_list"></div> </div>');
-      $("#oaoLeft").append('<img src="/media/'+ album.album_art +'"  style="display:block; width:300px; height:300px;"></img>');  // change the css accordingly
+      $("#oaoLeft").append('<img src="/songsmedia/'+ album.album_art +'"  style="display:block; width:300px; height:300px;"></img>');  // change the css accordingly
       $("#oaoLeft").append('<div id="oaoLInfo"> <div class="playable">'+album.album+'</div> </div>');
    //   html = "<br> Album Name: <br>" + album.album + "<br> Artists: ";
       for(var j=0; j<album.artists.length && j<10 ; j++)
@@ -292,7 +294,7 @@ function display_album(id){
       for(var j=0; j<album.song_set.length; j++)
       {
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class="popular_item song" id="song_'+album.song_set[j].id+'"> <div id="p_song_name">'+album.song_set[j].id_no+' ' +album.song_set[j].song +'</div>'
+        html += '<li class="popular_item song draggable" id="song_'+album.song_set[j].id+'"> <div id="p_song_name">'+album.song_set[j].id_no+' ' +album.song_set[j].song +'</div>'
                 +   ' <div class="miniIcons" id="p_alb_controls">'
                 +       '<a href=""></a>' 
                 +       '<a href=""></a>' 
@@ -303,6 +305,7 @@ function display_album(id){
       $("#popular_list").append(html);
 
       artist_ready();
+      dragging();
       song_ready();
     });
 
@@ -316,7 +319,7 @@ function display_artist(id){
     $.ajax(url,contentType= "application/json").done( function(data){
       artist = data[0];
       $("#artist_view").empty();
-      $("#artist_view").append('<div id="artist_banner" style="background:url('+'\'\/media\/' + artist.cover_pic +  '\'); background-size:cover; "></div>');
+      $("#artist_view").append('<div id="artist_banner" style="background:url('+'\'\/songsmedia\/' + artist.cover_pic +  '\'); background-size:cover; "></div>');
   //    debugger;
       $("#artist_banner").append('<div id="layer" style="background:url(\'\/static/images/jukebox/gradientCover.png\'); " ></div>');
     //  console.log('abcdddddddddddddddd');
@@ -325,7 +328,7 @@ function display_artist(id){
       for(var j=0; j<artist.album_set.length; j++)
       {
         html = '<div class="artist_album">'
-                + '<div class="artist_album_pic"><img src="/media/'+ artist.album_set[j].album_art +'"></img></div>'
+                + '<div class="artist_album_pic"><img src="/songsmedia/'+ artist.album_set[j].album_art +'"></img></div>'
                 + '<div id="artist_song_list">'
                 + '<div id="popular_heading"> '+artist.album_set[j].album+' </div>'
                 + '<div id="popular_list">'
@@ -334,7 +337,7 @@ function display_artist(id){
       for(var k=0; k<artist.album_set[j].song_set.length; k++)
       {
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class=" song popular_item" id="song_'+artist.album_set[j].song_set[k].id+'"> <div id="p_song_name">'+ artist.album_set[j].song_set[k].id_no +' '+ artist.album_set[j].song_set[k].song +'</div>'
+        html += '<li class=" song popular_item draggable" id="song_'+artist.album_set[j].song_set[k].id+'"> <div id="p_song_name">'+ artist.album_set[j].song_set[k].id_no +' '+ artist.album_set[j].song_set[k].song +'</div>'
                 +   ' <div class="miniIcons" id="p_alb_controls">'
                 +       '<a href=""></a>' 
                 +       '<a href=""></a>' 
@@ -364,6 +367,7 @@ function display_artist(id){
       $("#append").append(html);
       */
       album_ready();
+      dragging();
       song_ready();
     });
 
@@ -532,8 +536,8 @@ function get_song_html(song)
     "<img src=\'\/media\/" + album_art + "\' width='300px' height='300px'>" +
     "<br> <span class='song' id='song_" + k + "'>Play </span> <br><br>";
 */
-  var html1 = "<div class='item_wrapper playable' id='song_"+k+"' data-type='play' data-value='"+k+"'>"+
-    '<div class="item song"  id="song_'+k+'" style="background:url('+'\'\/media\/' + album_art +  '\'); background-size:cover">' +
+  var html1 = "<div class='item_wrapper song playable draggable' id='song_"+k+"' data-type='play' data-value='"+k+"'>"+
+    '<div class="item"  id="song_'+k+'" style="background:url('+'\'\/songsmedia\/' + album_art +  '\'); background-size:cover">' +
    ' <div id="faint"></div>'+
    ' <a class="play_icon"><i class="icon-play song-icon-play"></i></a>'+
    ' </div>' +
@@ -632,9 +636,10 @@ function play(id)
   var song_id = "#count_" + id;
   $.ajax(url,contentType= "application/json").done( function(data){
     var song = data[0];
+    if( !in_queue && (id != song_playing)) add_queue_song(song);
     $("#musicPlayerPic").empty();
-   $("#musicPlayerPic").append('<img src="\/media\/' + song.album.album_art +  '" style="width: 32px; height: 32px;" >');
-   Jukebox.play_url('song_'+id,'http://192.168.121.5'+song.file_name)
+   $("#musicPlayerPic").append('<img src="\/songsmedia\/' + song.album.album_art +  '" style="width: 32px; height: 32px;" >');
+   Jukebox.play_url('song_'+id,'http://192.168.121.5/songs/english/'+song.file_name)
  $("#ilSong").html('<b>'+song.song+'</b>');
   var art = [];
   for(i=0;i<song.artists.length && i<5; i++) art.push(song.artists[i].artist);
@@ -653,10 +658,21 @@ function check_hash( name )
   hash = hash.replace(/\/$/, '');
   if(!prev_hash) prev_hash="";
   prev_hash = prev_hash.replace(/\/$/, '');
-  console.log('prev_hash i123 '+ prev_hash);
-  console.log('hash '+ hash);
   hash = hash.split('/');
   phash = prev_hash.split('/');
+  if(name=='playing')
+  {
+
+    song = hash.indexOf('song');
+    if(hash.length-song == phash.length-song)
+    {
+    console.log('song        '+song);
+      for(i=song;i<hash.length;i++){ console.log(hash[i]+'  '+phash[i]);
+        if(hash[i]!=phash[i] ) return false;}
+      return true;
+    }
+  return false;
+  }
   if(name=='song')
   {
     if(hash.length == phash.length)
@@ -781,8 +797,17 @@ function playlist_ready(){
 
 function song_ready()
 {
-  $(".song").on('click',function(){
-      id = $(this).attr('id').split('_')[1];
+  $(".song").bind('click',function()
+      {
+        song_bind($(this))
+      });
+
+}
+function song_bind(element){
+ //   if(check_hash('song')){
+   //   add_queue(element)}
+      in_queue = element.hasClass('qitem');
+      id = element.attr('id').split('_')[1];
       if(Number(id) == song_playing)
       {
         play(song_playing);
@@ -798,6 +823,4 @@ function song_ready()
         hash.push(id);
         window.hash_change.apply(window, hash);
       }
-    });
-
 }

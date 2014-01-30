@@ -255,10 +255,12 @@ ul{
 	height:auto;
 	position: absolute;
 	margin: 0 auto;
-	margin-left: 201px;
+	margin-left: 200px;
+  /*right:218px;*/
   box-shadow: 1px 1px 1px #EEE;
   border-right: 1px solid #DDD;
   background-color:#FFF;
+  padding-bottom: 60px;
 }
 
 #centerdata{
@@ -586,14 +588,18 @@ border-radius: 4px;
 }
 
 #popular_artists{
-	margin-top: 10px;
-  background-color:#FFF;
-  padding: 0px 5px 0px 5px;
-  margin-bottom: 10px;
+     margin-top: 10px;
+     background-color: #FFF;
+     padding: 0px 5px 0px 5px;
+     border: #E0E0E0 1px solid;
+     border-radius: 3px;
+     box-shadow: 0px 1px 0px #EEE;
 }
 
 #popular_artists_list{
-	display: block;
+        display: block;
+         border-bottom: 1px solid #E0E0E0;
+         margin-top: 15px;
 }
 
 #popular_artists a{
@@ -606,18 +612,19 @@ border-radius: 4px;
 }
 
 .qitem{
-	height: 40px;
-	border-top: 1px solid #666;
+	height: 41px;
+  border-top: 1px solid #E0E0E0;
 }
 .qitem:hover{
+  background-color:#FFF;
 	-webkit-transition-property:color, text;
-	-webkit-transition-duration: 0.3s, 0.3s;
+	-webkit-transition-duration: 0.1s, 0.1s;
 	-webkit-transition-timing-function: ease-in ,linear,ease-out;
 	-moz-transition-property:color, text;
-	-moz-transition-duration:0.5s;
+	-moz-transition-duration:0.3s;
 	-moz-transition-timing-function: linear, ease-in;
 	-o-transition-property:color, text;
-	-o-transition-duration:0.5s;
+	-o-transition-duration:0.3s;
 	-o-transition-timing-function: linear, ease-in;
 }
 .qitem>div{
@@ -625,11 +632,11 @@ border-radius: 4px;
 }
 
 .qimage{
-	background-color: #CACACA;
-	width: 30px;
-	height: 30px;
-	margin: 5px 0px 5px 5px;
-	cursor: pointer;
+  background-color: #CACACA;
+width: 30px;
+height: 30px;
+margin: 5px 0px 5px 5px;
+cursor: pointer;
 }
 
 .qinfo{
@@ -645,6 +652,9 @@ color: #757575;
 
 .qsong{
 	font-size: 12px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .qartist{
 	font-size: 11px;
@@ -831,10 +841,10 @@ cursor: pointer;
 .searchLightboxOpen{
 	display: block;
 	position: fixed;
-	background-color: #E0E0E0;
+	background-color: rgba(255, 255, 255, 0.7);
 	border-bottom: 0 none;
 	z-index: 3;
-	opacity: 0.985;
+
 }
 
 .searchLightboxClose{
@@ -871,7 +881,7 @@ cursor: pointer;
 	font-size: 96px;
 	width: 100%;
 	font-family: "helvetica_neue_bold","Arial","sans-serif";
-	background-color: #E0E0E0;
+	background-color: rgba(0, 0, 0, 0);
 	border: 0px;
 	text-transform: uppercase;
 }
@@ -1217,5 +1227,12 @@ cursor: pointer;
   color: #686868;
   cursor: pointer;
   right: 5px;
+}
+/* blur css*/
+.blur_back{
+  -webkit-filter:blur(30px);
+  -moz-filter:blur(30px);
+  -ms-filter:blur(30px);
+  filter:blur(30px);
 }
 
