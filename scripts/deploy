@@ -1,5 +1,5 @@
 #!/bin/bash
 
-python manage.py collectstatic
-python manage.py cachepages
+su www-data -c "python manage.py collectstatic"
+su www-data -c "python manage.py cachepages"
 touch production/wsgi.py

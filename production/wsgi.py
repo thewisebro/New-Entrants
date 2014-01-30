@@ -1,5 +1,5 @@
 """
-WSGI config for channeli project.
+WSGI config for channeli project_path.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable
@@ -15,9 +15,9 @@ framework.
 """
 import os, sys
 
-apache_configuration= os.path.dirname(__file__)
-project = os.path.dirname(apache_configuration)
-sys.path.append(project)
+apache_configuration= os.path.dirname(os.path.abspath(__file__))
+project_path = os.path.dirname(apache_configuration)
+sys.path.append(project_path)
 
 # We defer to a DJANGO_SETTINGS_MODULE already in the environment. This breaks
 # if running multiple sites in the same mod_wsgi process. To fix this, use
@@ -37,7 +37,7 @@ application = get_wsgi_application()
 def ApplicationWrapper(application):
   def wrapped_application(environ, start_response):
     if environ['PATH_INFO'] == '/':
-      f = open('production/cached_pages/index.html','r')
+      f = open(project_path+'/production/cached_pages/index.html','r')
       response_body = f.read()
       f.close()
       status = '200 OK'
