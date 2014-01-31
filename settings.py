@@ -19,6 +19,10 @@ TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 
+JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
+JUKEBOX_MEDIA_URL = '/songsmedia/'
+JUKEBOX_SONGS_BASEURL = '/songs/'
+
 # Add apps to python path
 sys.path.append(PROJECT_ROOT + '/apps')
 
@@ -194,6 +198,7 @@ THIRD_PARTY_APPS = (
 
 CHANNELI_APPS = (
   'nucleus',
+  'jukebox',
   'api',
   'reporting',
   'crop_image',
