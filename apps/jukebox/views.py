@@ -127,6 +127,26 @@ class GetSongView(RetrieveAPIView):
   queryset = Song.objects.all()
   serializer_class = SongSerializer
 
+def get_json_Queue(song):
+  return {
+    'id':song.id,
+    'album': song.album.album,
+    'album_art': song.album.album_art.name,
+    'song':song.song,
+    'artist':song.artists.all()[0].artist,
+  }
+
+def getQueue(request):
+  queue = request.GET['qu']
+  queue = queue.split(',')
+  queue = map(lambda x: int(x), queue)
+  lsongs = Song.objects.in_bulk(queue)
+  for key in lsongs.keys():
+    lsongs[key]=get_json_Queue(lsongs[key])
+  lsongs = json.dumps({'queue':lsongs})
+  return HttpResponse(lsongs, mimetype='application/json')
+
+
 
 class SearchJsonView(ListAPIView):
   """

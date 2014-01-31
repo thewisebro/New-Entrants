@@ -2,7 +2,7 @@ function Player() {
   var self = this;
   var sm = soundManager; // soundManager instance
   var isIE = (navigator.userAgent.match(/msie/i));
-  var sound; 
+  var sound;
   var checkmute = 0;
   var prevVolume;
   var duration=null;
@@ -15,7 +15,7 @@ function Player() {
 
     play: function() {
        $('#'+sound.id).find('.play_icon i').removeClass('icon-play').addClass('icon-pause');
-       console.log("--------------"+sound.id); 
+     //  console.log("--------------"+sound.id); 
     },
 
     stop: function() {
@@ -24,11 +24,9 @@ function Player() {
     },
 
     pause: function() {
-   
     },
 
     resume: function() {
-          
     },
 
     finish: function() {
@@ -56,8 +54,6 @@ function Player() {
     whileplaying: function(){
        $("#musicBlueSlider").css('width', ((this.position/this.duration) *  ($("#musicSlider").width())));
         $("#ui-sliderlarge-handle").css('left', ((this.position/this.duration) *($("#musicSlider").width())));
-          
-
           var seconds = Math.round(this.position/1000);
           var min=Math.round(seconds/60);
           var sec=Math.round(seconds%60);
@@ -68,8 +64,8 @@ function Player() {
           function leftzero(n){
                 return n > 9 ? "" + n: "0" + n;
           }
-         $("#timePlayed").html(min+':'+leftzero(sec));
-         $("#totalTime").html(tmin+':'+leftzero(tsec));
+         $("#timePlayed").text(min+':'+leftzero(sec));
+         $("#totalTime").text(tmin+':'+leftzero(tsec));
 
       }
 
@@ -121,7 +117,6 @@ function Player() {
             //set the currentSound to id of the sound currently playing
             self.currentSound=sound.id;
             }
-           
           }
           else{
             sound = soundManager.createSound({
@@ -220,7 +215,7 @@ function Player() {
     $('#bLeftPlay img').on('click',function(){
       if(self.currentSound){//check if sound obj exists
         sound.togglePause();
-      } 
+      }
     });
 
     $('#bLeftLeft img').on('click',function(){
@@ -245,7 +240,7 @@ function Player() {
 
              prevVolume = $('#slider').slider("value");
              $('#slider').slider( "value", 0 );
-             if(sound){ 
+             if(sound){
               sound.setVolume($('#slider').slider("value"));
               console.log('value set to');
               console.log($('#slider').slider("value"));
@@ -256,8 +251,7 @@ function Player() {
              volume.removeClass().addClass( "icon-volume-up" );
              if(prevVolume){$('#slider').slider( "value", prevVolume );}
              else{$('#slider').slider( "value", 100 );}
-             
-             if(sound){ 
+             if(sound){
               sound.setVolume( $('#slider').slider("value"));
               console.log('value set to');
               console.log($('#slider').slider("value"));
@@ -272,14 +266,12 @@ function Player() {
 
                 volume = $('#volumeicons i');
                var value = $(this).slider('value');
-                if(value <= 5) { 
+                if(value <= 5) {
                     volume.removeClass().addClass( "icon-volume-off" );
-                } 
-            
+                }
                 else if (value <= 65) {
                     volume.removeClass().addClass( "icon-volume-down" );
-                                      
-                } 
+                }
                 else {
                     volume.removeClass().addClass( "icon-volume-up" );
                 }
@@ -288,7 +280,6 @@ function Player() {
 
             stop: function( event, ui ) {
                 var value = $(this).slider('value');
-                
                 volume = $('#volumeicons i');
                 console.log(value);
                 if(value <= 5) { 
@@ -305,9 +296,7 @@ function Player() {
                       console.log(value);
                     }
                     checkmute=1;
-                    
-                } 
-            
+                }
                 else if (value <= 65) {
                     volume.removeClass().addClass( "icon-volume-down" );
                     if(checkmute && sound){
@@ -319,8 +308,7 @@ function Player() {
                       console.log('value set to');
                       console.log(value);
                     }
-                    
-                } 
+                }
                 else {
                     volume.removeClass().addClass( "icon-volume-up" );
                     if(checkmute && sound){
@@ -337,6 +325,21 @@ function Player() {
 
     });
     //music slider
+    $('#musicSlider').slider({
+
+          slide: function(event, ui) {
+            //$("#musicSlider").css('width',$(this).slider('value'));
+
+          },
+
+          stop: function(){
+          console.log("pos"+sound.position);
+          console.log("duration"+sound.duration);
+         console.log(sound.setPosition(($(this).slider("value")/(100)*(sound.duration))));
+         // sound.setPosition(($(this).slider("value")/($(this).width())*(sound.duration)));
+        //  console.log($(this).slider("value"))
+          }
+    });
 
 
   }//handle click
@@ -360,7 +363,7 @@ var Jukebox = null;
 
 soundManager.setup({
   // disable or enable debug output
-  debugMode: true,
+  debugMode: false,
   // use HTML5 audio for MP3/MP4, if available
   preferFlash: false,
   useFlashBlock: true,

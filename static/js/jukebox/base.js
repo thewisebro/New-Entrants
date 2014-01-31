@@ -26,10 +26,8 @@ var now_display='trending';
 var album_html = '';
 var artist_html = '';
 var trending_html='';
-var queue = '';
-var in_queue = false;
-
-
+var queue = [];
+var in_queue=false;
 
 
 var song_playing=0;
@@ -184,6 +182,7 @@ function display(name){
       {
         $('#centerdata').html(trending_html);
         lTrending();
+        dragging();
         song_ready();
         return;
       }
@@ -636,7 +635,7 @@ function play(id)
   var song_id = "#count_" + id;
   $.ajax(url,contentType= "application/json").done( function(data){
     var song = data[0];
-    if( !in_queue && (id != song_playing)) add_queue_song(song);
+    if( !in_queue && (id != song_playing)){ add_queue_song(song); now_playing=queue.length-1; }
     $("#musicPlayerPic").empty();
    $("#musicPlayerPic").append('<img src="\/songsmedia\/' + song.album.album_art +  '" style="width: 32px; height: 32px;" >');
    Jukebox.play_url('song_'+id,'http://192.168.121.5/songs/english/'+song.file_name)
@@ -798,8 +797,8 @@ function playlist_ready(){
 function song_ready()
 {
   $(".song").bind('click',function()
-      {
-        song_bind($(this))
+ {
+       song_bind($(this));
       });
 
 }
@@ -824,3 +823,24 @@ function song_bind(element){
         window.hash_change.apply(window, hash);
       }
 }
+
+$(document).ready(function(){
+    var que = localStorage.getItem('queue');
+   if(que != null)
+    {
+      $.get('queue/',{qu:que},function(data){
+          var qu = data['queue'];
+          que = que.split(',');
+          console.log(qu);
+          console.log(que);
+          for(var i=0;i<que.length;i++)
+          {
+            add_LS_queue(qu[que[i]]);
+          }
+        }
+        );  
+    }
+    
+});
+
+

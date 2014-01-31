@@ -139,6 +139,47 @@ function searchView(e){
 
 /* draggable dropabble playqueue */
 
+function del_queue()
+{
+  localStorage.setItem('queue','');
+}
+
+function add_in_queue(id,insert)
+{
+  if(insert!=0) insert = insert || queue.length;
+  id = parseInt(id);
+  queue.splice(insert,0,id);
+  localStorage.setItem('queue',queue);
+}
+
+function remove_from_queue(insert)
+{
+ if (queue.length == 0) return;
+  if(insert!=0) insert = insert || queue.length;
+  var m = queue.splice(insert,1);
+  return m[0];
+}
+
+function add_LS_queue(song)
+{
+  console.log(song);
+  var id = 'song_'+song.id;
+  var image = '\/songsmedia\/' + song.album_art;
+  image = 'http://192.168.121.5:60000'+image;
+  var artist_name = song.artist;
+  var song_name = song.song;
+var html = '<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
+   + ' </div>'
+   + '<div class="qinfo">'
+   + '<div class="qsong">'+song_name+'</div>'
+   + '<div class="qartist">'+artist_name+'</div></div>';
+$( "<div class='qitem song' id='"+id+"'></div>" ).html( html ).appendTo( $("#queue_content"));
+$(".qsong").width($(".qitem").width()-50);
+$(".qartist").width($(".qitem").width()-50);
+add_in_queue(song.id,queue.length);
+song_ready();
+}
+
 function add_queue_song(song)
 {
   var id = 'song_'+song.id;
@@ -151,8 +192,10 @@ var html = '<div class="qimage" style="background:url(\''+image+'\'); background
    + '<div class="qinfo">'
    + '<div class="qsong">'+song_name+'</div>'
    + '<div class="qartist">'+artist_name+'</div></div>';
-$( "<div class='qitem song' id='"+id+"'></div>" ).html( html ).appendTo( $("#popular_artists_list"));
+$( "<div class='qitem song' id='"+id+"'></div>" ).html( html ).appendTo( $("#queue_content"));
 $(".qsong").width($(".qitem").width()-50);
+$(".qartist").width($(".qitem").width()-50);
+add_in_queue(song.id,queue.length);
 song_ready();
 }
 
@@ -198,12 +241,17 @@ var html = '<div class="qimage" style="background:url(\''+image+'\'); background
    + '<div class="qinfo">'
    + '<div class="qsong">'+song_name+'</div>'
    + '<div class="qartist">'+artist_name+'</div></div>';
-$( "<div class='qitem song' id='"+id+"'></div>" ).html( html ).appendTo( $("#popular_artists_list"));
+$( "<div class='qitem song' id='"+id+"'></div>" ).html( html ).appendTo( $("#queue_content"));
+$(".qsong").width($(".qitem").width()-50);
+$(".qartist").width($(".qitem").width()-50);
 song_ready();
+id = id.split('_')[1];
+add_in_queue(id,queue.length);
 }
 
 
 function dragging() {
+  var move = '';
    // $( "#catalog" ).accordion();
     $( ".draggable" ).draggable({
 appendTo: "body",
@@ -224,7 +272,15 @@ sort: function() {
 // gets added unintentionally by droppable interacting with sortable
 // using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
 $( this ).removeClass( "ui-state-default" );
-}
+},
+start: function(event, ui){
+  move = remove_from_queue(ui.item.index());
+  console.log('id == '+move);
+
+  },
+update: function(event, ui){
+  add_in_queue(move,ui.item.index());
+  }
 });
 
 }

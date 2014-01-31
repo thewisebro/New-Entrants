@@ -443,16 +443,14 @@ border-radius: 4px;
 }
 
 #songLoaded{
-	border: 1px solid black;
-	position: absolute;
-	height: 3px;
-	background-color: #747474;
-	cursor: pointer;
-	top: 24px;
-	left: 47px;
-	right: 97px;
-	border-radius: 4px;
-	z-index: 0;
+  border: 1px solid rgb(0, 0, 0);
+  position: absolute;
+  height: 3px;
+  background-color: rgb(116, 116, 116);
+  cursor: pointer;
+  top: -1px;
+  left: 0px;
+  border-radius: 4px;
 }
 
 #infoLeft{
@@ -658,6 +656,9 @@ color: #757575;
 }
 .qartist{
 	font-size: 11px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .qsong:hover{
@@ -669,6 +670,10 @@ color: #757575;
 
 #qlist{
 	display: none;
+}
+
+#queue_content{
+  padding:0px!important;
 }
 
 .trash{
@@ -1235,4 +1240,10 @@ cursor: pointer;
   -ms-filter:blur(30px);
   filter:blur(30px);
 }
+/* shaddow before bottom */
+#bottom:before{
+
+
+}
+
 

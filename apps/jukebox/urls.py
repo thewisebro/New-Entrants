@@ -44,6 +44,7 @@ urlpatterns = patterns('',
     url(r'^play/$', PlayJsonView.as_view(), name='count'),
     url(r'^song/(?P<pk>[0-9]+)/$', GetSongView.as_view(), name='song_list'),
     url(r'^search/', SearchJsonView.as_view(), name='search'),
+    url(r'^queue/', 'jukebox.views.getQueue', name='queue'),
 )
 
 

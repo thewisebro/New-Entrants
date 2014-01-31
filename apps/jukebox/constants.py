@@ -1,3 +1,3 @@
-ARTIST_PIC_DIR = 'jukebox/artist'
-ALBUMART_DIR = 'jukebox/albumart'
+ARTIST_PIC_DIR = '/songsmedia/artist'
+ALBUMART_DIR = '/songsmedia/albumart'
 SONG_DIR = '/home/pankaj/jukebox_songs/newestsongs/'

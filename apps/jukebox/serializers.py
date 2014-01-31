@@ -63,5 +63,21 @@ class PlaylistSerializer(serializers.ModelSerializer):
     return lsongs
 
 
+class PlayQueueSerializer(serializers.Serializer):
+  songs = serializers.CharField()
+  songs_list = serializers.SerializerMethodField('get_songs_list')
+  def __init__(self,song_list, *args, **kwargs):
+    self.songs = song_list
+    super(PlayQueueSerializer,self).__init__(*args,**kwargs)
+  class Meta:
+    fields = ('songs_list')
+    depth = 2
+
+  def get_songs_list(self):
+    if(songs == ''):
+      return []
+    songs_id = songs.split(',')
+    lsongs = Song.objects.in_bulk(songs_id)
+    return lsongs
 
 

@@ -152,7 +152,9 @@
 </a>
 <span id="queue_trash"><i class="icon-sort-down"></i></span>
 </div>
-<div id="popular_artists_list">
+<div id="popular_artists_list" class="nano">
+<div id="queue_content" class="content">
+</div>
 
 </div>
 
@@ -190,9 +192,10 @@
 	</div>
 	</div>
 
-	<div id="musicSlider"></div>
-	<div id="songLoaded"></div>
-	<div id="borderMusicSlider"></div> 
+	<div id="musicSlider">
+    <div id="songLoaded"></div>
+  </div>
+  <div id="borderMusicSlider"></div> 
 
 
 	</div>
@@ -254,7 +257,7 @@
        // $(".qsong").width($(".qitem").width()-50);
 		    $( "#slider" ).find('a').attr('id','ui-slidersmall-handle');
 		    $( "#musicSlider" ).find('a').attr('id','ui-sliderlarge-handle');
-
+        $(".nano").nanoScroller();
 		    });
 $('#centerdata').css('width',$(window).width()-180-240);
 // to erase the rightside on homeview and strech the centerdiv

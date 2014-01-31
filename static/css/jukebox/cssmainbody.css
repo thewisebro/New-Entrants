@@ -80,7 +80,7 @@ opacity: 0;
 .artist_data{
 	/*background-color: red;*/
 	width: 100%;
-	height: 30px;
+	height: 18px;
 	margin-top: 15px;
 }
 .artist_data > div{
@@ -120,9 +120,9 @@ opacity: 0;
 }
 .song_name{
 	font-family: "helvetica_neue_medium","Arial","sans-serif";
-	font-size: 13px;
+	font-size: 14px;
 	 -webkit-font-smoothing: antialiased;
-	  color: #464646;
+	  color: #444;
 	  cursor: pointer;
 	text-overflow: ellipsis;
 	overflow: hidden;
@@ -130,7 +130,7 @@ opacity: 0;
 }
 .artist_name{
 	font-family: "helvetica_neue_regular","Arial","sans-serif";
-	font-size: 12px;
+	font-size: 13px;
 	 -webkit-font-smoothing: antialiased;
 	   cursor: pointer;
 	color:#757575;
