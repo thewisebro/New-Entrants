@@ -49,10 +49,6 @@ class PrivelegeJsonView(TemplateView):
 class NoticeListView(ListAPIView):
   serializer_class = NoticeListViewSerializer
   def get_queryset(self):
-    page_no = int(self.kwargs['page_no'])
-    a = page_no*10
-    b = a - 10
-    return Notice.objects.order_by('datetime_modified')[b:a]
     llim = int(self.kwargs['llim'])                                #lower limit
     hlim = int(self.kwargs['hlim'])                                #higher limit
     first_notice_id = int(self.kwargs['id'])                       #id of the first notice relative to which the number of notices to be sent are realized
@@ -157,11 +153,12 @@ class Show_Uploads(ListAPIView):
 def edit(request, pk):
   NoticeForm = GenerateNoticeForm(request.user)
   privelege = request.user.uploader_set.all().exists()
-  notice = Notice.objects.get(id=pk)
+  n = Notice.objects.get(id=pk)
   if request.method == 'POST' and privelege:
     form = NoticeForm(request.POST)
     if form.is_valid():
-
+      Oldn.pk
+      old_notice = OldNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, )
       c=Category.objects.get(name=form.cleaned_data['category'])
       uploader = Uploader.objects.get(user=request.user, category=c)
       notice = form.save(commit=False)
@@ -171,6 +168,6 @@ def edit(request, pk):
       return HttpResponseRedirect(reverse('index'))
   else:
     form =  NoticeForm(
-              initial={'subject' : notice.subject, 'reference' : notice.reference , 'expire_date' : notice.expire_date , 'content' : notice.content, 'category' : notice.uploader.category})
+              initial={'subject' : n.subject, 'reference' : n.reference , 'expire_date' : n.expire_date , 'content' : n.content, 'category' : n.uploader.category})
   context = {'form' : form, 'privelege' : privelege}
   return render(request, 'notices/upload.html', context)

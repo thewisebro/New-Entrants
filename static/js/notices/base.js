@@ -1,11 +1,15 @@
 var no_of_pages, last_page_notices;		//variables for search results
 var pages, last_page_no;		//variables for show_uploads results
+var total_pages, notices_on_last_page;		//variables general notice display
 var store = new Array(50);
 var emptyarray = new Array(50);
+var hash1, hash2;
 var privelege=0, first_time_visit=0, starred=0;
-var search_store, check_upload_array={}, upload_array, star_array={}, read_array={};				      //star_array stores the ids of notices who are starred for a particualar user.read_array is similar
+var search_store, check_upload_array={}, upload_array, star_array={}, read_array={};				      //star_array stores the ids of notices who are starred for a particular user.read_array is similar
 							                                  //search_store stores the results of a particular search
-$(document).on("load_app_notices", function(e, hash1, hash2){
+$(document).on("load_app_notices", function(e, h1, h2){
+  hash1=h1;
+  hash2=h2;
   if(hash1 == undefined || hash1 == "")
   {
     location.hash = '#notices/1';
@@ -21,11 +25,14 @@ $(document).on("load_app_notices", function(e, hash1, hash2){
     	{
       		gap_scanner(1, 1);
     	}
-		get_privelege(hash1, hash2);
+      else
+      {
+		    get_privelege();
+      }
   }
 });
 
-function get_privelege(hash1, hash2)
+function get_privelege()
 {
 	if(first_time_visit==0)
 	{
@@ -43,11 +50,11 @@ function get_privelege(hash1, hash2)
         			html += '<div id = "show_uploads" onclick="upload_change_page(1)">Show/Edit Uploads</div><br>';
         			$('#content').append(html);
       			}
-			      search_bar(hash1, hash2);
+			      search_bar();
     		},
 		    error: function ()
 		    {
-			    search_bar(hash1, hash2);
+			    search_bar();
 		    }
   });
 	}
@@ -60,11 +67,11 @@ function get_privelege(hash1, hash2)
         		html += '<div id = "show_uploads" onclick="upload_change_page(1)">Show/Edit Uploads</div><br>';
         		$('#content').append(html);
 		}
-		search_bar(hash1, hash2);
+		search_bar();
 	}
 }
 
-function search_bar(hash1, hash2)
+function search_bar()
 {
 	html = 'Search: <input type="text" id="search_data" onkeydown="if (event.keyCode == 13) search()"><br>'
 	$('#content').append(html);
@@ -72,17 +79,17 @@ function search_bar(hash1, hash2)
 	{
 		if(starred==1)
     {
-      bring_starred_notices(hash1, hash2);
+      bring_starred_notices( );
     }
 		else
-		get_total_notices_no(hash1);
+		get_total_notices_no();
 		first_time_visit=1;
 	}
 	else
   {
     if(hash1 == "search")
     {
-      display_search_list(parseInt(hash2));
+      display_search_list(parseInt());
     }
     else if(hash1 == "show_uploads")
     {
@@ -93,12 +100,12 @@ function search_bar(hash1, hash2)
     }
     else
     {
-	    load_numbers_bar(hash1);
+	    load_numbers_bar();
     }
   }
 }
 
-function get_total_notices_no(hash1, hash2)
+function get_total_notices_no()
 {
   		$.ajax({
     		type: 'get',
@@ -123,32 +130,23 @@ function get_total_notices_no(hash1, hash2)
               }
             }
             else
-      			load_numbers_bar(hash1);
+      			load_numbers_bar();
     		}
   		});
 };
 
-function load_numbers_bar(hash1)
+function load_numbers_bar()
 {
       $('div#page_numbers').remove();
       html = '<div id="page_numbers">';
       for(var i=0; i<total_pages-1; i++)
       {
-        html += '<span id="number-' + (i+1) + '" class="numbers_list" onclick="hashchange('+ (i+1) + ')">' + (i+1) +'</span>';
-      }
-      html += '<span id="number-' + total_pages + '"class="numbers_list" onclick="hashchange('+ total_pages +  ')">' + total_pages + '</span>';
-      html += '</div>';
-      $('#content').append(html);
-      list_notices(parseInt(hash1));
-}
-
-function hashchange(number)
         html += '<span id="number-' + (i+1) + '" class="numbers_list" onclick="change_page('+ (i+1) + ')">' + (i+1) +'</span>';
       }
       html += '<span id="number-' + total_pages + '"class="numbers_list" onclick="change_page('+ total_pages +  ')">' + total_pages + '</span>';
       html += '</div>';
       $('#content').append(html);
-      first_time_check(parseInt(hash1));
+      first_time_check();
 }
 
 function change_page(number)
@@ -156,28 +154,6 @@ function change_page(number)
   location.hash = '#notices/' + number;
 }
 
-function list_notices(page_no)
-{
-  $.ajax({
-    type: 'get',
-    url : 'notices/list_notices/' + page_no,
-    success: function (data)
-    {
-      $('div#notice_list').remove();
-      html = '<div id="notice_list">';
-      var k = 0;
-      if(page_no < total_pages)
-        k = 10;
-      else
-        k = notices_on_last_page;
-      for(var i=0; i<k; i++)
-      {
-        html += '<div class="notice_info" onclick="display_notice(' + data[i].id + ')">'  + data[i].subject + '</div>';
-      }
-      html += '</div>'
-      $('#content').append(html);
-    }
-  });
 function open_notice(id)
 {
   location.hash = '#notices/content/' + id;
@@ -204,7 +180,6 @@ function search_change_page(page_no)
 
 function list_notices(page_no)
 {
-  console.log();
       $('div#notice_list').remove();
       html = '<div id="notice_list">';
       var k = 0;
@@ -273,6 +248,7 @@ function list_notices(page_no)
       }
       else
       {
+
         for(var i=a; i<b; i++)
         {
           html += '<div class="notice_info" onclick="open_notice(' + store[i].id + ')">' + store[i].subject + '</div>';
@@ -284,21 +260,14 @@ function list_notices(page_no)
 
 function display_notice(id)
 {
-  $.ajax({
-    type: 'get',
-    url : 'notices/get_notice/' + id,
-    success: function (data)
-  console.log("gaind");
   read_notice(id);
   $.ajax({
     type: 'get',
     url : 'notices/get_notice/' + id,
     success: function(data)
     {
-      console.log(data.subject);
       html = '<p>Subject : ' + data.subject + '<br>';
       html += 'Reference : ' + data.reference + '<br>';
-      html += 'Category : ' + data.uploader.category.name + '<br>';
       html += 'Category : ' + data.category + '<br>';
       html += 'Content : ' + data.content + '<br></p>';
       $('#content').empty();
@@ -326,13 +295,18 @@ function gap_filler(llim, hlim, temp, page_no)
            }
            if(page_no)
            list_notices(page_no);
-      }
+           else
+           {
+           get_privelege();
+           }
+      },
     });
 }
 
 function first_time_check(page_no)                                         /* Check if one clicks for the first time on a bundle*/
 {
-    var bundle_no = (page_no-1)/5 + 1;
+  page_no=parseInt(hash1);
+  var bundle_no = (page_no-1)/5 + 1;
     var len = (store.length/50);
     for(var i=0; i<(bundle_no-len); i++)
       store.push.apply(store, emptyarray);
@@ -341,7 +315,7 @@ function first_time_check(page_no)                                         /* Ch
 
 function gap_scanner(page_no, t)                 // Fills the appropriate gaps with notice objects into the store, between indices
 {                                                                           // corresponding to the bundle_no.
-	var bundle_no = (page_no-1)/5 + 1;
+  var bundle_no = (page_no-1)/5 + 1;
     var b = bundle_no*50 -1;
     var i = b - 49;
     var gap_begin = 0, gap_end = 0, temp=0;
@@ -356,9 +330,13 @@ function gap_scanner(page_no, t)                 // Fills the appropriate gaps w
       if(temp)
       {
         if(i in store)
+        {
         gap_end = i - 1;
+        }
         else if(i == b)
+        {
         gap_end = i;
+        }
         else
         {
           i++;
@@ -369,14 +347,18 @@ function gap_scanner(page_no, t)                 // Fills the appropriate gaps w
           gap_filler(gap_begin, gap_end, 0, 0);
         }
         else
-        gap_filler(gap_begin, gap_end, store[0].id, page_no);
+        {
+          gap_filler(gap_begin, gap_end, store[0].id, page_no);
+        } 
         gap_begin = 0;
         temp=0;
       }
       i++;
     }
     if(!gap_end)
+    {
     list_notices(page_no);
+    }
 }
 
 function search()
@@ -531,7 +513,13 @@ function star_notice(id, e)
 	}
 	$.ajax({
 	type: 'post',
-	url: url
+	url: url,
+  error : function()
+  {
+    html = 'Error';
+    $('#content').empty();
+    $('#content').append(html);
+  }
 	});
 }
 
@@ -548,7 +536,7 @@ function read_notice(id)
   }
 }
 
-function bring_starred_notices(hash1, hash2)      			// A function that brings all the starred notice corresponding to a particular user
+function bring_starred_notices()      			// A function that brings all the starred notice corresponding to a particular user
 {
 	$.ajax({
 	type: 'get',
@@ -560,12 +548,12 @@ function bring_starred_notices(hash1, hash2)      			// A function that brings a
 		{
 			star_array[data[i]]=1;
 		}
-    bring_read_notices(hash1, hash2)
+    bring_read_notices()
 	}
 	});
 }
 
-function bring_read_notices(hash1, hash2)      			// A function that brings all the read notice corresponding to a particular user
+function bring_read_notices()      			// A function that brings all the read notice corresponding to a particular user
 {
 	$.ajax({
 	type: 'get',
@@ -578,14 +566,14 @@ function bring_read_notices(hash1, hash2)      			// A function that brings all 
 			read_array[data[i]]=1;
 		}
     if(privelege==1)
-    bring_uploads(hash1, hash2)
+    bring_uploads()
     else
-		get_total_notices_no(hash1);
+		get_total_notices_no();
 	}
 	});
 }
 
-function bring_uploads(hash1, hash2)
+function bring_uploads()
 {
    $.ajax({
       type: 'get',
@@ -603,7 +591,7 @@ function bring_uploads(hash1, hash2)
           upload_array[i] = data[i];
           check_upload_array[data[i].id]=1;
         }
-		    get_total_notices_no(hash1, hash2);
+		    get_total_notices_no();
       }
    });
 }
