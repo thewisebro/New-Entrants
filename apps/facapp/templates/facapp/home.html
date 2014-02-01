@@ -1,1 +1,17 @@
-<h1>It Works!</h1>
+<html>
+  <head>
+    <title>
+      facapp
+    </title>
+    <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor.js"></script>
+  </head>
+  <body>
+
+    <h1>It Works!</h1>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <div type="text" name="ckedit" contentEditable="true" >this content is editable....</div>
+      <input type="submit" name="submit" />
+    </form>
+  </body>
+</html>
