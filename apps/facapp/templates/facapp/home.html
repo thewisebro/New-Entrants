@@ -4,14 +4,37 @@
       facapp
     </title>
     <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>
+
   </head>
   <body>
 
     <h1>It Works!</h1>
-    <form action="" method="POST">
+    <form method="POST" onsubmit="return sendData();">
       {% csrf_token %}
-      <div type="text" name="ckedit" contentEditable="true" >this content is editable....</div>
+      <div type="text" name="ckedit" contentEditable="true" id="datin" >this content is editable....</div>
       <input type="submit" name="submit" />
     </form>
   </body>
+  <script type="text/javascript">
+
+  function sendData(){
+    console.log("called");
+      var inputs = {
+          ckedit:    $("#datin").html()
+      };
+            $.ajax({
+              data: inputs,
+              type: "POST",
+              url: "",
+              success: function(data){
+              $("#datin").html(data);
+              console.log("success");
+              }
+            });
+            return false;
+  }
+
+  </script>
 </html>
