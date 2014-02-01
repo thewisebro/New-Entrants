@@ -186,6 +186,7 @@ DJANGO_CONTRIB_APPS = (
 THIRD_PARTY_APPS = (
 #  'debug_toolbar',
   'rest_framework',
+  'fluent_comments',
   'crispy_forms',
   'taggit',
   'taggit_autocomplete',
@@ -208,7 +209,8 @@ CHANNELI_APPS = (
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
 
-COMMENTS_APP = 'threadedcomments'
+FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
+COMMENTS_APP = 'fluent_comments'
 
 AUTH_USER_MODEL = 'nucleus.User'
 
