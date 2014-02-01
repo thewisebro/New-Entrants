@@ -1,5 +1,5 @@
 #!/bin/bash
 
-python manage.py collectstatic
+echo 'yes'| python manage.py collectstatic
 python manage.py cachepages
 touch production/wsgi.py

@@ -1,0 +1,118 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+
+
+#left_album_list{
+position: fixed;
+display: inline-block;
+width: 200px;
+height: 100%;
+border-right: #E9E9E9 1px solid;
+box-shadow: inset -1px 0px 5px #222;
+padding: 10px 10px 10px 10px;
+background-color: #444;
+
+}
+
+
+#oneAlbumHeader{
+	position: relative;
+	margin-top: 45px;
+	margin-bottom: 10px;
+
+	height: 30px;
+
+	border-bottom: 1px solid lightGrey;
+	font-family: "Lato Bold";
+	font-size: 18px;
+
+}
+#oaoWrapper{
+	width: 100%;
+	min-height: 100%;
+	border-right: 1px solid #DDD;
+	box-shadow: 1px 1px 1px #eee;
+	background-color: #fff;
+}
+
+#oaoWrapper>div{
+	display:block;
+	float: left;
+
+}
+
+#oaoLeft{
+position: relative;
+min-height: 100%;
+width: 300px;
+padding: 30px 20px 0px 30px;
+
+}
+#oaoLInfo{
+	margin-top: 10px;
+	width: 300px;
+	padding-bottom: 7px;
+}
+#oaoLinfo div:nth-child(1){
+font-size: 30px;
+font-family:"helvetica_neue_bold";
+color: #444;
+}
+#oaoLinfo div:nth-child(2){
+font-size: 24px;
+font-family:"helvetica_neue_light";
+color: #757575;
+}
+#oaoRight{
+margin-left: 20px;
+right: 30px;
+left: 330px;
+position: absolute;
+max-width: 600px;
+margin-top: 30px;
+}
+
+.oaoRListItem{
+	font-size: 14px;
+	padding: 3px;
+	padding-left: 10px;
+}
+
+.oaoRListItem:hover{
+	background-color: white;
+	cursor: pointer;
+
+}
+.miniIcons{
+	display: inline-block;
+	float: right;
+}
+.miniIcons a{
+	padding-left: 10px;
+	opacity: 0;
+}
+
+.oaoRListItem:hover .miniIcons a{
+	opacity: 1;
+}
+.miniIcons a:nth-child(3){
+	margin-right: 5px;
+}
+
+#album_panel_hide{
+	position: fixed;
+	left: 420px;
+	top: 182px;
+	font-size: 14px;
+	border-left: 0px;
+	padding: 3px 3px 3px 0px;
+	cursor: pointer;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
+#album_panel_hide:hover{
+	color: #D8511D;
+}

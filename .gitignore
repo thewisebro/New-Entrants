@@ -1,7 +1,4 @@
-*.swp
-*.swo
-*.swn
-*.swm
+*.sw*
 *.pyc
 *~
 .sass-cache/*

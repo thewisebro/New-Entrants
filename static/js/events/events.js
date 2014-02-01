@@ -122,7 +122,7 @@ function process_hashtags(hashtags){
 }
 
 function get_calendars(hashtags){
-  $.post("/events/get_calendars",{},
+  $.get("/events/get_calendars",{},
     function(data){
         calendars = data.calendars;
         show_calendar_labels();
@@ -173,7 +173,7 @@ function update_events(calendar,action,number){
   var id = null;
   if(action == 'next')
     id = calendar.events[calendar.events.length-1].id;
-  $.post("/events/fetch",
+  $.get("/events/fetch",
     {'calendar_name':(calendar == virtual_calendar?virtual_calendar.calendar_name:calendar.name),
      'action' : action,
      'id' : id,
@@ -319,7 +319,7 @@ var Weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','S
 function set_calendar(){
   if(display_month == null) display_month = today.getMonth();
   if(display_year == null) display_year = today.getFullYear();
-  $.post('/events/get_events_dates',{
+  $.get('/events/get_events_dates',{
       month : display_month+1,
       year : display_year
     },
