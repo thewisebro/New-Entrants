@@ -30,5 +30,5 @@ class FoundFeed(ModelFeed):
     model = FoundItems
     app = 'lostfound'
 
-Feeds.register(FoundFeed)
-Feeds.register(LostFeed)
+# Feeds.register(FoundFeed)
+# Feeds.register(LostFeed)

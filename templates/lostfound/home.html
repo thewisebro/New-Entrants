@@ -37,13 +37,13 @@
                     {% endif %}
                   </td>
                 </tr>
-                <tr> <td class="column_1">Date :</td>      <td class="column_2">{{ row.date }}</td>  </tr>
+                <tr> <td class="column_1">Date :</td>      <td class="column_2">{{ row.datetime_created.date }}</td>  </tr>
                 {% if row.place|length > 25 %}
                   <tr> <td class="column_1">Place :</td>     <td class="column_2">{{ row.place|slice:":25" }}...</td>  </tr>
                 {% else %}
                   <tr> <td class="column_1">Place :</td>     <td class="column_2">{{ row.place }}</td>  </tr>
                 {% endif %}
-                <tr> <td class="column_1">Posted by :</td> <td class="column_2">{{ row.user.get_name }}</td>  </tr>
+                <tr> <td class="column_1">Posted by :</td> <td class="column_2">{{ row.user.name }}</td>  </tr>
                 <tr> <td class="column_1">Status :</td>    <td class="column_2">{{ row.status }}</td>  </tr>
               </table>
             </div>
@@ -72,9 +72,9 @@
                     {% endif %}
                   </td>
                 </tr>
-                <tr> <td class="column_1">Date :</td>      <td class="column_2">{{ row.date }}</td>  </tr>
+                <tr> <td class="column_1">Date :</td>      <td class="column_2">{{ row.datetime_created.date }}</td>  </tr>
                 <tr> <td class="column_1">Place :</td>     <td class="column_2">{{ row.place }}</td>  </tr>
-                 <tr> <td class="column_1">Posted by :</td> <td class="column_2">{{ row.user.get_name }}</td>  </tr>
+                 <tr> <td class="column_1">Posted by :</td> <td class="column_2">{{ row.user.name }}</td>  </tr>
                   <tr> <td class="column_1">Status :</td>    <td class="column_2">{{ row.status }}</td>  </tr>
               </table>
             </div>

@@ -16,10 +16,10 @@ from django.conf import settings
 
 from settings import MEDIA_ROOT, MEDIA_URL
 from lostfound.models import *
+from lostfound.forms import BaseModelFormFunction
 # from api.forms import *
 from lostfound.constants import *
 from notifications.models import Notification
-
 
 logger = logging.getLogger('lostfound')
 
@@ -48,7 +48,7 @@ def index(request):
 
 def lost(request):
   logger.info(request.user.username+": entered lost")
-  contact = request.user.get_contact()
+  contact = request.user.contact_no
   user = request.user
   email = user.email
 
@@ -93,7 +93,7 @@ def lost(request):
 @login_required
 def found(request):
   logger.info(request.user.username+": entered found")
-  contact = request.user.get_contact()
+  contact = request.user.contact_no
   user = request.user
   email = user.email
 
@@ -254,7 +254,7 @@ def edit(request, category, pk_id):
     item = FoundItems.objects.get(pk = pk_id)
 
   user = request.user
-  contact = user.get_contact()
+  contact = user.contact_no
   email = user.email
 
   if item.user.username == request.user.username:
@@ -266,6 +266,7 @@ def edit(request, category, pk_id):
           new_entry.pk = item.pk
           new_entry.user = request.user
           new_entry.status = 'Item not found'
+          new_entry.datetime_created = item.datetime_created
           try:
             new_entry.save()
           except Exception as e:
@@ -290,6 +291,7 @@ def edit(request, category, pk_id):
           new_entry.pk = item.pk
           new_entry.user = request.user
           new_entry.status = 'Owner not found'
+          new_entry.datetime_created = item.datetime_created
           try:
             new_entry.save()
           except Exception as e:
@@ -315,7 +317,7 @@ def edit(request, category, pk_id):
 def sendmail(request, type_of_mail, pk_id):
   logger.info(request.user.username+": entered edit with type " + type_of_mail + 'and pk ' + pk_id)
   user = request.user
-  contact = user.get_contact()
+  contact = user.contact_no
   email = user.email
   app = 'lostfound'
 
@@ -340,7 +342,7 @@ def sendmail(request, type_of_mail, pk_id):
       notif_text += 'Email at ' + escape(user.email) + '.'
     url = '/lostfound/view-item/lost/' + str(pk_id)
     users = [qryst[0].user]
-    Notification.save_notification(app, notif_text, url, users, pk_id, model=LostItems)
+    Notification.save_notification(app, notif_text, url, users, qryst[0])
 
   if type_of_mail == 'found':
     qryst = FoundItems.objects.filter(pk = pk_id)
@@ -363,7 +365,7 @@ def sendmail(request, type_of_mail, pk_id):
       notif_text += 'Email at ' + escape(user.email) + '.'
     url = '/lostfound/view-item/found/' + str(pk_id)
     users = [qryst[0].user]
-    Notification.save_notification(app, notif_text, url, users, pk_id, model=FoundItems)
+    Notification.save_notification(app, notif_text, url, users, qryst[0])
 
   receiver = str(qryst[0].email)
   try:
@@ -386,7 +388,7 @@ def deleteEntry(request, category, pk_id):
   app = 'lostfound'
   if category == "lost":
     item = LostItems.objects.get(pk = pk_id)
-    Notification.delete_notification(app, pk_id, model=LostItems)
+    Notification.delete_notification(app, item)
     if item.user.username == request.user.username:
       try:
         item.delete()
@@ -402,7 +404,7 @@ def deleteEntry(request, category, pk_id):
     return HttpResponseRedirect('/lostfound/')
   elif category == "found":
     item = FoundItems.objects.get(pk = pk_id)
-    Notification.delete_notification(app, pk_id, model=FoundItems)
+    Notification.delete_notification(app, item)
     if item.user.username == request.user.username:
       try:
         item.delete()
@@ -495,7 +497,7 @@ def _get_page_list(page_no, pages, items_per_page):
     return l[page_no - items_per_page + 1: page_no + items_per_page - 1]
 
 def _check_words_to_ignore(st):
-  f = open(settings.PROJECT_ROOT+'/lostfound/wordstoignore.txt', 'r')
+  f = open(settings.PROJECT_ROOT + '/apps/lostfound/wordstoignore.txt', 'r')
   words = [line[:-1] for line in f]
   f.close()
   st = st.split(' ')

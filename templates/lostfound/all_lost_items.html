@@ -23,17 +23,17 @@
        <div class="posted_by_header">Posted by</div>
     </div>
 
-    {% load macros %}
-    {% macro my_macro all_lost_items %}
+    {% load kwacros %}
+    {% kwacro my_kwacro all_lost_items %}
       <!-- Details of a single item BEGINS -->
       <div class="item_details">
         <div class="visible_details" {% if query.pk == key %} id="visible_details_item" {% else %} {% endif %}>
           <div class="serial_number">{{forloop.counter}}</div>
           <div class="item_name">{{query.item_lost}}</div>
-          <div class="date">{{query.date}}</div>
+          <div class="date">{{query.datetime_created.date}}</div>
           <div class="place">{{query.place}}</div>
           <div class="status">{{query.status}}</div>
-          <div class="posted_by">{{query.user.get_name}}</div>
+          <div class="posted_by">{{query.user.name}}</div>
           <div style="clear:both"></div>
         </div>
 
@@ -41,7 +41,7 @@
         <div id="hidden_details" >
           <div class="contact_details">
             <table>
-              <tr> <td>Lost by :</td>        <td>{{query.user.get_name}}</td> </tr>
+              <tr> <td>Lost by :</td>        <td>{{query.user.name}}</td> </tr>
               <tr> <td>Contact Number :</td> <td>{{query.contact}}</td> </tr>
             </table>
           </div>
@@ -83,23 +83,23 @@
           <div style="clear:both"></div>
         </div>
       </div>
-    {% endmacro %}
+    {% endkwacro %}
     {% if table_data and not empty %}
       {% for query in table_data.object_list %}
       <!-- Details of a single item BEGINS -->
-        {% usemacro my_macro 'all_lost_items' %}
+        {% usekwacro my_kwacro 'all_lost_items' %}
       {% endfor %}
     {% endif %}
 
     {% if qryst_lost %}
       {% for query in qryst_lost %}
-        {% usemacro my_macro 'all_lost_items' %}
+        {% usekwacro my_kwacro 'all_lost_items' %}
         <!-- Details of a single item BEGINS -->
       {% endfor %}
     {% endif %}
     {% if query  %}
       <!-- Details of a single item BEGINS -->
-      {% usemacro my_macro 'all_lost_items' %}
+      {% usekwacro my_kwacro 'all_lost_items' %}
     {% endif %}
     {% if table_data %}
       <div id="pagination_bar">
