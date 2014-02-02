@@ -4,7 +4,6 @@ pagelet_patterns = patterns('nucleus.pagelets',
   url(r'^header/$', 'header', name='header'),
   url(r'^sidebar/$', 'sidebar', name='sidebar'),
 )
-
 urlpatterns = patterns('',
   url(r'^$', 'nucleus.views.index', name='index'),
   url(r'^login/$', 'django.contrib.auth.views.login',
