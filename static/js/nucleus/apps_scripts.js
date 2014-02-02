@@ -6,6 +6,10 @@ var apps_scripts = {
   ],
   'events':[
     '/static/js/events/events.js'
+  ],
+  'helpcenter':[
+    '/static/js/prettydate.js',
+    '/static/js/helpcenter/helpcenter.js'
   ]
 }
 

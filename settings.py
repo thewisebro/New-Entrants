@@ -205,6 +205,8 @@ CHANNELI_APPS = (
   'crop_image',
   'groups',
   'events',
+  'notifications',
+  'helpcenter',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
@@ -220,6 +222,8 @@ CRISPY_CLASS_CONVERTERS = {
   'datewidget': "textinput textInput",
   'timewidget': "textinput textInput",
   'datetimewidget': "textinput textInput",
+  'emailinput': "textinput textInput",
+  'numberinput': "textinput textInput",
 }
 
 COMPRESS_PRECOMPILERS = (

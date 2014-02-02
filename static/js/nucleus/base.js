@@ -75,3 +75,8 @@ function get_app_hashtags(){
   var first_hashtag = hashtags.shift();
   return hashtags;
 }
+
+function redirect_to_home(){
+  history.replaceState({},'home','/');
+  hashchangeCallback(true);
+}

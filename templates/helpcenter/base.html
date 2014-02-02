@@ -1,0 +1,26 @@
+{% extends "nucleus/home.html" %}
+
+{% load tags %}
+
+{% block active-home %}{% endblock %}
+
+{% block app_styles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/utilities/base.css"/>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/helpcenter/helpcenter.css"/>
+{% endblock %}
+
+{% block app_scripts %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/helpcenter/base.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/prettydate.js"></script>
+{% endblock %}
+
+{% block horizontal_tabs_block %}
+{% endblock %}
+
+{% block content %}
+  <div class="app-content-header"><div id="set-head"><span style="cursor:pointer;" onclick="location='/helpcenter/';">Help Center</span></div></div>
+  <div id="content-top-space" style="height:50px"></div>
+  {% block main_content %}
+  {% endblock %}
+{% endblock %}
