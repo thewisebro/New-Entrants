@@ -6,6 +6,7 @@ admin.autodiscover()
 actual_urlpatterns = patterns('',
   url(r'', include('nucleus.urls')),
   url(r'^events/', include('events.urls')),
+  url(r'^lostfound/', include('lostfound.urls')),
   url(r'^crop_image/', include('crop_image.urls')),
   url(r'^admin/', include(admin.site.urls)),
   url(r'^taggit_autocomplete/', include('taggit_autocomplete.urls')),

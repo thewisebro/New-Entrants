@@ -1,0 +1,87 @@
+{% extends "lostfound/base.html" %}
+  {% block css %}
+    <link rel="stylesheet" href="{{STATIC_URL}}css/lostfound/home.css"/>
+  {% endblock css %}
+  {% block content_header %}
+    RECENTLY...
+    <div id="header_pending_items">
+    {% if lost_count != 0 and found_count != 0 %}
+      There are <a href="/lostfound/account/lost">{{lost_count}} lost items</a> and <a href="/lostfound/account/found">{{found_count}} found object(s)</a> pending
+    {% endif %}
+    {% if lost_count != 0 and found_count == 0 %}
+      There are <a href="/lostfound/account/lost">{{lost_count}} lost object(s)</a> pending
+    {% endif %}
+    {% if found_count != 0 and lost_count == 0 %}
+      There are <a href="/lostfound/account/found">{{lost_count}} lost object(s)</a> pending
+    {% endif %}
+    </div>
+  {% endblock content_header %}
+<!--    <div id="main_content">-->
+  {% block main_content %}
+    <div class="items_container">                    <!-- main content upper section BEGIN -->
+      <div class="items_header" >
+        <span>LOST ITEMS</span>       <!-- lost items HEADING-->
+        <a href="/lostfound/all/lost/"><img id="more_icon" src="{{STATIC_URL}}images/lostfound/more_icon.jpg" /></a>    <!-- more lost items icon -->
+      </div>
+      <div class="items" >        <!-- lost items BEGIN -->
+        {% for row in data_lost %}
+          <div class="item_{{ forloop.counter }}">             <!-- lost item no. 1 -->
+            <div>
+              <table class="items_table">
+                <tr>
+                  <td colspan="2" class="item_name">
+                    {% if row.item_lost|length > 30 %}
+                    <a href="/lostfound/all/lost/{{row.pk}}" title="{{ row.item_lost }}">{{ row.item_lost|slice:":27" }}...</a>
+                    {% else %}
+                    <a href="/lostfound/all/lost/{{row.pk}}">{{ row.item_lost }}</a>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr> <td class="column_1">Date :</td>      <td class="column_2">{{ row.date }}</td>  </tr>
+                {% if row.place|length > 25 %}
+                  <tr> <td class="column_1">Place :</td>     <td class="column_2">{{ row.place|slice:":25" }}...</td>  </tr>
+                {% else %}
+                  <tr> <td class="column_1">Place :</td>     <td class="column_2">{{ row.place }}</td>  </tr>
+                {% endif %}
+                <tr> <td class="column_1">Posted by :</td> <td class="column_2">{{ row.user.get_name }}</td>  </tr>
+                <tr> <td class="column_1">Status :</td>    <td class="column_2">{{ row.status }}</td>  </tr>
+              </table>
+            </div>
+            <!--<img class="box_shadow" src="{{STATIC_URL}}images/lostfound/box_shadow.png" />-->
+          </div>
+        {% endfor %}
+        <div style="clear:both"></div>
+      </div>
+    </div>
+    <div  class="items_container">                    <!-- main content lower section BEGIN -->
+      <div class="items_header">
+        <span>FOUND ITEMS</span>       <!-- found items HEADING-->
+        <a href="/lostfound/all/found/"><img id="more_icon" src="{{STATIC_URL}}images/lostfound/more_icon.jpg" /></a>    <!-- more found items icon -->
+      </div>
+      <div class="items">        <!-- found items BEGIN -->
+        {% for row in data_found %}
+          <div class="item_{{ forloop.counter }}">             <!-- found item no. 1 -->
+            <div>
+              <table>
+                <tr>
+                  <td colspan="2" class="item_name">
+                    {% if row.item_found|length > 30 %}
+                    <a href="/lostfound/all/found/{{row.pk}}" title="{{ row.item_found }}">{{ row.item_found|slice:":27" }}...</a>
+                    {% else %}
+                    <a href="/lostfound/all/found/{{row.pk}}">{{ row.item_found }}</a>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr> <td class="column_1">Date :</td>      <td class="column_2">{{ row.date }}</td>  </tr>
+                <tr> <td class="column_1">Place :</td>     <td class="column_2">{{ row.place }}</td>  </tr>
+                 <tr> <td class="column_1">Posted by :</td> <td class="column_2">{{ row.user.get_name }}</td>  </tr>
+                  <tr> <td class="column_1">Status :</td>    <td class="column_2">{{ row.status }}</td>  </tr>
+              </table>
+            </div>
+            <!--<img class="box_shadow" src="{{STATIC_URL}}images/lostfound/box_shadow.png" />-->
+          </div>
+        {% endfor %}
+        <div style="clear:both"></div>
+      </div>
+    </div>
+  {% endblock main_content %}

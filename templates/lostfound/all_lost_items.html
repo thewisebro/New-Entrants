@@ -1,0 +1,150 @@
+{% extends "lostfound/base.html" %}
+  {% block css %}
+    <link rel="stylesheet" href="{{STATIC_URL}}css/lostfound/all_lost_items.css"/>
+  {% endblock css %}
+  {% block content_header %}
+    {% if lost_count %}
+      YOUR LOST ITEM(S)
+    {% endif %}
+    {% if table_data %}
+        ALL LOST ITEMS
+    {% endif %}
+    {% if query %}
+      LOST ITEM
+    {% endif %}
+  {% endblock content_header %}
+
+  {% block main_content %}
+    <div class="item_details_header">
+      <div class="item_name_header">Item Name</div>
+      <div class="date_header">Date</div>
+      <div class="place_header">Place</div>
+      <div class="status_header">Status</div>
+       <div class="posted_by_header">Posted by</div>
+    </div>
+
+    {% load macros %}
+    {% macro my_macro all_lost_items %}
+      <!-- Details of a single item BEGINS -->
+      <div class="item_details">
+        <div class="visible_details" {% if query.pk == key %} id="visible_details_item" {% else %} {% endif %}>
+          <div class="serial_number">{{forloop.counter}}</div>
+          <div class="item_name">{{query.item_lost}}</div>
+          <div class="date">{{query.date}}</div>
+          <div class="place">{{query.place}}</div>
+          <div class="status">{{query.status}}</div>
+          <div class="posted_by">{{query.user.get_name}}</div>
+          <div style="clear:both"></div>
+        </div>
+
+
+        <div id="hidden_details" >
+          <div class="contact_details">
+            <table>
+              <tr> <td>Lost by :</td>        <td>{{query.user.get_name}}</td> </tr>
+              <tr> <td>Contact Number :</td> <td>{{query.contact}}</td> </tr>
+            </table>
+          </div>
+          <div class="other_details">
+            <div class="label">Other details :</div>
+            <div class="details">
+            {% if query.other_details %}
+              {{query.other_details}}
+            {% else %}
+              No details entered
+            {% endif %}
+            </div>
+          </div>
+          {% if query.user.username != user.username %}
+            {% if query.status != 'Item found'%}
+            <div class="send_email" >
+              <a href="/lostfound/sendmail/lost/{{query.pk}}">
+                <img id="email_icon" src="{{STATIC_URL}}images/lostfound/email_icon.jpg"/>
+                <span>Send automatic<br/> e-mail <br/>to this person</span>
+              </a>
+            </div>
+            {% else %}
+            <div class="send_email" >
+              This item has been found.
+            </div>
+            {% endif %}
+          {% else %}
+            <div class="send_email" >
+              <a href="/lostfound/edit/lost/{{query.pk}}/">Edit details</a>
+              &nbsp &nbsp
+              <a class="delItem" name="lost/{{ query.pk }}" href="javascript:void()">Delete Item</a>
+              <br/>
+              <br/>
+              {% if query.status == 'Item not found'%}
+                <a name="lost/{{ query.pk }}" class="statusItemLost" href="javascript:void()">Change Status</a>
+              {% endif %}
+            </div>
+          {% endif %}
+          <div style="clear:both"></div>
+        </div>
+      </div>
+    {% endmacro %}
+    {% if table_data and not empty %}
+      {% for query in table_data.object_list %}
+      <!-- Details of a single item BEGINS -->
+        {% usemacro my_macro 'all_lost_items' %}
+      {% endfor %}
+    {% endif %}
+
+    {% if qryst_lost %}
+      {% for query in qryst_lost %}
+        {% usemacro my_macro 'all_lost_items' %}
+        <!-- Details of a single item BEGINS -->
+      {% endfor %}
+    {% endif %}
+    {% if query  %}
+      <!-- Details of a single item BEGINS -->
+      {% usemacro my_macro 'all_lost_items' %}
+    {% endif %}
+    {% if table_data %}
+      <div id="pagination_bar">
+        <div >
+          {% if table_data.number !=  1 %}
+            <span class="first_page_link">
+              <a href="?page=1">First</a>
+            </span>
+          {% endif %}
+
+          {% if table_data.has_previous %}
+            <span class="previous_page_link">
+              <a href="?page={{ table_data.previous_page_number }}">Previous</a>
+            </span>
+          {% endif %}
+
+          {% for page in page_list %}
+            {% if table_data.number == page %}
+              <span class="active_page">
+                <a href="?page={{ table_data.number }}">{{table_data.number}}</a>
+              </span>
+            {% else %}
+              <span class="pageno">
+                <a href="?page={{ page }}">{{ page }}</a>
+              </span>
+            {% endif %}
+          {% endfor %}
+
+          {% if table_data.has_next %}
+            <span class="next_page_link">
+              <a href="?page={{ table_data.next_page_number }}">Next</a>
+            </span>
+          {% endif %}
+
+          {% if table_data.number !=  table_data.paginator.num_pages  %}
+            <span class="last_page_link">
+              <a href="?page={{ paginator.num_pages }}">Last</a>
+            </span>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  {% endblock main_content %}
+  {% block script %}
+    <script type="text/javascript" src="{{STATIC_URL}}js/lostfound/all_lost_items.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/lostfound/confirmBox.js"></script>
+  {% endblock script %}
+
