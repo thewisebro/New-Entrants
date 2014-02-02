@@ -32,7 +32,7 @@ urlpatterns = patterns('',
 #    url(r'^trending/play/$', PlayView.as_view(), name='count'),
     url(r'^login/$','django.contrib.auth.views.login' , {'template_name':'jukebox/login.html'}),
     url(r'^logout/$','django.contrib.auth.views.logout' , {'next_page':'/jukebox/login'}),
-    url(r'^playlist/', include(playlist_patterns)),
+    url(r'^playlists/', include(playlist_patterns)),
 
 # Json Starting
     url(r'^trending/new/$', TemplateView.as_view(template_name='jukebox/trending_json.html')), # for practice
@@ -43,8 +43,10 @@ urlpatterns = patterns('',
     url(r'^artists/(?P<id>[\d]+)/$', ArtistDescJsonView.as_view(), name='artist_desc'),
     url(r'^play/$', PlayJsonView.as_view(), name='count'),
     url(r'^song/(?P<pk>[0-9]+)/$', GetSongView.as_view(), name='song_list'),
+    url(r'^songs/$', SongsJsonView.as_view(), name='song_list'),
     url(r'^search/', SearchJsonView.as_view(), name='search'),
     url(r'^queue/', 'jukebox.views.getQueue', name='queue'),
+    url(r'^playlists_add/$', AddToPlaylistView.as_view(), name='add_to_playlist'),
 )
 
 

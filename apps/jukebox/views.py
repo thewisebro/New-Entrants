@@ -8,7 +8,7 @@ from core.views.generic import ListView,TemplateView,View,DetailView, RedirectVi
 from django.core import serializers
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
-from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveAPIView, CreateAPIView
 from rest_framework.response import Response
 
 from nucleus.models import User
@@ -46,6 +46,14 @@ class AlbumsJsonView(ListAPIView):
   """
   queryset = Album.objects.order_by('album')
   serializer_class = AlbumSerializer
+
+
+class SongsJsonView(ListAPIView):
+  """
+    To show a list of artists
+  """
+  queryset = Song.objects.all()
+  serializer_class = SongSerializer
 
 
 class AlbumDescJsonView(ListAPIView):
@@ -108,9 +116,27 @@ class PlaylistAllJsonView(ListCreateAPIView):
 
   def pre_save(self, obj):
     obj.person = self.request.user
-    obj.songs = ''
+    obj.songs = self.request.POST.get('songs','')
     obj.name = self.request.POST.get('name','')
     obj.private = True
+
+
+class AddToPlaylistView(CreateAPIView):
+  serializer_class = PlaylistSerializer
+  permission_classes = (IsOwnerOrReadOnly,)
+  def post(self,request):
+    songs = self.request.POST.get('songs','')
+    playlist_id = int(self.request.POST.get('id',''))
+    active = self.request.user.is_active
+    if active :
+      user = self.request.user                             # user logged in
+      playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
+      if len(playlists) == 1 :
+        playlist = playlists[0]
+        playlist.songs += 'b'+songs
+        playlist.save()
+    return Response('')
+
 
 
 class PlaylistDescView(RetrieveAPIView):

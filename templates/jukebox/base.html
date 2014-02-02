@@ -1,8 +1,9 @@
 <html>
   <head>
     <title>JukeBox</title>
+ <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/fontello.css"> <!-- fontello import -->
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css"><!-- lato regular font import -->
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/main.css">
+ <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/main.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/cssmainbody.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artists.css"><!-- artists link -->
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artistslist.css">
@@ -26,7 +27,16 @@
   <div id="center_albums" style="display:none;"></div>
   <div id="center_playlist" style="display:none;"></div>
   <div id="center_search" style="display:none;"></div>
-
+  <!-- save as playlist box-->
+  <div id="save_playlist_dialog" class="save_as_playlist_close">
+  <div id="save_playlist_header"></div>
+    <div id="as_new_list"> 
+      <div id="add_new_button">Create New +</div>
+    </div>
+    <div id="as_prev_list">
+    </div>
+    <div id="save_as_playlist_cancel"><i class="icon-remove"></i></div>
+  </div>
   <!-- search div -->
 			<div id="searchDivcss" class="searchLightboxClose">
 				<div id="searchHeader">
@@ -146,9 +156,20 @@
 </div>
 
 <div id="rightside">    <!-- got to change after clicking -->
-<div id="popular_artists">
+<div id="popular_artists" class="popular_artists_before">
+<span id="play_queue_icon" class="open_queue"><i class="icon-align-justify"></i></span>
+<div id="queue_dropdown" style="display:none;">
+<ul>
+  <li id="save_as_playlist">Save as playlist</li>
+  <li id="add_to_playlist">Add to Playlist</li>
+  <li id="clear_queue">Clear Queue</li>
+</ul>
+</ul>
+</ul>
+</ul>
+</div>
 <a id="qa">
-<div id="play_queue">Play Queue</div>
+<span id="play_queue" class="open_queue">Play Queue</span>
 </a>
 <span id="queue_trash"><i class="icon-sort-down"></i></span>
 </div>
@@ -165,7 +186,15 @@
 <!--bottombar-->
 
 <div id="bottom">
-	<div id="bLeft">
+  <div id="mini_play">
+    <div id="mini_image">
+    </div>
+    <div id="mini_icons">
+    </div>
+  </div>
+
+
+	<div id="bLeft" style="display:none">
 		<div id="bLeftLeft">
 			<img src="{{ STATIC_URL }}images/jukebox/prevItem.png">
 		</div>

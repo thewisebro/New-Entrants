@@ -29,7 +29,7 @@
     // class of the complete item .. "itemwrapper"  item_wrapperAlb
     //class of the item image .. "itemimage"   itemAlb
   // get width of the container
-  var width= $("#"+divwidth+"").width()-3;
+  var width= $("#"+divwidth+"").width()-5;
  // var width = document.getElementById(""+divwidth+"").offsetWidth;
   // x=width of box to be resized , y=distance b/n 2 boxes
     var x,y,n=0;
@@ -66,7 +66,7 @@ console.log(n+"final");
    var k =1;
    var noOfItems = $("."+itemwrapper+"").length;
    for (i=0; i<=noOfItems-1 ; i=i+n){
-     var lol = $($("."+itemwrapper+"")[i]).attr('id');
+    // var lol = $($("."+itemwrapper+"")[i]).attr('id');
     // console.log(lol);
       
        $($("."+itemwrapper+"")[i]).css("margin-left", y);
@@ -307,7 +307,17 @@ $(window).resize(function() {
 
  //resizeit('artists_items','item_wrapperAlb','itemAlb');
 
+
+if($("#navigation a.selected")[0]==$("#playlists_link")[0]){
+        var widthOfDiv = $('#playlist_view').width()/5;
+                    $('#playlistBanner ul li').css({width:widthOfDiv,height:widthOfDiv});
+                                $('#playlistBanner').css({height:widthOfDiv});
+
+}
+if($("#navigation a.selected")[0]==$("#trending_link")[0]){
 resizeit('container','item_wrapper','item');
+}
+
 });
 
 

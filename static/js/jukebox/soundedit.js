@@ -9,6 +9,8 @@ function Player() {
   this.prevSound = null;
   this.currentSound = null;
   this.nextSound = null;
+  this.loopSetting=0;//default 
+  this.shuffle=false;
   this.events = {
 
     // handlers for sound events as they're started/stopped/played
@@ -33,9 +35,41 @@ function Player() {
        $("#songLoaded").css('width', '0');
        $("#musicBlueSlider").css('width','0');
        $("#ui-sliderlarge-handle").css('left','0');
-       $("#timePlayed").html(min+':'+leftzero(sec));
+       $("#timePlayed").html(0+':'+"00");
+       
       // $('#'+sound.id).find('.play_icon i').removeClass('icon-pause').addClass('icon-play');
+       //check for looping
+        //check for shuffle on
+       if(self.shuffle && self.shuffle != 1){//if shuffle
+         self.playShuffle();
+       }
+       else{//else shuffle
+       if(self.loopSetting==0){
+         if((($("#queue_content").find(".qselected").next().length>0))){
+             $('#bLeftRight img').click();
+         }
+       }
+       else if(self.loopSetting==1){
+            sound.play();
+       }
+       else{
+         //alert("sadsadsad");
+          if(($("#queue_content").find(".qselected").next().length>0)){
+              $("#bLeftRight img").click();
+          }
+          else{
+         
+             var temp = $("queue_content").find(".qselected");
+             $($("#queue_content").children('div')[0]).addClass("qselected");
+             temp.removeClass("qselected");
+             var a = $("#queue_content").find(".qselected").attr("id");
+             var k = a.slice(5,a.length);
+             in_queue = true;//song is in the queue 
+             play(parseInt(k));
 
+          }
+       }
+       }//else shuffle
     },
     loading:function(){
       //  soundManager._writeDebug(this.id + ': loading ' + this.bytesLoaded + ' / ' + this.bytesTotal);
@@ -72,8 +106,21 @@ function Player() {
   }
 
 
-  this.newSound = function(){
-      //define later to create a new sound object
+  this.playShuffle = function(){
+      //shuffle songs from list
+
+      var index = Math.floor(Math.random()*queue.length);
+      var song_random = queue[index];
+      if(song_random == song_playing){
+        self.playShuffle();
+        return;
+      }
+      $("#queue_content").find(".qselected").removeClass("qselected");
+      //console.log(a);
+      $('#queue_content div:nth-child('+index+')').addClass("qselected");
+      in_queue=true;
+      play(song_random);
+
   }
 
   this.play_url = function(idback,urlback){
@@ -141,7 +188,6 @@ function Player() {
 
           }//outer else
   }
-
 
   this.handleClick = function(e) {
    /* 
@@ -215,19 +261,53 @@ function Player() {
     $('#bLeftPlay img').on('click',function(){
       if(self.currentSound){//check if sound obj exists
         sound.togglePause();
+        //change icon to pause 
       }
     });
 
     $('#bLeftLeft img').on('click',function(){
-      if(self.prevSound){//check if sound obj exists
-        sound.togglePause();
+     if(self.shuffle){
+           self.playShuffle();
+     }
+     else{
+      if(self.currentSound && ($("#queue_content").find(".qselected").prev().length>0)){//check if sound obj exists
+       var a = $("#queue_content").find(".qselected").prev().attr("id");
+      //console.log(a);
+      var k = a.slice(5,a.length);
+      var elm = $("#queue_content").find(".qselected");
+      elm.prev().addClass("qselected");
+      elm.removeClass("qselected");
+      in_queue = true;//song is in the queue 
+      play(parseInt(k));
+     }
       }
     });
 
     $('#bLeftRight img').on('click',function(){
-      if(self.nextSound){//check if sound obj exists
-        sound.togglePause();
+     if(self.shuffle){
+           self.playShuffle();
+     }
+     else{
+      if(self.currentSound &&  ($("#queue_content").find(".qselected").next().length>0)){//check if sound obj exists
+      var a = $("#queue_content").find(".qselected").next().attr("id");
+      console.log(a);
+      var k = a.slice(5,a.length);
+      var elm = $("#queue_content").find(".qselected");
+      elm.next().addClass("qselected");
+      elm.removeClass("qselected");
+      in_queue=true;//defines that the song is in the queue 
+      play(parseInt(k));
       }
+      else{
+             var temp = $("queue_content").find(".qselected");
+             $($("#queue_content").children('div')[0]).addClass("qselected");
+             temp.removeClass("qselected");
+             var a = $("#queue_content").find(".qselected").attr("id");
+             var k = a.slice(5,a.length);
+             in_queue = true;//song is in the queue 
+             play(parseInt(k));
+      }
+     }
     });
     //mute button
     $('#volumeicons').on('click',function(){
@@ -259,6 +339,18 @@ function Player() {
              checkmute=0;
         }
     });
+    
+    $("#shufflepic").on("click",function(){
+        if(self.shuffle){
+          $("#shufflepic").html("<span>0</span>");
+          self.shuffle=false;
+        }
+        else{ 
+          $("#shufflepic").html("<span>1</span>");
+          self.shuffle=true;
+        }
+        
+        })
     //volume slider
     $('#slider').slider({
 
@@ -341,7 +433,31 @@ function Player() {
           }
     });
 
-
+   //looping
+    $("#looppic").on("click",function(){
+     if(self.loopSetting==0){
+      //setting 0 is default , no looping
+      //switch to next state 1
+     self.loopSetting=1;
+     //change css 
+      $("#looppic").html("<span>1</span>");
+     // self.loopSound(self.currentSound);
+         }
+     else if(self.loopSetting==1){
+      //single song loop
+      //switch to next state 2
+      self.loopSetting=2;
+      //change css
+      $("#looppic").html("<span>2</span>");
+     }
+     else if(self.loopSetting==2){
+     //full playlist loop
+    //switch  to next state 0
+      self.loopSetting=0;
+     //change css
+      $("#looppic").html("<span>0</span>");
+     }
+    });
   }//handle click
 
   this.stopSound = function(oSound) {

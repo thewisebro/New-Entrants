@@ -11,9 +11,10 @@
   overflow-x    : hidden;
   top           : 0;
   right         : 0;
-  bottom        : 0;
+  bottom        : 66px;
   left          : 0;
 }
+
 .nano .content:focus {
   outline: thin dotted;
 }
@@ -29,7 +30,7 @@
   width      : 10px;
   right      : 0;
   top        : 0;
-  bottom     : 0;
+  bottom     : 66px;
   visibility : hidden\9; /* Target only IE7 and IE8 with this hack */
   opacity    : .01; 
   -webkit-transition    : .2s;

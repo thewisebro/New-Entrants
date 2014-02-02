@@ -6,7 +6,7 @@ body{
 	font-family:"helvetica_neue_medium","Arial","sans-serif";
 	overflow-x:hidden;
 	overflow-y:scroll;
-	background-color: #F5F5F5;
+	background-color: #FFF;
 }
 
 ul{
@@ -278,7 +278,7 @@ ul{
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
-	height: 45px;
+	height: 52px;
 	background-color:#474747; 
 	z-index: 2;
 	border-top: 1px solid #101010;
@@ -408,7 +408,7 @@ ul{
 	position: absolute;
 	width: 100%;
 	height: 36px;
-	margin: 3px 0px;
+	margin: 7px 0px;
 	background-color: #2a2a2a;
 	border: 1px solid #101010;
 	border-radius:2px;
@@ -586,32 +586,56 @@ border-radius: 4px;
 }
 
 #popular_artists{
-     margin-top: 10px;
-     background-color: #FFF;
-     padding: 0px 5px 0px 5px;
-     border: #E0E0E0 1px solid;
-     border-radius: 3px;
-     box-shadow: 0px 1px 0px #EEE;
+}
+
+.popular_artists_before{
+        margin-top: 10px;
+        padding: 0px 5px 0px 15px;
+        border-radius: 3px; 
+        border: rgba(224, 224, 224, 0) 1px solid;
+}
+.popular_artists_after{ 
+    margin-top: 10px;
+padding: 0px 5px 0px 15px;
+         border-bottom: 2px solid #DDD;
+}
+
+#play_queue_icon{
+      position: absolute;
+      top: 22px;
+      color: #6E6E6E;
+      left: 15px;
+      font-size: 14px;
+      cursor:pointer;
+}
+
+#play_queue{
+cursor:pointer; 
+
 }
 
 #popular_artists_list{
-        display: block;
+         display: block;
          border-bottom: 1px solid #E0E0E0;
-         margin-top: 15px;
+         margin-top: 0px;
+         visibility:hidden;
 }
 
 #popular_artists a{
 	font-family:"helvetica_neue_bold";
   display: block;
-	padding: 10px 4px;
+	padding: 10px 10px;
 	font-size: 13px;
 	text-decoration: none;
 	color: #686868;
 }
 
 .qitem{
-	height: 41px;
-  border-top: 1px solid #E0E0E0;
+height: 41px;
+        background-color: #FFF;
+        border-radius: 2px;
+cursor: pointer;
+        border-bottom: 1px solid #EEE;
 }
 .qitem:hover{
   background-color:#FFF;
@@ -659,6 +683,7 @@ color: #757575;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+color:#757575;
 }
 
 .qsong:hover{
@@ -674,6 +699,7 @@ color: #757575;
 
 #queue_content{
   padding:0px!important;
+  margin-bottom: 50px;
 }
 
 .trash{
@@ -824,7 +850,7 @@ cursor: pointer;
         right: -44px;
         color: #AAA;
         font-size: 16px;
-        top: 3px;
+        top: 7px;
         cursor: pointer;
         width: 36px;
         height: 26px;
@@ -1226,12 +1252,15 @@ cursor: pointer;
 
 /* queue*/
 #queue_trash{
+  display:none;
   float: right;
-  position: relative;
-  top: -28px;
-  color: #686868;
-  cursor: pointer;
-  right: 5px;
+position: relative;
+top: -30px;
+color: #686868;
+cursor: pointer;
+width: 20px;
+height: 20px;
+      text-align: center;  
 }
 /* blur css*/
 .blur_back{
@@ -1240,10 +1269,191 @@ cursor: pointer;
   -ms-filter:blur(30px);
   filter:blur(30px);
 }
-/* shaddow before bottom */
-#bottom:before{
+
+.ui-sortable-helper{
+ box-shadow: #AAA 0px 1px 1px;
+border: 1px solid #CCC;
+}
+
+
+/* populatr_artists dropdown*/
+#queue_dropdown{
+background-color: rgb(255, 255, 255);
+width: 150px;
+position: absolute;
+right: 11px;
+top: 45px;
+z-index: 2;
+border-radius:3px;
+box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+border: 1px solid #BBB;
+}
+#queue_dropdown ul li { 
+       color: #757575;
+       font-size: 12px;
+       border-bottom: 1px solid #EEE;
+       padding: 6px;
+       cursor:pointer;
+}
+
+#queue_dropdown ul li:hover {
+color:#444;
+} 
+  
+
+/* playlist view */
+
+#playlistBanner{
+width: 100%;
+       background-color: #515151;
+}
+#playlistBanner ul li {
+float: left;
+display: block;
+width: 20%;
+       /*height: 100px;*/
+background: url(http://www.savingcountrymusic.com/wp-content/uploads/2013/04/taylor-swift.jpg);
+            background-size: cover;
 
 
 }
 
+#viewPlaylist{
+position: relative;
+padding: 0px 20px 0px 20px; 
+height: 100%;
+width: 100%;
+       background-color: #FFF;
+}
 
+#playlistInfo{
+position: relative;
+bottom: 37px;
+color: #FFF;
+       padding-left: 30px;
+       padding-right: 30px;
+       z-index: 2;
+       text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+}
+
+#playlistName{
+  font-size: 24px;
+float: left;
+       font-family: "helvetica_neue_bold";
+}
+
+#playlistSongCount{
+  font-size: 24px;
+float: right;
+       margin-left: 10px;
+       font-family: "helvetica_neue_light";
+}
+
+/* save as playlist dialog box */
+.save_as_playlist_open{
+          display: block;
+          width: 400px;
+          height: 250px;
+          position: absolute;
+          background-color: #FFF;
+          z-index: 3;
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+          border-bottom-left-radius: 3px;
+          box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 25px;
+          border: 1px solid #BBB;
+          left: 33%;
+          top: 18%;
+}
+
+.save_as_playlist_close{
+        display:none;
+}
+
+#save_playlist_header{
+height: 30px;
+width: 100%;
+       background-color: #F1F2F4;
+
+}
+
+#save_as_playlist_cancel{
+    position: absolute;
+float: right;
+right: 7px;
+top: 7px;
+cursor: pointer;
+color: #757575;
+       font-size: 15px;
+}
+#save_as_playlist_cancel:hover{
+  color:#444;
+}
+
+#as_prev_list{
+
+
+}
+
+#as_new_list{
+width: 100%;
+height: 60px;
+        background-color: #FFF;
+        border-bottom: 1px solid #EEE;
+        padding-top: 40px;
+
+}
+#add_new_button{
+width: 100px;
+height: 17px;
+        background-color: #008DDE;
+margin: 0px auto;
+color: #FFF;
+       font-size: 14px;
+       text-indent: 6px;
+padding: 10px;
+cursor: pointer;
+        border-radius: 3px;
+}
+#add_new_button:hover{
+background-color: #018BDC;
+    -webkit-transition: background-color 0.1s linear;
+        -moz-transition: background-color 300ms linear;
+            -o-transition: background-color 300ms linear;
+                -ms-transition: background-color 300ms linear;
+                    transition: background-color 300ms linear;
+
+}
+/*mini icons */
+#mini_play{
+  position: absolute;
+width: 150px;
+height: 150px;
+top: -107px;
+left: 25px;
+      border-radius: 3px;
+border: 1px solid #101010;
+        box-shadow:0px 1px 1px #666;
+}
+
+#mini_icons{
+  width: 100%;
+height: 43px;
+        background-color: rgba(18, 18, 18, 0.64);
+bottom: 0px;
+position: absolute;
+          border-bottom-left-radius: 2px;
+          border-bottom-right-radius: 2px;
+border-top: 1px solid #222;
+}
+
+#mini_image{
+        /* background:url(http://userserve-ak.last.fm/serve/500/93440915/Overexposed.png);*/
+        width: 150px;
+        height: 150px;
+        background-size:cover;
+        background-color:#3C3C3C;
+        border-radius: 3px;
+
+}

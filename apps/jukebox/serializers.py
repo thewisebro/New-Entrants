@@ -2,6 +2,16 @@ from HTMLParser import HTMLParser
 from django.forms import widgets
 from rest_framework import serializers
 from jukebox.models import Song, Artist, Album, Playlist
+#from jukebox.views import get_json_Queue
+
+def get_json_Queue(song):
+  return {
+    'id':song.id,
+    'album': song.album.album,
+    'album_art': song.album.album_art.name,
+    'song':song.song,
+    'artist':song.artists.all()[0].artist,
+  }
 
 class HyperlinkedFileField(serializers.FileField):
   def to_native(self, value):
@@ -60,6 +70,9 @@ class PlaylistSerializer(serializers.ModelSerializer):
       return []
     songs_id = songs.split('b')
     lsongs = Song.objects.in_bulk(songs_id)
+    for key in lsongs.keys():
+      lsongs[key]=get_json_Queue(lsongs[key])
+
     return lsongs
 
 
@@ -78,6 +91,8 @@ class PlayQueueSerializer(serializers.Serializer):
       return []
     songs_id = songs.split(',')
     lsongs = Song.objects.in_bulk(songs_id)
+    for key in lsongs.keys():
+      lsongs[key]=SongSerializer(lsongs[key])
     return lsongs
 
 
