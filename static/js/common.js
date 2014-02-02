@@ -80,3 +80,43 @@ jQuery.cachedScript = function(url, options){
   });
   return jQuery.ajax(options);
 };
+
+function display_messages(messages){
+  if(!messages)return;
+  if(messages.length > 0){
+    var message = messages.shift(1);
+    $('#messages-div').html("<span class='"+message.extra_tags+" message-span'>"+message.message+"</span>");
+    setTimeout(function(){
+        $('#messages-div').html('');
+        setTimeout(function(){
+            display_messages(messages);
+          },500
+        );
+      },4000
+    );
+  }
+  else
+    $('#messages-div').html('');
+}
+
+function open_login_dialog(){
+  dialog_iframe({
+    name: 'login_dialog',
+    title: 'Sign In',
+    width: 400,
+    height: 200,
+    src: '/login_dialog/?next=/close_dialog/login_dialog/',
+    close: function(){
+      user_logged_in = true;
+      $(document).trigger("login");
+    }
+  });
+}
+
+function logout(){
+  $.get('/logout_ajax/',{
+    },function(data){
+      user_logged_in = false;
+      $(document).trigger("logout");
+  });
+}

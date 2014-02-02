@@ -12,6 +12,7 @@ urlpatterns = patterns('',
         {'template_name': 'nucleus/login_dialog.html'}, name='login_dialog'),
   url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page':'/'},
         name='logout'),
+  url(r'^logout_ajax/$', 'nucleus.views.logout_ajax', name='logout_ajax'),
   url(r'^close_dialog/(?P<dialog_name>\w+)/$', 'nucleus.views.close_dialog',
         name='close_dialog'),
   url(r'', include(pagelet_patterns))

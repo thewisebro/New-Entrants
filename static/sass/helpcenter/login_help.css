@@ -1,0 +1,13 @@
+.point
+{
+  margin:20px 10px;
+  font-family:"Tahoma","Arial",sans-serif;
+  font-size:13px;
+  color:#202020;
+  word-spacing:1px;
+}
+
+a{
+  color: #0072dc;
+  text-decoration: none;
+}

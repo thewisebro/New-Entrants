@@ -3,6 +3,13 @@ var loaded_scripts_apps = [];
 var apps_scripts = {
   'home':[
     '/static/js/nucleus/feeds.js'
+  ],
+  'events':[
+    '/static/js/events/events.js'
+  ],
+  'helpcenter':[
+    '/static/js/prettydate.js',
+    '/static/js/helpcenter/helpcenter.js'
   ]
 }
 
