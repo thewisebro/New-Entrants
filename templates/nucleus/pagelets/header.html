@@ -2,10 +2,12 @@
 <div id="header-options">
   {% if user.is_authenticated %}
     <div id="logout" class="header-option" onclick="logout();">Sign Out</div>
+    <div class="header-option" onclick="location.hash='#helpcenter'">Help Center</div>
+    <div class="header-option" onclick="take_feedback();">Feedback</div>
+    <div id="user-account">
+      {{ user.name }}
+    </div>
   {% else %}
     <div id="login" class="header-option" onclick="open_login_dialog();">Sign In</div>
   {% endif %}
-</div>
-<div id="user-account">
-  {{ user.name }}
 </div>

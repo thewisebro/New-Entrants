@@ -8,14 +8,12 @@
   {% endif %}
   <script type="text/javascript">
     parent.display_messages({{ django_messages }});
-    {% if close %}
-      parent.add_event_dialog.dialog('close');
-    {% endif %}
   </script>
 {% endblock %}
 
 {% block styles %}
   {{ form.media.css }}
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.sass" type="text/sass"/>
   <style type="text/css">
     .cke{
       margin-left:10px !important;
@@ -25,7 +23,6 @@
 
 {% block body %}
   <form class="uniForm" id='add-event-form' action="" method="POST">{% csrf_token %}
-    {{ form.non_field_errors }}
     <div class='edit-line'>
       <label class='field-label-big'>Calendar : </label><div class='field'><select name='calendar_name' onchange="$('input[name=reset]').click();">
        <option value=''> ---------- </option>

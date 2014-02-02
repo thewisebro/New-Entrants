@@ -19,6 +19,10 @@ TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 
+JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
+JUKEBOX_MEDIA_URL = '/songsmedia/'
+JUKEBOX_SONGS_BASEURL = '/songs/'
+
 # Add apps to python path
 sys.path.append(PROJECT_ROOT + '/apps')
 
@@ -182,6 +186,7 @@ DJANGO_CONTRIB_APPS = (
 THIRD_PARTY_APPS = (
 #  'debug_toolbar',
   'rest_framework',
+  'fluent_comments',
   'crispy_forms',
   'taggit',
   'taggit_autocomplete',
@@ -194,17 +199,21 @@ THIRD_PARTY_APPS = (
 
 CHANNELI_APPS = (
   'nucleus',
+  'jukebox',
   'api',
   'reporting',
   'crop_image',
   'groups',
   'events',
   'lostfound',
+  'notifications',
+  'helpcenter',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
 
-COMMENTS_APP = 'threadedcomments'
+FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
+COMMENTS_APP = 'fluent_comments'
 
 AUTH_USER_MODEL = 'nucleus.User'
 
@@ -214,6 +223,8 @@ CRISPY_CLASS_CONVERTERS = {
   'datewidget': "textinput textInput",
   'timewidget': "textinput textInput",
   'datetimewidget': "textinput textInput",
+  'emailinput': "textinput textInput",
+  'numberinput': "textinput textInput",
 }
 
 COMPRESS_PRECOMPILERS = (

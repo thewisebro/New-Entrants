@@ -1,0 +1,39 @@
+<html>
+
+  <body>
+    Hey!!!
+    <br />
+    <br />
+    <div id="container">
+    InDiv
+    </div>
+    <a href="#" onclick="return prac();">Songs</a>
+  </body>
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+  </script>
+  <script>
+  var items=[];
+  function prac() {
+    $.ajax("../json/",contentType= "application/json").done( function(data){ items=data; } );
+   for (var i=0; i<items.length; i++){
+     $("#container").append(get_song_html(items[i]));
+   }
+
+  }
+  function get_song_html(song)
+  {
+    var art = song.album.album_art;
+    html = "<br> Name: "+ song.song+ "<br> Album: " + song.album.album +"<br> Artists: ";
+    for (var j=0; j<song.artists.length; j++)
+    {
+      html += song.artists[j].artist + ", ";
+    }
+    html += "<br> Count: " + song.count + "<br>" +
+      "<img src=\'{{MEDIA_URL}}" + art + "\' width='100px' height='100px'>" +
+      "<br>";
+    return html;
+  }
+
+
+  </script>
+</html>

@@ -6,7 +6,7 @@ function setup_form(){
   try{
     $(".iDateField").datepicker({dateFormat:'dd-mm-yy',changeMonth:true,changeYear:true,yearRange:"1980:2020"});
     $(".iDateTimeField").datetimepicker({dateFormat:'dd-mm-yy',timeformat:'hh:mm:ss',changeMonth:true,changeYear:true,yearRange:"1980:2020"});
-    $(".iTimeField").timepicker();
+    $(".iTimeField").timepicker({stepMinute: 15});
   }catch(e){};
 
   try{

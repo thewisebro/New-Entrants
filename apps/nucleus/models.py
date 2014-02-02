@@ -4,9 +4,10 @@ import re
 from django.contrib.auth.models import AbstractUser, UserManager, Group
 from django.conf import settings
 from django.core import validators
+from django.utils.safestring import mark_safe
 from django.db.models.base import ModelBase
-from core import models
 
+from core import models
 from api import model_constants as MC
 from facapp import constants as FC
 from crop_image import CropImage
@@ -109,6 +110,24 @@ class User(AbstractUser, models.Model):
       return Owner.objects.get(account=account, user=self)
 
   @property
+  def html_name(self):
+    return mark_safe("<span class='user-span' data-username='%s'>%s</span>"%\
+                      (self.username, self.name))
+
+  @property
+  def photo_url(self):
+    return self.photo.url if self.photo else settings.STATIC_URL +\
+        'images/nucleus/default_dp.png'
+
+  def serialize(self):
+    return {
+      'is_authenticated': True,
+      'username': self.username,
+      'name': self.name,
+      'photo': self.photo_url
+    }
+
+  @property
   def delegates(self):
     return User.objects.filter(user_owners__account=self,
                                 user_owners__active=True)
@@ -141,6 +160,10 @@ def Role(group_name):
 
     def __unicode__(self):
       return self.role + ':' + unicode(self.user)
+
+    @property
+    def name(self):
+      return self.user.name
 
     class Meta:
       abstract = True
@@ -191,10 +214,6 @@ class StudentBase(Role('Student')):
       semtype_int = (self.semester_no + 1)%2
       self.semester = self.branch.graduation + str(year) + str(semtype_int)
     return super(StudentBase, self).save(*args, **kwargs)
-
-  @property
-  def name(self):
-    return self.user.name
 
 
 class Student(StudentBase):
