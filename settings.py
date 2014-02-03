@@ -201,15 +201,20 @@ CHANNELI_APPS = (
   'nucleus',
   'jukebox',
   'api',
-  'reporting',
+  'moderation',
   'crop_image',
   'groups',
   'events',
   'notifications',
   'helpcenter',
+  'feeds',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
+
+FEED_APPS = (
+  'events',
+)
 
 FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
 COMMENTS_APP = 'fluent_comments'
