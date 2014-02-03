@@ -20,12 +20,32 @@ class Batch(models.Model):
   lectut_course=models.ForeignKey(Lectut_Course)
 
 class Upload_Image(models.Model):
-  uploaded_image=models.ImageField(upload_to='../../media/lectut/images')
+  upload_image=models.ImageField(upload_to='../../media/lectut/images')
+
+class Video(models.Model):
+  upload_video=models.FileField(upload_to='../../media/lectut/videos' , null=True)
+  def matche_file_type(cls, iname, ifile, request):
+        # the extensions that lectut will recognise for the uploaded video
+        filename_extensions = ['.dv', '.mov', '.mp4', '.avi', '.wmv',]
+        ext = os.path.splitext(iname)[1].lower()
+        return ext in filename_extensions
+
+class Ppt(models.Model):
+  upload_ppt=models.FileField(upload_to='../../media/lectut/ppts', null=True)
+  def matche_file_type(cls, iname, ifile, request):
+        # the extensions that lectut will recognise for the uploaded ppt
+        ext = os.path.splitext(iname)[1].lower()
+        return ext in ['.ppt']
+
+class Pdf(models.Model):
+  upload_pdf=models.FileField(upload_to='../../media/lectut/pdf',null=True)
+  def matche_file_type(cls, iname, ifile, request):
+          # the extensions that lectut will recognise for the uploaded pdf
+          ext = os.path.splitext(iname)[1].lower()
+          return ext in ['.pdf']
 
 class Upload(models.Model):
-  image  = models.ImageField(upload_to = fs, null=True)
-  other_files=models.FileField(upload_to = fs, null=True)
-  Upload = generic.GenericForeignKey('image','other_files')
+  Upload = generic.GenericForeignKey('upload_image','upload_video','upload_ppt')
 
 class lectut_Faculty(models.Model):
   faculty=models.ForeignKey(Faculty)

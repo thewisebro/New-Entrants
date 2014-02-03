@@ -199,6 +199,7 @@ CHANNELI_APPS = (
   'crop_image',
   'groups',
   'events',
+  'lectut',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
