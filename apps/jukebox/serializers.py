@@ -34,10 +34,17 @@ class ArtistSerializer(serializers.ModelSerializer):
     depth = 1
 
 class AlbumDescSerializer(serializers.ModelSerializer):
+  song_set = serializers.SerializerMethodField('get_song_set')
   class Meta:
     model = Album
     fields = ('id', 'song_set', 'album', 'artists', 'album_art')
-    depth = 1
+    depth = 2
+  def get_song_set(self,obj):
+    if(obj==None):
+      return []
+    songs = obj.song_set.all().order_by('id')
+    songs = map(lambda x: SongSerializer(x).data,songs)
+    return songs
 
 class ArtistDescSerializer(serializers.ModelSerializer):
   album_set = AlbumDescSerializer(many=True)

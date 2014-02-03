@@ -26,6 +26,15 @@ def content_file_name(instance, filename):
 class Artist(models.Model):
   artist = models.CharField(max_length=MC.TEXT_LENGTH)
   cover_pic = models.ImageField(upload_to=JC.ARTIST_PIC_DIR, max_length=MC.TEXT_LENGTH)
+  lang_choices = (
+      ('eng' , 'English'),
+      ('hindi' , 'Hindi'),
+      ('tamil','Tamil'),
+      ('telugu','Telugu'),
+      ('punjabi','Punjabi'),
+      ('mal','Malyali')
+  )
+  language = models.CharField(max_length=10, choices=lang_choices)
   def __unicode__(self):
     return self.artist
 
@@ -40,6 +49,15 @@ class Album(models.Model):
 #genres = models.ManyToManyField(Genre)                # Multiple Genres
   year = models.IntegerField(max_length=4, default = datetime.datetime.today().year)
   album_art = models.ImageField(upload_to=JC.ALBUMART_DIR, max_length=MC.TEXT_LENGTH)
+  lang_choices = (
+      ('eng' , 'English'),
+      ('hindi' , 'Hindi'),
+      ('tamil','Tamil'),
+      ('telugu','Telugu'),
+      ('punjabi','Punjabi'),
+      ('mal','Malyali')
+  )
+  language = models.CharField(max_length=10, choices=lang_choices)
   def __unicode__(self):
     return self.album
 
@@ -54,7 +72,11 @@ class Song(models.Model):
   genres = models.ManyToManyField(Genre)                 # Multiple Genres
   lang_choices = (
       ('eng' , 'English'),
-      ('hindi' , 'Hindi')
+      ('hindi' , 'Hindi'),
+      ('tamil','Tamil'),
+      ('telugu','Telugu'),
+      ('punjabi','Punjabi'),
+      ('mal','Malyali')
   )
   language = models.CharField(max_length=10, choices=lang_choices)
 #  date_added = models.DateField(auto_now_add=True)        # For the date item is added

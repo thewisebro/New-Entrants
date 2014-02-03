@@ -33,56 +33,6 @@ var in_queue=false;
 
 
 var song_playing=0;
-/*$('form#playlist').on('submit', function(e) {
-  $.ajax({
-      type: 'post',
-      url: 'playlist/',
-      data: $(this).serialize(),
-      success: function () {
-        display_playlists($('#username').val());
-       $('form#playlist').trigger('reset');
-      }
-      });
-  e.preventDefault();
-});
-*/
-/*
-
-$('form#search').on('submit', function(e) {
-    q = $(this).find("input").val();
-    href = '#search/' + q;
-    document.location.href = href;
-  $.ajax({
-      type: 'get',
-      url: 'search/',
-      data: $(this).serialize(),
-      success: function (data) {
-       $("#append").empty();
-       $("#append").append("<br> Songs: <br>")
-       for(var i=0; i<data.songs.length; i++)
-       {
-         $("#append").append(get_song_html(data.songs[i]))
-       }
-       $("#append").append("<br><hr><br> Albums: <br>")
-       for(var i=0; i<data.albums.length; i++)
-       {
-         $("#append").append(get_album_html(data.albums[i]))
-       }
-       $("#append").append("<br><hr><br> Artists: <br>")
-       for(var i=0; i<data.artists.length; i++)
-       {
-         $("#append").append(get_artist_html(data.artists[i]))
-       }
-       $('form#search').trigger('reset');
-      artist_ready();
-      album_ready();
-      song_ready();
-      }
-      
-      });
-  e.preventDefault();
-});
-*/
 
 $('#searchBig').bind("keyup", function (event) {
     q = $(this).val();
@@ -308,7 +258,7 @@ function display_album(id){
       for(var j=0; j<album.song_set.length; j++)
       {
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class="popular_item song draggable" id="song_'+album.song_set[j].id+'"> <div id="p_song_name">'+album.song_set[j].id_no+' ' +album.song_set[j].song +'</div>'
+        html += '<li class="popular_item song draggable" id="song_'+album.song_set[j].id+'"><div id="list_number">'+left_add_zero(j+1)+'</div>  <div id="p_song_name">'+album.song_set[j].song +'</div>'
                 +   ' <div class="miniIcons" id="p_alb_controls">'
                 +       '<a href=""></a>' 
                 +       '<a href=""></a>' 
@@ -325,7 +275,9 @@ function display_album(id){
 
 }
 
-
+function left_add_zero(n){
+      return n > 9 ? "" + n: "0" + n;
+}
 
 // display_artist for displaying a specific artist
 function display_artist(id){
@@ -349,8 +301,9 @@ function display_artist(id){
 
       for(var k=0; k<artist.album_set[j].song_set.length; k++)
       {
+
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class=" song popular_item draggable" id="song_'+artist.album_set[j].song_set[k].id+'"> <div id="p_song_name">'+ artist.album_set[j].song_set[k].id_no +' '+ artist.album_set[j].song_set[k].song +'</div>'
+        html += '<li class=" song popular_item draggable" id="song_'+artist.album_set[j].song_set[k].id+'"><div id="list_number">'+left_add_zero(k+1)+'</div> <div id="p_song_name">'+ artist.album_set[j].song_set[k].song +'</div>'
                 +   ' <div class="miniIcons" id="p_alb_controls">'
                 +       '<a href=""></a>' 
                 +       '<a href=""></a>' 
@@ -778,7 +731,7 @@ function split_hash(){
   if (song >= 0){
     play(hash[song+1]);
   }
-  prev_hash = document.location.href.split('#')[1];
+  if (name!='search') prev_hash = document.location.href.split('#')[1];
 }
 
 function create_playlist_queue(val)

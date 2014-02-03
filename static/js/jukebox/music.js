@@ -83,12 +83,14 @@ function key_ready(){
 
 function keyDown(e)
 {
+   if(e.ctrlKey || e.altKey) return;
    if(!select){
  if(jQuery.inArray(e.keyCode,[8,9,13,16,17,18,19,20,32,33,34,35,36,37,38,39,40,45,46,91,92,93,107,109,112,113,114,115,116,117,118,119,120,121,122,123,144,145,224]) !== -1){ return;}
    //check for escape key 
    if (e.keyCode == 27) { 
    if(type==1){
      type=0;
+     document.location.hash = prev_hash;
     $('#searchButton').addClass("notOpen");
      $("#bigwrapper").removeClass("blur_back");
     $("#searchDivcss").removeClass("searchLightboxOpen").addClass("searchLightboxClose");
@@ -133,6 +135,7 @@ function searchView(e){
     // search icon css
     // alert("not visible");
     $('#searchButton').addClass("notOpen");
+     document.location.hash = prev_hash;
     // active class on full search view only
     // change the style of search div
     $("#searchDivcss").removeClass("searchLightboxOpen").addClass("searchLightboxClose");
@@ -351,12 +354,15 @@ $("#clear_queue").on("click",function(){
   hash = hash.split('/');
   name = hash[0];
   song = hash.indexOf('song');
-  var id = hash[song+1];
-  var url = "play/?song_id=" + id;
-  $.ajax(url,contentType= "application/json").done( function(data){
-      var song = data[0];
-      add_queue_song(song);
-    });
+  if(song>=0)
+  {
+      var id = hash[song+1];
+      var url = "play/?song_id=" + id;
+      $.ajax(url,contentType= "application/json").done( function(data){
+          var song = data[0];
+          add_queue_song(song);
+        });
+  }
   });
    $("#queue_dropdown").css({'display':'none'});
  });

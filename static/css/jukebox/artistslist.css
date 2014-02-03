@@ -141,7 +141,7 @@ margin-top: 30px;
 	background-color: #eee;
 	height: 32px;
 	line-height: 30px;
-	padding-left: 10px;
+	padding-left: 3px;
 }
 
 
@@ -160,7 +160,7 @@ margin-top: 30px;
 }
 
 #popular_list ul li div{
-	display: inline-block;
+float:left
 }
 
 #p_alb_controls{
@@ -178,12 +178,15 @@ margin-top: 30px;
 #p_song_name{
 	font-size: 12px;
   cursor: pointer;
+  margin-left:10px;
+  line-height: 32px;
 }
 
 #p_alb_name{
 	font-size: 12px;
 	padding-left: 5px;
 	color: #A3A3A3;
+  line-height: 32px;
 }
 
 #artist_body{
@@ -251,7 +254,7 @@ font-family: "helvetica_neue_bold","Arial";
 }
 
 .list_alpha ul li{
-	padding: 3px 0px 3px 0px;
+	padding: 5px 0px 5px 0px;
 	cursor: pointer;
   font-family:"helvetica_neue_medium";
 	max-width: 720px;
