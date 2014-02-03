@@ -42,7 +42,7 @@ DATABASES = {
                                           # The following settings are not used with sqlite3:
     'USER': 'channeli',
     'PASSWORD': 'channeli',
-    'HOST': '',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+    'HOST': '192.168.121.5',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
     'PORT': '',                           # Set to empty string for default.
   }
 }
@@ -205,6 +205,7 @@ CHANNELI_APPS = (
   'crop_image',
   'groups',
   'events',
+  'lostfound',
   'notifications',
   'helpcenter',
   'feeds',
@@ -254,18 +255,39 @@ LOGGING = {
       '()': 'django.utils.log.RequireDebugFalse'
     }
   },
+  'formatters': {
+    'verbose': {
+      'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
+      #'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+    },
+    'simple': {
+      'format': '%(levelname)s %(message)s'
+    },
+  },
   'handlers': {
     'mail_admins': {
       'level': 'ERROR',
       'filters': ['require_debug_false'],
       'class': 'django.utils.log.AdminEmailHandler'
-    }
+    },
+    'lostfound_file_logger': {
+      'level':'DEBUG',
+      'class':'logging.handlers.TimedRotatingFileHandler',
+      'formatter': 'verbose',
+      'filename' : os.path.join(PROJECT_ROOT, 'logs/lostfound'),
+      'when'     : 'midnight',
+      'backupCount':365
+    },
   },
   'loggers': {
     'django.request': {
       'handlers': ['mail_admins'],
       'level': 'ERROR',
       'propagate': True,
+    },
+    'lostfound': {
+      'handlers':['lostfound_file_logger'],
+      'level':'INFO'
     },
   }
 }
