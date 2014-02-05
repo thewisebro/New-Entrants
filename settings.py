@@ -206,12 +206,18 @@ CHANNELI_APPS = (
   'groups',
   'events',
 <<<<<<< HEAD
+<<<<<<< HEAD
   'lectut',
 =======
+=======
+>>>>>>> 26f37a4e39dad54127686333d6ae661b731b543e
   'lostfound',
   'notifications',
   'helpcenter',
   'feeds',
+<<<<<<< HEAD
+>>>>>>> 26f37a4e39dad54127686333d6ae661b731b543e
+=======
 >>>>>>> 26f37a4e39dad54127686333d6ae661b731b543e
 )
 
