@@ -212,7 +212,8 @@ add_in_queue(song.id,queue.length);
 song_ready();
 }
 
-function add_queue(element)
+
+function clone_element(element)
 {
   if(element.hasClass('song'))
   {
@@ -256,16 +257,49 @@ function add_queue(element)
              + '<div class="qinfo">'
              + '<div class="qsong">'+song_name+'</div>'
              + '<div class="qartist">'+artist_name+'</div></div>';
-          $( "<div class='qitem song' id='"+id+"'></div>" ).html( html ).appendTo( $("#queue_content"));
+          return $( "<div class='qitem song' id='"+id+"'></div>" ).html( html );
+  }
+}
+
+function add_queue(ui)
+{
+  var element = ui.draggable;
+  if(element.hasClass('song'))
+  {
+          var elm = clone_element(element);
+          var id = element.attr('id');
+          var i = 0; 
+
+          $('#queue_content').children('div.qitem').each(function () {
+              if ($(this).offset().top >= ui.offset.top)
+              {
+              elm.insertBefore($(this));
+              i = 1;
           $(".qsong").width($(".qitem").width()-50);
           $(".qartist").width($(".qitem").width()-50);
           song_ready();
           id = id.split('_')[1];
           add_in_queue(id,queue.length);
+              return false; //break loop
+              }
+              });
+
+          if (i != 1)
+          {
+          $(".qsong").width($(".qitem").width()-50);
+          $(".qartist").width($(".qitem").width()-50);
+          song_ready();
+          id = id.split('_')[1];
+          add_in_queue(id,queue.length);
+              //alert('no');
+          elm.appendTo( $("#queue_content"));
+          }
+
   }
   else if(element.hasClass('album'))
   {
-         var lis = element.parents().eq(1).find('li')
+         if(element.hasClass('artist_album_pic')) var lis = element.parents().eq(0).find('li')
+         else var lis = element.parents().eq(1).find('li')
          for(var i=0;i<lis.length;i++)
          {
            var li = $(lis[i]);
@@ -280,15 +314,23 @@ function dragging() {
    // $( "#catalog" ).accordion();
     $( ".draggable" ).draggable({
 appendTo: "body",
-helper: "clone"
+helper: function(event)
+       {
+         if ($(this).hasClass('song')) return clone_element($(this));
+          else if($(this).hasClass('album'))
+          {
+                 return $(this);
+          }
+       },
+cursorAt: {top: 5,left: 5},
+zIndex : 100
 });
     $( "#rightside" ).droppable({
 activeClass: "ui-state-default",
 hoverClass: "ui-state-hover",
 accept: ".draggable",
 drop: function( event, ui ) {
-$( this ).find( ".placeholder" ).remove();
-var element = ui.draggable;
+var element = ui;
 add_queue(element);
 }
 }).sortable({
@@ -381,3 +423,7 @@ $("#save_as_playlist").on("click",function(){
 $("#save_as_playlist_cancel").on("click",function(){
     $("#save_playlist_dialog").removeClass().addClass("save_as_playlist_close");
      });
+
+
+/* login popup */
+

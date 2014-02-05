@@ -289,12 +289,11 @@ ul{
 }
 /* ============= b Left */
 #bLeft{
-	width: 130px;
-	position: relative;
-	display: inline-block;
-	padding-left: 25px;
-	padding-right: 25px;
-	/*top: -11px;*/
+  width: 130px;
+position: relative;
+          padding-left: 50px;
+          padding-right: 25px;
+top: -4px;
 }
 #bLeft>div{
 	display: inline-block;
@@ -303,24 +302,42 @@ ul{
 }
 #bLeftLeft{
 	position: relative;
-	width: 24px;
-	height: 24px;
-	margin-right: 5px;
-  background-color: #FFF;
+	width: 30px;
+	height: 30px;
+	margin-right: 0px;
+  vertical-align:baseline;
 
 }
 #bLeftPlay{
 	position: relative;
-	width: 24px;
-	height: 24px;
-	margin-right: 5px;
-  background-color: #FFF;
+	width: 30px;
+	height: 30px;
+	margin-right: 4px;
+  vertical-align:baseline;
+}
+
+#bLeftPlay>img{
+  width:30px;
+height:30px;
+}
+
+#bLeftLeft>img{
+  width:26px;
+height:26px;
+position:absolute;
+top:3px;
+}
+#bLeftRight>img{
+  width:26px;
+height:26px;
+position:absolute;
+top:3px;
 }
 #bLeftRight{
 	position: relative;
-	width: 24px;
-	height: 24px;
-  background-color: #FFF;
+	width: 30px;
+	height: 30px;
+          vertical-align:baseline;
 }
 
 /* ==============b Right ==================*/
@@ -1107,8 +1124,8 @@ cursor: pointer;
 	border-top: 1px solid #FFF;
 	width: 100%;
 }
-
-#searchContentFull{
+/*changed search playlist*/
+#playlistContentFull{
 	width: 100%;
 	background-color: white;
 	height: auto;
@@ -1125,10 +1142,12 @@ cursor: pointer;
 	background-color: #EEE;
 }
 
-#searchContentFull ul {
+/*changed search playlist*/
+#playlistContentFull ul {
 }
 
-#searchContentFull ul li{
+/*changed search playlist*/
+#playlistContentFull ul li{
 	height: 32px;
 	width: 100%;
 	border-bottom:1px solid #E0E0E0;
@@ -1142,17 +1161,39 @@ cursor: pointer;
 	-o-transition-property:color, text;
 	-o-transition-duration:0.1s;
 	-o-transition-timing-function: linear, ease-in;
+display: -moz-box;
+display: -webkit-box;
+display: -ms-flexbox;
+display: box;
 }
 
-#searchContentFull ul li:hover{
+/*changed search playlist*/
+#playlistContentFull ul li:hover{
 	background-color: #EEE;
 }
-#searchContentFull ul li:hover .iDname{
+/*changed search playlist*/
+#playlistContentFull ul li:hover .iDname{
 	color: #008DDE;
 }
-#searchContentFull ul li>div{
-	float: left;
+/*changed search playlist*/
+#playlistContentFull ul li>div{
+
 }
+#playlistContentFull ul li:nth-child(2n-1){
+  background-color:#eee;
+}
+#playlistContentFull ul li:nth-child(2n){
+  background-color:#f9f9f9;
+}
+.opacity_zero{
+  opacity:0;
+}
+
+.opacity_one{
+  opacity:1;
+}
+
+
 #itemsDisplay>div {
 	font-size: 12px;
 	font-weight: bold;
@@ -1162,28 +1203,49 @@ cursor: pointer;
 }
 
 .iDname{
-	width: 45%;
-	padding: 9px 10px 0px 0px;
-	font-size: 12px;
+-moz-box-flex: 16;
+-webkit-box-flex: 16;
+-ms-flex: 16;
+box-flex: 16;
+width: 1%;
+padding: 9px 10px 0px 0px;
+         font-size: 12px;
+}
+.iDoptions{
+width: 1%;
+       -webkit-box-flex: 1.0;
+       -moz-box-flex: 1.0;
+       -ms-flex: 1.0;
+       box-flex: 1.0;
+padding: 9px 0px 0px 0px;
 }
 
 .iDalbum{
-	width: 25%;
-	padding: 9px 10px 0px 0px;
-	font-size: 12px;
+width: 1%;
+padding: 9px 10px 0px 0px;
+         font-size: 12px;
+         -moz-box-flex: 16;
+         -webkit-box-flex: 16;
+         -ms-flex: 16;
+         box-flex: 16;
 }
 
 .iDartist{
-	width: 25%;
-	padding: 9px 0px 0px 0px;
-	font-size: 12px;
+width: 1%;
+padding: 9px 0px 0px 0px;
+         font-size: 12px;
+         -moz-box-flex: 16;
+         -webkit-box-flex: 16;
+         -ms-flex: 16;
+         box-flex: 16;
+
 }
 
 .iDsrno{
-	width: 25px;
-	/*height: 32px;*/
-	padding: 8px 0 0 10px;
-	font-size: 12px;
+width: 25px;
+       -webkit-box-flex: 1.0;
+padding: 8px 0 0 10px;
+         font-size: 12px;
 }
 
 /*Playlist view */
@@ -1317,20 +1379,25 @@ background: url(http://www.savingcountrymusic.com/wp-content/uploads/2013/04/tay
 
 }
 
+#layerBanner{
+  width: 100%;
+height: 100px;
+position: absolute;
+          z-index: 1;
+
+}
 #viewPlaylist{
 position: relative;
-padding: 0px 20px 0px 20px; 
 height: 100%;
 width: 100%;
        background-color: #FFF;
 }
 
 #playlistInfo{
-position: relative;
-bottom: 37px;
+position: absolute;
+top:134px;/*change this browser*/
 color: #FFF;
-       padding-left: 30px;
-       padding-right: 30px;
+width:100%;
        z-index: 2;
        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }
@@ -1338,13 +1405,14 @@ color: #FFF;
 #playlistName{
   font-size: 24px;
 float: left;
+       margin-left:20px;
        font-family: "helvetica_neue_bold";
 }
 
 #playlistSongCount{
   font-size: 24px;
 float: right;
-       margin-left: 10px;
+       margin-right: 20px;
        font-family: "helvetica_neue_light";
 }
 
@@ -1468,8 +1536,68 @@ height: 26px;
 cursor: pointer;
         line-height: 27px;
         text-indent: 6px;
+}
 
-    
-      
+.song_options{
+position: relative;
+color: #FFF;
+       z-index: 3;
+       font-size: 25px;
+float: right;
+right: 5px;
+top: 5px;
+ display:none;
+}
 
+.item_wrapper:hover .song_options{
+  display:block;
+}
+
+.song_options:hover{
+  color:#008DDE;
+}
+
+.song_setting_box{
+width: 130px;
+        background-color: #FFF;
+position: absolute;
+display: none;
+left: 34px;
+top: 3px;
+     font-size: 12px;
+color: #808080;
+       border-radius: 2px;
+
+}
+
+.song_setting_box ul li {
+
+color: #757575;
+       font-size: 12px;
+       border-bottom: 1px solid #EEE;
+padding: 6px;
+cursor: pointer;
+}
+.song_setting_box ul li:hover{
+ color:#222;
+
+}
+
+#login_popup{
+display: block;
+width: 400px;
+height: 250px;
+position: absolute;
+          background-color: #FFF;
+          z-index: 3;
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+          border-bottom-left-radius: 3px;
+          box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 25px;
+border: 1px solid #BBB;
+left: 33%;
+top: 18%;
+left: 33%;
+top: 18%;
 }

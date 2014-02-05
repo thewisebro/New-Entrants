@@ -3,6 +3,7 @@
 """
 import json
 from itertools import chain
+from difflib import *
 
 from core.views.generic import ListView,TemplateView,View,DetailView, RedirectView
 from django.core import serializers
@@ -15,6 +16,39 @@ from nucleus.models import User
 from jukebox.models import *
 from jukebox.serializers import *
 from jukebox.permissions import *
+from jukebox import constants as JC
+
+songs = open(JC.SONGS_JSON_FILE,'r+')
+albums = open(JC.ALBUMS_JSON_FILE,'r+')
+artists = open(JC.ARTISTS_JSON_FILE,'r+')
+
+songs = songs.readline()
+albums = albums.readline()
+artists = artists.readline()
+
+songs = json.loads(songs)
+albums = json.loads(albums)
+artists = json.loads(artists)
+
+songs_search = {}
+for key in songs.keys():
+  songs_search[songs[key]['song'].lower()]=key
+
+
+albums_search = {}
+for key in albums.keys():
+  albums_search[albums[key]['album'].lower()]=key
+
+artists_search = {}
+for key in artists.keys():
+  artists_search[artists[key]['artist'].lower()]=key
+
+
+def search_json(inp, dic):
+  out = filter(lambda x: x.startswith(inp),dic.keys())
+  if len(out)<5:
+    out += filter(lambda x: (inp in x) and (not x.startswith(inp)),dic.keys())
+  return out[:5]
 
 class IndexView(TemplateView):
   """
@@ -202,6 +236,8 @@ class SearchJsonView(ListAPIView):
         'albums' : albums.data,
         'artists' : artists.data,
     })
+#song_keys = search_json(q.lower(),songs_search)
+#print song_keys
     return Response(context)
 
 

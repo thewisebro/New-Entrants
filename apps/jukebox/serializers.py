@@ -13,6 +13,21 @@ def get_json_Queue(song):
     'artist':song.artists.all()[0].artist,
   }
 
+def get_json_album(album):
+  return {
+    'id':album.id,
+    'album': album.album,
+    'album_art': album.album_art.name,
+    'artist':album.artists.all()[0].artist,
+  }
+
+def get_json_artist(artist):
+  return {
+    'id':artist.id,
+    'artist':artist.artist,
+    'cover_pic':artist.cover_pic.name,
+  }
+
 class HyperlinkedFileField(serializers.FileField):
   def to_native(self, value):
     request = self.context.get('request', None)

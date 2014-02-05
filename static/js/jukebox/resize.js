@@ -247,6 +247,9 @@ console.log(n+"final");
     });
 
 
+//song_options
+
+
 
 
     // change the color of selected link to white 
@@ -312,6 +315,9 @@ if($("#navigation a.selected")[0]==$("#playlists_link")[0]){
         var widthOfDiv = $('#playlist_view').width()/5;
                     $('#playlistBanner ul li').css({width:widthOfDiv,height:widthOfDiv});
                                 $('#playlistBanner').css({height:widthOfDiv});
+                                var tops = widthOfDiv-100;
+                                $('#layerBanner').css({top:tops+5});
+                                $("#playlistInfo").css({top:tops+50});
 
 }
 if($("#navigation a.selected")[0]==$("#trending_link")[0]){

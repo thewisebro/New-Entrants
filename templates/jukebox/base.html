@@ -27,6 +27,18 @@
   <div id="center_albums" style="display:none;"></div>
   <div id="center_playlist" style="display:none;"></div>
   <div id="center_search" style="display:none;"></div>
+  <!-- login popup-->
+  <div id="login_popup" class="hidden_login">
+    <form>
+    <div>
+      <input type="text" name="jb_username" placeholder="username"></input>
+    </div>
+    <div>  
+      <input type="password" name="jb_password" placeholder="username"></input>
+    </div>
+    </form>
+  </div>
+
   <!-- save as playlist box-->
   <div id="save_playlist_dialog" class="save_as_playlist_close">
   <div id="save_playlist_header"></div>
@@ -194,15 +206,15 @@
   </div>
 
 
-	<div id="bLeft" style="display:none">
+	<div id="bLeft" >
 		<div id="bLeftLeft">
-			<img src="{{ STATIC_URL }}images/jukebox/prevItem.png">
+			<img src="{{ STATIC_URL }}images/jukebox/icon_new_prev.png">
 		</div>
 		<div id="bLeftPlay">
-			<img src="{{ STATIC_URL }}images/jukebox/playSong.png">
+			<img src="{{ STATIC_URL }}images/jukebox/icon_new_play.png">
 		</div>
 		<div id="bLeftRight">
-			<img src="{{ STATIC_URL }}images/jukebox/nextItem.png">
+			<img src="{{ STATIC_URL }}images/jukebox/icon_new_next.png">
 		</div>
 	</div>
 	<div id="bMiddle">

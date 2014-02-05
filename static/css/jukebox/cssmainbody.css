@@ -48,10 +48,10 @@
 position: relative;
 top: 35%;
 color: #FFF;
-text-align: center;
 font-size: 60px;
 opacity: 0;
-
+display:block;
+left:30%;
 }
 
 .song-icon-play{
@@ -139,7 +139,7 @@ opacity: 0;
 	white-space: nowrap;
 }
 
-#faint{
+.faint{
 	
 position: absolute;
 width: inherit;
@@ -148,7 +148,7 @@ background-color: rgba(0, 0, 0, 0.6);
 opacity: 0;
 }
 
-.item_wrapper:hover #faint{
+.item_wrapper:hover .faint{
 
 	        zoom: 1;
         filter: alpha(opacity=100);

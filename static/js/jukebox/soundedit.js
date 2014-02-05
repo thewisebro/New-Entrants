@@ -18,17 +18,29 @@ function Player() {
     play: function() {
        $('#'+sound.id).find('.play_icon i').removeClass('icon-play').addClass('icon-pause');
      //  console.log("--------------"+sound.id); 
+
+       $('#'+sound.id).find('#faint').animate({'opacity':'1'},300);
+       $('#'+sound.id).find('.play_icon').animate({'opacity':'1'},300);
+        $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_pause.png");
+
     },
 
     stop: function() {
       $('#'+sound.id).find('.play_icon i').removeClass('icon-pause').addClass('icon-play');
+      
+       $('#'+sound.id).find('#faint').attr('style','');
+       $('#'+sound.id).find('.play_icon').attr('style','');
 
     },
 
-    pause: function() {
+    pause: function() 
+           {
+        $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_play.png");
     },
 
     resume: function() {
+
+        $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_pause.png");
     },
 
     finish: function() {
@@ -37,6 +49,7 @@ function Player() {
        $("#ui-sliderlarge-handle").css('left','0');
        $("#timePlayed").html(0+':'+"00");
        
+        $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_play.png");
       // $('#'+sound.id).find('.play_icon i').removeClass('icon-pause').addClass('icon-play');
        //check for looping
         //check for shuffle on
@@ -88,13 +101,13 @@ function Player() {
     whileplaying: function(){
        $("#musicBlueSlider").css('width', ((this.position/this.duration) *  ($("#musicSlider").width())));
         $("#ui-sliderlarge-handle").css('left', ((this.position/this.duration) *($("#musicSlider").width())));
-          var seconds = Math.round(this.position/1000);
-          var min=Math.round(seconds/60);
-          var sec=Math.round(seconds%60);
+          var seconds = this.position/1000;
+          var min=Math.floor(seconds/60);
+          var sec=Math.floor(seconds%60);
 
-          var tseconds= Math.round(this.duration/1000);
-          var tmin = Math.round(tseconds/60);
-          var tsec=Math.round(tseconds%60);
+          var tseconds=this.duration/1000;
+          var tmin = Math.floor(tseconds/60);
+          var tsec=Math.floor(tseconds%60);
           function leftzero(n){
                 return n > 9 ? "" + n: "0" + n;
           }
@@ -132,7 +145,7 @@ function Player() {
           if(self.currentSound){//check if sound exist and is playing
             if(idback==sound.id){
                console.log('playing sound found state toggled');
-              // sound.togglePause();
+              //sound.togglePause();
             }
             else{
               //the clicked div is some other sound 
