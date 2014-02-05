@@ -4,14 +4,12 @@
   {{ form.media.js }}
   <script type="text/javascript">
     parent.display_messages({{ django_messages }});
-    {% if close %}
-      parent.edit_event_dialog.dialog('close');
-    {% endif %}
   </script>
 {% endblock %}
 
 {% block styles %}
   {{ form.media.css }}
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.sass" type="text/sass"/>
   <style type="text/css">
     .cke{
       margin-left:10px !important;
@@ -21,7 +19,6 @@
 
 {% block body %}
   <form action="" method="POST" class="uniForm">{% csrf_token %}
-    {{ form.non_field_errors }}
     {{ form.uniform }}
     <input class="input-button" style="margin-left:10px;" type="submit" name="submit" value="Submit"/>
   </form>

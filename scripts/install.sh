@@ -6,6 +6,7 @@ apt-get install python-pip
 apt-get install php5
 apt-get install rubygems
 apt-get install python-mysqldb
+apt-get install python-pygresql
 
 pip install Django\==1.6.1
 
@@ -17,7 +18,7 @@ ln -s /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib/libjpeg.so
 ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/libfreetype.so
 pip install PIL
 
-# django-compressor dependency
+# django-compressor
 pip install django-appconf
 pip install versiontools
 
@@ -27,6 +28,23 @@ gem install compass
 # django-debug-toolbar
 pip install sqlparse
 
-# django-php-bridge
-pip install phpserialize
-pip install deliverance
+# django-fluent-comments
+pip install Akismet
+
+# django-extensions
+pip install Werkzeug
+
+# several python modules
+
+pip install beautifulsoup
+pip install xhtml2pdf
+pip install pisa
+pip install xlrd
+pip install xlwt
+pip install whoosh
+pip install mutagen
+pip install reportlab
+pip install python-dateutil
+
+# fuzzy wuzzy
+pip install -e git+https://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy

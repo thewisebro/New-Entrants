@@ -1,54 +1,89 @@
 from core import models
 from core import forms
+
 from nucleus.models import User , Course , Faculty
+from threadedcomments.models import ThreadedComment
+
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.core.files.storage import FileSystemStorage
+from django.db.models.signals import post_save
 
 fs = FileSystemStorage(location='Uploads')
 
 # Create your models here.
-class Lectut_User(models.Model):
+class LectutUser(models.Model):
   user=models.ForeignKey(User)
-
-class Lectut_Course(models.Model):
-  course=models.ForeignKey(Course)
 
 class Batch(models.Model):
   name=models.CharField(max_length=20)
-  student=models.ManyToManyField(Lectut_User)
-  lectut_course=models.ForeignKey(Lectut_Course)
+  student=models.ManyToManyField(LectutUser)
+  course=models.ForeignKey(Course, related_name='+')
 
-class Upload_Image(models.Model):
-  upload_image=models.ImageField(upload_to='../../media/lectut/images')
+class BaseUpload(models.Model):
+  class Meta:
+    abstract = True
 
-class Video(models.Model):
-  upload_video=models.FileField(upload_to='../../media/lectut/videos' , null=True)
+  def save(self, *args, **kwargs):
+     if self.featured:
+          self.__class__.objects.all().update(featured = False)
+     super(Model, self).save(*args, **kwargs)
+
+class UploadImage(BaseUpload):
+  upload_image=models.ImageField(upload_to='lectut/images')
+
+class UploadVideo(BaseUpload):
+  upload_video=models.FileField(upload_to='lectut/videos' , null=True)
   def matche_file_type(cls, iname, ifile, request):
         # the extensions that lectut will recognise for the uploaded video
         filename_extensions = ['.dv', '.mov', '.mp4', '.avi', '.wmv',]
         ext = os.path.splitext(iname)[1].lower()
         return ext in filename_extensions
 
-class Ppt(models.Model):
-  upload_ppt=models.FileField(upload_to='../../media/lectut/ppts', null=True)
+class UploadPPT(BaseUpload):
+  upload_ppt=models.FileField(upload_to='lectut/ppts', null=True)
   def matche_file_type(cls, iname, ifile, request):
         # the extensions that lectut will recognise for the uploaded ppt
         ext = os.path.splitext(iname)[1].lower()
         return ext in ['.ppt']
 
-class Pdf(models.Model):
-  upload_pdf=models.FileField(upload_to='../../media/lectut/pdf',null=True)
+class UploadPdf(BaseUpload):
+  upload_pdf=models.FileField(upload_to='lectut/pdf',null=True)
   def matche_file_type(cls, iname, ifile, request):
           # the extensions that lectut will recognise for the uploaded pdf
           ext = os.path.splitext(iname)[1].lower()
           return ext in ['.pdf']
 
 class Upload(models.Model):
-  Upload = generic.GenericForeignKey('upload_image','upload_video','upload_ppt')
+  content_type=models.ForeignKey(ContentType)
+  object_id=models.PositiveIntegerField()
+  batch=models.ForeignKey(Batch)
+  Upload = generic.GenericForeignKey('content_type','object_id')
 
-class lectut_Faculty(models.Model):
-  faculty=models.ForeignKey(Faculty)
+  def create_upload(sender, instance, *args, **kwargs):
+      if kwargs['created']:
+               sku = u'%s%s%s' % ()
+               u = Upload()
+               u.save()
+
+  post_save.connect(create_upload, sender=BaseUpload)
+
+
+class Activity(models.Model):
+   log=models.ForeignKey(Upload)
+
+   #Creates Activity when Upload model is created
+   def create_activity(sender, instance, *args, **kwargs):
+            if kwargs['created']:
+                      sku = u'%s%s%s' % (instance.log)
+                      s = Activity( log=instance)
+                      s.save()
+
+   post_save.connect(create_activity, sender=Upload)
+
+class FluentComments(models.Model):
+  threaded_comments=models.ForeignKey(ThreadedComment)
+  activity=models.ForeignKey(Activity)
 
 '''class Notification(models.Model):
   pub_date = models.DateTimeField('date published')

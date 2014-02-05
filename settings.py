@@ -19,6 +19,10 @@ TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 
+JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
+JUKEBOX_MEDIA_URL = '/songsmedia/'
+JUKEBOX_SONGS_BASEURL = '/songs/'
+
 # Add apps to python path
 sys.path.append(PROJECT_ROOT + '/apps')
 
@@ -38,7 +42,7 @@ DATABASES = {
                                           # The following settings are not used with sqlite3:
     'USER': 'channeli',
     'PASSWORD': 'channeli',
-    'HOST': '',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+    'HOST': '192.168.121.5',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
     'PORT': '',                           # Set to empty string for default.
   }
 }
@@ -182,6 +186,7 @@ DJANGO_CONTRIB_APPS = (
 THIRD_PARTY_APPS = (
 #  'debug_toolbar',
   'rest_framework',
+  'fluent_comments',
   'crispy_forms',
   'taggit',
   'taggit_autocomplete',
@@ -194,17 +199,30 @@ THIRD_PARTY_APPS = (
 
 CHANNELI_APPS = (
   'nucleus',
+  'jukebox',
   'api',
-  'reporting',
+  'moderation',
   'crop_image',
   'groups',
   'events',
+<<<<<<< HEAD
   'lectut',
+=======
+  'lostfound',
+  'notifications',
+  'helpcenter',
+  'feeds',
+>>>>>>> 26f37a4e39dad54127686333d6ae661b731b543e
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
 
-COMMENTS_APP = 'threadedcomments'
+FEED_APPS = (
+  'events',
+)
+
+FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
+COMMENTS_APP = 'fluent_comments'
 
 AUTH_USER_MODEL = 'nucleus.User'
 
@@ -214,6 +232,8 @@ CRISPY_CLASS_CONVERTERS = {
   'datewidget': "textinput textInput",
   'timewidget': "textinput textInput",
   'datetimewidget': "textinput textInput",
+  'emailinput': "textinput textInput",
+  'numberinput': "textinput textInput",
 }
 
 COMPRESS_PRECOMPILERS = (
@@ -239,18 +259,39 @@ LOGGING = {
       '()': 'django.utils.log.RequireDebugFalse'
     }
   },
+  'formatters': {
+    'verbose': {
+      'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
+      #'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+    },
+    'simple': {
+      'format': '%(levelname)s %(message)s'
+    },
+  },
   'handlers': {
     'mail_admins': {
       'level': 'ERROR',
       'filters': ['require_debug_false'],
       'class': 'django.utils.log.AdminEmailHandler'
-    }
+    },
+    'lostfound_file_logger': {
+      'level':'DEBUG',
+      'class':'logging.handlers.TimedRotatingFileHandler',
+      'formatter': 'verbose',
+      'filename' : os.path.join(PROJECT_ROOT, 'logs/lostfound'),
+      'when'     : 'midnight',
+      'backupCount':365
+    },
   },
   'loggers': {
     'django.request': {
       'handlers': ['mail_admins'],
       'level': 'ERROR',
       'propagate': True,
+    },
+    'lostfound': {
+      'handlers':['lostfound_file_logger'],
+      'level':'INFO'
     },
   }
 }

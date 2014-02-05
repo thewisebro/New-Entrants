@@ -1,0 +1,219 @@
+
+
+#report_lost{
+    width:880px;
+}
+
+
+
+#item_details{
+    float:left;
+    margin-right:56px;
+    margin-top:35px;
+}
+
+#contact_details{
+    float:left;
+    margin-left:60px;
+    margin-top:35px;
+}
+
+#contact_details{
+    _margin-left:0px;
+}
+
+.lostfoundform_input:hover{
+    border-left:2px solid #f68419;
+}
+
+.lostfoundform_input{
+    border-left:2px solid #ebebeb;
+}
+
+.form_header{
+    color:#f68914;
+    font-family:Verdana;
+    letter-spacing:1px;
+    font-size:15px;
+    padding-left:22px;
+    height:20px;
+}
+
+
+
+
+
+#item_details div , #contact_details div {
+    margin:5px;
+    padding-right:15px;
+    width:auto;
+}
+
+#item_details div , #contact_details div {
+    _width:350px;
+}
+
+
+#report_lost  #text_input:focus , #report_lost select:focus , #report_lost #text_input:focus , #report_lost textarea:focus{
+    border:1px solid #f68419;
+}
+
+#report_lost  #datepicker:focus , #report_lost select:focus , #report_lost #datepicker:focus , #report_lost textarea:focus{
+    border:1px solid #f68419;
+}
+
+
+#report_lost  select{
+    border:none;
+    border-top:1px solid #c9c9c9;
+    border-left:1px solid #c9c9c9;
+}
+
+#report_lost  #text_input , #report_lost #text_input{
+    margin-top:14px;
+    height:25px;
+    width:233px;
+    border:none;
+    border-top:1px solid #c9c9c9;
+    border-left:1px solid #c9c9c9;
+}
+
+#report_lost  #datepicker , #report_lost #datepicker{
+    margin-top:14px;
+    height:25px;
+    width:233px;
+    border:none;
+    border-top:1px solid #c9c9c9;
+    border-left:1px solid #c9c9c9;
+}
+#report_lost label{
+    display:block;
+    float:left;
+    color:#4d4d4d;
+    height:40px;
+    width:85px;
+    padding-left:25px;
+    padding-top:20px;
+}
+
+
+
+
+
+
+
+#item_lost{
+    height:60px;
+    background-color:#ebebeb;
+}
+
+
+
+#category{
+    height:60px;
+    background-color:#ebebeb;
+}
+
+#date{
+    height:60px;
+    background-color:#ebebeb;
+}
+
+#category select{
+    height:30px;
+    margin-top:15px;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-right:5px;
+    width:235px;
+}
+
+#select_day{
+    height:30px;
+    margin-top:15px;
+    margin-right:5px;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-right:5px;
+}
+#select_month{
+    height:30px;
+    margin-top:15px;
+    width:91px;
+    margin-left:5px;
+    margin-right:5px;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-right:5px;
+}
+#select_year{
+    height:30px;
+    margin-top:15px;
+    margin-left:5px;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-right:5px;
+}
+
+
+
+
+
+#place{
+    height:60px;
+    background-color:#ebebeb;
+}
+#other_details{
+    background-color:#ebebeb;
+    padding-bottom:20px;
+}
+
+#other_details textarea{
+    height:135px;
+    margin-top:15px;
+    width:232px;
+    font-family:Verdana;
+    font-size:12px;
+    border:none;
+    border-top:1px solid #c9c9c9;
+    border-left:1px solid #c9c9c9;
+}
+
+
+
+
+#name{
+    height:60px;
+    background-color:#ebebeb;
+}
+#contact_number{
+    height:60px;
+    background-color:#ebebeb;
+}
+#address{
+    height:60px;
+    background-color:#ebebeb;
+}
+#email{
+    height:60px;
+    background-color:#ebebeb;
+}
+
+
+
+#report_lost_form_submit{
+    height:25px;
+    padding-top:0px;
+    width:65px;
+    margin-left:360px;
+    margin-top:5px;
+    border:0px;
+    color:#4d4d4d;
+    font-family:Verdana;
+    font-size:12px;
+    box-shadow:0px 0px 2px #4d4d4d;
+    border-radius:3px;
+}
+#report_lost_form_submit{
+    _margin-left:300px;
+}

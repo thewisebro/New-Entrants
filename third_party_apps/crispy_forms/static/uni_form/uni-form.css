@@ -61,7 +61,7 @@
       .uniForm .fileUpload,
       .uniForm .selectInput,
       .uniForm select,
-      .uniForm textarea{ float: left; width: 53%; margin: 0; }
+      .uniForm textarea{ float: left; width: 200px; margin: 0; }
       
       /* Read-Only output */
       .uniForm .readOnlyLabel{ margin: 0; font-size: 1em; font-weight: bold; }

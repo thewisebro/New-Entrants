@@ -1,5 +1,6 @@
 <script type="text/javascript">
-  var user_logged_in = {% if user.is_authenticated %}true{% else %}false{% endif %};
+  var channeli_apps = {{ channeli_apps }};
+  var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
 </script>
 <div id="sidebar-tabs">
   {% for tab in tabs %}
