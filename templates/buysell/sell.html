@@ -1,0 +1,97 @@
+{% extends "buysell/base.html" %}
+{% block title %}Sell | Buy and Sell{% endblock title %}
+
+{% block styles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/buysell/buyform.css">
+<style>
+#content{
+float:left;
+}
+</style>
+{% endblock styles %}
+
+{% block account_tab %}
+active_tab
+{% endblock %}
+
+
+{% block scripts %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/buysell/sell.js"></script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/buysell/edititem.js"></script>
+{% endblock scripts %}
+
+<!-- Above, page specific css/js added. Below is "content" of the main_base.html base template -->
+
+{% block content %}
+    {% if form.errors %}
+      <ul id="errors">
+        {% for error in errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+<span id="reqid" style="display:none">{{itemid}}</span>
+
+    {% if not extraData.editFlag %}<h2 id="heading">Sell Item</h2>{% endif %}
+    <div class="row-fluid span12">{% if extraData.editFlag %}<div class="heading">Edit the details of your item:</div>{% endif %}
+    </div>
+
+    <span id="itemid" style="display:none">{% if extraData.editFlag %}{{extraData.itemid}}{% endif %}</span>
+    <div id="editform" style="float:left;position:relative;margin-left:410px;border:1px;">{% include "old_channeli/generic_form.html" with form=form %}</div>
+
+{% if extraData.item_image %} <div id="old_image" style="float:left;margin-left:50px;">Current Image:<br/><br/><br/>{% if extraData.editFlag %}<img src="{{MEDIA_URL}}{{ extraData.item_image }}"/>{% endif %}</div>{% endif %}
+    {% if not extraData.editFlag %}<p id="requestLink">Or, view the requests made by other users <a href="/buysell/viewrequests/">here</a>.</p>{% endif %}
+
+{% endblock content %}
+<!--
+<div class="row-fluid">
+	<span class="span4 offset4 heading">Fill in this form to get your entry registered</span>
+</div>
+<div class="row-fluid">
+	<span class="span2 offset4 entries">Item Name</span>
+	<input class="span2 offset1 entries-input" type="text"/>
+</div>
+<div class="row-fluid">
+	<span class="span2 offset4 entries">Category</span>
+	<input class="span2 offset1 entries-input" type="text"/>
+</div>
+<div class="row-fluid">
+	<span class="span2 offset4 entries">Price</span>
+	<input class="span2 offset1 entries-input" type="text"/>
+</div>
+<div class="row-fluid">
+	<span class="span2 offset4 entries">Status</span>
+	<input class="span2 offset1 entries-input" type="text"/>
+</div>
+<div class="row-fluid">
+	<span class="span2 offset4 entries">Phone No.</span>
+	<input class="span2 offset1 entries-input" type="text"/>
+</div>
+<div class="row-fluid">
+	<span class="span2 offset4 entries">Email Id</span>
+	<input class="span2 offset1 entries-input" type="text"/>
+</div>
+<div class="row-fluid">
+	<span class="span2 offset4 entries">Item Photo</span>
+	<input class="span2 offset1 entries-input" type="text" style="width:128px;"/>
+	<input id="upload" class="btn" type="text" value="Upload">
+</div>
+<div class="row-fluid">
+	<span class="span2 offset4 entries">This entry will expire after</span>
+	<input class="span2 offset1 entries-input" type="text"/>
+	<span class="entries">days</span>
+</div>
+<div class="row-fluid">
+	<span class="span2 offset4 entries">Description</span>
+	<textarea class="entries-input" rows="3"></textarea>
+</div>
+<div class="row-fluid">
+	<div class="span1 offset6 btn-submit">
+		<input class="submit btn" type="button" value="Submit">
+	</div>
+</div>
+-->

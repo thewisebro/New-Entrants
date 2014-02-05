@@ -209,6 +209,7 @@ CHANNELI_APPS = (
   'notifications',
   'helpcenter',
   'feeds',
+  'buysell',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
@@ -278,6 +279,15 @@ LOGGING = {
       'when'     : 'midnight',
       'backupCount':365
     },
+    'buysell_file_logger': {
+      'level':'DEBUG',
+      'class':'logging.handlers.TimedRotatingFileHandler',
+      'formatter': 'verbose',
+      'filename' : os.path.join(PROJECT_ROOT, 'logs/buysell'),
+      'when'     : 'midnight',
+      'backupCount':365
+    },
+
   },
   'loggers': {
     'django.request': {
@@ -289,5 +299,10 @@ LOGGING = {
       'handlers':['lostfound_file_logger'],
       'level':'INFO'
     },
+    'buysell': {
+      'handlers':['buysell_file_logger'],
+      'level':'INFO'
+    },
+
   }
 }
