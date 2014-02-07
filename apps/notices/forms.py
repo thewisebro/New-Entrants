@@ -10,3 +10,8 @@ def GenerateNoticeForm(user):
       model = Notice
       fields = ['subject','expire_date','reference', 'content']
   return NoticeForm
+
+class EditForm(ModelForm):
+    class Meta:
+      model = Notice
+      fields = ['subject','expire_date','reference', 'content']

@@ -33,7 +33,7 @@ def upload(request):
       notice = form.save(commit=False)
       notice.uploader = uploader
       notice.save()
-      return HttpResponseRedirect(reverse('index'))
+      return HttpResponseRedirect(reverse('notices_index'))
   else:
     form =  NoticeForm()
   context = {'form' : form, 'privelege' : privelege}
@@ -82,7 +82,6 @@ class GetNotice(RetrieveAPIView):
 class NoticeSearch(ListAPIView):
   def get_queryset(self):
 	query = self.request.GET.get('q', '')
-	print query
 	words = query.split(' ')
 	un_queryset = {}			#unsorted(with respect to frequency) queryset
 	count = {}
@@ -112,6 +111,25 @@ def read_star_notice(request, id1, action):              #action determines whet
     notice_user.read_notices.add(notice_temp)
   else:
 		notice_user.starred_notices.remove(notice_temp)
+  success = {'success' : 'true'}
+  success = simplejson.dumps(success)
+  return HttpResponse(success, mimetype="application/json")
+
+def mul_read_star_notice(request, action):              #action determines whether the function of this view is to star, unstar, read or unread a notice
+  user1 = request.user
+  notice_user = NoticeUser.objects.get(user=user1)
+  list1 = request.GET.get('q', '')
+  ids = list1.split(' ')
+  for i in ids:
+    notice_temp = Notice.objects.get(id=i)
+    if action=="add_starred":
+      notice_user.starred_notices.add(notice_temp)
+    elif action=="add_read":
+      notice_user.read_notices.add(notice_temp)
+    elif action=="delete_starred":
+		  notice_user.starred_notices.remove(notice_temp)
+    else:
+		  notice_user.read_notices.remove(notice_temp)
   success = {'success' : 'true'}
   success = simplejson.dumps(success)
   return HttpResponse(success, mimetype="application/json")
@@ -151,23 +169,39 @@ class Show_Uploads(ListAPIView):
 
 @login_required
 def edit(request, pk):
-  NoticeForm = GenerateNoticeForm(request.user)
+  NoticeForm = EditForm()
   privelege = request.user.uploader_set.all().exists()
   n = Notice.objects.get(id=pk)
   if request.method == 'POST' and privelege:
-    form = NoticeForm(request.POST)
+    form = EditForm(request.POST)
     if form.is_valid():
-      Oldn.pk
-      old_notice = OldNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, )
-      c=Category.objects.get(name=form.cleaned_data['category'])
-      uploader = Uploader.objects.get(user=request.user, category=c)
+      if n.datetime_modified==n.datetime_created:
+        tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created)
+      else:
+        new_edit_no = max(map(lambda a:a.editing_no,TrashNotice.objects.filter(notice_id=n.pk)))+1
+        tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no = new_edit_no, datetime_created=n.datetime_modified, original_datetime = n.datetime_created)
       notice = form.save(commit=False)
-      notice.uploader = uploader
-      notice.re_edited = True
-      notice.save()
-      return HttpResponseRedirect(reverse('index'))
+      n.subject = notice.subject
+      n.reference = notice.reference
+      n.content = notice.content
+      n.expire_date = notice.expire_date
+      n.re_edited = True
+      n.save()
+      tnotice.datetime_created=n.datetime_modified
+      tnotice.save()
+      return HttpResponseRedirect(reverse('notices_index'))
   else:
-    form =  NoticeForm(
-              initial={'subject' : n.subject, 'reference' : n.reference , 'expire_date' : n.expire_date , 'content' : n.content, 'category' : n.uploader.category})
-  context = {'form' : form, 'privelege' : privelege}
-  return render(request, 'notices/upload.html', context)
+    form =  EditForm(
+              initial={'subject' : n.subject, 'reference' : n.reference , 'expire_date' : n.expire_date , 'content' : n.content, 'category' : n.uploader.category.name})
+  context = {'form' : form, 'privelege' : privelege, 'category' : n.uploader.category.name}
+  return render(request, 'notices/edit.html', context)
+
+@login_required
+def delete(request, pk):
+  n = Notice.objects.get(id=pk)
+  privelege = request.user.uploader_set.all().exists()
+  if privelege:
+    tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=-1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created)
+    tnotice.save()
+    n.delete()
+  return HttpResponseRedirect(reverse('notices_index'))

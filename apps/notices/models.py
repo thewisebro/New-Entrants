@@ -25,9 +25,10 @@ class AbstractNotice(models.Model):
 class Notice(AbstractNotice):
   pass
 
-class Old_Notice(AbstractNotice):
+class TrashNotice(AbstractNotice):
   notice_id = models.IntegerField()
   editing_no = models.IntegerField()
+  original_datetime = models.DateTimeField()
 
 class NoticeUser(models.Model):
   user = models.OneToOneField(User)

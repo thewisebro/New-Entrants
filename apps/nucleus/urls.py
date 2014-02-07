@@ -6,7 +6,7 @@ pagelet_patterns = patterns('nucleus.pagelets',
 )
 
 urlpatterns = patterns('',
-  url(r'^$', 'nucleus.views.index', name='index'),
+  url(r'^$', 'nucleus.views.index', name='notices_index'),
   url(r'^login', 'django.contrib.auth.views.login',
         {'template_name': 'nucleus/login.html'}, name='login'),
   url(r'^login_dialog/$', 'django.contrib.auth.views.login',
