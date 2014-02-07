@@ -17,35 +17,48 @@
    <!-- <link href='http://fonts.googleapis.com/css?family=Raleway:500' rel='stylesheet' type='text/css'>-->
     <!--<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artistslist.css">-->
    <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css">-->
+    <script>
+      var logged_in = '{{ user.is_active }}';
+    </script>
 
   </head>
 
   <body>
-  
+  <div id="loading_line"></div>
   <div id="center_trending" style="display:none;"></div>
   <div id="center_artists" style="display:none;"></div>
   <div id="center_albums" style="display:none;"></div>
   <div id="center_playlist" style="display:none;"></div>
   <div id="center_search" style="display:none;"></div>
   <!-- login popup-->
-  <div id="login_popup" class="hidden_login">
+  <div id="login_popup" style="display:none" class="hidden_login">
     <form>
+    <div id="signin_header">Sign In
+    <div id="signin_cancel"><i class="icon-remove"></i></div>
+    </div>
     <div>
-      <input type="text" name="jb_username" placeholder="username"></input>
+      <input type="text" id="jb_username" name="jb_username" placeholder="Username"></input>
     </div>
     <div>  
-      <input type="password" name="jb_password" placeholder="username"></input>
+      <input type="password" id="jb_password" name="jb_password" placeholder="Password"></input>
     </div>
+    <div id="signin_button_large">Sign In</div>
     </form>
   </div>
 
   <!-- save as playlist box-->
   <div id="save_playlist_dialog" class="save_as_playlist_close">
-  <div id="save_playlist_header"></div>
+  <div id="save_playlist_header">Save as playlist</div>
     <div id="as_new_list"> 
       <div id="add_new_button">Create New +</div>
+      <div id="create_new_input_div" style="display:none">
+        <input type="text" id="create_new_input"></input>
+      </div>
     </div>
     <div id="as_prev_list">
+    <select id="select_saved_playlist">
+      <option>Save as existing</option>
+    </select>
     </div>
     <div id="save_as_playlist_cancel"><i class="icon-remove"></i></div>
   </div>
@@ -171,10 +184,11 @@
 <div id="popular_artists" class="popular_artists_before">
 <span id="play_queue_icon" class="open_queue"><i class="icon-align-justify"></i></span>
 <div id="queue_dropdown" style="display:none;">
+<div id="pointer_queue"></div>
 <ul>
   <li id="save_as_playlist">Save as playlist</li>
-  <li id="add_to_playlist">Add to Playlist</li>
-  <li id="clear_queue">Clear Queue</li>
+  <li id="add_to_playlist">Add to playlist</li>
+  <li id="clear_queue">Clear queue</li>
 </ul>
 </ul>
 </ul>
@@ -261,7 +275,14 @@
 		<div id="slider"></div> 
 		<div id="borderVolume"></div> 
 		<span id="volumeicons"><i class="icon-volume-up"></i></span>  
-		</section>  
+		</section> 
+   <div id="signin_button">
+    {% if user.is_active %}
+      Sign Out
+    {% else %}
+     Sign in
+    {% endif %}
+   </div> 
 	</div>
 
 

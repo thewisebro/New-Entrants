@@ -342,7 +342,7 @@ top:3px;
 
 /* ==============b Right ==================*/
 #bRight{
-	width: 180px;
+	width: 218px;
 	float: right;
 	/*background-color:rgb(73, 125, 134);*/
 	height: 45px;
@@ -352,8 +352,9 @@ top:3px;
 #volumesection {  
     width: 150px;  
     height: auto;  
-    margin-top: 21px;  
+    margin-top: 25px;  
     position: relative;  
+    left:-10px;
 } 
 #slider{  
 	border: 1px solid black;
@@ -1337,7 +1338,6 @@ border: 1px solid #CCC;
 }
 
 
-/* populatr_artists dropdown*/
 #queue_dropdown{
 background-color: rgb(255, 255, 255);
 width: 150px;
@@ -1349,6 +1349,17 @@ border-radius:3px;
 box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
 border: 1px solid #BBB;
 }
+#pointer_queue{
+  position: absolute;
+            border-bottom: 12px solid #FFF;
+            border-left: 10px solid rgba(0, 0, 0, 0);
+            border-right: 10px solid rgba(0, 0, 0, 0);
+right: 12px;
+top: -12px;
+     box-shadow: 0 0 95px rgba(0, 0, 0, 0.4);
+
+}
+
 #queue_dropdown ul li { 
        color: #757575;
        font-size: 12px;
@@ -1430,8 +1441,10 @@ float: right;
           border-bottom-left-radius: 3px;
           box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 25px;
           border: 1px solid #BBB;
-          left: 33%;
-          top: 18%;
+          left:50%;
+          margin-left:-200px;
+          top: 40%;
+          margin-top:-126px;
 }
 
 .save_as_playlist_close{
@@ -1442,7 +1455,10 @@ float: right;
 height: 30px;
 width: 100%;
        background-color: #F1F2F4;
-
+       text-indent: 10px;
+       line-height: 30px;
+color: #444;
+       font-size: 14px;
 }
 
 #save_as_playlist_cancel{
@@ -1459,26 +1475,48 @@ color: #757575;
 }
 
 #as_prev_list{
+width: 220px;
+height: 37px;
+        border-radius: 3px;
+margin: 0 auto;
+       padding-top:35px;
 
+}
 
+#select_saved_playlist{
+  width: 220px;
+height: 37px;
+border: 1px solid #CCC;
+        border-radius: 3px;
+        text-indent: 10px;
+        font-size: 14px;
+color: #6E6E6E;
+background: #F8F8F8;
+            box-shadow: inset 0px 1px 0px #EAEAEA;
+cursor:pointer;
+
+}
+
+#select_saved_playlist:focus{
+  outline:0px;
 }
 
 #as_new_list{
 width: 100%;
-height: 60px;
         background-color: #FFF;
         border-bottom: 1px solid #EEE;
-        padding-top: 40px;
+        padding-top: 35px;
+        padding-bottom:35px;
 
 }
 #add_new_button{
-width: 100px;
+width: 200px;
 height: 17px;
         background-color: #008DDE;
 margin: 0px auto;
 color: #FFF;
        font-size: 14px;
-       text-indent: 6px;
+       text-align: center;
 padding: 10px;
 cursor: pointer;
         border-radius: 3px;
@@ -1491,6 +1529,33 @@ background-color: #018BDC;
                 -ms-transition: background-color 300ms linear;
                     transition: background-color 300ms linear;
 
+}
+#create_new_input_div{
+
+display: block;
+width: 220px;
+height: 37px;
+margin: 0px auto;
+color: #FFF;
+       font-size: 14px;
+cursor: pointer;
+        border-radius: 3px;
+}
+
+#create_new_input{
+width: 220px;
+height: 37px;
+       border-radius: 3px;
+      font-size: 18px;
+color: #767676;
+      text-indent: 10px;
+border: 1px solid #CCC;
+       background-color: #F8F8F8;
+      box-shadow: inset 0px 1px 1px #D7D7D7; 
+}
+
+#create_new_input:focus{
+outline:0px;
 }
 /*mini icons */
 #mini_play{
@@ -1596,8 +1661,119 @@ position: absolute;
           border-bottom-left-radius: 3px;
           box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 25px;
 border: 1px solid #BBB;
-left: 33%;
-top: 18%;
-left: 33%;
-top: 18%;
+left: 50%;
+margin-left:-200px;
+top: 40%;
+     margin-top: -126px;
+}
+
+#login_popup form div input{
+width: 200px;
+height: 36px;
+        font-size: 16px;
+        text-indent: 10px;
+border: 1px solid #CCC;
+        border-radius: 2px;
+background: #F8F8F8;
+            box-shadow: inset 0px 1px 0px #EAEAEA;
+}
+
+#jb_username{
+
+
+}
+#jb_password{
+
+
+}
+
+#signin_button{
+right: 10px;
+top: 8px;
+width: 86px;
+position: absolute;
+          text-align: center;
+height: 34px;
+        text-shadow: 0px -1px 1px #0069A6;
+        line-height: 34px;
+        font-size: 14px;
+        font-family: helvetica_neue_medium;
+        border-radius: 3px;
+        background-color: #008DDE;
+color: #FFF;
+border: 1px solid #003857;
+        box-shadow: 0px 1px 2px #3D3D3D;
+cursor:pointer;
+
+}
+
+#signin_button_large{
+  width: 200px;
+         text-align: center;
+margin: 10px auto;
+height: 36px;
+        line-height: 36px;
+        font-size: 14px;
+        border-radius: 2px;
+        background-color: #008DDE;
+color: #FFF;
+cursor: pointer;
+}
+
+#signin_button_large:hover{
+ background-color:#009AF2;
+-webkit-transition-property:color, text;
+	-webkit-transition-duration: 0.1s, 0.1s;
+	-webkit-transition-timing-function: ease-in ,linear,ease-out;
+	-moz-transition-property:color, text;
+	-moz-transition-duration:0.5s;
+	-moz-transition-timing-function: linear, ease-in;
+	-o-transition-property:color, text;
+	-o-transition-duration:0.5s;
+	-o-transition-timing-function: linear, ease-in;
+
+}
+
+#login_popup form div:nth-child(2){
+  width: 200px;
+margin: 0 auto;
+        margin-bottom: 10px;
+        margin-top: 40px;
+
+}
+
+#login_popup form div:nth-child(3){
+   width: 200px;
+margin: 0 auto;
+
+}
+
+#signin_header{
+
+height: 30px;
+width: 100%;
+       background-color: #F1F2F4;
+       text-indent: 10px;
+       line-height: 30px;
+color: #444;
+       font-size: 14px;
+}
+
+#signin_cancel{
+position: absolute;
+float: right;
+right: 12px;
+top: 7px;
+cursor: pointer;
+color: #757575;
+       font-size: 15px;
+}
+
+#loading_line{
+  width: 100%;
+height: 2px;
+background: #F00;
+position: fixed;
+top: 0px;
+     z-index: 3;
 }

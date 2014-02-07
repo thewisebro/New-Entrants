@@ -4,9 +4,11 @@
 import json
 from itertools import chain
 from difflib import *
+from HTMLParser import HTMLParser
 
 from core.views.generic import ListView,TemplateView,View,DetailView, RedirectView
 from django.core import serializers
+from django.contrib.auth import authenticate
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveAPIView, CreateAPIView
@@ -44,11 +46,43 @@ for key in artists.keys():
   artists_search[artists[key]['artist'].lower()]=key
 
 
+def get_json_Queue(song):
+  htm = HTMLParser()
+  return {
+    'id':song.id,
+    'album': song.album.album,
+    'album_id':song.album.id,
+    'album_art': song.album.album_art.name,
+    'song':song.song,
+    'file_name':htm.unescape(str( song.file_name.name)),
+    'artist':song.artists.all()[0].artist,
+    'artist_id':song.artists.all()[0].id,
+  }
+
+
 def search_json(inp, dic):
   out = filter(lambda x: x.startswith(inp),dic.keys())
   if len(out)<5:
     out += filter(lambda x: (inp in x) and (not x.startswith(inp)),dic.keys())
   return out[:5]
+
+
+
+def login(request):
+  active = False
+  if 'username' in request.POST and 'password' in request.POST:
+    uid = request.POST['username']
+    pwd = request.POST['password']
+    if authenticate(username=uid, password=pwd):
+      active = True
+    else:
+      active = False
+  active = json.dumps({'active':active})
+  return HttpResponse(active, mimetype='application/json')
+
+
+
+
 
 class IndexView(TemplateView):
   """
@@ -175,7 +209,7 @@ class AddToPlaylistView(CreateAPIView):
 
 class PlaylistDescView(RetrieveAPIView):
 #queryset = Playlist.objects.all()
-  serializer_class = PlaylistSerializer
+  serializer_class = PlaylistDescSerializer
   def get_queryset(self):
     active = self.request.user.is_active
     if active :
@@ -187,22 +221,19 @@ class GetSongView(RetrieveAPIView):
   queryset = Song.objects.all()
   serializer_class = SongSerializer
 
-def get_json_Queue(song):
-  return {
-    'id':song.id,
-    'album': song.album.album,
-    'album_art': song.album.album_art.name,
-    'song':song.song,
-    'artist':song.artists.all()[0].artist,
-  }
 
+def map_queue(x):
+  try:
+    return int(x)
+  except:
+    pass
 def getQueue(request):
   queue = request.GET['qu']
   queue = queue.split(',')
-  queue = map(lambda x: int(x), queue)
+  queue = map(lambda x: map_queue(x), queue)
   lsongs = Song.objects.in_bulk(queue)
   for key in lsongs.keys():
-    lsongs[key]=get_json_Queue(lsongs[key])
+    lsongs[key]=SongSerializer(lsongs[key]).data
   lsongs = json.dumps({'queue':lsongs})
   return HttpResponse(lsongs, mimetype='application/json')
 

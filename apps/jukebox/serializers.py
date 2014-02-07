@@ -5,12 +5,16 @@ from jukebox.models import Song, Artist, Album, Playlist
 #from jukebox.views import get_json_Queue
 
 def get_json_Queue(song):
+  htm = HTMLParser()
   return {
     'id':song.id,
     'album': song.album.album,
+    'album_id':song.album.id,
     'album_art': song.album.album_art.name,
     'song':song.song,
+    'file_name':htm.unescape(str( song.file_name.name)),
     'artist':song.artists.all()[0].artist,
+    'artist_id':song.artists.all()[0].id,
   }
 
 def get_json_album(album):
@@ -34,7 +38,30 @@ class HyperlinkedFileField(serializers.FileField):
     htm = HTMLParser()
     return htm.unescape(str(value.name))
 
+class AlbumArtSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Album
+    fields = ('id', 'album', 'album_art')
+    depth = 1
+
+
+class ArtistSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Artist
+    fields = ('id', 'artist')
+    depth = 1
+
 class SongSerializer(serializers.ModelSerializer):
+  file_name = HyperlinkedFileField(source='file_name')
+  album = AlbumArtSerializer()
+  artists = ArtistSerializer(many=True)
+  class Meta:
+    model = Song
+    fields = ('id', 'song', 'album', 'artists', 'file_name')
+    depth = 1
+
+
+class SongDescSerializer(serializers.ModelSerializer):
   file_name = HyperlinkedFileField(source='file_name')
   class Meta:
     model = Song
@@ -77,11 +104,17 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 
 class PlaylistSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Playlist
+    fields = ('id', 'name')
+    depth = 1
+
+class PlaylistDescSerializer(serializers.ModelSerializer):
   person = serializers.Field(source='person.username')
   songs_list = serializers.SerializerMethodField('get_songs_list')
   class Meta:
     model = Playlist
-    fields = ('id', 'songs', 'person', 'name', 'private','songs_list')
+    fields = ('id', 'songs', 'name', 'songs_list')
     depth = 2
 
   def get_songs_list(self, obj):
@@ -93,7 +126,7 @@ class PlaylistSerializer(serializers.ModelSerializer):
     songs_id = songs.split('b')
     lsongs = Song.objects.in_bulk(songs_id)
     for key in lsongs.keys():
-      lsongs[key]=get_json_Queue(lsongs[key])
+      lsongs[key]=SongSerializer(lsongs[key]).data
 
     return lsongs
 
