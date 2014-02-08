@@ -8,7 +8,7 @@ class CourseAdmin(admin.ModelAdmin):
 admin.site.register(CourseDetails,CourseAdmin)
 admin.site.register(CourseStructureMap)
 admin.site.register(InstituteElectivesNotEligibleMap)
-admin.site.register(RegolPerson)
+admin.site.register(RegolStudent)
 admin.site.register(AssignedFaculty)
 admin.site.register(PhdInfo)
 admin.site.register(InstituteElectives)

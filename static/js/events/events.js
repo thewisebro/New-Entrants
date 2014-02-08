@@ -1,3 +1,5 @@
+//@ sourceURL=events.js
+
 var calendars = null;
 var events_per_request = 20;
 var display_by_month_year = false;

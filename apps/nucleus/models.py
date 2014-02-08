@@ -161,10 +161,6 @@ def Role(group_name):
     def __unicode__(self):
       return self.role + ':' + unicode(self.user)
 
-    @property
-    def name(self):
-      return self.user.name
-
     class Meta:
       abstract = True
   return SubUser
@@ -270,16 +266,16 @@ class StudentInfo(StudentInfoBase):
     verbose_name_plural = 'Students Information'
 
 
-class StudentAlumniInfo(StudentInfoBase):
+class StudentInfoAlumni(StudentInfoBase):
   studentalumni = models.OneToOneField(StudentAlumni, primary_key=True)
 
   class Meta:
-    verbose_name = 'StudentAlumni Information'
-    verbose_name_plural = 'StudentAlumnis Information'
+    verbose_name = 'Student Information (Alumni)'
+    verbose_name_plural = 'Students Information (Alumni)'
 
 
 class Course(models.Model):
-  code = models.CharField(max_length=MC.CODE_LENGTH, primary_key=True)
+  code = models.CharField(max_length=MC.CODE_LENGTH)
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   credits = models.IntegerField()
   subject_area = models.CharField(max_length=MC.CODE_LENGTH)
@@ -307,12 +303,13 @@ class RegisteredCourseChangeBase(models.Model):
   course = models.ForeignKey(Course)
   credits = models.IntegerField(null=True, blank=True)
   change = models.CharField(max_length=3, choices=MC.COURSE_CHANGE_CHOICES)
-
   class Meta:
     abstract = True
 
 class RegisteredCourseChange(RegisteredCourseChangeBase):
   student = models.ForeignKey(Student)
+  backlog_registeredcoursechange = models.ForeignKey('RegisteredCourseChange',
+      related_name='next_registeredcoursechange', blank=True, null=True)
 
   def __unicode__(self):
     return unicode(self.student) + ':' + unicode(self.course) +\
@@ -320,6 +317,8 @@ class RegisteredCourseChange(RegisteredCourseChangeBase):
 
 class RegisteredCourseChangeAlumni(RegisteredCourseChangeBase):
   studentalumni = models.ForeignKey(StudentAlumni)
+  backlog_registeredcoursechangealumni = models.ForeignKey('RegisteredCourseChangeAlumni',
+      related_name='next_registeredcoursechangealumni', blank=True, null=True)
 
   def __unicode__(self):
     return unicode(self.studentalumni) + ':' + unicode(self.course)
@@ -328,8 +327,6 @@ class RegisteredCourseChangeAlumni(RegisteredCourseChangeBase):
 class Batch(models.Model):
   name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   faculties = models.ManyToManyField('Faculty', blank=True, null=True)
-  semtype = models.CharField(max_length=1, choices=MC.SEMESTER_TYPE_CHOICES)
-  year = models.IntegerField()
   course = models.ForeignKey(Course)
   students = models.ManyToManyField(Student, blank=True, null=True)
 
