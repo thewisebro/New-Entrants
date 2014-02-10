@@ -138,7 +138,7 @@ border: 1px solid #E0E0E0;
 border-bottom: 0px;
 }
 
-#popular_list ul li {
+#popular_list>ul>li {
 	list-style-type: none;
 	background-color: #eee;
 	height: 32px;
@@ -149,11 +149,11 @@ border-bottom: 0px;
 
 
 
-#popular_list ul li:nth-child(2n){
+#popular_list>ul>li:nth-child(2n){
 	background-color: #f9f9f9;
 }
 
-#popular_list ul li:hover{
+#popular_list>ul>li:hover{
 	background-color:#d0d0d0;
 }
 
@@ -162,7 +162,7 @@ border-bottom: 0px;
 
 }
 
-#popular_list ul li div{
+#popular_list>ul>li>div{
 float:left
 }
 

@@ -1,5 +1,5 @@
-ARTIST_PIC_DIR = '/home/songsmedia/artist'
-ALBUMART_DIR = '/home/songsmedia/albumart'
+ARTIST_PIC_DIR = '/home/songsmedia/'
+ALBUMART_DIR = '/home/songsmedia/'
 SONG_DIR = '/home/pankaj/jukebox_songs/newestsongs/'
 SONGS_JSON_FILE = '/home/pankaj/channeli/all.json'
 ARTISTS_JSON_FILE = '/home/pankaj/channeli/artists.json'

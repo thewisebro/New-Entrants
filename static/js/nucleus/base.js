@@ -1,19 +1,6 @@
 var current_tab, tabs, tabs_parent_top;
 var showLoading = true;
 
-function open_login_dialog(){
-  dialog_iframe({
-    name: 'login_dialog',
-    title: 'Sign In',
-    width: 400,
-    height: 200,
-    src: '/login_dialog/?next=/close_dialog/login_dialog/',
-    close: function(){
-      $(document).trigger("login");
-    }
-  });
-}
-
 $(document).on("login", function(){
   load_pagelet("header");
   load_pagelet("sidebar");

@@ -49,19 +49,34 @@
   <!-- save as playlist box-->
   <div id="save_playlist_dialog" class="save_as_playlist_close">
   <div id="save_playlist_header">Save as playlist</div>
-    <div id="as_new_list"> 
+    <div id="as_new_list">
+      <div id="add_new_submit"><i id="icon-check-sign-button" class="icon-check-sign"></i></div> 
       <div id="add_new_button">Create New +</div>
       <div id="create_new_input_div" style="display:none">
         <input type="text" id="create_new_input"></input>
       </div>
     </div>
     <div id="as_prev_list">
+    <div id="as_prev_submit"><i id="icon-check-sign-button" class="icon-check-sign"></i></div>
     <select id="select_saved_playlist">
       <option>Save as existing</option>
     </select>
     </div>
     <div id="save_as_playlist_cancel"><i class="icon-remove"></i></div>
   </div>
+<!-- add to playlist only -->
+  <div id="add_to_playlist_dialog" class="add_to_playlist_close">
+  <div id="add_to_playlist_header">Add to playlist</div>
+    <div id="add_to_playlist_div">
+    <div id="add_to_playlist_submit"><i id="icon-check-sign-button" class="icon-check-sign"></i></div>
+    <select id="add_to_saved_playlist">
+      <option>Select Playlist</option>
+    </select>
+    </div>
+    <div id="add_to_playlist_cancel"><i class="icon-remove"></i></div>
+  </div>
+
+
   <!-- search div -->
 			<div id="searchDivcss" class="searchLightboxClose">
 				<div id="searchHeader">
@@ -293,6 +308,7 @@
 </body>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-1.10.2.min.js"></script>
     <script src="{{ STATIC_URL }}js/csrf.js"></script>
+    <script src="{{ STATIC_URL }}js/common.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}jquery/nanoscroller/jquery.nanoscroller.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/resize.js"></script> 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/music.js"></script>

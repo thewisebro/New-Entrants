@@ -14,6 +14,7 @@
               listopen='true';
               $('#oneAlbumOpened').animate({left:'220',right:'0'},300);
               $('#album_panel_hide').animate({left:'420',top:'185'},300);
+
              // $("#rightside").animate({right:'0',opacity:'1'},300); 
             },10);  
     }
@@ -90,6 +91,9 @@ function keyDown(e)
    if (e.keyCode == 27) { 
    if(type==1){
      type=0;
+     if(prev_hash.indexOf('/song')>0)
+       prev_hash=prev_hash.slice(0,prev_hash.indexOf('/song'));
+     if(song_playing!=0) prev_hash += '/song/'+song_playing;
      document.location.hash = prev_hash;
     $('#searchButton').addClass("notOpen");
      $("#bigwrapper").removeClass("blur_back");
@@ -135,6 +139,9 @@ function searchView(e){
     // search icon css
     // alert("not visible");
     $('#searchButton').addClass("notOpen");
+     if(prev_hash.indexOf('/song')>0)
+       prev_hash=prev_hash.slice(0,prev_hash.indexOf('/song'));
+     if(song_playing!=0) prev_hash += '/song/'+song_playing;
      document.location.hash = prev_hash;
     // active class on full search view only
     // change the style of search div
@@ -165,8 +172,22 @@ function remove_from_queue(insert)
  if (queue.length == 0) return;
   if(insert!=0) insert = insert || queue.length;
   var m = queue.splice(insert,1);
+  localStorage.setItem('queue',queue);
   return m[0];
 }
+
+
+function delete_from_playlist(index, play_id)
+{
+  $.post('playlist_delete_from/',{id:play_id, index:index});
+}
+
+
+function change_index_playlist(oindex, nindex,play_id)
+{
+  $.post('playlist_change_index/',{oindex:oindex, nindex:nindex, id:play_id });
+}
+
 
 function add_LS_queue(song)
 {
@@ -175,7 +196,7 @@ function add_LS_queue(song)
   image = 'http://192.168.121.5:60000'+image;
   var artist_name = song.artists[0].artist;
   var song_name = song.song;
-var html = '<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
+var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
    + ' </div>'
    + '<div class="qinfo">'
    + '<div class="qsong">'+song_name+'</div>'
@@ -185,6 +206,7 @@ $(".qsong").width($(".qitem").width()-50);
 $(".qartist").width($(".qitem").width()-50);
 add_in_queue(song.id,queue.length);
 song_ready();
+queue_binder();
 }
 
 function add_next_queue(song)
@@ -194,7 +216,7 @@ function add_next_queue(song)
   image = 'http://192.168.121.5:60000'+image;
   var artist_name = song.artists[0].artist;
   var song_name = song.song;
-var html = '<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
+var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
    + ' </div>'
    + '<div class="qinfo">'
    + '<div class="qsong">'+song_name+'</div>'
@@ -210,13 +232,14 @@ var html = '<div class="qimage" style="background:url(\''+image+'\'); background
                 return;
               }
             });
-          if(cnt == queue.length) add_LS_queue(song);
+          if(cnt == queue.length+1) add_LS_queue(song);
           else
           {
               $(".qsong").width($(".qitem").width()-50);
               $(".qartist").width($(".qitem").width()-50);
                         add_in_queue(id,cnt-1);
               song_ready();
+queue_binder();
           }
 }
 
@@ -227,7 +250,7 @@ function add_queue_song(song)
   image = 'http://192.168.121.5:60000'+image;
   var artist_name = song.artists[0].artist;
   var song_name = song.song;
-var html = '<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
+var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
    + ' </div>'
    + '<div class="qinfo">'
    + '<div class="qsong">'+song_name+'</div>'
@@ -243,6 +266,7 @@ $(".qartist").width($(".qitem").width()-50);
        
 add_in_queue(song.id,queue.length);
 song_ready();
+queue_binder();
 }
 
 
@@ -293,11 +317,12 @@ function clone_element_song(id)
               image = 'http://192.168.121.5/songsmedia/'+image;
               var artist_name = songs_url[id].artists[0].artist;
               var song_name = songs_url[id].song;
-              var html = '<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
+              var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
                  + ' </div>'
                  + '<div class="qinfo">'
                  + '<div class="qsong">'+song_name+'</div>'
                  + '<div class="qartist">'+artist_name+'</div></div>';
+queue_binder();
               return $( "<div class='qitem song' id='"+idn+"'></div>" ).html( html );
 
             }
@@ -310,11 +335,12 @@ function clone_element_song(id)
                   image = 'http://192.168.121.5:60000'+image;
                   var artist_name = songs_url[id].artists[0].artist;
                   var song_name = songs_url[id].song;
-                  var html = '<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
+                  var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
                      + ' </div>'
                      + '<div class="qinfo">'
                      + '<div class="qsong">'+song_name+'</div>'
                      + '<div class="qartist">'+artist_name+'</div></div>';
+queue_binder();
                   return $( "<div class='qitem song' id='"+idn+"'></div>" ).html( html );
               });
             }
@@ -500,6 +526,7 @@ $("#save_as_playlist").bind("click",function(){
         }
       }
     });
+
 $("#save_as_playlist_cancel").on("click",function(){
     $("#save_playlist_dialog").removeClass().addClass("save_as_playlist_close");
     $("#bigwrapper").css('opacity','1');
@@ -510,9 +537,43 @@ $(document).unbind('keydown',function(e) {
      });
 
 
+$("#add_to_playlist_cancel").on("click",function(){
+    $("#add_to_playlist_dialog").removeClass().addClass("add_to_playlist_close");
+    $("#bigwrapper").css('opacity','1');
+     });
+
+$("#add_to_playlist").on("click",function(){
+    if($("#add_to_playlist_dialog").hasClass("add_to_playlist_open")){
+        $("#add_to_playlist_dialog").removeClass().addClass("add_to_playlist_close");
+     }
+    else{
+    
+    $("#bigwrapper").css('opacity','0.2');
+    $("#add_to_playlist_dialog").removeClass().addClass("add_to_playlist_open");
+  //  $("#save_playlist_dialog").css({'display':'block'});
+    $("#queue_dropdown").css({'display':'none'});
+$(document).bind('keydown',function(e) {
+   if (e.keyCode == 27) { $('#add_to_playlist_cancel').click(); }
+  });
+  
+    }
+ });
+
+
+$("#add_to_playlist").bind("click",function(){
+      $('#add_to_saved_playlist').empty();
+      if(!playlists_open) get_json('playlists');
+      if(playlists_json.playlists && playlists_json.playlists.length > 0){
+         $('#add_to_saved_playlist').append('<option value=0>Save As Existing</option>');
+         for(var i=0;i<playlists_json.playlists.length;i++){
+         $('#add_to_saved_playlist').append('<option value='+playlists_json.playlists[i].id+'>'+playlists_json.playlists[i].name+'</option>');
+        }
+      }
+    });
+
 /* login popup */
 $("#signin_cancel").on('click',function(){
-      
+   login_cancel  = true;      
   $('#login_popup').css('display','none');  
   $("#bigwrapper").css('opacity','1');
 $(document).unbind('keydown',function(e) {
@@ -522,11 +583,12 @@ $(document).unbind('keydown',function(e) {
 
 $("#signin_button").on('click',function(){
     if(logged_in) return;
-      
+    open_login_dialog(); 
   //$('#login_popup').css('display','block');  
-  $("#bigwrapper").css('opacity','0.2');
+  /*$("#bigwrapper").css('opacity','0.2');
   $('#login_popup').show();
   console.log('yo');
+  */
 $(document).bind('keydown',function(e) {
    if (e.keyCode == 27) { $('#signin_cancel').click(); }
   });
@@ -582,3 +644,4 @@ $('#add_new_button').on('click',function(){
     select=true;
     } 
     });
+

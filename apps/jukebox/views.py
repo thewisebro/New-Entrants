@@ -201,7 +201,69 @@ class AddToPlaylistView(CreateAPIView):
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
-        playlist.songs += 'b'+songs
+        if playlist.songs == '':
+          playlist.songs = songs
+        else:
+          playlist.songs += 'b'+songs
+        playlist.save()
+    return Response('')
+
+
+
+class OverwritePlaylistView(CreateAPIView):
+  serializer_class = PlaylistSerializer
+  permission_classes = (IsOwnerOrReadOnly,)
+  def post(self,request):
+    songs = self.request.POST.get('songs','')
+    playlist_id = int(self.request.POST.get('id',''))
+    active = self.request.user.is_active
+    if active :
+      user = self.request.user                             # user logged in
+      playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
+      if len(playlists) == 1 :
+        playlist = playlists[0]
+        playlist.songs = songs
+        playlist.save()
+    return Response('')
+
+
+
+class DeleteFromPlaylistView(CreateAPIView):
+  serializer_class = PlaylistSerializer
+  permission_classes = (IsOwnerOrReadOnly,)
+  def post(self,request):
+    index = int(self.request.POST.get('index',''))
+    playlist_id = int(self.request.POST.get('id',''))
+    active = self.request.user.is_active
+    if active :
+      user = self.request.user                             # user logged in
+      playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
+      if len(playlists) == 1 :
+        playlist = playlists[0]
+        songs = playlist.songs.split('b')
+        songs.pop(index)
+        playlist.songs = 'b'.join(songs)
+        playlist.save()
+    return Response('')
+
+
+
+class ChangeIndexPlaylistView(CreateAPIView):
+  serializer_class = PlaylistSerializer
+  permission_classes = (IsOwnerOrReadOnly,)
+  def post(self,request):
+    oindex = int(self.request.POST.get('oindex',''))
+    nindex = int(self.request.POST.get('nindex',''))
+    playlist_id = int(self.request.POST.get('id',''))
+    active = self.request.user.is_active
+    if active :
+      user = self.request.user                             # user logged in
+      playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
+      if len(playlists) == 1 :
+        playlist = playlists[0]
+        songs = playlist.songs.split('b')
+        songs.insert(nindex,songs.pop(oindex))
+        playlist.songs = 'b'.join(songs)
         playlist.save()
     return Response('')
 

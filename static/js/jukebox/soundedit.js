@@ -16,19 +16,19 @@ function Player() {
     // handlers for sound events as they're started/stopped/played
 
     play: function() {
-       $('#'+sound.id).find('.play_icon i').removeClass('icon-play').addClass('icon-pause');
+       $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_pause.png")
      //  console.log("--------------"+sound.id); 
 
-       $('#'+sound.id).find('#faint').animate({'opacity':'1'},300);
+       $('#'+sound.id).find('.faint').animate({'opacity':'1'},300);
        $('#'+sound.id).find('.play_icon').animate({'opacity':'1'},300);
         $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_pause.png");
-
+      
     },
 
     stop: function() {
-      $('#'+sound.id).find('.play_icon i').removeClass('icon-pause').addClass('icon-play');
+      $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_play.png");
       
-       $('#'+sound.id).find('#faint').attr('style','');
+       $('#'+sound.id).find('.faint').attr('style','');
        $('#'+sound.id).find('.play_icon').attr('style','');
 
     },
@@ -274,8 +274,18 @@ function Player() {
     $('#bLeftPlay img').on('click',function(){
       if(self.currentSound){//check if sound obj exists
         sound.togglePause();
-        //change icon to pause 
-      }
+        //change icon to pause
+       /*if(sound.id.playState()){
+               
+       $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_pause.png");
+       }
+       else{
+       
+       $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_play.png");
+       } 
+        
+      */
+        }
     });
 
     $('#bLeftLeft img').on('click',function(){

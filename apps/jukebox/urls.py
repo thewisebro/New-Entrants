@@ -47,6 +47,9 @@ urlpatterns = patterns('',
     url(r'^search/', SearchJsonView.as_view(), name='search'),
     url(r'^queue/', 'jukebox.views.getQueue', name='queue'),
     url(r'^playlists_add/$', AddToPlaylistView.as_view(), name='add_to_playlist'),
+    url(r'^playlists_over/$', OverwritePlaylistView.as_view(), name='overwrite_playlist'),
+    url(r'^playlist_delete_from/$', DeleteFromPlaylistView.as_view(), name='delete_from_playlist'),
+    url(r'^playlist_change_index/$', ChangeIndexPlaylistView.as_view(), name='change_index_playlist'),
 )
 
 
