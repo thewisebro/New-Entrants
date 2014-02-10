@@ -144,7 +144,7 @@ function Player() {
 
           if(self.currentSound){//check if sound exist and is playing
             if(idback==sound.id){
-               console.log('playing sound found state toggled');
+             //  console.log('playing sound found state toggled');
               //sound.togglePause();
             }
             else{
@@ -268,23 +268,22 @@ function Player() {
 
       });//documenton click
 */
-
     //on click events on the bottom bar
     //PLAY PAUSE NEXT PREV
     $('#bLeftPlay img').on('click',function(){
       if(self.currentSound){//check if sound obj exists
         sound.togglePause();
-        //change icon to pause
-       /*if(sound.id.playState()){
+      // change icon to pause
+       if(sound.paused){
                
-       $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_pause.png");
+       $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_play.png");
        }
        else{
        
-       $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_play.png");
+       $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_pause.png");
        } 
         
-      */
+      
         }
     });
 
@@ -298,10 +297,10 @@ function Player() {
       //console.log(a);
       var k = a.slice(5,a.length);
       var elm = $("#queue_content").find(".qselected");
-      elm.prev().addClass("qselected");
-      elm.removeClass("qselected");
       in_queue = true;//song is in the queue 
-      play(parseInt(k));
+      elm.prev().addClass("qselected").click();
+      elm.removeClass("qselected");
+   //   play(parseInt(k));
      }
       }
     });
@@ -316,19 +315,18 @@ function Player() {
       console.log(a);
       var k = a.slice(5,a.length);
       var elm = $("#queue_content").find(".qselected");
-      elm.next().addClass("qselected");
-      elm.removeClass("qselected");
       in_queue=true;//defines that the song is in the queue 
-      play(parseInt(k));
+      elm.next().addClass("qselected").click();
+      elm.removeClass("qselected");
+     // play(parseInt(k));
       }
       else{
              var temp = $("queue_content").find(".qselected");
-             $($("#queue_content").children('div')[0]).addClass("qselected");
-             temp.removeClass("qselected");
-             var a = $("#queue_content").find(".qselected").attr("id");
-             var k = a.slice(5,a.length);
              in_queue = true;//song is in the queue 
-             play(parseInt(k));
+             $($("#queue_content").children('div')[0]).addClass("qselected").click();
+             temp.removeClass("qselected");
+             //var k = a.slice(5,a.length);
+            // play(parseInt(k));
       }
      }
     });

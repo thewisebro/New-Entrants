@@ -280,7 +280,7 @@ ul{
 	right: 0px;
 	height: 52px;
 	background-color:#474747; 
-	z-index: 2;
+	z-index: 4;
 	border-top: 1px solid #101010;
   box-shadow: inset 0px 1px 1px #666;
 }
@@ -2112,4 +2112,51 @@ color: #757575;
 text-indent: 6px;
 cursor: pointer;
 }
+/* artist_lang*/
 
+#artist_language{
+margin-top: 2px;
+background: #333;
+height: 30px;
+color: #AAA;
+       font-size: 14px;
+       text-indent: 10px;
+       margin-bottom:20px;
+       border-radius:3px;
+       border-bottom:1px solid #202020;
+}
+
+#artist_language>span{
+  cursor:pointer;
+}
+
+#artist_language_display{
+  line-height: 30px;
+}
+
+#artist_language_dropdown{
+  width: 200px;
+position: absolute;
+background: #343434;
+top: 43px;
+}
+
+#artist_language_dropdown>ul>li{
+height: 30px;
+       border-bottom: 1px solid #202020;
+      line-height: 30px;
+cursor: pointer; 
+}
+
+
+
+#artist_language_dropdown>ul>li:nth-child(4){
+    border-bottom:0px;
+}
+#artist_language_icon{
+
+float: right;
+position: relative;
+top: 5px;
+right: 10px;
+}

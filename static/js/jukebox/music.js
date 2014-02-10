@@ -223,16 +223,19 @@ var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></d
    + '<div class="qartist">'+artist_name+'</div></div>';
    var elm=$( "<div class='qitem song' id='"+id+"'></div>" ).html( html );
           var cnt = 0;
+          var qselect = false;
           $('#queue_content').children('div.qitem').each(function () {
               cnt++;
               if ($(this).hasClass('qselected'))
               {
+                qselect = true;
                 console.log(this);
                 elm.insertAfter($(this));
                 return;
               }
             });
           if(cnt == queue.length+1) add_LS_queue(song);
+          else if(!qselect) add_LS_queue(song);
           else
           {
               $(".qsong").width($(".qitem").width()-50);
@@ -387,8 +390,8 @@ function add_queue(ui,element)
   else if($(element).hasClass('album'))
   {
                  console.log('yo');
-         if(element.hasClass('artist_album_pic')) var lis = element.parents().eq(0).find('li')
-         else var lis = element.parents().eq(1).find('li')
+         if(element.hasClass('artist_album_pic')) var lis = element.parents().eq(0).find('li.draggable')
+         else var lis = element.parents().eq(1).find('li.draggable')
          for(var i=0;i<lis.length;i++)
          {
            var li = lis[i];

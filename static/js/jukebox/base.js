@@ -150,7 +150,7 @@ function display(name){
         dragging();
         options_binder();
         song_ready();
-
+        trending_ready(); 
        $('.song_options').on('click',function(e) { 
        
        e.stopPropagation(); });
@@ -200,7 +200,7 @@ function display(name){
       }
       if(name=='artists')
       {
-        $("#centerdata").append('<div id="artistsList">  <div class="nano" id="left_album_list">  <div id="contentList" class="content"> </div></div></div>');
+        $("#centerdata").append('<div id="artistsList">  <div class="nano" id="left_album_list">  <div id="contentList" class="content"><div id="artist_language"><div id="artist_language_dropdown"><ul><li>Hindi</li><li>Punjabi</li><li>Tamil</li><li>Telugu</li></ul></div><span id="artist_language_display">English</span><span id="artist_language_icon"><i class="icon-sort-down"></i></span></div></div></div></div>');
       }
       items=data;
       for (var i=0; i<items.length; i++){
@@ -225,6 +225,7 @@ function display(name){
         lTrending();
         dragging();
         options_binder();
+        trending_ready(); 
         trending_json = items;
         trending_open=true;
 
@@ -928,7 +929,7 @@ function get_json(name)
           if(name=='trending'){ trending_json=data; trending_open=true; get_json('albums');  }
           else if(name=='albums'){ albums_json=data; albums_open=true; get_json('artists'); }
           else if(name=='artists'){ artists_json=data; artists_open=true; get_json('playlists'); }
-          else if(name=='playlists'){ playlists_json=data; playlists_open=true; reload(); add_songs_url();  }
+          else if(name=='playlists'){ playlists_json=data; playlists_open=true;  add_songs_url();  }
           console.log(name);
         });
 }
@@ -1015,6 +1016,17 @@ function playlist_ready(){
       hash_change('playlists',id);
     });
 }
+
+function trending_ready(){
+    
+    $('.play_icon').bind('click',function(){
+       var so = 'song_'+song_playing;
+        if( $(this).parent().attr('id') == so){
+             $('#bLeftPlay img').click();
+          } 
+    });
+}
+
 
 function song_ready()
 {
@@ -1103,6 +1115,7 @@ function playlist_song_options_binder(id){
           change_index_playlist(oldIndex,newIndex,id);
         } 
         });
+  $( "#play_sortable" ).sortable( "option", "containment", "parent" );
   $( "#play_sortable" ).disableSelection();
   var playlist_setting_state=false;
   /* playlist list items setting */
@@ -1235,7 +1248,11 @@ function login()
   $(document).on("login", function(){
           if(login_cancel){ login_cancel=false; return;}
            console.log('asa');
-           get_json('playlists');
+           $.ajax('playlists/',contentType= "application/json").done( function(data){
+              playlists_json=data;
+              playlists_open=true;
+              reload();
+              });
            logged_in=true;
            $("#signin_button").text('Sign Out');
            login_cancel=false;
@@ -1247,7 +1264,12 @@ function login()
             var uid = $('#jb_username').val();
             var pwd = $('#jb_password').val();
             $.post('/login/',{username:uid, password:pwd}, function(data){
-                    get_json('playlists');
+           $.ajax('playlists/',contentType= "application/json").done( function(data){
+              playlists_json=data;
+              playlists_open=true;
+              reload();
+              });
+           //         get_json('playlists');
                     $("#signin_button").text('Sign Out');
                     logged_in = true;
                     $('#signin_cancel').click();
@@ -1261,7 +1283,12 @@ function login()
   $("#signin_button").on('click', function(){
             if(logged_in)
             $.get('/logout/', function(){
-                get_json('playlists');
+           $.ajax('playlists/',contentType= "application/json").done( function(data){
+              playlists_json=data;
+              playlists_open=true;
+              reload();
+              });
+           //     get_json('playlists');
                 $("#signin_button").text('Sign In');
                 logged_in = false;
               });
