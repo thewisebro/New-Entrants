@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <title> {{artist.artist}} </title>
+  </head>
+
+  <body>
+    Artist:
+    <br>
+      <p>Artist Name --- {{artist.artist}}</p>
+      <img src="{{ MEDIA_URL }}{{artist.cover_pic}}" width="200px" height="200px">
+      <br><br>
+      Albums: --- {{ artist.album_set.count }}
+      <br>
+      {% for album in artist.album_set.all %}
+        {{album.album}}
+      <img src="{{ MEDIA_URL }}{{album.album_art}}" width="100px" height="100px">
+      <br>
+      {% endfor %}
+      </body>
+<html>

@@ -1,5 +1,5 @@
 """
-WSGI config for channeli project.
+WSGI config for channeli project_path.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable
@@ -13,7 +13,11 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
-import os
+import os, sys
+
+apache_configuration= os.path.dirname(os.path.abspath(__file__))
+project_path = os.path.dirname(apache_configuration)
+sys.path.append(project_path)
 
 # We defer to a DJANGO_SETTINGS_MODULE already in the environment. This breaks
 # if running multiple sites in the same mod_wsgi process. To fix this, use
@@ -30,3 +34,19 @@ application = get_wsgi_application()
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
 # application = HelloWorldApplication(application)
+def ApplicationWrapper(application):
+  def wrapped_application(environ, start_response):
+    if environ['PATH_INFO'] == '/':
+      f = open(project_path+'/production/cached_pages/index.html','r')
+      response_body = f.read()
+      f.close()
+      status = '200 OK'
+      response_headers = [('Content-Type', 'text/html'),
+                            ('Content-Length', str(len(response_body)))]
+      start_response(status, response_headers)
+      return [response_body]
+    else:
+      return application(environ, start_response)
+  return wrapped_application
+
+application = ApplicationWrapper(application)
