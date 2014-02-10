@@ -96,10 +96,10 @@ def delete(request):
     else:
       messages.error(request,'There was some error deleting the event')
       json = simplejson.dumps({'result':'failure'})
-  return HttpResponse(json,mimetype='application/json')
+  return HttpResponse(json,content_type='application/json')
 
 def get_calendars(request):
-  if request.is_ajax() and request.method == 'POST':
+  if request.is_ajax() and request.method == 'GET':
     calendars = [{'name':'all','verbose_name':'All'}]
     if request.user.is_authenticated():
       user_calendar,created = Calendar.objects.get_or_create(name=request.user.username)
@@ -112,12 +112,12 @@ def get_calendars(request):
     calendars += map(lambda cal:{'name':cal.name,'verbose_name':cal.name},public_calendars)+\
                   [{'name':'groups','verbose_name':'Groups'}]
     json = simplejson.dumps({'calendars':calendars})
-    return HttpResponse(json,mimetype='application/json')
+    return HttpResponse(json,content_type='application/json')
 
 def get_events_dates(request):
-  if request.is_ajax() and request.method == 'POST':
-    month = request.POST['month']
-    year = request.POST['year']
+  if request.is_ajax() and request.method == 'GET':
+    month = request.GET['month']
+    year = request.GET['year']
     if request.user.is_authenticated():
       events = Event.objects.exclude(~Q(calendar__name = request.user.username),calendar__cal_type = 'PRI')
     else:
@@ -125,7 +125,7 @@ def get_events_dates(request):
     events = events.filter(date__month = month,date__year = year)
     dates = map(lambda e:e.date.day,events)
     json = simplejson.dumps({'dates':dates})
-    return HttpResponse(json,mimetype='application/json')
+    return HttpResponse(json,content_type='application/json')
 
 def added_by(event):
   if event.calendar.cal_type == 'GRP':
@@ -188,16 +188,16 @@ def event_dict(event,user):
   }
 
 def fetch(request):
-  if request.is_ajax() and request.method == 'POST':
+  if request.is_ajax() and request.method == 'GET':
     try:
-      calendar_name = request.POST['calendar_name']
+      calendar_name = request.GET['calendar_name']
       group_name = None
-      if request.POST.has_key('group_name'):
-        group_name = request.POST['group_name']
-      action = request.POST['action']
-      pk = request.POST['id']
-      number = int(request.POST['number'])
-      by_month_year = request.POST['by_month_year']
+      if request.GET.has_key('group_name'):
+        group_name = request.GET['group_name']
+      action = request.GET['action']
+      pk = request.GET['id']
+      number = int(request.GET['number'])
+      by_month_year = request.GET['by_month_year']
       if request.user.is_authenticated():
         events = Event.objects.exclude(~Q(calendar__name=request.user.username), calendar__cal_type='PRI')
       else:
@@ -211,8 +211,8 @@ def fetch(request):
       else:
         events = Event.objects.filter(calendar__name=calendar_name)
       if by_month_year:
-        month = request.POST['month']
-        year = request.POST['year']
+        month = request.GET['month']
+        year = request.GET['year']
         if action == 'first':
           events = events.filter(date__month = month,date__year=year)
         elif action == 'next':
@@ -228,7 +228,7 @@ def fetch(request):
           pk_datetime = datetime.combine(pk_event.date,pk_event.time) if pk_event.time else pk_event.date
           events = events.extra(where=["IF(time,ADDTIME(date,time),date) > "+pk_datetime.strftime("'%Y-%m-%d %H:%M:%S'")])
       json = simplejson.dumps({'events':map(lambda e:event_dict(e,request.user),events[:number]),'more':int(events.count()>number)})
-      return HttpResponse(json,mimetype='application/json')
+      return HttpResponse(json,content_type='application/json')
     except Exception as e:
       logger.exception('Exception accured in events/fetch : '+str(e))
       return HttpResponse('')

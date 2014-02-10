@@ -1,28 +1,6 @@
 var current_tab, tabs, tabs_parent_top;
 var showLoading = true;
 
-function open_login_dialog(){
-  dialog_iframe({
-    name: 'login_dialog',
-    title: 'Sign In',
-    width: 400,
-    height: 200,
-    src: '/login_dialog/?next=/close_dialog/login_dialog/',
-    close: function(){
-      user_logged_in = true;
-      $(document).trigger("login");
-    }
-  });
-}
-
-function logout(){
-  $.get('/logout_ajax/',{
-    },function(data){
-      user_logged_in = false;
-      $(document).trigger("logout");
-  });
-}
-
 $(document).on("login", function(){
   load_pagelet("header");
   load_pagelet("sidebar");
@@ -96,4 +74,9 @@ function get_app_hashtags(){
   var hashtags = location.hash.substr(1).split('/');
   var first_hashtag = hashtags.shift();
   return hashtags;
+}
+
+function redirect_to_home(){
+  history.replaceState({},'home','/');
+  hashchangeCallback(true);
 }

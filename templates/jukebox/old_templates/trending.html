@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title> Trending Songs </title>
+  </head>
+
+  <body>
+    Trending Songs:
+    <br>
+    {% for song in trending %}
+      <p>Song Name --- {{song.song}}</p>
+      <p>Album ---{{song.album}}</p>
+      Artist ---
+      {% for artist in song.artists.all %}
+        {{artist}} , &nbsp;
+      {% endfor %}
+      <p>Count --- {{song.count}}</p>
+      <img src="{{ MEDIA_URL }}{{song.album.album_art}}" width="100px" height="100px"></img>
+      <br>
+      <a href="play/?song_id={{ song.id }}" onclick=" prac(); " >Play</a>
+      <br>
+    </div>
+    {% endfor %}
+  </body>
+  <script src="{{STATIC_URL}}/js/jukebox/base.js"></script>
+<html>

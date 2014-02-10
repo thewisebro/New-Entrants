@@ -3,7 +3,7 @@ from datetime import datetime
 from django.conf import settings
 
 from taggit_autocomplete.managers import TaggableManager
-from core import models
+from django.db import models
 
 
 class Taggable(models.Model):

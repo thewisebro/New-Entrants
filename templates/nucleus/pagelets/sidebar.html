@@ -1,3 +1,7 @@
+<script type="text/javascript">
+  var channeli_apps = {{ channeli_apps }};
+  var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
+</script>
 <div id="sidebar-tabs">
   {% for tab in tabs %}
     <div id="{{ tab }}-tab" class="tab" onclick="tab_clicked('{{ tab }}');">{{ tab|title }}</div>
