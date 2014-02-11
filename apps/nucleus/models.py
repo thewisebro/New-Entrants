@@ -282,6 +282,7 @@ class Course(models.Model):
   pre_requisites = models.ManyToManyField('Course', null=True, blank=True)
   semtype = models.CharField(max_length=1, choices=MC.SEMESTER_TYPE_CHOICES)
   year = models.IntegerField()
+  seats = models.PositiveIntegerField(blank=True, null=True)
 
   def __unicode__(self):
     return self.course_code + ':' + self.course_name + '(' + self.semtype +\
@@ -292,6 +293,7 @@ class RegisteredBranchCourse(models.Model):
   branch = models.ForeignKey(Branch)
   course = models.ForeignKey(Course)
   semester_no = models.IntegerField()
+  subject_area = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
   credits = models.IntegerField(null=True, blank=True)
 
   def __unicode__(self):
@@ -301,6 +303,7 @@ class RegisteredBranchCourse(models.Model):
 
 class RegisteredCourseChangeBase(models.Model):
   course = models.ForeignKey(Course)
+  subject_area = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
   credits = models.IntegerField(null=True, blank=True)
   change = models.CharField(max_length=3, choices=MC.COURSE_CHANGE_CHOICES)
   class Meta:
