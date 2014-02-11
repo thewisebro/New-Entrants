@@ -1,10 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from lectut.models import LectutUser
+from lectut.models import *
 
-class Userdetail(admin.ModelAdmin):
-  fields = ['name']
-
-
-admin.site.register(LectutUser , Userdetail)
+admin.site.register(LectutUser )
+admin.site.register(LectutBatch)

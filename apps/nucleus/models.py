@@ -288,8 +288,8 @@ class Course(models.Model):
   year = models.IntegerField()
 
   def __unicode__(self):
-    return self.course_code + ':' + self.course_name + '(' + self.semtype +\
-            ',' + self.year + ')'
+    return str(self.code) + ':' + str(self.name) + '(' + unicode(self.semtype) +\
+            ',' + unicode(self.year) + ')'
 
 
 class RegisteredBranchCourse(models.Model):

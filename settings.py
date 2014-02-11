@@ -205,20 +205,11 @@ CHANNELI_APPS = (
   'crop_image',
   'groups',
   'events',
-<<<<<<< HEAD
-<<<<<<< HEAD
   'lectut',
-=======
-=======
->>>>>>> 26f37a4e39dad54127686333d6ae661b731b543e
   'lostfound',
   'notifications',
   'helpcenter',
   'feeds',
-<<<<<<< HEAD
->>>>>>> 26f37a4e39dad54127686333d6ae661b731b543e
-=======
->>>>>>> 26f37a4e39dad54127686333d6ae661b731b543e
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS

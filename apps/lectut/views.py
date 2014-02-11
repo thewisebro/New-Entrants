@@ -16,3 +16,9 @@ else:
 '''
 def tester(request):
       return HttpResponse("Hello, world. You're at lectut.")
+
+def dispbatch(request , user):
+  active = self.request.user.is_active
+  if active :
+      user = self.request.user
+      batch=Batch.objects.filter(student=user)

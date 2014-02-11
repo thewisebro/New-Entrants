@@ -13,12 +13,18 @@ fs = FileSystemStorage(location='Uploads')
 
 # Create your models here.
 class LectutUser(models.Model):
-  user=models.ForeignKey(User)
+  user=models.OneToOneField(User)
 
-class Batch(models.Model):
-  name=models.CharField(max_length=20)
-  student=models.ManyToManyField(LectutUser)
+  def __unicode__(self):
+      return str(self.user)
+
+class LectutBatch(models.Model):
+  name=models.CharField(max_length=5 , null=True)
+  lectutuser=models.ManyToManyField(LectutUser)
   course=models.ForeignKey(Course, related_name='+')
+
+  def __unicode__(self):
+     return str(self.name)
 
 class BaseUpload(models.Model):
   class Meta:
@@ -57,7 +63,7 @@ class UploadPdf(BaseUpload):
 class Upload(models.Model):
   content_type=models.ForeignKey(ContentType)
   object_id=models.PositiveIntegerField()
-  batch=models.ForeignKey(Batch)
+  lectutbatch=models.ForeignKey(LectutBatch)
   Upload = generic.GenericForeignKey('content_type','object_id')
 
   def create_upload(sender, instance, *args, **kwargs):
