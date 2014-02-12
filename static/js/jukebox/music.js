@@ -203,11 +203,12 @@ var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></d
    + '<div class="qsong">'+song_name+'</div>'
    + '<div class="qartist">'+artist_name+'</div></div>';
 $( "<div class='qitem song' id='"+id+"'></div>" ).html( html ).appendTo( $("#queue_content"));
-$(".qsong").width($(".qitem").width()-50);
-$(".qartist").width($(".qitem").width()-50);
+
 add_in_queue(song.id,queue.length);
 song_ready();
 queue_binder();
+$(".qsong").width($(".qitem").width()-50);
+$(".qartist").width($(".qitem").width()-50);
 }
 
 function add_next_queue(song)
@@ -239,11 +240,11 @@ var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></d
           else if(!qselect) add_LS_queue(song);
           else
           {
-              $(".qsong").width($(".qitem").width()-50);
-              $(".qartist").width($(".qitem").width()-50);
                         add_in_queue(id,cnt-1);
               song_ready();
 queue_binder();
+$(".qsong").width($(".qitem").width()-50);
+$(".qartist").width($(".qitem").width()-50);
           }
 }
 
@@ -268,6 +269,8 @@ $(".qartist").width($(".qitem").width()-50);
           });
        elem.addClass('qselected');
        
+$(".qsong").width($(".qitem").width()-50);
+$(".qartist").width($(".qitem").width()-50);
 add_in_queue(song.id,queue.length);
 song_ready();
 queue_binder();
@@ -378,13 +381,13 @@ function add_queue(ui,element)
 
           if (i != 1)
           {
-          $(".qsong").width($(".qitem").width()-50);
-          $(".qartist").width($(".qitem").width()-50);
           song_ready();
           id = id.split('_')[1];
           add_in_queue(id,queue.length);
               //alert('no');
           elm.appendTo( $("#queue_content"));
+          $(".qsong").width($(".qitem").width()-50);
+          $(".qartist").width($(".qitem").width()-50);
           }
 
   }

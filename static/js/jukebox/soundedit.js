@@ -130,9 +130,9 @@ function Player() {
       }
       $("#queue_content").find(".qselected").removeClass("qselected");
       //console.log(a);
-      $('#queue_content div:nth-child('+index+')').addClass("qselected");
       in_queue=true;
-      play(song_random);
+      $('#queue_content div:nth-child('+index+')').addClass("qselected").click();
+      /*play(song_random);*/
 
   }
 

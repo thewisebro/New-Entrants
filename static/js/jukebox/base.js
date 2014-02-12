@@ -67,9 +67,9 @@ $('#inputFor').focus();
 search_full(search_str);
 $('#inputFor').on("keyup", function (event) {
     q = $(this).val();
-    //hash_change('search',q);
+    hash_change('search',q);
     console.log('heree');
-    search_full(q);
+    //search_full(q);
 });
 
 }
@@ -868,7 +868,7 @@ function check_hash( name )
     }
   return false;
   }
-  else if(name=='artists' || name=='albums' || name=='playlists')
+  else if(name=='artists' || name=='albums' || name=='playlists' || name=='search')
   {
      if(hash[0]==phash[0]) return true;
   }
@@ -926,16 +926,18 @@ function split_hash(){
   if( name== 'search'){
     //$('#searchButton').click();
     //alert('hash   '+hash[1]);
-    if(hash[1]=='') 
+    if(hash.length==1 || hash.length==3 ) 
     {
-      $("#songSearch").empty();
-      $("#albumSearch").empty();
-      $("#artistSearch").empty();
+      console.log('sasa');
+            $('#searchList').html($('#itemsDisplay').clone());
+      $("#itemDisplay").hide();
     }
     else
     {
-      if(prev_hash != document.location.href.split('#')[1])
-      get_search_html(hash[1]);
+      if(!check_hash('search'))
+        get_search_html(hash[1]);
+      else
+        search_full(hash[1]);
     }
   }
   if (song >= 0){
