@@ -97,6 +97,7 @@ class ArtistDescSerializer(serializers.ModelSerializer):
 
 
 class AlbumSerializer(serializers.ModelSerializer):
+  artists = ArtistSerializer(many=True)
   class Meta:
     model = Album
     fields = ('id', 'album', 'artists')

@@ -46,6 +46,21 @@ for key in artists.keys():
   artists_search[artists[key]['artist'].lower()]=key
 
 
+def dict_search(dictionary, search_field, search_str,limit=100):
+  contains = []
+  starts = []
+  for key in dictionary.keys():
+    if dictionary[key][search_field].lower().startswith(search_str):
+      starts.append(dictionary[key])
+    elif search_str in dictionary[key][search_field].lower():
+      contains.append(dictionary[key])
+
+    if len(starts) == limit:
+      return starts
+  return (starts + contains)[:limit]
+
+
+
 def get_json_Queue(song):
   htm = HTMLParser()
   return {
@@ -307,27 +322,26 @@ class SearchJsonView(ListAPIView):
   """
   def get(self, request, format=None):
     context = {}
-    q = self.request.GET.get('q')                       # q -> Search String coming
-    songs1 = Song.objects.filter(song__istartswith=q)[:5]
-    songs2 = Song.objects.filter(song__icontains=q).exclude(song__istartswith=q)[:5]
-    songs = list(chain(songs1,songs2))
-    songs = SongSerializer(songs[:5],many=True)
-#print songs
-    artists1 = Artist.objects.filter(artist__istartswith=q)[:5]
-    artists2 = Artist.objects.filter(artist__icontains=q).exclude(artist__istartswith=q)[:5]
-    artists = list(chain(artists1,artists2))
-    artists = ArtistSerializer(artists[:5],many=True)
-    albums1 = Album.objects.filter(album__istartswith=q)[:5]
-    albums2 = Album.objects.filter(album__icontains=q).exclude(album__istartswith=q)[:5]
-    albums = list(chain(albums1,albums2))
-    albums = AlbumSerializer(albums[:5],many=True)
-# songs = SongSerializer(Song.objects.filter(song__icontains=q)[:5],many=True)
-#albums = AlbumSerializer(Album.objects.filter(album__icontains=q)[:5],many=True)
-#artists = ArtistSerializer(Artist.objects.filter(artist__icontains=q)[:5], many=True)
+    q = self.request.GET.get('q').lower()                       # q -> Search String coming
     context.update({                                    # For multiple models and lists usage in ListView
-        'songs' : songs.data,
-        'albums' : albums.data,
-        'artists' : artists.data,
+        'songs' : dict_search(songs,'song',q,5),
+        'albums' : dict_search(albums,'album',q,5),
+        'artists' : dict_search(artists,'artist',q,5),
+    })
+#song_keys = search_json(q.lower(),songs_search)
+#print song_keys
+    return Response(context)
+
+
+class SearchAllJsonView(ListAPIView):
+  """
+    For three way search :  Song, Album, Artist
+  """
+  def get(self, request, format=None):
+    context = {}
+    q = self.request.GET.get('q').lower()                       # q -> Search String coming
+    context.update({                                    # For multiple models and lists usage in ListView
+        'songs' : dict_search(songs,'song',q),
     })
 #song_keys = search_json(q.lower(),songs_search)
 #print song_keys

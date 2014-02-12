@@ -91,10 +91,11 @@ function keyDown(e)
    if (e.keyCode == 27) { 
    if(type==1){
      type=0;
-     if(prev_hash.indexOf('/song')>0)
+/*     if(prev_hash.indexOf('/song')>0)
        prev_hash=prev_hash.slice(0,prev_hash.indexOf('/song'));
      if(song_playing!=0) prev_hash += '/song/'+song_playing;
      document.location.hash = prev_hash;
+     */
     $('#searchButton').addClass("notOpen");
      $("#bigwrapper").removeClass("blur_back");
     $("#searchDivcss").removeClass("searchLightboxOpen").addClass("searchLightboxClose");
@@ -106,7 +107,7 @@ function keyDown(e)
 
  if(type == 0){
     searchView(e);
-    $('#searchBig').focus();
+    console.log('here');
    
     }
     else{
@@ -130,7 +131,7 @@ function searchView(e){
    // alert(' open/visible ');
     // change the style of search div
     $("#searchDivcss").removeClass("searchLightboxClose").addClass("searchLightboxOpen");
-    $('#searchBig').focus();
+    $('#searchBig').select();
     //blur css
    $("#bigwrapper").addClass("blur_back");
  }
@@ -331,11 +332,11 @@ queue_binder();
             }
             else
             {
-              var url = "song/" + idn;
+              var url = "song/" + id;
               $.ajax(url,contentType= "application/json").done( function(data){
                   songs_url[id]=data;
                   var image = songs_url[id].album.album_art;
-                  image = 'http://192.168.121.5:60000'+image;
+                  image = 'http://192.168.121.5/songsmedia/'+image;
                   var artist_name = songs_url[id].artists[0].artist;
                   var song_name = songs_url[id].song;
                   var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'

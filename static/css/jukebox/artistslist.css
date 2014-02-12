@@ -81,12 +81,14 @@ box-shadow: inset -1px 0px 5px #222;
 
 #artistInfo{
 	position: relative;
-	top: 306px;
+	top: 300px;
 	color: #FFF;
 	padding-left: 30px;
   padding-right:30px;
 	z-index: 2;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);  
+  height:50px;
+  line-height:50px;
 }
 #artistName{
 	font-size: 24px;
@@ -194,7 +196,8 @@ float:left
 
 #artist_body{
 	position: relative;
-	margin:30px;
+	padding:30px;
+background: #FFF;
 }
 
 .artist_album{
