@@ -15,7 +15,7 @@ actual_urlpatterns = patterns('',
   url(r'^helpcenter/', include('helpcenter.urls')),
   url(r'^taggit_autocomplete/', include('taggit_autocomplete.urls')),
   url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-  url(r'^songsmedia/jukebox/(.*)$', 'django.views.static.serve', {'document_root': settings.JUKEBOX_MEDIA_ROOT}),
+  url(r'^songsmedia/(.*)$', 'django.views.static.serve', {'document_root': settings.JUKEBOX_MEDIA_ROOT}),
 )
 
 urlpatterns = patterns('',
