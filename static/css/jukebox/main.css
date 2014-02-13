@@ -259,18 +259,11 @@ margin: 0 auto;
         box-shadow: 1px 1px 1px #EEE;
         border-right: 1px solid #DDD;
         background-color: #FFF;
-top: 0px;
-bottom: 0px;
 left: 0px;
 right: 220px;
 }
 
 #centerdata{
-position: absolute;
-top: 0px;
-bottom: 0px;
-left: 0px;
-right: 0px;
 }
 
 

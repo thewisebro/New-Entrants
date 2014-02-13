@@ -329,7 +329,6 @@ function clone_element_song(id)
                  + '<div class="qinfo">'
                  + '<div class="qsong">'+song_name+'</div>'
                  + '<div class="qartist">'+artist_name+'</div></div>';
-queue_binder();
               return $( "<div class='qitem song' id='"+idn+"'></div>" ).html( html );
 
             }
@@ -347,7 +346,6 @@ queue_binder();
                      + '<div class="qinfo">'
                      + '<div class="qsong">'+song_name+'</div>'
                      + '<div class="qartist">'+artist_name+'</div></div>';
-queue_binder();
                   return $( "<div class='qitem song' id='"+idn+"'></div>" ).html( html );
               });
             }
@@ -372,22 +370,24 @@ function add_queue(ui,element)
               i = 1;
           $(".qsong").width($(".qitem").width()-50);
           $(".qartist").width($(".qitem").width()-50);
-          song_ready();
           id = id.split('_')[1];
           add_in_queue(id,cnt-1);
+          song_ready();
+queue_binder();
               return false; //break loop
               }
               });
 
           if (i != 1)
           {
-          song_ready();
           id = id.split('_')[1];
           add_in_queue(id,queue.length);
               //alert('no');
           elm.appendTo( $("#queue_content"));
           $(".qsong").width($(".qitem").width()-50);
           $(".qartist").width($(".qitem").width()-50);
+          song_ready();
+queue_binder();
           }
 
   }

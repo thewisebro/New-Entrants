@@ -11,6 +11,7 @@ function Player() {
   this.nextSound = null;
   this.loopSetting=0;//default 
   this.shuffle=false;
+  this.shuffle_stack = 0; // count for stack overflow of playShuffle
   this.events = {
 
     // handlers for sound events as they're started/stopped/played
@@ -73,12 +74,12 @@ function Player() {
           else{
          
              var temp = $("queue_content").find(".qselected");
-             $($("#queue_content").children('div')[0]).addClass("qselected");
-             temp.removeClass("qselected");
-             var a = $("#queue_content").find(".qselected").attr("id");
-             var k = a.slice(5,a.length);
              in_queue = true;//song is in the queue 
-             play(parseInt(k));
+             $($("#queue_content").children('div')[0]).addClass("qselected").click();
+             temp.removeClass("qselected");
+             //var a = $("#queue_content").find(".qselected").attr("id");
+             //var k = a.slice(5,a.length);
+             //play(parseInt(k));
 
           }
        }
@@ -125,13 +126,20 @@ function Player() {
       var index = Math.floor(Math.random()*queue.length);
       var song_random = queue[index];
       if(song_random == song_playing){
-        self.playShuffle();
-        return;
+        this.shuffle_stack++;
+        if(this.shuffle_stack < 5)
+        {
+          self.playShuffle();
+          return;
+        }
       }
       $("#queue_content").find(".qselected").removeClass("qselected");
       //console.log(a);
       in_queue=true;
-      $('#queue_content div:nth-child('+index+')').addClass("qselected").click();
+      index += 1; // nth child starts from 1 not 0
+      $('#queue_content div.qitem:nth-child('+index+')').addClass("qselected").click();   // bug solved by adding 'qitem'
+      console.log('index  '+index);
+      this.shuffle_stack = 0; //to reset shuffle_stack
       /*play(song_random);*/
 
   }
@@ -145,6 +153,7 @@ function Player() {
           if(self.currentSound){//check if sound exist and is playing
             if(idback==sound.id){
              //  console.log('playing sound found state toggled');
+              console.log('  idback  '+idback);
               //sound.togglePause();
             }
             else{
@@ -441,11 +450,12 @@ function Player() {
     $('#musicSlider').slider({
 
           slide: function(event, ui) {
-            //$("#musicSlider").css('width',$(this).slider('value'));
-
+          //  $("#musicBlueSlider").css('width',$(this).slider('value'));
+          sound.pause();
           },
 
           stop: function(){
+          sound.play();
           console.log("pos"+sound.position);
           console.log("duration"+sound.duration);
          console.log(sound.setPosition(($(this).slider("value")/(100)*(sound.duration))));

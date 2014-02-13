@@ -12,6 +12,7 @@
 
 
 function search_full(search_str){
+$('#inputFor').val(search_str);
     $.get('search_all/',{q:search_str}, function(data){
             var songs = data.songs;
             var albums = data.albums;
@@ -52,6 +53,7 @@ $('#inputFor').focus(function() {
                        }).blur(function(){
                      select = false;
                      });
+$('#inputFor').val('');
 $('#inputFor').val(search_str);
 $('#inputFor').focus();
             $('#searchViewOpened').append('<div id="searchItemToShow"><span id="search_song_count">Songs(0)</span></div><div id="searchUnderline"></div></div>'+
@@ -111,6 +113,13 @@ var add_to_play = [];
 $('#searchBig').bind("keyup", function (event) {
     q = $(this).val();
     //hash_change('search',q);
+      if(q=='') 
+      {
+        $("#songSearch").empty();
+        $("#albumSearch").empty();
+        $("#artistSearch").empty();
+        return;
+      }
     search(q);
 });
 function search(q)
@@ -165,12 +174,6 @@ function search(q)
       hash = document.location.href.split('#')[1];
       if(!hash) hash="";
       hash = hash.split('/');
-      if(hash[1]=='') 
-      {
-        $("#songSearch").empty();
-        $("#albumSearch").empty();
-        $("#artistSearch").empty();
-      }
       }
     });
 }
@@ -251,9 +254,6 @@ function display(name){
         lArtists();
         artist_ready();
        
-     $('#artist_view').smoothWheel({refer:"body"});
-     $('#sidebar').smoothWheel({refer:"body"});
-     $('#bottom').smoothWheel({refer:"body"});
         return;
     }
     // for hashtags
@@ -322,10 +322,6 @@ function display(name){
         lArtists();
         artists_json = items;
         artists_open = true;
-        //enable smooth scrolling
-     $('#artist_view').smoothWheel({refer:"body"});
-     $('#sidebar').smoothWheel({refer:"body"});
-     $('#bottom').smoothWheel({refer:"body"});
       }
     });
   }
@@ -336,7 +332,7 @@ function display(name){
 function display_album(id){
   url = "albums/" + id;
     $.ajax(url,contentType= "application/json").done( function(data){
-      album = data[0];
+      var album = data;
       $("#oaoWrapper").empty();
       $("#oaoWrapper").append('<div id="oaoLeft"></div>    <div id="oaoRight"> <div id="popular_list"></div> </div>');
       $("#oaoLeft").append('<img class="album draggable" src="http://192.168.121.5/songsmedia/'+ album.album_art +'"  style="display:block; width:300px; height:300px;"></img>');  // change the css accordingly
@@ -376,7 +372,7 @@ function left_add_zero(n){
 function display_artist(id){
   url = "artists/" + id;
     $.ajax(url,contentType= "application/json").done( function(data){
-      artist = data[0];
+      var artist = data;
       $("#artist_view").empty();
       $("#artist_view").append('<div id="artist_banner" style="background:url('+'\'http://192.168.121.5\/songsmedia\/' + artist.cover_pic +  '\'); background-size:cover; "></div>');
   //    debugger;
@@ -448,6 +444,9 @@ function display_artist(id){
            });
 
       /*smooth scrolling enable only on atist_view */
+     $('#artist_view').smoothWheel({refer:"body"});
+     $('#sidebar').smoothWheel({refer:"body"});
+     $('#bottom').smoothWheel({refer:"body"});
 
 
     });
@@ -642,7 +641,7 @@ function display_playlist(id){
         var album_id = playlist.songs_list[parseInt(songs[j])].album.id;
         var file_name = playlist.songs_list[parseInt(songs[j])].file_name;
         //'<div class="pqimage" style="background:url(\''+image+'\'); background-size:cover">'
-        html += '<li ><div class="iDsrno">'+j+'</div><div class="iDname song draggable" id="'+id+'">'+song_name+'</div><div class="iDalbum album" id="album_'+album_id+'">'+album_name+'</div><div class="iDartist artist" id="artist_'+artist_id+'">'+artist_name+'</div id="iDoptions"><div class="iDoptions"><i id="playlist_setting_icon" class="icon-ellipsis-horizontal"></i><div class="playlist_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li>Share</li><li class="delete_from_playlist" id="delete_'+j+'_'+play_id+'">Delete</li></ul></div></div></li>';
+        html += '<li ><div class="iDsrno">'+left_add_zero(j+1)+'</div><div class="iDname song draggable" id="'+id+'">'+song_name+'</div><div class="iDalbum album" id="album_'+album_id+'">'+album_name+'</div><div class="iDartist artist" id="artist_'+artist_id+'">'+artist_name+'</div id="iDoptions"><div class="iDoptions"><i id="playlist_setting_icon" class="icon-ellipsis-horizontal"></i><div class="playlist_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li>Share</li><li class="delete_from_playlist" id="delete_'+j+'_'+play_id+'">Delete</li></ul></div></div></li>';
         if(!(playlist.songs_list[parseInt(songs[j])].id in songs_url)) songs_url[playlist.songs_list[parseInt(songs[j])].id]=playlist.songs_list[parseInt(songs[j])];
       }
       html +='</ul>';
@@ -926,7 +925,7 @@ function split_hash(){
   if( name== 'search'){
     //$('#searchButton').click();
     //alert('hash   '+hash[1]);
-    if(hash.length==1 || hash.length==3 ) 
+    if(hash.length==1 || hash.length==3 || (hash.length>1 && hash[1]=='') )
     {
       console.log('sasa');
             $('#searchList').html($('#itemsDisplay').clone());

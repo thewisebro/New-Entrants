@@ -46,6 +46,11 @@ for key in artists.keys():
   artists_search[artists[key]['artist'].lower()]=key
 
 
+all_albums = open(JC.ALL_ALBUMS_JSON_FILE,'r+')
+all_artists = open(JC.ALL_ARTISTS_JSON_FILE,'r+')
+all_albums = json.loads(all_albums.readline())
+all_artists = json.loads(all_artists.readline())
+
 def dict_search(dictionary, search_field, search_str,limit=100):
   contains = []
   starts = []
@@ -144,23 +149,35 @@ class AlbumDescJsonView(ListAPIView):
     To show description of an Album, i.e., Artist, Songs, album_art
   """
   serializer_class = AlbumDescSerializer
+  def get(self,request,*args, **kwargs):
+    if 'id' in self.kwargs:
+      album_coming = self.kwargs['id']
+      album = all_albums[album_coming]
+      return Response(album)
+    """
   def get_queryset(self):
     if 'id' in self.kwargs:
       album_coming = self.kwargs['id']
       album = Album.objects.filter(id = album_coming)
       return album
+    """
 
 
 class ArtistDescJsonView(ListAPIView):
   """
     To show description of an Artist, i.e., Albums, cover_pic
   """
-  serializer_class = ArtistDescSerializer
-  def get_queryset(self):
+#serializer_class = ArtistDescSerializer
+  def get(self,request,*args, **kwargs):
+    if 'id' in self.kwargs:
+      artist_coming = self.kwargs['id']
+      artist = all_artists[artist_coming]
+      return Response(artist)
+  """def get_queryset(self):
     if 'id' in self.kwargs:
       artist_coming = self.kwargs['id']
       artist = Artist.objects.filter(id = artist_coming)
-      return artist
+      return artist"""
 
 
 

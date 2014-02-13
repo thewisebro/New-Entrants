@@ -63,6 +63,8 @@ class SongSerializer(serializers.ModelSerializer):
 
 class SongDescSerializer(serializers.ModelSerializer):
   file_name = HyperlinkedFileField(source='file_name')
+  album = AlbumArtSerializer()
+  artists = ArtistSerializer(many=True)
   class Meta:
     model = Song
     fields = ('id', 'id_no', 'song', 'album', 'artists', 'count','file_name')
@@ -77,6 +79,7 @@ class ArtistSerializer(serializers.ModelSerializer):
 
 class AlbumDescSerializer(serializers.ModelSerializer):
   song_set = serializers.SerializerMethodField('get_song_set')
+  artists = ArtistSerializer(many=True)
   class Meta:
     model = Album
     fields = ('id', 'song_set', 'album', 'artists', 'album_art')
