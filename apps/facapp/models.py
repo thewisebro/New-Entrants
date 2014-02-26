@@ -9,3 +9,5 @@ class Section(models.Model):
   priority = models.IntegerField()
   content = models.TextField(default='')
   lastModified = models.DateTimeField(auto_now=True)
+  def __unicode__(self):
+        return self.title + " of " + str(self.professor.user.username)
