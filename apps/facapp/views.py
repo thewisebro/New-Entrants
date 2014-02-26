@@ -9,10 +9,16 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def home(request):
   print "yess"
-  if 'ckedit' in request.POST:
-    show = request.POST["ckedit"]
+  sections = Section.objects.all()
+  data = {"sections" : sections}
+  if 'title' in request.POST:
+    title = request.POST['title']
+    value = request.POST['content']
+    s = Section.objects.get(title=title)
+    s.content = value
+    s.save()
     print "here"
-    return HttpResponse(show)
+    return HttpResponse(value)
 #   return HttpResponse(data.titles)
-  return render(request, 'facapp/home.html')
+  return render(request, 'facapp/home.html', data)
 

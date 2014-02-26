@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>{% block title %}facapp{% endblock %}</title>
+
+    {% block static %}
+    <!--<link type="text/css" href="{{ STATIC_URL }}ckeditor/contents.css">-->
+    <link type="text/css" href="{{ STATIC_URL }}css/facapp/bootstrap.css">
+    <link type="text/css" href="{{ STATIC_URL }}css/facapp/styles.css">
+    <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>-->
+    {% endblock %}
+  </head>
+  <body>
+    <div id="header">
+      {% block header %}
+        <header>
+          <div id="header_parent">
+            <div id="header">
+              <div id="header_text">
+                Faculty Profile
+              </div>
+              <div id="header_app_links">
+                <nav>
+                  <a href="/facapp/">Home</a>
+                  &nbsp;|&nbsp;
+                  <a href="/">Channel i</a>
+                  &nbsp;|&nbsp;
+                  <a href="/logout/">Logout</a>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <div id="header_shadow">
+          </div>
+        <header>
+
+      {% endblock %}
+    </div>
+    <div id="content">
+      {% block content %}
+      {% endblock %}
+    </div>
+    <div id="footer">
+      {% block footer %}
+         <footer>
+          <div id="footer">c 2014 Information Management Group</div>
+        </footer>
+
+
+      {% endblock %}
+    </div>
+    {% block scripting %}
+    {% endblock %}
+  </body>
+</html>

@@ -1,0 +1,41 @@
+{% extends "facapp/base.html" %}
+
+{% block content %}
+
+      <div type="text" name="ckedit" contentEditable="true" id="datin" >this content is editable....</div>
+      <button type="submit" onclick="return sendData(this);" ht="datin" class="btn btn-lg btn-succes" name="submit" >save</button>
+    {% if sections %}
+      {% for section in sections %}
+      {{ section.title }}<br />
+      <div contentEditable="true" id="{{ section.title }}">{{ section.content|safe }}</div>
+      <button type="submit" ht="{{ section.title }}" onclick="return sendData(this);" class="btn btn-lg btn-succes" name="submit" >save</button>
+      {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block scripting %}
+  <script type="text/javascript">
+
+  function sendData(elem){
+    console.log("called");
+      var classy = $(elem).attr("ht");
+      var inputs = {
+          "title" : classy,
+          "content" : $("#" + classy).html(),
+      };
+            $.ajax({
+              data: inputs,
+              dataType: 'html',
+              type: "POST",
+              url: "",
+              success: function(data){
+              $("#" + classy).html(data);
+              console.log("success");
+              }
+            });
+            return false;
+  }
+
+  </script>
+{% endblock %}
+</html>
