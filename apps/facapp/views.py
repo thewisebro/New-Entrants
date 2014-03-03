@@ -9,9 +9,6 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def home(request):
   print "yess"
-  sections = Section.objects.all()
-  titles_list = sectionData.titles
-  data = {"sections" : sections, "titles_list" : titles_list}
   if 'title' in request.POST:
     title = request.POST['title']
     value = request.POST['content']
@@ -21,5 +18,27 @@ def home(request):
     print "here"
     return HttpResponse(value)
 #   return HttpResponse(data.titles)
+  sections = Section.objects.all()
+  titlesList = sectionData.titles
+  data = {"sections" : sections, "titles_list" : titlesList}
   return render(request, 'facapp/home.html', data)
 
+@csrf_exempt
+def sendFields(request, title):
+  sections = sectionData.data
+  print title
+  for section in sections:
+    if section[0][1] == title:
+#       print section[2][1]
+      print "this is what is being sent"
+#       sendIt = "{"
+      sendIt = ""
+      for fields in section[2][1]:
+#         sendIt += ( fields[0] + " " )
+#         sendIt += '"' + fields[0] + '" : "' + fields[1] + '",'
+        sendIt += fields[0] + ":" + fields[1] + ","
+#       sendIt += "}"
+      print sendIt
+#       return HttpResponse(section[2][1])
+      return HttpResponse(sendIt)
+  return HttpResponse("try using the others category if you want another title")

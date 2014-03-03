@@ -15,12 +15,14 @@
         <button type="submit" ht="{{ section.title }}" onclick="return sendData(this);" class="btn btn-lg btn-succes" name="submit" >save</button><br /><br /><br />
       {% endfor %}
     {% endif %}
+                      <!-------------------------------- show new requested sections -------------------------------->
+    <div id="new_sections" ></div>
 
                       <!--------------------------------  load the new sections ------------------------------------>
     <a href="#" onclick="show_titles()" style="text-decoration:none" >new</a>
     <div id="titles_list" style="display:none" >
       {% for title in titles_list %}
-        <div onclick="return get_fields(this)"> {{ title }} </div>
+        <div onclick="return get_fields(this)">{{ title }}</div>
       {% endfor %} 
     </div>
 
@@ -62,16 +64,32 @@
   </script>
   <script type="text/javascript">
   function get_fields(elem){
+    console.log("sent");
+    title = $(elem).html();
+    console.log(title);
     var inputs = {
-      "title" : $(elem).html(),
+      "title" : title,
     };
     $.ajax({
       data: inputs,
       datatype: 'html',
       type: "POST",
-      url: "",
+      url: "/facapp/fields/" + title + "/",
       success: function(data){
-      $("#" + classy
+//        $("#new_sections").append(data);
+        $("#new_sections").append(title + "<br />");
+        $("#new_sections").append('<div id="' + title + '" contentEditable="true" ></div>');
+        res = data.split(',');
+        len = res.length-1;
+        for(var i = 0; i < len ; i++)
+        {
+          field = res[i].split(':');
+          $("#" + title ).append(field[0] + " dummy content <br />");
+        }
+//        $("#new_sections").append("</div>");
+        $("#new_sections").append('<button ht="' + title + ' type="" name="">save</button> <br /><br />');
+      }
+    });
   }
   </script>
 {% endblock %}

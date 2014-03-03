@@ -16,7 +16,7 @@ titles = [
 	"Multiple Posts",
 	"Teaching Engagements",
 	"Sponsored Research Projects",
-	"Project And Thesis Supervision",
+	"Project and Thesis Supervision",
 	"Phd Supervised",
 	"Research Scholar Group",
 	"Areas Of Interests",

@@ -4,5 +4,5 @@ from facapp import views
 
 urlpatterns = patterns('',
   url(r'^$', views.home, name='home'),
-
+  url(r'^fields/(?P<title>[\w\s]+)/$', views.sendFields, name='fields'),
   )
