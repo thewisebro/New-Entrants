@@ -1,23 +1,41 @@
 {% extends "facapp/base.html" %}
 
+
+<!------------------------------ the content block ------------------------------>
+
 {% block content %}
 
-      <div type="text" name="ckedit" contentEditable="true" id="datin" >this content is editable....</div>
-      <button type="submit" onclick="return sendData(this);" ht="datin" class="btn btn-lg btn-succes" name="submit" >save</button>
+    {{ user }}
+    <br /><br />
+                     <!-------------------------------- load the already saved sections ---------------------------->
     {% if sections %}
       {% for section in sections %}
-      {{ section.title }}<br />
-      <div contentEditable="true" id="{{ section.title }}">{{ section.content|safe }}</div>
-      <button type="submit" ht="{{ section.title }}" onclick="return sendData(this);" class="btn btn-lg btn-succes" name="submit" >save</button>
+        {{ section.title }}<br />
+        <div contentEditable="true" id="{{ section.title }}">{{ section.content|safe }}</div>
+        <button type="submit" ht="{{ section.title }}" onclick="return sendData(this);" class="btn btn-lg btn-succes" name="submit" >save</button><br /><br /><br />
       {% endfor %}
     {% endif %}
+
+                      <!--------------------------------  load the new sections ------------------------------------>
+    <a href="#" onclick="show_titles()" style="text-decoration:none" >new</a>
+    <div id="titles_list" style="display:none" >
+      {% for title in titles_list %}
+        <div onclick="return get_fields(this)"> {{ title }} </div>
+      {% endfor %} 
+    </div>
+
+
+    <br /><br /><br />
 {% endblock %}
+
+
+
+<!----------------------------the scripting block-------------------------------->
 
 {% block scripting %}
   <script type="text/javascript">
 
   function sendData(elem){
-    console.log("called");
       var classy = $(elem).attr("ht");
       var inputs = {
           "title" : classy,
@@ -37,5 +55,23 @@
   }
 
   </script>
+  <script type="text/javascript">
+  function show_titles(){
+    $("#titles_list").css("display","block");
+  }
+  </script>
+  <script type="text/javascript">
+  function get_fields(elem){
+    var inputs = {
+      "title" : $(elem).html(),
+    };
+    $.ajax({
+      data: inputs,
+      datatype: 'html',
+      type: "POST",
+      url: "",
+      success: function(data){
+      $("#" + classy
+  }
+  </script>
 {% endblock %}
-</html>

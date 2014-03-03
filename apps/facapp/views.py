@@ -3,14 +3,15 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from facapp.models import *
 from django.shortcuts import render
-from facapp import data
+from facapp import sectionData
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def home(request):
   print "yess"
   sections = Section.objects.all()
-  data = {"sections" : sections}
+  titles_list = sectionData.titles
+  data = {"sections" : sections, "titles_list" : titles_list}
   if 'title' in request.POST:
     title = request.POST['title']
     value = request.POST['content']
