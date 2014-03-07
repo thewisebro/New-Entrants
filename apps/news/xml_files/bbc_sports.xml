@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet title="XSL_formatting" type="text/xsl" href="/shared/bsp/xsl/rss/nolsol.xsl"?>
+
+<rss xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">  
+  <channel> 
+    <title>BBC Sport - Sport</title>  
+    <link>http://www.bbc.co.uk/sport/0/</link>  
+    <description>The latest stories from the Sport section of the BBC Sport web site.</description>  
+    <language>en-gb</language>  
+    <lastBuildDate>Thu, 06 Mar 2014 18:11:26 GMT</lastBuildDate>  
+    <copyright>Copyright: (C) British Broadcasting Corporation, see http://news.bbc.co.uk/2/hi/help/rss/4498287.stm for terms and conditions of reuse.</copyright>  
+    <image> 
+      <url>http://news.bbc.co.uk/sol/shared/img/sport_120x60.gif</url>  
+      <title>BBC Sport - Sport</title>  
+      <link>http://www.bbc.co.uk/sport/0/</link>  
+      <width>120</width>  
+      <height>60</height> 
+    </image>  
+    <ttl>15</ttl>  
+    <atom:link href="http://feeds.bbci.co.uk/sport/0/rss.xml" rel="self" type="application/rss+xml"/>  
+    <item> 
+      <title>Injured Wilshere out for six weeks</title>  
+      <description>Arsenal midfielder Jack Wilshere suffers a hairline fracture in his left foot and will be sidelined for at least six weeks.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26470890</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26470890</guid>  
+      <pubDate>Thu, 06 Mar 2014 16:02:25 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73419000/jpg/_73419426_hi021421906.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73419000/jpg/_73419427_hi021421906.jpg"/> 
+    </item>  
+    <item> 
+      <title>Warwickshire confirm Trott's return</title>  
+      <description></description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26465990</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26465990</guid>  
+      <pubDate>Thu, 06 Mar 2014 10:44:57 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406312_73235869.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406313_73235869.jpg"/> 
+    </item>  
+    <item> 
+      <title>McGinley picks Torrance &amp; Smyth</title>  
+      <description></description>  
+      <link>http://www.bbc.co.uk/sport/0/golf/26468173</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/golf/26468173</guid>  
+      <pubDate>Thu, 06 Mar 2014 12:24:22 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73413000/gif/_73413435_sam.gif"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73413000/gif/_73413436_sam.gif"/> 
+    </item>  
+    <item> 
+      <title>Anelka gesture had 'anti-Semitic' link</title>  
+      <description>Nicolas Anelka was banned because his 'quenelle' gesture had an "anti-Semitic" element, says an FA disciplinary panel.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26473716</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26473716</guid>  
+      <pubDate>Thu, 06 Mar 2014 17:50:51 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73418000/jpg/_73418947_a.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73418000/jpg/_73418948_a.jpg"/> 
+    </item>  
+    <item> 
+      <title>England v Wales - a game for the ages</title>  
+      <description>The passionate rivalry between England and Wales is a treasure trove of emotion passed down from generation to generation</description>  
+      <link>http://www.bbc.co.uk/sport/0/rugby-union/26467297</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/rugby-union/26467297</guid>  
+      <pubDate>Thu, 06 Mar 2014 16:51:32 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73421000/jpg/_73421776_miner.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73421000/jpg/_73421777_miner.jpg"/> 
+    </item>  
+    <item> 
+      <title>Thursday's gossip column</title>  
+      <description>Chelsea eye Van Persie, Spurs anxious to keep Lloris, Soldado vows to stay, plus more</description>  
+      <link>http://www.bbc.co.uk/sport/0/26460539</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/26460539</guid>  
+      <pubDate>Thu, 06 Mar 2014 16:54:17 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400317_gossip_promo_320_secondedition.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400318_gossip_promo_320_secondedition.jpg"/> 
+    </item>  
+    <item> 
+      <title>Pistorius found praying over body</title>  
+      <description>A neighbour of Oscar Pistorius tells his murder trial he found the South African Paralympic athlete praying over his girlfriend's body as she lay dying.</description>  
+      <link>http://www.bbc.co.uk/news/world-africa-26461431#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-africa-26461431</guid>  
+      <pubDate>Thu, 06 Mar 2014 17:23:07 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73411000/jpg/_73411994_73411986.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73411000/jpg/_73411995_73411986.jpg"/> 
+    </item>  
+    <item> 
+      <title>McLaren 'will win races this year'</title>  
+      <description>Ron Dennis is convinced McLaren will win races this year, after he seized back control of Formula 1 operations in January.</description>  
+      <link>http://www.bbc.co.uk/sport/0/formula1/26467140</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/formula1/26467140</guid>  
+      <pubDate>Thu, 06 Mar 2014 14:37:58 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73414000/jpg/_73414797_ron_dennis_of_mclaren_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73414000/jpg/_73414798_ron_dennis_of_mclaren_getty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Teenager Knight is GB Sochi flagbearer</title>  
+      <description></description>  
+      <link>http://www.bbc.co.uk/sport/0/disability-sport/26467694</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/disability-sport/26467694</guid>  
+      <pubDate>Thu, 06 Mar 2014 12:55:45 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73409000/jpg/_73409206_73409186.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73409000/jpg/_73409207_73409186.jpg"/> 
+    </item>  
+    <item> 
+      <title>Henderson comes into Ireland team</title>  
+      <description>Ulster back-row forward Iain Henderson comes into the Ireland team for Saturday's Six Nations game with Italy in Dublin.</description>  
+      <link>http://www.bbc.co.uk/sport/0/rugby-union/26464639</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/rugby-union/26464639</guid>  
+      <pubDate>Thu, 06 Mar 2014 13:05:29 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73412000/jpg/_73412036_hendersontwo.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73412000/jpg/_73412047_hendersontwo.jpg"/> 
+    </item>  
+    <item> 
+      <title>Hodgson has selection 'headaches'</title>  
+      <description></description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26459842</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26459842</guid>  
+      <pubDate>Wed, 05 Mar 2014 23:37:10 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73404000/jpg/_73404315_73400958.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73404000/jpg/_73404316_73400958.jpg"/> 
+    </item>  
+    <item> 
+      <title>Roberts relishing England hype</title>  
+      <description>Wales centre Jamie Roberts says he is relishing the hype surrounding Sunday's Six Nations match with England.</description>  
+      <link>http://www.bbc.co.uk/sport/0/rugby-union/26449427</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/rugby-union/26449427</guid>  
+      <pubDate>Thu, 06 Mar 2014 07:43:54 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73397000/jpg/_73397029_cdf_210214_cf_wales_v_france_24.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73397000/jpg/_73397030_cdf_210214_cf_wales_v_france_24.jpg"/> 
+    </item>  
+    <item> 
+      <title>Wing May relishes Cuthbert reunion</title>  
+      <description>England winger Jonny May is looking forward to lining up opposite old school friend Alex Cuthbert against Wales on Sunday.</description>  
+      <link>http://www.bbc.co.uk/sport/0/rugby-union/26463101</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/rugby-union/26463101</guid>  
+      <pubDate>Thu, 06 Mar 2014 09:33:31 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73420000/jpg/_73420983_jonny_may_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73420000/jpg/_73420984_jonny_may_getty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Magath set for 'most difficult' test</title>  
+      <description>Felix Magath says trying to keep Fulham in the Premier League is the toughest test of his managerial career.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26472475</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26472475</guid>  
+      <pubDate>Thu, 06 Mar 2014 16:10:24 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73418000/jpg/_73418135_73417173.jpg"/>  
+      <media:thumbnail width="144" height="80" url="http://news.bbcimg.co.uk/media/images/73418000/jpg/_73418217_73417173.jpg"/> 
+    </item>  
+    <item> 
+      <title>Pursuit team 'lacked commitment'</title>  
+      <description>The men's pursuit team lacked commitment in the lead up to the World Track Championships says British Cycling head coach Shane Sutton.</description>  
+      <link>http://www.bbc.co.uk/sport/0/wales/26467483</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/wales/26467483</guid>  
+      <pubDate>Thu, 06 Mar 2014 13:34:07 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73408000/jpg/_73408904_180877830.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73408000/jpg/_73408905_180877830.jpg"/> 
+    </item>  
+    <item> 
+      <title>Watson sets up clash with Radwanska</title>  
+      <description>Heather Watson faces world number three Agnieszka Radwanska in Indian Wells after beating Swiss Belinda Bencic.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26462742</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26462742</guid>  
+      <pubDate>Thu, 06 Mar 2014 07:35:03 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73402000/jpg/_73402953_476882655.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73402000/jpg/_73402954_476882655.jpg"/> 
+    </item>  
+    <item> 
+      <title>Broad 'baffled' by ball change</title>  
+      <description>Stuart Broad says he was "baffled" by a decision to change a ball in England's 25-run win over West Indies in the third ODI.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26462028</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26462028</guid>  
+      <pubDate>Thu, 06 Mar 2014 00:18:29 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73401000/jpg/_73401026_hi021423333.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73401000/jpg/_73401027_hi021423333.jpg"/> 
+    </item>  
+    <item> 
+      <title>Buttler backed by legend Richards</title>  
+      <description>West Indies legend Viv Richards says England one-day star Jos Buttler is "one of the finest finishers in world cricket".</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26464769</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26464769</guid>  
+      <pubDate>Thu, 06 Mar 2014 10:57:40 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406941_73404365.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406942_73404365.jpg"/> 
+    </item>  
+    <item> 
+      <title>Carney targets more England goals</title>  
+      <description>Birmingham City's Karen Carney hopes to add to her England goal tally in Friday's Cyprus Cup tie with Finland.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26473033</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26473033</guid>  
+      <pubDate>Thu, 06 Mar 2014 15:59:32 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73416000/jpg/_73416830_karencarney2.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73417000/jpg/_73417131_karencarney2.jpg"/> 
+    </item>  
+    <item> 
+      <title>Ecclestone plans for Azerbaijan race</title>  
+      <description>A Formula 1 race could be held in Azerbaijan in 2015, according to chief executive Bernie Ecclestone.</description>  
+      <link>http://www.bbc.co.uk/sport/0/formula1/26461423</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/formula1/26461423</guid>  
+      <pubDate>Thu, 06 Mar 2014 07:47:09 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400179_73401133.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400180_73401133.jpg"/> 
+    </item>  
+    <item> 
+      <title>Woods fit to play in WGC event</title>  
+      <description>Tiger Woods is fit to play in the World Golf Championships at Doral despite withdrawing from the Honda Classic in Florida.</description>  
+      <link>http://www.bbc.co.uk/sport/0/golf/26459121</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/golf/26459121</guid>  
+      <pubDate>Wed, 05 Mar 2014 22:38:21 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73398000/jpg/_73398238_tigerwoods.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73398000/jpg/_73398239_tigerwoods.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: World Cup moments: Negrete's volley</title>  
+      <description>BBC Sport counts down 100 of the greatest World Cup moments, as the 2014 tournament in Brazil draws nearer.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26222660</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26222660</guid>  
+      <pubDate>Thu, 06 Mar 2014 07:01:50 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73327000/jpg/_73327522_world_cup_moments_320__0002_98.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73327000/jpg/_73327533_world_cup_moments_320__0002_98.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Hodgson ponders 'difficult' decisions</title>  
+      <description>England manager Roy Hodgson says selecting his 23-man squad for the World Cup in Brazil will be "very difficult".</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26463059</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26463059</guid>  
+      <pubDate>Thu, 06 Mar 2014 08:09:45 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73403000/jpg/_73403069_476827315.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73403000/jpg/_73403070_476827315.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: 1966 World Cup: Top 10 goals</title>  
+      <description>BBC Sport picks its favourite goals from the 1966 World Cup, including Geoff Hurst's famous strike against West Germany to help England lift the trophy.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/25187864</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/25187864</guid>  
+      <pubDate>Wed, 04 Dec 2013 20:20:24 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/71480000/jpg/_71480706_57258510.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/71481000/jpg/_71481098_57258510.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: 2010 World Cup: Top 10 goals</title>  
+      <description>BBC Sport picks its favourite goals from the 2010 World Cup finals in South Africa.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/25187858</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/25187858</guid>  
+      <pubDate>Wed, 04 Dec 2013 20:18:58 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/71481000/jpg/_71481454_108343515.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/71481000/jpg/_71481455_108343515.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: 2006 World Cup: Top 10 goals</title>  
+      <description>BBC Sport picks its favourite goals from the 2006 World Cup in Germany.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/25187859</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/25187859</guid>  
+      <pubDate>Wed, 04 Dec 2013 20:18:34 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/71479000/jpg/_71479080_97859053.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/71479000/jpg/_71479081_97859053.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: World Cup moments: Crazy Maradona</title>  
+      <description>BBC Sport counts down 100 of the greatest World Cup moments, as the 2014 tournament in Brazil draws nearer.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26225799</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26225799</guid>  
+      <pubDate>Wed, 05 Mar 2014 06:54:37 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73402000/png/_73402942_maradonaceleb.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73402000/png/_73402943_maradonaceleb.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: World Cup moments: Bergkamp stunner</title>  
+      <description>BBC Sport counts down 100 of the greatest World Cup moments, as the 2014 tournament in Brazil draws nearer.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26225796</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26225796</guid>  
+      <pubDate>Tue, 04 Mar 2014 07:43:01 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73382000/jpg/_73382624_bergkamp.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73382000/jpg/_73382625_bergkamp.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Who should Hodgson take to Brazil?</title>  
+      <description>Football Focus presenter Dan Walker takes a closer look at Roy Hodgson's latest England squad alongside former Aston Villa striker John Carew and Martin Keown.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26398529</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26398529</guid>  
+      <pubDate>Tue, 04 Mar 2014 07:41:36 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73363000/jpg/_73363951_cole.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73363000/jpg/_73363952_cole.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Memorable England World Cup goals</title>  
+      <description>BBC Sport looks back at some of England's most memorable goals at past World Cup finals, after qualifying for Brazil 2014.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/24544346</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/24544346</guid>  
+      <pubDate>Wed, 16 Oct 2013 06:45:59 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/70504000/jpg/_70504312_beckhamcolombia.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/70504000/jpg/_70504313_beckhamcolombia.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Brown scores screamer in Poland</title>  
+      <description>Skipper Scott Brown slams in the winner for Scotland in Warsaw as Gordon Strachan's side beat Poland 1-0 in a friendly.</description>  
+      <link>http://www.bbc.co.uk/sport/0/scotland/26466042</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/scotland/26466042</guid>  
+      <pubDate>Thu, 06 Mar 2014 12:41:24 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73409000/jpg/_73409944_brown_poster.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73409000/jpg/_73409945_brown_poster.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: England players on 'positive' display</title>  
+      <description>England players Daniel Sturridge, Gary Cahill and Jordan Henderson reflect on England's 1-0 win over Denmark.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26465195</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26465195</guid>  
+      <pubDate>Thu, 06 Mar 2014 10:27:54 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73405000/jpg/_73405757_mmftbsturridgedance.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73405000/jpg/_73405758_mmftbsturridgedance.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: England-Wales will be massive - Dawson</title>  
+      <description>Matt Dawson says England's preparation for their match against Wales will all be about payback for last year's 30-3 drubbing.</description>  
+      <link>http://www.bbc.co.uk/sport/0/rugby-union/26459702</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/rugby-union/26459702</guid>  
+      <pubDate>Wed, 05 Mar 2014 19:15:44 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73397000/jpg/_73397449_still.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73397000/jpg/_73397450_still.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Ball change 'baffles' Broad</title>  
+      <description>Captain Stuart Broad denies that England tampered with the ball during their one-day international victory over the West Indies.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26463054</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26463054</guid>  
+      <pubDate>Thu, 06 Mar 2014 08:04:05 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73404000/jpg/_73404884_476794833.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73404000/jpg/_73404885_476794833.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: England Women beat Italy 2-0</title>  
+      <description>England beat Italy 2-0 in their opening Cyprus Cup Group A game thanks to goals from Karen Carney and Toni Duggan.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26461097</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26461097</guid>  
+      <pubDate>Wed, 05 Mar 2014 23:10:40 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399300_73399292.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399301_73399292.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Gerrard backs psychiatrist move</title>  
+      <description>Steven Gerrard says psychiatrist Dr Steve Peters, who will work with England at the World Cup, has helped him achieve the most consistent form of his career.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26440546</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26440546</guid>  
+      <pubDate>Tue, 04 Mar 2014 16:33:26 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73369000/png/_73369433_gerrard.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73369000/png/_73369544_gerrard.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: 'Biggest fight in British history'</title>  
+      <description>Boxing promoter Eddie Hearn believes the re-match between Carl Froch and George Groves will be the "biggest fight in British boxing history."</description>  
+      <link>http://www.bbc.co.uk/sport/0/boxing/26431243</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/boxing/26431243</guid>  
+      <pubDate>Tue, 04 Mar 2014 15:11:33 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73357000/png/_73357679_mmboxeddiehearniv43.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73357000/png/_73357680_mmboxeddiehearniv43.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Cook critics deluded - Swann</title>  
+      <description>Graeme Swann says anyone who questions whether Alistair Cook should remain as England captain is "deluded".</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26431241</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26431241</guid>  
+      <pubDate>Tue, 04 Mar 2014 09:15:33 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400366_cook_swann_reuters.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400367_cook_swann_reuters.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: 'Race stopped me captaining England'</title>  
+      <description>Former Arsenal and England defender Sol Campbell believes he could have captained England for 10 years if he had been white instead of black.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26410847</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26410847</guid>  
+      <pubDate>Mon, 03 Mar 2014 06:23:15 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73317000/png/_73317810_mmftbsolcampbellintv1.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73318000/png/_73318846_mmftbsolcampbellintv1.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Formula 1's best overtakes of 2013</title>  
+      <description>BBC Sport looks back at some of the most exciting overtaking manoeuvres from the 2013 Formula 1 season.</description>  
+      <link>http://www.bbc.co.uk/sport/0/formula1/25476335</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/formula1/25476335</guid>  
+      <pubDate>Tue, 31 Dec 2013 11:01:39 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/71897000/jpg/_71897161_180036077.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/71897000/jpg/_71897162_180036077.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: McGinley praises vice-captains' 'passion'</title>  
+      <description>Ryder Cup captain Paul McGinley says he picked vice-captains Sam Torrance and Des Smyth because of their "ability, passion and judgement".</description>  
+      <link>http://www.bbc.co.uk/sport/0/golf/26465199</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/golf/26465199</guid>  
+      <pubDate>Thu, 06 Mar 2014 15:29:49 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73416000/png/_73416083_mmglfrydercupvicecaptains.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73416000/png/_73416084_mmglfrydercupvicecaptains.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Highlights: Wales 30-3 England</title>  
+      <description>Watch highlights as Wales thrash England 30-3 to clinch the Six Nations title at Millennium Stadium.</description>  
+      <link>http://www.bbc.co.uk/sport/0/rugby-union/21817341</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/rugby-union/21817341</guid>  
+      <pubDate>Sat, 16 Mar 2013 19:21:11 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/66435000/jpg/_66435791_walesvengstill.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/66435000/jpg/_66435792_walesvengstill.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: O'Neill disappointed with NI performance</title>  
+      <description>Northern Ireland manager Michael O'Neill is critical of his team's performance in the scoreless draw with Cyprus in Nicosia.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26458638</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26458638</guid>  
+      <pubDate>Wed, 05 Mar 2014 21:30:01 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399534_oneillitv.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399535_oneillitv.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: O'Sullivan hits 147 to win Welsh Open</title>  
+      <description>Ronnie O'Sullivan hits a 147 break to defeat Ding Junhui 9-3 and win the 2014 Welsh Open title.</description>  
+      <link>http://www.bbc.co.uk/sport/0/snooker/26411860</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/snooker/26411860</guid>  
+      <pubDate>Sun, 02 Mar 2014 21:20:31 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73319000/png/_73319646_mmsnoosullivan147.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73319000/png/_73319647_mmsnoosullivan147.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Can Man City keep up with Chelsea?</title>  
+      <description>Mark Chapman is joined by Martin Keown and Mark Lawrenson for this week's Match of the Day 3, as they trio look back at the weekend's Premier League results.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26414070</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26414070</guid>  
+      <pubDate>Mon, 03 Mar 2014 09:40:52 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73323000/png/_73323414_motd3.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73326000/png/_73326512_motd3.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Classic Wales v England clashes</title>  
+      <description>Highlights of six of the best Six Nations games between England and Wales, including Wales' last-gasp win in 1999 and a peroxide blond Will Greenwood scoring a hat-trick in 2001.</description>  
+      <link>http://www.bbc.co.uk/sport/0/rugby-union/17121887</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/rugby-union/17121887</guid>  
+      <pubDate>Wed, 22 Feb 2012 08:43:37 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/58644000/jpg/_58644200_mmscottgibbs.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/58644000/jpg/_58644201_mmscottgibbs.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: James wins Keirin bronze at worlds</title>  
+      <description>Becky James fails to defend her Keirin title finishing third in the final at the World track Cycling championships in Colombia.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cycling/26412388</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cycling/26412388</guid>  
+      <pubDate>Mon, 03 Mar 2014 06:28:02 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73320000/jpg/_73320549_73320471.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73320000/jpg/_73320550_73320471.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Trott secures track cycling silver</title>  
+      <description>Double Olympic champion Laura Trott wins her second medal at the World track Cycling Championships in Colombia with silver in the Omnium.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cycling/26412386</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cycling/26412386</guid>  
+      <pubDate>Mon, 03 Mar 2014 06:33:18 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73323000/jpg/_73323000_trott_mm_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73323000/jpg/_73323001_trott_mm_getty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Who is on the England plane to Brazil?</title>  
+      <description>After England beat Denmark, which players are off to the World Cup, who remains on the fringes and who is unlikely to feature?</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26461761</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26461761</guid>  
+      <pubDate>Thu, 06 Mar 2014 16:21:44 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73407000/gif/_73407582_split.gif"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73407000/gif/_73407583_split.gif"/> 
+    </item>  
+    <item> 
+      <title>A lot of people want me to fail - Tomkins</title>  
+      <description>Super League's poster boy Sam Tomkins aims to prove his critics wrong as he prepares to make his debut in the NRL</description>  
+      <link>http://www.bbc.co.uk/sport/0/rugby-league/26452042</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/rugby-league/26452042</guid>  
+      <pubDate>Thu, 06 Mar 2014 06:38:30 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399448_samtomkinsgetty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399449_samtomkinsgetty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Seven British medal hopes for World Indoors</title>  
+      <description>"Britain's young athletes will have to learn to deal with expectation and not buckle under the spotlight," says Steve Cram</description>  
+      <link>http://www.bbc.co.uk/sport/0/athletics/26456391</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/athletics/26456391</guid>  
+      <pubDate>Thu, 06 Mar 2014 11:15:55 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73408000/jpg/_73408603_73395114.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73408000/jpg/_73408604_73395114.jpg"/> 
+    </item>  
+    <item> 
+      <title>Sure-footed McGinley well equipped for Ryder Cup</title>  
+      <description>Europe captain Paul McGinley's decisions continue to send out the right messages ahead of Gleneagles, writes Iain Carter</description>  
+      <link>http://www.bbc.co.uk/sport/0/golf/26471499</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/golf/26471499</guid>  
+      <pubDate>Thu, 06 Mar 2014 15:27:04 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73415000/jpg/_73415095_mginley.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73415000/jpg/_73415096_mginley.jpg"/> 
+    </item>  
+    <item> 
+      <title>Scotland need ambition and pace - Blair</title>  
+      <description>Scotland can upset France if they get the visitors running on the heavy Murrayfield pitch, says ex-scrum-half Mike Blair</description>  
+      <link>http://www.bbc.co.uk/sport/0/rugby-union/26470896</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/rugby-union/26470896</guid>  
+      <pubDate>Thu, 06 Mar 2014 13:56:48 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73416000/jpg/_73416400_davedentonrugby.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73416000/jpg/_73416401_davedentonrugby.jpg"/> 
+    </item>  
+    <item> 
+      <title>Strachan's Scotland impress again</title>  
+      <description>A third consecutive win on the road bodes well for Scotland's Euro 2016 campaign, writes BBC Sport's Alasdair Lamont</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26463457</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26463457</guid>  
+      <pubDate>Thu, 06 Mar 2014 10:04:50 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73404000/jpg/_73404095_brown.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73404000/jpg/_73404096_brown.jpg"/> 
+    </item>  
+    <item> 
+      <title>Sochi Paralympics: Ones to watch</title>  
+      <description>The Sochi Paralympics get under way on 7 March, and BBC Sport picks out the athletes to watch on the snow and ice</description>  
+      <link>http://www.bbc.co.uk/sport/0/disability-sport/25595643</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/disability-sport/25595643</guid>  
+      <pubDate>Mon, 03 Mar 2014 11:05:20 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73328000/jpg/_73328885_gaudet.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73328000/jpg/_73328886_gaudet.jpg"/> 
+    </item>  
+    <item> 
+      <title>Must-not-miss sport on the BBC</title>  
+      <description>Your guide to the latest sporting events on the BBC, including athletics, Six Nations and top-flight football</description>  
+      <link>http://www.bbc.co.uk/sport/0/17151954</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/17151954</guid>  
+      <pubDate>Mon, 03 Mar 2014 00:49:28 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73300000/jpg/_73300280_73299120.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73300000/jpg/_73300281_73299120.jpg"/> 
+    </item>  
+    <item> 
+      <title>Defender gets 28-game ban for tackle</title>  
+      <description>Vietnam international Tran Dinh Dong is banned for 28 matches after breaking an opponent's leg during a league game.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26464186</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26464186</guid>  
+      <pubDate>Thu, 06 Mar 2014 09:49:51 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73403000/jpg/_73403981_188092449.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73404000/jpg/_73404112_188092449.jpg"/> 
+    </item>  
+    <item> 
+      <title>Stars record England World Cup song</title>  
+      <description>Gary Barlow and Gary Lineker lead a team of football and pop stars to record the video for the official England 2014 World Cup song.</description>  
+      <link>http://www.bbc.co.uk/news/entertainment-arts-26447869#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/entertainment-arts-26447869</guid>  
+      <pubDate>Wed, 05 Mar 2014 18:18:07 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73396000/jpg/_73396080_73395006.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73396000/jpg/_73396081_73395006.jpg"/> 
+    </item>  
+    <item> 
+      <title>Farah to run at Glasgow Grand Prix</title>  
+      <description>Double Olympic champion Mo Farah will compete at Glasgow's Diamond League meeting on 11-12 July.</description>  
+      <link>http://www.bbc.co.uk/sport/0/athletics/26442805</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/athletics/26442805</guid>  
+      <pubDate>Tue, 04 Mar 2014 22:01:31 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73373000/jpg/_73373250_176633267.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73373000/jpg/_73373343_176633267.jpg"/> 
+    </item>  
+    <item> 
+      <title>Wembley to host Froch-Groves rematch</title>  
+      <description>Carl Froch and George Groves' rematch will take place at Wembley Stadium on 31 May, promoter Eddie Hearn announces.</description>  
+      <link>http://www.bbc.co.uk/sport/0/boxing/26422792</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/boxing/26422792</guid>  
+      <pubDate>Tue, 04 Mar 2014 17:50:21 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73341000/jpg/_73341582_shake.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73341000/jpg/_73341583_shake.jpg"/> 
+    </item>  
+    <item> 
+      <title>England hold on for series victory</title>  
+      <description>Joe Root scores his first one-day international ton as England beat West Indies by 25 runs to win the series 2-1.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26459699</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26459699</guid>  
+      <pubDate>Wed, 05 Mar 2014 22:25:25 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400386_stuartbroadgetty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400387_stuartbroadgetty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Brailsford free of blame - Sutton</title>  
+      <description>Head coach Shane Sutton says Sir Dave Brailsford is not to blame for Britain's poor World Track Cycling display in Colombia.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cycling/26426652</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cycling/26426652</guid>  
+      <pubDate>Tue, 04 Mar 2014 10:43:58 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73344000/jpg/_73344866_73343567.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73344000/jpg/_73344867_73343567.jpg"/> 
+    </item>  
+    <item> 
+      <title>Ukraine Paralympians 'may boycott'</title>  
+      <description>Ukrainian Paralympians may boycott the Sochi Games and fear for their country, says their Paralympic Committee president.</description>  
+      <link>http://www.bbc.co.uk/sport/0/disability-sport/26474595</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/disability-sport/26474595</guid>  
+      <pubDate>Thu, 06 Mar 2014 18:04:24 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73420000/jpg/_73420108_ukraine23.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73420000/jpg/_73420109_ukraine23.jpg"/> 
+    </item>  
+    <item> 
+      <title>Shaw cherishes 'dream' England debut</title>  
+      <description>Southampton defender Luke Shaw hopes he has improved his chances of making the World Cup after a 'dream' England debut.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26472545</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26472545</guid>  
+      <pubDate>Thu, 06 Mar 2014 15:35:58 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73416000/jpg/_73416857_shaw.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73416000/jpg/_73416858_shaw.jpg"/> 
+    </item>  
+    <item> 
+      <title>Williams relief ahead of new F1 season</title>  
+      <description>Williams admit they are "relieved" that they appear to have a competitive car for the 2014 Formula 1 season.</description>  
+      <link>http://www.bbc.co.uk/sport/0/formula1/26470458</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/formula1/26470458</guid>  
+      <pubDate>Thu, 06 Mar 2014 16:30:01 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73412000/jpg/_73412537_williams2014.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73412000/jpg/_73412538_williams2014.jpg"/> 
+    </item>  
+    <item> 
+      <title>McIlroy loses in Florida play-off</title>  
+      <description>Northern Ireland's Rory McIlroy lost in a four-way play-off at the Honda Classic in Florida to American Russell Henley.</description>  
+      <link>http://www.bbc.co.uk/sport/0/golf/26411766</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/golf/26411766</guid>  
+      <pubDate>Mon, 03 Mar 2014 07:35:39 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73320000/jpg/_73320698_rory3.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73320000/jpg/_73320699_rory3.jpg"/> 
+    </item>  
+    <item> 
+      <title>Fenton Cheltenham entries clear to run</title>  
+      <description>Philip Fenton's three Cheltenham Festival entries, including Gold Cup hope Last Instalment, pass dope tests.</description>  
+      <link>http://www.bbc.co.uk/sport/0/horse-racing/26455033</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/horse-racing/26455033</guid>  
+      <pubDate>Wed, 05 Mar 2014 15:42:05 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73391000/jpg/_73391830_73390030.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73391000/jpg/_73391831_73390030.jpg"/> 
+    </item>  
+    <item> 
+      <title>Lorenzo dominates Phillip Island test</title>  
+      <description>Yamaha's Jorge Lorenzo finishes clear of Honda's Dani Pedrosa in the tyre safety testing session on Phillip Island.</description>  
+      <link>http://www.bbc.co.uk/sport/0/motogp/26450701</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/motogp/26450701</guid>  
+      <pubDate>Wed, 05 Mar 2014 14:45:44 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73387000/jpg/_73387401_jorge_lorenzo_3_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73387000/jpg/_73387402_jorge_lorenzo_3_getty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Russia on top as 2014 Games end</title>  
+      <description>Hosts Russia finish top of the medal table and Britain equals its best performance as Sochi 2014 comes to an end.</description>  
+      <link>http://www.bbc.co.uk/sport/0/winter-olympics/26314345</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/winter-olympics/26314345</guid>  
+      <pubDate>Sun, 23 Feb 2014 19:01:05 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73171000/jpg/_73171013_73170789.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73171000/jpg/_73171014_73170789.jpg"/> 
+    </item>  
+    <item> 
+      <title>Burgess 'focused' before Bath switch</title>  
+      <description>Sam Burgess wants NRL success with South Sydney before switching codes to join Bath, says Rabbitohs coach Michael Maguire.</description>  
+      <link>http://www.bbc.co.uk/sport/0/rugby-league/26467560</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/rugby-league/26467560</guid>  
+      <pubDate>Thu, 06 Mar 2014 15:00:09 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73414000/jpg/_73414558_476286011.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73414000/jpg/_73414559_476286011.jpg"/> 
+    </item>  
+    <item> 
+      <title>Italy's Parisse out of Ireland game</title>  
+      <description>Italy captain and number eight Sergio Parisse has a slight calf strain and misses the Six Nations match against Ireland.</description>  
+      <link>http://www.bbc.co.uk/sport/0/rugby-union/26471321</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/rugby-union/26471321</guid>  
+      <pubDate>Thu, 06 Mar 2014 15:33:31 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73416000/jpg/_73416581_inpho_00769713.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73416000/jpg/_73416582_inpho_00769713.jpg"/> 
+    </item>  
+    <item> 
+      <title>O'Sullivan 147 seals Welsh Open win</title>  
+      <description>Ronnie O'Sullivan makes a 147 break in the final frame to wrap up a 9-3 victory over Ding Junhui in the Welsh Open final.</description>  
+      <link>http://www.bbc.co.uk/sport/0/snooker/26407655</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/snooker/26407655</guid>  
+      <pubDate>Sun, 02 Mar 2014 21:06:37 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73319000/jpg/_73319812_ronnie.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73319000/jpg/_73319813_ronnie.jpg"/> 
+    </item>  
+    <item> 
+      <title>GB men fail to qualify for Euros</title>  
+      <description>Great Britain's men's water polo team fail to qualify for the 2014 European Championship after a play-off defeat by Romania.</description>  
+      <link>http://www.bbc.co.uk/sport/0/swimming/26405886</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/swimming/26405886</guid>  
+      <pubDate>Sun, 02 Mar 2014 10:42:50 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73309000/jpg/_73309791_hungary_gb_reuters.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73309000/jpg/_73309792_hungary_gb_reuters.jpg"/> 
+    </item>  
+    <item> 
+      <title>Hutchins named director at Queen's</title>  
+      <description>British tennis player Ross Hutchins is named tournament director for the Aegon Championships at Queen's Club.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26454949</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26454949</guid>  
+      <pubDate>Wed, 05 Mar 2014 17:02:14 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73391000/jpg/_73391227_180380967.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73391000/jpg/_73391228_180380967.jpg"/> 
+    </item>  
+    <item> 
+      <title>Briton pulls out of 'scary' downhill</title>  
+      <description>Former British soldier Mick Brennan will not compete in Saturday's downhill at the Winter Paralympics after describing conditions as "scary".</description>  
+      <link>http://www.bbc.co.uk/sport/0/disability-sport/26449133</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/disability-sport/26449133</guid>  
+      <pubDate>Wed, 05 Mar 2014 12:42:53 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73389000/jpg/_73389414_sochiski.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73389000/jpg/_73389415_sochiski.jpg"/> 
+    </item>  
+    <item> 
+      <title>QPR announce £65m loss for 2013</title>  
+      <description>Championship side QPR announce a loss of over £65m in their accounts to May 2013 and an overall debt of £177.1m</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26468560</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26468560</guid>  
+      <pubDate>Thu, 06 Mar 2014 14:28:47 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73415000/jpg/_73415304_tf_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73415000/jpg/_73415305_tf_getty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Celtic striker charged with assault</title>  
+      <description>Celtic striker and Republic of Ireland international Anthony Stokes is questioned by police about an alleged assault on an Elvis impersonator.</description>  
+      <link>http://www.bbc.co.uk/news/uk-scotland-glasgow-west-26470771#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/uk-scotland-glasgow-west-26470771</guid>  
+      <pubDate>Thu, 06 Mar 2014 16:18:51 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73419000/jpg/_73419375_stokes.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73419000/jpg/_73419376_stokes.jpg"/> 
+    </item>  
+    <item> 
+      <title>Coleman hails Bale's signature show</title>  
+      <description>Wales boss Chris Coleman jokes he nearly asked Gareth Bale for his autograph after he starred in a 3-1 win over Iceland.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26460964</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26460964</guid>  
+      <pubDate>Thu, 06 Mar 2014 07:21:57 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406888_gareth_bale_wales_smile.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406889_gareth_bale_wales_smile.jpg"/> 
+    </item>  
+    <item> 
+      <title>Glens under-strength for Ballymena</title>  
+      <description>Glentoran have a number of players suspended and injury concerns for the visit of Ballymena United to the Oval on Friday night.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26464631</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26464631</guid>  
+      <pubDate>Thu, 06 Mar 2014 13:08:49 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73410000/jpg/_73410343_eddiepatterson.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73410000/jpg/_73410344_eddiepatterson.jpg"/> 
+    </item> 
+  </channel> 
+</rss>

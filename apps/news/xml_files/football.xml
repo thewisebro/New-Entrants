@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet title="XSL_formatting" type="text/xsl" href="/shared/bsp/xsl/rss/nolsol.xsl"?>
+
+<rss xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">  
+  <channel> 
+    <title>BBC Sport - Football</title>  
+    <link>http://www.bbc.co.uk/sport/0/football/</link>  
+    <description>The latest stories from the Football section of the BBC Sport web site.</description>  
+    <language>en-gb</language>  
+    <lastBuildDate>Thu, 06 Mar 2014 18:09:55 GMT</lastBuildDate>  
+    <copyright>Copyright: (C) British Broadcasting Corporation, see http://news.bbc.co.uk/2/hi/help/rss/4498287.stm for terms and conditions of reuse.</copyright>  
+    <image> 
+      <url>http://news.bbc.co.uk/sol/shared/img/sport_120x60.gif</url>  
+      <title>BBC Sport - Football</title>  
+      <link>http://www.bbc.co.uk/sport/0/football/</link>  
+      <width>120</width>  
+      <height>60</height> 
+    </image>  
+    <ttl>15</ttl>  
+    <atom:link href="http://feeds.bbci.co.uk/sport/0/football/rss.xml" rel="self" type="application/rss+xml"/>  
+    <item> 
+      <title>Injured Wilshere out for six weeks</title>  
+      <description>Arsenal midfielder Jack Wilshere suffers a hairline fracture in his left foot and will be sidelined for at least six weeks.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26470890</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26470890</guid>  
+      <pubDate>Thu, 06 Mar 2014 16:02:25 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73419000/jpg/_73419426_hi021421906.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73419000/jpg/_73419427_hi021421906.jpg"/> 
+    </item>  
+    <item> 
+      <title>Anelka gesture had 'anti-Semitic' link</title>  
+      <description>Nicolas Anelka was banned because his 'quenelle' gesture had an "anti-Semitic" element, says an FA disciplinary panel.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26473716</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26473716</guid>  
+      <pubDate>Thu, 06 Mar 2014 17:50:51 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73418000/jpg/_73418947_a.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73418000/jpg/_73418948_a.jpg"/> 
+    </item>  
+    <item> 
+      <title>Magath set for 'most difficult' test</title>  
+      <description>Felix Magath says trying to keep Fulham in the Premier League is the toughest test of his managerial career.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26472475</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26472475</guid>  
+      <pubDate>Thu, 06 Mar 2014 16:10:24 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73418000/jpg/_73418135_73417173.jpg"/>  
+      <media:thumbnail width="144" height="80" url="http://news.bbcimg.co.uk/media/images/73418000/jpg/_73418217_73417173.jpg"/> 
+    </item>  
+    <item> 
+      <title>Shaw cherishes 'dream' England debut</title>  
+      <description>Southampton defender Luke Shaw hopes he has improved his chances of making the World Cup after a 'dream' England debut.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26472545</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26472545</guid>  
+      <pubDate>Thu, 06 Mar 2014 15:35:58 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73416000/jpg/_73416857_shaw.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73416000/jpg/_73416858_shaw.jpg"/> 
+    </item>  
+    <item> 
+      <title>QPR announce £65m loss for 2013</title>  
+      <description>Championship side QPR announce a loss of over £65m in their accounts to May 2013 and an overall debt of £177.1m</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26468560</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26468560</guid>  
+      <pubDate>Thu, 06 Mar 2014 14:28:47 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73415000/jpg/_73415304_tf_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73415000/jpg/_73415305_tf_getty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Hodgson has selection 'headaches'</title>  
+      <description>England boss Roy Hodgson says he has World Cup selection "headaches" after some positive displays against Denmark.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26459842</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26459842</guid>  
+      <pubDate>Wed, 05 Mar 2014 23:37:10 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73404000/jpg/_73404315_73400958.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73404000/jpg/_73404316_73400958.jpg"/> 
+    </item>  
+    <item> 
+      <title>Coleman hails Bale's signature show</title>  
+      <description>Wales boss Chris Coleman jokes he nearly asked Gareth Bale for his autograph after he starred in a 3-1 win over Iceland.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26460964</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26460964</guid>  
+      <pubDate>Thu, 06 Mar 2014 07:21:57 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406888_gareth_bale_wales_smile.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406889_gareth_bale_wales_smile.jpg"/> 
+    </item>  
+    <item> 
+      <title>Strachan plays down win in Poland</title>  
+      <description>Gordon Strachan thinks Scotland's win in Warsaw will count for nothing when the sides meet in the Euro 2016 qualifiers.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26461654</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26461654</guid>  
+      <pubDate>Thu, 06 Mar 2014 11:20:10 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400992_brown.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400993_brown.jpg"/> 
+    </item>  
+    <item> 
+      <title>O'Neill urges patience after NI draw</title>  
+      <description>Boss Michael O'Neill admits Northern Ireland are "miles away" from where they want to be after a 0-0 draw against Cyprus.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26458637</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26458637</guid>  
+      <pubDate>Wed, 05 Mar 2014 22:08:32 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73398000/jpg/_73398835_oneillsd.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73398000/jpg/_73398836_oneillsd.jpg"/> 
+    </item>  
+    <item> 
+      <title>Norwich's Fer sidelined for 'weeks'</title>  
+      <description>Norwich City manager Chris Hughton says injured midfielder Leroy Fer could be out of action for "weeks".</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26471643</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26471643</guid>  
+      <pubDate>Thu, 06 Mar 2014 17:05:11 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73420000/jpg/_73420235_pa-18059095.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73420000/jpg/_73420236_pa-18059095.jpg"/> 
+    </item>  
+    <item> 
+      <title>Cellino tax trial raises Leeds doubt</title>  
+      <description>Massimo Cellino's proposed takeover of Leeds may collapse if the Italian is found guilty of tax evasion later this month.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26466112</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26466112</guid>  
+      <pubDate>Thu, 06 Mar 2014 10:56:53 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406507_cellino_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406508_cellino_getty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Defender gets 28-game ban for tackle</title>  
+      <description>Vietnam international Tran Dinh Dong is banned for 28 matches after breaking an opponent's leg during a league game.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26464186</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26464186</guid>  
+      <pubDate>Thu, 06 Mar 2014 09:49:51 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73403000/jpg/_73403981_188092449.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73404000/jpg/_73404112_188092449.jpg"/> 
+    </item>  
+    <item> 
+      <title>O'Neill sees positives despite loss</title>  
+      <description>Martin O'Neill is not downhearted despite Republic of Ireland losing for the first time since he took over as manager.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26461734</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26461734</guid>  
+      <pubDate>Wed, 05 Mar 2014 23:29:21 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400962_oneilldublin.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400963_oneilldublin.jpg"/> 
+    </item>  
+    <item> 
+      <title>Shakhtar bemoan halt to Ukraine league</title>  
+      <description>Sergei Palkin, the chief executive of Shakhtar Donetsk, insists football is 'a positive emotion' and can be used for good.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26473839</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26473839</guid>  
+      <pubDate>Thu, 06 Mar 2014 18:04:05 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73421000/jpg/_73421039_dmytrochygrynskiy.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73421000/jpg/_73421040_dmytrochygrynskiy.jpg"/> 
+    </item>  
+    <item> 
+      <title>England's rivals Italy lose to Spain</title>  
+      <description>England's opening World Cup opponents Italy lose 1-0 against Spain, while Cristiano Ronaldo becomes Portugal's top scorer.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26460938</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26460938</guid>  
+      <pubDate>Wed, 05 Mar 2014 23:58:57 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73401000/jpg/_73401238_021423916-1.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73401000/jpg/_73401239_021423916-1.jpg"/> 
+    </item>  
+    <item> 
+      <title>South Africa 0-5 Brazil</title>  
+      <description>Neymar hits his second international hat-trick and Oscar and Fernandinho also score as Brazil thrash South Africa.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26461019</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26461019</guid>  
+      <pubDate>Wed, 05 Mar 2014 22:42:37 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399725_73398342.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399726_73398342.jpg"/> 
+    </item>  
+    <item> 
+      <title>Carney targets more England goals</title>  
+      <description>Birmingham City's Karen Carney hopes to add to her England goal tally in Friday's Cyprus Cup tie with Finland.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26473033</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26473033</guid>  
+      <pubDate>Thu, 06 Mar 2014 15:59:32 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73416000/jpg/_73416830_karencarney2.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73417000/jpg/_73417131_karencarney2.jpg"/> 
+    </item>  
+    <item> 
+      <title>Bolton's Pratley out for season</title>  
+      <description>Bolton will be without midfielder Darren Pratley for the rest of the season after undergoing shoulder surgery.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26472173</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26472173</guid>  
+      <pubDate>Thu, 06 Mar 2014 15:52:30 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73415000/jpg/_73415943_182610758.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73415000/jpg/_73415944_182610758.jpg"/> 
+    </item>  
+    <item> 
+      <title>Flitcroft ready to face friend Hill</title>  
+      <description>Bury manager David Flitcroft and Rochdale boss Keith Hill will put their friendship aside for their League Two meeting.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26433852</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26433852</guid>  
+      <pubDate>Thu, 06 Mar 2014 10:40:41 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73370000/jpg/_73370978_pa-12163451.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73370000/jpg/_73370979_pa-12163451.jpg"/> 
+    </item>  
+    <item> 
+      <title>Bees 'not complacent' on Lionel Road</title>  
+      <description>Brentford say they are not complacent as they await final approval on their plans to build a new stadium at Lionel Road.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26451714</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26451714</guid>  
+      <pubDate>Thu, 06 Mar 2014 10:35:55 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73395000/jpg/_73395150_lionelroadnightbrentford.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73395000/jpg/_73395151_lionelroadnightbrentford.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Hodgson ponders 'difficult' decisions</title>  
+      <description>England manager Roy Hodgson says selecting his 23-man squad for the World Cup in Brazil will be "very difficult".</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26463059</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26463059</guid>  
+      <pubDate>Thu, 06 Mar 2014 08:09:45 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73403000/jpg/_73403069_476827315.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73403000/jpg/_73403070_476827315.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Brown scores screamer in Poland</title>  
+      <description>Skipper Scott Brown slams in the winner for Scotland in Warsaw as Gordon Strachan's side beat Poland 1-0 in a friendly.</description>  
+      <link>http://www.bbc.co.uk/sport/0/scotland/26466042</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/scotland/26466042</guid>  
+      <pubDate>Thu, 06 Mar 2014 12:41:24 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73409000/jpg/_73409944_brown_poster.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73409000/jpg/_73409945_brown_poster.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: World Cup moments: Negrete's volley</title>  
+      <description>BBC Sport counts down 100 of the greatest World Cup moments, as the 2014 tournament in Brazil draws nearer.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26222660</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26222660</guid>  
+      <pubDate>Thu, 06 Mar 2014 07:01:50 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73327000/jpg/_73327522_world_cup_moments_320__0002_98.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73327000/jpg/_73327533_world_cup_moments_320__0002_98.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: World Cup moments: Crazy Maradona</title>  
+      <description>BBC Sport counts down 100 of the greatest World Cup moments, as the 2014 tournament in Brazil draws nearer.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26225799</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26225799</guid>  
+      <pubDate>Wed, 05 Mar 2014 06:54:37 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73402000/png/_73402942_maradonaceleb.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73402000/png/_73402943_maradonaceleb.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: England beat Denmark in 2002</title>  
+      <description>Watch England beat Denmark 3-0 in their Second Round match at the 2002 World Cup in Niigata, Japan.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26452356</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26452356</guid>  
+      <pubDate>Wed, 05 Mar 2014 12:53:03 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73386000/jpg/_73386799_engden2002.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73386000/jpg/_73386800_engden2002.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Colchester boss's bird poo woe</title>  
+      <description>Colchester United boss Joe Dunne receives a gift from an overhead bird after Saturday's 2-1 loss at Leyton Orient.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26439497</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26439497</guid>  
+      <pubDate>Tue, 04 Mar 2014 17:00:57 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73370000/jpg/_73370486_73368411.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73370000/jpg/_73370487_73368411.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Can Man City keep up with Chelsea?</title>  
+      <description>Mark Chapman is joined by Martin Keown and Mark Lawrenson for this week's Match of the Day 3, as they trio look back at the weekend's Premier League results.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26414070</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26414070</guid>  
+      <pubDate>Mon, 03 Mar 2014 09:40:52 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73323000/png/_73323414_motd3.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73326000/png/_73326512_motd3.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: 'Race stopped me captaining England'</title>  
+      <description>Former Arsenal and England defender Sol Campbell believes he could have captained England for 10 years if he had been white instead of black.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26410847</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26410847</guid>  
+      <pubDate>Mon, 03 Mar 2014 06:23:15 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73317000/png/_73317810_mmftbsolcampbellintv1.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73318000/png/_73318846_mmftbsolcampbellintv1.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Pellegrini hails 'beautiful' goals</title>  
+      <description>Manchester City manager Manuel Pellegrini hails the "beautiful goals" which earned his side a 3-1 win over Sunderland in the Capital One Cup final at Wembley.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26410666</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26410666</guid>  
+      <pubDate>Sun, 02 Mar 2014 18:15:55 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73317000/png/_73317868_mmftblcpellegrini.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73317000/png/_73317869_mmftblcpellegrini.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: England players on 'positive' display</title>  
+      <description>England players Daniel Sturridge, Gary Cahill and Jordan Henderson reflect on England's 1-0 win over Denmark.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26465195</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26465195</guid>  
+      <pubDate>Thu, 06 Mar 2014 10:27:54 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73405000/jpg/_73405757_mmftbsturridgedance.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73405000/jpg/_73405758_mmftbsturridgedance.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: England Women beat Italy 2-0</title>  
+      <description>England beat Italy 2-0 in their opening Cyprus Cup Group A game thanks to goals from Karen Carney and Toni Duggan.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26461097</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26461097</guid>  
+      <pubDate>Wed, 05 Mar 2014 23:10:40 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399300_73399292.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399301_73399292.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: O'Neill disappointed with NI performance</title>  
+      <description>Northern Ireland manager Michael O'Neill is critical of his team's performance in the scoreless draw with Cyprus in Nicosia.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26458638</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26458638</guid>  
+      <pubDate>Wed, 05 Mar 2014 21:30:01 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399534_oneillitv.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399535_oneillitv.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: No complaints at red card - McAuley</title>  
+      <description>Northern Ireland defender Gareth McAuley says his straight red card in the scoreless draw with Cyprus was justified.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26458639</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26458639</guid>  
+      <pubDate>Wed, 05 Mar 2014 21:42:59 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399798_garth.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73399000/jpg/_73399850_garth.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Spain's Puyol scores at World Cup 2010</title>  
+      <description>Carles Puyol scores a thumping header for Spain in their 1-0 semi-final victory over Germany at the 2010 World Cup in South Africa.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26440547</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26440547</guid>  
+      <pubDate>Tue, 04 Mar 2014 17:35:11 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73371000/jpg/_73371330_102823103.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73372000/jpg/_73372043_102823103.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: In search of the real Cellino</title>  
+      <description>BBC Late Kick-Off Yorkshire goes to Sardinia to find out more about prospective Leeds owner Massimo Cellino.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26433067</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26433067</guid>  
+      <pubDate>Tue, 04 Mar 2014 11:23:12 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73351000/jpg/_73351190_cellino_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73351000/jpg/_73351191_cellino_getty.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: McClaren retains coaching passion</title>  
+      <description>Derby County head coach Steve McClaren tells BBC Late Kick Off Midlands he has always had a passion and enthusiasm for coaching and he wants to carry on as long as he can.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26399953</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26399953</guid>  
+      <pubDate>Tue, 04 Mar 2014 13:00:30 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73302000/jpg/_73302556_73301442.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73302000/jpg/_73302557_73301442.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Charlton 'one part of my network' - owner</title>  
+      <description>Charlton owner Roland Duchatelet tells BBC Late Kick Off London and the South East that the Addicks will remain "a club in its own right" despite now being a part of a network of six teams across Europe.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26420000</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26420000</guid>  
+      <pubDate>Mon, 03 Mar 2014 13:00:47 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73332000/jpg/_73332636_rolandduchateletbbclko.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73332000/jpg/_73332637_rolandduchateletbbclko.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: The Irish League Show - Programme 29</title>  
+      <description>BBC Sport NI's video review of Irish Cup action including minnows Queen's University clinching a place in the semi-finals.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26418784</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26418784</guid>  
+      <pubDate>Mon, 03 Mar 2014 17:37:47 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73328000/jpg/_73328895_ils_464_with_kink_edit.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73328000/jpg/_73328896_ils_464_with_kink_edit.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Hughton rues 'mad 15 minutes'</title>  
+      <description>Chris Hughton says a "mad 15 minutes", during which they conceded four goals, cost Norwich in their 4-1 loss to Aston Villa.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26410855</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26410855</guid>  
+      <pubDate>Sun, 02 Mar 2014 20:32:45 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73319000/png/_73319372_mmftbplastnorhughton.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73319000/png/_73319373_mmftbplastnorhughton.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Sherwood says Spurs 'won ugly'</title>  
+      <description>Tottenham Hotspur boss Tim Sherwood says his side "won ugly" after beating Cardiff City 1-0 at White Hart Lane.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26410672</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26410672</guid>  
+      <pubDate>Sun, 02 Mar 2014 19:32:22 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73318000/png/_73318990_mmftbpltotcarsherwood.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73318000/png/_73318991_mmftbpltotcarsherwood.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Cardiff boss Solskjaer bemoans fine margins</title>  
+      <description>Cardiff City manager Ole Gunnar Solskjaer says "fine margins" were the difference as his side lost 1-0 to Tottenham Hotspur at White Hart Lane.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26410667</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26410667</guid>  
+      <pubDate>Sun, 02 Mar 2014 19:27:11 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73318000/png/_73318810_mmftbpltotcarsolskjaer.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73318000/png/_73318811_mmftbpltotcarsolskjaer.png"/> 
+    </item>  
+    <item> 
+      <title>Strachan's Scotland impress again</title>  
+      <description>A third consecutive win on the road bodes well for Scotland's Euro 2016 campaign, says Alasdair Lamont</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26463457</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26463457</guid>  
+      <pubDate>Thu, 06 Mar 2014 10:04:50 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73404000/jpg/_73404095_brown.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73404000/jpg/_73404096_brown.jpg"/> 
+    </item>  
+    <item> 
+      <title>The World Cup wannabe and his bid to make Brazil</title>  
+      <description>How the Steel City and the Spice Girls are helping to keep USA defender Oguchi Onyewu's World Cup dream alive</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26424556</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26424556</guid>  
+      <pubDate>Wed, 05 Mar 2014 10:05:55 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73343000/jpg/_73343378_73339128.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73343000/jpg/_73343379_73339128.jpg"/> 
+    </item>  
+    <item> 
+      <title>Counting down to a 'Brazilliant' World Cup</title>  
+      <description>Sun, sound and Selecao success, Ronaldo and Messi, and family rivalries - here's what excites you about the 2014 World Cup</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26431909</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26431909</guid>  
+      <pubDate>Tue, 04 Mar 2014 20:57:15 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73375000/jpg/_73375139_73366963.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73375000/jpg/_73375140_73366963.jpg"/> 
+    </item>  
+    <item> 
+      <title>Manager ins and outs - March 2014</title>  
+      <description>Track the managerial ins and outs and lists every boss in the top five leagues in England and the Scottish Premiership</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26399507</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26399507</guid>  
+      <pubDate>Sat, 01 Mar 2014 14:14:43 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73301000/jpg/_73301629_467946355.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73301000/jpg/_73301630_467946355.jpg"/> 
+    </item>  
+    <item> 
+      <title>Robertson 'proud' at Scotland debut</title>  
+      <description>Dundee United defender Andrew Robertson says making his Scotland debut against Poland was a "proud moment".</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26466504</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26466504</guid>  
+      <pubDate>Thu, 06 Mar 2014 12:53:14 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73410000/jpg/_73410690_andrewrobertson_sns.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73410000/jpg/_73410691_andrewrobertson_sns.jpg"/> 
+    </item>  
+    <item> 
+      <title>Wales 3-1 Iceland</title>  
+      <description>Real Madrid forward Gareth Bale leads Wales to an impressive friendly win over Iceland in Cardiff.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26348965</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26348965</guid>  
+      <pubDate>Wed, 05 Mar 2014 22:10:11 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400703_bale_si_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400704_bale_si_getty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Glens under-strength for Ballymena</title>  
+      <description>Glentoran have a number of players suspended and injury concerns for the visit of Ballymena United to the Oval on Friday night.</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26464631</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26464631</guid>  
+      <pubDate>Thu, 06 Mar 2014 13:08:49 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73410000/jpg/_73410343_eddiepatterson.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73410000/jpg/_73410344_eddiepatterson.jpg"/> 
+    </item>  
+    <item> 
+      <title>Who is on the England plane to Brazil?</title>  
+      <description>After England beat Denmark, which players are off to the World Cup, who remains on the fringes and who is unlikely to feature?</description>  
+      <link>http://www.bbc.co.uk/sport/0/football/26461761</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/football/26461761</guid>  
+      <pubDate>Thu, 06 Mar 2014 16:21:44 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73407000/gif/_73407582_split.gif"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73407000/gif/_73407583_split.gif"/> 
+    </item>  
+    <item> 
+      <title>Thursday's gossip column</title>  
+      <description>Chelsea eye Van Persie, Spurs anxious to keep Lloris, Soldado vows to stay, plus more</description>  
+      <link>http://www.bbc.co.uk/sport/0/26460539</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/26460539</guid>  
+      <pubDate>Thu, 06 Mar 2014 16:54:17 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400317_gossip_promo_320_secondedition.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400318_gossip_promo_320_secondedition.jpg"/> 
+    </item> 
+  </channel> 
+</rss>

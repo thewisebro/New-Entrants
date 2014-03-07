@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {% load static %}
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/news/base.css"> 
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  </head>
+<body>
+
+  <div id="search">
+    <h2>News:</h2>
+    {% block search %}{% endblock %}
+  </div>
+  <div id="customize">
+
+  </div>
+  <div id="left_container">
+    <div class="button"><a style="text-decoration:none;color:black;font-size:16px;" href="/news/home/">Home</a></div>
+    <div class="button"><a style="text-decoration:none;color:black;font-size:16px;" href="/news/international/">International</a></div>
+    <div class="button"><a style="text-decoration:none;color:black;font-size:16px;" href="/news/national/">National</a></div>
+    <div class="button"><a style="text-decoration:none;color:black;font-size:16px;"href="/news/sports/">Sports</a></div>
+    <div class="button"><a style="text-decoration:none;color:black;font-size:16px;"href="/news/entertainment/">Entertainment</a></div>
+  </div>
+   <div id="main">
+    {% block main %} {% endblock %}
+   </div>
+</body>
+<script src="{{ STATIC_URL }}js/news/jquery.masonry.min.js"></script>
+  <script type="text/javascript">
+    //$(document).ready(function(){
+    $(window).load(function(){
+      $('#container').masonry({
+        columnWidth:5,
+        itemSelector: '.item'
+        /* animationOptions: {
+          duration: 400
+        }*/
+          /*isAnimated: true,
+          animationOptions: {
+            duration: 750,
+            easing: 'linear',
+            queue: false
+          }*/
+       });
+    });
+
+</script>
+</html>

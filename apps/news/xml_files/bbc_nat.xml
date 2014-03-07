@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet title="XSL_formatting" type="text/xsl" href="/shared/bsp/xsl/rss/nolsol.xsl"?>
+
+<rss xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">  
+  <channel> 
+    <title>BBC News - India</title>  
+    <link>http://www.bbc.co.uk/news/world/asia/india/#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+    <description>The latest stories from the India section of the BBC News web site.</description>  
+    <language>en-gb</language>  
+    <lastBuildDate>Thu, 06 Mar 2014 12:36:13 GMT</lastBuildDate>  
+    <copyright>Copyright: (C) British Broadcasting Corporation, see http://news.bbc.co.uk/2/hi/help/rss/4498287.stm for terms and conditions of reuse.</copyright>  
+    <image> 
+      <url>http://news.bbcimg.co.uk/nol/shared/img/bbc_news_120x60.gif</url>  
+      <title>BBC News - India</title>  
+      <link>http://www.bbc.co.uk/news/world/asia/india/#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <width>120</width>  
+      <height>60</height> 
+    </image>  
+    <ttl>15</ttl>  
+    <atom:link href="http://feeds.bbci.co.uk/news/world/asia/india/rss.xml" rel="self" type="application/rss+xml"/>  
+    <item> 
+      <title>India students face sedition charges</title>  
+      <description>A group of Kashmiri students in India is facing charges of sedition for apparently supporting the country's arch rival Pakistan in a cricket match.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-26463140#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-26463140</guid>  
+      <pubDate>Thu, 06 Mar 2014 09:27:11 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73409000/jpg/_73409720_pakistanvsindia.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73409000/jpg/_73409721_pakistanvsindia.jpg"/> 
+    </item>  
+    <item> 
+      <title>India lost boy found via WhatsApp</title>  
+      <description>A missing 11-year-old boy in India is found after he was spotted by a member of the public who received a WhatsApp alert sent out by police.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-26462576#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-26462576</guid>  
+      <pubDate>Thu, 06 Mar 2014 11:35:40 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73403000/jpg/_73403110_ytfh.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73403000/jpg/_73403111_ytfh.jpg"/> 
+    </item>  
+    <item> 
+      <title>Delhi arrests after parties clash</title>  
+      <description>Police in the Indian capital, Delhi, arrest 14 people in connection with the clashes between two rival political parties on Wednesday.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-26462341#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-26462341</guid>  
+      <pubDate>Thu, 06 Mar 2014 05:52:14 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73401000/jpg/_73401735_73401653.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73401000/jpg/_73401736_73401653.jpg"/> 
+    </item>  
+    <item> 
+      <title>Indian media: 'Celebration of democracy'</title>  
+      <description>Media in India see the upcoming general election as a 'celebration of democracy' and urge citizens and politicians to make it a 'grand success'.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-26462378#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-26462378</guid>  
+      <pubDate>Thu, 06 Mar 2014 07:00:09 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73402000/jpg/_73402034_voting%2Bap.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73402000/jpg/_73402035_voting%2Bap.jpg"/> 
+    </item>  
+    <item> 
+      <title>India names general election dates</title>  
+      <description>India's election will take place from 7 April to 12 May, officials say, in a race pitting Rahul Gandhi's Congress party against the Narendra Modi-led BJP.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-26445322#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-26445322</guid>  
+      <pubDate>Wed, 05 Mar 2014 13:43:19 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73378000/jpg/_73378220_73377871.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73378000/jpg/_73378221_73377871.jpg"/> 
+    </item>  
+    <item> 
+      <title>India tycoon's custody extended</title>  
+      <description>Indian businessman Subrata Roy is attacked with ink outside the Supreme Court, which orders him remain in custody in a multi-billion dollar fraud case.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-26429759#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-26429759</guid>  
+      <pubDate>Tue, 04 Mar 2014 12:54:04 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73354000/jpg/_73354840_73353080.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73354000/jpg/_73354841_73353080.jpg"/> 
+    </item>  
+    <item> 
+      <title>India Rolls-Royce deals 'on hold'</title>  
+      <description>India puts on hold all deals with Rolls-Royce till an investigation into bribery allegations against the London-based company is complete, the Press Trust of India news agency reports.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-26429585#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-26429585</guid>  
+      <pubDate>Tue, 04 Mar 2014 11:12:23 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73347000/jpg/_73347260_72332879.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73347000/jpg/_73347261_72332879.jpg"/> 
+    </item>  
+    <item> 
+      <title>Police password lost for eight years</title>  
+      <description>Complaints pile up for eight years because Indian police officers did not know a computer password.</description>  
+      <link>http://www.bbc.co.uk/news/blogs-news-from-elsewhere-26439556#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/blogs-news-from-elsewhere-26439556</guid>  
+      <pubDate>Wed, 05 Mar 2014 09:23:06 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73380000/jpg/_73380681_password.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73380000/jpg/_73380682_password.jpg"/> 
+    </item>  
+    <item> 
+      <title>Maoists warn over relationships</title>  
+      <description>Maoist rebels in India warn their cadre to refrain from indulging in live-in relationships, pre-marital sex and extra-marital affairs, saying such behaviour will be regarded as 'indiscipline' .</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-26429757#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-26429757</guid>  
+      <pubDate>Tue, 04 Mar 2014 07:06:53 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73347000/jpg/_73347500_148026315.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73347000/jpg/_73347501_148026315.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: Delhi's 'little Africa'</title>  
+      <description>Photographer Ronny Sen documents life in the Khirkee Extension area of Delhi which has been in the spotlight in recent days after a minister raided a house there, accusing its inhabitants - four Ugandan women - of being involved in prostitution and drug trade.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-25908797#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-25908797</guid>  
+      <pubDate>Wed, 29 Jan 2014 21:52:03 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/72542000/jpg/_72542053_03.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/72542000/jpg/_72542054_03.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: Life of an Indian runaway boy</title>  
+      <description>Photographer Arindam Mukherjee spends a month documenting the life of 13-year-old Sheikh Alamgir who ran away from home at seven and lived at a railway station in Calcutta for six years.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-25665665#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-25665665</guid>  
+      <pubDate>Tue, 28 Jan 2014 21:35:42 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/72290000/jpg/_72290645_lostlife_04.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/72290000/jpg/_72290646_lostlife_04.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: Life along Kashmir border</title>  
+      <description>Abid Bhat's pictures of life on the de facto border between India and Pakistan in disputed Kashmir.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-25517451#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-25517451</guid>  
+      <pubDate>Mon, 06 Jan 2014 03:25:47 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/71955000/jpg/_71955005_loc_001.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/71955000/jpg/_71955006_loc_001.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: Kashmiri saffron</title>  
+      <description>Photographer Abid Bhat travels to a saffron field in Indian-administered Kashmir to see how saffron, the world's most expensive spice, is harvested.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-25184341#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-25184341</guid>  
+      <pubDate>Thu, 26 Dec 2013 03:26:40 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/71626000/jpg/_71626939_saffron_035.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/71626000/jpg/_71626940_saffron_035.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: India in 2013</title>  
+      <description>BBC Online looks back at the big events of 2013 in India in photos.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-25489977#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-25489977</guid>  
+      <pubDate>Mon, 30 Dec 2013 00:23:10 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/71953000/jpg/_71953673_71920380.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/71953000/jpg/_71953674_71920380.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: India craze over Tendulkar farewell</title>  
+      <description>Images of emotional fans in India as Sachin Tendulkar plays his farewell game.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-24936548#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-24936548</guid>  
+      <pubDate>Thu, 14 Nov 2013 05:11:12 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/71103000/jpg/_71103856_71103579.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/71103000/jpg/_71103857_71103579.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: India's street children</title>  
+      <description>Images of India's street children taken by Vicky Roy, who himself grew up on the streets.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-24455387#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-24455387</guid>  
+      <pubDate>Tue, 12 Nov 2013 01:02:51 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/70369000/jpg/_70369064_33_img_8888.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/70369000/jpg/_70369065_33_img_8888.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: Restored Humayun's Tomb</title>  
+      <description>Images of the restored historic Humayun's Tomb in the Indian capital, Delhi.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-24200904#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-24200904</guid>  
+      <pubDate>Wed, 25 Sep 2013 23:32:29 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/70064000/jpg/_70064496_70064417.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/70064000/jpg/_70064497_70064417.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: India coal fires</title>  
+      <description>Photographer Arindam Mukherjee captures life in the dusty coal town of Jharia in the eastern Indian state of Jharkhand where underground fires have burned for more than 80 years now.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-23422068#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-23422068</guid>  
+      <pubDate>Wed, 14 Aug 2013 00:22:58 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/69273000/jpg/_69273632_inferno_12.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/69273000/jpg/_69273633_inferno_12.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: Anglo-Indian community in India</title>  
+      <description>Images of the dwindling Anglo-Indian community in the Indian city of Calcutta.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-23862035#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-23862035</guid>  
+      <pubDate>Mon, 16 Sep 2013 00:04:27 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/69642000/jpg/_69642115_anglo_21.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/69642000/jpg/_69642126_anglo_21.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: India's dying mime art</title>  
+      <description>The Jogesh Mime Academy in the eastern Indian city of Calcutta is attempting to revive the 3,000-year-old art of Indian pantomime.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-22949654#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-22949654</guid>  
+      <pubDate>Thu, 18 Jul 2013 23:34:26 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/68734000/jpg/_68734536_chhandakpradhan_beyondsilence-4.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/68734000/jpg/_68734537_chhandakpradhan_beyondsilence-4.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: Kashmir train link</title>  
+      <description>Abid Bhat's photographs of the railway line in Indian-administered Kashmir that aims to link the valley with the rest of India.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-23193045#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-23193045</guid>  
+      <pubDate>Thu, 11 Jul 2013 02:37:07 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/68565000/jpg/_68565741_train_story_pics_from_kashmir(11).jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/68565000/jpg/_68565742_train_story_pics_from_kashmir(11).jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: India flood survivors</title>  
+      <description>Images of flood survivors in India's Uttarakhand state, by Ronny Sen.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-23237132#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-23237132</guid>  
+      <pubDate>Sun, 14 Jul 2013 23:46:10 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/68669000/jpg/_68669242_68627077.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/68669000/jpg/_68669243_68627077.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: An Indian middle-class family</title>  
+      <description>Ronny Sen's images of the Prabhoos, a middle-class family in Mumbai, India's commercial and entertainment capital.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-22999479#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-22999479</guid>  
+      <pubDate>Wed, 26 Jun 2013 23:08:15 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/68395000/jpg/_68395611_68300186.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/68395000/jpg/_68395612_68300186.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: India flood rescue operations</title>  
+      <description>Images from rescue operations in India's Uttarakhand state, where more than 150 people have died in floods.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-22981887#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-22981887</guid>  
+      <pubDate>Thu, 20 Jun 2013 06:51:36 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/68273000/jpg/_68273356_68273301.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/68273000/jpg/_68273357_68273301.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: India's dying telegram service</title>  
+      <description>Images of India's telegram service which will be discontinued in July.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-22903185#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-22903185</guid>  
+      <pubDate>Mon, 17 Jun 2013 02:34:39 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/68175000/jpg/_68175926_68174007.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/68175000/jpg/_68175927_68174007.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: India's 'living dead'</title>  
+      <description>Photographer Arkadripta Chakraborty documents India's "living dead" - people who have been officially declared dead to deprive them of their property.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-22685924#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-22685924</guid>  
+      <pubDate>Fri, 07 Jun 2013 00:32:47 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/68030000/jpg/_68030032_67840152.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/68030000/jpg/_68030033_67840152.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: Indian Africans</title>  
+      <description>Photographer Ketaki Sheth's images of a small community of Indians of African descent.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-22637058#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-22637058</guid>  
+      <pubDate>Mon, 03 Jun 2013 01:18:39 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/67801000/jpg/_67801056_67798493.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/67801000/jpg/_67801057_67798493.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: India's fading trams</title>  
+      <description>Images of India's last remaining tramcars - by photographer Ronny Sen.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-22460872#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-22460872</guid>  
+      <pubDate>Mon, 20 May 2013 23:19:20 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/67498000/jpg/_67498008_67497058.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/67498000/jpg/_67498009_67497058.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: Indian cinema turns 100</title>  
+      <description>Images from 100 years of Indian cinema.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-22424264#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-22424264</guid>  
+      <pubDate>Thu, 09 May 2013 01:54:12 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/67439000/jpg/_67439441_hindicinema11.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/67439000/jpg/_67439442_hindicinema11.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: Rare 19th Century pictures of India</title>  
+      <description>A selection of rare 19th century pictures of India taken by legendary photographer Raja Deendayal.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-22212009#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-22212009</guid>  
+      <pubDate>Mon, 22 Apr 2013 00:45:15 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/67103000/jpg/_67103653_3-98.60.0296(09).jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/67103000/jpg/_67103654_3-98.60.0296(09).jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Hopes for economy in India election</title>  
+      <description>India, the world's largest democracy, has set a date for its next general election. Yogita Limaye reports from the state of Gujarat on how the economy will be a central battleground for politicians.</description>  
+      <link>http://www.bbc.co.uk/news/business-26461665#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/business-26461665</guid>  
+      <pubDate>Thu, 06 Mar 2014 06:23:17 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73401000/jpg/_73401341_73398655.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73401000/jpg/_73401342_73398655.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Why is the sari back in fashion?</title>  
+      <description>There are signs that the sari is back in fashion with urban Indian women, as Shilpa Kannan reports.</description>  
+      <link>http://www.bbc.co.uk/news/business-26385686#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/business-26385686</guid>  
+      <pubDate>Sun, 02 Mar 2014 11:48:53 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73290000/jpg/_73290125_73287841.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73290000/jpg/_73290126_73287841.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: India GDP to reach near decade-low</title>  
+      <description>India's latest economic growth figures are expected to reach a near decade-low, but what does the slowdown mean for ordinary people?</description>  
+      <link>http://www.bbc.co.uk/news/business-26379392#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/business-26379392</guid>  
+      <pubDate>Fri, 28 Feb 2014 01:39:07 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73271000/jpg/_73271830_de53.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73271000/jpg/_73271831_de53.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: On the hunt for a man-eating tiger</title>  
+      <description>The BBC's Andrew North joins a team of hunters as efforts are stepped up to find a man-eating tiger that has so far killed 10 people in northern India, most of them farm workers.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-26364848#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-26364848</guid>  
+      <pubDate>Thu, 27 Feb 2014 09:11:15 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73249000/jpg/_73249119_73247144.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73249000/jpg/_73249120_73247144.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: India leopard search continues</title>  
+      <description>Panic has gripped the northern Indian town of Meerut where all local schools have shut because of a leopard on the loose.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-26347436#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-26347436</guid>  
+      <pubDate>Wed, 26 Feb 2014 06:43:10 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73222000/jpg/_73222478_73222022.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73222000/jpg/_73222479_73222022.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Indians not allowed to prosper</title>  
+      <description>India could break apart if it doesn't tackle corruption in its political system Arvind Kejriwal, the leader of India's newest party, has told the BBC.</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-26333123#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-26333123</guid>  
+      <pubDate>Tue, 25 Feb 2014 05:09:00 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73197000/jpg/_73197678_73197670.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73197000/jpg/_73197679_73197670.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: India's booming seafood industry</title>  
+      <description>Sameer Hashmi reports from a seafood factory which has benefited from increased exports.</description>  
+      <link>http://www.bbc.co.uk/news/business-26289939#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/business-26289939</guid>  
+      <pubDate>Sat, 22 Feb 2014 14:51:25 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73137000/jpg/_73137831_73133454.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73137000/jpg/_73137832_73133454.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: The Indian mobile phone dilemma</title>  
+      <description>Mobile phone operators are complaining about the cost in providing 900 million Indians the network coverage they require.</description>  
+      <link>http://www.bbc.co.uk/news/26293516#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/26293516</guid>  
+      <pubDate>Fri, 21 Feb 2014 23:32:40 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73147000/jpg/_73147065_73139987.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73147000/jpg/_73147066_73139987.jpg"/> 
+    </item>  
+    <item> 
+      <title>Why Indians want to settle on Mars</title>  
+      <description>Why Indians want to settle on Mars</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-26319170#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-26319170</guid>  
+      <pubDate>Wed, 05 Mar 2014 21:07:33 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73221000/jpg/_73221783_73177764.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73221000/jpg/_73221784_73177764.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Lowdown on the world's biggest vote</title>  
+      <description>60-second lowdown on India's record-breaking election</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-26453043#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-26453043</guid>  
+      <pubDate>Wed, 05 Mar 2014 13:00:07 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73386000/jpg/_73386853_73379979.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73386000/jpg/_73386854_73379979.jpg"/> 
+    </item>  
+    <item> 
+      <title>Myanmar's Tamils seek to protect their identity</title>  
+      <description>What's it like being a Tamil in modern-day Myanmar?</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-25438275#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-25438275</guid>  
+      <pubDate>Thu, 06 Mar 2014 01:51:09 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/71852000/jpg/_71852206_tamil_3.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/71852000/jpg/_71852207_tamil_3.jpg"/> 
+    </item>  
+    <item> 
+      <title>Why India's election could be close</title>  
+      <description>Why India's election could be closer than some think</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-26445329#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-26445329</guid>  
+      <pubDate>Wed, 05 Mar 2014 12:55:10 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73381000/jpg/_73381714_73378411.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73381000/jpg/_73381715_73378411.jpg"/> 
+    </item>  
+    <item> 
+      <title>What can you buy for 50 rupees in India?</title>  
+      <description>What can you buy with 50 rupees in India?</description>  
+      <link>http://www.bbc.co.uk/news/blogs-trending-26449352#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/blogs-trending-26449352</guid>  
+      <pubDate>Wed, 05 Mar 2014 16:06:03 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73393000/jpg/_73393002_indexsmallindia.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73393000/jpg/_73393003_indexsmallindia.jpg"/> 
+    </item>  
+    <item> 
+      <title>No country for single women</title>  
+      <description>The stigma of being female and unattached in India</description>  
+      <link>http://www.bbc.co.uk/news/magazine-26341350#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/magazine-26341350</guid>  
+      <pubDate>Tue, 04 Mar 2014 20:33:06 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73352000/jpg/_73352977_suruchi.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73356000/jpg/_73356789_suruchi.jpg"/> 
+    </item>  
+    <item> 
+      <title>In pictures: Indian women through the ages</title>  
+      <description>Images of an exhibition of vintage photographs of Indian women</description>  
+      <link>http://www.bbc.co.uk/news/world-asia-india-25663858#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/world-asia-india-25663858</guid>  
+      <pubDate>Tue, 04 Mar 2014 03:24:21 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/72172000/jpg/_72172669_wi08ss49-portraitoftheactressnimmi%2C1933.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/72172000/jpg/_72172670_wi08ss49-portraitoftheactressnimmi%2C1933.jpg"/> 
+    </item>  
+    <item> 
+      <title>The sanitary pad revolutionary</title>  
+      <description>The school dropout who sparked a sanitary pad revolution in India</description>  
+      <link>http://www.bbc.co.uk/news/magazine-26260978#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/magazine-26260978</guid>  
+      <pubDate>Tue, 04 Mar 2014 00:35:20 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/73344000/jpg/_73344660_muruga_7_promosmall.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73344000/jpg/_73344661_muruga_7_promosmall.jpg"/> 
+    </item> 
+  </channel> 
+</rss>
