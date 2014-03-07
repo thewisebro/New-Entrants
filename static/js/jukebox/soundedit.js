@@ -50,7 +50,10 @@ function Player() {
        $("#ui-sliderlarge-handle").css('left','0');
        $("#timePlayed").html(0+':'+"00");
        
-        $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_play.png");
+       // $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_play.png");
+      // $("#bLeftPlay img").click();
+      // $('#'+sound.id).find('.faint').attr('style','');
+      // $('#'+sound.id).find('.play_icon').attr('style','');
       // $('#'+sound.id).find('.play_icon i').removeClass('icon-pause').addClass('icon-play');
        //check for looping
         //check for shuffle on

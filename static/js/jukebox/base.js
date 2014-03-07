@@ -103,6 +103,7 @@ var songs_url = {};
 var song_playing=0;
 var login_cancel=false;
 
+
 if(logged_in=='True')
   logged_in = true;
 else
@@ -349,7 +350,7 @@ function display_album(id){
       {
          var k = album.song_set[j].id;
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class="popular_item song draggable" id="song_'+k+'"><div id="list_number">'+left_add_zero(j+1)+'</div>  <div id="p_song_name">'+album.song_set[j].song +'</div><div class="album_options"><i class="album_options_button icon-ellipsis-horizontal"></i><div class="album_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li>Share</li></ul></div></div>';
+        html += '<li class="popular_item song draggable" id="song_'+k+'"><div id="list_number">'+left_add_zero(j+1)+'</div>  <div id="p_song_name">'+album.song_set[j].song +'</div><div class="album_options"><i class="album_options_button icon-ellipsis-horizontal"></i><div class="album_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li class="share_url" id="share_'+k+'">Share</li></ul></div></div>';
         if(!(album.song_set[j].id in songs_url)) songs_url[album.song_set[j].id]=album.song_set[j];
 
       }
@@ -393,7 +394,7 @@ function display_artist(id){
         var l = artist.album_set[j].song_set[k].id;
 
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class=" song popular_item draggable" id="song_'+l+'"><div id="list_number">'+left_add_zero(k+1)+'</div> <div id="p_song_name">'+ artist.album_set[j].song_set[k].song +'</div><div class="artist_options"><i class="artist_options_button icon-ellipsis-horizontal"></i><div class="artist_item_setting_box"><ul><li class="song" id="song_'+l+'">Play now</li><li class="next" id="next_'+l+'">Play next</li><li class="last" id="last_'+l+'">Play last</li><li class="options_add_to_playlist" id="add_'+l+'">Add to playlist</li><li>Share</li></ul></div></div>';
+        html += '<li class=" song popular_item draggable" id="song_'+l+'"><div id="list_number">'+left_add_zero(k+1)+'</div> <div id="p_song_name">'+ artist.album_set[j].song_set[k].song +'</div><div class="artist_options"><i class="artist_options_button icon-ellipsis-horizontal"></i><div class="artist_item_setting_box"><ul><li class="song" id="song_'+l+'">Play now</li><li class="next" id="next_'+l+'">Play next</li><li class="last" id="last_'+l+'">Play last</li><li class="options_add_to_playlist" id="add_'+l+'">Add to playlist</li><li class="share_url" id="share_'+l+'">Share</li></ul></div></div>';
         if(!(artist.album_set[j].song_set[k].id in songs_url)) songs_url[artist.album_set[j].song_set[k].id]=artist.album_set[j].song_set[k];
 
       }
@@ -496,6 +497,7 @@ var create_playlist = function() {
                    $.post('playlists/',{name:val}, function(data){
                          $('#temp').attr('id','playlist_'+data.id);
                          playlist_ready();
+                         get_json('playlists');
                      });  
                      val=null;
 
@@ -525,7 +527,7 @@ function display_playlists(){
       var data = playlists_json;
       if(data.active)
       {
-        var html = '<div class="start"><div class="list_alpha"><div class="playlist" id="playlist_new"><div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div></div> <ul id= "playlists"></ul></div></div>';
+        var html = '<div class="start"><div class="list_alpha"><div class="playlist_create" id="playlist_new"><div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div></div> <ul id= "playlists"></ul></div></div>';
       $("#contentList").append(html);
       for(var i=0; i<data.playlists.length; i++){
         var playlist = data.playlists[i];
@@ -641,7 +643,7 @@ function display_playlist(id){
         var album_id = playlist.songs_list[parseInt(songs[j])].album.id;
         var file_name = playlist.songs_list[parseInt(songs[j])].file_name;
         //'<div class="pqimage" style="background:url(\''+image+'\'); background-size:cover">'
-        html += '<li ><div class="iDsrno">'+left_add_zero(j+1)+'</div><div class="iDname song draggable" id="'+id+'">'+song_name+'</div><div class="iDalbum album" id="album_'+album_id+'">'+album_name+'</div><div class="iDartist artist" id="artist_'+artist_id+'">'+artist_name+'</div id="iDoptions"><div class="iDoptions"><i id="playlist_setting_icon" class="icon-ellipsis-horizontal"></i><div class="playlist_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li>Share</li><li class="delete_from_playlist" id="delete_'+j+'_'+play_id+'">Delete</li></ul></div></div></li>';
+        html += '<li ><div class="iDsrno">'+left_add_zero(j+1)+'</div><div class="iDname song draggable" id="'+id+'">'+song_name+'</div><div class="iDalbum album" id="album_'+album_id+'">'+album_name+'</div><div class="iDartist artist" id="artist_'+artist_id+'">'+artist_name+'</div id="iDoptions"><div class="iDoptions"><i id="playlist_setting_icon" class="icon-ellipsis-horizontal"></i><div class="playlist_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li class="share_url" id="share_'+k+'">Share</li><li class="delete_from_playlist" id="delete_'+j+'_'+play_id+'">Delete</li></ul></div></div></li>';
         if(!(playlist.songs_list[parseInt(songs[j])].id in songs_url)) songs_url[playlist.songs_list[parseInt(songs[j])].id]=playlist.songs_list[parseInt(songs[j])];
       }
       html +='</ul>';
@@ -692,7 +694,7 @@ function get_song_html(song)
    '<li class="song_div next" id="next_'+k+'">Play Next</li>' +
    '<li class="song_div last" id="last_'+k+'">Play Last</li>'+
    '<li class="song_div options_add_to_playlist" id="add_'+k+'">Add to Playlist</li>'+
-   '<li class="song_div ">Share</li></ul>'+
+   '<li class="song_div share_url" id="share_'+k+'">Share</li></ul>'+
    '</div></div>'+
    ' <div class="faint"></div>'+
    ' <a class="play_icon"><img src="../static/images/jukebox/icon_new_play.png" width="50px" height="50px"></a>'+
@@ -811,7 +813,7 @@ function play(id)
    // $(song_id).html(song.count);
     song_playing = id;
     clearTimeout(interval);
-    interval = setTimeout(function(){ count_increase(id); },30000);
+    interval = setTimeout(function(){ count_increase(id); },5000);
     }
   else
   {
@@ -1047,6 +1049,7 @@ $( document ).ready(function() {
   }
 
    get_json('trending');
+ //  clip = new ZeroClipboard.Client();
   });
 
 //window.onhashchange = split_hash(); // For IE<8 and safari
@@ -1088,6 +1091,10 @@ $('.delete_from_playlist').bind('click', function(){
       var play_id = $(this).attr('id').split('_')[2];
       $(this).parents().eq(3).remove();
       delete_from_playlist(index,play_id);
+    });
+$('.share_url').bind('click', function(){
+      var song_id = $(this).attr('id').split('_')[1];
+     // copy_to_clipboard(song_id,this);
     });
 }
 
@@ -1423,4 +1430,11 @@ function login()
 
 
 
-
+/*function copy_to_clipboard(song_id,elm)
+{
+  var copy_text = document.location.href.split('#')[0] + '#trending/song/'+song_id;
+  clip.setText(copy_text);
+  clip.glue(elm);
+  alert('copied '+copy_text);
+}
+*/
