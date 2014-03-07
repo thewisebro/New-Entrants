@@ -205,6 +205,8 @@ CHANNELI_APPS = (
   'crop_image',
   'groups',
   'events',
+  'news',
+  'haystack',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
@@ -260,3 +262,16 @@ LOGGING = {
     },
   }
 }
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://192.168.121.5:8983/solr/'
+        # ...or for multicore...
+        # 'URL': 'http://127.0.0.1:8983/solr/mysite',
+    },
+}
+
+#HAYSTACK_SITECONF = 'channeli.search_sites'
+#HAYSTACK_SEARCH_ENGINE = 'solr'
+#HAYSTACK_SOLR_URL = 'http://192.168.121.5:8983/solr/'

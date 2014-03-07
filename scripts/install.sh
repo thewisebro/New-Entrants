@@ -29,3 +29,25 @@ pip install sqlparse
 
 # django-fluent-comments
 pip install Akismet
+
+# Install JAVA
+sudo apt-get install openjdk-7-jdk
+
+# Install jetty
+sudo apt-get install jetty
+sudo apt-get install libjetty-extra
+
+####### 'BeautifulSoup' Installation #########
+
+# python lxml parser [Dependency]
+apt-get install python-lxml
+
+# python html5lib parser [Dependency]
+apt-get install python-html5lib
+
+# python BeautifulSoup [Main installation]
+pip install BeautifulSoup
+
+#################### Ends ###################
+
+
