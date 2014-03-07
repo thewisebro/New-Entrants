@@ -84,6 +84,7 @@ function key_ready(){
 
 function keyDown(e)
 {
+   keyMap(e);
    if(e.ctrlKey || e.altKey) return;
    if(!select){
  if(jQuery.inArray(e.keyCode,[8,9,13,16,17,18,19,20,32,33,34,35,36,37,38,39,40,45,46,91,92,93,107,109,112,113,114,115,116,117,118,119,120,121,122,123,144,145,224]) !== -1){ return;}

@@ -23,6 +23,8 @@ function Player() {
        $('#'+sound.id).find('.faint').animate({'opacity':'1'},300);
        $('#'+sound.id).find('.play_icon').animate({'opacity':'1'},300);
         $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_pause.png");
+        var id_play = sound.id.split('_')[1];
+        document.title=songs_url[id_play].song +'-'+ songs_url[id_play].artists[0].artist;
       
     },
 
@@ -31,17 +33,21 @@ function Player() {
       
        $('#'+sound.id).find('.faint').attr('style','');
        $('#'+sound.id).find('.play_icon').attr('style','');
+        document.title='Jukebox';
 
     },
 
     pause: function() 
            {
         $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_play.png");
+        document.title='Jukebox';
     },
 
     resume: function() {
 
         $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_pause.png");
+        var id_play = sound.id.split('_')[1];
+        document.title=songs_url[id_play].song +'-'+ songs_url[id_play].artists[0].artist;
     },
 
     finish: function() {
@@ -49,6 +55,7 @@ function Player() {
        $("#musicBlueSlider").css('width','0');
        $("#ui-sliderlarge-handle").css('left','0');
        $("#timePlayed").html(0+':'+"00");
+        document.title='Jukebox';
        
        // $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_play.png");
       // $("#bLeftPlay img").click();

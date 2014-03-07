@@ -110,6 +110,7 @@
 				</div>
 
 				<div id="navigation">
+          <div class="upper_crease"></div>
 						<a id="trending_link">
 							<div id="trending_icon"><i class="icon-fire"></i></div>
 							<div id="trending_text">Trending</div>
@@ -126,13 +127,28 @@
 
 						<a id="albums_link" onClick="lStumble();">
 							<div id="albums_icon"><i class=" icon-spinner"></i></div>
-							<div id="albums_text">Stumble</div>
+							<div id="albums_text">New Releases</div>
 						</a>
-						
+           
+				</div>
+        <div id="playlist_navigation">
+          <div class="upper_crease"></div>
             <a id="playlists_link">
-							<div id="home_icon"><i class="icon-heart" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
-							<div id="home_text" style="">My Playlists</div>
-						</a>
+              <div id="home_icon"><i class="icon-heart" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
+              <div id="home_text" style="">My Playlists</div>
+            </a>
+            <a id="playlists_link">
+              <div id="home_icon"><i class="icon-heart" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
+              <div id="home_text" style="">Shared Playlists</div>
+            </a>
+          
+        </div>
+        <div id="settings_navigation">
+          <div class="upper_crease"></div>
+           <a id="playlists_link">
+              <div id="home_icon"><i class="icon-heart" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
+              <div id="home_text" style="">Settings</div>
+            </a>
 
 				<!--	<div id="playlists">	
 						
@@ -307,8 +323,10 @@
   </div> <!-- div #bigwrapper ends -->
 </body>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-1.10.2.min.js"></script>
+    <script src="{{ STATIC_URL }}js/fuse.min.js"></script>
     <script src="{{ STATIC_URL }}js/csrf.js"></script>
     <script src="{{ STATIC_URL }}js/common.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/keymap.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}jquery/nanoscroller/jquery.nanoscroller.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/resize.js"></script> 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/music.js"></script>

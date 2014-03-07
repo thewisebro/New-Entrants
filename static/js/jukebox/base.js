@@ -18,10 +18,10 @@ $('#inputFor').val(search_str);
             var albums = data.albums;
             var artists = data.artists;
             $('#search_song_count').html('Songs('+songs.length+')');
-            $('#searchList').html($('#itemsDisplay').clone());
+            $('#song_searchList').html($('#itemsDisplay').clone());
            // $('#centerdata').append('<div id="searchItemToShow"><span>Songs('+songs.length+')</span><span>Albums('+albums.length+')</span><span>Artists('+artists.length+')</span></div><div id="searchUnderline"></div></div>'+
        for(var i=0; i<songs.length;i++){
-            $('#searchList').append(''+
+            $('#song_searchList').append(''+
 		'		<li>'+
 		'			<div class="iDsrno">'+left_add_zero(i+1)+'</div>'+
 		'			<div class="iDname song draggable" id="song_'+songs[i].id+'">'+songs[i].song+'</div>'+
@@ -30,6 +30,7 @@ $('#inputFor').val(search_str);
 		'		</li>');
         if(!(songs[i].id in songs_url)) songs_url[songs[i].id]=songs[i];
        }
+
 //       debugger;
 song_ready();
 album_ready();
@@ -56,16 +57,34 @@ $('#inputFor').focus(function() {
 $('#inputFor').val('');
 $('#inputFor').val(search_str);
 $('#inputFor').focus();
-            $('#searchViewOpened').append('<div id="searchItemToShow"><span id="search_song_count">Songs(0)</span></div><div id="searchUnderline"></div></div>'+
+            $('#searchViewOpened').append('<div id="searchItemToShow"><span id="search_song_count">Songs(0)</span><span id="search_album_count">Albums(0)</span><span id="search_artist_count">Artists(0)</span></div><div id="searchUnderline"></div></div>'+
     '<div id="searchContentFull">'+
-    '<ul id="searchList">'+
+    '<ul class="searchList" id="song_searchList">'+
 		'		<li id="itemsDisplay">'+
 		'			<div class="iDsrno" style="visibility:hidden;font-size: 12px;">99</div>'+
 		'			<div class="iDname">NAME</div>'+
 		'			<div class="iDalbum">ALBUM</div>'+
 		'			<div class="iDartist">ARTIST</div>'+
 		'		</li>'+
-    '</ul>');
+    '</ul>'+
+    '<ul class="searchList" id="album_searchList">'+
+		'		<li id="itemsDisplay">'+
+		'			<div class="iDsrno" style="visibility:hidden;font-size: 12px;">99</div>'+
+		'			<div class="iDname">NAME</div>'+
+		'			<div class="iDalbum">ALBUM</div>'+
+		'			<div class="iDartist">ARTIST</div>'+
+		'		</li>'+
+    '</ul>'+
+    '<ul class="searchList" id="artist_searchList">'+
+		'		<li id="itemsDisplay">'+
+		'			<div class="iDsrno" style="visibility:hidden;font-size: 12px;">99</div>'+
+		'			<div class="iDname">NAME</div>'+
+		'			<div class="iDalbum">ALBUM</div>'+
+		'			<div class="iDartist">ARTIST</div>'+
+		'		</li>'+
+    '</ul>'+
+    '</div>'
+    );
 search_full(search_str);
 $('#inputFor').on("keyup", function (event) {
     q = $(this).val();
@@ -140,18 +159,19 @@ function search(q)
        $("#songSearch").append('<div> <ul  id="songSearchSpan" class="searchResultList" > </ul> </div>');
        for(var i=0; i<data.songs.length; i++)
        {
-         var html = '<li class="song" id="song_'+data.songs[i].id+'"><div class="searchItemImg" ></div>'
+         var html = '<li class="song" id="song_'+data.songs[i].id+'"><div class="searchItemImg" style="background-image:url('+'http://192.168.121.5\/songsmedia\/' + data.songs[i].album.album_art+')" ></div>'
                   +  '<div class="searchItemDetails">'
 		              +   '<div class="itemName">'+ data.songs[i].song+'</div>'
 		              +    '<div class="itemSubDetail">'+data.songs[i].artists[0].artist+'</div></div></li>';
          $("#songSearchSpan").append(html);
+         songs_url[data.songs[i].id]=data.songs[i];
        }
        $("#albumSearch").empty();
        $("#albumSearch").append('<div class="searchHeading">Albums<span> ('+data.albums.length+')</span></div>');
        $("#albumSearch").append('<div> <ul  id="albumSearchSpan" class="searchResultList" > </ul> </div>');
        for(var i=0; i<data.albums.length; i++)
        {
-         var html = '<li class="album searchItem" id="album_'+data.albums[i].id+'"><div class="searchItemImg"></div>'
+         var html = '<li class="album searchItem" id="album_'+data.albums[i].id+'"><div class="searchItemImg" style="background-image:url('+'http://192.168.121.5\/songsmedia\/' + data.albums[i].album_art+')" ></div>'
                   +  '<div class="searchItemDetails">'
 		              +   '<div class="itemName">'+ data.albums[i].album+'</div>'
 		              +    '<div class="itemSubDetail">'+data.albums[i].artists[0].artist+'</div></div></li>';
@@ -162,7 +182,7 @@ function search(q)
        $("#artistSearch").append('<div> <ul  id="artistSearchSpan" class="searchResultList" > </ul> </div>');
        for(var i=0; i<data.artists.length; i++)
        {
-         var html = '<li class="artist searchItem" id="artist_'+data.artists[i].id+'"><div class="searchItemImg"></div>'
+         var html = '<li class="artist searchItem" id="artist_'+data.artists[i].id+'"><div class="searchItemImg" style="background-image:url('+'http://192.168.121.5\/songsmedia\/' + data.artists[i].artist_art+')" ></div>'
                   +  '<div class="searchItemDetails">'
 		              +   '<div class="itemName">'+ data.artists[i].artist+'</div>'
 		              +    '</div></li>';
@@ -797,7 +817,6 @@ var interval;
 
 function play(id)
 {
-  
   if(id in songs_url){
     var song = songs_url[id];
     Jukebox.play_url('song_'+id,'http://192.168.121.5/songs/english/'+song.file_name);
@@ -1050,6 +1069,7 @@ $( document ).ready(function() {
 
    get_json('trending');
  //  clip = new ZeroClipboard.Client();
+   
   });
 
 //window.onhashchange = split_hash(); // For IE<8 and safari
@@ -1210,7 +1230,6 @@ $(".song_options").on('click',function(){
 $('.song_setting_box').mouseleave(function(){
     $(".song_setting_box").css('display','none');
     });
-  console.log('called');
 }
 
 function playlist_song_options_binder(id){

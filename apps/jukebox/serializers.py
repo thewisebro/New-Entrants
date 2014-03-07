@@ -107,6 +107,22 @@ class AlbumSerializer(serializers.ModelSerializer):
     depth = 1
 
 
+class SearchArtistSerializer(serializers.ModelSerializer):
+  artist_art = serializers.SerializerMethodField('get_artist_art')
+  class Meta:
+    model = Artist
+    fields = ('id','artist','artist_art')
+
+  def get_artist_art(self,obj):
+    return obj.album_set.all()[0].album_art.name
+
+class SearchAlbumSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Album
+    fields = ('id', 'album', 'artists', 'album_art')
+    depth = 1
+
+
 class PlaylistSerializer(serializers.ModelSerializer):
   class Meta:
     model = Playlist

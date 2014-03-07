@@ -346,11 +346,32 @@ class SearchJsonView(ListAPIView):
   def get(self, request, format=None):
     context = {}
     q = self.request.GET.get('q').lower()                       # q -> Search String coming
-    context.update({                                    # For multiple models and lists usage in ListView
+    """context.update({                                    # For multiple models and lists usage in ListView
         'songs' : dict_search(songs,'song',q,5),
         'albums' : dict_search(albums,'album',q,5),
         'artists' : dict_search(artists,'artist',q,5),
-    })
+    })"""
+    songs1 = Song.objects.filter(song__istartswith=q)[:5]
+    songs2 = Song.objects.filter(song__icontains=q).exclude(song__istartswith=q)[:5]
+    songs = list(chain(songs1,songs2))
+    songs = SongSerializer(songs[:5],many=True)
+#print songs
+    artists1 = Artist.objects.filter(artist__istartswith=q)[:5]
+    artists2 = Artist.objects.filter(artist__icontains=q).exclude(artist__istartswith=q)[:5]
+    artists = list(chain(artists1,artists2))
+    artists = SearchArtistSerializer(artists[:5],many=True)
+    albums1 = Album.objects.filter(album__istartswith=q)[:5]
+    albums2 = Album.objects.filter(album__icontains=q).exclude(album__istartswith=q)[:5]
+    albums = list(chain(albums1,albums2))
+    albums = SearchAlbumSerializer(albums[:5],many=True)
+# songs = SongSerializer(Song.objects.filter(song__icontains=q)[:5],many=True)
+#albums = AlbumSerializer(Album.objects.filter(album__icontains=q)[:5],many=True)
+#artists = ArtistSerializer(Artist.objects.filter(artist__icontains=q)[:5], many=True)
+    context.update({                                    # For multiple models and lists usage in ListView
+        'songs' : songs.data,
+        'albums' : albums.data,
+        'artists' : artists.data,
+        })
 #song_keys = search_json(q.lower(),songs_search)
 #print song_keys
     return Response(context)
