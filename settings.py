@@ -153,6 +153,10 @@ MIDDLEWARE_CLASSES = (
   # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+CRON_CLASSES = (
+  'jukebox.cron.ScoreHalf',
+)
+
 import django.conf.global_settings as DEFAULT_SETTINGS
 
 TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
@@ -195,6 +199,7 @@ THIRD_PARTY_APPS = (
   'django.contrib.comments',
   'compressor',
   'django_extensions',
+  'django_cron',
 )
 
 CHANNELI_APPS = (

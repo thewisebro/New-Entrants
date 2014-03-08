@@ -414,7 +414,7 @@ function display_artist(id){
         var l = artist.album_set[j].song_set[k].id;
 
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class=" song popular_item draggable" id="song_'+l+'"><div id="list_number">'+left_add_zero(k+1)+'</div> <div id="p_song_name">'+ artist.album_set[j].song_set[k].song +'</div><div class="artist_options"><i class="artist_options_button icon-ellipsis-horizontal"></i><div class="artist_item_setting_box"><ul><li class="song" id="song_'+l+'">Play now</li><li class="next" id="next_'+l+'">Play next</li><li class="last" id="last_'+l+'">Play last</li><li class="options_add_to_playlist" id="add_'+l+'">Add to playlist</li><li class="share_url" id="share_'+l+'">Share</li></ul></div></div>';
+        html += '<li class=" song popular_item draggable" id="song_'+l+'"><div class="list_icon"><i class="icon-play list_icon_play"></i></div><div id="list_number">'+left_add_zero(k+1)+'</div> <div id="p_song_name">'+ artist.album_set[j].song_set[k].song +'</div><div class="artist_options"><i class="artist_options_button icon-ellipsis-horizontal"></i><div class="artist_item_setting_box"><ul><li class="song" id="song_'+l+'">Play now</li><li class="next" id="next_'+l+'">Play next</li><li class="last" id="last_'+l+'">Play last</li><li class="options_add_to_playlist" id="add_'+l+'">Add to playlist</li><li class="share_url" id="share_'+l+'">Share</li></ul></div></div>';
         if(!(artist.album_set[j].song_set[k].id in songs_url)) songs_url[artist.album_set[j].song_set[k].id]=artist.album_set[j].song_set[k];
 
       }
@@ -547,6 +547,7 @@ function display_playlists(){
       var data = playlists_json;
       if(data.active)
       {
+        console.log('asa');
         var html = '<div class="start"><div class="list_alpha"><div class="playlist_create" id="playlist_new"><div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div></div> <ul id= "playlists"></ul></div></div>';
       $("#contentList").append(html);
       for(var i=0; i<data.playlists.length; i++){
@@ -576,7 +577,7 @@ function display_playlists(){
         $("#centerdata").append('<div id="playlistsList">  <div class="nano" id="left_playlist_list">  <div id="contentList" class="content"> </div></div></div>');
       if(data.active)
       {
-        html = '<div class="start"><div class="list_alpha"><div class="playlist" id="playlist_new"><div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div></div> <ul id= "playlists"></ul></div></div>';
+        html = '<div class="start"><div class="list_alpha"><div class="playlist_create" id="playlist_new"><div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div></div> <ul id= "playlists"></ul></div></div>';
       $("#contentList").append(html);
       for(var i=0; i<data.playlists.length; i++){
         var playlist = data.playlists[i];
@@ -641,6 +642,9 @@ function display_playlist(id){
           return;
         }
       var playlist = data;
+      var banner_songs_array = [];
+      var album_present = [];
+      var usong_count=0;
       var songs = playlist.songs.split('b');
       $("#playlist_view").empty();
       $("#playlist_view").append('<div id="playlistBanner"></div>');
@@ -665,6 +669,10 @@ function display_playlist(id){
         //'<div class="pqimage" style="background:url(\''+image+'\'); background-size:cover">'
         html += '<li ><div class="iDsrno">'+left_add_zero(j+1)+'</div><div class="iDname song draggable" id="'+id+'">'+song_name+'</div><div class="iDalbum album" id="album_'+album_id+'">'+album_name+'</div><div class="iDartist artist" id="artist_'+artist_id+'">'+artist_name+'</div id="iDoptions"><div class="iDoptions"><i id="playlist_setting_icon" class="icon-ellipsis-horizontal"></i><div class="playlist_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li class="share_url" id="share_'+k+'">Share</li><li class="delete_from_playlist" id="delete_'+j+'_'+play_id+'">Delete</li></ul></div></div></li>';
         if(!(playlist.songs_list[parseInt(songs[j])].id in songs_url)) songs_url[playlist.songs_list[parseInt(songs[j])].id]=playlist.songs_list[parseInt(songs[j])];
+
+        if($.inArray(album_id,album_present)>=0) continue;
+        banner_songs_array[usong_count++]=k;
+        album_present.push(album_id);
       }
       html +='</ul>';
       $('#playlistContentFull').append(html);
@@ -676,7 +684,7 @@ function display_playlist(id){
         $("#playlistInfo").css({top:widthOfDiv-100+5+50});
 
 
-
+      playlist_banner_images(banner_songs_array);
       album_ready();
       artist_ready();
       song_ready();
@@ -759,6 +767,7 @@ function get_artist_html(artist)
    // html += '</ul></div></div>';
     html += '<div class="start">'+
              '<div class="head_alpha">'+tagg+'</div>'+
+             '<div class="head_border"></div>'+
               '<div class="list_alpha"> <ul id="artist_tag_'+artisttag_count+'"></ul></div></div>';
     $("#contentList").append(html);
    prev_artist=tagg;
@@ -786,6 +795,7 @@ function get_album_html(album)
    // html += '</ul></div></div>';
     html += '<div class="start">'+
              '<div class="head_alpha">'+tagg+'</div>'+
+             '<div class="head_border"></div>'+
               '<div class="list_alpha"> <ul id="album_tag_'+albumtag_count+'"></ul></div></div>';
     $("#contentList").append(html);
    prev_album=tagg;
@@ -819,6 +829,8 @@ function play(id)
 {
   if(id in songs_url){
     var song = songs_url[id];
+    $('#song_'+song_playing).find('.faint').attr('style','');
+    $('#song_'+song_playing).find('.play_icon').attr('style','');
     Jukebox.play_url('song_'+id,'http://192.168.121.5/songs/english/'+song.file_name);
     if( !in_queue && (id != song_playing)){ add_queue_song(song); now_playing=queue.length-1; }
     $("#musicPlayerPic").empty();

@@ -1,4 +1,19 @@
 
+
+function getRandomArrayElements(arr, count) {
+  var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
+  while (i-- > min && i>0) {
+    index = Math.floor((i + 1) * Math.random());
+    temp = shuffled[index];
+    shuffled[index] = shuffled[i];
+    shuffled[i] = temp;
+  }
+  if(count>arr.length) return shuffled;
+  return shuffled.slice(min);
+}
+
+
+
 /*for loading the diff links in mainbody div*/
   function lTrending(){
          //  $("#rightside").animate({right:'220',opacity:'0'},300); 
@@ -446,7 +461,8 @@ start: function(event, ui){
 update: function(event, ui){
   add_in_queue(move,ui.item.index());
   }
-});
+}).disableSelection();
+  $( "#rightside" ).sortable( "option", "containment", "#queue_content" );
 
 }
 
@@ -512,6 +528,11 @@ $("#save_as_playlist").on("click",function(){
         $("#save_playlist_dialog").removeClass().addClass("save_as_playlist_close");
      }
     else{
+      if(!logged_in)
+      {
+        $('#signin_button').click();
+        return;
+      }
     
     $("#bigwrapper").css('opacity','0.2');
     $("#save_playlist_dialog").removeClass().addClass("save_as_playlist_open");
@@ -555,7 +576,11 @@ $("#add_to_playlist").on("click",function(){
         $("#add_to_playlist_dialog").removeClass().addClass("add_to_playlist_close");
      }
     else{
-    
+      if(!logged_in)
+      {
+        $('#signin_button').click();
+        return;
+      }
     $("#bigwrapper").css('opacity','0.2');
     $("#add_to_playlist_dialog").removeClass().addClass("add_to_playlist_open");
   //  $("#save_playlist_dialog").css({'display':'block'});
@@ -653,3 +678,13 @@ $('#add_new_button').on('click',function(){
     } 
     });
 
+function playlist_banner_images(songs)
+{
+    var new_songs = getRandomArrayElements(songs,5);
+    var song_count = 0;
+    $.each($('#playlistBanner').find('ul li'),function(){
+        if(song_count>=new_songs.length) return;
+        $(this).css('background-image','url(http://192.168.121.5\/songsmedia\/'+songs_url[new_songs[song_count]].album.album_art+')');
+        song_count++;
+      }); 
+}
