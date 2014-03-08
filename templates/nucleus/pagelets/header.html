@@ -5,7 +5,8 @@
     <div class="header-option" onclick="location.hash='#helpcenter'">Help Center</div>
     <div class="header-option" onclick="take_feedback();">Feedback</div>
     <div id="user-account">
-      {{ user.name }}
+      <div id="user-thumbnail"><img src="{{ user.photo_url }}"/></div>
+      <span id="user-name">{{ user.name }}</span>
     </div>
   {% else %}
     <div id="login" class="header-option" onclick="open_login_dialog();">Sign In</div>
