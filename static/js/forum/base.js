@@ -1,6 +1,11 @@
 $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
-    $('#content') .html('');
-    if(!hash1) $('#content').html('forum under construction!');
+    //html = '';
+    //html += '<div id="tag_search"><form action="" method="post" onsubmit="search_tag();return false;">';
+    //html += '<input type="text" name="tag_key">';
+    //html += '<input type="submit" value="Search"></div>';
+    $('#content').html('');
+    if(!hash1)
+      display_activity();
     if(hash1 == 'questions')
       display_questions();
     else if(hash1 == 'question')
@@ -9,15 +14,12 @@ $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
       display_answer(hash2);
     else if(hash1 == 'tag')
       display_tag(hash2);
-    else if(hash1 == 'activity')
-      display_activity();
 });
 
-
-function escapeStr(str) 
+function escapeStr(str)
 {
       if (str)
-                return str.replace(/([ #;?%&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');      
+                return str.replace(/([ #;?%&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
 
                       return str;
 }
@@ -33,7 +35,7 @@ function question_html(data){
   for(i=0;i<data.tags.length;i++)
   {
     html += '<div id = "tag_'+data.tags[i].name+'"><a href="#forum/tag/'+data.tags[i].name+'">' + data.tags[i].name + '</a></div>';
-  } 
+  }
   html += '<br><br></div>';
   return html;
 }
@@ -62,7 +64,7 @@ function singleanswer_html(data){
       html += '<div id = "upvote_'+data.answer.id+'"><button onclick="upvote_answer('+data.answer.id+')">Upvote</button></div>';
       html += '<div id = "count_'+data.answer.id+'">' + data.answer.upvote_count + '</div>';
       html += '<div id = "downvote_'+data.answer.id+'"><button onclick="downvote_answer('+data.answer.id+')">Downvote</button></div>';
-    } 
+    }
   }
   else
   {
@@ -83,7 +85,7 @@ function singleanswer_html(data){
       html += '<div id = "upvote_'+data.answer.id+'"><button>Upvote</button></div>';
       html += '<div id = "count_'+data.answer.id+'">' + data.answer.upvote_count + '</div>';
       html += '<div id = "downvote_'+data.answer.id+'"><button>Downvote</button></div>';
-    } 
+    }
   }
   return html;
 }
@@ -161,7 +163,7 @@ function display_question(id){
       'question_id': id
     },function(data)
     {
-      html = ''; 
+      html = '';
       html += question_html(data);
       if (data.question.same_profile=="false")
       {
@@ -196,7 +198,7 @@ function add_answer(question_id){
       'question_id': question_id,
       'description': $('input[name=answer]').val(),
     },function(data)
-    {  
+    {
       $('#answers_'+question_id).prepend(answer_html(data));
       $('input[name=answer]').val('');
     });
@@ -321,7 +323,7 @@ function display_activity(){
       {
         html += activities_html(data,i-1);
       }
-      $('#content').html(html);
+      $('#content').append(html);
     });
 }
 
@@ -347,3 +349,17 @@ function unfollow_tag(tag_name){
     });
 }
 
+function search_tag(){
+  $.post('forum/search_tag/',
+    {
+      'tag_key': $('input[name=tag_key]').val()
+    },function(data)
+    {
+      html = '';
+      for(i=data.tags.length;i>0;i--)
+      {
+        html += '<div id = "tag_'+data.tags[i]+'"><a href="#forum/tag/'+data.tags[i]+'">' + data.tags[i] + '</a></div>';
+      }
+      $('#content').append(html);
+    });
+}

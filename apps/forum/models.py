@@ -9,7 +9,7 @@ from api import model_constants as MC
 
 from taggit_autocomplete.managers import TaggableManager
 
-class Question(Taggable):
+class Question(models.Model, Taggable):
   profile = models.ForeignKey('Profile')
   datetime_modified = models.DateTimeField(auto_now=True)
   description = models.TextField()

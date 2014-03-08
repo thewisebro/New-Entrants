@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from forum.models import *
 from forum.forms import *
 from django.utils import simplejson
-from core.models import Count
+from core.models import Count,Q
 from taggit.models import Tag,TaggedItem
 
 @login_required
@@ -78,6 +78,9 @@ def tag_dict(tag,profile):
     'name': tag.name,
     'follow_unfollow': follow_bool
   }
+
+def tag_name(tag):
+  return tag.name
 
 def tagitem_content(tagitem,profile):
   return tagitem.content_object
@@ -231,4 +234,10 @@ def unfollow_tag(request):
     Activity.objects.get(activity_type='FOL_TOPIC',content_type=ContentType.objects.get_for_model(tag_item),object_id=tag_item.pk).delete()
     profile.tags_followed.remove(tag)
   return HttpResponse()
+
+def search_tag(request):
+  tag_key = request.POST['tag_key']
+  tags = Tag.objects.filter(Q(name__icontains=tag_key))
+  json_data = simplejson.dumps({'tags':map(tag_name,tags)})
+  return HttpResponse(json_data, mimetype='application/json')
 

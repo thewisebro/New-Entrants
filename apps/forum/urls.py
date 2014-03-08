@@ -15,5 +15,6 @@ urlpatterns = patterns('forum.views',
   url(r'^fetch_tag/$','fetch_tag',name='fetch_tag'),
   url(r'^fetch_activity/$','fetch_activity',name='fetch_activity'),
   url(r'^follow_tag/$','follow_tag',name='follow_tag'),
-  url(r'^unfollow_tag/$','unfollow_tag',name='unfollow_tag')
+  url(r'^unfollow_tag/$','unfollow_tag',name='unfollow_tag'),
+  url(r'^search_tag/$','search_tag',name='search_tag')
 )
