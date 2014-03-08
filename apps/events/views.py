@@ -131,7 +131,7 @@ def added_by(event):
   if event.calendar.cal_type == 'GRP':
     group = Group.objects.get(user__username = event.calendar.name)
     return "<a href='/groups/%s/'>"%group.user.username +\
-           group.user.html_name()+"</a>"
+           group.user.html_name+"</a>"
   else:
     return ''
 
@@ -189,7 +189,7 @@ def event_dict(event,user):
 
 def fetch(request):
   if request.is_ajax() and request.method == 'GET':
-    try:
+#    try:
       calendar_name = request.GET['calendar_name']
       group_name = None
       if request.GET.has_key('group_name'):
@@ -229,9 +229,9 @@ def fetch(request):
           events = events.extra(where=["IF(time,ADDTIME(date,time),date) > "+pk_datetime.strftime("'%Y-%m-%d %H:%M:%S'")])
       json = simplejson.dumps({'events':map(lambda e:event_dict(e,request.user),events[:number]),'more':int(events.count()>number)})
       return HttpResponse(json,content_type='application/json')
-    except Exception as e:
-      logger.exception('Exception accured in events/fetch : '+str(e))
-      return HttpResponse('')
+#    except Exception as e:
+#      logger.exception('Exception accured in events/fetch : '+str(e))
+#      return HttpResponse('')
 
 @login_required
 def browse(request,calendar_name,path):

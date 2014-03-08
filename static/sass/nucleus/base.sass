@@ -39,7 +39,22 @@ body
   #user-account
     float: right
     margin-right: 20px
-    font-size: 14px
+
+    #user-thumbnail
+      float: right
+      width: 25px
+      height: 25px
+      margin-left: 10px
+      margin-top: 8px
+
+      img
+        width: auto
+        height: 100%
+        border-radius: 2px
+
+    #user-name
+      float: right
+      font-size: 14px
 
 #sidebar-tabs
   position: fixed
@@ -51,8 +66,8 @@ body
   background: #333
 
   .tab
-    width: 110px
-    padding: 10px 0px 10px 10px
+    width: 108px
+    padding: 10px 0px 10px 12px
     height: 20px
     line-height: 20px
     cursor: pointer
@@ -63,6 +78,9 @@ body
 
   .active-tab
     background-color: rgba(0, 0, 0, 0.45)
+    border-left: 2px solid $blue-link
+    width: 108px
+    padding: 10px 0px 10px 10px
     &:hover
       background-color: rgba(0, 0, 0, 0.45)
 
@@ -98,7 +116,7 @@ body
   right: 0
   left: 0
   z-index: -50
-  background: #f8f8f8
+  background: #eee
 
   #content-back
     margin-top: 0
@@ -117,4 +135,5 @@ body
   font-family: $sans-serif
   font-weight: bold
   color: $red
+  margin-top: 10px
   margin-bottom: 10px

@@ -25,7 +25,17 @@ def content_file_name(instance, filename):
 
 class Artist(models.Model):
   artist = models.CharField(max_length=MC.TEXT_LENGTH)
-  cover_pic = models.ImageField(upload_to=JC.ARTIST_PIC_DIR, max_length=MC.TEXT_LENGTH)
+  upload_storage = FileSystemStorage(location=JC.ARTIST_PIC_DIR, base_url='/uploads')
+  cover_pic = models.ImageField(upload_to='artist/',storage=upload_storage, max_length=MC.TEXT_LENGTH)
+  lang_choices = (
+      ('eng' , 'English'),
+      ('hindi' , 'Hindi'),
+      ('tamil','Tamil'),
+      ('telugu','Telugu'),
+      ('punjabi','Punjabi'),
+      ('mal','Malyali')
+  )
+  language = models.CharField(max_length=10, choices=lang_choices)
   def __unicode__(self):
     return self.artist
 
@@ -39,7 +49,17 @@ class Album(models.Model):
   artists = models.ManyToManyField(Artist, blank=True, null=True)              # Multiple Artists (feat.)
 #genres = models.ManyToManyField(Genre)                # Multiple Genres
   year = models.IntegerField(max_length=4, default = datetime.datetime.today().year)
-  album_art = models.ImageField(upload_to=JC.ALBUMART_DIR, max_length=MC.TEXT_LENGTH)
+  upload_storage = FileSystemStorage(location=JC.ALBUMART_DIR, base_url='/uploads')
+  album_art = models.ImageField(upload_to='albumart/',storage = upload_storage, max_length=MC.TEXT_LENGTH)
+  lang_choices = (
+      ('eng' , 'English'),
+      ('hindi' , 'Hindi'),
+      ('tamil','Tamil'),
+      ('telugu','Telugu'),
+      ('punjabi','Punjabi'),
+      ('mal','Malyali')
+  )
+  language = models.CharField(max_length=10, choices=lang_choices)
   def __unicode__(self):
     return self.album
 
@@ -54,7 +74,11 @@ class Song(models.Model):
   genres = models.ManyToManyField(Genre)                 # Multiple Genres
   lang_choices = (
       ('eng' , 'English'),
-      ('hindi' , 'Hindi')
+      ('hindi' , 'Hindi'),
+      ('tamil','Tamil'),
+      ('telugu','Telugu'),
+      ('punjabi','Punjabi'),
+      ('mal','Malyali')
   )
   language = models.CharField(max_length=10, choices=lang_choices)
 #  date_added = models.DateField(auto_now_add=True)        # For the date item is added
