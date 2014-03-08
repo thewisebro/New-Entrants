@@ -151,6 +151,10 @@ def Role(group_name):
     def role(self):
       return group_name
 
+    @property
+    def name(self):
+      return self.user.name
+
     @staticmethod
     def post_save_receiver(sender, **kwargs):
       instance = kwargs['instance']

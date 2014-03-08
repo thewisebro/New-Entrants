@@ -139,7 +139,9 @@ def fetch_answer(request):
   profile = Profile.get_profile(request.user.student)
   answer = Answer.objects.get(id=answer_id)
   question = answer.question
-  json_data = simplejson.dumps({'answer':answer_dict(answer,profile),'question':question_dict(question,profile)})
+  tags = question.tags.all()
+  json_data = simplejson.dumps({'answer':answer_dict(answer,profile),'question':question_dict(question,profile),
+      'tags':map(lambda t:tag_dict(t,profile), tags)})
   return HttpResponse(json_data, mimetype='application/json')
 
 def follow_question(request):
@@ -240,4 +242,9 @@ def search_tag(request):
   tags = Tag.objects.filter(Q(name__icontains=tag_key))
   json_data = simplejson.dumps({'tags':map(tag_name,tags)})
   return HttpResponse(json_data, mimetype='application/json')
+
+def answer_comments(request,answer_id):
+  answer = Answer.objects.get(pk=answer_id)
+  return render(request,'forum/answer_comments.html',{'answer': answer,})
+
 
