@@ -1,0 +1,208 @@
+from django.db.models import Q
+from django import forms
+import logging
+
+from regol.models import *
+from regol.forms import *
+
+logger = logging.getLogger('channel-i_logger')
+
+def get_degree(semester):
+  return semester[:-2]
+
+def sem_registering_for(semester):
+  temp = int(semester[-2:])
+  if temp%10 == 0:
+    temp = temp+1
+  else:
+    temp = temp+9
+  return semester[:-2]+str(temp)
+
+def get_registered_courses(person, reg_type, semester):
+  course_list = []
+  if(reg_type == 'IER'):
+    structures = InstituteElectives.objects.filter(person=person, semester=semester)  
+    for struct in structures:
+      temp_list = []
+      choices = struct.choice_list.split('|')
+      for choice in choices:
+        name = CourseDetails.objects.get(pk=choice).course_name 
+        temp_list.append((choice, name))    
+      course_list.append(temp_list)
+  elif(reg_type == 'DER'):
+    structures = RegisteredCourses.objects.filter(person=person, semester=semester, subject_area='DEC')
+    for struct in structures:
+      detail = struct.course_details
+      course_list.append((detail.course_code,detail.course_name))
+  elif(reg_type == 'SBR'):
+    structures = RegisteredCourses.objects.filter(person=person, semester=semester, cleared_status='NXT')
+    for struct in structures:
+      detail = struct.course_details
+      course_list.append((detail.course_code,detail.course_name))
+  return course_list
+
+def get_course_form_ug(person, reg_type, semester, edit):
+  degree = get_degree(semester)
+  if(reg_type == 'IER' or reg_type == 'DER'):
+    choice_list = []
+    codes =[]
+    if(reg_type == 'IER'): 
+      existing_elecs = InstituteElectives.objects.filter(person = person, semester = semester)
+      if edit == 'edit':
+        for elec in existing_elecs:
+          choices = elec.choice_list.split('|')
+          temp_list = []
+          for choice in choices:
+            temp_list.append((choice,CourseDetails.objects.get(pk=choice).course_name))
+          choice_list.append(temp_list)
+          codes.append(elec.group_code)      
+      else:
+        structures = CourseStructureMap.objects.filter(branch = person.branch, 
+            semester = semester, group_status = 1, subject_area = 'IEC')
+    elif(reg_type == 'DER'):
+      structures = CourseStructureMap.objects.filter(branch = person.branch, 
+          semester = semester, group_status = 1, subject_area = 'DEC')
+      existing_elecs = RegisteredCourses.objects.filter(person = person, semester = semester, subject_area = 'DEC')
+    if edit == 'fetch':
+      if existing_elecs:
+        structures = delete_existing_structures(list(structures), list(existing_elecs), 'elec')
+      elec_group_details = []
+      for struct in structures:
+        elec_group_details.append([struct.course_code, list(CourseDetails.objects.filter(group_code__contains=struct.course_code))])
+      elec_group_details = filter_electives(elec_group_details, person, reg_type)
+      for code, details in elec_group_details:
+        codes.append(code)
+        temp_choice = []
+        for detail in details:
+          temp_choice.append((detail.course_code, detail.course_name))
+        choice_list.append(temp_choice)
+    form = UGCourseForm(count = len(choice_list), choice_list = choice_list, codes = codes, reg_type = reg_type)
+  elif(reg_type == 'SBR'):
+    initial_list = []
+    course_details = []
+    structures = CourseStructureMap.objects.filter(branch = person.branch, 
+            semester = semester, group_status = 0)
+    existing_courses = get_existing_courses(person)
+    next_courses = get_next_courses(person, semester) 
+    if edit == 'edit':
+     for course in next_courses:
+       initial_list.append(course.course_code) 
+    if existing_courses:
+        structures = delete_existing_structures(list(structures), existing_courses, 'course')
+    for struct in structures:
+      course_details.append((struct.course_code, CourseDetails.objects.get(pk=struct.course_code).course_name))
+      course_details = filter_courses(course_details, person)
+    form = UGCourseForm(initial={'choice_course':initial_list},count=len(next_courses),choice_list=course_details,codes=[],reg_type=reg_type) 
+  return form      
+      
+def allot_insti_electives():
+  insti_elecs = InstituteElectives.objects.all() 
+
+def filter_electives(elec_group_details, person, reg_type):
+  if reg_type == 'IER':
+    elec_list = InstituteElectivesNotEligibleMap.objects.filter(branch = person.branch)
+    elec_not_eligible = []
+    for elec in elec_list:
+      elec_not_eligible.append(elec.course_details)
+  existing_courses = get_existing_courses(person)
+# To remove courses for which the person is not eligible.
+  for elec_code,elec_details in elec_group_details:
+    dummy = list(elec_details)
+    for elec_detail in dummy: 
+      if reg_type == 'IER':
+        if elec_not_eligible:
+          delete_existing_courses(elec_not_eligible,elec_details,elec_detail)
+# To remove courses which have already been cleared.  
+      if existing_courses:
+        delete_existing_courses(existing_courses,elec_details,elec_detail)
+# To remove courses whose pre-requisites have not been cleared.  
+      pre_requisite = get_pre_requisite(elec_detail.course_code)
+      if pre_requisite is not None:
+        if pre_requisite not in cleared_courses or pre_requisite not in current_courses:
+          elec_details.remove(elec_detail)
+  return elec_group_details       
+#returns pre-requisites of a course
+def get_pre_requisite(course_code): 
+  return CourseDetails.objects.get(pk = course_code).pre_requisite
+
+# Return all cleared courses of a person
+def get_existing_courses(person):
+  existing_courses =[]
+  courses = RegisteredCourses.objects.filter(Q(cleared_status = 'CLR') | Q(cleared_status ='CUR') | Q(cleared_status = 'CLR'), person = person)
+  for course in courses:
+    existing_courses.append(course.course_details)
+  return existing_courses
+
+def get_next_courses(person, semester):
+  next_courses =[]
+  courses = RegisteredCourses.objects.filter(person = person, semester = semester, cleared_status = 'NXT')
+  for course in courses:
+    next_courses.append(course.course_details)
+  return next_courses
+
+def get_insti_electives(person, semester):
+  return InstituteElectives.objects.filter(person = person, semester = semester)
+
+def filter_courses(course_details, person):
+  existing_courses = get_existing_courses(person)
+  dummy = list(course_details)
+  for course_code, course_detail in dummy:
+    pre_requisite = get_pre_requisite(course_code)
+    if pre_requisite is not None:
+      if pre_requisite not in existing_courses:
+        course_details.remove(course_code)
+  return course_details
+
+def delete_existing_courses(table,elec_details,elec_detail):  
+  if elec_detail in table:
+    elec_details.remove(elec_detail)
+  return elec_details
+
+def delete_existing_structures(course_structure, existing_courses, category):
+  for ex_course in existing_courses:
+    if(category=="elec"):
+      code = ex_course.group_code
+    elif(category=="course"):
+      code =ex_course.course_code   
+    j=0
+    for course_struct in course_structure:
+      if(course_struct.course_code == code):
+        del course_structure[j]
+      j+=1
+  return course_structure
+
+def uniqify(details):
+  checked = [] 
+  for detail in details:
+    if detail not in checked:
+      checked.append(detail)
+  return checked
+
+def get_course_form_pg(person, reg_type, semester, edit):
+  if reg_type == 'SBR':
+    courses = []
+    prog_electives = []
+    structures = CourseStructureMap.objects.filter(branch=person.branch, semester=semester)
+    existing_elecs = RegisteredCourses.objects.filter(person = person, semester = semester, subject_area = 'PEC')
+    existing_courses = get_existing_courses(person)
+    pelec_count = len(prog_electives)-len(existing_elecs)
+    if existing_elecs:
+      structures = delete_existing_structures(list(structures), list(existing_elecs), 'elec')
+    if existing_courses:
+        structures = delete_existing_structures(list(structures), existing_courses, 'course')
+    for structure in structures:
+      if structure.group_status == 0:  
+        course_details.append((structure.course_code,CourseDetails.objects.get(course_code=structure.course_code).course_name))
+      elif structure.subject_area == 'PEC' and structure.group_status == 1:
+        prog_electives.append(structure.course_code)
+    codesp = []
+    prog_elec_details = []
+    for code in uniqify(prog_electives):
+      codesp.append(code)
+      temp_detail = []
+      course_details = CourseDetails.objects.filter(group_code__contains=code)
+      for detail in course_details:  
+        temp_detail.append((detail.course_code, detail.course_name))
+      prog_elec_details.append(temp_detail)
+    form = PGCourseForm(course_details=course_details, prog_elec_details=prog_elec_details, codesp=codesp)
+    print form

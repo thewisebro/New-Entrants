@@ -207,7 +207,7 @@ function rightclick_handle(e,id,type)
     if(!zclip){
       zclip = true;
       $('#copy-public-link-file').zclip({
-        path: '/static/js/jquery/ZeroClipboard.swf',
+        path: static_url+'js/jquery/zclip/ZeroClipboard.swf',
         copy: function(){
           var public_link = public_url_base+get_path(dir_id)+selected_file;
           return public_link;

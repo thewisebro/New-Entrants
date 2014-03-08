@@ -25,7 +25,7 @@ logger = logging.getLogger('channel-i_logger')
 def pagelet_index(request):
   ResponseForm = ResponseFormGen(request.user)
   form = ResponseForm()
-  user_in_img = 1 if request.user.in_group('IMG Member') else 0
+  user_in_img = 1 if request.user.in_group('IMG Admin') else 0
   return render(request, 'helpcenter/pagelet_index.html', {
       'form': form,
       'user_in_img': user_in_img
@@ -41,7 +41,7 @@ def reply_dict(reply):
     username = 'img'
     user_photo = '/static/images/nucleus/img_dp.png'
   else:
-    user_photo = response.user.photo_url
+    user_photo = reply.response.user.photo_url
   return {
     'username' : username,
     'user_photo' : user_photo,
@@ -62,7 +62,7 @@ def response_dict(response, user=None):
     'datetime' : response.datetime_created.strftime('%Y-%m-%d %H:%M:%S'),
     'response_type' : response.response_type,
   }
-  if user and user.in_group('IMG Member'):
+  if user and user.in_group('IMG Admin'):
     res_dict.update({
         'resolved': response.resolved
     })
@@ -71,7 +71,7 @@ def response_dict(response, user=None):
 @login_required
 def fetch(request):
   if request.is_ajax() and request.method == 'GET':
-    user_in_img = request.user.in_group('IMG Member')
+    user_in_img = request.user.in_group('IMG Admin')
     action = request.GET['action']
     pk = request.GET['id']
     number = int(request.GET['number'])
@@ -104,7 +104,7 @@ def give_response(request):
 @login_required
 def give_reply(request):
   if request.is_ajax() and request.method == 'POST':
-    user_in_img = request.user.in_group('IMG Member')
+    user_in_img = request.user.in_group('IMG Admin')
     text = request.POST['text']
     response = Response.objects.get(pk=request.POST['response_id'])
     if text and (user_in_img or response.user == request.user):
@@ -129,7 +129,7 @@ def send_a_mail(email, msg):
 
 @login_required
 def set_resolved(request):
-  if request.is_ajax() and request.method == 'POST' and request.user.in_group('IMG Member'):
+  if request.is_ajax() and request.method == 'POST' and request.user.in_group('IMG Admin'):
     response = Response.objects.get(pk=request.POST['response_id'])
     value = int(request.POST['value'])
     response.resolved = True if value else False
