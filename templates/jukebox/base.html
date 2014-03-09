@@ -1,8 +1,9 @@
 <html>
   <head>
     <title>JukeBox</title>
+ <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/fontello.css"> <!-- fontello import -->
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css"><!-- lato regular font import -->
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/main.css">
+ <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/main.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/cssmainbody.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artists.css"><!-- artists link -->
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artistslist.css">
@@ -16,16 +17,65 @@
    <!-- <link href='http://fonts.googleapis.com/css?family=Raleway:500' rel='stylesheet' type='text/css'>-->
     <!--<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artistslist.css">-->
    <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css">-->
+    <script>
+      var logged_in = '{{ user.is_active }}';
+    </script>
 
   </head>
 
   <body>
-  
+  <div id="loading_line"></div>
   <div id="center_trending" style="display:none;"></div>
   <div id="center_artists" style="display:none;"></div>
   <div id="center_albums" style="display:none;"></div>
   <div id="center_playlist" style="display:none;"></div>
   <div id="center_search" style="display:none;"></div>
+  <!-- login popup-->
+  <div id="login_popup" style="display:none" class="hidden_login">
+    <form>
+    <div id="signin_header">Sign In
+    <div id="signin_cancel"><i class="icon-remove"></i></div>
+    </div>
+    <div>
+      <input type="text" id="jb_username" name="jb_username" placeholder="Username"></input>
+    </div>
+    <div>  
+      <input type="password" id="jb_password" name="jb_password" placeholder="Password"></input>
+    </div>
+    <div id="signin_button_large">Sign In</div>
+    </form>
+  </div>
+
+  <!-- save as playlist box-->
+  <div id="save_playlist_dialog" class="save_as_playlist_close">
+  <div id="save_playlist_header">Save as playlist</div>
+    <div id="as_new_list">
+      <div id="add_new_submit"><i id="icon-check-sign-button" class="icon-check-sign"></i></div> 
+      <div id="add_new_button">Create New +</div>
+      <div id="create_new_input_div" style="display:none">
+        <input type="text" id="create_new_input"></input>
+      </div>
+    </div>
+    <div id="as_prev_list">
+    <div id="as_prev_submit"><i id="icon-check-sign-button" class="icon-check-sign"></i></div>
+    <select id="select_saved_playlist">
+      <option>Save as existing</option>
+    </select>
+    </div>
+    <div id="save_as_playlist_cancel"><i class="icon-remove"></i></div>
+  </div>
+<!-- add to playlist only -->
+  <div id="add_to_playlist_dialog" class="add_to_playlist_close">
+  <div id="add_to_playlist_header">Add to playlist</div>
+    <div id="add_to_playlist_div">
+    <div id="add_to_playlist_submit"><i id="icon-check-sign-button" class="icon-check-sign"></i></div>
+    <select id="add_to_saved_playlist">
+      <option>Select Playlist</option>
+    </select>
+    </div>
+    <div id="add_to_playlist_cancel"><i class="icon-remove"></i></div>
+  </div>
+
 
   <!-- search div -->
 			<div id="searchDivcss" class="searchLightboxClose">
@@ -146,13 +196,27 @@
 </div>
 
 <div id="rightside">    <!-- got to change after clicking -->
-<div id="popular_artists">
+<div id="popular_artists" class="popular_artists_before">
+<span id="play_queue_icon" class="open_queue"><i class="icon-align-justify"></i></span>
+<div id="queue_dropdown" style="display:none;">
+<div id="pointer_queue"></div>
+<ul>
+  <li id="save_as_playlist">Save as playlist</li>
+  <li id="add_to_playlist">Add to playlist</li>
+  <li id="clear_queue">Clear queue</li>
+</ul>
+</ul>
+</ul>
+</ul>
+</div>
 <a id="qa">
-<div id="play_queue">Play Queue</div>
+<span id="play_queue" class="open_queue">Play Queue</span>
 </a>
 <span id="queue_trash"><i class="icon-sort-down"></i></span>
 </div>
-<div id="popular_artists_list">
+<div id="popular_artists_list" class="nano">
+<div id="queue_content" class="content">
+</div>
 
 </div>
 
@@ -163,22 +227,27 @@
 <!--bottombar-->
 
 <div id="bottom">
-	<div id="bLeft">
+  <div id="mini_play">
+    <div id="mini_image">
+    </div>
+    <div id="mini_icons">
+    </div>
+  </div>
+
+
+	<div id="bLeft" >
 		<div id="bLeftLeft">
-			<img src="{{ STATIC_URL }}images/jukebox/prevItem.png">
+			<img src="{{ STATIC_URL }}images/jukebox/icon_new_prev.png">
 		</div>
 		<div id="bLeftPlay">
-			<img src="{{ STATIC_URL }}images/jukebox/playSong.png">
+			<img src="{{ STATIC_URL }}images/jukebox/icon_new_play.png">
 		</div>
 		<div id="bLeftRight">
-			<img src="{{ STATIC_URL }}images/jukebox/nextItem.png">
+			<img src="{{ STATIC_URL }}images/jukebox/icon_new_next.png">
 		</div>
 	</div>
 	<div id="bMiddle">
 	<div id="musicbar">
-	<div id="musicPlayerPic">
-	<img src="">
-	</div>
 	<div id="musicPlayerSlider">
 	<div id="musicPlayerInfo">
 	<div id="infoLeft">
@@ -190,9 +259,10 @@
 	</div>
 	</div>
 
-	<div id="musicSlider"></div>
-	<div id="songLoaded"></div>
-	<div id="borderMusicSlider"></div> 
+	<div id="musicSlider">
+    <div id="songLoaded"></div>
+  </div>
+  <div id="borderMusicSlider"></div> 
 
 
 	</div>
@@ -220,7 +290,14 @@
 		<div id="slider"></div> 
 		<div id="borderVolume"></div> 
 		<span id="volumeicons"><i class="icon-volume-up"></i></span>  
-		</section>  
+		</section> 
+   <div id="signin_button">
+    {% if user.is_active %}
+      Sign Out
+    {% else %}
+     Sign in
+    {% endif %}
+   </div> 
 	</div>
 
 
@@ -231,6 +308,7 @@
 </body>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-1.10.2.min.js"></script>
     <script src="{{ STATIC_URL }}js/csrf.js"></script>
+    <script src="{{ STATIC_URL }}js/common.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}jquery/nanoscroller/jquery.nanoscroller.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/resize.js"></script> 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/music.js"></script>
@@ -254,7 +332,7 @@
        // $(".qsong").width($(".qitem").width()-50);
 		    $( "#slider" ).find('a').attr('id','ui-slidersmall-handle');
 		    $( "#musicSlider" ).find('a').attr('id','ui-sliderlarge-handle');
-
+        $(".nano").nanoScroller();
 		    });
 $('#centerdata').css('width',$(window).width()-180-240);
 // to erase the rightside on homeview and strech the centerdiv
@@ -266,6 +344,8 @@ $('#centerdata').css('width',$(window).width()-180-240);
 <!--    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/soundedit.js"></script>   -->
  <!-- <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
  <!-- <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>-->
+  
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/smoothscroll.js"></script>
 
   <script src="{{ STATIC_URL }}js/jukebox/base.js">
   </script>

@@ -6,7 +6,7 @@ body{
 	font-family:"helvetica_neue_medium","Arial","sans-serif";
 	overflow-x:hidden;
 	overflow-y:scroll;
-	background-color: #F5F5F5;
+	background-color: #FFF;
 }
 
 ul{
@@ -252,23 +252,25 @@ ul{
 
 /*=============================================MAIN ====================================*/
 #mainbody {
-	height:auto;
-	position: absolute;
-	margin: 0 auto;
-	margin-left: 200px;
-  /*right:218px;*/
-  box-shadow: 1px 1px 1px #EEE;
-  border-right: 1px solid #DDD;
-  background-color:#FFF;
-  padding-bottom: 60px;
+  height: auto;
+position: absolute;
+margin: 0 auto;
+        margin-left: 200px;
+        box-shadow: 1px 1px 1px #EEE;
+        border-right: 1px solid #DDD;
+        background-color: #FFF;
+top: 0px;
+bottom: 0px;
+left: 0px;
+right: 220px;
 }
 
 #centerdata{
-	
-	min-height: 100%;
-	position: relative;
-	left: 0px;
-	right: 0px;
+position: absolute;
+top: 0px;
+bottom: 0px;
+left: 0px;
+right: 0px;
 }
 
 
@@ -278,9 +280,9 @@ ul{
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
-	height: 45px;
+	height: 52px;
 	background-color:#474747; 
-	z-index: 2;
+	z-index: 4;
 	border-top: 1px solid #101010;
   box-shadow: inset 0px 1px 1px #666;
 }
@@ -289,12 +291,11 @@ ul{
 }
 /* ============= b Left */
 #bLeft{
-	width: 130px;
-	position: relative;
-	display: inline-block;
-	padding-left: 25px;
-	padding-right: 25px;
-	/*top: -11px;*/
+  width: 130px;
+position: relative;
+          padding-left: 50px;
+          padding-right: 25px;
+top: -4px;
 }
 #bLeft>div{
 	display: inline-block;
@@ -303,29 +304,47 @@ ul{
 }
 #bLeftLeft{
 	position: relative;
-	width: 24px;
-	height: 24px;
-	margin-right: 5px;
-  background-color: #FFF;
+	width: 30px;
+	height: 30px;
+	margin-right: 0px;
+  vertical-align:baseline;
 
 }
 #bLeftPlay{
 	position: relative;
-	width: 24px;
-	height: 24px;
-	margin-right: 5px;
-  background-color: #FFF;
+	width: 30px;
+	height: 30px;
+	margin-right: 4px;
+  vertical-align:baseline;
+}
+
+#bLeftPlay>img{
+  width:30px;
+height:30px;
+}
+
+#bLeftLeft>img{
+  width:26px;
+height:26px;
+position:absolute;
+top:3px;
+}
+#bLeftRight>img{
+  width:26px;
+height:26px;
+position:absolute;
+top:3px;
 }
 #bLeftRight{
 	position: relative;
-	width: 24px;
-	height: 24px;
-  background-color: #FFF;
+	width: 30px;
+	height: 30px;
+          vertical-align:baseline;
 }
 
 /* ==============b Right ==================*/
 #bRight{
-	width: 180px;
+	width: 218px;
 	float: right;
 	/*background-color:rgb(73, 125, 134);*/
 	height: 45px;
@@ -335,8 +354,9 @@ ul{
 #volumesection {  
     width: 150px;  
     height: auto;  
-    margin-top: 21px;  
+    margin-top: 25px;  
     position: relative;  
+    left:-10px;
 } 
 #slider{  
 	border: 1px solid black;
@@ -408,7 +428,7 @@ ul{
 	position: absolute;
 	width: 100%;
 	height: 36px;
-	margin: 3px 0px;
+	margin: 7px 0px;
 	background-color: #2a2a2a;
 	border: 1px solid #101010;
 	border-radius:2px;
@@ -437,22 +457,20 @@ height: 3px;
 background-color: #141414;
 cursor: pointer;
 top: 24px;
-left: 47px;
+left: 11px;
 right: 97px;
 border-radius: 4px;
 }
 
 #songLoaded{
-	border: 1px solid black;
-	position: absolute;
-	height: 3px;
-	background-color: #747474;
-	cursor: pointer;
-	top: 24px;
-	left: 47px;
-	right: 97px;
-	border-radius: 4px;
-	z-index: 0;
+  border: 1px solid rgb(0, 0, 0);
+  position: absolute;
+  height: 3px;
+  background-color: rgb(116, 116, 116);
+  cursor: pointer;
+  top: -1px;
+  left: 0px;
+  border-radius: 4px;
 }
 
 #infoLeft{
@@ -539,8 +557,7 @@ border-radius: 4px;
 #infoLeft {
 	position: absolute;
 	top: 0px;
-	left: 45px;
-
+	left: 11px;
 }
 #timeRight{
 	position: absolute;
@@ -588,32 +605,79 @@ border-radius: 4px;
 }
 
 #popular_artists{
-     margin-top: 10px;
-     background-color: #FFF;
-     padding: 0px 5px 0px 5px;
-     border: #E0E0E0 1px solid;
-     border-radius: 3px;
-     box-shadow: 0px 1px 0px #EEE;
+}
+
+.popular_artists_before{
+        margin-top: 10px;
+        padding: 0px 5px 0px 15px;
+        border-radius: 3px; 
+        border: rgba(224, 224, 224, 0) 1px solid;
+}
+.popular_artists_after{ 
+    margin-top: 10px;
+padding: 0px 5px 0px 15px;
+         border-bottom: 1px solid #DDD;
+}
+
+#play_queue_icon{
+      position: absolute;
+      top: 22px;
+      color: #6E6E6E;
+      left: 15px;
+      font-size: 14px;
+      cursor:pointer;
+}
+
+#play_queue{
+cursor:pointer; 
+
 }
 
 #popular_artists_list{
-        display: block;
+         display: block;
          border-bottom: 1px solid #E0E0E0;
-         margin-top: 15px;
+         margin-top: 0px;
+         visibility:hidden;
+}
+
+#popular_artists_list> div.pane{
+  right:-11px;
+  width:5px;
+}
+
+.queue_item_remove{
+  position: absolute;
+color: #B2B2B2;;
+top: 6px;
+right: -3px;
+       font-size:14px;
+display:none;
+}
+
+.queue_item_remove:hover{
+  color:#787878;
+}
+
+.qitem:hover .queue_item_remove{
+  display:block;
 }
 
 #popular_artists a{
 	font-family:"helvetica_neue_bold";
   display: block;
-	padding: 10px 4px;
+	padding: 10px 10px;
 	font-size: 13px;
 	text-decoration: none;
 	color: #686868;
 }
 
 .qitem{
-	height: 41px;
-  border-top: 1px solid #E0E0E0;
+position:relative;
+height: 41px;
+        background-color: #FFF;
+        border-radius: 2px;
+cursor: pointer;
+        border-bottom: 1px solid #EEE;
 }
 .qitem:hover{
   background-color:#FFF;
@@ -658,6 +722,10 @@ color: #757575;
 }
 .qartist{
 	font-size: 11px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+color:#757575;
 }
 
 .qsong:hover{
@@ -669,6 +737,11 @@ color: #757575;
 
 #qlist{
 	display: none;
+}
+
+#queue_content{
+  padding:0px!important;
+  margin-bottom: 50px;
 }
 
 .trash{
@@ -819,7 +892,7 @@ cursor: pointer;
         right: -44px;
         color: #AAA;
         font-size: 16px;
-        top: 3px;
+        top: 7px;
         cursor: pointer;
         width: 36px;
         height: 26px;
@@ -1026,9 +1099,9 @@ cursor: pointer;
 /*search view opened*/
 #searchViewOpened{
 	position: absolute;
-	left: -220px;
+	left: 0px;
 	right: 0px;
-	height: 100%;
+	min-height: 100%;
 	background-color:#EEE;
 	padding: 30px 30px 50px 30px;
 	border-right: 1px solid #DDD;
@@ -1084,21 +1157,12 @@ cursor: pointer;
 	height: auto;
 }
 
-#searchItemToShow>span{
-	padding-right: 10px;
-	padding-left: 10px;
+
+#searchContentFull>ul {
+  color:#444;
 }
 
-#itemsDisplay{
-	width: 100%;
-	height: 40px;
-	background-color: #EEE;
-}
-
-#searchContentFull ul {
-}
-
-#searchContentFull ul li{
+#searchContentFull>ul>li{
 	height: 32px;
 	width: 100%;
 	border-bottom:1px solid #E0E0E0;
@@ -1112,48 +1176,211 @@ cursor: pointer;
 	-o-transition-property:color, text;
 	-o-transition-duration:0.1s;
 	-o-transition-timing-function: linear, ease-in;
+display: -moz-box;
+display: -webkit-box;
+display: -ms-flexbox;
+display: box;
 }
 
-#searchContentFull ul li:hover{
+#searchContentFull>ul>li:hover{
 	background-color: #EEE;
 }
-#searchContentFull ul li:hover .iDname{
-	color: #008DDE;
+
+#searchContentFull>ul>li>div{
+
 }
-#searchContentFull ul li>div{
-	float: left;
+#searchContentFull>ul>li:nth-child(2n-1){
+  background-color:#eee;
 }
+#searchContentFull>ul>li:nth-child(2n){
+  background-color:#f9f9f9;
+}
+
+
+
+
+
+/*changed search playlist*/
+#playlistContentFull{
+	width: 100%;
+	background-color: white;
+	height: auto;
+}
+
+#searchItemToShow>span{
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+#itemsDisplay{
+	width: 100%;
+	height: 40px;
+	background-color: #EEE;
+}
+
+/*changed search playlist*/
+#playlistContentFull>ul {
+  color:#444;
+}
+
+/*changed search playlist*/
+#playlistContentFull>ul>li{
+	height: 32px;
+	width: 100%;
+	border-bottom:1px solid #E0E0E0;
+	white-space: nowrap;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration: 0.1s, 0.1s;
+	-webkit-transition-timing-function: ease-in ,linear,ease-out;
+	-moz-transition-property:color, text;
+	-moz-transition-duration:0.1s;
+	-moz-transition-timing-function: linear, ease-in;
+	-o-transition-property:color, text;
+	-o-transition-duration:0.1s;
+	-o-transition-timing-function: linear, ease-in;
+display: -moz-box;
+display: -webkit-box;
+display: -ms-flexbox;
+display: box;
+}
+
+/*changed search playlist*/
+#playlistContentFull>ul>li:hover{
+	background-color: #EEE;
+}
+
+/*changed search playlist*/
+#playlistContentFull>ul>li>div{
+
+}
+#playlistContentFull>ul>li:nth-child(2n-1){
+  background-color:#eee;
+}
+#playlistContentFull>ul>li:nth-child(2n){
+  background-color:#f9f9f9;
+}
+.opacity_zero{
+  opacity:0;
+}
+
+.opacity_one{
+  opacity:1;
+}
+
+
 #itemsDisplay>div {
 	font-size: 12px;
 	font-weight: bold;
 	font-family: arial;
 	color: #505050;
-	float: left;
 }
 
 .iDname{
-	width: 45%;
-	padding: 9px 10px 0px 0px;
-	font-size: 12px;
+-moz-box-flex: 16;
+-webkit-box-flex: 16;
+-ms-flex: 16;
+box-flex: 16;
+width: 1%;
+padding: 9px 10px 0px 0px;
+         font-size: 12px;
+overflow: hidden;
+          text-overflow: ellipsis;
+}
+
+.iDname:hover{
+  cursor:pointer;
+color:#008DDE;
+}
+
+.iDoptions{
+position:relative;
+width: 1%;
+       -webkit-box-flex: 2.0;
+       -moz-box-flex: 2.0;
+       -ms-flex: 2.0;
+       box-flex: 2.0;
+padding: 9px 0px 0px 0px;
+         font-size:18px;
+cursor:pointer;
+color:#aaa;
+}
+.iDoptions:hover{
+color:#008DDE !important;
+}
+
+#playlistContentFull>ul>li:hover .iDoptions{
+color:#333;
+
 }
 
 .iDalbum{
-	width: 25%;
-	padding: 9px 10px 0px 0px;
-	font-size: 12px;
+width: 1%;
+padding: 9px 10px 0px 0px;
+         font-size: 12px;
+         -moz-box-flex: 16;
+         -webkit-box-flex: 16;
+         -ms-flex: 16;
+         box-flex: 16;
+overflow: hidden;
+          text-overflow: ellipsis;
 }
 
+.iDalbum:hover{
+cursor:pointer;
+color:#008DDE;
+}
+
+
 .iDartist{
-	width: 25%;
-	padding: 9px 0px 0px 0px;
-	font-size: 12px;
+width: 1%;
+padding: 9px 0px 0px 0px;
+         font-size: 12px;
+         -moz-box-flex: 16;
+         -webkit-box-flex: 16;
+         -ms-flex: 16;
+         box-flex: 16;
+overflow: hidden;
+          text-overflow: ellipsis;
+}
+
+.iDartist:hover{
+  cursor:pointer;
+color:#008DDE;
+
 }
 
 .iDsrno{
-	width: 25px;
-	/*height: 32px;*/
-	padding: 8px 0 0 10px;
-	font-size: 12px;
+width: 25px;
+       -webkit-box-flex: 1.0;
+padding: 8px 0 0 10px;
+         font-size: 12px;
+}
+
+.playlist_item_setting_box{
+width: 130px;
+       background-color: #FFF;
+position: absolute;
+display: none;
+left: 28px;
+top: 11px;
+     font-size: 12px;
+color: #808080;
+       border-radius: 2px;
+       box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+border: 1px solid #BBB;
+        z-index: 45;
+}
+
+.playlist_item_setting_box>ul>li{
+ color: #757575;
+        font-size: 12px;
+        border-bottom: 1px solid #EEE;
+padding: 6px;
+cursor: pointer;
+}
+
+.playlist_item_setting_box>ul>li:hover{
+ color:#333;
 }
 
 /*Playlist view */
@@ -1221,12 +1448,15 @@ cursor: pointer;
 
 /* queue*/
 #queue_trash{
+  display:none;
   float: right;
-  position: relative;
-  top: -28px;
-  color: #686868;
-  cursor: pointer;
-  right: 5px;
+position: relative;
+top: -30px;
+color: #686868;
+cursor: pointer;
+width: 20px;
+height: 20px;
+      text-align: center;  
 }
 /* blur css*/
 .blur_back{
@@ -1236,3 +1466,748 @@ cursor: pointer;
   filter:blur(30px);
 }
 
+.ui-sortable-helper{
+ box-shadow: #AAA 0px 1px 1px;
+border: 1px solid #CCC;
+}
+
+
+#queue_dropdown{
+background-color: rgb(255, 255, 255);
+width: 150px;
+position: absolute;
+right: 11px;
+top: 45px;
+z-index: 2;
+border-radius:3px;
+box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+border: 1px solid #BBB;
+}
+#pointer_queue{
+  position: absolute;
+            border-bottom: 12px solid #FFF;
+            border-left: 10px solid rgba(0, 0, 0, 0);
+            border-right: 10px solid rgba(0, 0, 0, 0);
+right: 12px;
+top: -12px;
+     box-shadow: 0 0 95px rgba(0, 0, 0, 0.4);
+
+}
+
+#queue_dropdown ul li { 
+       color: #757575;
+       font-size: 12px;
+       border-bottom: 1px solid #EEE;
+       padding: 6px;
+       cursor:pointer;
+}
+
+#queue_dropdown ul li:hover {
+color:#444;
+} 
+  
+
+/* playlist view */
+
+#playlistBanner{
+width: 100%;
+       background-color: #515151;
+}
+#playlistBanner ul li {
+float: left;
+display: block;
+width: 20%;
+       /*height: 100px;*/
+background: url(http://www.savingcountrymusic.com/wp-content/uploads/2013/04/taylor-swift.jpg);
+            background-size: cover;
+
+
+}
+
+#layerBanner{
+  width: 100%;
+height: 100px;
+position: absolute;
+          z-index: 1;
+
+}
+#viewPlaylist{
+position: relative;
+height: 100%;
+width: 100%;
+       background-color: #FFF;
+}
+
+#playlistInfo{
+position: absolute;
+top:134px;/*change this browser*/
+color: #FFF;
+width:100%;
+       z-index: 2;
+       text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+}
+
+#playlistName{
+  font-size: 24px;
+float: left;
+       margin-left:20px;
+       font-family: "helvetica_neue_bold";
+}
+
+#playlistSongCount{
+  font-size: 24px;
+float: right;
+       margin-right: 20px;
+       font-family: "helvetica_neue_light";
+}
+
+/* save as playlist dialog box */
+.save_as_playlist_open{
+          display: block;
+          width: 400px;
+          height: 250px;
+          position: absolute;
+          background-color: #FFF;
+          z-index: 3;
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+          border-bottom-left-radius: 3px;
+          box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 25px;
+          border: 1px solid #BBB;
+          left:50%;
+          margin-left:-200px;
+          top: 40%;
+          margin-top:-126px;
+}
+
+.save_as_playlist_close{
+        display:none;
+}
+
+#save_playlist_header{
+height: 30px;
+width: 100%;
+       background-color: #F1F2F4;
+       text-indent: 10px;
+       line-height: 30px;
+color: #444;
+       font-size: 14px;
+}
+
+#save_as_playlist_cancel{
+    position: absolute;
+float: right;
+right: 7px;
+top: 7px;
+cursor: pointer;
+color: #757575;
+       font-size: 15px;
+}
+#save_as_playlist_cancel:hover{
+  color:#444;
+}
+
+#as_prev_list{
+width: 220px;
+height: 37px;
+        border-radius: 3px;
+margin: 0 auto;
+       padding-top:35px;
+
+}
+
+#select_saved_playlist{
+  width: 220px;
+height: 37px;
+border: 1px solid #CCC;
+        border-radius: 3px;
+        text-indent: 10px;
+        font-size: 14px;
+color: #6E6E6E;
+background: #F8F8F8;
+            box-shadow: inset 0px 1px 0px #EAEAEA;
+cursor:pointer;
+
+}
+
+#select_saved_playlist:focus{
+  outline:0px;
+}
+
+#add_to_playlist_div{
+width: 220px;
+height: 37px;
+        border-radius: 3px;
+margin: 0 auto;
+       padding-top:35px;
+
+}
+
+
+#add_to_saved_playlist{
+  width: 220px;
+height: 37px;
+border: 1px solid #CCC;
+        border-radius: 3px;
+        text-indent: 10px;
+        font-size: 14px;
+color: #6E6E6E;
+background: #F8F8F8;
+            box-shadow: inset 0px 1px 0px #EAEAEA;
+cursor:pointer;
+
+}
+
+
+#add_to_saved_playlist:focus{
+  outline:0px;
+}
+
+
+#add_to_playlist_submit{
+position: absolute;
+background: #008DDE;
+width: 37px;
+height: 37px;
+right: 48px;
+       border-radius: 3px;
+color: #FFF;
+cursor:pointer;
+}
+
+#as_prev_submit:hover{
+  background:#009AF2;
+}
+
+
+#as_new_list{
+width: 100%;
+        background-color: #FFF;
+        border-bottom: 1px solid #EEE;
+        padding-top: 35px;
+        padding-bottom:35px;
+
+}
+#add_new_button{
+width: 200px;
+height: 17px;
+        background-color: #008DDE;
+margin: 0px auto;
+color: #FFF;
+       font-size: 14px;
+       text-align: center;
+padding: 10px;
+cursor: pointer;
+        border-radius: 3px;
+}
+#add_new_button:hover{
+background-color: #018BDC;
+    -webkit-transition: background-color 0.1s linear;
+        -moz-transition: background-color 300ms linear;
+            -o-transition: background-color 300ms linear;
+                -ms-transition: background-color 300ms linear;
+                    transition: background-color 300ms linear;
+
+}
+
+#add_new_submit{
+position: absolute;
+background: #008DDE;
+width: 37px;
+height: 37px;
+right: 48px;
+       border-radius: 3px;
+color: #FFF;
+cursor:pointer;
+}
+
+#as_prev_submit{
+position: absolute;
+background: #008DDE;
+width: 37px;
+height: 37px;
+right: 48px;
+       border-radius: 3px;
+color: #FFF;
+cursor:pointer;
+}
+
+#as_prev_submit:hover{
+  background:#009AF2;
+}
+
+#add_new_submit:hover{
+  background:#009AF2;
+}
+
+#icon-check-sign-button{
+  position: relative;
+display: block;
+         margin-top: 10px;
+         margin-left: 7px;
+         font-size:17px;
+}
+
+#create_new_input_div{
+
+display: block;
+width: 220px;
+height: 37px;
+margin: 0px auto;
+color: #FFF;
+       font-size: 14px;
+cursor: pointer;
+        border-radius: 3px;
+}
+
+#create_new_input{
+width: 220px;
+height: 37px;
+       border-radius: 3px;
+      font-size: 18px;
+color: #767676;
+      text-indent: 10px;
+border: 1px solid #CCC;
+       background-color: #F8F8F8;
+      box-shadow: inset 0px 1px 1px #D7D7D7; 
+}
+
+#create_new_input:focus{
+outline:0px;
+}
+
+/*Add to playlist */
+#add_to_playlist_dialog{
+
+
+}
+
+.add_to_playlist_close{
+display:none;
+}
+#add_to_playlist_header{
+height: 30px;
+width: 100%;
+       background-color: #F1F2F4;
+       text-indent: 10px;
+       line-height: 30px;
+color: #444;
+       font-size: 14px;
+}
+.add_to_playlist_open{
+display: block;
+width: 400px;
+height: 150px;
+position: absolute;
+          background-color: #FFF;
+          z-index: 3;
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+          border-bottom-left-radius: 3px;
+          box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 25px;
+border: 1px solid #BBB;
+left: 50%;
+      margin-left: -200px;
+top: 40%;
+     margin-top: -126px;
+}
+#add_to_playlist_cancel{
+position: absolute;
+float: right;
+right: 7px;
+top: 7px;
+cursor: pointer;
+color: #757575;
+       font-size: 15px;
+}
+/*mini icons */
+#mini_play{
+  position: absolute;
+width: 150px;
+height: 150px;
+top: -107px;
+left: 25px;
+      border-radius: 3px;
+border: 1px solid #101010;
+        box-shadow:0px 1px 1px #666;
+}
+
+#mini_icons{
+  width: 100%;
+height: 44px;
+        background-color: rgba(0, 0, 0, 0.64);
+bottom: 0px;
+position: absolute;
+          border-bottom-left-radius: 2px;
+          border-bottom-right-radius: 2px;
+border-top: 1px solid #222;
+box-shadow: inset 0px 1px 1px rgba(255, 255, 255, 0.25);
+}
+
+#mini_image{
+        /* background:url(http://userserve-ak.last.fm/serve/500/93440915/Overexposed.png);*/
+        width: 150px;
+        height: 150px;
+        background-size:cover;
+        background-color:#3C3C3C;
+        border-radius: 3px;
+
+}
+
+/*list display css */
+
+#list_number{
+width: 26px;
+height: 26px;
+        margin-top: 3px;
+        font-size: 12px;
+cursor: pointer;
+        line-height: 27px;
+        text-indent: 6px;
+}
+
+.song_options{
+  position: relative;
+color: #FFF;
+       z-index: 3;
+       font-size: 20px;
+float: right;
+right: 5px;
+top: 5px;
+display: none;
+background: rgba(0, 0, 0, 0.57);
+            border-radius: 2px;
+cursor:pointer;
+}
+
+
+.setting_button{
+  display: block;
+           margin-top: 2px;
+}
+
+.item_wrapper:hover .song_options{
+  display:block;
+}
+
+.song_options:hover{
+  color:#008DDE;
+}
+
+.song_setting_box{
+width: 130px;
+        background-color: #FFF;
+position: absolute;
+display: none;
+left: 34px;
+top: 3px;
+     font-size: 12px;
+color: #808080;
+       border-radius: 2px;
+box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+border: 1px solid #BBB;
+}
+
+.song_setting_box ul li {
+
+color: #757575;
+       font-size: 12px;
+       border-bottom: 1px solid #EEE;
+padding: 6px;
+cursor: pointer;
+}
+.song_setting_box ul li:hover{
+ color:#222;
+
+}
+
+.ui-dialog{
+display: block;
+width: 400px;
+height: 250px;
+position: absolute;
+          background-color: #FFF;
+          z-index: 3;
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+          border-bottom-left-radius: 3px;
+          box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 25px;
+border: 1px solid #BBB;
+left: 50%;
+margin-left:-200px;
+top: 40%;
+     margin-top: -126px;
+}
+
+
+.ui-dialog-titlebar{
+height: 30px;
+width: 100%;
+       background-color: #F1F2F4;
+       text-indent: 10px;
+       line-height: 30px;
+color: #444;
+       font-size: 14px;
+}
+
+#login_popup{
+display: block;
+width: 400px;
+height: 250px;
+position: absolute;
+          background-color: #FFF;
+          z-index: 3;
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+          border-bottom-left-radius: 3px;
+          box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 25px;
+border: 1px solid #BBB;
+left: 50%;
+margin-left:-200px;
+top: 40%;
+     margin-top: -126px;
+}
+
+#login_popup form div input{
+width: 200px;
+height: 36px;
+        font-size: 16px;
+        text-indent: 10px;
+border: 1px solid #CCC;
+        border-radius: 2px;
+background: #F8F8F8;
+            box-shadow: inset 0px 1px 0px #EAEAEA;
+}
+
+#signin_button{
+right: 10px;
+top: 8px;
+width: 86px;
+position: absolute;
+          text-align: center;
+height: 34px;
+        text-shadow: 0px -1px 1px #0069A6;
+        line-height: 34px;
+        font-size: 14px;
+        font-family: helvetica_neue_medium;
+        border-radius: 3px;
+        background-color: #008DDE;
+color: #FFF;
+border: 1px solid #003857;
+        box-shadow: 0px 1px 2px #3D3D3D;
+cursor:pointer;
+
+}
+
+#signin_button_large{
+  width: 200px;
+         text-align: center;
+margin: 10px auto;
+height: 36px;
+        line-height: 36px;
+        font-size: 14px;
+        border-radius: 2px;
+        background-color: #008DDE;
+color: #FFF;
+cursor: pointer;
+}
+
+#signin_button_large:hover{
+ background-color:#009AF2;
+-webkit-transition-property:color, text;
+	-webkit-transition-duration: 0.1s, 0.1s;
+	-webkit-transition-timing-function: ease-in ,linear,ease-out;
+	-moz-transition-property:color, text;
+	-moz-transition-duration:0.5s;
+	-moz-transition-timing-function: linear, ease-in;
+	-o-transition-property:color, text;
+	-o-transition-duration:0.5s;
+	-o-transition-timing-function: linear, ease-in;
+
+}
+
+#login_popup form div:nth-child(2){
+  width: 200px;
+margin: 0 auto;
+        margin-bottom: 10px;
+        margin-top: 40px;
+
+}
+
+#login_popup form div:nth-child(3){
+   width: 200px;
+margin: 0 auto;
+
+}
+
+#signin_header{
+
+height: 30px;
+width: 100%;
+       background-color: #F1F2F4;
+       text-indent: 10px;
+       line-height: 30px;
+color: #444;
+       font-size: 14px;
+}
+
+#signin_cancel{
+position: absolute;
+float: right;
+right: 12px;
+top: 7px;
+cursor: pointer;
+color: #757575;
+       font-size: 15px;
+}
+
+#loading_line{
+  width: 100%;
+height: 2px;
+background: #F00;
+position: fixed;
+top: 0px;
+     z-index: 3;
+}
+
+
+/* artist page list options  */
+.album_options{
+position: absolute;
+right: 0px;  
+  margin-top: 10px;
+    margin-right: 6px;
+    font-size: 18px;
+color:#AAA;
+cursor:pointer;
+
+}
+
+.popular_item:hover .album_options{
+  color:#333;
+}
+
+
+.album_options:hover{
+  color:#008DDE !important;
+}
+
+.album_item_setting_box{
+  width: 130px;
+         background-color: #FFF;
+position: absolute;
+display: none;
+left: 28px;
+top: -12px;
+     font-size: 12px;
+color: #808080;
+       border-radius: 2px;
+       box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+border: 1px solid #BBB;
+        z-index: 45;
+}
+.album_item_setting_box>ul>li{
+color: #757575;
+       font-size: 12px;
+       border-bottom: 1px solid #EEE;
+text-indent: 6px;
+cursor: pointer;
+}
+
+
+/* artist list settings */
+
+.artist_options{
+position: absolute;
+right: 0px;  
+  margin-top: 10px;
+    margin-right: 6px;
+    font-size: 18px;
+color:#AAA;
+cursor:pointer;
+
+}
+
+.popular_item:hover .artist_options{
+  color:#333;
+}
+
+
+.artist_options:hover{
+  color:#008DDE !important;
+}
+
+.artist_item_setting_box{
+  width: 130px;
+         background-color: #FFF;
+position: absolute;
+display: none;
+left: 28px;
+top: -12px;
+     font-size: 12px;
+color: #808080;
+       border-radius: 2px;
+       box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+border: 1px solid #BBB;
+        z-index: 45;
+}
+
+.artist_item_setting_box>ul>li{
+color: #757575;
+       font-size: 12px;
+       border-bottom: 1px solid #EEE;
+text-indent: 6px;
+cursor: pointer;
+}
+/* artist_lang*/
+
+#artist_language{
+margin-top: 2px;
+background: #333;
+height: 30px;
+color: #AAA;
+       font-size: 14px;
+       text-indent: 10px;
+       margin-bottom:20px;
+       border-radius:3px;
+       border-bottom:1px solid #202020;
+}
+
+#artist_language>span{
+  cursor:pointer;
+}
+
+#artist_language_display{
+  line-height: 30px;
+}
+
+#artist_language_dropdown{
+  width: 200px;
+position: absolute;
+background: #343434;
+top: 43px;
+}
+
+#artist_language_dropdown>ul>li{
+height: 30px;
+       border-bottom: 1px solid #202020;
+      line-height: 30px;
+cursor: pointer; 
+}
+
+
+
+#artist_language_dropdown>ul>li:nth-child(4){
+    border-bottom:0px;
+}
+#artist_language_icon{
+
+float: right;
+position: relative;
+top: 5px;
+right: 10px;
+}

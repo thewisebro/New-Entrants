@@ -29,13 +29,13 @@
     // class of the complete item .. "itemwrapper"  item_wrapperAlb
     //class of the item image .. "itemimage"   itemAlb
   // get width of the container
-  var width= $("#"+divwidth+"").width()-3;
+  var width= $("#"+divwidth+"").width()-5;
  // var width = document.getElementById(""+divwidth+"").offsetWidth;
   // x=width of box to be resized , y=distance b/n 2 boxes
     var x,y,n=0;
     var i=0;
-    $("."+itemwrapper+"").css("padding-right", Math.floor(0));
-    $("."+itemwrapper+"").css("padding-left", Math.floor(0));
+    $("."+itemwrapper+"").css("margin-right", Math.floor(0));
+    $("."+itemwrapper+"").css("margin-left", Math.floor(0));
 
     // setting the lower limit to 170 and going upto 240 .. and in each loop checking 
     // if the y satisfies our condition for that particular width of the box.
@@ -59,17 +59,17 @@
     }
    // console.log(y);
  //   console.log(x);
-     console.log(width+" : "+x+" : "+n);
-    $("."+itemwrapper+"").css("padding-right", y);
+   //  console.log(width+" : "+x+" : "+n);
+    $("."+itemwrapper+"").css("margin-right", y);
     $("."+itemwrapper+"").css("margin-top", y);
 console.log(n+"final");
    var k =1;
    var noOfItems = $("."+itemwrapper+"").length;
    for (i=0; i<=noOfItems-1 ; i=i+n){
-     var lol = $($("."+itemwrapper+"")[i]).attr('id');
+    // var lol = $($("."+itemwrapper+"")[i]).attr('id');
     // console.log(lol);
       
-       $($("."+itemwrapper+"")[i]).css("padding-left", y);
+       $($("."+itemwrapper+"")[i]).css("margin-left", y);
 
    }
 
@@ -247,6 +247,9 @@ console.log(n+"final");
     });
 
 
+//song_options
+
+
 
 
     // change the color of selected link to white 
@@ -307,7 +310,20 @@ $(window).resize(function() {
 
  //resizeit('artists_items','item_wrapperAlb','itemAlb');
 
+
+if($("#navigation a.selected")[0]==$("#playlists_link")[0]){
+        var widthOfDiv = $('#playlist_view').width()/5;
+                    $('#playlistBanner ul li').css({width:widthOfDiv,height:widthOfDiv});
+                                $('#playlistBanner').css({height:widthOfDiv});
+                                var tops = widthOfDiv-100;
+                                $('#layerBanner').css({top:tops+5});
+                                $("#playlistInfo").css({top:tops+50});
+
+}
+if($("#navigation a.selected")[0]==$("#trending_link")[0]){
 resizeit('container','item_wrapper','item');
+}
+
 });
 
 

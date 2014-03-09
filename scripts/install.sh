@@ -6,6 +6,7 @@ apt-get install python-pip
 apt-get install php5
 apt-get install rubygems
 apt-get install python-mysqldb
+apt-get install python-pygresql
 
 pip install Django\==1.6.1
 
@@ -51,3 +52,19 @@ pip install BeautifulSoup
 #################### Ends ###################
 
 
+# django-extensions
+pip install Werkzeug
+
+# several python modules
+
+pip install xhtml2pdf
+pip install pisa
+pip install xlrd
+pip install xlwt
+pip install whoosh
+pip install mutagen
+pip install reportlab
+pip install python-dateutil
+
+# fuzzy wuzzy
+pip install -e git+https://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy

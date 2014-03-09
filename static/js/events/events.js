@@ -1,3 +1,5 @@
+//@ sourceURL=events.js
+
 var calendars = null;
 var events_per_request = 20;
 var display_by_month_year = false;
@@ -57,7 +59,7 @@ function load_events_page(hashtags){
           '<div id="date-matrix">'+
           '</div>'+
         '</div>'+
-        (user_logged_in?
+        (user.is_authenticated?
         '<div id="add-event-div">'+
           '<div class="div-button" onclick="add_event();">Add an event</div>'+
         '</div>':'')+
