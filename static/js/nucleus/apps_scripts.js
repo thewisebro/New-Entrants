@@ -6,7 +6,11 @@ var apps_scripts = {
   ],
   'events':[
     '/static/js/events/events.js'
+  ],
+  'news':[
+    '/static/js/news/news.js'
   ]
+
 }
 
 function load_app(app, callback){

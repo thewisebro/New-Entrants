@@ -120,7 +120,6 @@ function search(q)
                   +  '<div class="searchItemDetails">'
 		              +   '<div class="itemName">'+ data.albums[i].album+'</div>'
 		              +    '<div class="itemSubDetail">'+data.albums[i].artists[0].artist+'</div></div></li>';
-         $("#albumSearchSpan").append(html);
        }
        $("#artistSearch").empty();
        $("#artistSearch").append('<div class="searchHeading">Artists<span> ('+data.artists.length+')</span></div>');
