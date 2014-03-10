@@ -246,6 +246,8 @@
   <div id="mini_play">
     <div id="mini_image">
     </div>
+    <div id="mini_image">
+    </div>
     <div id="mini_icons">
     </div>
   </div>
@@ -323,10 +325,10 @@
   </div> <!-- div #bigwrapper ends -->
 </body>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-1.10.2.min.js"></script>
-    <script src="{{ STATIC_URL }}js/fuse.min.js"></script>
     <script src="{{ STATIC_URL }}js/csrf.js"></script>
     <script src="{{ STATIC_URL }}js/common.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/keymap.js"></script>
+    <!-- // <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/keymap.js"></script>  -->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/keyboard.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}jquery/nanoscroller/jquery.nanoscroller.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/resize.js"></script> 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/music.js"></script>
@@ -340,7 +342,7 @@
 -->
 <!-- would add after adding music player bottom -->
 
-
+    
     <script type="text/javascript">
     $( document ).ready(function() {
 		    // put id to the large slider to change its color to blue
@@ -357,6 +359,7 @@ $('#centerdata').css('width',$(window).width()-180-240);
 // $('#centerdata').css('width',$(window).width()-180-240);
 
 </script>
+
 
 
 <!--    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/soundedit.js"></script>   -->

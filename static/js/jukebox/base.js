@@ -23,7 +23,7 @@ $('#inputFor').val(search_str);
        for(var i=0; i<songs.length;i++){
             $('#song_searchList').append(''+
 		'		<li>'+
-		'			<div class="iDsrno">'+left_add_zero(i+1)+'</div>'+
+		'			<div style="background-image:url('+'http://192.168.121.5\/songsmedia\/' + data.songs[i].album.album_art+')"  class="iDsrno"></div>'+
 		'			<div class="iDname song draggable" id="song_'+songs[i].id+'">'+songs[i].song+'</div>'+
 		'			<div class="iDalbum album" id="album_'+songs[i].album.id+'">'+songs[i].album.album+'</div>'+
 		'			<div class="iDartist artist" id="artist_'+songs[i].artists[0].id+'">'+songs[i].artists[0].artist+'</div>'+
@@ -626,7 +626,7 @@ function display_playlists(){
   });
   }
 }
-
+var playlist_open_now=[];
 function display_playlist(id){
   var play_id = id;
   url = "playlists/" + id;
@@ -644,6 +644,7 @@ function display_playlist(id){
       var playlist = data;
       var banner_songs_array = [];
       var album_present = [];
+      playlist_open_now = [];
       var usong_count=0;
       var songs = playlist.songs.split('b');
       $("#playlist_view").empty();
@@ -658,8 +659,8 @@ function display_playlist(id){
       {
         var k = playlist.songs_list[parseInt(songs[j])].id;
         var id = 'song_'+k;
-        var image = 'http://192.168.121.5\/songsmedia\/' + playlist.songs_list[parseInt(songs[j])].album.album_art;
-        image = 'http://192.168.121.5'+image;
+        var image = playlist.songs_list[parseInt(songs[j])].album.album_art;
+        image = 'http://192.168.121.5/songsmedia/'+image;
         var artist_name = playlist.songs_list[parseInt(songs[j])].artists[0].artist;
         var album_name = playlist.songs_list[parseInt(songs[j])].album.album;
         var song_name = playlist.songs_list[parseInt(songs[j])].song;
@@ -667,9 +668,9 @@ function display_playlist(id){
         var album_id = playlist.songs_list[parseInt(songs[j])].album.id;
         var file_name = playlist.songs_list[parseInt(songs[j])].file_name;
         //'<div class="pqimage" style="background:url(\''+image+'\'); background-size:cover">'
-        html += '<li ><div class="iDsrno">'+left_add_zero(j+1)+'</div><div class="iDname song draggable" id="'+id+'">'+song_name+'</div><div class="iDalbum album" id="album_'+album_id+'">'+album_name+'</div><div class="iDartist artist" id="artist_'+artist_id+'">'+artist_name+'</div id="iDoptions"><div class="iDoptions"><i id="playlist_setting_icon" class="icon-ellipsis-horizontal"></i><div class="playlist_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li class="share_url" id="share_'+k+'">Share</li><li class="delete_from_playlist" id="delete_'+j+'_'+play_id+'">Delete</li></ul></div></div></li>';
+        html += '<li ><div class="iDsrno" style="background-image:url('+ image+')"></div><div class="iDname song draggable" id="'+id+'">'+song_name+'</div><div class="iDalbum album" id="album_'+album_id+'">'+album_name+'</div><div class="iDartist artist" id="artist_'+artist_id+'">'+artist_name+'</div id="iDoptions"><div class="iDoptions"><i id="playlist_setting_icon" class="icon-ellipsis-horizontal"></i><div class="playlist_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li class="share_url" id="share_'+k+'">Share</li><li class="delete_from_playlist" id="delete_'+j+'_'+play_id+'">Delete</li></ul></div></div></li>';
         if(!(playlist.songs_list[parseInt(songs[j])].id in songs_url)) songs_url[playlist.songs_list[parseInt(songs[j])].id]=playlist.songs_list[parseInt(songs[j])];
-
+        playlist_open_now.push(playlist.songs_list[parseInt(songs[j])]);
         if($.inArray(album_id,album_present)>=0) continue;
         banner_songs_array[usong_count++]=k;
         album_present.push(album_id);
@@ -834,7 +835,10 @@ function play(id)
     Jukebox.play_url('song_'+id,'http://192.168.121.5/songs/english/'+song.file_name);
     if( !in_queue && (id != song_playing)){ add_queue_song(song); now_playing=queue.length-1; }
     $("#musicPlayerPic").empty();
+    $('#mini_image').css({'margin-top':'150px'});
+    // alert('ssss');
     $("#mini_image").css({'background-image':'url('+'http://192.168.121.5\/songsmedia\/' + song.album.album_art+')'});
+    $('#mini_image').animate({marginTop:'0px'});
 //   $("#musicPlayerPic").append('<img src="\/songsmedia\/' + song.album.album_art +  '" style="width: 32px; height: 32px;" >');
 //   Jukebox.play_url('song_'+id,'http://192.168.121.5/songs/english/'+song.file_name)
  $("#ilSong").html('<b>'+song.song+'</b>');
@@ -853,7 +857,9 @@ function play(id)
        var song = data;
         if( !in_queue && (id != song_playing)){ add_queue_song(song); now_playing=queue.length-1; }
         $("#musicPlayerPic").empty();
+         $('#mini_image').css({'margin-top':'150px'});
         $("#mini_image").css({'background-image':'url('+'http://192.168.121.5\/songsmedia\/' + song.album.album_art+')'});
+            $('#mini_image').animate({marginTop:'0px'});
      $("#ilSong").html('<b>'+song.song+'</b>');
       var art = [];
       for(i=0;i<song.artists.length && i<5; i++) art.push(song.artists[i].artist);
@@ -881,14 +887,10 @@ function check_hash( name )
   if(name=='playing')
   {
 
-    song = hash.indexOf('song');
-    if(hash.length-song == phash.length-song)
-    {
-      for(i=song;i<hash.length;i++){ console.log(hash[i]+'  '+phash[i]);
-        if(hash[i]!=phash[i] ) return false;}
+    hsong = hash.indexOf('song')+1;
+    psong = phash.indexOf('song')+1;
+        if(hash[hsong]!=phash[psong] ) return false;
       return true;
-    }
-  return false;
   }
   if(name=='song')
   {
@@ -924,7 +926,7 @@ function split_hash(){
   hash = hash.split('/');
   name = hash[0];
   song = hash.indexOf('song');
-  if(song>=0 && check_hash('song')){ play(hash[song+1]); prev_hash=document.location.href.split('#')[1]; console.log(hash[song+1]); return;}
+  if(song>=0 && check_hash('song') && !check_hash('playing')){ play(hash[song+1]); prev_hash=document.location.href.split('#')[1]; console.log(hash[song+1]); return;}
   if ( Object.keys(names).indexOf(name) >= 0){
             if(!check_hash(name))
             {
@@ -972,7 +974,7 @@ function split_hash(){
         search_full(hash[1]);
     }
   }
-  if (song >= 0){
+  if (song >= 0 && !check_hash('playing')){
     play(hash[song+1]);
   }
 //  if (name!='search') prev_hash = document.location.href.split('#')[1];

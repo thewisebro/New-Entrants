@@ -306,6 +306,35 @@ class ChangeIndexPlaylistView(CreateAPIView):
     return Response('')
 
 
+class RenamePlaylistView(CreateAPIView):
+  serializer_class = PlaylistSerializer
+  permission_classes = (IsOwnerOrReadOnly,)
+  def post(self,request):
+    new_name = self.request.POST.get('name','')
+    playlist_id = int(self.request.POST.get('id',''))
+    active = self.request.user.is_active
+    if active :
+      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
+      if len(playlists) == 1 :
+        playlist = playlists[0]
+        playlist.name = str(new_name)
+        playlist.save()
+    return Response('')
+
+class DeletePlaylistView(CreateAPIView):
+  serializer_class = PlaylistSerializer
+  permission_classes = (IsOwnerOrReadOnly,)
+  def post(self,request):
+    playlist_id = int(self.request.POST.get('id',''))
+    active = self.request.user.is_active
+    if active :
+      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
+      if len(playlists) == 1 :
+        playlist = playlists[0]
+        playlist.delete()
+    return Response('')
 
 class PlaylistDescView(RetrieveAPIView):
 #queryset = Playlist.objects.all()

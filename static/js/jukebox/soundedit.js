@@ -24,7 +24,7 @@ function Player() {
        $('#'+sound.id).find('.play_icon').animate({'opacity':'1'},300);
         $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_pause.png");
         var id_play = sound.id.split('_')[1];
-        document.title=songs_url[id_play].song +'-'+ songs_url[id_play].artists[0].artist;
+        // document.title=songs_url[id_play].song +'-'+ songs_url[id_play].artists[0].artist;
       
     },
 
@@ -33,21 +33,21 @@ function Player() {
       
        $('#'+sound.id).find('.faint').attr('style','');
        $('#'+sound.id).find('.play_icon').attr('style','');
-        document.title='Jukebox';
+        // document.title='Jukebox';
 
     },
 
     pause: function() 
            {
         $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_play.png");
-        document.title='Jukebox';
+        // document.title='Jukebox';
     },
 
     resume: function() {
 
         $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_pause.png");
         var id_play = sound.id.split('_')[1];
-        document.title=songs_url[id_play].song +'-'+ songs_url[id_play].artists[0].artist;
+        // document.title=songs_url[id_play].song +'-'+ songs_url[id_play].artists[0].artist;
     },
 
     finish: function() {
@@ -55,7 +55,7 @@ function Player() {
        $("#musicBlueSlider").css('width','0');
        $("#ui-sliderlarge-handle").css('left','0');
        $("#timePlayed").html(0+':'+"00");
-        document.title='Jukebox';
+        // document.title='Jukebox';
        
        // $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_play.png");
       // $("#bLeftPlay img").click();
@@ -351,7 +351,7 @@ function Player() {
     });
     //mute button
     $('#volumeicons').on('click',function(){
-
+      volume = $('#volumeicons i');
        if(sound){
         sound.toggleMute();
         }
@@ -400,12 +400,43 @@ function Player() {
                var value = $(this).slider('value');
                 if(value <= 5) {
                     volume.removeClass().addClass( "icon-volume-off" );
+                    if(sound){
+                       sound.toggleMute();
+                      sound.setVolume(value);
+                      console.log('value set to');
+                      console.log(value);
+                    }
+                    if(sound){
+                      sound.setVolume(value);
+                      console.log('value set to');
+                      console.log(value);
+                    }
+                    checkmute=1;
                 }
                 else if (value <= 65) {
                     volume.removeClass().addClass( "icon-volume-down" );
+                    if(checkmute && sound){
+                      checkmute=0;
+                      sound.toggleMute();
+
+                    }
+                    if(sound){
+                      sound.setVolume(value);
+                      console.log('value set to');
+                      console.log(value);
+                    }
                 }
                 else {
                     volume.removeClass().addClass( "icon-volume-up" );
+                    if(checkmute && sound){
+                      checkmute=0;
+                      sound.toggleMute();
+                    }
+                    if(sound){
+                      sound.setVolume(value);
+                      console.log('value set to');
+                      console.log(value);
+                    }
                 }
 
             },
@@ -499,6 +530,122 @@ function Player() {
       $("#looppic").html("<span>0</span>");
      }
     });
+
+    // keyboard
+
+ // keyboardjs
+    KeyboardJS.on('space',function(){
+      if(!select){
+        $('bLeftPlay').click();
+      }
+    });
+
+    KeyboardJS.on('ctrl > up',function(){
+      r = $('#slider').slider('value') + 10 ;
+      $('#slider').slider( "value",r );
+      var value = $('#slider').slider('value');
+                volume = $('#volumeicons i');
+                console.log(value);
+                if(value <= 5) { 
+                    volume.removeClass().addClass( "icon-volume-off" );
+                    if(sound){
+                      sound.toggleMute();
+                      sound.setVolume(value);
+                      console.log('value set to');
+                      console.log(value);
+                    }
+                    if(sound){
+                      sound.setVolume(value);
+                      console.log('value set to');
+                      console.log(value);
+                    }
+                    checkmute=1;
+                }
+                else if (value <= 65) {
+                    volume.removeClass().addClass( "icon-volume-down" );
+                    if(checkmute && sound){
+                      checkmute=0;
+                      sound.toggleMute();
+                    }
+                    if(sound){
+                      sound.setVolume(value);
+                      console.log('value set to');
+                      console.log(value);
+                    }
+                }
+                else {
+                    volume.removeClass().addClass( "icon-volume-up" );
+                    if(checkmute && sound){
+                      checkmute=0;
+                      sound.toggleMute();
+                    }
+                    if(sound){
+                      sound.setVolume(value);
+                      console.log('value set to');
+                      console.log(value);
+                    }
+               }
+            
+    });
+
+     KeyboardJS.on('ctrl > down',function(){
+      r = $('#slider').slider('value') - 10 ;
+      $('#slider').slider( "value",r );
+
+       var value = $('#slider').slider('value');
+                volume = $('#volumeicons i');
+                console.log(value);
+                if(value <= 5) { 
+                    volume.removeClass().addClass( "icon-volume-off" );
+                    if(sound){
+                      sound.toggleMute();
+                      sound.setVolume(value);
+                      console.log('value set to');
+                      console.log(value);
+                    }
+                    if(sound){
+                      sound.setVolume(value);
+                      console.log('value set to');
+                      console.log(value);
+                    }
+                    checkmute=1;
+                }
+                else if (value <= 65) {
+                    volume.removeClass().addClass( "icon-volume-down" );
+                    if(checkmute && sound){
+                      checkmute=0;
+                      sound.toggleMute();
+                    }
+                    if(sound){
+                      sound.setVolume(value);
+                      console.log('value set to');
+                      console.log(value);
+                    }
+                }
+                else {
+                    volume.removeClass().addClass( "icon-volume-up" );
+                    if(checkmute && sound){
+                      checkmute=0;
+                      sound.toggleMute();
+                    }
+                    if(sound){
+                      sound.setVolume(value);
+                      console.log('value set to');
+                      console.log(value);
+                    }
+               }
+    });
+
+    KeyboardJS.on('ctrl + right',function(){
+      inc = $('#musicSlider').width()*0.10;
+      c = $("#musicBlueSlider").width() + inc;
+      $('bLeftPlay').click();
+      $("#musicBlueSlider").width(c);
+      $('bLeftPlay').click();
+
+
+    });
+
   }//handle click
 
   this.stopSound = function(oSound) {
@@ -536,3 +683,10 @@ soundManager.onready(function() {
   // soundManager.createSound() etc. may now be called
   Jukebox = new Player();
 });
+
+
+
+
+
+
+//  this.position change

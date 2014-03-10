@@ -99,7 +99,6 @@ function key_ready(){
 
 function keyDown(e)
 {
-   keyMap(e);
    if(e.ctrlKey || e.altKey) return;
    if(!select){
  if(jQuery.inArray(e.keyCode,[8,9,13,16,17,18,19,20,32,33,34,35,36,37,38,39,40,45,46,91,92,93,107,109,112,113,114,115,116,117,118,119,120,121,122,123,144,145,224]) !== -1){ return;}
@@ -210,7 +209,7 @@ function add_LS_queue(song)
 {
   var id = 'song_'+song.id;
   var image = '\/songsmedia\/' + song.album.album_art;
-  image = 'http://192.168.121.5:60000'+image;
+  image = 'http://192.168.121.5'+image;
   var artist_name = song.artists[0].artist;
   var song_name = song.song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
@@ -231,7 +230,7 @@ function add_next_queue(song)
 {
   var id = 'song_'+song.id;
   var image = '\/songsmedia\/' + song.album.album_art;
-  image = 'http://192.168.121.5:60000'+image;
+  image = 'http://192.168.121.5'+image;
   var artist_name = song.artists[0].artist;
   var song_name = song.song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
@@ -268,7 +267,7 @@ function add_queue_song(song)
 {
   var id = 'song_'+song.id;
   var image = '\/songsmedia\/' + song.album.album_art;
-  image = 'http://192.168.121.5:60000'+image;
+  image = 'http://192.168.121.5'+image;
   var artist_name = song.artists[0].artist;
   var song_name = song.song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
@@ -687,4 +686,80 @@ function playlist_banner_images(songs)
         $(this).css('background-image','url(http://192.168.121.5\/songsmedia\/'+songs_url[new_songs[song_count]].album.album_art+')');
         song_count++;
       }); 
+}
+
+function add_queue_playlist()
+{
+   for(var i=0;i<playlist_open_now.length;i++)
+   {
+     add_LS_queue(playlist_open_now[i]); 
+   }
+}
+
+function delete_playlist(id)
+{
+  $('ul#playlists li#playlist_'+id).remove();
+  $.post('playlist_delete/',{id:id});
+  get_json('playlists');
+    
+}
+
+function reanme_playlist(where, id)
+{
+  if(where=='list')
+  {
+    var old_name = $('ul#playlists li#playlist_'+id+' span').text();
+    $('ul#playlists li#playlist_'+id).html('<input type="text" value="'+old_name+'" >');
+    $('ul#playlists li#playlist_'+id+' input').select();
+    $('ul#playlists li#playlist_'+id+' input').focus();
+    select=true;
+    $('ul#playlists li#playlist_'+id+' input').keypress(function(e){
+              if(e.which == 13)
+              {
+                  
+                  var new_name = $('ul#playlists li#playlist_'+id+' input').val();
+                  $('ul#playlists li#playlist_'+id).html('<span>'+capitalize(new_name)+'</span>');
+                   $.post('playlist_rename/',{name:new_name, id:id}, function(data){
+                         get_json('playlists');
+                     }); 
+              }
+            
+        });
+
+    $('ul#playlists li#playlist_'+id+' input').focus(function(){ select=true; });
+    $('ul#playlists li#playlist_'+id+' input').blur(function(){
+            select=false; 
+                  $('ul#playlists li#playlist_'+id).html('<span>'+capitalize(old_name)+'</span>');
+
+        });
+  }
+  else if(where=='mainbody')
+  {
+    var old_name = $('#playlistName').text();
+    $('#playlistName').html('<input type="text" value="'+old_name+'" >');
+    $('#playlistName input').select().focus();
+    select=true;
+    $('#playlistName input').keypress(function(e){
+              if(e.which == 13)
+              {
+                  
+                  var new_name = $('#playlistName input').val();
+                  $('#playlistName').html(capitalize(new_name));
+                  $('ul#playlists li#playlist_'+id).html('<span>'+capitalize(new_name)+'</span>');
+                  
+                   $.post('playlist_rename/',{name:new_name, id:id}, function(data){
+                         get_json('playlists');
+                     }); 
+              }
+            
+        });
+
+    $('#playlistName input').focus(function(){ select=true; });
+    $('#playlistName input').blur(function(){
+            select=false; 
+                  $('#playlistName').html(capitalize(old_name));
+
+        });
+    
+  }
 }
