@@ -3,12 +3,13 @@
     <title>{% block title %}facapp{% endblock %}</title>
 
     {% block static %}
-    <!--<link type="text/css" href="{{ STATIC_URL }}ckeditor/contents.css">-->
-    <link type="text/css" href="{{ STATIC_URL }}css/facapp/bootstrap.css">
-    <link type="text/css" href="{{ STATIC_URL }}css/facapp/styles.css">
+    <!--<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}ckeditor/contents.css">-->
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/facapp/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/facapp/styles.css">
     <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
     <!--<script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>-->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/facapp/main.js"></script>
     {% endblock %}
   </head>
   <body>

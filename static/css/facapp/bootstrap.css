@@ -439,7 +439,8 @@ h6 .small,
 }
 h1,
 .h1 {
-  font-size: 36px;
+  font-size: 38px;
+  color: rgb(165, 122, 17);
 }
 h2,
 .h2 {
