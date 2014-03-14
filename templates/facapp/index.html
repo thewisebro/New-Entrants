@@ -43,7 +43,7 @@
 				</div>
 				<!-- <div class="row">
 					<div id="sections" class="col-md-3"></div> -->
-				<div id="content">
+				<div id="profile">
 					<div id="info" class="row">
 						<div class="col-md-8">
 							<p id="name">Gupta S.P.</p><!-- <br /> -->
@@ -56,8 +56,21 @@
 							<img class="faculty_image" src="http://people.iitr.ernet.in/facultyphoto/default.jpg">
 						</div>
 					</div>
+
+
+
+<!---//////////////////////////////////// load the already saved sections ///////////////////////////////////////////////////////-->
+
 					<div id="editable">
-						<div id="Areas Of Interest" class="section">
+    					{% if sections %}
+      						{% for section in sections %}
+        						<div contentEditable="true" id="{{ section.title }}" class="section">
+          							{{ section.content|safe }}
+        						</div>
+        						<button type="submit" ht="{{ section.title }}" onclick="return updateSection(this);" class="btn btn-primary" name="submit" >save</button>
+      						{% endfor %}
+    					{% endif %}
+						<!-- <div id="Areas Of Interest" class="section">
 							<p class="title">Areas Of Interest</p>
 							<p class="matter">Power Apparatus, Electric Device, Power Apparatus and Electric Drives</p>
 						</div>
@@ -78,12 +91,13 @@
 								<tr><td 0="">P.hd.</td><td 0="">Microprocessor Controlled Current Source Inverter fed Induction motor drive</td><td 0="">IIT Roorkee</td><td 0="">1995</td></tr><tr><td 0="">M.E.</td><td 0="">Power Apparatus And Electrical Drives </td><td 0="">IIT Roorkee</td><td 0="">								1985</td></tr><tr><td 0="">B.E.</td><td 0="">Electrical Engg. </td><td 0="">IIT Roorkee</td><td 0="">1983</td></tr></tbody>
 							</table></p>
 						</div>
-						<button type="submit" class="btn btn-primary">Save</button>
+						<button type="submit" class="btn btn-primary">Save</button> -->
 						<div class="section"><p class="title"></p><p class="matter"></p></div>
 					</div>
 				</div>
 				<!-- </div> -->
 			</div>
+			
 		</div>
 		<footer>
 				<div id="footer" >

@@ -21,7 +21,7 @@ def home(request):
   sections = Section.objects.all()
   titlesList = sectionData.titles
   data = {"sections" : sections, "titles_list" : titlesList}
-  return render(request, 'facapp/index.html', data)
+  return render(request, 'facapp/home.html', data)
 
 @csrf_exempt
 def sendFields(request, title):
@@ -30,7 +30,7 @@ def sendFields(request, title):
   for section in sections:
     if section[0][1] == title:
 #       print section[2][1]
-      print "this is what is being sent"
+      print 'this is what is being sent'
 #       sendIt = "{"
       sendIt = ""
       for fields in section[2][1]:
@@ -41,12 +41,19 @@ def sendFields(request, title):
       print sendIt
 #       return HttpResponse(section[2][1])
       return HttpResponse(sendIt)
-  return HttpResponse("try using the others category if you want another title")
+  return HttpResponse('try using the others category if you want another title')
 
 @csrf_exempt
 def createSection(request):
   print "recieved"
   if 'title' in request.POST:
     title = request.POST['title']
-    value = request.POST['content']
-
+    content = request.POST['content']
+    priority = request.POST['priority']
+    priority = int(priority)
+    user = request.user
+    p = Faculty.objects.get(user=user)
+    print p
+    s = Section.objects.create(title  = title, professor = p, priority = priority, content = content)
+    return HttpResponse('created new section instance')
+  return HttpResponse('no post request detected')

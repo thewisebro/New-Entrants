@@ -3,9 +3,12 @@ $(document).ready(function(){
 	    if($(this).hasClass("active")){
 	    }
 	    else{
-	      $(this).addClass("active");
 
+	      $(this).addClass("active");
 	      $(this).siblings().removeClass("active");
+
+        id = $(this).find("a").html().toLowerCase();
+        console.log($("#" + id).html());
 	    }
   });
 });
@@ -67,7 +70,31 @@ function get_fields(elem){
       }
       CKEDITOR.inline(title_id);
 
-      $("#new_sections").append('<button ht="' + title + '" type="submit" name="submit" onclick="return createSection()" >save</button> <br /><br />');
+      $("#new_sections").append('<input> <button ht="' + title + '" type="submit" name="submit" onclick="return createSection(this)" >save</button> <br /><br />');
     } 
   });
 }
+
+
+function createSection(elem){
+  var title = $(elem).attr("ht");
+  var title_id = title.split(' ').join('_').toLowerCase();
+  var content = $("#" + title_id).html();
+  var priority = $("#new_sections").find("input").val();
+  console.log(priority);
+  var inputs ={
+    "title" : title,
+    "content" : content,
+    "priority" : priority,
+  };
+  $.ajax({
+    data: inputs,
+    dataType: 'html',
+    type: "POST",
+    url: "/facapp/createSection/",
+    success: function(data){
+      console.log("done");
+    }
+  });
+}
+
