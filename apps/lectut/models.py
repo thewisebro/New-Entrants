@@ -30,15 +30,15 @@ class BaseUpload(models.Model):
   class Meta:
     abstract = True
 
-  def save(self, *args, **kwargs):
+  """def save(self, *args, **kwargs):
      if self.featured:
           self.__class__.objects.all().update(featured = False)
-     super(Model, self).save(*args, **kwargs)
+     super(Model, self).save(*args, **kwargs)"""
 
 class UploadImage(BaseUpload):
-  upload_image=models.ImageField(upload_to='lectut/images')
+  upload_image=models.ImageField(upload_to='lectut/images/')
 
-class UploadVideo(BaseUpload):
+'''class UploadVideo(BaseUpload):
   upload_video=models.FileField(upload_to='lectut/videos' , null=True)
   def matche_file_type(cls, iname, ifile, request):
         # the extensions that lectut will recognise for the uploaded video
@@ -59,7 +59,7 @@ class UploadPdf(BaseUpload):
           # the extensions that lectut will recognise for the uploaded pdf
           ext = os.path.splitext(iname)[1].lower()
           return ext in ['.pdf']
-
+'''
 class Upload(models.Model):
   content_type=models.ForeignKey(ContentType)
   object_id=models.PositiveIntegerField()
@@ -75,8 +75,15 @@ class Upload(models.Model):
   post_save.connect(create_upload, sender=BaseUpload)
 
 
+Act_Types = (
+        ('tut' , 'Tutorial'),
+        ('sol' , 'Solution'),
+        ('que' , 'Question'),
+        ('exm' , 'Exam Papers')
+    )
 class Activity(models.Model):
    log=models.ForeignKey(Upload)
+   act_type=models.CharField(max_length=3 , choices=Act_Types)
 
    #Creates Activity when Upload model is created
    def create_activity(sender, instance, *args, **kwargs):

@@ -1,6 +1,9 @@
 <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
          <p>
-             <input id="id_image" type="file" class="" name="image">
+             {{text_form}}
+             {{image_form}}
          </p>
+         {% load staticfiles%}
          <input type="submit" value="Submit">
+         <img src="{%static "images_2.jpg"%}" height="200" width="100"">
 </form>

@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from nucleus.models import Batch , Course, User, Student
 from forms import *
 
@@ -37,12 +38,20 @@ def upload(request):
 #context={'image_form' : image_form}
 #return render (request, 'lectut/image.html', context)
    if request.method == 'POST':
-           image_form = ImageForm(request.POST, request.Files )
-           if image_form.is_valid():
-               image_form.save()
-               return HttpResponseRedirect(reverse('lectut/views/upload'))
+           text_form = TextUpload(request.POST)
+           image_form = ImageForm(request.POST , request.FILES )
+           if text_form.is_valid():
+              text_form.save()
+              return HttpResponseRedirect(reverse('lectut/views/upload'))
+
+           elif image_form.is_valid():
+              new_image = UploadImage(upload_image = request.FILES['upload_image'])
+              new_image.save()
+              return HttpResponseRedirect(reverse('upload'))
    else:
+      text_form = TextUpload()
       image_form = ImageForm()
 
-   context = {'image_form': image_form}
+   context = {'image_form': image_form,
+              'text_form' : text_form }
    return render( request, 'lectut/image.html', context)
