@@ -6,20 +6,34 @@
 import os
 #import HTMLParser
 
-from  django.shortcuts import render_to_response
+from  django.shortcuts import HttpResponse, render_to_response
 
 #from settings import MEDIA_URL
 #import hashlib
 #import datetime
 #import uuid
+
+import json as simplejson
 from models import News
 from channels import hindu, ie, msn, toi, yahoo, bbc #, nyt
 
 #from similarity import compare
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
-
+from news import constants as NC
 from haystack.query import SearchQuerySet
+
+def prepare_content(item):
+  formatted_datetime = item.article_date.strftime("%A, %d. %B %Y %I:%M%p");
+  return {
+    "pk": str(item.pk),
+    "title": item.title,
+    "image": item.image_path,
+    "description_text": item.description_text,
+    "article_date": formatted_datetime,
+    "channel": item.channel,
+    "source": item.source
+  }
 
 def home(request):
    #print dir(hindu)
@@ -29,9 +43,49 @@ def home(request):
     var = '/news/search/?q='+q+"&models="+models
     return HttpResponseRedirect(var)
    else:
-    news = News.objects.all().order_by('-article_date') #exclude(image_path = "noimage")
-    items = news.values_list('pk','title','image_path','description_text','article_date','source')
-    return render_to_response('news/home.html', {'items':items}, context_instance = RequestContext(request))
+    marker = 1
+    news = News.objects.all().order_by('-article_date')
+    json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker})
+    return HttpResponse(json,content_type='application/json')
+
+def fetch_more_news(request):
+  try:
+    #channel = request.POST.get('channel')
+    arg = request.POST.get('arg')
+    marker = request.POST.get('marker')
+    marker = int(marker)
+    feed_limit = 20
+    #feed_limit = 50 if category is 'News' else 20
+    if arg in NC.CATEGORIES:
+      print arg
+      channel = arg.lower()
+      if channel is 'news':
+        news = News.objects.all().order_by('-article_date')[(marker*feed_limit) : ((marker+1)*feed_limit)]
+      else:
+        news = News.objects.filter(channel = channel).order_by('-article_date')[(marker*feed_limit) : ((marker+1)*feed_limit)]
+   #TODO: elif arg in NC.SOURCES:
+    else:
+      print arg
+      source = arg.lower()
+      news = News.objects.filter(source = source).order_by('-article_date')[(marker*feed_limit) : ((marker+1)*feed_limit)]
+    json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker+1})
+    return HttpResponse(json,content_type='application/json')
+  except Exception as e:
+    print e
+    return HttpResponse("Invalid Request!");
+
+def categories_list(request):
+  cat_list = NC.CATEGORIES
+  json = simplejson.dumps({'categories': cat_list});
+  return HttpResponse(json,content_type='application/json')
+
+def get_by_source(request):
+  source = request.POST.get('source');
+  print source
+  marker = 1
+  news = News.objects.filter(source = source).order_by('-article_date')[:20]
+  json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker})
+  return HttpResponse(json,content_type='application/json')
 
 def national(request):
    q = request.GET.get('q')
@@ -40,9 +94,10 @@ def national(request):
     var = '/news/search/?q='+q+"&models="+models
     return HttpResponseRedirect(var)
    else:
-    news = News.objects.filter(channel = "national").order_by('-article_date')
-    items = news.values_list('pk','title','image_path','description_text','article_date','source')
-    return render_to_response('news/home.html', {'items':items}, context_instance = RequestContext(request))
+    marker = 1
+    news = News.objects.filter(channel = "national").order_by('-article_date')[:20]
+    json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker})
+    return HttpResponse(json,content_type='application/json')
 
 def international(request):
    q = request.GET.get('q')
@@ -51,9 +106,10 @@ def international(request):
     var = '/news/search/?q='+q+"&models="+models
     return HttpResponseRedirect(var)
    else:
-    news = News.objects.filter(channel = "international").order_by('-article_date')
-    items = news.values_list('pk','title','image_path','description_text','article_date','source')
-    return render_to_response('news/home.html', {'items':items}, context_instance = RequestContext(request))
+    marker = 1
+    news = News.objects.filter(channel = "international").order_by('-article_date')[:20]
+    json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker})
+    return HttpResponse(json,content_type='application/json')
 
 def sports(request):
    q = request.GET.get('q')
@@ -62,9 +118,10 @@ def sports(request):
     var = '/news/search/?q='+q+"&models="+models
     return HttpResponseRedirect(var)
    else:
-    news = News.objects.filter(channel = "sports").order_by('-article_date')
-    items = news.values_list('pk','title','image_path','description_text','article_date','source')
-    return render_to_response('news/home.html', {'items':items}, context_instance = RequestContext(request))
+    marker = 1
+    news = News.objects.filter(channel = "sports").order_by('-article_date')[:20]
+    json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker})
+    return HttpResponse(json,content_type='application/json')
 
 def entertainment(request):
    q = request.GET.get('q')
@@ -73,35 +130,73 @@ def entertainment(request):
     var = '/news/search/?q='+q+"&models="+models
     return HttpResponseRedirect(var)
    else:
-    news = News.objects.filter(channel = "entertainment").order_by('-article_date')
-    items = news.values_list('pk','title','image_path','description_text','article_date','source')
-    return render_to_response('news/home.html', {'items':items}, context_instance = RequestContext(request))
+    marker = 1
+    news = News.objects.filter(channel = "entertainment").order_by('-article_date')[:20]
+    json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker})
+    return HttpResponse(json,content_type='application/json')
 
+def technology(request):
+   q = request.GET.get('q')
+   models = request.GET.get('models')
+   if q is not None and models is not None:
+    var = '/news/search/?q='+q+"&models="+models
+    return HttpResponseRedirect(var)
+   else:
+    marker = 1
+    news = News.objects.filter(channel = "technology").order_by('-article_date')[:20]
+    json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker})
+    return HttpResponse(json,content_type='application/json')
+
+def education(request):
+   q = request.GET.get('q')
+   models = request.GET.get('models')
+   if q is not None and models is not None:
+    var = '/news/search/?q='+q+"&models="+models
+    return HttpResponseRedirect(var)
+   else:
+    marker = 1
+    news = News.objects.filter(channel = "education").order_by('-article_date')[:20]
+    json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker})
+    return HttpResponse(json,content_type='application/json')
+
+def health(request):
+   q = request.GET.get('q')
+   models = request.GET.get('models')
+   if q is not None and models is not None:
+    var = '/news/search/?q='+q+"&models="+models
+    return HttpResponseRedirect(var)
+   else:
+    marker = 1
+    news = News.objects.filter(channel = "health").order_by('-article_date')[:20]
+    json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker})
+    return HttpResponse(json,content_type='application/json')
 
 def news_item(request, item_id):
     news = News.objects.get(pk = item_id)
     pk = news.pk
     title = news.title
     image = news.image_path
+    channel = news.channel
     source = news.source
     article_date = news.article_date
     content = news.item  #.encode('utf8')
-    #print(title+", "+content)
 
-    #related = "hello"
-    related = SearchQuerySet().more_like_this(news)[:5]
+    related = SearchQuerySet().more_like_this(news)
+    formatted_datetime = article_date.strftime("%A, %d. %B %Y %I:%M%p");
 
     item = {
-      'pk':pk,
-      'title':title,
-      'image':image,
-      'source':source,
-      'article_date':article_date,
-      'content':content,
-      'related':related,
+      'pk': str(pk),
+      'title': title,
+      'image': image,
+      'channel': channel,
+      'source': source,
+      'article_date': formatted_datetime,
+      'content': content,
+      #'related': related,
     }
 
-    return render_to_response('news/news_item.html', item, context_instance=RequestContext(request))
+    json = simplejson.dumps({'item': item})
+    return HttpResponse(json,content_type='application/json')
 
 '''
 def related_news(item_1, item_2):

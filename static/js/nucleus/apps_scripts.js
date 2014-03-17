@@ -9,7 +9,8 @@ var apps_scripts = {
     '/static/js/events/events.js'
   ],
   'news':[
-    '/static/js/news/news.js'
+    '/static/js/news/news.js',
+    '/static/js/prettydate.js'
   ],
   'helpcenter':[
     '/static/js/prettydate.js',

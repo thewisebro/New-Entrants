@@ -19,6 +19,8 @@ TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 
+GLOBAL_MEDIA_ROOT = '/home/apps/media/channeli_media/'
+
 JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
 JUKEBOX_MEDIA_URL = '/songsmedia/'
 JUKEBOX_SONGS_BASEURL = '/songs/'

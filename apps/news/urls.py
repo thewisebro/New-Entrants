@@ -7,13 +7,19 @@ from django.conf.urls import patterns, include, url
 #from haystack.views import SearchView
 
 urlpatterns = patterns('news.views',
-  url(r'^$', 'html_data_extracter'),
-  url(r'^home/$', 'home'),
+  url(r'^extract/$', 'html_data_extracter'),
+  url(r'^$', 'home'),
+  url(r'^fetch/$', 'fetch_more_news'),
+  url(r'^categories_list/$', 'categories_list'),
   url(r'^international/$', 'international'),
   url(r'^national/$', 'national'),
   url(r'^sports/$', 'sports'),
   url(r'^entertainment/$', 'entertainment'),
-  url(r'^item/(?P<item_id>\d+)$','news_item'),
+  url(r'^technology/$', 'technology'),
+  url(r'^education/$', 'education'),
+  url(r'^health/$', 'health'),
+  url(r'^item/(?P<item_id>\d+)/$','news_item'),
+  url(r'^source/$','get_by_source'),
   url(r'^search/',include('haystack.urls')),
 
 )
