@@ -16,27 +16,29 @@ import datetime
 from django.utils.encoding import smart_str
 
 # App Imports
-from news.models import News
+from news.models import *
 
 #############################  'INDIAN EXPRESS' ################################
 
-def Msn(path, category):
+def Msn(path, channel):
   try:
-    print "\n\nStarting 'MSN NEWS - '"+category+".....\n"
+    print "\n\nStarting 'MSN NEWS - '"+channel+".....\n"
     xml_file = open(path)
     tree = ElementTree.parse(xml_file)
     xml_file.close()
     root = tree.getroot()
     test_var = ""
-    source = "MSN NEWS"
+    #source = "MSN NEWS"
     counter = 0
+    source = Source.objects.get(name='MSN News')
 
     #os.chdir('media/news_feeds/images')
     for item in root.iter('item'):
       try:
         counter += 1
         title = item.find('title').text
-        archive = News.objects.filter(title=title, source=source, channel=category)
+        channel = Channel.objects.get(name=channel)
+        archive = News.objects.filter(title=title, source=source, channel=channel)
         if len(archive) is 0:
           link = item.find('link').text
           des = item.find('description').text
@@ -72,7 +74,7 @@ def Msn(path, category):
                 p.title = title
                 p.description_text = smart_str(des)
                 p.source = source
-                p.channel = category
+                p.channel = channel
                 p.image_path = image_link
                 p.article_date = published_date
                 p.save()
@@ -105,24 +107,24 @@ def Msn(path, category):
 
 
 def International(path):
-  category = "international"
+  channel = "International"
   xml_file_path = path + 'msn_int.xml'
-  Msn(xml_file_path, category)
+  Msn(xml_file_path, channel)
 
 def National(path):
-  category = "national"
+  channel = "National"
   xml_file_path = path + 'msn_nat.xml'
-  Msn(xml_file_path, category)
+  Msn(xml_file_path, channel)
 
 def Sports(path):
-  category = "sports"
+  channel = "Sports"
   xml_file_path = path + 'msn_sports.xml'
-  Msn(xml_file_path, category)
+  Msn(xml_file_path, channel)
 
 def Entertainment(path):
-  category = "entertainment"
+  channel = "Entertainment"
   xml_file_path = path + 'msn_entertainment.xml'
-  Msn(xml_file_path, category)
+  Msn(xml_file_path, channel)
 
 def selectAll(path):
   International(path)

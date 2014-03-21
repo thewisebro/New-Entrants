@@ -7,7 +7,7 @@
     <link>http://www.bbc.co.uk/sport/0/cricket/</link>  
     <description>The latest stories from the Cricket section of the BBC Sport web site.</description>  
     <language>en-gb</language>  
-    <lastBuildDate>Thu, 06 Mar 2014 16:53:08 GMT</lastBuildDate>  
+    <lastBuildDate>Fri, 21 Mar 2014 18:01:29 GMT</lastBuildDate>  
     <copyright>Copyright: (C) British Broadcasting Corporation, see http://news.bbc.co.uk/2/hi/help/rss/4498287.stm for terms and conditions of reuse.</copyright>  
     <image> 
       <url>http://news.bbc.co.uk/sol/shared/img/sport_120x60.gif</url>  
@@ -19,130 +19,193 @@
     <ttl>15</ttl>  
     <atom:link href="http://feeds.bbci.co.uk/sport/0/cricket/rss.xml" rel="self" type="application/rss+xml"/>  
     <item> 
-      <title>Warwickshire confirm Trott's return</title>  
-      <description>Warwickshire confirm that England batsman Jonathan Trott will be fit to start the new season in April.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26465990</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26465990</guid>  
-      <pubDate>Thu, 06 Mar 2014 10:44:57 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406312_73235869.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406313_73235869.jpg"/> 
+      <title>India thrash Pakistan in World T20</title>  
+      <description>India beat Pakistan by seven wickets in the first match of the Super 10 phase at the ICC World Twenty20 in Mirpur.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26683282</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26683282</guid>  
+      <pubDate>Fri, 21 Mar 2014 17:06:42 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73741000/jpg/_73741338_rainaafp.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73741000/jpg/_73741339_rainaafp.jpg"/> 
     </item>  
     <item> 
-      <title>Broad 'baffled' by ball change</title>  
-      <description>Stuart Broad says he was "baffled" by a decision to change a ball in England's 25-run win over West Indies in the third ODI.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26462028</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26462028</guid>  
-      <pubDate>Thu, 06 Mar 2014 00:18:29 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73401000/jpg/_73401026_hi021423333.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73401000/jpg/_73401027_hi021423333.jpg"/> 
+      <title>Ireland knocked out by Netherlands</title>  
+      <description>The Netherlands are into the Super 10 stage of the World Twenty20 after a remarkable victory over Ireland in Sylhet.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26685154</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26685154</guid>  
+      <pubDate>Fri, 21 Mar 2014 12:35:59 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73732000/gif/_73732504_barresi.gif"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73732000/gif/_73732505_barresi.gif"/> 
     </item>  
     <item> 
-      <title>Buttler backed by legend Richards</title>  
-      <description>West Indies legend Viv Richards says England one-day star Jos Buttler is "one of the finest finishers in world cricket".</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26464769</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26464769</guid>  
-      <pubDate>Thu, 06 Mar 2014 10:57:40 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406941_73404365.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73406000/jpg/_73406942_73404365.jpg"/> 
+      <title>England must win T20 opener - Broad</title>  
+      <description>England captain Stuart Broad says winning their opening World T20 game with New Zealand on Saturday is "non-negotiable".</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26679765</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26679765</guid>  
+      <pubDate>Fri, 21 Mar 2014 17:56:38 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73722000/jpg/_73722166_73721078.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73722000/jpg/_73722167_73721078.jpg"/> 
     </item>  
     <item> 
-      <title>England hold on for series victory</title>  
-      <description>Joe Root scores his first one-day international ton as England beat West Indies by 25 runs to win the series 2-1.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26459699</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26459699</guid>  
-      <pubDate>Wed, 05 Mar 2014 22:25:25 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400386_stuartbroadgetty.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400387_stuartbroadgetty.jpg"/> 
+      <title>Stokes has surgery on injured wrist</title>  
+      <description>England all-rounder Ben Stokes has surgery on the fractured wrist which ruled him out of the current World Twenty20.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26686738</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26686738</guid>  
+      <pubDate>Fri, 21 Mar 2014 14:20:07 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73731000/jpg/_73731741_ben_stokes_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73731000/jpg/_73731742_ben_stokes_getty.jpg"/> 
     </item>  
     <item> 
-      <title>Australia seal dramatic SA series win</title>  
-      <description>Australia finally break South Africa's resistance to win the series and send Graeme Smith into retirement with defeat.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26455017</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26455017</guid>  
-      <pubDate>Wed, 05 Mar 2014 16:47:50 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73394000/jpg/_73394442_aussies.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73394000/jpg/_73394443_aussies.jpg"/> 
+      <title>England women thrash NZ in warm-up</title>  
+      <description>Anya Shrubsole takes four wickets as England skittle New Zealand for 48 in a warm-up for the Women's World Twenty20.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26681286</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26681286</guid>  
+      <pubDate>Fri, 21 Mar 2014 10:37:24 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73732000/jpg/_73732972_73721207.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73732000/jpg/_73732973_73721207.jpg"/> 
     </item>  
     <item> 
-      <title>Ashes loss was a wake-up - Anderson</title>  
-      <description>England and Lancashire bowler James Anderson believes the 5-0 Ashes whitewash by Australia will be a "wake-up call".</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26448604</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26448604</guid>  
-      <pubDate>Wed, 05 Mar 2014 11:14:07 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73381000/jpg/_73381822_460464395.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73381000/jpg/_73381843_460464395.jpg"/> 
+      <title>Injury rules Wakely out for season</title>  
+      <description>Northamptonshire limited-overs captain Alex Wakely is likely to miss the 2014 season with a ruptured Achilles tendon.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26687024</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26687024</guid>  
+      <pubDate>Fri, 21 Mar 2014 15:55:59 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73734000/jpg/_73734634_176702180.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73734000/jpg/_73734635_176702180.jpg"/> 
     </item>  
     <item> 
-      <title>Broad's captaincy impresses Vaughan</title>  
-      <description>Stuart Broad is praised for "brave and proactive" leadership by ex-England captain Michael Vaughan.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26449697</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26449697</guid>  
-      <pubDate>Wed, 05 Mar 2014 11:55:21 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73383000/jpg/_73383455_stuart_broad_reuters.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73383000/jpg/_73383456_stuart_broad_reuters.jpg"/> 
+      <title>Worldwide interest in Scotland role</title>  
+      <description>Cricket Scotland reveals that candidates from all over the world have applied for its head coach vacancy.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26683035</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26683035</guid>  
+      <pubDate>Fri, 21 Mar 2014 13:58:21 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73731000/jpg/_73731410_prestonmommsen_sns.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73731000/jpg/_73731411_prestonmommsen_sns.jpg"/> 
     </item>  
     <item> 
-      <title>Miller to become Derbyshire president</title>  
-      <description>Derbyshire confirm ex-England national selector Geoff Miller is to be voted in as club president this month.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26455898</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26455898</guid>  
-      <pubDate>Wed, 05 Mar 2014 16:58:33 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73392000/jpg/_73392986_millergrantweb.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73393000/jpg/_73393762_millergrantweb.jpg"/> 
+      <title>Beaten Bangladesh qualify at World T20</title>  
+      <description>Hosts Bangladesh qualify for the Super 10 phase at the World Twenty20 despite a surprise loss to Hong Kong in Chittagong.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26667303</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26667303</guid>  
+      <pubDate>Thu, 20 Mar 2014 18:22:00 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73714000/jpg/_73714527_bangladeshap.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73714000/jpg/_73714528_bangladeshap.jpg"/> 
     </item>  
     <item> 
-      <title>Hants back Vince captaincy potential</title>  
-      <description>Hampshire director of cricket Giles White says new vice-captain James Vince can mature into a future club captain.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26455731</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26455731</guid>  
-      <pubDate>Wed, 05 Mar 2014 17:49:40 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73395000/jpg/_73395423_166301092.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73395000/jpg/_73395424_166301092.jpg"/> 
+      <title>Ireland women lose warm-up game</title>  
+      <description>Ireland women's are beaten by Sri Lanka in their opening warm-up game in Bangladesh ahead of the World Twenty20.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26674959</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26674959</guid>  
+      <pubDate>Thu, 20 Mar 2014 18:15:17 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73719000/jpg/_73719032_ceceliajoyce.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73719000/jpg/_73719084_ceceliajoyce.jpg"/> 
     </item>  
     <item> 
-      <title>Muchall hopes to seize Durham chance</title>  
-      <description>Gordon Muchall wants to cement a place in Durham's Championship side after the exit of several senior players.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26449596</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26449596</guid>  
-      <pubDate>Wed, 05 Mar 2014 15:51:26 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73387000/jpg/_73387260_gordonmuchall.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73387000/jpg/_73387261_gordonmuchall.jpg"/> 
+      <title>Tredwell awarded England contract</title>  
+      <description>Kent off-spinner James Tredwell is awarded an incremental contract by England for the 2013-14 season.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26671085</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26671085</guid>  
+      <pubDate>Thu, 20 Mar 2014 18:23:41 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73710000/jpg/_73710324_james_tredwell_getty2.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73710000/jpg/_73710935_james_tredwell_getty2.jpg"/> 
     </item>  
     <item> 
-      <title>'Giles can make England world-beaters'</title>  
-      <description>Graeme Swann backs Ashley Giles to be England's permanent head coach and says the team can return to the top.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26431870</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26431870</guid>  
-      <pubDate>Tue, 04 Mar 2014 11:54:55 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73354000/jpg/_73354600_gilesap.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73354000/jpg/_73354601_gilesap.jpg"/> 
+      <title>Sussex release seam bowler Amjad</title>  
+      <description>Sussex release seam bowler Amjad Khan at the end of his contract, bringing an end to his three-year spell at Hove.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26656694</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26656694</guid>  
+      <pubDate>Thu, 20 Mar 2014 09:54:32 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73688000/jpg/_73688950_amjad3.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73688000/jpg/_73688951_amjad3.jpg"/> 
     </item>  
     <item> 
-      <title>All cricketers 'hair tested' for drugs</title>  
-      <description>Every professional cricketer in England and Wales has been "hair tested" as part of a pilot scheme to step up drug testing.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26440739</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26440739</guid>  
-      <pubDate>Tue, 04 Mar 2014 17:02:30 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73371000/jpg/_73371290_maynard464.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73371000/jpg/_73371291_maynard464.jpg"/> 
+      <title>Derbys excited by ground naming deal</title>  
+      <description>Chief executive Simon Storey says Derbyshire's six-figure stadium sponsorship deal will bring benefits on and off the pitch.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26662249</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26662249</guid>  
+      <pubDate>Thu, 20 Mar 2014 09:13:58 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73695000/jpg/_73695888_pa-16496540.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73695000/jpg/_73695889_pa-16496540.jpg"/> 
     </item>  
     <item> 
-      <title>Smith a captaincy great, says Stewart</title>  
-      <description>South African batsman Graeme Smith is one of the game's greatest captains, says former England skipper Alec Stewart.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26431109</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26431109</guid>  
-      <pubDate>Tue, 04 Mar 2014 11:19:37 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73350000/jpg/_73350263_graeme_smith_2getty.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73350000/jpg/_73350264_graeme_smith_2getty.jpg"/> 
+      <title>England lose to India in T20 warm-up</title>  
+      <description>England's stuttering form continues as they lose to India by 20 runs in their final World Twenty20 warm-up match.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26654567</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26654567</guid>  
+      <pubDate>Wed, 19 Mar 2014 17:11:00 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73687000/jpg/_73687057_73683604.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73687000/jpg/_73687058_73683604.jpg"/> 
     </item>  
     <item> 
-      <title>World T20 format to 'benefit' Irish</title>  
-      <description>George Dockrell says Ireland's first-round games at the World T20 could ready them for contests with the major nations.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26435184</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26435184</guid>  
-      <pubDate>Tue, 04 Mar 2014 12:39:56 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73355000/jpg/_73355625_dockrellappeal.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73355000/jpg/_73355626_dockrellappeal.jpg"/> 
+      <title>Maynard to coach St Lucia Zouks</title>  
+      <description>Former Glamorgan head coach Matthew Maynard isconfirmed as coach of St Lucia Zouks for the 2014 Caribbean Premier League.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26652194</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26652194</guid>  
+      <pubDate>Wed, 19 Mar 2014 16:41:11 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73686000/jpg/_73686579_cdf_glamorgan_cricket11.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73686000/jpg/_73686580_cdf_glamorgan_cricket11.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Root 'gutted' to miss World Twenty20</title>  
+      <description>England batsman Joe Root says it is "gutting" to miss out on the ICC World Twenty20 in Bangladesh through a hand injury.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26681391</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26681391</guid>  
+      <pubDate>Fri, 21 Mar 2014 16:32:59 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73737000/jpg/_73737012_joeroot.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73737000/jpg/_73737013_joeroot.jpg"/> 
+    </item>  
+    <item> 
+      <title>AUDIO: Ireland's O'Brien shocked by T20 loss</title>  
+      <description>Ireland's Kevin O'Brien describes the six-wicket defeat by the Netherlands as 'a bit of a shock'.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26687736</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26687736</guid>  
+      <pubDate>Fri, 21 Mar 2014 15:38:37 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73734000/jpg/_73734881_inpho_00789494.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73734000/jpg/_73734882_inpho_00789494.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Guide to the Indian Premier League</title>  
+      <description>Watch BBC Sport's guide to the Indian Premier League ahead of the 2014 season, which takes place from April until June.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26655415</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26655415</guid>  
+      <pubDate>Wed, 19 Mar 2014 17:24:40 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73686000/png/_73686965_mmiplstill.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73686000/png/_73686966_mmiplstill.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Worcs confident ground will be ready</title>  
+      <description>Worcestershire tell BBC Midlands Today that New Road will be ready for the season despite the winter floods.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26644471</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26644471</guid>  
+      <pubDate>Wed, 19 Mar 2014 11:49:55 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73676000/jpg/_73676920_de52.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73676000/jpg/_73676992_de52.jpg"/> 
+    </item>  
+    <item> 
+      <title>AUDIO: Joyce pleased as Ireland see off UAE</title>  
+      <description>Ireland batsman Ed Joyce is pleased with the team's performance in the 21-run victory over United Arab Emirates in the World Twenty20.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26656492</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26656492</guid>  
+      <pubDate>Wed, 19 Mar 2014 19:11:29 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73690000/jpg/_73690171_edvid.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73690000/jpg/_73690172_edvid.jpg"/> 
+    </item>  
+    <item> 
+      <title>AUDIO: Porterfield relieved after T20 win</title>  
+      <description>Ireland captain William Porterfield is happy after their last-ball victory over Zimbabwe in the World Twenty20 in Bangladesh.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26613516</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26613516</guid>  
+      <pubDate>Mon, 17 Mar 2014 16:43:18 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73638000/jpg/_73638455_cel.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73638000/jpg/_73638456_cel.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: England women begin professional era</title>  
+      <description>BBC Sport reports from the England women's training camp as they approach the World Twenty20 tournament as professionals.</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26473293</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26473293</guid>  
+      <pubDate>Sat, 08 Mar 2014 10:01:24 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73452000/jpg/_73452172_charlotte_edwards_pa.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73452000/jpg/_73452173_charlotte_edwards_pa.jpg"/> 
     </item>  
     <item> 
       <title>VIDEO: Ball change 'baffles' Broad</title>  
@@ -163,76 +226,31 @@
       <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73417000/jpg/_73417199_millergrantweb.jpg"/> 
     </item>  
     <item> 
-      <title>VIDEO: Cook critics deluded - Swann</title>  
-      <description>Graeme Swann says anyone who questions whether Alistair Cook should remain as England captain is "deluded".</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26431241</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26431241</guid>  
-      <pubDate>Tue, 04 Mar 2014 09:15:33 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400366_cook_swann_reuters.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400367_cook_swann_reuters.jpg"/> 
+      <title>World Twenty20 team-by-team guide</title>  
+      <description>Which player has scored the fastest international century and who is the oldest player in the tournament? Plus, who does Jonathan Agnew think will win?</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26316092</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26316092</guid>  
+      <pubDate>Fri, 21 Mar 2014 17:43:53 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73574000/jpg/_73574413_chris_gayle_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73574000/jpg/_73574414_chris_gayle_getty.jpg"/> 
     </item>  
     <item> 
-      <title>AUDIO: Guernsey 'low' after Caymans loss</title>  
-      <description>Guernsey Cricket Board CEO Mark Latter tells BBC Radio Guernsey that the tourists are "feeling fairly low" after losing their ICC World Cricket League Division Five opener.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26471167</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26471167</guid>  
-      <pubDate>Thu, 06 Mar 2014 14:43:34 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73414000/jpg/_73414993_cricket-624x351.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73414000/jpg/_73414994_cricket-624x351.jpg"/> 
+      <title>Bangladesh coach: Anything is possible</title>  
+      <description>Bangladesh coach Shane Jurgensen on why he thinks his underdogs can spring a surprise on home soil in the World T20</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26573651</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26573651</guid>  
+      <pubDate>Sat, 15 Mar 2014 23:43:29 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73611000/jpg/_73611279_shanejurgensen.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73611000/jpg/_73611280_shanejurgensen.jpg"/> 
     </item>  
     <item> 
-      <title>VIDEO: England bowlers were perfect - Broad</title>  
-      <description>England captain Stuart Broad says he is "delighted" with his "perfect" bowlers after England beat West Indies by three wickets to level the one day series at 1-1.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26414063</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26414063</guid>  
-      <pubDate>Mon, 03 Mar 2014 08:47:43 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73325000/png/_73325942_broad.png"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73325000/png/_73325943_broad.png"/> 
-    </item>  
-    <item> 
-      <title>VIDEO: England have gone back to basics - Broad</title>  
-      <description>England's limited overs captain Stuart Broad praises the "relaxed" approach of new coach Ashley Giles ahead of England's one day international against the West Indies.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26375996</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26375996</guid>  
-      <pubDate>Thu, 27 Feb 2014 20:05:10 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73273000/png/_73273408_mmcribroadint27-2.png"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73273000/png/_73273409_mmcribroadint27-2.png"/> 
-    </item>  
-    <item> 
-      <title>AUDIO: Kent chief welcomes Stevens verdict</title>  
-      <description>Kent chief executive Jamie Clifford tells BBC Radio Kent he is delighted Darren Stevens has been cleared of failing to report a corrupt approach.</description>  
-      <link>http://www.bbc.co.uk/sport/0/26355750</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/26355750</guid>  
-      <pubDate>Wed, 26 Feb 2014 15:29:09 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73232000/jpg/_73232300_darrenstevenstowelgetty.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73235000/jpg/_73235090_darrenstevenstowelgetty.jpg"/> 
-    </item>  
-    <item> 
-      <title>AUDIO: Joyce and Simmons laud shock Irish win</title>  
-      <description>Man of the match Ed Joyce and coach Phil Simmons are both delighted after Ireland surprise defending world champions the West Indies in the Twenty20 clash in Jamaica.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26272967</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26272967</guid>  
-      <pubDate>Thu, 20 Feb 2014 10:39:12 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73105000/jpg/_73105337_pe_00337072.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73105000/jpg/_73105338_pe_00337072.jpg"/> 
-    </item>  
-    <item> 
-      <title>AUDIO: Whitticase praises new signing Shreck</title>  
-      <description>Leicestershire director of cricket Phil Whitticase says experienced duo Charlie Shreck and Ramnaresh Sarwan will be a huge help to the younger players in the 2014 season.</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26286962</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26286962</guid>  
-      <pubDate>Fri, 21 Feb 2014 10:31:01 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73128000/jpg/_73128237_98950399.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73130000/jpg/_73130323_98950399.jpg"/> 
-    </item>  
-    <item> 
-      <title>Banned cricketer Westfield seeks redemption</title>  
-      <description>Mervyn Westfield, jailed for spot-fixing in 2012, is on the verge of resuming his cricket career in Essex</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26405494</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26405494</guid>  
-      <pubDate>Mon, 03 Mar 2014 09:14:39 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73313000/jpg/_73313599_westfieldgrab.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73313000/jpg/_73313600_westfieldgrab.jpg"/> 
+      <title>Farewell to England's biggest foe</title>  
+      <description>Graeme Smith, the "incredible" South Africa captain who engineered the downfall of three England skippers</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26433671</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26433671</guid>  
+      <pubDate>Wed, 05 Mar 2014 16:37:04 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73395000/jpg/_73395798_graeme_smith_si.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73395000/jpg/_73395799_graeme_smith_si.jpg"/> 
     </item>  
     <item> 
       <title>County ins &amp; outs</title>  
@@ -244,22 +262,22 @@
       <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73033000/jpg/_73033128_aaron_finch_getty.jpg"/> 
     </item>  
     <item> 
-      <title>Farewell to England’s biggest foe</title>  
-      <description>The 'incredible leader' who engineered the downfall of three England captains retires from international cricket</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26433671</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26433671</guid>  
-      <pubDate>Wed, 05 Mar 2014 16:37:04 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73395000/jpg/_73395798_graeme_smith_si.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73395000/jpg/_73395799_graeme_smith_si.jpg"/> 
+      <title>'England lack power to challenge for World T20'</title>  
+      <description>A lightweight and out-of-form England will be happy to progress from the World T20 group stages, says Jonathan Agnew</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26612625</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26612625</guid>  
+      <pubDate>Thu, 20 Mar 2014 18:06:42 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73714000/jpg/_73714315_morgangetty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73714000/jpg/_73714316_morgangetty.jpg"/> 
     </item>  
     <item> 
-      <title>Ask Graeme Swann</title>  
-      <description>Former England off-spinner Graeme Swann on his retirement, his toughest opponents and Alastair Cook's singing</description>  
-      <link>http://www.bbc.co.uk/sport/0/cricket/26459651</link>  
-      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26459651</guid>  
-      <pubDate>Wed, 05 Mar 2014 22:53:54 GMT</pubDate>  
-      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400433_anderson_swann_getty.jpg"/>  
-      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73400000/jpg/_73400434_anderson_swann_getty.jpg"/> 
+      <title>Jordan, Rihanna and the World Twenty20</title>  
+      <description>Chris Jordan, the England "superhero" who went to school with Rihanna but was almost thrown on the scrapheap at 23</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26646728</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26646728</guid>  
+      <pubDate>Thu, 20 Mar 2014 06:27:02 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73675000/jpg/_73675749_7cc24f68-6451-4123-8c5e-85d152f5eacf.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73675000/jpg/_73675750_889ad8b2-2643-44f4-80b6-372320bee377.jpg"/> 
     </item> 
   </channel> 
 </rss>

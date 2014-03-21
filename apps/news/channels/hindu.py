@@ -15,20 +15,21 @@ import datetime
 from django.utils.encoding import smart_str
 
 # App Imports
-from news.models import News
+from news.models import *
 
 ################### For THE HINDU:  #####################################
 
-def Hindu(path, category):
+def Hindu(path, channel):
   try:
-    print "\n\nStarting 'THE HINDU - '"+category+".....\n"
+    print "\n\nStarting 'THE HINDU - '"+channel+".....\n"
     xml_file = open(path)
     tree = ElementTree.parse(xml_file)
     xml_file.close()
     root = tree.getroot()
     test_var = ""
-    source = "THE HINDU"
+    #source = "THE HINDU"
     counter = 0
+    source = Source.objects.get(name='The Hindu')
 
     #print(os.getcwd())
     #os.chdir('media/news_feeds/images')
@@ -37,7 +38,8 @@ def Hindu(path, category):
       try:
         counter += 1
         title = item.find('title').text
-        archive = News.objects.filter(title=title, source=source, channel=category)
+        channel = Channel.objects.get(name=channel)
+        archive = News.objects.filter(title=title, source=source, channel=channel)
         if len(archive) is 0:
           link = item.find('link').text
           des = item.find('description').text
@@ -75,7 +77,7 @@ def Hindu(path, category):
                 p.description_text = smart_str(des)
                 image_link = "noimage"
                 p.source = source
-                p.channel = category
+                p.channel = channel
                 p.image_path = image_link
                 p.article_date = published_date
                 p.save()
@@ -136,46 +138,46 @@ def Hindu(path, category):
 
 
 def International(path):
-  category = "international"
+  channel = "International"
   xml_file_path = path + 'hindu_int.xml'
-  Hindu(xml_file_path, category)
+  Hindu(xml_file_path, channel)
 
 def National(path):
-  category = "national"
+  channel = "National"
   xml_file_path = path + 'hindu_nat.xml'
-  Hindu(xml_file_path, category)
+  Hindu(xml_file_path, channel)
 
 def Sports(path):
-  category = "sports"
+  channel = "Sports"
   xml_file_path = path + 'hindu_sports.xml'
-  Hindu(xml_file_path, category)
+  Hindu(xml_file_path, channel)
 
 def Entertainment(path):
-  category = "entertainment"
+  channel = "Entertainment"
   xml_file_path = path + 'hindu_entertainment.xml'
-  Hindu(xml_file_path, category)
+  Hindu(xml_file_path, channel)
 
-def Science(path):
-  category = "science-tech"
+def Technology(path):
+  channel = "Technology"
   xml_file_path = path + 'hindu_science_tech.xml'
-  Hindu(xml_file_path, category)
+  Hindu(xml_file_path, channel)
 
 def Education(path):
-  category = "education"
+  channel = "Education"
   xml_file_path = path + 'hindu_education.xml'
-  Hindu(xml_file_path, category)
+  Hindu(xml_file_path, channel)
 
 def Health(path):
-  category = "health"
+  channel = "Health"
   xml_file_path = path + 'hindu_health.xml'
-  Hindu(xml_file_path, category)
+  Hindu(xml_file_path, channel)
 
 def selectAll(path):
   International(path)
   National(path)
   Sports(path)
   Entertainment(path)
-  Science(path)
+  Technology(path)
   Education(path)
   Health(path)
 

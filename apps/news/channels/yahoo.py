@@ -16,28 +16,30 @@ import datetime
 from django.utils.encoding import smart_str
 
 # App Imports
-from news.models import News
+from news.models import *
 
 #############################  'INDIAN EXPRESS' ################################
 
-def Yahoo(path, category):
+def Yahoo(path, channel):
   try:
-    print "\n\nStarting 'YAHOO NEWS - '"+category+".....\n"
+    print "\n\nStarting 'YAHOO NEWS - '"+channel+".....\n"
     xml_file = open(path)
     tree = ElementTree.parse(xml_file)
     xml_file.close()
     root = tree.getroot()
     test_var = ""
-    source = "Yahoo News"
+    #source = "Yahoo News"
     image_link = None
     counter = 0
+    source = Source.objects.get(name='Yahoo News')
 
     #os.chdir('media/news_feeds/images')
     for item in root.iter('item'):
       try:
         counter += 1
         title = item.find('title').text
-        archive = News.objects.filter(title=title, source=source, channel=category)
+        channel = Channel.objects.get(name=channel)
+        archive = News.objects.filter(title=title, source=source, channel=channel)
         if len(archive) is 0:
           link = item.find('link').text
           des_content = item.find('description').text
@@ -92,7 +94,7 @@ def Yahoo(path, category):
               p.title = title
               p.description_text = smart_str(des)
               p.source = source
-              p.channel = category
+              p.channel = channel
               p.image_path = "noimage"
               p.article_date = published_date
               p.save()
@@ -122,19 +124,19 @@ def Yahoo(path, category):
 
 
 def International(path):
-  category = "international"
+  channel = "International"
   xml_file_path = path + 'yahoo_int.xml'
-  Yahoo(xml_file_path, category)
+  Yahoo(xml_file_path, channel)
 
 def National(path):
-  category = "national"
+  channel = "National"
   xml_file_path = path + 'yahoo_nat.xml'
-  Yahoo(xml_file_path, category)
+  Yahoo(xml_file_path, channel)
 
 def Sports(path):
-  category = "sports"
+  channel = "Sports"
   xml_file_path = path + 'yahoo_sports.xml'
-  Yahoo(xml_file_path, category)
+  Yahoo(xml_file_path, channel)
 
 def selectAll(path):
   International(path)

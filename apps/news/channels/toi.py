@@ -16,20 +16,21 @@ import datetime
 from django.utils.encoding import smart_str
 
 # App Imports
-from news.models import News
+from news.models import *
 
 ######################## 'TIMES OF INDIA' ####################################
 
-def Toi(path, category):
+def Toi(path, channel):
   try:
-    print "\n\nStarting 'TIMES OF INDIA - '"+category+".....\n"
+    print "\n\nStarting 'TIMES OF INDIA - '"+channel+".....\n"
     xml_file = open(path)
     tree = ElementTree.parse(xml_file)
     xml_file.close()
     root = tree.getroot()
     test_var = ""
-    source = "Times Of India"
+    #source = "Times Of India"
     counter = 0
+    source = Source.objects.get(name='Times Of India')
 
     #print(os.getcwd())
     #os.chdir('media/news_feeds/images')
@@ -37,7 +38,8 @@ def Toi(path, category):
       counter += 1
       try:
         title = item.find('title').text
-        archive = News.objects.filter(title=title, source=source, channel=category)
+        channel = Channel.objects.get(name=channel)
+        archive = News.objects.filter(title=title, source=source, channel=channel)
         if len(archive) is 0:
           link = item.find('link').text
           des_content = item.find('description').text
@@ -83,7 +85,7 @@ def Toi(path, category):
               p.title = title
               p.description_text = smart_str(des)
               p.source = source
-              p.channel = category
+              p.channel = channel
               p.image_path = "noimage"
               p.article_date = published_date
               p.save()
@@ -121,52 +123,52 @@ def Toi(path, category):
     pass
 
 def International(path):
-  category = "international"
+  channel = "International"
   xml_file_path = path + 'toi_int.xml'
-  Toi(xml_file_path, category)
+  Toi(xml_file_path, channel)
 
 def National(path):
-  category = "national"
+  channel = "National"
   xml_file_path = path + 'toi_nat.xml'
-  Toi(xml_file_path, category)
+  Toi(xml_file_path, channel)
 
 def Sports(path):
-  category = "sports"
+  channel = "Sports"
   xml_file_path = path + 'toi_sports.xml'
-  Toi(xml_file_path, category)
+  Toi(xml_file_path, channel)
 
 def Entertainment(path):
-  category = "entertainment"
+  channel = "Entertainment"
   xml_file_path = path + 'toi_entertainment.xml'
-  Toi(xml_file_path, category)
+  Toi(xml_file_path, channel)
 
-def Science(path):
-  category = "science-tech"
-  xml_file_path = path + 'toi_science.xml'
-  Toi(xml_file_path, category)
+#def Science(path):
+#  channel = "Technology"
 
-def Tech(path):
-  category = "science-tech"
+def Technology(path):
+  channel = "Technology"
   xml_file_path = path + 'toi_tech.xml'
-  Toi(xml_file_path, category)
+  Toi(xml_file_path, channel)
+  xml_file_path = path + 'toi_science.xml'
+  Toi(xml_file_path, channel)
 
 def Education(path):
-  category = "education"
+  channel = "Education"
   xml_file_path = path + 'toi_education.xml'
-  Toi(xml_file_path, category)
+  Toi(xml_file_path, channel)
 
 def Health(path):
-  category = "health"
+  channel = "Health"
   xml_file_path = path + 'toi_health.xml'
-  Toi(xml_file_path, category)
+  Toi(xml_file_path, channel)
 
 def selectAll(path):
   International(path)
   National(path)
   Sports(path)
   Entertainment(path)
-  Science(path)
-  Tech(path)
+  #Science(path)
+  Technology(path)
   Education(path)
   Health(path)
 

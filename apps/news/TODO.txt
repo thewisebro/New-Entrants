@@ -1,4 +1,7 @@
 
+FEATURES:
+  [1]: https://sublime.wbond.net/ - For showing Dynamic Status
+
 ADDITIONS:
   [1]: techcrunch.com - Geek
   [2]: in.ign.com - Games

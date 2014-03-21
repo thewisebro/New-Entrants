@@ -9,8 +9,11 @@ var apps_scripts = {
     '/static/js/events/events.js'
   ],
   'news':[
-    '/static/js/news/news.js',
-    '/static/js/prettydate.js'
+    //'/static/js/news/jquery-ias.min.js',
+    '/static/js/news/jquery-ui.js',
+    '/static/js/news/highcharts.js',
+    '/static/js/news/draggable-points-master/draggable-points.js',
+    '/static/js/news/news.js'
   ],
   'helpcenter':[
     '/static/js/prettydate.js',
@@ -41,3 +44,5 @@ function load_app(app, callback){
     pipe = pipe.pipe(callback);
   deferred.resolve();
 }
+
+

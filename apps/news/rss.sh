@@ -58,6 +58,7 @@ mv "index.html" ie_education.xml
 wget "http://indianexpress.com/section/lifestyle/health/feed/"
 mv "index.html" ie_health.xml
 
+<<COMMENT
 #Hindustan Times
 wget "http://feeds.hindustantimes.com/HT-WorldSectionPage-Topstories";
 mv "HT-WorldSectionPage-Topstories" ht_int.xml
@@ -67,6 +68,7 @@ wget "http://feeds.hindustantimes.com/HT-SportsSection-Topstories";
 mv "HT-SportsSection-Topstories" ht_sports.xml
 wget "http://feeds.hindustantimes.com/HT-HomePage-Entertainment";
 mv "HT-HomePage-Entertainment" ht_entertainment.xml
+COMMENT
 
 #Msn News
 wget "http://news.in.msn.com/rss/world_news.aspx"
@@ -86,6 +88,7 @@ mv "national" yahoo_nat.xml
 wget "http://in.news.yahoo.com/rss/sports"
 mv "sports" yahoo_sports.xml
 
+<<COMMENT
 #Google-News
 wget "http://news.google.co.in/news?pz=1&cf=all&ned=in&hl=en&topic=w&output=rss";
 mv "news?pz=1&cf=all&ned=in&hl=en&topic=w&output=rss" google_int.xml
@@ -93,6 +96,7 @@ wget "http://news.google.co.in/news?pz=1&cf=all&ned=in&hl=en&topic=n&output=rss"
 mv "news?pz=1&cf=all&ned=in&hl=en&topic=n&output=rss" google_nat.xml
 wget "http://news.google.co.in/news?pz=1&cf=all&ned=in&hl=en&topic=s&output=rss";
 mv "news?pz=1&cf=all&ned=in&hl=en&topic=s&output=rss" google_sports.xml
+COMMENT
 
 #BBC-International
 wget "http://feeds.bbci.co.uk/news/world/rss.xml";
@@ -118,6 +122,7 @@ mv "rss.xml?edition=uk" football.xml
 wget "http://feeds.bbci.co.uk/sport/0/tennis/rss.xml?edition=uk";
 mv "rss.xml?edition=uk" tennis.xml
 
+<<COMMENT
 #Newyork Times
 wget "http://feeds.nytimes.com/nyt/rss/World";
 mv "World" nyt_int.xml
@@ -125,7 +130,7 @@ wget "http://topics.nytimes.com/topics/reference/timestopics/subjects/b/badminto
 mv "index.html?rss=1" badminton.xml
 wget "http://topics.nytimes.com/topics/reference/timestopics/subjects/c/chess/index.html?rss=1";
 mv "index.html?rss=1" chess.xml
-
+COMMENT
 
 <<COMMENT
 mv "news?pz=1&cf=all&ned=in&hl=en&topic=w&output=rss" google_int.xml

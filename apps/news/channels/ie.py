@@ -16,20 +16,21 @@ import datetime
 from django.utils.encoding import smart_str
 
 # App Imports
-from news.models import News
+from news.models import *
 
 #############################  'INDIAN EXPRESS' ################################
 
-def Ie(path, category):
+def Ie(path, channel):
   try:
-    print "\n\nStarting 'INDIAN EXPRESS - '"+category+".....\n"
+    print "\n\nStarting 'INDIAN EXPRESS - '"+channel+".....\n"
     xml_file = open(path)
     tree = ElementTree.parse(xml_file)
     xml_file.close()
     root = tree.getroot()
     test_var = ""
-    source = "INDIAN EXPRESS"
+    #source = "INDIAN EXPRESS"
     counter = 0
+    source = Source.objects.get(name='Indian Express')
 
     #print(os.getcwd())
     #os.chdir('media/news_feeds/images')
@@ -37,7 +38,8 @@ def Ie(path, category):
       try:
         counter += 1
         title = item.find('title').text
-        archive = News.objects.filter(title=title, source=source, channel=category)
+        channel = Channel.objects.get(name=channel)
+        archive = News.objects.filter(title=title, source=source, channel=channel)
         if len(archive) is 0:
           link = item.find('link').text
           des_content = item.find('description').text
@@ -86,7 +88,7 @@ def Ie(path, category):
                 p.title = title
                 p.description_text = des
                 p.source = source
-                p.channel = category
+                p.channel = channel
                 p.image_path = "noimage"
                 p.article_date = published_date
                 p.save()
@@ -133,46 +135,46 @@ def Ie(path, category):
 
 
 def International(path):
-  category = "international"
+  channel = "International"
   xml_file_path = path + 'ie_int.xml'
-  Ie(xml_file_path, category)
+  Ie(xml_file_path, channel)
 
 def National(path):
-  category = "national"
+  channel = "National"
   xml_file_path = path + 'ie_nat.xml'
-  Ie(xml_file_path, category)
+  Ie(xml_file_path, channel)
 
 def Sports(path):
-  category = "sports"
+  channel = "Sports"
   xml_file_path = path + 'ie_sports.xml'
-  Ie(xml_file_path, category)
+  Ie(xml_file_path, channel)
 
 def Entertainment(path):
-  category = "entertainment"
+  channel = "Entertainment"
   xml_file_path = path + 'ie_entertainment.xml'
-  Ie(xml_file_path, category)
+  Ie(xml_file_path, channel)
 
-def Science(path):
-  category = "science-tech"
+def Technology(path):
+  channel = "Technology"
   xml_file_path = path + 'ie_science_tech.xml'
-  Ie(xml_file_path, category)
+  Ie(xml_file_path, channel)
 
 def Education(path):
-  category = "education"
+  c = "Education"
   xml_file_path = path + 'ie_education.xml'
-  Ie(xml_file_path, category)
+  Ie(xml_file_path, channel)
 
 def Health(path):
-  category = "health"
+  channel = "Health"
   xml_file_path = path + 'ie_health.xml'
-  Ie(xml_file_path, category)
+  Ie(xml_file_path, channel)
 
 def selectAll(path):
   International(path)
   National(path)
   Sports(path)
   Entertainment(path)
-  Science(path)
+  Technology(path)
   Education(path)
   Health(path)
 

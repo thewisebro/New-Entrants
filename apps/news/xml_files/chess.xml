@@ -7,12 +7,28 @@
     <description>News about Chess, including commentary and archival articles published in The New York Times.</description>
     <copyright>Copyright 2014 The New York Times Company</copyright>
     <language>en-us</language>
-    <lastBuildDate>Thu, 06 Mar 2014 13:15:03 -0500</lastBuildDate>
+    <lastBuildDate>Tue, 18 Mar 2014 15:43:48 -0400</lastBuildDate>
     <image>
       <url>http://graphics8.nytimes.com/images/section/NytSectionHeader.gif</url>
       <title>NYT</title>
       <link>http://www.nytimes.com</link>
     </image>
+    <item>
+      <title>Two European Events Could Scramble Rankings</title>
+      <link>http://www.nytimes.com/2014/03/16/us/two-european-events-could-scramble-rankings.html?partner=rssnyt&amp;emc=rss</link>
+      <description>Most of the world&#8217;s top players descended on Europe to compete in either the Candidates tournament or the European Individual Chess Championship.</description>
+      <author>By DYLAN LOEB McCLAIN</author>
+      <pubDate>Sun, 16 Mar 2014 00:00:00 -0500</pubDate>
+      <guid isPermaLink="false">http://www.nytimes.com/2014/03/16/us/two-european-events-could-scramble-rankings.html?partner=rssnyt&amp;emc=rss</guid>
+    </item>
+    <item>
+      <title>League Play Pays Off for a Former Champ, Too</title>
+      <link>http://www.nytimes.com/2014/03/09/crosswords/chess/league-play-pays-off-for-a-former-champ-too.html?partner=rssnyt&amp;emc=rss</link>
+      <description>Viswanathan Anand has a special relationship with Germany&#8217;s Budesliga, a lucrative source of income for players trying to earn a living at chess.</description>
+      <author>By DYLAN LOEB McCLAIN</author>
+      <pubDate>Sun, 09 Mar 2014 00:00:00 -0500</pubDate>
+      <guid isPermaLink="false">http://www.nytimes.com/2014/03/09/crosswords/chess/league-play-pays-off-for-a-former-champ-too.html?partner=rssnyt&amp;emc=rss</guid>
+    </item>
     <item>
       <title>A Player&#8217;s Attacks Pay Off at a Tournament in Minsk</title>
       <link>http://www.nytimes.com/2014/03/02/crosswords/chess/a-players-attacks-pay-off-at-a-tournament-in-minsk.html?partner=rssnyt&amp;emc=rss</link>
@@ -76,22 +92,6 @@
       <author>Interview by SUSAN DOMINUS</author>
       <pubDate>Sun, 26 Jan 2014 00:00:00 -0500</pubDate>
       <guid isPermaLink="false">http://www.nytimes.com/2014/01/26/magazine/magnus-carlsen-chess-champion-my-moves-speak-for-themselves.html?partner=rssnyt&amp;emc=rss</guid>
-    </item>
-    <item>
-      <title>Kasparov Discloses Election Contracts </title>
-      <link>http://www.nytimes.com/2014/01/25/sports/kasparov-discloses-contracts-with-federation-official.html?partner=rssnyt&amp;emc=rss</link>
-      <description>Seeking to bolster his campaign to become president of the World Chess Federation, the former champion Garry Kasparov promised payments to an academy run by the organization&#8217;s general secretary.</description>
-      <author>By DYLAN LOEB McCLAIN</author>
-      <pubDate>Sat, 25 Jan 2014 00:00:00 -0500</pubDate>
-      <guid isPermaLink="false">http://www.nytimes.com/2014/01/25/sports/kasparov-discloses-contracts-with-federation-official.html?partner=rssnyt&amp;emc=rss</guid>
-    </item>
-    <item>
-      <title>Kasparov&#8217;s Moves in Run for Chess Office Raise Ethical Concerns</title>
-      <link>http://www.nytimes.com/2014/01/22/sports/kasparovs-moves-in-run-for-chess-office-raise-ethical-concerns.html?partner=rssnyt&amp;emc=rss</link>
-      <description>&lt;a href="http://www.nytimes.com/2014/01/22/sports/kasparovs-moves-in-run-for-chess-office-raise-ethical-concerns.html?partner=rssnyt&amp;emc=rss"&gt;&lt;img src="http://graphics8.nytimes.com/images/2014/01/22/sports/Y-CHESS/Y-CHESS-thumbStandard.jpg" border="0" height="75" width="75" hspace="4" align="left"&gt;&lt;/a&gt;Garry Kasparov promised money to a supporter who was expected to deliver votes needed for Kasparov&#8217;s election as president of the World Chess Federation, according to a draft contract reviewed by The Times.</description>
-      <author>By DYLAN LOEB McCLAIN</author>
-      <pubDate>Wed, 22 Jan 2014 00:00:00 -0500</pubDate>
-      <guid isPermaLink="false">http://www.nytimes.com/2014/01/22/sports/kasparovs-moves-in-run-for-chess-office-raise-ethical-concerns.html?partner=rssnyt&amp;emc=rss</guid>
     </item>
   </channel>
 </rss>

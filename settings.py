@@ -19,7 +19,10 @@ TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 
-GLOBAL_MEDIA_ROOT = '/home/apps/media/channeli_media/'
+GLOBAL_MEDIA_ROOT = '/home/apps/channeli_media/'
+NEWS_MEDIA_ROOT = GLOBAL_MEDIA_ROOT + 'news/'
+NEWS_IMAGES_ROOT = NEWS_MEDIA_ROOT + 'images/'
+NEWS_MEDIA_URL = '/newsmedia/'
 
 JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
 JUKEBOX_MEDIA_URL = '/songsmedia/'
@@ -301,11 +304,19 @@ LOGGING = {
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://192.168.121.5:8983/solr/'
-        # ...or for multicore...
-        # 'URL': 'http://127.0.0.1:8983/solr/mysite',
+      'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+      'URL': 'http://192.168.121.5:8983/solr/',
+      'INCLUDE_SPELLING': True,
+      # ...or for multicore...
+      # 'URL': 'http://127.0.0.1:8983/solr/mysite',
     },
+    'autocomplete': {
+      'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+      'URL': 'http://192.168.121.5:8983/solr/',
+      'INCLUDE_SPELLING': True,
+      # ...or for multicore...
+      # 'URL': 'http://127.0.0.1:8983/solr/mysite',
+    }
 }
 
 try:

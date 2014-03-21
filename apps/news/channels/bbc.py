@@ -16,21 +16,22 @@ import datetime
 from django.utils.encoding import smart_str
 
 # App Imports
-from news.models import News
+from news.models import *
 
 #############################  'INDIAN EXPRESS' ################################
 
-def Bbc(path, category):
+def Bbc(path, channel):
   try:
-    print "\n\nStarting 'BBC NEWS - '"+category+".....\n"
+    print "\n\nStarting 'BBC NEWS - '"+channel+".....\n"
     xml_file = open(path)
     tree = ElementTree.parse(xml_file)
     xml_file.close()
     root = tree.getroot()
     test_var = ""
-    source = "BBC News"
+    #source = "BBC News"
     image_link = None
     counter = 0
+    source = Source.objects.get(name='BBC News')
     #print(os.getcwd())
     #os.chdir('media/news_feeds/images')
 
@@ -38,7 +39,8 @@ def Bbc(path, category):
       try:
         counter += 1
         title = item.find('title').text
-        archive = News.objects.filter(title=title, source=source, channel=category)
+        channel = Channel.objects.get(name=channel)
+        archive = News.objects.filter(title=title, source=source, channel=channel)
         if len(archive) is 0:
           link = item.find('link').text
           des = item.find('description').text
@@ -92,7 +94,7 @@ def Bbc(path, category):
                 p.title = title
                 p.description_text = smart_str(des)
                 p.source = source
-                p.channel = category
+                p.channel = channel
                 p.image_path = "noimage"
                 p.article_date = published_date
                 p.save()
@@ -126,46 +128,46 @@ def Bbc(path, category):
 
 
 def International(path):
-  category = "international"
+  channel = "International"
   xml_file_path = path + 'bbc_int.xml'
-  Bbc(xml_file_path, category)
+  Bbc(xml_file_path, channel)
 
 def National(path):
-  category = "national"
+  channel = "National"
   xml_file_path = path + 'bbc_nat.xml'
-  Bbc(xml_file_path, category)
+  Bbc(xml_file_path, channel)
 
 def Sports(path):
-  category = "sports"
+  channel = "Sports"
   xml_file_path = path + 'bbc_sports.xml'
-  Bbc(xml_file_path, category)
+  Bbc(xml_file_path, channel)
 
 def Entertainment(path):
-  category = "entertainment"
+  channel = "Entertainment"
   xml_file_path = path + 'bbc_entertainment.xml'
-  Bbc(xml_file_path, category)
+  Bbc(xml_file_path, channel)
 
-def Science(path):
-  category = "science-tech"
+def Technology(path):
+  channel = "Technology"
   xml_file_path = path + 'bbc_science.xml'
-  Bbc(xml_file_path, category)
+  Bbc(xml_file_path, channel)
 
 def Tech(path):
-  category = "science-tech"
+  channel = "Technology"
   xml_file_path = path + 'bbc_tech.xml'
-  Bbc(xml_file_path, category)
+  Bbc(xml_file_path, channel)
 
 def Health(path):
-  category = "health"
+  channel = "Health"
   xml_file_path = path + 'bbc_html.xml'
-  Bbc(xml_file_path, category)
+  Bbc(xml_file_path, channel)
 
 def selectAll(path):
   International(path)
   National(path)
   Sports(path)
   Entertainment(path)
-  Science(path)
+  Technology(path)
   Tech(path)
   Health(path)
 

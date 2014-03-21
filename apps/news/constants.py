@@ -9,3 +9,4 @@ CATEGORIES = [
   'Health'
 ]
 
+FEED_LIMIT = 20
