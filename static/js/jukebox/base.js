@@ -110,11 +110,13 @@ var prev_hash="";
 var albums_open=false;
 var artists_open=false;
 var playlists_open=false;
+var public_playlists_open=false;
 var trending_open=false;
 var now_display='trending';
 var albums_json = {};
 var artists_json = {};
 var playlists_json = {};
+var public_playlists_json = {};
 var trending_json={};
 var queue = [];
 var in_queue=false;
@@ -547,7 +549,6 @@ function display_playlists(){
       var data = playlists_json;
       if(data.active)
       {
-        console.log('asa');
         var html = '<div class="start"><div class="list_alpha"><div class="playlist_create" id="playlist_new"><div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div></div> <ul id= "playlists"></ul></div></div>';
       $("#contentList").append(html);
       for(var i=0; i<data.playlists.length; i++){
@@ -559,12 +560,9 @@ function display_playlists(){
           lPlaylists();
       $("#playlist_new").bind("click",create_playlist);
       playlist_ready();
-  //  return;
     }
     else
     {
-      console.log(data.active+'asasas');
-       
       $("#contentList").append('Login Required');
     return;
     }
@@ -957,6 +955,18 @@ function split_hash(){
       display_playlists();
     }
   }
+  if( name == 'shared' )
+  {
+    if(hash.length == 2 || hash.length == 4)
+    {
+      if(!check_hash('shared')) display_public_playlists();
+        display_playlist(Number(hash[1]));
+    }
+    else
+    {
+      display_public_playlists();
+    }
+  }
   if( name== 'search'){
     //$('#searchButton').click();
     //alert('hash   '+hash[1]);
@@ -1063,12 +1073,14 @@ function get_json(name)
 {
         if (name in names) var show = names[name];
         else if(name=='playlists') var show=['playlists/'];
+        else if(name=='public_playlists') var show=['playlists_public/'];
         var url = show[0];
         $.ajax(url,contentType= "application/json").done( function(data){
           if(name=='trending'){ trending_json=data; trending_open=true; get_json('albums');  }
           else if(name=='albums'){ albums_json=data; albums_open=true; get_json('artists'); }
           else if(name=='artists'){ artists_json=data; artists_open=true; get_json('playlists'); }
-          else if(name=='playlists'){ playlists_json=data; playlists_open=true;  add_songs_url();  }
+          else if(name=='playlists'){ playlists_json=data; playlists_open=true;  add_songs_url(); get_json('public_playlists'); }
+          else if(name=='public_playlists'){ public_playlists_json=data; public_playlists_open=true;  add_songs_url();  }
           console.log(name);
         });
 }
@@ -1140,6 +1152,7 @@ $("#trending_link").click(function(){ hash_change("trending"); });  // changes h
 $("#artists_link").click(function(){ hash_change("artists"); });    // changes hash when Artist is clicked
 $("#albums_link").click(function(){ hash_change("albums"); });      // changes hash when Albums is clicked
 $("#playlists_link").click(function(){ hash_change("playlists"); });      // changes hash when Albums is clicked
+$("#shared_link").click(function(){ hash_change("shared"); });      // changes hash when Albums is clicked
 
 function artist_ready(){
   $(".artist").on('click',function(){
@@ -1159,6 +1172,10 @@ function playlist_ready(){
   $(".playlist").on('click',function(){
       id = $(this).attr('id').split('_')[1];
       hash_change('playlists',id);
+    });
+  $(".shared").on('click',function(){
+      id = $(this).attr('id').split('_')[1];
+      hash_change('shared',id);
     });
 }
 
@@ -1471,3 +1488,40 @@ function login()
   alert('copied '+copy_text);
 }
 */
+function display_public_playlists(){
+      $("#centerdata").empty();
+        $("#centerdata").append('<div id="playlistsList">  <div class="nano" id="left_playlist_list">  <div id="contentList" class="content"> </div></div></div>');
+  if( public_playlists_open )
+  {
+      var data = public_playlists_json;
+        var html = '<div class="start"><div class="list_alpha"><div class="playlist_create" id="playlist_new"><div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div></div> <ul id= "playlists"></ul></div></div>';
+      $("#contentList").append(html);
+      for(var i=0; i<data.length; i++){
+        var playlist = data[i];
+        $("#playlists").append('<li class="shared" id="shared_'+ playlist.id +'"><span>'+playlist.name+'</span></li>');
+      }
+          $("#playlistsList").append('<div id="playlist_view"></div>');
+          $("#playlistsList").append('<div id="playlist_panel_hide"><i class="icon-reorder"></i></div>');
+          lPlaylists();
+      playlist_ready();
+    }
+  else{
+  url = 'playlists_public/';
+  $.ajax(url,{ type:"GET" } ,contentType= "application/json").done( function(data){
+      $("#centerdata").empty();
+        $("#centerdata").append('<div id="playlistsList">  <div class="nano" id="left_playlist_list">  <div id="contentList" class="content"> </div></div></div>');
+        html = '<div class="start"><div class="list_alpha"><div class="playlist_create" id="playlist_new"><div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div></div> <ul id= "playlists"></ul></div></div>';
+      $("#contentList").append(html);
+      for(var i=0; i<data.length; i++){
+        var playlist = data[i];
+        $("#playlists").append('<li class="shared" id="shared_'+ playlist.id +'"><span>'+playlist.name+'</span></li>');
+      }
+          $("#playlistsList").append('<div id="playlist_view"></div>');
+          $("#playlistsList").append('<div id="playlist_panel_hide"><i class="icon-reorder"></i></div>');
+          lPlaylists();
+      playlist_ready();
+      public_playlists_json=data;
+      public_playlists_open=true;
+    });
+    }
+}

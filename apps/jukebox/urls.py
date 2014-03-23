@@ -53,6 +53,8 @@ urlpatterns = patterns('',
     url(r'^playlists_over/$', OverwritePlaylistView.as_view(), name='overwrite_playlist'),
     url(r'^playlist_delete_from/$', DeleteFromPlaylistView.as_view(), name='delete_from_playlist'),
     url(r'^playlist_change_index/$', ChangeIndexPlaylistView.as_view(), name='change_index_playlist'),
+    url(r'^playlists_public/$', PublicPlaylistAllJsonView.as_view(), name='public_playlists'),
+    url(r'^playlist_private_toggle/$', PublicPrivatePlaylistView.as_view(), name='public_private_playlist'),
 )
 
 
