@@ -47,15 +47,34 @@ def sendFields(request, title):
 def createSection(request):
   print "recieved"
   if 'title' in request.POST:
-    print 'post request'
     title = request.POST['title']
     content = request.POST['content']
     priority = request.POST['priority']
-    print priority
-#     priority = int(priority)
-#     user = request.user
-#     p = Faculty.objects.get(user=user)
-#     print p
-#     s = Section.objects.create(title  = title, professor = p, priority = priority, content = content)
+    user = request.user
+    print user
+    p = Faculty.objects.get(user=user)
+    s = Section.objects.create(title  = title, professor = p, priority = priority, content = content)
     return HttpResponse('created new section instance')
   return HttpResponse('no post request detected')
+
+@csrf_exempt
+def setPriority(request):
+  if 'priority' in request.POST and request.user!='NULL' :
+    data = request.POST['priority']
+    professor = request.user
+    titles = data.split(',')
+    print titles
+    for idx,title in enumerate(titles):
+      section = Section.objects.get(title = title, professor = professor)
+      section.priority = idx + 1
+      section.save()
+      print section.priority
+    # try:
+    # print section.priority
+    # except Section.DoesNotExist:
+    #   # no employee found
+    # except Section.MultipleObjectsReturned:
+    #   # what to do if multiple employees have been returned?
+    return HttpResponse('priority set')
+  else:
+    HttpResponse('something is not right.')

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>
@@ -81,13 +82,11 @@
 					<div id="priority" class="hidden">
 						<div id="section_list">
 							<ul id="sortable" class="list-group list-unstyled">
-								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>Areas Of Interests</li>
-								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>Honors</li>
-								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>Membership</li>
-								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>PHD Supervised</li>
-								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>Item 5</li>
-								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>Item 6</li>
-								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>Item 7</li>
+								{% if sections %}
+									{% for section in sections %}
+										<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>{{ section.title }}</li>
+									{% endfor %}
+								{% endif %}
 							</ul>
 						</div>
 					</div>

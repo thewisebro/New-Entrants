@@ -20,14 +20,29 @@ $(document).ready(function(){
 		revert      : 'invalid',
 		placeholder : 'placeholder',
 		update      : function (event, ui) {
-			var articleorder="";
+			var priority="";
 			$("#sortable li").each(function(i) {
-				if (articleorder=='')
-					articleorder = $(this).text();
+				if (priority=='')
+					priority = $(this).text();
 				else
-					articleorder += "," + $(this).text();
+					priority += "," + $(this).text();
 			});
-			console.log(articleorder);
+      inputs = {
+        'priority' : priority,
+      }
+      $.ajax({
+        data: inputs,
+        dataType: 'html',
+        type: 'POST',
+        url: '/facapp/setPriority/',
+        success: function(data){
+          console.log(data);
+        },
+        error: function(){
+          console.log('error occurred');
+        }
+      });
+			console.log(priority);
 		},
 	});
 	$( "#sortable" ).disableSelection();
