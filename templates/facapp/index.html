@@ -3,16 +3,20 @@
 		<title>
 			Facapp
 		</title>
-		<script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
-		<script type="text/javascript" src="{{ STATIC_URL }}/js/facapp/bootstrap.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/bootstrap.min.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/main.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/jquery-sortable-min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/jquery-ui-1.10.4.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor.js"></script>
 		<!-- <link rel="stylesheet" type="text/css" href="ckeditor/contents.css"> -->
-		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/facapp/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/facapp/bootstrap.css">
 		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/facapp/style.css">
 		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/facapp/bootstrap-override.css">
+
 	</head>
 	<body>
+		<!--//////////////////////////////////////////  container div starts  ///////////////////////////////////////////////-->
 		<div id="container">
 			<header>
 			    <div id="header_parent">
@@ -32,6 +36,7 @@
 			    <div id="header_shadow">
 			    </div>
 			</header>
+			<!--//////////////////////////////////////  middle div starts  //////////////////////////////////////////-->
 			<div id="middle">
 				<div id="tabs" >
 					<ul class="nav nav-tabs nav-justified">
@@ -41,70 +46,68 @@
 		  				<!-- <li><a>Messages</a></li> -->
 					</ul>
 				</div>
-				<!-- <div class="row">
-					<div id="sections" class="col-md-3"></div> -->
-				<div id="profile">
-					<div id="info" class="row">
-						<div class="col-md-8">
-							<p id="name">Gupta S.P.</p><!-- <br /> -->
-							<p class="details">Head Of Department</p>
-							<p class="details">spseefee[at]iitr.ac.in</p>
-							<p class="details">Ph No: 01332-285827</p>
-							<p class="details">resume</p>
+				<div id="content">
+					<!--///////////////////////////////  Profile div starts  ///////////////////////////////////-->
+					<div id="profile">
+						<div id="info" class="row">
+							<div class="col-md-8">
+								<p id="name">Gupta S.P.</p><!-- <br /> -->
+								<p class="details">Head Of Department</p>
+								<p class="details">spseefee[at]iitr.ac.in</p>
+								<p class="details">Ph No: 01332-285827</p>
+								<p class="details">resume</p>
+							</div>
+							<div class="col-md-4">
+								<img class="faculty_image" src="http://people.iitr.ernet.in/facultyphoto/default.jpg">
+							</div>
 						</div>
-						<div class="col-md-4">
-							<img class="faculty_image" src="http://people.iitr.ernet.in/facultyphoto/default.jpg">
+
+						<div id="editable">
+	    					{% if sections %}
+							<!---////////////// load the already saved sections ///////////////////////-->
+	      						{% for section in sections %}
+	        						<div contentEditable="true" id="{{ section.title }}" class="section">
+	          							{{ section.content|safe }}
+	        						</div>
+	        						<button type="submit" ht="{{ section.title }}" onclick="return updateSection(this);" class="btn btn-primary" name="submit" >save</button>
+	      						{% endfor %}
+							<!---/////////////// already saved sections loaded /////////////////////////-->
+							{% endif %}
+							<div class="section"><p class="title"></p><p class="matter"></p></div>
 						</div>
 					</div>
-
-
-
-<!---//////////////////////////////////// load the already saved sections ///////////////////////////////////////////////////////-->
-
-					<div id="editable">
-    					{% if sections %}
-      						{% for section in sections %}
-        						<div contentEditable="true" id="{{ section.title }}" class="section">
-          							{{ section.content|safe }}
-        						</div>
-        						<button type="submit" ht="{{ section.title }}" onclick="return updateSection(this);" class="btn btn-primary" name="submit" >save</button>
-      						{% endfor %}
-    					{% endif %}
-						<!-- <div id="Areas Of Interest" class="section">
-							<p class="title">Areas Of Interest</p>
-							<p class="matter">Power Apparatus, Electric Device, Power Apparatus and Electric Drives</p>
+					<!--/////////////////////////////////  Profile div ends  ////////////////////////////////////-->
+					<!--///////////////////////////////  Priority div starts  ///////////////////////////////////-->
+					<div id="priority" class="hidden">
+						<div id="section_list">
+							<ul id="sortable" class="list-group list-unstyled">
+								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>Areas Of Interests</li>
+								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>Honors</li>
+								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>Membership</li>
+								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>PHD Supervised</li>
+								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>Item 5</li>
+								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>Item 6</li>
+								<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>Item 7</li>
+							</ul>
 						</div>
-						<button type="submit" class="btn btn-primary">Save</button>
-						<div id="Areas Of Interest" class="section">
-							<p class="title">Memberships</p>
-							<p class="matter">IEE, Honaray member
-							IEEE, Member
-							Institution of Engineers India, Fellow
-							IAQR, Life Member</p>
-						</div>
-						<button type="submit" class="btn btn-primary">Save</button>
-						<div id="Areas Of Interest" class="section">
-							<p class="title">Areas Of Interest</p>
-							<p class="matter"><table class="matter">
-								<tbody><tr>
-									<th align="left">Degree</th><th align="left">Subject</th><th align="left">University</th><th align="left">Year</th></tr>
-								<tr><td 0="">P.hd.</td><td 0="">Microprocessor Controlled Current Source Inverter fed Induction motor drive</td><td 0="">IIT Roorkee</td><td 0="">1995</td></tr><tr><td 0="">M.E.</td><td 0="">Power Apparatus And Electrical Drives </td><td 0="">IIT Roorkee</td><td 0="">								1985</td></tr><tr><td 0="">B.E.</td><td 0="">Electrical Engg. </td><td 0="">IIT Roorkee</td><td 0="">1983</td></tr></tbody>
-							</table></p>
-						</div>
-						<button type="submit" class="btn btn-primary">Save</button> -->
-						<div class="section"><p class="title"></p><p class="matter"></p></div>
 					</div>
+					<!--////////////////////////////////  Priority div ends  /////////////////////////////////////-->
+					<!--//////////////////////////////  Add Section div starts  //////////////////////////////////-->
+					<div id="add_section" class="hidden">
+						this is the add section div
+					</div>
+					<!--///////////////////////////////  Add Section div ends  ///////////////////////////////////-->
 				</div>
-				<!-- </div> -->
 			</div>
-			
+			<!--////////////////////////////////////////  middle div ends  ////////////////////////////////////////////-->
 		</div>
+		<!--//////////////////////////////////////////  container div ends  /////////////////////////////////////////////////-->
 		<footer>
-				<div id="footer" >
-				    <!-- <div id="footer">© 2014 Information Management Group</div> -->
-				    <div class="span12 left">Copyright 2014 &nbsp;<a id="link_img" href="http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html" target="_blank">Information Management Group <img id="img-logo" class="" src="{{ STATIC_URL }}images/facapp/img-logo.png"></a>
-		 			</div>
-		 		</div>
-			</footer>
+			<div id="footer" >
+			    <!-- <div id="footer">© 2014 Information Management Group</div> -->
+			    <div class="span12 left">Copyright 2014 &nbsp;<a id="link_img" href="http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html" target="_blank">Information Management Group <img id="img-logo" class="" src="{{ STATIC_URL }}images/facapp/img-logo.png"></a>
+	 			</div>
+	 		</div>
+		</footer>
 	</body>
 </html>

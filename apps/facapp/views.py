@@ -21,7 +21,7 @@ def home(request):
   sections = Section.objects.all()
   titlesList = sectionData.titles
   data = {"sections" : sections, "titles_list" : titlesList}
-  return render(request, 'facapp/home.html', data)
+  return render(request, 'facapp/index.html', data)
 
 @csrf_exempt
 def sendFields(request, title):
@@ -47,13 +47,15 @@ def sendFields(request, title):
 def createSection(request):
   print "recieved"
   if 'title' in request.POST:
+    print 'post request'
     title = request.POST['title']
     content = request.POST['content']
     priority = request.POST['priority']
-    priority = int(priority)
-    user = request.user
-    p = Faculty.objects.get(user=user)
-    print p
-    s = Section.objects.create(title  = title, professor = p, priority = priority, content = content)
+    print priority
+#     priority = int(priority)
+#     user = request.user
+#     p = Faculty.objects.get(user=user)
+#     print p
+#     s = Section.objects.create(title  = title, professor = p, priority = priority, content = content)
     return HttpResponse('created new section instance')
   return HttpResponse('no post request detected')

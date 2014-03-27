@@ -1,16 +1,37 @@
 $(document).ready(function(){
+
 	$("#tabs ul").on('click', 'li', function() {
-	    if($(this).hasClass("active")){
-	    }
-	    else{
+		if($(this).hasClass("active")){
+		}
+		else{
 
-	      $(this).addClass("active");
-	      $(this).siblings().removeClass("active");
+			$(this).addClass("active");
+			$(this).siblings().removeClass("active");
 
-        id = $(this).find("a").html().toLowerCase();
-        console.log($("#" + id).html());
+			text = $.trim($(this).text()).split(' ').join('_').toLowerCase();
+			id = "#" + text;
+			// console.log(id);
+			$(id).removeClass("hidden");
+			$(id).siblings().addClass("hidden");
 	    }
-  });
+	});
+	
+	$( "#sortable" ).sortable({
+		revert      : 'invalid',
+		placeholder : 'placeholder',
+		update      : function (event, ui) {
+			var articleorder="";
+			$("#sortable li").each(function(i) {
+				if (articleorder=='')
+					articleorder = $(this).text();
+				else
+					articleorder += "," + $(this).text();
+			});
+			console.log(articleorder);
+		},
+	});
+	$( "#sortable" ).disableSelection();
+
 });
 
 
@@ -80,7 +101,7 @@ function createSection(elem){
   var title = $(elem).attr("ht");
   var title_id = title.split(' ').join('_').toLowerCase();
   var content = $("#" + title_id).html();
-  var priority = $("#new_sections").find("input").val();
+  var priority = $("#new_sections").find("input").html();
   console.log(priority);
   var inputs ={
     "title" : title,
