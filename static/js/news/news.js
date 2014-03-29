@@ -35,6 +35,28 @@ $(document).on('load_app_news', function(){
 
   var args = arguments;
 
+  $('#global_search_bar').autocomplete({
+    source : function(request, response) {
+      $.get('/news/search/?q='+$("#global_search_bar").val(), function(res){
+        console.log(res);
+        response( $.map(res.suggestions, function(item){
+          return {
+            label: item.title,
+            value: item.title,
+            id: item.id
+          }
+        }));
+       });
+    },
+    minLength: 2,
+    select: function(event, ui){
+      location.hash = 'news/item/'+ui.item.id+'/';
+      $("#global_search_bar").val('');
+      return false;
+    }
+  });
+
+
   $.get('/news/channels_list/', {}, function(res){
    if(res.msg == "NOUSER") { location.hash = 'news/'; return;}
    channel_arr = res.channels;
@@ -191,10 +213,6 @@ function get_item_page( res ) {
     var main = res.main;
     var related = res.related
     current_selected_source = '';
-    console.log("NEWS PAGE DATA");
-    console.log(main);
-    console.log("MAIN");
-    console.log(related.length);
 
     var item_page_html =
       '<div id="news-header">'+
@@ -232,26 +250,32 @@ function get_item_page( res ) {
         '<div class="news_page_article_content">'+
           main.content +
         '</div>'+
-      '</div>'+
-      '<div id="related_items_'+ main.pk +'" class="related_items_box">'+
-        '<div style="clear:both"></div>'+
-        '<div class="related_items_header">Related News</div>';
-        for(var j=0; j<related.length; j++) {
-          item_page_html += ''+
-          '<div class="related_items">'+
-            construct_related_item(related[j]) +
-          '</div>';
-        }
-        item_page_html += '</div>';
+      '</div>';
+      if(related.length > 0) {
+        item_page_html += ''+
+        '<div id="related_items_'+ main.pk +'" class="related_items_box">'+
+          '<div style="clear:both"></div>'+
+          '<div class="related_items_header">Related News</div>';
+          for(var j=0; j<related.length; j++) {
+            item_page_html += ''+
+            '<div class="related_items">'+
+              construct_related_item(related[j]) +
+            '</div>';
+          }
+          item_page_html += '</div>';
+      }
      $("#content").html(item_page_html);
+
+
+     /* Internal content links, image sizes handled */
      /*
      $('.news_page_article_content a').attr('target', '_blank');
      var image_width = $('.news_page_img').width();
      if(image_width > 300) {
         $('.news_page_img').css('width', '100%');
 
-      }
-    */
+     }
+     */
 }
 
 function get_by_cat( arg ) {

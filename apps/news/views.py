@@ -45,12 +45,15 @@ def store_default_pref(newsuser, channel):
 
 def search(request):
   print request.GET.get('q')
-  sqs = SearchQuerySet().autocomplete(content_auto=request.GET.get('q')) #[:5]
-  print sqs
+  sqs = SearchQuerySet().autocomplete(content_auto=request.GET.get('q'))[:5]
+  #suggestions = map(lambda result: related_item_dict(News.objects.get_or_none(pk = result.pk)), sqs)
+  print "SEARCH"
+  #print suggestions
   suggestions = map(lambda result:{'title':result.title,'id':result.pk}, sqs)
   json = simplejson.dumps({
     'suggestions': suggestions
   })
+  print json
   return HttpResponse(json, content_type='application/json')
 
 def home(request):
@@ -291,7 +294,7 @@ def health(request):
     return HttpResponse("Invalid Request!")
 
 def item_dict(news_item):
-  formatted_datetime = news_item.article_date.strftime("%A, %d. %B %Y %I:%M%p");
+  formatted_datetime = news_item.article_date.strftime("%A, %d. %B %Y %I:%M%p")
   item = {
     'pk': str(news_item.pk),
     'title': news_item.title,
@@ -304,7 +307,7 @@ def item_dict(news_item):
   return item
 
 def related_item_dict(news_item):
-  formatted_datetime = news_item.article_date.strftime("%A, %d. %B %Y %I:%M%p");
+  formatted_datetime = news_item.article_date.strftime("%A, %d. %B %Y %I:%M%p")
   item = {
     'pk': str(news_item.pk),
     'title': news_item.title,
@@ -323,6 +326,7 @@ def news_item(request, item_id):
       return HttpResponse(simplejson.dumps({'msg': 'NOUSER'}), content_type='application/json')
     news_item = News.objects.get(pk = item_id)
     main = item_dict(news_item)
+    #print main
     """
     pk = news.pk
     title = news.title
@@ -334,11 +338,11 @@ def news_item(request, item_id):
     """
     more_like_this = SearchQuerySet().more_like_this(news_item)[:3]
     if more_like_this is not None:
-      related = map(lambda result:related_item_dict(News.objects.get_or_none(pk = result.pk)), more_like_this)
-      print related
+      related = map(lambda result: related_item_dict(News.objects.get_or_none(pk = result.pk)), more_like_this)
       json = simplejson.dumps({'main':main, 'related':related})
       return HttpResponse(json,content_type='application/json')
     else:
+      print main
       json = simplejson.dumps({'main':main, 'related':[]})
       return HttpResponse(json,content_type='application/json')
 

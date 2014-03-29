@@ -160,7 +160,7 @@ def Technology(path):
   Ie(xml_file_path, channel)
 
 def Education(path):
-  c = "Education"
+  channel = "Education"
   xml_file_path = path + 'ie_education.xml'
   Ie(xml_file_path, channel)
 
