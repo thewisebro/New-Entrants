@@ -46,6 +46,11 @@ for key in artists.keys():
   artists_search[artists[key]['artist'].lower()]=key
 
 
+all_albums = open(JC.ALL_ALBUMS_JSON_FILE,'r+')
+all_artists = open(JC.ALL_ARTISTS_JSON_FILE,'r+')
+all_albums = json.loads(all_albums.readline())
+all_artists = json.loads(all_artists.readline())
+
 def dict_search(dictionary, search_field, search_str,limit=100):
   contains = []
   starts = []
@@ -144,23 +149,35 @@ class AlbumDescJsonView(ListAPIView):
     To show description of an Album, i.e., Artist, Songs, album_art
   """
   serializer_class = AlbumDescSerializer
+  def get(self,request,*args, **kwargs):
+    if 'id' in self.kwargs:
+      album_coming = self.kwargs['id']
+      album = all_albums[album_coming]
+      return Response(album)
+    """
   def get_queryset(self):
     if 'id' in self.kwargs:
       album_coming = self.kwargs['id']
       album = Album.objects.filter(id = album_coming)
       return album
+    """
 
 
 class ArtistDescJsonView(ListAPIView):
   """
     To show description of an Artist, i.e., Albums, cover_pic
   """
-  serializer_class = ArtistDescSerializer
-  def get_queryset(self):
+#serializer_class = ArtistDescSerializer
+  def get(self,request,*args, **kwargs):
+    if 'id' in self.kwargs:
+      artist_coming = self.kwargs['id']
+      artist = all_artists[artist_coming]
+      return Response(artist)
+  """def get_queryset(self):
     if 'id' in self.kwargs:
       artist_coming = self.kwargs['id']
       artist = Artist.objects.filter(id = artist_coming)
-      return artist
+      return artist"""
 
 
 
@@ -174,6 +191,12 @@ class PlayJsonView(ListAPIView):
     song = Song.objects.get(id=int(song_id))
     song.count += 1
     song.save()
+    active = self.request.user.is_active
+    if active :
+      user = self.request.user                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=user)
+      user = user[0]
+      user.add_songs_listen(song)
     return Song.objects.filter(id=int(song_id))
 
 
@@ -186,7 +209,7 @@ class PlaylistAllJsonView(ListCreateAPIView):
     playlists = PlaylistSerializer(many=True)
     active = self.request.user.is_active
     if active :
-      user = self.request.user                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
       playlists = PlaylistSerializer(Playlist.objects.filter(person=user.id).order_by('-id'),many=True)
       context.update({                                    # For multiple models and lists usage in ListView
           'playlists' : playlists.data,
@@ -198,7 +221,7 @@ class PlaylistAllJsonView(ListCreateAPIView):
 
 
   def pre_save(self, obj):
-    obj.person = self.request.user
+    obj.person = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]
     obj.songs = self.request.POST.get('songs','')
     obj.name = self.request.POST.get('name','')
     obj.private = True
@@ -212,7 +235,7 @@ class AddToPlaylistView(CreateAPIView):
     playlist_id = int(self.request.POST.get('id',''))
     active = self.request.user.is_active
     if active :
-      user = self.request.user                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
@@ -233,7 +256,7 @@ class OverwritePlaylistView(CreateAPIView):
     playlist_id = int(self.request.POST.get('id',''))
     active = self.request.user.is_active
     if active :
-      user = self.request.user                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
@@ -251,7 +274,7 @@ class DeleteFromPlaylistView(CreateAPIView):
     playlist_id = int(self.request.POST.get('id',''))
     active = self.request.user.is_active
     if active :
-      user = self.request.user                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
@@ -272,7 +295,7 @@ class ChangeIndexPlaylistView(CreateAPIView):
     playlist_id = int(self.request.POST.get('id',''))
     active = self.request.user.is_active
     if active :
-      user = self.request.user                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
@@ -283,6 +306,35 @@ class ChangeIndexPlaylistView(CreateAPIView):
     return Response('')
 
 
+class RenamePlaylistView(CreateAPIView):
+  serializer_class = PlaylistSerializer
+  permission_classes = (IsOwnerOrReadOnly,)
+  def post(self,request):
+    new_name = self.request.POST.get('name','')
+    playlist_id = int(self.request.POST.get('id',''))
+    active = self.request.user.is_active
+    if active :
+      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
+      if len(playlists) == 1 :
+        playlist = playlists[0]
+        playlist.name = str(new_name)
+        playlist.save()
+    return Response('')
+
+class DeletePlaylistView(CreateAPIView):
+  serializer_class = PlaylistSerializer
+  permission_classes = (IsOwnerOrReadOnly,)
+  def post(self,request):
+    playlist_id = int(self.request.POST.get('id',''))
+    active = self.request.user.is_active
+    if active :
+      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
+      if len(playlists) == 1 :
+        playlist = playlists[0]
+        playlist.delete()
+    return Response('')
 
 class PlaylistDescView(RetrieveAPIView):
 #queryset = Playlist.objects.all()
@@ -290,7 +342,7 @@ class PlaylistDescView(RetrieveAPIView):
   def get_queryset(self):
     active = self.request.user.is_active
     if active :
-      user = self.request.user                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
       playlists = Playlist.objects.filter(person=user.id)
       return playlists
 
@@ -323,11 +375,32 @@ class SearchJsonView(ListAPIView):
   def get(self, request, format=None):
     context = {}
     q = self.request.GET.get('q').lower()                       # q -> Search String coming
-    context.update({                                    # For multiple models and lists usage in ListView
+    """context.update({                                    # For multiple models and lists usage in ListView
         'songs' : dict_search(songs,'song',q,5),
         'albums' : dict_search(albums,'album',q,5),
         'artists' : dict_search(artists,'artist',q,5),
-    })
+    })"""
+    songs1 = Song.objects.filter(song__istartswith=q)[:5]
+    songs2 = Song.objects.filter(song__icontains=q).exclude(song__istartswith=q)[:5]
+    songs = list(chain(songs1,songs2))
+    songs = SongSerializer(songs[:5],many=True)
+#print songs
+    artists1 = Artist.objects.filter(artist__istartswith=q)[:5]
+    artists2 = Artist.objects.filter(artist__icontains=q).exclude(artist__istartswith=q)[:5]
+    artists = list(chain(artists1,artists2))
+    artists = SearchArtistSerializer(artists[:5],many=True)
+    albums1 = Album.objects.filter(album__istartswith=q)[:5]
+    albums2 = Album.objects.filter(album__icontains=q).exclude(album__istartswith=q)[:5]
+    albums = list(chain(albums1,albums2))
+    albums = SearchAlbumSerializer(albums[:5],many=True)
+# songs = SongSerializer(Song.objects.filter(song__icontains=q)[:5],many=True)
+#albums = AlbumSerializer(Album.objects.filter(album__icontains=q)[:5],many=True)
+#artists = ArtistSerializer(Artist.objects.filter(artist__icontains=q)[:5], many=True)
+    context.update({                                    # For multiple models and lists usage in ListView
+        'songs' : songs.data,
+        'albums' : albums.data,
+        'artists' : artists.data,
+        })
 #song_keys = search_json(q.lower(),songs_search)
 #print song_keys
     return Response(context)

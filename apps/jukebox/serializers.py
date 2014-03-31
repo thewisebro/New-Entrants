@@ -63,6 +63,8 @@ class SongSerializer(serializers.ModelSerializer):
 
 class SongDescSerializer(serializers.ModelSerializer):
   file_name = HyperlinkedFileField(source='file_name')
+  album = AlbumArtSerializer()
+  artists = ArtistSerializer(many=True)
   class Meta:
     model = Song
     fields = ('id', 'id_no', 'song', 'album', 'artists', 'count','file_name')
@@ -77,6 +79,7 @@ class ArtistSerializer(serializers.ModelSerializer):
 
 class AlbumDescSerializer(serializers.ModelSerializer):
   song_set = serializers.SerializerMethodField('get_song_set')
+  artists = ArtistSerializer(many=True)
   class Meta:
     model = Album
     fields = ('id', 'song_set', 'album', 'artists', 'album_art')
@@ -101,6 +104,22 @@ class AlbumSerializer(serializers.ModelSerializer):
   class Meta:
     model = Album
     fields = ('id', 'album', 'artists')
+    depth = 1
+
+
+class SearchArtistSerializer(serializers.ModelSerializer):
+  artist_art = serializers.SerializerMethodField('get_artist_art')
+  class Meta:
+    model = Artist
+    fields = ('id','artist','artist_art')
+
+  def get_artist_art(self,obj):
+    return obj.album_set.all()[0].album_art.name
+
+class SearchAlbumSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Album
+    fields = ('id', 'album', 'artists', 'album_art')
     depth = 1
 
 
