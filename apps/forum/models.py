@@ -10,16 +10,17 @@ from api import model_constants as MC
 from taggit_autocomplete.managers import TaggableManager
 
 class Question(models.Model, Taggable):
-  profile = models.ForeignKey('Profile')
+  profile = models.ForeignKey('Profile', related_name='added')
   datetime_modified = models.DateTimeField(auto_now=True)
   description = models.TextField()
   title = models.CharField(max_length=MC.TEXT_LENGTH)
+  user_views = models.ManyToManyField('Profile', related_name='viewed')
 
   def save(self,*args,**kwargs):
     result = super(Question,self).save(*args,**kwargs)
     if not Activity.objects.filter(activity_type=Activity.ASK_QUES,
         content_type=ContentType.objects.get_for_model(self), object_id=self.pk).exists():
-      Activity.objects.create(activity_type=Activity.ASK_QUES, content=self)
+      Activity.objects.create(activity_type=Activity.ASK_QUES, content=self, profile=self.profile)
     return result
 
   def delete(self,*args,**kwargs):
@@ -59,7 +60,7 @@ class ProfileQuestionFollowed(models.Model):
 
   def save(self,*args,**kwargs):
     result = super(ProfileQuestionFollowed,self).save(*args,**kwargs)
-    Activity.objects.create(activity_type=Activity.FOLLOW_QUES, content=self)
+    Activity.objects.create(activity_type=Activity.FOLLOW_QUES, content=self, profile=self.profile)
     return result
 
   def delete(self,*args,**kwargs):
@@ -83,7 +84,7 @@ class ProfileAnswerUpvoted(models.Model):
 
   def save(self,*args,**kwargs):
     result = super(ProfileAnswerUpvoted,self).save(*args,**kwargs)
-    Activity.objects.create(activity_type=Activity.UPVOTE_ANS, content=self)
+    Activity.objects.create(activity_type=Activity.UPVOTE_ANS, content=self, profile=self.profile)
     return result
 
   def delete(self,*args,**kwargs):
@@ -103,12 +104,12 @@ class ProfileAnswerUpvoted(models.Model):
 
 class Answer(models.Model):
   profile = models.ForeignKey(Profile)
-  question = models.ForeignKey(Question)
+  question = models.ForeignKey(Question, related_name='answers')
   description = models.TextField()
   datetime_modified = models.DateTimeField(auto_now=True)
   def save(self,*args,**kwargs):
     result = super(Answer,self).save(*args,**kwargs)
-    Activity.objects.create(activity_type=Activity.POST_ANS, content=self)
+    Activity.objects.create(activity_type=Activity.POST_ANS, content=self, profile=self.profile)
     return result
 
   def delete(self,*args,**kwargs):
@@ -142,7 +143,7 @@ class Activity(models.Model):
   content_type = models.ForeignKey(ContentType)
   object_id = models.IntegerField()
   content = generic.GenericForeignKey('content_type','object_id')
-  datetime = models.DateTimeField(auto_now_add=True)
+  profile = models.ForeignKey(Profile)
 
   def __unicode__(self):
     return self.activity_type

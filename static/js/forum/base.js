@@ -5,8 +5,8 @@ $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
     //html += '<input type="submit" value="Search"></div>';
     $('#content').html('');
     if(!hash1)
-      display_activity();
-    if(hash1 == 'questions')
+      display_activity(0,0);
+    else if(hash1 == 'questions')
       display_questions();
     else if(hash1 == 'question')
       display_question(hash2);
@@ -14,6 +14,21 @@ $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
       display_answer(hash2);
     else if(hash1 == 'tag')
       display_tag(hash2);
+    else if(hash1 == 'activity')
+    {
+      if(!hash2)
+        display_activity(1,0);
+      else
+        display_activity(1,hash2);
+    }
+    else if(hash1 == 'unanswered')
+      display_unanswered();
+    else if(hash1 == 'mytopic')
+      display_mytopic();
+    else if(hash1 == 'popular'){
+      console.log("hello");
+      display_popular();
+    }
 });
 
 function escapeStr(str)
@@ -87,6 +102,7 @@ function singleanswer_html(data){
       html += '<div id = "downvote_'+data.answer.id+'"><button>Downvote</button></div>';
     }
   }
+  html += '<div id = "answer_comments_'+data.answer.id+'"></div>';
   return html;
 }
 
@@ -123,6 +139,10 @@ function allanswers_html(data){
   {
     html += '<a href="#forum/answer/'+data.answers[i].id+'">Answer </a>';
     html += data.answers[i].description + '<br>';
+    html += '<div id="comments_'+data.answers[i].id+'">';
+    html += '<div id="show_hide_comments_'+data.answers[i].id+'" onclick="show_comments('+data.answers[i].id+')"> Show comments </div>';
+    html += '<div id="answer_comments_'+data.answers[i].id+'"></div>';
+    html += '</div>';
   }
   html += '</div>';
   return html;
@@ -130,15 +150,66 @@ function allanswers_html(data){
 
 function activities_html(data,i){
   html = '';
-  html += '<div id = "activity_'+i+'">';
-  html += data.activities[i].student_name;
+  html += '<div class = "feed-box">';
+  html += '<a href="#"></a>';
+ // html += data.activities[i].student_name;
   if(data.activities[i].activity_type=='ASK_QUES')
   {
-    html += ' asked a ' + '<a href="#forum/question/'+data.activities[i].object_id+'">question</a>'
+    html += '<a href="#"><img class="feed-propic" src=""></a>' +
+            '<div class="feed-text">' +
+              '<div class="feed-line">' + 
+                '<a class="person-name" href="#">' + 
+                  data.activities[i].student_name + 
+                '</a>' +
+                ' asked a question' +
+              '</div>' + //feed-line
+              '<div class="feed-description">' + 
+                '<div class="feed-question">' +
+                  '<a class="question-title" href="/#forum/question/'+data.activities[i].object.id+'">' +
+                    data.activities[i].object.title +
+                  '</a>' +
+                  '<div class="question-description">' +
+                    data.activities[i].object.description +
+                  '</div>' + //question-description
+                '</div>' + //feed-question
+              '</div>' + //feed description
+              '<div class="feed-bottom-line">' +
+                '<a class="answers-number" href="/#forum/question/'+data.activities[i].object.id+'">' +
+                  data.activities[i].object.answers_number +
+                  ' Answers' +
+                '</a>' +
+              '</div>' + //feed-bottom-line
+            '</div>'; //feed-text
+
   }
   else if(data.activities[i].activity_type=='POST_ANS')
   {
-    html += ' posted an ' + '<a href="#forum/answer/'+data.activities[i].object_id+'">answer</a>' + 'to a question';
+          html += '<a href="#"><img class="feed-propic" src=""></a>' +
+                  '<div class="feed-text">' +
+                    '<div class="feed-line">' + 
+                      '<a class="person-name" href="#">' + 
+                        data.activities[i].student_name + 
+                      '</a>' +
+                      ' answered a question' +
+                    '</div>' + //feed-line
+                    '<div class="feed-description">' +
+                      '<div class="feed-answer-box">' +
+                        '<div class="question-title-box">' +
+                          '<div class="question-title">' +
+                            data.activities[i].object.title +
+                          '</div>' + //question-title
+                        '</div>' + //question-title-box
+                        '<div class="answer-line">' +
+                          data.activities[i].student_name +
+                          '\'s answer:' +
+                        '</div>' + //answer-line
+                        '<div class="answer-box">' +
+                          data.activities[i].object.description +
+                        '</div>' + //answer-box
+                      '</div>' + //feed-answer-box
+                    '</div>' + //feed-description
+                  '</div>';//feed-text
+
   }
   else if(data.activities[i].activity_type=='FOL_QUES')
   {
@@ -152,7 +223,7 @@ function activities_html(data,i){
   {
     html += ' followed a ' + '<a href="#forum/tag/'+data.activities[i].object.name+'">tag</a>';
   }
-  html += '</div>';
+  html += '</div>'; //feed-box
   return html;
 }
 
@@ -180,6 +251,7 @@ function display_question(id){
 function display_questions(){
   $.get('forum/fetch_questions/',
     {
+      'type_question': 0,
     },function(data)
     {
       html = '';
@@ -214,6 +286,7 @@ function display_answer(answer_id){
     {
       html = singleanswer_html(data);
       $('#content').append(html);
+      $('#answer_comments_'+answer_id).load('forum/answer_comments/'+data.answer.id);
     });
 }
 
@@ -313,16 +386,19 @@ function display_tag(tag_name){
     });
 }
 
-function display_activity(){
+function display_activity(single,username){
   $.get('forum/fetch_activity/',
     {
+      'single': single,
+      'username': username
     },function(data)
     {
-      html = '';
+      html = '<div id="forum-feed">';
       for(i=data.activities.length;i>0;i--)
       {
         html += activities_html(data,i-1);
       }
+      html += '</div>';
       $('#content').append(html);
     });
 }
@@ -363,3 +439,64 @@ function search_tag(){
       $('#content').append(html);
     });
 }
+
+function show_comments(answer_id){
+  $('#show_hide_comments_'+answer_id).remove();
+  $('#answer_comments_'+answer_id).load('forum/answer_comments/'+answer_id);
+  html = '<div id="show_hide_comments_'+answer_id+'" onclick="hide_comments('+answer_id+')"> Hide Comments </div>';  
+  $('#comments_'+answer_id).prepend(html);
+}
+
+function hide_comments(answer_id){
+  $('#answer_comments_'+answer_id).html('');
+  html = 'show comments';
+  $('#show_hide_comments_'+answer_id).html(html);
+  $('#show_hide_comments_'+answer_id).on("click",function(){show_comments(answer_id)});
+}
+
+function display_unanswered(){
+  $.get('forum/fetch_questions/',
+    {
+      'type_question': 1
+    },function(data)
+    {
+      html = '';
+      for(var i=data.questions.length;i>0;i--)
+      {
+        html +=  questions_html(data,i-1);
+      }
+      $('#content').append(html);
+    });
+}
+
+function display_mytopic(){
+  $.get('forum/fetch_questions/',
+    {
+      'type_question': 2
+    },function(data)
+    {
+      html = '';
+      for(var i=data.questions.length;i>0;i--)
+      {
+        html +=  questions_html(data,i-1);
+      }
+      $('#content').append(html);
+    });
+}
+
+
+function display_popular(){
+  $.get('forum/fetch_questions/',
+    {
+      'type_question': 3
+    },function(data)
+    {
+      html = '';
+      for(var i=data.questions.length;i>0;i--)
+      {
+        html +=  questions_html(data,i-1);
+      }
+      $('#content').append(html);
+    });
+}
+
