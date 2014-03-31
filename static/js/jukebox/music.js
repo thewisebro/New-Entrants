@@ -1,4 +1,19 @@
 
+
+function getRandomArrayElements(arr, count) {
+  var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
+  while (i-- > min && i>0) {
+    index = Math.floor((i + 1) * Math.random());
+    temp = shuffled[index];
+    shuffled[index] = shuffled[i];
+    shuffled[i] = temp;
+  }
+  if(count>arr.length) return shuffled;
+  return shuffled.slice(min);
+}
+
+
+
 /*for loading the diff links in mainbody div*/
   function lTrending(){
          //  $("#rightside").animate({right:'220',opacity:'0'},300); 
@@ -194,7 +209,7 @@ function add_LS_queue(song)
 {
   var id = 'song_'+song.id;
   var image = '\/songsmedia\/' + song.album.album_art;
-  image = 'http://192.168.121.5:60000'+image;
+  image = 'http://192.168.121.5'+image;
   var artist_name = song.artists[0].artist;
   var song_name = song.song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
@@ -215,7 +230,7 @@ function add_next_queue(song)
 {
   var id = 'song_'+song.id;
   var image = '\/songsmedia\/' + song.album.album_art;
-  image = 'http://192.168.121.5:60000'+image;
+  image = 'http://192.168.121.5'+image;
   var artist_name = song.artists[0].artist;
   var song_name = song.song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
@@ -252,7 +267,7 @@ function add_queue_song(song)
 {
   var id = 'song_'+song.id;
   var image = '\/songsmedia\/' + song.album.album_art;
-  image = 'http://192.168.121.5:60000'+image;
+  image = 'http://192.168.121.5'+image;
   var artist_name = song.artists[0].artist;
   var song_name = song.song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
@@ -329,7 +344,6 @@ function clone_element_song(id)
                  + '<div class="qinfo">'
                  + '<div class="qsong">'+song_name+'</div>'
                  + '<div class="qartist">'+artist_name+'</div></div>';
-queue_binder();
               return $( "<div class='qitem song' id='"+idn+"'></div>" ).html( html );
 
             }
@@ -347,7 +361,6 @@ queue_binder();
                      + '<div class="qinfo">'
                      + '<div class="qsong">'+song_name+'</div>'
                      + '<div class="qartist">'+artist_name+'</div></div>';
-queue_binder();
                   return $( "<div class='qitem song' id='"+idn+"'></div>" ).html( html );
               });
             }
@@ -372,22 +385,24 @@ function add_queue(ui,element)
               i = 1;
           $(".qsong").width($(".qitem").width()-50);
           $(".qartist").width($(".qitem").width()-50);
-          song_ready();
           id = id.split('_')[1];
           add_in_queue(id,cnt-1);
+          song_ready();
+queue_binder();
               return false; //break loop
               }
               });
 
           if (i != 1)
           {
-          song_ready();
           id = id.split('_')[1];
           add_in_queue(id,queue.length);
               //alert('no');
           elm.appendTo( $("#queue_content"));
           $(".qsong").width($(".qitem").width()-50);
           $(".qartist").width($(".qitem").width()-50);
+          song_ready();
+queue_binder();
           }
 
   }
@@ -445,7 +460,8 @@ start: function(event, ui){
 update: function(event, ui){
   add_in_queue(move,ui.item.index());
   }
-});
+}).disableSelection();
+  $( "#rightside" ).sortable( "option", "containment", "#queue_content" );
 
 }
 
@@ -511,6 +527,11 @@ $("#save_as_playlist").on("click",function(){
         $("#save_playlist_dialog").removeClass().addClass("save_as_playlist_close");
      }
     else{
+      if(!logged_in)
+      {
+        $('#signin_button').click();
+        return;
+      }
     
     $("#bigwrapper").css('opacity','0.2');
     $("#save_playlist_dialog").removeClass().addClass("save_as_playlist_open");
@@ -554,7 +575,11 @@ $("#add_to_playlist").on("click",function(){
         $("#add_to_playlist_dialog").removeClass().addClass("add_to_playlist_close");
      }
     else{
-    
+      if(!logged_in)
+      {
+        $('#signin_button').click();
+        return;
+      }
     $("#bigwrapper").css('opacity','0.2');
     $("#add_to_playlist_dialog").removeClass().addClass("add_to_playlist_open");
   //  $("#save_playlist_dialog").css({'display':'block'});
@@ -652,3 +677,89 @@ $('#add_new_button').on('click',function(){
     } 
     });
 
+function playlist_banner_images(songs)
+{
+    var new_songs = getRandomArrayElements(songs,5);
+    var song_count = 0;
+    $.each($('#playlistBanner').find('ul li'),function(){
+        if(song_count>=new_songs.length) return;
+        $(this).css('background-image','url(http://192.168.121.5\/songsmedia\/'+songs_url[new_songs[song_count]].album.album_art+')');
+        song_count++;
+      }); 
+}
+
+function add_queue_playlist()
+{
+   for(var i=0;i<playlist_open_now.length;i++)
+   {
+     add_LS_queue(playlist_open_now[i]); 
+   }
+}
+
+function delete_playlist(id)
+{
+  $('ul#playlists li#playlist_'+id).remove();
+  $.post('playlist_delete/',{id:id});
+  get_json('playlists');
+    
+}
+
+function reanme_playlist(where, id)
+{
+  if(where=='list')
+  {
+    var old_name = $('ul#playlists li#playlist_'+id+' span').text();
+    $('ul#playlists li#playlist_'+id).html('<input type="text" value="'+old_name+'" >');
+    $('ul#playlists li#playlist_'+id+' input').select();
+    $('ul#playlists li#playlist_'+id+' input').focus();
+    select=true;
+    $('ul#playlists li#playlist_'+id+' input').keypress(function(e){
+              if(e.which == 13)
+              {
+                  
+                  var new_name = $('ul#playlists li#playlist_'+id+' input').val();
+                  $('ul#playlists li#playlist_'+id).html('<span>'+capitalize(new_name)+'</span>');
+                   $.post('playlist_rename/',{name:new_name, id:id}, function(data){
+                         get_json('playlists');
+                     }); 
+              }
+            
+        });
+
+    $('ul#playlists li#playlist_'+id+' input').focus(function(){ select=true; });
+    $('ul#playlists li#playlist_'+id+' input').blur(function(){
+            select=false; 
+                  $('ul#playlists li#playlist_'+id).html('<span>'+capitalize(old_name)+'</span>');
+
+        });
+  }
+  else if(where=='mainbody')
+  {
+    var old_name = $('#playlistName').text();
+    $('#playlistName').html('<input type="text" value="'+old_name+'" >');
+    $('#playlistName input').select().focus();
+    select=true;
+    $('#playlistName input').keypress(function(e){
+              if(e.which == 13)
+              {
+                  
+                  var new_name = $('#playlistName input').val();
+                  $('#playlistName').html(capitalize(new_name));
+                  $('ul#playlists li#playlist_'+id).html('<span>'+capitalize(new_name)+'</span>');
+                  
+                   $.post('playlist_rename/',{name:new_name, id:id}, function(data){
+                         get_json('playlists');
+                     }); 
+              }
+            
+        });
+
+    $('#playlistName input').focus(function(){ select=true; });
+    $('#playlistName input').blur(function(){
+            select=false; 
+                  $('#playlistName').html(capitalize(old_name));
+
+        });
+    
+  }
+}

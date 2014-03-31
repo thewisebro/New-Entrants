@@ -136,6 +136,8 @@ outer: do { // Just used for break goto
        }
 
        container = $(this);
+       container.unbind("mousewheel", onWheel);
+       container.unbind("DOMMouseScroll", onWheel);
        container.bind("mousewheel", onWheel);
        container.bind("DOMMouseScroll", onWheel);
 
