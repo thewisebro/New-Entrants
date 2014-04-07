@@ -199,6 +199,7 @@ THIRD_PARTY_APPS = (
 
 CHANNELI_APPS = (
   'nucleus',
+<<<<<<< HEAD
   'jukebox',
   'api',
   'moderation',
@@ -210,6 +211,9 @@ CHANNELI_APPS = (
   'notifications',
   'helpcenter',
   'feeds',
+=======
+  'lectut',
+>>>>>>> 898aeee401332c2f77ea1777a72c3ab8e3749fe2
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
