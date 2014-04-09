@@ -42,16 +42,21 @@ def upload(request):
            image_form = ImageForm(request.POST , request.FILES )
            if text_form.is_valid():
               text_form.save()
-              return HttpResponseRedirect(reverse('lectut/views/upload'))
+              return HttpResponseRedirect(reverse('upload'))
 
            elif image_form.is_valid():
               new_image = UploadImage(upload_image = request.FILES['upload_image'])
               new_image.save()
+              a1=Activity(log=new_image)
+              a1.save()
               return HttpResponseRedirect(reverse('upload'))
    else:
       text_form = TextUpload()
       image_form = ImageForm()
 
+   previous_noti=UploadImage.objects.all().order_by('-datetime_created')
+
    context = {'image_form': image_form,
-              'text_form' : text_form }
+              'text_form' : text_form,
+              'previous_noti': previous_noti}
    return render( request, 'lectut/image.html', context)

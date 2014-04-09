@@ -1,9 +1,57 @@
+<!-- Add jQuery library -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+<!-- Add fancyBox -->
+<link rel="stylesheet" href="{{ STATIC_URL }}/jquery/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="{{ STATIC_URL }}/jquery/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+<!-- Add mousewheel plugin (this is optional) -->
+<script type="text/javascript" src="/fancybox/lib/jquery.mousewheel-3.0.6.pack.js"></script>
+
+<!-- Optionally add helpers - button, thumbnail and/or media -->
+<link rel="stylesheet" href="{{ STATIC_URL }}/jquery/fancybox/source/helpers/jquery.fancybox-buttons.css?v=1.0.5" type="text/css" media="screen" />
+<script type="text/javascript" src="{{ STATIC_URL }}/jquery/fancybox/source/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
+<script type="text/javascript" src="{{ STAIC_URL }}/jquery//fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
+
+<link rel="stylesheet" href="{{ STATIC_URL }}/jquery/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<script type="text/javascript" src="{{ STATIC_URL }}/jquery/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+
 <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
          <p>
              {{text_form}}
              {{image_form}}
          </p>
          {% load staticfiles%}
-         <input type="submit" value="Submit">
-         <img src="{%static "images_2.jpg"%}" height="200" width="100"">
+         <!--iframe id="select"></iframe-->
+         <input type="Submit" id=" Submit" value="Submit">
+         <br>
+         <!--p id="choices"></p-->
+         {% for noti in previous_noti%}
+            <a class="fancybox" rel="group1" href="{{ MEDIA_URL }}/{{noti}}"><img src="{{ MEDIA_URL }}/{{noti}}" height="100" width="100"></a>
+            {{ noti }}
+            <br>
+         {% endfor %}
+
+<!--a class="fancybox" rel="group" href="{{ MEDIA_URL }}/lectut/images/images_1.jpg"><img src="{{ MEDIA_URL }}/lectut/images/images_2.jpg" alt="" /></a-->
+<!--a class="fancybox" rel="group" href="image_2.jpg"><img src="{{ MEDIA_URL }}/lectut/images/images_2.jpg" alt="" /></a-->
+<script>
+  function choosetype()
+  {
+    var act_type=prompt("Please enter the type of file:\nLecture\nTutorial\nExam Paper\nSolution","Lecture");
+  }
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+          $(".fancybox").fancybox();
+            });
+
+  $(document).ready(function(){
+      $("#Submit").fancybox({
+      type : "iframe",
+      href : "login.html"
+          });
+      });
+    
+</script>
 </form>
