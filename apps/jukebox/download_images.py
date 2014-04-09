@@ -36,10 +36,9 @@ def add_error(err,line):
 
 def get_album_art(album):
   if(album.album_art):
-    print "yo!!!!! album_art is present for  "+album.album
     return
   url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+urllib.quote_plus(album.album)+"+album+art"
-  url = urllib2.urlopen(url,timeout=5).read()
+  url = urllib2.urlopen(url,timeout=5).read(10000000)
   js = json.loads(url)
   a=js['responseData']['results'][0]['url']
   img_temp = NamedTemporaryFile(delete=True)
@@ -48,13 +47,13 @@ def get_album_art(album):
 
   name = urlparse(a).path.split('/')[-1]
   album.album_art.save(name, File(img_temp), save=True)
+  print album.album, album.album_art.name
 
 def get_artist_pic(artist):
   if(artist.cover_pic):
-    print "yo!!!!! album_art is present for  "+artist.artist
     return
   url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+urllib.quote_plus(artist.artist)+"+high+resolution"
-  url = urllib2.urlopen(url,timeout=5).read()
+  url = urllib2.urlopen(url,timeout=5).read(10000000)
   js = json.loads(url)
   minwidth = 10000
   minurl = ""
@@ -71,6 +70,8 @@ def get_artist_pic(artist):
 
   name = urlparse(minurl).path.split('/')[-1]
   artist.cover_pic.save(name, File(img_temp), save=True)
+  print artist.artist, '      ', artist.cover_pic.name
+
 
 
 def work_albums():
@@ -78,8 +79,8 @@ def work_albums():
   for album in albums:
     try:
       get_album_art(album)
-      print album.album
     except Exception as e:
+      print album.album
       print "\nErr:",e
       add_error(e,album.album)
 
@@ -89,7 +90,7 @@ def work_artists():
   for artist in artists:
     try:
       get_artist_pic(artist)
-      print artist.artist
     except Exception as e:
+      print artist.artist
       print "\nErr:",e
       add_error(e,artist.artist)

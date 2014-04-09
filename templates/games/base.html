@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block styles %}
+  <link rel="stylesheet" href="{{STATIC_URL}}css/games/base.css" type="text/css" />
+  <link rel="stylesheet" href="{{STATIC_URL}}jquery/nanoscroller/nanoscroller.css" type="text/css" />
+  <style>
+    .pane{
+       background:rgba(255,255,255,0.3) !important;
+     }  
+  </style>
+{% endblock %}
+
+{% block body %}
+  <div id="header">           
+    <div id="games_logo">
+    </div>
+    <a href="/" class="header_link">
+      <div class="header_link">
+        back to Channel i
+      </div>
+    </a>
+  </div>
+  <div id="container">  
+    {% block text %}
+
+    {% endblock %}
+    {% block game %}  
+  
+    {% endblock game %}
+    {% block highscores %}
+
+    {% endblock highscores %}
+  </div>
+  <!-- Image Slider Begins -->
+  <div id="big_div" class="bottom-slider">  
+    <div id="slider_header" class="games_links">
+      <div class="slider_text">
+        More Games
+      </div>
+      <div id="slider_header_click"> 
+      </div>
+    </div>
+    {% block moregames %}
+    {% endblock moregames %}
+  </div>
+  <div id='footer' class="games_links">
+      <div class="slider_text">
+        More Games
+      </div>
+      <div id="footer_click">
+      </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+  <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>   
+  <script type="text/javascript" src="{{ STATIC_URL }}js/games/games.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}jquery/nanoscroller/jquery.nanoscroller.min.js"></script>
+  <script type="text/javascript">
+  $('body').ready(function(){
+    $('.nano').nanoScroller();
+  });  
+  </script>
+{% endblock %}
+

@@ -67,6 +67,7 @@ $(window).bind('hashchange', hashchangeCallback);
 function get_current_app(){
   var hashtags = location.hash.substr(1).split('/');
   var first_hashtag = hashtags.shift();
+  if(!first_hashtag)first_hashtag = tabs[0];
   return first_hashtag;
 }
 
@@ -79,4 +80,14 @@ function get_app_hashtags(){
 function redirect_to_home(){
   history.replaceState({},'home','/');
   hashchangeCallback(true);
+}
+
+function take_feedback(){
+  dialog_iframe({
+    name:'feedback_dialog',
+    title:'Feedback',
+    width:600,
+    height:360,
+    src:'/helpcenter/feedback/'
+  });
 }

@@ -132,7 +132,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '!v@yt*jnnatgsh$t2!d0-9*mh(6tm4dxst*ypwp6)gxo2qg-em'
+SECRET_KEY = 'j7xfb&%+bvl_ehozg1@u#bxz9it1zr9b1q%fs*e_zn7ovs$-!1'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -150,6 +150,10 @@ MIDDLEWARE_CLASSES = (
   'api.middlewares.DelegateMiddleware',
   # Uncomment the next line for simple clickjacking protection:
   # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+CRON_CLASSES = (
+  'jukebox.cron.ScoreHalf',
 )
 
 import django.conf.global_settings as DEFAULT_SETTINGS
@@ -195,6 +199,7 @@ THIRD_PARTY_APPS = (
   'django.contrib.comments',
   'compressor',
   'django_extensions',
+  'django_cron',
 )
 
 CHANNELI_APPS = (
@@ -210,6 +215,9 @@ CHANNELI_APPS = (
   'notifications',
   'helpcenter',
   'feeds',
+  'regol',
+  'academics',
+  'games',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
@@ -292,3 +300,8 @@ LOGGING = {
     },
   }
 }
+
+try:
+  from production.settings import *
+except ImportError:
+  pass
