@@ -8,17 +8,15 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def home(request):
-  print "yess"
   if 'title' in request.POST:
     title = request.POST['title']
     value = request.POST['content']
     s = Section.objects.get(title=title)
     s.content = value
     s.save()
-    print "here"
     return HttpResponse(value)
 #   return HttpResponse(data.titles)
-  sections = Section.objects.all()
+  sections = Section.objects.order_by('priority')
   titlesList = sectionData.titles
   data = {"sections" : sections, "titles_list" : titlesList}
   return render(request, 'facapp/index.html', data)
@@ -26,18 +24,12 @@ def home(request):
 @csrf_exempt
 def sendFields(request, title):
   sections = sectionData.data
-  print title
   for section in sections:
     if section[0][1] == title:
 #       print section[2][1]
-      print 'this is what is being sent'
-#       sendIt = "{"
       sendIt = ""
       for fields in section[2][1]:
-#         sendIt += ( fields[0] + " " )
-#         sendIt += '"' + fields[0] + '" : "' + fields[1] + '",'
         sendIt += fields[0] + ":" + fields[1] + ","
-#       sendIt += "}"
       print sendIt
 #       return HttpResponse(section[2][1])
       return HttpResponse(sendIt)
@@ -63,7 +55,6 @@ def setPriority(request):
     data = request.POST['priority']
     professor = request.user
     titles = data.split(',')
-    print titles
     for idx,title in enumerate(titles):
       section = Section.objects.get(title = title, professor = professor)
       section.priority = idx + 1

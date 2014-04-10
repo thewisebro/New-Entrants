@@ -36,7 +36,6 @@ $(document).ready(function(){
         type: 'POST',
         url: '/facapp/setPriority/',
         success: function(data){
-          console.log(data);
         },
         error: function(){
           console.log('error occurred');
@@ -56,7 +55,7 @@ function updateSection(elem){
     var classy = $(elem).attr("ht");
     var inputs = {
         "title" : classy,
-        "content" : $("#" + classy).html(),
+        "content" : $("[id='" + classy + "']").html(),
     };
           $.ajax({
             data: inputs,
@@ -65,7 +64,6 @@ function updateSection(elem){
             url: "",
             success: function(data){
             $("#" + classy).html(data);
-            console.log("success");
             }
           });
           return false;
