@@ -7,7 +7,6 @@ except:
   import settings
 from django.core.management import setup_environ
 setup_environ(settings)
-
 import time as ptime
 from BeautifulSoup import BeautifulSoup
 from utilities.models import EmailAuthUser
@@ -53,7 +52,7 @@ def parse_html(html):
 def added_by(event):
   if event.calendar.cal_type == 'GRP':
     group = Group.objects.get(user__username = event.calendar.name)
-    return group.user.html_name()
+    return group.user.html_name
   else:
     return ''
 

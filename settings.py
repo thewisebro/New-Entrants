@@ -42,7 +42,7 @@ DATABASES = {
                                           # The following settings are not used with sqlite3:
     'USER': 'channeli',
     'PASSWORD': 'channeli',
-    'HOST': '',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+    'HOST': '192.168.121.5',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
     'PORT': '',                           # Set to empty string for default.
   }
 }
@@ -132,7 +132,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '!v@yt*jnnatgsh$t2!d0-9*mh(6tm4dxst*ypwp6)gxo2qg-em'
+SECRET_KEY = 'j7xfb&%+bvl_ehozg1@u#bxz9it1zr9b1q%fs*e_zn7ovs$-!1'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -150,6 +150,10 @@ MIDDLEWARE_CLASSES = (
   'api.middlewares.DelegateMiddleware',
   # Uncomment the next line for simple clickjacking protection:
   # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+CRON_CLASSES = (
+  'jukebox.cron.ScoreHalf',
 )
 
 import django.conf.global_settings as DEFAULT_SETTINGS
@@ -186,6 +190,7 @@ DJANGO_CONTRIB_APPS = (
 THIRD_PARTY_APPS = (
 #  'debug_toolbar',
   'rest_framework',
+  'fluent_comments',
   'crispy_forms',
   'taggit',
   'taggit_autocomplete',
@@ -194,24 +199,35 @@ THIRD_PARTY_APPS = (
   'django.contrib.comments',
   'compressor',
   'django_extensions',
+  'django_cron',
 )
 
 CHANNELI_APPS = (
   'nucleus',
   'jukebox',
   'api',
-  'reporting',
+  'moderation',
   'notices',
-  'api',
-  'reporting',
   'crop_image',
   'groups',
   'events',
+  'lostfound',
+  'notifications',
+  'helpcenter',
+  'feeds',
+  'regol',
+  'academics',
+  'games',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
 
-COMMENTS_APP = 'threadedcomments'
+FEED_APPS = (
+  'events',
+)
+
+FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
+COMMENTS_APP = 'fluent_comments'
 
 AUTH_USER_MODEL = 'nucleus.User'
 
@@ -221,6 +237,8 @@ CRISPY_CLASS_CONVERTERS = {
   'datewidget': "textinput textInput",
   'timewidget': "textinput textInput",
   'datetimewidget': "textinput textInput",
+  'emailinput': "textinput textInput",
+  'numberinput': "textinput textInput",
 }
 
 COMPRESS_PRECOMPILERS = (
@@ -246,12 +264,29 @@ LOGGING = {
       '()': 'django.utils.log.RequireDebugFalse'
     }
   },
+  'formatters': {
+    'verbose': {
+      'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
+      #'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+    },
+    'simple': {
+      'format': '%(levelname)s %(message)s'
+    },
+  },
   'handlers': {
     'mail_admins': {
       'level': 'ERROR',
       'filters': ['require_debug_false'],
       'class': 'django.utils.log.AdminEmailHandler'
-    }
+    },
+    'lostfound_file_logger': {
+      'level':'DEBUG',
+      'class':'logging.handlers.TimedRotatingFileHandler',
+      'formatter': 'verbose',
+      'filename' : os.path.join(PROJECT_ROOT, 'logs/lostfound'),
+      'when'     : 'midnight',
+      'backupCount':365
+    },
   },
   'loggers': {
     'django.request': {
@@ -259,5 +294,14 @@ LOGGING = {
       'level': 'ERROR',
       'propagate': True,
     },
+    'lostfound': {
+      'handlers':['lostfound_file_logger'],
+      'level':'INFO'
+    },
   }
 }
+
+try:
+  from production.settings import *
+except ImportError:
+  pass

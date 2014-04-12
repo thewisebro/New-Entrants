@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Notice Board</title>
+  <link rel="shortcut icon" href="template/images/favicon1.png"/>    
+  <link rel="stylesheet" type="text/css" href="template/upload_style.css">
+  <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+  <script type="text/javascript" src="ckeditor/ckfinder/ckfinder.js"></script>
+  <script type="text/javascript">
+  <!--script-->
+  
+         CKEDITOR.config.toolbar_Full =
+[
+
+	{ name: 'document',		items : [ 'Source','-','NewPage','Preview','DocProps',,'Print','-','Templates' ] },
+
+	{ name: 'clipboard',	items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+
+	{ name: 'editing',		items : [ 'Find','Replace','-','SelectAll'] },
+
+	{ name: 'links',		items : [ 'Link','Unlink'] },
+
+	{ name: 'paragraph',	items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','-',
+                                            'JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'] },
+
+	'/',
+
+	{ name: 'styles',		items : [ 'Styles','Format','Font','FontSize' ] },
+
+	{ name: 'colors',		items : [ 'TextColor','BGColor' ] },
+
+	{ name: 'basicstyles',	items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+
+	{ name: 'insert',		items : [ 'Image','Table','HorizontalRule','SpecialChar','PageBreak'] },
+
+        { name: 'tools',       items : [ 'Maximize'] }
+
+];
+CKEDITOR.config.width = "100%";
+CKEDITOR.config.height = "300px";
+//CKEDITOR.config.removePlugins = "resize";
+CKEDITOR.config.language = "unicode";
+
+CKEDITOR.config.extraPlugins = 'autogrow';
+CKEDITOR.config.autoGrow_minHeight = "300px";
+CKEDITOR.config.autoGrow_maxHeight = "600px";
+//CKEDITOR.config.filebrowserBrowseUrl = 'ckeditor/ckfinder/ckfinder.html?Type=Files';
+//CKEDITOR.config.filebrowserImageBrowseUrl = 'ckeditor/ckfinder/ckfinder.html?Type=Images';
+//CKEDITOR.config.filebrowserFlashBrowseUrl = 'ckeditor/ckfinder/ckfinder.html?Type=Flash';
+//CKEDITOR.config.filebrowserUploadUrl = 'ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files';
+//CKEDITOR.config.filebrowserImageUploadUrl = 'ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images';
+//CKEDITOR.config.filebrowserFlashUploadUrl = 'ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash';
+  
+  //Form Validation 
+  function date_validity(d,m,y)
+  {var date=new Date();
+   date.setFullYear(y,m-1,d);
+   return (m-1)==date.getMonth() && d==date.getDate();
+  }
+  function expire_validity(d,m,y)
+  {var exp_date = new Date(),today = new Date();
+   exp_date.setFullYear(y,m-1,d);
+   return exp_date >= today;
+  }
+  
+  function checkForm()
+  { subject = document.getElementById("subject").value;
+    content = CKEDITOR.instances.ckbody.getData();
+    exp_date = document.getElementById("date_exp").value;
+    exp_month = document.getElementById("month_exp").value;
+    exp_year = document.getElementById("year_exp").value;
+    var valid = true,msg = "";
+    if(subject == "")
+    { valid = false;
+      msg += "Subject field is empty\n";
+    }
+    if(content == "")
+    { valid = false;
+      msg += "No Content in notice\n";
+    }
+    if(exp_date == "-1"||exp_month == "-1"||exp_year == "-1")
+    { valid = false;
+      msg += "Expire date not given\n";
+    }
+    else if(date_validity(exp_date,exp_month,exp_year) == false)
+    { valid = false;
+      msg += "Expire date given is incorrect\n";
+    }
+    else if(expire_validity(exp_date,exp_month,exp_year) == false)
+    { valid = false;
+       msg += "Expire date is a past date\n";
+    }
+    var checkbox_atleast = false
+    for(i = 0;i < Categories.length;i++)
+    {checkboxes = document.getElementsByName(Categories[i])
+      for(j = 0;j<checkboxes.length;j++)
+        if(checkboxes[j].checked != false)
+	{ checkbox_atleast = true;
+	  break;
+	}
+    }	
+    if(checkbox_atleast == false)
+    { valid=false;
+      msg+="No checkbox is checked\n";
+    }
+    
+    if(valid==false)
+    {  alert(msg);
+       return false;
+    }   
+    else return true;
+  }
+  
+  function clickall(cat)
+  { var all=document.getElementById(cat);
+    if(all.checked)
+      all.checked=true;
+    else
+      all.checked=false;
+    inputs=document.getElementsByName(cat);
+    for(i=0;i<inputs.length;i++)
+    {  elm=inputs[i]
+       elm.checked=all.checked;
+    }
+  } 
+
+  
+  
+  </script>
+ </head>
+ <body>
+  <div id="header"><div id="header_inner">
+     <div id="header_left">
+     </div>
+     <div id="header_right">
+       <a href="logout.cgi?auth=<!--sid-->">Log Out</a>
+       <a href="upload.cgi?auth=<!--sid-->&todo=edit">Edit a Notice</a>    </div></div>
+  </div>
+  <div id="main">
+
+             
+       <form name='form' action="upload.cgi" method="post" onsubmit="return checkForm()">
+         <input type="hidden" name="auth" value="<!--sid-->">
+	 <input type="hidden" name="todo" value="<!--todo-->">
+	 <div class='a'>Subject :<input type="text" id='subject' name="subject" size="75" maxlength="100" style="margin:1px"></div>
+	 <br>
+         <div class='a'>Expire-date :<select id='date_exp' name="date_exp" style="margin:1px">
+			<option value="-1">Day...</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value="8">8</option>
+			<option value="9">9</option>
+			<option value="10">10</option>
+			<option value="11">11</option>
+			<option value="12">12</option>
+			<option value="13">13</option>
+		        <option value="14">14</option>
+			<option value="15">15</option>
+			<option value="16">16</option>
+			<option value="17">17</option>
+			<option value="18">18</option>
+			<option value="19">19</option>
+			<option value="20">20</option>
+			<option value="21">21</option>
+			<option value="22">22</option>
+			<option value="23">23</option>
+			<option value="24">24</option>
+			<option value="25">25</option>
+			<option value="26">26</option>
+			<option value="27">27</option>
+			<option value="28">28</option>
+			<option value="29">29</option>
+			<option value="30">30</option>
+			<option value="31">31</option>
+                        </select>
+
+			<select id='month_exp' name="month_exp" style="margin:1px">
+			<option value="-1">Month...</option>
+			<option value="1">Jan</option>
+			<option value="2">Feb</option>
+			<option value="3">Mar</option>
+			<option value="4">Apr</option>
+			<option value="5">May</option>
+			<option value="6">Jun</option>
+			<option value="7">Jul</option>
+			<option value="8">Aug</option>
+			<option value="9">Sep</option>
+			<option value="10">Oct</option>
+			<option value="11">Nov</option>
+			<option value="12">Dec</option>
+                        </select>
+			
+			<select id='year_exp' name="year_exp" style="margin:1px">
+                        <option value="-1">Year...</option>
+                        <option value="<!--curr_year0-->"><!--curr_year0--></option>
+	                <option value="<!--curr_year1-->"><!--curr_year1--></option>
+	                <option value="<!--curr_year2-->"><!--curr_year2--></option>
+                        <option value="<!--curr_year3-->"><!--curr_year3--></option>
+                        <option value="<!--curr_year4-->"><!--curr_year4--></option>
+
+			</select>
+         <span style="margin-left:20px">Reference No. :</span><input type="text" id='ref' name="ref" style="margin:1px"><br></div>
+         <textarea id="ckbody" style="height:300px;width:100%" class="ckeditor" name="ckbody"></textarea>
+	 <script type="text/javascript">
+	    var editor = CKEDITOR.replace( 'ckbody' );
+	    CKFinder.setupCKEditor( editor, 'ckeditor/ckfinder/' );
+	 </script>   
+         <br>
+	 <b>Copy To:</b>
+	 <br>
+	 <!--ctable--><br>
+         <input type="submit" style="float:right; font-size:25px;" name="upload" value="Upload"> 
+       </form>
+ 
+ 
+  </div>
+  <div id="footer">Copyright &copy;  <!--current_year--> | 
+   <a target="_blank" href="http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html">Information Management Group</a>. All rights reserved.
+  </div>
+  <script type="text/javascript">
+   var premsg="<!--premsg-->";
+   if(premsg)
+      alert(premsg);
+   
+  </script>  
+ </body>
+</html> 
+

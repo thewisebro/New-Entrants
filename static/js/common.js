@@ -45,7 +45,20 @@ function dialog_iframe(data){
   $dialog.dialog('open');
   eval(data.name+'=$dialog;')
 }
-var temp;
+
+function open_login_dialog(){
+  dialog_iframe({
+    name: 'login_dialog',
+    title: 'Sign In',
+    width: 450,
+    height: 300,
+    src: '/login_dialog/?next=/close_dialog/login_dialog/',
+    close: function(){
+      $(document).trigger("login");
+    }
+  });
+}
+
 function close_dialog(dialog_name){
   temp = dialog_name;
   console.log(dialog_name);

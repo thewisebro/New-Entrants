@@ -30,9 +30,9 @@ urlpatterns = patterns('',
 #    url(r'^albums/(?P<album>[\w\ ]+)/$', AlbumDescView.as_view(), name='album_desc'),
 #    url(r'^artists/(?P<artist>[\w\ ]+)/$', ArtistDescView.as_view(), name='artist_desc'),
 #    url(r'^trending/play/$', PlayView.as_view(), name='count'),
-    url(r'^login/$','django.contrib.auth.views.login' , {'template_name':'jukebox/login.html'}),
+    url(r'^login/$','jukebox.views.login' ),
     url(r'^logout/$','django.contrib.auth.views.logout' , {'next_page':'/jukebox/login'}),
-    url(r'^playlist/', include(playlist_patterns)),
+    url(r'^playlists/', include(playlist_patterns)),
 
 # Json Starting
     url(r'^trending/new/$', TemplateView.as_view(template_name='jukebox/trending_json.html')), # for practice
@@ -43,7 +43,16 @@ urlpatterns = patterns('',
     url(r'^artists/(?P<id>[\d]+)/$', ArtistDescJsonView.as_view(), name='artist_desc'),
     url(r'^play/$', PlayJsonView.as_view(), name='count'),
     url(r'^song/(?P<pk>[0-9]+)/$', GetSongView.as_view(), name='song_list'),
+    url(r'^songs/$', SongsJsonView.as_view(), name='song_list'),
     url(r'^search/', SearchJsonView.as_view(), name='search'),
+    url(r'^search_all/', SearchAllJsonView.as_view(), name='search_all'),
+    url(r'^queue/', 'jukebox.views.getQueue', name='queue'),
+    url(r'^playlists_add/$', AddToPlaylistView.as_view(), name='add_to_playlist'),
+    url(r'^playlist_delete/$', DeletePlaylistView.as_view(), name='delete_playlist'),
+    url(r'^playlist_rename/$', RenamePlaylistView.as_view(), name='rename_playlist'),
+    url(r'^playlists_over/$', OverwritePlaylistView.as_view(), name='overwrite_playlist'),
+    url(r'^playlist_delete_from/$', DeleteFromPlaylistView.as_view(), name='delete_from_playlist'),
+    url(r'^playlist_change_index/$', ChangeIndexPlaylistView.as_view(), name='change_index_playlist'),
 )
 
 

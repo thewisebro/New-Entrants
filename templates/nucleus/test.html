@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% load comments %}
+
+{% block body %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fluent_comments/css/ajaxcomments.css" />
+
+{% render_comment_list for user %}
+{% render_comment_form for user %}
+<script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}fluent_comments/js/ajaxcomments.js"></script>
+{% endblock %}

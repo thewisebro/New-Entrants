@@ -17,16 +17,20 @@ class CropImageWidget(forms.ClearableFileInput):
     return super(CropImageWidget, self).__init__()
 
   def render(self, name, value, attrs=None):
-    attrs['style'] = "display:none"
-    Class = CropImageMeta.classes[self.unique_name]
-    image_url = Class.get_image_url(value)
-    clear_checkbox_name = self.clear_checkbox_name(name)
-    html = "<img id=\"%s-img\" src=\"%s\" width=\"%spx\" height=\"%spx\" style=\"float:left\"><div style=\"float:left\">\
-            <button type=\"button\" onclick=\"upload_image('%s',%s)\" style=\"float:left;margin:%spx 0 5px 10px\">\
-            Upload Image</button><br><div style=\"float:left;margin-left:10px\">Clear:<input type=\"checkbox\" name=\"%s\"/></div></div>" % \
-            (self.unique_name, image_url, Class.width, Class.height, self.unique_name,
-             value.instance.pk, Class.height/2-23, clear_checkbox_name)
-    return mark_safe(html)
+    try:
+      attrs['style'] = "display:none"
+      Class = CropImageMeta.classes[self.unique_name]
+      image_url = Class.get_image_url(value)
+      clear_checkbox_name = self.clear_checkbox_name(name)
+      html = "<img id=\"%s-img\" src=\"%s\" width=\"%spx\" height=\"%spx\" style=\"float:left\"><div style=\"float:left\">\
+              <button type=\"button\" onclick=\"upload_image('%s',%s)\" style=\"float:left;margin:%spx 0 5px 10px\">\
+              Upload Image</button><br><div style=\"float:left;margin-left:10px\">Clear:<input type=\"checkbox\" name=\"%s\"/></div></div>" % \
+              (self.unique_name, image_url, Class.width, Class.height, self.unique_name,
+               value.instance.pk, Class.height/2-23, clear_checkbox_name)
+      return mark_safe(html)
+    except Exception as e:
+      del attrs['style']
+      return super(CropImageWidget, self).render(name, value, attrs)
 
   class Media:
     js = (

@@ -30,4 +30,4 @@ echo -e "Assigining port ${txtgrn}$port_server_assign${txtreset} to your server"
 
 rm $TEMP
 
-cd /home/`whoami`/channeli && python manage.py runserver 0.0.0.0:$port_server_assign
+cd /home/`whoami`/channeli && python manage.py runserver_plus 0.0.0.0:$port_server_assign
