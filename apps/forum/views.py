@@ -68,6 +68,7 @@ def question_dict(question,profile):
     'description': question.description,
     'follow_unfollow': follow_bool,
     'same_profile': same_profile,
+    'student_name': question.profile.student.name,
     'answers_number': len(Answer.objects.filter(question=question))
   }
 
@@ -141,7 +142,7 @@ def fetch_questions(request):
     q1 = "select count(*) from forum_question_user_views where question_id=`forum_question`.`id`"
     q3 = "select count(*) from forum_profile_questions_followed where question_id=`forum_question`.`id`"
     internal = str(Question.objects.extra(select={'hit_count':q1,'answers_count':q2,'followers':q3}).query)
-    questions = Question.objects.raw('''Select id, datetime_created, profile_id, datetime_modified, description, title,answers_count+4*hit_count+followers-2*(datediff(now(),datetime_created)) as total from (%s) AS myalias order by total desc;'''%internal)
+    questions = Question.objects.raw('''Select id, datetime_created, profile_id, datetime_modified, description, title,answers_count+4*hit_count+followers-2*(datediff(now(),datetime_created)) as total from (%s) AS myalias order by total;'''%internal)
     json_data = simplejson.dumps({'questions':map(lambda q:question_dict(q, profile), questions)})
 
   return HttpResponse(json_data, mimetype='application/json')
@@ -162,8 +163,12 @@ def add_answer(request):
   question_id = request.POST['question_id']
   description = request.POST['description']
   question = Question.objects.get(id=question_id)
+  questions = Question.objects.filter(id=question_id)
+  users = map(lambda s:s.profile,questions)
+  url = '#'
   profile = Profile.get_profile(request.user.student)
   answer = question.answers.create(description=description, profile=profile)
+  save_notification('forum','your questions was answered', url, users, answer)
   json_data = simplejson.dumps({'answer':answer_dict(answer,profile)})
   return HttpResponse(json_data, mimetype='application/json')
 

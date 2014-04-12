@@ -1,11 +1,89 @@
+var current_state = null;
+
+function yes_category(){
+  var html =        '<div id="forum-category">' +
+                  '<div id="category-box">' +
+                    '<a class="category-link" href="#forum/">' +
+                      '<div id="all" class="category">' +
+                        'All' +
+                      '</div>' + //category
+                    '</a>' +
+                    '<a class="category-link" href="#forum/unanswered/">' +
+                      '<div id="unanswered" class="category">' +
+                        'Unanswered' +
+                      '</div>' + //category
+                    '</a>' +
+                    '<a class="category-link" href="#forum/mytopic/">' +
+                      '<div id="mytopic" class="category">' +
+                        'My Topic' +
+                      '</div>' + //category
+                    '</a>' +
+                    '<a class="category-link" href="#forum/popular/">' +
+                      '<div id="popular" class="category">' +
+                        'Popular' +
+                      '</div>' + //category
+                    '</a>' +
+                  '</div>' + //category-box
+                  '<div id="add-question-div">' +
+                    '<div class="div-button" onclick="ask_question();">Ask Question</div>' +
+                  '</div>' + //add-question-div
+                '</div>'; //forum-category
+  return html;
+}
+
 $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
     //html = '';
     //html += '<div id="tag_search"><form action="" method="post" onsubmit="search_tag();return false;">';
     //html += '<input type="text" name="tag_key">';
     //html += '<input type="submit" value="Search"></div>';
     $('#content').html('');
+    var next_state = null;
     if(!hash1)
+    {
+      next_state = 'yes_category';
+    }
+    else if(hash1 == 'questions')
+    {}
+    else if(hash1 == 'question')
+    {}
+    else if(hash1 == 'answer')
+    {}
+    else if(hash1 == 'tag')
+    {}
+    else if(hash1 == 'activity')
+    {
+      if(!hash2)
+      {}
+      else
+      {}
+    }
+    else if(hash1 == 'unanswered')
+    {
+      next_state = 'yes_category';
+    }
+    else if(hash1 == 'mytopic')
+    {
+      next_state = 'yes_category';
+    }
+    else if(hash1 == 'popular')
+    {
+      next_state = 'yes_category';
+    }
+    if(next_state != current_state || right_column_app != 'forum')
+    {
+      right_column_app = 'forum';
+      current_state = next_state;
+      var html = '';
+      if(current_state == 'yes_category')
+      {
+        html = yes_category();
+      }
+      $('#right-column .content').html(html);
+    }
+    if(!hash1)
+    {
       display_activity(0,0);
+    }
     else if(hash1 == 'questions')
       display_questions();
     else if(hash1 == 'question')
@@ -22,12 +100,16 @@ $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
         display_activity(1,hash2);
     }
     else if(hash1 == 'unanswered')
-      display_unanswered();
+    {
+      display_category(1);
+    }
     else if(hash1 == 'mytopic')
-      display_mytopic();
-    else if(hash1 == 'popular'){
-      console.log("hello");
-      display_popular();
+    {
+      display_category(2);
+    }
+    else if(hash1 == 'popular')
+    {
+      display_category(3);
     }
 });
 
@@ -41,7 +123,7 @@ function escapeStr(str)
 
 
 function question_html(data){
-  html = '';
+  var html = '';
   html += '<div id = "question_'+data.question.id+'">' + data.question.id + '<br>' + data.question.title + '<br>' + data.question.description + '<br><br>';
   if(data.question.follow_unfollow=="true")
     html += '<div id = "follow_unfollow_'+data.question.id+'"><button onclick="unfollow_question('+data.question.id+')">Unfollow</button></div>';
@@ -57,7 +139,7 @@ function question_html(data){
 
 
 function singleanswer_html(data){
-  html = '';
+  var html = '';
   html += question_html(data);
   html += data.answer.description + '<br><br>';
   if(data.answer.same_profile=="false")
@@ -107,15 +189,15 @@ function singleanswer_html(data){
 }
 
 function answer_html(data){
-  html = '';
+  var html = '';
   html += '<a href="#forum/answer/'+data.answer.id+'">Answer </a>' +  data.answer.description + '<br><br>';
   return html;
 }
 
 
 
-function questions_html(data,i){
-  html = '';
+function questions1_html(data,i){
+  var html = '';
   html += '<div id = "question_'+data.questions[i].id+'">' + '<a href="#forum/question/'+data.questions[i].id+'">Question ' + data.questions[i].id + '</a>' + '<br>' + data.questions[i].title + '<br>' + data.questions[i].description + '<br>';
   if(data.questions[i].follow_unfollow=="true")
     html += '<div id = "follow_unfollow_'+data.questions[i].id+'"><button onclick="unfollow_question('+data.questions[i].id+')">Unfollow</button></div>';
@@ -125,15 +207,49 @@ function questions_html(data,i){
   return html;
 }
 
+function questions_html(data,i,type_question){
+  var html = '' +
+         '<div class="feed-box">' +
+          '<a herf="#"></a>' +
+          '<a href="#"><img class="feed-propic" src=""></a>' +
+          '<div class="feed-text">' +
+            '<div class="feed-line">' + 
+              '<a class="person-name-no-text" href="#">' + 
+                data.questions[i].student_name + 
+              '</a>' +
+            '</div>' + //feed-line
+            '<div class="feed-description">' + 
+              '<div class="feed-question">' +
+                '<a class="question-title" href="/#forum/question/'+data.questions[i].id+'">' +
+                  data.questions[i].title +
+                '</a>' +
+                '<div class="question-description">' +
+                  data.questions[i].description +
+                '</div>' + //question-description
+              '</div>' + //feed-question
+            '</div>' + //feed description
+            '<div class="feed-bottom-line">' +
+              '<a class="answers-number" href="/#forum/question/'+data.questions[i].id+'">';
+  if(type_question==1)
+    html += 'Be the first one to answer';
+  else
+    html += data.questions[i].answers_number +
+           ' Answers';
+  html +=       '</a>' +
+              '</div>' + //feed-bottom-line
+            '</div>' + //feed-texit
+          '</div>'; //feed-box
+  return html;
+}
 
 function answers_html(data,i){
-  html = '';
+  var html = '';
   html += '<div id = "answer_'+data.question.id+'">' + data.answers[i].description + '<br><br>' + '</div>';
   return html;
 }
 
 function allanswers_html(data){
-  html = '';
+  var html = '';
   html += '<div id = "answers_'+data.question.id+'">';
   for(i=0;i<data.answers.length;i++)
   {
@@ -149,7 +265,7 @@ function allanswers_html(data){
 }
 
 function activities_html(data,i){
-  html = '';
+  var html = '';
   html += '<div class = "feed-box">';
   html += '<a href="#"></a>';
  // html += data.activities[i].student_name;
@@ -161,7 +277,9 @@ function activities_html(data,i){
                 '<a class="person-name" href="#">' + 
                   data.activities[i].student_name + 
                 '</a>' +
-                ' asked a question' +
+                '<span>' +
+                  ' asked a question' +
+                '</span>' +
               '</div>' + //feed-line
               '<div class="feed-description">' + 
                 '<div class="feed-question">' +
@@ -227,6 +345,21 @@ function activities_html(data,i){
   return html;
 }
 
+function ask_question(){
+  var html = '<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front dialog-class" tabindex="-1" role="dialog" style="position: fixed; height: auto; width: 920px; top: 50px; left: 327px; display: block;" aria-describedby="add_event_dialog-div" aria-labelledby="ui-id-1">' + 
+               '<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">' +
+                 '<span id="ui-id-1" class="ui-dialog-title">Ask Question</span>' +
+                 '<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" aria-disabled="false" title="close">' +
+                   '<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>' +
+                   '<span class="ui-button-text">close</span>' +
+                 '</button>' +
+               '</div>' +
+               '<div id="add_event_dialog-div" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: 205px;">' +
+                 '<iframe id="add_event_dialog-iframe" src="/forum/ask_question/" width="100%" height="98%" frameborder="0"></iframe>' +
+               '</div>' +
+             '</div>';
+  $('body').append(html);
+}
 
 function display_question(id){
   $.get('forum/fetch_question/',
@@ -234,7 +367,7 @@ function display_question(id){
       'question_id': id
     },function(data)
     {
-      html = '';
+      var html = '';
       html += question_html(data);
       if (data.question.same_profile=="false")
       {
@@ -254,10 +387,10 @@ function display_questions(){
       'type_question': 0,
     },function(data)
     {
-      html = '';
+      var html = '';
       for(var i=data.questions.length;i>0;i--)
       {
-        html +=  questions_html(data,i-1);
+        html +=  questions_html(data,i-1,0);
       }
       $('#content').append(html);
     });
@@ -284,7 +417,7 @@ function display_answer(answer_id){
       'answer_id': answer_id
     },function(data)
     {
-      html = singleanswer_html(data);
+      var html = singleanswer_html(data);
       $('#content').append(html);
       $('#answer_comments_'+answer_id).load('forum/answer_comments/'+data.answer.id);
     });
@@ -296,7 +429,7 @@ function follow_question(question_id){
       'question_id': question_id
     },function(data)
     {
-      html =  '<button onclick="unfollow_question('+question_id+');"> Unfollow </button>';
+      var html =  '<button onclick="unfollow_question('+question_id+');"> Unfollow </button>';
       $('#follow_unfollow_'+question_id).html(html);
     });
 }
@@ -307,7 +440,7 @@ function unfollow_question(question_id){
       'question_id': question_id
     },function(data)
     {
-      html =  '<button onclick="follow_question('+question_id+');"> Follow </button>';
+      var html =  '<button onclick="follow_question('+question_id+');"> Follow </button>';
       $('#follow_unfollow_'+question_id).html(html);
     });
 }
@@ -318,7 +451,7 @@ function remove_upvote(answer_id){
       'answer_id': answer_id
     },function(data)
     {
-      html = '<button onclick="upvote_answer('+answer_id+')">Upvote</button>';
+      var html = '<button onclick="upvote_answer('+answer_id+')">Upvote</button>';
       $('#upvote_'+answer_id).html(html);
       html = data.count;
       $('#count_'+answer_id).html(html);
@@ -332,7 +465,7 @@ function remove_downvote(answer_id){
       'answer_id': answer_id
     },function(data)
     {
-      html = '<button onclick="downvote_answer('+answer_id+')">Downvote</button>';
+      var html = '<button onclick="downvote_answer('+answer_id+')">Downvote</button>';
       $('#downvote_'+answer_id).html(html);
     });
 }
@@ -343,7 +476,7 @@ function upvote_answer(answer_id){
       'answer_id': answer_id
     },function(data)
     {
-      html = '<button onclick="remove_upvote('+answer_id+')">Upvoted</button>';
+      var html = '<button onclick="remove_upvote('+answer_id+')">Upvoted</button>';
       $('#upvote_'+answer_id).html(html);
       html = data.count;
       $('#count_'+answer_id).html(html);
@@ -358,7 +491,7 @@ function downvote_answer(answer_id){
       'answer_id': answer_id
     },function(data)
     {
-      html = '<button onclick="remove_downvote('+answer_id+')">Downvoted</button>';
+      var html = '<button onclick="remove_downvote('+answer_id+')">Downvoted</button>';
       $('#downvote_'+answer_id).html(html);
       html = data.count;
       $('#count_'+answer_id).html(html);
@@ -373,7 +506,7 @@ function display_tag(tag_name){
       'tag_name': tag_name
     },function(data)
     {
-      html = '';
+      var html = '';
       if(data.tag.follow_unfollow=="true")
         html += '<div id="follow_unfollow_tag_'+tag_name+'"><button onclick=\"unfollow_tag(\''+tag_name+'\')\"> Unfollow </button></div>';
       else
@@ -393,13 +526,15 @@ function display_activity(single,username){
       'username': username
     },function(data)
     {
-      html = '<div id="forum-feed">';
+      var html = '<div id="forum-feed">' ;
       for(i=data.activities.length;i>0;i--)
       {
         html += activities_html(data,i-1);
       }
-      html += '</div>';
-      $('#content').append(html);
+      html += '</div>'; //forum-feed
+      $('#content').html(html);
+      var category_name = "all";
+      change_active_label(category_name);
     });
 }
 
@@ -409,7 +544,7 @@ function follow_tag(tag_name){
       'tag_name': tag_name
     },function(data)
     {
-      html =  '<button onclick=\"unfollow_tag(\''+tag_name+'\')\"> Unfollow </button>';
+      var html =  '<button onclick=\"unfollow_tag(\''+tag_name+'\')\"> Unfollow </button>';
       $('#follow_unfollow_tag_'+escapeStr(tag_name)).html(html);
     });
 }
@@ -420,7 +555,7 @@ function unfollow_tag(tag_name){
       'tag_name': tag_name
     },function(data)
     {
-      html =  '<button onclick=\"follow_tag(\''+tag_name+'\')\"> Follow </button>';
+      var html =  '<button onclick=\"follow_tag(\''+tag_name+'\')\"> Follow </button>';
       $('#follow_unfollow_tag_'+escapeStr(tag_name)).html(html);
     });
 }
@@ -431,7 +566,7 @@ function search_tag(){
       'tag_key': $('input[name=tag_key]').val()
     },function(data)
     {
-      html = '';
+      var html = '';
       for(i=data.tags.length;i>0;i--)
       {
         html += '<div id = "tag_'+data.tags[i]+'"><a href="#forum/tag/'+data.tags[i]+'">' + data.tags[i] + '</a></div>';
@@ -443,60 +578,40 @@ function search_tag(){
 function show_comments(answer_id){
   $('#show_hide_comments_'+answer_id).remove();
   $('#answer_comments_'+answer_id).load('forum/answer_comments/'+answer_id);
-  html = '<div id="show_hide_comments_'+answer_id+'" onclick="hide_comments('+answer_id+')"> Hide Comments </div>';  
+  var html = '<div id="show_hide_comments_'+answer_id+'" onclick="hide_comments('+answer_id+')"> Hide Comments </div>';  
   $('#comments_'+answer_id).prepend(html);
 }
 
 function hide_comments(answer_id){
   $('#answer_comments_'+answer_id).html('');
-  html = 'show comments';
+  var html = 'show comments';
   $('#show_hide_comments_'+answer_id).html(html);
-  $('#show_hide_comments_'+answer_id).on("click",function(){show_comments(answer_id)});
+  $('#show_hide_comments_'+answer_id).on("click",function(){show_comments(answer_id);});
 }
 
-function display_unanswered(){
-  $.get('forum/fetch_questions/',
-    {
-      'type_question': 1
-    },function(data)
-    {
-      html = '';
-      for(var i=data.questions.length;i>0;i--)
-      {
-        html +=  questions_html(data,i-1);
-      }
-      $('#content').append(html);
-    });
+function change_active_label(category_name){
+      $('#all'). removeClass('active-label');
+      $('#unanswered').removeClass('active-label');
+      $('#mytopic').removeClass('active-label');
+      $('#popular').removeClass('active-label');
+      $('#'+category_name). addClass('active-label');
 }
 
-function display_mytopic(){
+function display_category(type_question){
   $.get('forum/fetch_questions/',
     {
-      'type_question': 2
+      'type_question': type_question
     },function(data)
     {
-      html = '';
+      var html = '<div id="forum-feed">';
       for(var i=data.questions.length;i>0;i--)
       {
-        html +=  questions_html(data,i-1);
+        html +=  questions_html(data,i-1,type_question);
       }
-      $('#content').append(html);
-    });
-}
-
-
-function display_popular(){
-  $.get('forum/fetch_questions/',
-    {
-      'type_question': 3
-    },function(data)
-    {
-      html = '';
-      for(var i=data.questions.length;i>0;i--)
-      {
-        html +=  questions_html(data,i-1);
-      }
-      $('#content').append(html);
+      html += '</div>'; //forum-feed
+      $('#content').html(html);
+      var category_name = location.hash.substr(1).split('/')[1];
+      change_active_label(category_name);
     });
 }
 
