@@ -7,7 +7,7 @@ PROJECT_ROOT = os.path.dirname(__file__)
 
 # Email Settings
 EMAIL_HOST = '192.168.180.11'
-EMAIL_PORT = 25
+MAIL_PORT = 25
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASS = ''
 

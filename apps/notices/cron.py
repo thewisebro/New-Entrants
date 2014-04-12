@@ -11,10 +11,9 @@ setup_environ(settings)
 import time as ptime
 from BeautifulSoup import BeautifulSoup
 from utilities.models import EmailAuthUser
-from events.models import *
+from notices.models import *
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
-from events.views import duration,shown_calendar_name
 
 PeopleProxyUrl = "http://people.iitr.ernet.in/"
 
@@ -26,7 +25,7 @@ def parse_html(html):
       link['href'] = link['href'].replace(' ','%20')
       link_href_splits = link['href'].split('/')
       if link_href_splits[0] == '':
-        link['href'] = PeopleProxyUrl+'media_events/'+'/'.join(link_href_splits[3:])
+        link['href'] = PeopleProxyUrl+'media_notices/'+'/'.join(link_href_splits[3:])
   images = soup('img')
   for image in images:
     if image.has_key('src'):
@@ -47,54 +46,37 @@ def parse_html(html):
     img['style'] = (img['style']+';' if img.has_key('style') else '') + 'max-width:670px;height:auto'
     img_src_splits = img['src'].split('/')
     if img_src_splits[0] == '':
-      img['src'] = PeopleProxyUrl+'media_events/'+'/'.join(img_src_splits[3:])
+      img['src'] = PeopleProxyUrl+'media_notices/'+'/'.join(img_src_splits[3:])
   return str(soup)
 
-def added_by(event):
-  if event.calendar.cal_type == 'GRP':
-    group = Group.objects.get(user__username = event.calendar.name)
-    return group.user.html_name()
-  else:
-    return ''
-
-def event_dict_for_email(event):
+def notice_dict_for_email(notice):
   return {
-    'title' : event.title,
-    'shown_calendar_name' : shown_calendar_name(event.calendar),
-    'added_by' : added_by(event),
-    'date' : str(int(event.date.strftime('%d')))+event.date.strftime(' %B, %Y'),
-    'time' : event.time.strftime('%I:%M %p') if event.time else '',
-    'duration':duration(event),
-    'place' : event.place,
-    'description' : parse_html(event.description),
+    'subject' : notice.subject,
+    'id' : notice.id,
+    'content' : parse_html(notice.content),
   }
 
-def get_subject_content(event):
-  subject = event.title
-  content = render_to_string('events/email.html',{'PeopleProxyUrl':PeopleProxyUrl,'event':event_dict_for_email(event)})
+def get_subject_content(notice):
+  subject = notice.subject
+  content = render_to_string('notices/email.html',{'PeopleProxyUrl':PeopleProxyUrl,'notice':notice_dict_for_email(notice)})
   return subject,content
 
 if __name__ == '__main__':
-  events = Event.objects.extra(
-      where = [
-        "NOT event_type = 'NOEMAIL'",
-        "email_sent = 0",
-        "NOT ((event_type = 'REMINDER') AND (DATE_ADD(NOW(),INTERVAL 6 HOUR) < IF(time,ADDTIME(date,time),date)))"]
-  )
-  for event in events:
-    event.email_sent = True
-    event.save()
-    event_users = event.calendar.eventsuser_set.all()
-    subject,content = get_subject_content(event)
+  notices = Notice.objects.filter(emailsend=False)
+  for notice in notices:
+    notice.emailsend = True
+    notice.save()
+    notice_users = notice.uploader.category.noticeuser_set.all()
+    subject,content = get_subject_content(notice)
     email_ids = []
-    for event_user in event_users:
-      if event_user.email_subscribed:
-        email_ids.append(event_user.user.get_email())
+    for notice_user in notice_users:
+      if notice_user.subscribed:
+        email_ids.append(notice_user.user.email)
     while email_ids:
       first_100_email_ids = email_ids[:100]
-     email_ids = email_ids[100:]
+      email_ids = email_ids[100:]
       try:
-        msg = EmailMessage(subject,content,'Event',first_100_email_ids)
+        msg = EmailMessage(subject,content,'eNotice',first_100_email_ids)
         msg.content_subtype = "html"
         msg.send()
       except Exception as e:

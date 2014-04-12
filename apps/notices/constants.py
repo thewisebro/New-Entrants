@@ -1,8 +1,8 @@
 OPTIONS = (
-  ('Plc', 'Placement'),
-  ('Aut', 'Authorities'),
-  ('Dep', 'Departments'),
-  ('Bwn', 'Bhawans'),
+  ('Placement', 'Placement'),
+  ('Authorities', 'Authorities'),
+  ('Departments', 'Departments'),
+  ('Bhawans', 'Bhawans'),
   ('All', 'All'),
   )
 

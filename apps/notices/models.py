@@ -13,7 +13,7 @@ class AbstractNotice(models.Model):
   uploader = models.ForeignKey('Uploader')
   emailsend = models.BooleanField(default=False)
   re_edited = models.BooleanField(default=False)
-  expired_status = models.BooleanField(default=True)
+  expired_status = models.BooleanField(default=False)
   datetime_modified = models.DateTimeField(auto_now=True)
 
   class Meta:
@@ -50,7 +50,7 @@ class Uploader(models.Model):
 
 class Category(models.Model):
   users = models.ManyToManyField(User, through='Uploader')
-  main_category = models.CharField(max_length=10,choices = OPTIONS)
+  main_category = models.CharField(max_length=20,choices = OPTIONS)
   name = models.CharField(max_length=100)
   code = models.CharField(max_length=100)
 

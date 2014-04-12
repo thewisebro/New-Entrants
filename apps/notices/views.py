@@ -49,15 +49,20 @@ class PrivelegeJsonView(TemplateView):
 class NoticeListView(ListAPIView):
   serializer_class = NoticeListViewSerializer
   def get_queryset(self):
+    mode = self.kwargs['mode']
     llim = int(self.kwargs['llim'])                                #lower limit
     hlim = int(self.kwargs['hlim'])                                #higher limit
-    first_notice_id = int(self.kwargs['id'])                       #id of the first notice relative to which the number of notices to be sent are realized
+    first_notice_id = int(self.kwargs['id'])                       #id of the first notice relative to which the number of notices to be sent is realized
+    if(mode=="new"):
+      queryset = Notice.objects.filter(expired_status=False)
+    else:
+      queryset = Notice.objects.filter(expired_status=True)
     a = 0
     count = 0
     temp = 0
     if first_notice_id!=0:
       while temp==0:
-        query = Notice.objects.order_by('-datetime_modified')[a:a+10]
+        query = queryset.order_by('-datetime_modified')[a:a+10]
         for x in query:
           if x.id==first_notice_id:
             temp=1
@@ -66,12 +71,60 @@ class NoticeListView(ListAPIView):
         a += 10
     llim = llim + count
     hlim = hlim + count + 1
-    queryset = Notice.objects.order_by('-datetime_modified')[llim:hlim]
+    queryset = queryset.order_by('-datetime_modified')[llim:hlim]
+    return queryset
+
+class TempNoticeListView(ListAPIView):
+  serializer_class = NoticeListViewSerializer
+  def get_queryset(self):
+    mode = self.kwargs['mode']
+    if(mode=="old"):
+      queryset = Notice.objects.filter(expired_status=True)
+    else:
+      queryset = Notice.objects.filter(expired_status=False)
+    mc = self.kwargs['mc']
+    subc = self.kwargs['subc']
+    llim = int(self.kwargs['llim'])                                #lower limit
+    hlim = int(self.kwargs['hlim'])                                #higher limit
+    first_notice_id = int(self.kwargs['id'])                       #id of the first notice relative to which the number of notices to be sent is realized
+    a = 0
+    count = 0
+    temp = 0
+    if first_notice_id!=0:
+      while temp==0:
+        if(subc=="All"):
+          query = queryset.filter(uploader__category__main_category=mc).order_by('-datetime_modified')[a:a+10]
+        else:
+          query = queryset.filter(uploader__category__name=subc).order_by('-datetime_modified')[a:a+10]
+        for x in query:
+          if x.id==first_notice_id:
+            temp=1
+            break
+          count += 1
+        a += 10
+    llim = llim + count
+    hlim = hlim + count + 1
+    if(subc=="All"):
+       queryset = queryset.filter(uploader__category__main_category=mc).order_by('-datetime_modified')[llim:hlim]
+    else:
+       queryset = queryset.filter(uploader__category__name=subc).order_by('-datetime_modified')[llim:hlim]
     return queryset
 
 class Maxnumber(TemplateView):
   def get(self, request):
-    number_json = simplejson.dumps({'total_notices' : len(Notice.objects.all()) })
+    number_json = simplejson.dumps({'total_new_notices' : len(Notice.objects.filter(expired_status=False)),'total_old_notices' : len(Notice.objects.filter(expired_status=True)) })
+    return HttpResponse(number_json, mimetype="application/json")
+
+class TempMaxNotice(TemplateView):
+  def get(self, request, mode, mc, subc):
+    if(mode=="new"):
+      queryset = Notice.objects.filter(expired_status=False)
+    else:
+      queryset = Notice.objects.filter(expired_status=True)
+    if(subc=="All"):
+      number_json = simplejson.dumps({'total_notices' : len(queryset.filter(uploader__category__main_category=mc))})
+    else:
+      number_json = simplejson.dumps({'total_notices' : len(queryset.filter(uploader__category__name=subc))})
     return HttpResponse(number_json, mimetype="application/json")
 
 class GetNotice(RetrieveAPIView):
@@ -81,24 +134,37 @@ class GetNotice(RetrieveAPIView):
 
 class NoticeSearch(ListAPIView):
   def get_queryset(self):
-	query = self.request.GET.get('q', '')
-	words = query.split(' ')
-	un_queryset = {}			#unsorted(with respect to frequency) queryset
-	count = {}
-	for word in words:
-		result = Notice.objects.filter(subject__icontains=word)
-		for temp in result:
-			if temp.id in un_queryset:
-				count[temp.id] = count[temp.id]+1
-			else:
-				un_queryset[temp.id] = temp
-				count[temp.id] = 1
-	date_sorted_queryset=sorted(un_queryset, key= lambda l : un_queryset[l].datetime_modified, reverse=True)
-	count_date_sorted_queryset=sorted(date_sorted_queryset, key= lambda l: count[l], reverse=True)
-	queryset = []				#Sorted queryset
-	for notice_id in count_date_sorted_queryset:
-		queryset.append(un_queryset[notice_id])
-	return queryset
+    query = self.request.GET.get('q', '')
+    mode = self.kwargs['mode']
+    if(mode=="old"):
+      queryset1 = Notice.objects.filter(expired_status=True)
+    else:
+      queryset1 = Notice.objects.filter(expired_status=False)
+    mc = self.kwargs['mc']
+    subc = self.kwargs['subc']
+    if(subc=="All" and mc=="All"):
+      query1=queryset1
+    elif(subc=="All"):
+      query1=queryset1.filter(uploader__category__main_category=mc)
+    else:
+      query1=queryset1.filter(uploader__category__name=subc)
+    words = query.split(' ')
+    un_queryset = {}			#unsorted(with respect to frequency) queryset
+    count = {}
+    for word in words:
+		  result = query1.filter(subject__icontains=word)
+		  for temp in result:
+			  if temp.id in un_queryset:
+				  count[temp.id] = count[temp.id]+1
+			  else:
+				  un_queryset[temp.id] = temp
+				  count[temp.id] = 1
+    date_sorted_queryset=sorted(un_queryset, key= lambda l : un_queryset[l].datetime_modified, reverse=True)
+    count_date_sorted_queryset=sorted(date_sorted_queryset, key= lambda l: count[l], reverse=True)
+    queryset = []				#Sorted queryset
+    for notice_id in count_date_sorted_queryset:
+		  queryset.append(un_queryset[notice_id])
+    return queryset
   serializer_class = GetNoticeSerializer
 
 def read_star_notice(request, id1, action):              #action determines whether the function of this view is to star, unstar, read or unread a notice
@@ -205,3 +271,5 @@ def delete(request, pk):
     tnotice.save()
     n.delete()
   return HttpResponseRedirect(reverse('notices_index'))
+
+
