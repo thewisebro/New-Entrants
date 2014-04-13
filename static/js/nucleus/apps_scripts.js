@@ -8,6 +8,9 @@ var apps_scripts = {
   'forum':[
     '/static/js/forum/base.js'
   ],
+  'notices':[
+    '/static/js/notices/base.js'
+  ],
   'events':[
     '/static/js/events/events.js'
   ],

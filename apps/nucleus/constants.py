@@ -7,6 +7,7 @@ tabs = [
   ('groups', False, []),
   ('links', False, []),
   ('forum', True, ['Student']),
+  ('notices',False , [])
 ]
 
 channeli_apps = {

@@ -7,7 +7,7 @@ PROJECT_ROOT = os.path.dirname(__file__)
 
 # Email Settings
 EMAIL_HOST = '192.168.180.11'
-EMAIL_PORT = 25
+MAIL_PORT = 25
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASS = ''
 
@@ -188,7 +188,7 @@ DJANGO_CONTRIB_APPS = (
   'django.contrib.staticfiles',
   'django.contrib.admin',
   'django.contrib.humanize',
-  # Uncomment the next line to enable admin documentation:
+# Uncomment the next line to enable admin documentation:
   # 'django.contrib.admindocs',
 )
 
@@ -213,6 +213,7 @@ CHANNELI_APPS = (
   'jukebox',
   'api',
   'moderation',
+  'notices',
   'crop_image',
   'forum',
   'groups',
