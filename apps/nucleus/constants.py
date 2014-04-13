@@ -3,6 +3,7 @@ tabs = [
   ('events', False, []),
   ('apps', False, []),
   ('games', True, ['Student']),
+  ('news', False, []),
   ('groups', False, []),
   ('links', False, []),
   ('forum', True, ['Student']),

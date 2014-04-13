@@ -19,6 +19,11 @@ TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 
+GLOBAL_MEDIA_ROOT = '/home/apps/channeli_media/'
+NEWS_MEDIA_ROOT = GLOBAL_MEDIA_ROOT + 'news/'
+NEWS_IMAGES_ROOT = NEWS_MEDIA_ROOT + 'images/'
+NEWS_MEDIA_URL = '/newsmedia/'
+
 JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
 JUKEBOX_MEDIA_URL = '/songsmedia/'
 JUKEBOX_SONGS_BASEURL = '/songs/'
@@ -200,6 +205,7 @@ THIRD_PARTY_APPS = (
   'compressor',
   'django_extensions',
   'django_cron',
+  'haystack',
 )
 
 CHANNELI_APPS = (
@@ -211,6 +217,7 @@ CHANNELI_APPS = (
   'forum',
   'groups',
   'events',
+  'news',
   'lostfound',
   'notifications',
   'helpcenter',
@@ -299,6 +306,23 @@ LOGGING = {
       'level':'INFO'
     },
   }
+}
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+      'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+      'URL': 'http://192.168.121.5:8983/solr/',
+      'INCLUDE_SPELLING': True,
+      # ...or for multicore...
+      # 'URL': 'http://127.0.0.1:8983/solr/mysite',
+    },
+    'autocomplete': {
+      'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+      'URL': 'http://192.168.121.5:8983/solr/',
+      'INCLUDE_SPELLING': True,
+      # ...or for multicore...
+      # 'URL': 'http://127.0.0.1:8983/solr/mysite',
+    }
 }
 
 try:
