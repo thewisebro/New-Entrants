@@ -5,6 +5,9 @@ var apps_scripts = {
     '/static/js/prettydate.js',
     '/static/js/feeds/feeds.js'
   ],
+  'forum':[
+    '/static/js/forum/base.js'
+  ],
   'events':[
     '/static/js/events/events.js'
   ],

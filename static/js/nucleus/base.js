@@ -1,5 +1,6 @@
 var current_tab, tabs, tabs_parent_top;
 var showLoading = true;
+var right_column_app = null;
 
 $(document).on("login", function(){
   load_pagelet("header");

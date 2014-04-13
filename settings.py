@@ -208,6 +208,7 @@ CHANNELI_APPS = (
   'api',
   'moderation',
   'crop_image',
+  'forum',
   'groups',
   'events',
   'lostfound',
