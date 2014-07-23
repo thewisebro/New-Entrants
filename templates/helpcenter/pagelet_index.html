@@ -15,7 +15,9 @@
        <input type="submit" class="input-button" name="submit" value="Submit"/>
      </form>
   </div>
-  <div class='helpcenter-header' style='margin-top:25px'>Previous Queries</div>
+  {% if queries_exists %}
+    <div class='helpcenter-header' style='margin-top:25px'>Previous Queries</div>
+  {% endif %}
 {% endif %}
 <div id="responses">
 </div>

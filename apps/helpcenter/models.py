@@ -29,13 +29,13 @@ class Response(models.Model):
     if not Notification.filter(app='helpcenter', instance=self).exists():
       if flag:
         Notification.save_notification('helpcenter', "A user "+escape(self.text[0].lower()+self.text[1:]).replace('\n','<br>'),
-            '/helpcenter/queries/#'+str(self.pk), Group.objects.get(name='IMG Admin').user_set.all(), self)
+            '/helpcenter/queries/#'+str(self.pk), Group.objects.get(name='Helpcenter Admin').user_set.all(), self)
       else:
         Notification.save_notification('helpcenter', self.user.html_name+(' gave a feedback: ' if\
             self.response_type=='feedback' else ' asked for help: ')+\
             "<div class='sub-text'>"+escape(self.text).replace('\n','<br>')+"</div>",
             '/helpcenter/queries/#'+str(self.pk),
-            Group.objects.get(name='IMG Admin').user_set.all(), self)
+            Group.objects.get(name='Helpcenter Admin').user_set.all(), self)
     return result
 
   def delete(self, *args, **kwargs):
@@ -50,7 +50,7 @@ class Response(models.Model):
     if self.no_of_replies() == 0:
       return False
     u = self.reply_set.all().order_by('-number')[0].user
-    return True if u.in_group('IMG Admin') else False
+    return True if u.in_group('Helpcenter Admin') else False
 
   def __unicode__(self):
     return self.text[:50]
@@ -67,16 +67,16 @@ class Reply(models.Model):
     ordering = ['number']
 
   def clean(self,**kwargs):
-    if not (self.user == self.response.user or self.user.in_group('IMG Admin')):
+    if not (self.user == self.response.user or self.user.in_group('Helpcenter Admin')):
       raise ValidationError("User has not permission to reply")
     else:
       return super(Reply,self).clean(**kwargs)
 
   def save(self, *args, **kwargs):
     self.number = self.response.no_of_replies()+1
-    self.by_img = self.user.in_group('IMG Admin')
+    self.by_img = self.user.in_group('Helpcenter Admin')
     result = super(Reply, self).save(*args, **kwargs)
-    if self.user.in_group('IMG Admin'):
+    if self.user.in_group('Helpcenter Admin'):
       if self.response.user:
         Notification.save_notification('helpcenter', "IMG replied on your query :<div class='sub-text'>"+\
             escape(self.text).replace('\n','<br>')+"</div>",
@@ -84,7 +84,7 @@ class Reply(models.Model):
     else:
       Notification.save_notification('helpcenter', self.user.html_name + " replied on query :<div class='sub-text'>"+\
           escape(self.text).replace('\n','<br>')+"</div>", '/helpcenter/queries/#'+str(self.response.pk),
-          Group.objects.get(name='IMG Admin').user_set.all(), self)
+          Group.objects.get(name='Helpcenter Admin').user_set.all(), self)
     return result
 
   def showname(self):

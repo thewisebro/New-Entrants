@@ -1,13 +1,13 @@
 tabs = [
-  ('home', False, []),
-  ('events', False, []),
-  ('apps', False, []),
-  ('games', True, ['Student']),
-  ('news', False, []),
-  ('groups', False, []),
-  ('links', False, []),
-  ('forum', True, ['Student']),
-  ('notices',False , [])
+  ('home', False, [], 'fa fa-home'),
+  ('apps', False, [], 'fa fa-th-large'),
+  ('events', False, [], 'fa fa-calendar'),
+  ('notices',False , [], 'typcn typcn-pin'),
+  ('games', True, ['Student'], 'fa fa-gamepad'),
+  ('groups', False, [], 'fa fa-group'),
+  ('links', False, [], 'fa fa-list-ul'),
+  ('news', False, [], 'typcn typcn-flash'),
+  ('forum', True, ['Student'], 'fa fa-comments'),
 ]
 
 channeli_apps = {
