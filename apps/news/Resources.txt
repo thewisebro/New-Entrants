@@ -1,0 +1,5 @@
+
+[1]: http://yuji.wordpress.com/2011/08/18/installing-solr-and-django-haystack-on-ubuntu-with-openjdk/
+[2]: http://wiki.apache.org/solr/SolrJetty
+
+  These resources gives a clear picture about the installations of both 'apache solr' and 'Django Haystack module'.

@@ -1,0 +1,144 @@
+#content{
+      float: left;
+      width:100%;
+    }
+    form p{
+      margin:2px;
+    }
+    .subCat{
+      display:none;
+      margin-left: 20px;
+    }
+	
+#heading{
+ font-family:Trebuchet MS;
+ font-size:18px;
+ margin-left:12px;
+ margin-top:12px;
+}
+	
+#maintext{
+ font-family:times,serif;
+ font-size:12px;
+ margin-left:12px;
+}
+
+#div_item_name{
+ margin-left:12px;
+ margin-bottom:12px;
+}
+
+#id_item_name{
+float:right;
+margin-right:12px;
+width:400px;
+}
+
+#div_cost{
+ margin-left:12px;
+ margin-bottom:12px;
+}
+#id_cost{
+float:right;
+margin-right:12px;
+width:400px;
+}
+
+
+#div_status{
+ margin-left:12px;
+ margin-bottom:12px;
+}
+#id_status{
+float:right;
+margin-right:12px;
+width:405px;
+}
+
+#div_detail{
+ margin-left:12px;
+ margin-bottom:170px;
+}
+
+#id_detail{
+float:right;
+margin-right:12px;
+width:400px;
+}
+
+#div_contact{
+ margin-left:12px;
+ margin-bottom:12px;
+}
+#id_contact{
+float:right;
+margin-right:12px;
+width:400px;
+}
+
+#div_days_till_expiry{
+ margin-left:12px;
+ margin-bottom:12px;
+}
+#id_days_till_expiry{
+float:right;
+margin-right:12px;
+width:405px;
+}
+
+#div_email{
+ margin-left:12px;
+ margin-bottom:12px;
+}
+#id_email{
+float:right;
+margin-right:12px;
+width:400px;
+}
+
+#div_category{
+ margin-left:12px;
+ margin-bottom:12px;
+}
+#id_category{
+float:right;
+margin-right:12px;
+width:405px;
+}
+
+#div_sub_category{
+ margin-left:12px;
+ margin-bottom:12px;
+}
+#id_sub_category{
+float:right;
+margin-right:12px;
+width:405px;
+}
+
+#div_item_image{
+ margin-left:12px;
+ margin-bottom:12px;
+}
+input#id_item_image{
+float:right;
+margin-right:12px;
+width:405px;
+}
+
+#generic_form_submit{
+ margin-left:12px;
+ margin-bottom:12px;
+}
+#generic_form_reset{
+ margin-left:12px;
+ margin-bottom:12px;
+}
+#requestLink{
+ margin-left:12px;
+ margin-bottom:12px;
+}
+
+#container{
+margin-left:20px;
+}

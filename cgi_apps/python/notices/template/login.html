@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML4.01 TRANSITIONAL//EN" "loose.dtd" >
+<html>
+ <head>
+  <title>Notice Board</title>
+  <link rel="shortcut icon" href="template/images/favicon1.png"/>    
+  <style type="text/css">
+  @font-face {
+    font-family: 'caviardreams';
+
+   src:url('./template/fonts_used/CaviarDreams.ttf') format('truetype');
+  }
+  form{text-align:center;margin:auto;}
+  body{background-color:#fff;}
+  *{margin:0px;padding:0px;color:#000;font-family:caviardreams;}
+  table{font-family:nilland;text-align:center;margin:auto;}
+  #main{width:980px;height:540px;margin:0px auto;}
+  #header{height:50px;margin:5px 0px;}
+  #left{width:179px;height:540px;float:left}
+  #mid-line{width:1px;height:540px;float:left;}
+  #right{width:800px;height:540px;float:left}
+  #footer{height:20px;background:gray;text-align:center}
+  a{color:black;}
+  </style>
+  <script type="text/javascript">
+  <!--script-->
+  </script>
+ </head>
+ <body>
+  <div id="header"></div>
+  <div id="main">
+  <a href="index.cgi">View Notices</a><br><br><hr>
+  <p style="font:16px verdana;color:#000">
+      At the <b> e-Notice Board</b> you can view all the latest notices and announcements in the Institute, at the same time they are issued.
+      Authorities can post notices online using this interface.</p><br><hr><br>
+     <form action="login.cgi" method="post">
+        <table><tbody style="text-align:right">
+         <tr><td>UserName : </td><td><input type="text" name="username"></td></tr>
+         <tr><td>Password : </td><td><input type="password" name="passwd"></td></tr>
+         </tbody></table><br>
+         Upload Notices <input type="radio" checked="checked" name="todo" value="upload"><br>
+         Edit  Notices <input type="radio" name="todo" value="edit"><br><br>
+         <input type="submit" name="login" value="UPLOAD" style="text-decoration:none;color:#1389bc;cursor:pointer;font-size:20px;padding:2px 2px;font-family:verdana;">
+     </form>
+     <p style="color:red;font-size:14px"><!--logMessage--></p>      
+  </div>
+  <div id="footer" style="background:transparent;">Copyright &copy; <!--current_year--> | 
+    <a target="_blank" href="http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html">Information Management Group</a>. All rights reserved.
+  </div>
+ </body>
+</html> 
+
