@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/news/base.css">
+{% endblock styles %}
+
+{% block scripts %}
+{% endblock scripts %}
+
+{% block body %}
+  {% block search %}{% endblock %}
+
+  {% block right-column %}
+    <!--div id="left_container">
+      <div class="button"><a style="text-decoration:none;color:black;font-size:16px;" href="/news/home/">Home</a></div>
+      <div class="button"><a style="text-decoration:none;color:black;font-size:16px;" href="/news/international/">International</a></div>
+      <div class="button"><a style="text-decoration:none;color:black;font-size:16px;" href="/news/national/">National</a></div>
+      <div class="button"><a style="text-decoration:none;color:black;font-size:16px;"href="/news/sports/">Sports</a></div>
+      <div class="button"><a style="text-decoration:none;color:black;font-size:16px;"href="/news/entertainment/">Entertainment</a></div>
+    </div-->
+  {% endblock right-column %}
+
+  {% block content %}
+  {% endblock content %}
+
+{% endblock body %}

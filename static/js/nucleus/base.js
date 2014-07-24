@@ -1,7 +1,13 @@
 var current_tab, tabs, tabs_parent_top;
 var showLoading = true;
+var right_column_app = null;
 
 $(document).on("login", function(){
+  load_pagelet("header");
+  load_pagelet("sidebar");
+});
+
+$(document).on("logout", function(){
   load_pagelet("header");
   load_pagelet("sidebar");
 });
@@ -9,8 +15,11 @@ $(document).on("login", function(){
 $(document).on("pagelet_loaded_sidebar",function(){
   tabs = $('.tab').map(function(){return this.id.split('-')[0];});
   tabs_parent_top = $('#sidebar-tabs').position().top;
+  var load = true;
+  if(current_tab)
+    load = false;
   current_tab = undefined;
-  hashchangeCallback();
+  hashchangeCallback(load);
 });
 
 $('#loading-div')
@@ -28,13 +37,15 @@ function tab_clicked(tab){
     location.hash = tab;
 }
 
-function hashchangeCallback(){
+function hashchangeCallback(load){
   var hashtags = location.hash.substr(1).split('/');
   var first_hashtag = hashtags.shift();
   if(!first_hashtag)first_hashtag = tabs[0];
-  load_app(first_hashtag,function(){
-    $(document).trigger("load_app_"+first_hashtag, hashtags);
-  });
+  if(load)
+    load_app(first_hashtag,function(){
+      $(document).trigger("load_app_"+first_hashtag, hashtags);
+      $('.nano').nanoScroller();
+    });
   if($.inArray(first_hashtag, tabs) > -1){
     var tab = first_hashtag;
     if(current_tab!=tab){
@@ -53,3 +64,31 @@ function hashchangeCallback(){
 }
 
 $(window).bind('hashchange', hashchangeCallback);
+
+function get_current_app(){
+  var hashtags = location.hash.substr(1).split('/');
+  var first_hashtag = hashtags.shift();
+  if(!first_hashtag)first_hashtag = tabs[0];
+  return first_hashtag;
+}
+
+function get_app_hashtags(){
+  var hashtags = location.hash.substr(1).split('/');
+  var first_hashtag = hashtags.shift();
+  return hashtags;
+}
+
+function redirect_to_home(){
+  history.replaceState({},'home','/');
+  hashchangeCallback(true);
+}
+
+function take_feedback(){
+  dialog_iframe({
+    name:'feedback_dialog',
+    title:'Feedback',
+    width:600,
+    height:360,
+    src:'/helpcenter/feedback/'
+  });
+}

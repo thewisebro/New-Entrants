@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <base target="_blank">
+    <title>Notice Board</title>
+    <link rel="shortcut icon" href="template/images/favicon1.png"/>    
+    <link rel="stylesheet" type="text/css" href="template/resetcss.css"/>
+    <link rel="stylesheet" type="text/css" href="template/style1.css"/>
+    <!--link rel="stylesheet" type="text/css" href="template/style2.css"/-->
+    <script type="text/javascript">
+       <!--script-->
+    </script>
+    <script type="text/javascript" src="template/script.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+</head>
+<body>
+<div id="page_container">
+    <div id="header">
+       <div id="header_login">
+	    <div id="login" ><div class="top_link" onclick="loginform_display(this);">Upload</div>
+			<form action="login.cgi" method="post" target="_self" name="lform" style="font-family:verdana;font-size:15px;">
+				<div onclick="loginform_display(this);" style="color:black;float:right;margin-bottom:10px;margin-right:5px;">&nbsp;&nbsp;&nbsp;X</div><br> 
+				<table><tbody style="text-align:center">
+				 <tr><td style="text-align:right">UserName : </td><td><input type="text" name="username" style="width:140px;"></td></tr>
+				 <tr><td style="text-align:right">Password : </td><td><input type="password" name="passwd" style="width:140px;"></td></tr>
+				 </tbody></table><br>
+				 <div class='u'>Upload Notices</div> <input type="radio" checked="checked" name="todo" value="upload">
+				 <div style="width:100%;height:6px;"></div>
+				 <div class='u'>Edit  Notices</div> <input type="radio" name="todo" value="edit"><br><br>
+				<div style="text-align:center;"><input type="submit" name="login" value="LOGIN" style="text-decoration:none;color:#1389bc;cursor:pointer;font-size:15px;padding:2px 2px;text-align:left;font-family:verdana;"></div>
+				 
+     
+			</form>
+	</div>
+	<div id="current" onclick="clicked('New')">Current Notices</div>
+        <div id="expired" onclick="clicked('Old')">Expired Notices</div>
+        <a id="subscribe" href="/settings/email/" target="_blank">Subscribe</a>
+	<a href="/" target="_blank" id="channeli">Channel I</a>
+        <div id="search-show">Searched Notices</div>
+      </div>	
+       <div id="header_middle">  
+	 <div id="header_title">
+         <a href="index.cgi" target="_self"><span class='a'>N</span>otic<span class="e">e</span> Board</a>
+         </div>
+	 <div id="header_search">
+         </div>
+       </div>	 
+    </div>
+    <div style="clear:both;"></div>
+    
+    <div id="menubar">
+      <div id="inner_menubar"> 
+        <div id="cat"></div>
+        <div id="pref-pop-down"></div>
+      </div>
+    </div>
+	    
+    <div id="container">
+       
+       <div id="content_upper">
+          
+           
+
+	  
+	  
+	  <div id="notice-path"></div>
+	<div id="search">
+          <form onsubmit="search();document.getElementById('search_field').blur();sform_undisplay();return false;">
+          <div id="adv-search" >
+	  <div style="position:relative;margin-top:5px;">
+      
+	  <input  style="position:relative;z-index:301;" type="text" class="off" name="stb" id="search_field" size="35" value="L"  
+	                onfocus="openAdvSearch();exec_focus();sform_display();" onblur="exec_focus();"/>
+	  <input id="search_submit"  style="display:none;" type="submit" value="Search"/></div>
+
+          <div id="adv-search-popup" style="position:absolute;z-index:201;">
+	       <b>Advanced Search</b><br><div style="height:5px"></div>
+	       <input type="checkbox" id="adv1" name="adv" value="new" checked="checked" onclick="checkbox_click(this)">
+	       <label for="adv1" >Search in Current Notices</label><br>
+	   
+	       <input type="checkbox" id="adv2" name="adv" value="old" onclick="checkbox_click(this)">
+	       <label for="adv2" >Search in Expired Notices</label><br>
+               
+	       <input type="checkbox" id="adv3" name="adv" value="subject" checked="checked" onclick="checkbox_click(this)">
+	       <label for="adv3" >Search in Subject</label><br>
+               
+	       <input type="checkbox" id="adv4" name="adv" value="content" checked="checked" onclick="checkbox_click(this)">
+	       <label for="adv4" >Search in content</label><br>
+               
+	       <input type="checkbox" id="adv5" name="adv" value="date" onclick="checkbox_click(this)">
+	       <label for="adv5" >Search by date(dd-mm-yyyy)</label><br>
+		
+	       <br/>
+	       <a onclick="sform_undisplay(this)" style="text-decoration:underline;cursor:pointer;">Hide Menu</a>
+	  </div>
+          </div>	
+          </form>
+          </div>
+	  <div style="clear:both"></div>
+          
+	 <div id="notice-place">
+
+       </div>
+       </div>
+       
+       <div id="content_middle">
+       
+       				<div id="bottom_links">
+	            
+	            <div id="pagelinks"></div>	
+	       
+	       </div>
+
+       <div id="seperator3"></div>
+
+       
+       </div>
+       
+       <div style="clear:both">
+       </div>
+       
+       <div id="footer">Copyright &copy; <!--current_year--> | 
+        <a target="_blank" href="http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html">Information Management Group</a>. All rights reserved.
+       </div>
+
+    </div>
+ 
+
+</div>
+<script type="text/javascript">
+   var sid = "<!--sid-->";
+   var open_notice_id = "<!--open_notice_id-->";
+   if(location.host == 'people.iitr.ernet.in')
+   {
+     document.getElementById('subscribe').href = 'http://channeli.in/settings/email/';
+     document.getElementById('channeli').href = 'http://channeli.in/'; 
+   }
+   scriptend();
+</script>
+<div id="backy-dummy" style="position:absolute;width:100%;height:100%;background-color:black;position:absolute;top:0px;z-index:500;display:none;opacity:0.75;" onclick="loginform_display(this);"></div>
+<div id="backy-2-dummy" style="position:absolute;width:100%;height:100%;background-color:transparent;position:absolute;top:0px;z-index:200;display:none;opacity:0.75;" onclick="sform_undisplay(this);"></div>
+<div id="backy_subby" style="position:absolute;width:100%;height:100%;background-color:black;top:0px;z-index:500;display:none;opacity:0.75" onclick="subscriber_close();"></div>
+<div id="subscriber_show" style="position:absolute;top:50%;left:50%;padding:25px;width:400px;height:100px;margin-left:-225px;margin-top:-75px;display:none;z-index:501;background-color:white;opacity:1.00;" onclick="subscriber_close();">To subscribe , please log in to 
+
+<a style="text-decoration:underline;" href="http://192.168.121.7/">Channel-I</a></div>
+</body>
+<!-- Piwik -->
+<script type="text/javascript" src="/static/js/piwik.js"></script>
+<!-- End Piwik Tracking Code -->
+</html> 
+

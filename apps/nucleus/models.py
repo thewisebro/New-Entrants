@@ -4,9 +4,10 @@ import re
 from django.contrib.auth.models import AbstractUser, UserManager, Group
 from django.conf import settings
 from django.core import validators
+from django.utils.safestring import mark_safe
 from django.db.models.base import ModelBase
-from core import models
 
+from core import models
 from api import model_constants as MC
 from facapp import constants as FC
 from crop_image import CropImage
@@ -109,6 +110,24 @@ class User(AbstractUser, models.Model):
       return Owner.objects.get(account=account, user=self)
 
   @property
+  def html_name(self):
+    return mark_safe("<span class='user-span' data-username='%s'>%s</span>"%\
+                      (self.username, self.name))
+
+  @property
+  def photo_url(self):
+    return self.photo.url if self.photo else settings.STATIC_URL +\
+        'images/nucleus/default_dp.png'
+
+  def serialize(self):
+    return {
+      'is_authenticated': True,
+      'username': self.username,
+      'name': self.name,
+      'photo': self.photo_url
+    }
+
+  @property
   def delegates(self):
     return User.objects.filter(user_owners__account=self,
                                 user_owners__active=True)
@@ -131,6 +150,10 @@ def Role(group_name):
     @property
     def role(self):
       return group_name
+
+    @property
+    def name(self):
+      return self.user.name
 
     @staticmethod
     def post_save_receiver(sender, **kwargs):
@@ -192,10 +215,6 @@ class StudentBase(Role('Student')):
       self.semester = self.branch.graduation + str(year) + str(semtype_int)
     return super(StudentBase, self).save(*args, **kwargs)
 
-  @property
-  def name(self):
-    return self.user.name
-
 
 class Student(StudentBase):
   pass
@@ -251,22 +270,23 @@ class StudentInfo(StudentInfoBase):
     verbose_name_plural = 'Students Information'
 
 
-class StudentAlumniInfo(StudentInfoBase):
+class StudentInfoAlumni(StudentInfoBase):
   studentalumni = models.OneToOneField(StudentAlumni, primary_key=True)
 
   class Meta:
-    verbose_name = 'StudentAlumni Information'
-    verbose_name_plural = 'StudentAlumnis Information'
+    verbose_name = 'Student Information (Alumni)'
+    verbose_name_plural = 'Students Information (Alumni)'
 
 
 class Course(models.Model):
-  code = models.CharField(max_length=MC.CODE_LENGTH, primary_key=True)
+  code = models.CharField(max_length=MC.CODE_LENGTH)
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   credits = models.IntegerField()
   subject_area = models.CharField(max_length=MC.CODE_LENGTH)
   pre_requisites = models.ManyToManyField('Course', null=True, blank=True)
   semtype = models.CharField(max_length=1, choices=MC.SEMESTER_TYPE_CHOICES)
   year = models.IntegerField()
+  seats = models.PositiveIntegerField(blank=True, null=True)
 
   def __unicode__(self):
     return self.course_code + ':' + self.course_name + '(' + self.semtype +\
@@ -277,6 +297,7 @@ class RegisteredBranchCourse(models.Model):
   branch = models.ForeignKey(Branch)
   course = models.ForeignKey(Course)
   semester_no = models.IntegerField()
+  subject_area = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
   credits = models.IntegerField(null=True, blank=True)
 
   def __unicode__(self):
@@ -286,14 +307,16 @@ class RegisteredBranchCourse(models.Model):
 
 class RegisteredCourseChangeBase(models.Model):
   course = models.ForeignKey(Course)
+  subject_area = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
   credits = models.IntegerField(null=True, blank=True)
   change = models.CharField(max_length=3, choices=MC.COURSE_CHANGE_CHOICES)
-
   class Meta:
     abstract = True
 
 class RegisteredCourseChange(RegisteredCourseChangeBase):
   student = models.ForeignKey(Student)
+  backlog_registeredcoursechange = models.ForeignKey('RegisteredCourseChange',
+      related_name='next_registeredcoursechange', blank=True, null=True)
 
   def __unicode__(self):
     return unicode(self.student) + ':' + unicode(self.course) +\
@@ -301,6 +324,8 @@ class RegisteredCourseChange(RegisteredCourseChangeBase):
 
 class RegisteredCourseChangeAlumni(RegisteredCourseChangeBase):
   studentalumni = models.ForeignKey(StudentAlumni)
+  backlog_registeredcoursechangealumni = models.ForeignKey('RegisteredCourseChangeAlumni',
+      related_name='next_registeredcoursechangealumni', blank=True, null=True)
 
   def __unicode__(self):
     return unicode(self.studentalumni) + ':' + unicode(self.course)
@@ -309,8 +334,6 @@ class RegisteredCourseChangeAlumni(RegisteredCourseChangeBase):
 class Batch(models.Model):
   name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   faculties = models.ManyToManyField('Faculty', blank=True, null=True)
-  semtype = models.CharField(max_length=1, choices=MC.SEMESTER_TYPE_CHOICES)
-  year = models.IntegerField()
   course = models.ForeignKey(Course)
   students = models.ManyToManyField(Student, blank=True, null=True)
 
@@ -346,6 +369,19 @@ class Alumni(Role('Alumni')):
 
 
 ########################## Other useful Models ########################
+
+class PHPSession(models.Model):
+  session_key = models.CharField(max_length=40, primary_key=True)
+  session_data = models.TextField()
+  expire_date = models.DateTimeField(db_index=True)
+  username = models.CharField(max_length=15)
+
+  class Meta:
+    db_table = 'nucleus_php_session'
+
+  def __unicode__(self):
+    return self.session_key
+
 
 class GlobalVarMeta(ModelBase):
   def __getitem__(cls, key):

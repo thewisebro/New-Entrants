@@ -1,0 +1,513 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+@font-face {
+    font-family: 'caviardreams';
+
+   src:url('./fonts_used/CaviarDreams.ttf') format('truetype');
+    }
+
+@font-face {
+    font-family: 'foglihtenca';
+
+   src:url('./fonts_used/FoglihtenFr01.otf') format('opentype');
+    }
+@font-face {
+    font-family: 'secretcode';
+
+   src:url('./fonts_used/SECRCODE.TTF') format('truetype');
+    }
+@font-face {
+    font-family: 'walkway';
+
+   src:url('./fonts_used/WalkwaySemiBold.ttf') format('truetype');
+    }
+@font-face {
+    font-family: 'walkway2';
+
+   src:url('./fonts_used/WalkwayExpand.ttf') format('truetype');
+    }
+@font-face {
+    font-family: 'nilland';
+
+   src:url('./fonts_used/Nilland.ttf') format('truetype');
+    }
+@font-face {
+    font-family: 'symbols';
+
+   src:url('./fonts_used/WEBSB.TTF') format('truetype');
+    }
+
+a
+{
+outline:none;
+border:none;
+text-decoration:none;
+
+
+}
+
+#page_container
+{
+
+	width:100%;
+	height:100%;
+}
+
+body
+{
+	width:100%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+
+}
+html
+{
+
+}
+
+
+#container
+{
+	width:100%;
+	margin:0px auto;
+}
+#header
+{
+	width:100%;
+}
+#header_title
+{
+	font-family:caviardreams;
+	font-size:40px;
+	text-align:center;
+	width:100%;
+	padding-bottom:20px;
+	color:#2e2633;
+}
+#login_link
+{
+float:right;
+
+}
+#search_form
+{
+float:left;
+}
+#header_down
+{
+	width:777px;
+	float:left;
+}
+#header_logout
+{
+	float:left;
+	height:25px;
+	width:100%;
+	text-align:right;
+	
+}
+#seperator
+{
+background-color:black;
+height:1px;
+width:100%;
+float:left;
+box-shodow:0px 1px 0px orange;
+
+}
+#seperator3
+{
+background-color:black;
+height:1px;
+width:100%;
+float:left;
+z-index:-1;
+position:relative;
+top:25px;
+box-shodow:0px 1px 0px orange;
+
+}
+
+#seperator2
+{
+
+background-color:black;
+height:2px;
+width:100%;
+float:left;
+box-shodow:0px 1px 0px orange;
+position:relative;
+top:30px;
+
+
+}
+
+.top_link
+{
+width:16.66%;
+text-align:center;
+color:black;
+font-family:walkway;
+font-size:20px;
+float:left;
+color:#333333;
+padding-top:5px;
+padding-bottom:5px;
+border-bottom:1px solid;
+}
+
+.top_link:hover
+{
+border:none;
+color:black;
+box-shadow:0px 0px 2px grey;
+}
+
+.p_hid
+{
+display:none;
+left:-100%;
+}
+
+.a_hid
+{
+display:none;
+left:-200%;
+}
+
+.b_hid
+{
+display:none;
+left:-300%;
+}
+
+.d_hid
+{
+display:none;
+left:-400%;
+}
+
+.o_hid
+{
+display:none;
+left:-500%;
+}
+
+#placement:hover .p_hid
+{
+display:block;
+height:340px;
+width:600%;
+float:left;
+background-color:white;
+z-index:10000;
+position:relative;
+top:6px;
+border:none;
+margin:0px;
+padding:0px;
+}
+
+#authorities:hover .a_hid
+{
+display:block;
+height:340px;
+width:600%;
+float:left;
+background-color:white;
+z-index:10000;
+position:relative;
+top:6px;
+border:none;
+margin:0px;
+padding:0px;
+}
+
+#bhawans:hover .b_hid
+{
+display:block;
+height:340px;
+width:600%;
+float:left;
+background-color:white;
+z-index:10000;
+position:relative;
+top:6px;
+
+border:none;
+margin:0px;
+padding:0px;
+}
+
+#departments:hover .d_hid
+{
+display:block;
+height:340px;
+width:600%;
+float:left;
+background-color:white;
+z-index:10000;
+position:relative;
+top:6px;
+
+border:none;
+margin:0px;
+padding:0px;
+}
+
+#others:hover .o_hid
+{
+display:block;
+height:340px;
+width:600%;
+float:left;
+background-color:white;
+z-index:10000;
+position:relative;
+top:6px;
+
+border:none;
+margin:0px;
+padding:0px;
+}
+
+#links
+{
+width:100%;
+float:left;
+
+}
+
+#category
+{
+	margin-left:444px;
+	margin-top:15px;
+	float:left;
+}
+
+#sub_category
+{
+	margin-left:35px;
+	margin-top:15px;
+	float:left;
+}
+
+.select
+{
+	width:126px;
+}
+#menubar
+{
+	width:960px;
+	margin:0px auto;
+	height:37px;
+	background-color:#A7D573;		
+}
+#content
+{
+	width:100%;
+	margin:auto;
+}
+#content_upper
+{       width:960px;
+        margin:0px auto; 
+	padding-top:20px;
+}
+#content_middle
+{
+	float:none;
+	height:22px;
+	padding-top:30px;
+}
+#content_lower
+{
+	width:960px;
+
+}
+#numbering
+{
+	padding-left:25px;
+	letter-spacing:3px;
+	font-family:walkway;
+	float:right;
+}
+
+#numbering span:hover
+{
+text-decoration:underline;
+}
+.menu
+{
+	width:70px;
+	float:left;
+	color:#336699;
+	margin-left:120px;
+	line height:102px;
+	margin-top:5px;
+}
+
+.cat
+{
+	font-family:foglihtenca;
+	font-size:16px;
+	color:black;
+	padding-bottom:7px;
+	font-size:25px;
+}
+
+#footer
+{
+	padding-top:15px;
+	
+	width:100%;
+	margin:0 auto;
+	height:14px;
+	text-align:center;
+	font-family:walkway;
+	font-size:14px;
+	
+}
+
+table
+{
+	width:1024px;
+	margin:0 auto;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	/*border:solid 1px #6699cc;*/
+}
+
+td
+{
+	
+	width:auto;
+	height:25px;
+	font-size:16px;
+	text-transform:lowercase;
+	color:grey;
+}
+
+td:hover
+{
+text-decoration:underline;
+
+}
+table td 
+{
+	font-family:caviardreams;
+}
+
+tr
+{
+	height:30px;
+	border:none;
+	margin-bottom:1px;
+}
+
+th
+{
+	font-family:nilland;
+	font-size:18px;
+	color:grey;	
+}
+/*#search
+{
+	line-height:35px;
+	height:36px;
+	margin-left:750px;
+	width:260px;
+}
+*/
+.image_box
+{
+	padding-bottom:2px;
+}
+.search_box
+{
+	padding-left:7px;
+ 	width:203px;
+	margin-bottom:32px;
+	vertical-align:middle;
+	height:35px;
+	border:none;
+	background-image:url(images/images/search_boxs_10.png);
+}
+
+.selected
+{
+	color:#000;
+	font-family:Verdana;
+	font-size:20px;
+}
+
+.upper
+{
+	width:300px;
+	border-bottom:solid 1px #000000;
+	color:#336699;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:18px;
+	line-height:24px;
+	padding-top:3px;
+}
+.lower
+{
+	width:320px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#333333;
+	line-height:32px;
+	
+}
+
+.admin_box
+{
+	width:320px;
+	float:left;
+}
+
+
+
+.new td
+{
+color:black;
+}
+
+#bottom_links
+{
+font-family:walkway;
+font-size:16px;
+float:left;
+}
+#filter
+{
+width:200px;
+overflow:visible;
+float:left;
+text-align:center;
+}
+#subscribe
+{
+width:200px;
+text-align:center;
+float:left;
+}
+
+
+#filter:hover .p_hid
+{
+display:block;
+height:30px;
+width:300%;
+float:left;
+background-color:white;
+z-index:10000;
+position:relative;
+top:-50px;
+border:none;
+margin:0px;
+padding:0px;
+}

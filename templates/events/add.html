@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+  {% if calendar %}
+    {{ form.media.js }}
+  {% else %}
+    {{ block.super }}
+  {% endif %}
+  <script type="text/javascript">
+    parent.display_messages({{ django_messages }});
+  </script>
+{% endblock %}
+
+{% block styles %}
+  {{ form.media.css }}
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.sass" type="text/sass"/>
+  <style type="text/css">
+    .cke{
+      margin-left:10px !important;
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  <form class="uniForm" id='add-event-form' action="" method="POST">{% csrf_token %}
+    <div class='edit-line'>
+      <label class='field-label-big'>Calendar : </label><div class='field'><select name='calendar_name' onchange="$('input[name=reset]').click();">
+       <option value=''> ---------- </option>
+       {% for cal in calendars %}
+         <option value='{{ cal.name }}' {% if cal.name == calendar.name %}selected='selected'{% endif %}>{{ cal.verbose_name }}</option>
+       {% endfor %}
+      </select></div>
+    </div>
+    <input type="submit" name="reset" style="display:none;"/>
+    {% if calendar %}
+      {{ form.uniform }}
+      <input class="input-button" style="margin-left:10px;" type="submit" name="submit" value="Submit"/>
+    {% endif %}
+  </form>
+{% endblock %}

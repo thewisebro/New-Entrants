@@ -1,0 +1,163 @@
+/* line 1, ../../sass/helpcenter/helpcenter.sass */
+.query-box {
+  padding: 10px 10px 10px 5px;
+  border-top: 1px solid #dddbdb;
+  margin-bottom: 15px;
+  overflow: auto;
+}
+
+/* line 7, ../../sass/helpcenter/helpcenter.sass */
+.query-main, .feedback-main {
+  padding-bottom: 10px;
+  overflow: auto;
+}
+
+/* line 11, ../../sass/helpcenter/helpcenter.sass */
+.query-main {
+  cursor: pointer;
+}
+
+/* line 14, ../../sass/helpcenter/helpcenter.sass */
+.query-main-content {
+  float: left;
+  width: 97.5%;
+}
+
+/* line 18, ../../sass/helpcenter/helpcenter.sass */
+.feedback-main {
+  border-bottom: 0px;
+}
+
+/* line 21, ../../sass/helpcenter/helpcenter.sass */
+.replies {
+  border-top: 1px solid #e8e8e8;
+}
+
+/* line 24, ../../sass/helpcenter/helpcenter.sass */
+.seen {
+  float: left;
+}
+
+/* line 27, ../../sass/helpcenter/helpcenter.sass */
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  background-color: #dddbdb;
+  float: left;
+  margin: 0px 10px 0px 10px;
+}
+
+/* line 34, ../../sass/helpcenter/helpcenter.sass */
+.person-name {
+  float: left;
+  color: #0072dc;
+  font-family: "Tahoma", "Arial";
+  font-size: 13px;
+}
+
+/* line 40, ../../sass/helpcenter/helpcenter.sass */
+.posted {
+  float: right;
+  color: #797979;
+  font-size: 12px;
+  margin-left: 10px;
+  font-family: "Tahoma", "Arial";
+}
+
+/* line 47, ../../sass/helpcenter/helpcenter.sass */
+.query-app-name {
+  float: right;
+  color: #0072dc;
+  font-family: "Tahoma", "Arial";
+  font-size: 12px;
+}
+/* line 52, ../../sass/helpcenter/helpcenter.sass */
+.query-app-name a {
+  text-decoration: none;
+  color: #0072dc;
+}
+
+/* line 56, ../../sass/helpcenter/helpcenter.sass */
+.query-text {
+  margin-top: 26px;
+  margin-left: 72px;
+  color: #484848;
+  font-size: 12px;
+  max-width: 500px;
+  min-width: 275px;
+  font-family: "Tahoma", "Arial";
+  text-align: justify;
+}
+/* line 65, ../../sass/helpcenter/helpcenter.sass */
+.query-text a {
+  color: #0072dc;
+  text-decoration: none;
+}
+
+/* line 69, ../../sass/helpcenter/helpcenter.sass */
+.reply-text a {
+  color: #0072dc;
+  text-decoration: none;
+}
+
+/* line 73, ../../sass/helpcenter/helpcenter.sass */
+.reply-main {
+  padding: 7px 10px 7px 33px;
+  overflow: auto;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+/* line 78, ../../sass/helpcenter/helpcenter.sass */
+.profile-pic-small {
+  float: left;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  border: 1px solid #dddbdb;
+}
+
+/* line 85, ../../sass/helpcenter/helpcenter.sass */
+.reply-text {
+  float: left;
+  color: #484848;
+  font-size: 12px;
+  max-width: 500px;
+  min-width: 275px;
+  font-family: "Tahoma", "Arial";
+  text-align: justify;
+}
+
+/* line 94, ../../sass/helpcenter/helpcenter.sass */
+.write-reply {
+  padding: 7px 10px 7px 33px;
+  overflow: auto;
+}
+
+/* line 98, ../../sass/helpcenter/helpcenter.sass */
+.reply-box {
+  float: left;
+  color: #484848;
+  font-size: 12px;
+  height: 28px;
+  width: 350px;
+  max-width: 500px;
+  background-color: white;
+  font-family: "Tahoma", "Arial";
+  border: 1px solid #dddbdb;
+}
+
+/* line 109, ../../sass/helpcenter/helpcenter.sass */
+.helpcenter-header {
+  font-size: 14px;
+  font-family: "Tahoma";
+  color: #dd4b39;
+  margin-bottom: 10px;
+}
+
+/* line 115, ../../sass/helpcenter/helpcenter.sass */
+.min-max {
+  float: right;
+  margin-left: 5px;
+  color: #666666;
+  cursor: pointer;
+}

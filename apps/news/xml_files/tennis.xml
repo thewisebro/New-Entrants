@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet title="XSL_formatting" type="text/xsl" href="/shared/bsp/xsl/rss/nolsol.xsl"?>
+
+<rss xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">  
+  <channel> 
+    <title>BBC Sport - Tennis</title>  
+    <link>http://www.bbc.co.uk/sport/0/tennis/</link>  
+    <description>The latest stories from the Tennis section of the BBC Sport web site.</description>  
+    <language>en-gb</language>  
+    <lastBuildDate>Fri, 21 Mar 2014 12:44:09 GMT</lastBuildDate>  
+    <copyright>Copyright: (C) British Broadcasting Corporation, see http://news.bbc.co.uk/2/hi/help/rss/4498287.stm for terms and conditions of reuse.</copyright>  
+    <image> 
+      <url>http://news.bbc.co.uk/sol/shared/img/sport_120x60.gif</url>  
+      <title>BBC Sport - Tennis</title>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/</link>  
+      <width>120</width>  
+      <height>60</height> 
+    </image>  
+    <ttl>15</ttl>  
+    <atom:link href="http://feeds.bbci.co.uk/sport/0/tennis/rss.xml" rel="self" type="application/rss+xml"/>  
+    <item> 
+      <title>Nieminen breaks Rusedski record</title>  
+      <description>Jarkko Nieminen beats Greg Rusedski's 18-year-old record for the fastest ATP Tour win as the Finn thrashes Bernard Tomic.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26676844</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26676844</guid>  
+      <pubDate>Fri, 21 Mar 2014 08:56:33 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73718000/jpg/_73718809_477891099.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73718000/jpg/_73718810_477891099.jpg"/> 
+    </item>  
+    <item> 
+      <title>Lendl very hard to replace - Murray</title>  
+      <description>British number one Andy Murray says it will be difficult to find a replacement coach who is as good as mentor Ivan Lendl.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26671658</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26671658</guid>  
+      <pubDate>Thu, 20 Mar 2014 20:18:29 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73715000/jpg/_73715658_murraylendlindex.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73715000/jpg/_73715659_murraylendlindex.jpg"/> 
+    </item>  
+    <item> 
+      <title>Watson and Edmund exit in Miami</title>  
+      <description>Britain's Heather Watson loses to Virginie Razzano while Kyle Edmund goes out to Julien Benneteau in the Sony Open.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26654709</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26654709</guid>  
+      <pubDate>Wed, 19 Mar 2014 22:10:54 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73691000/jpg/_73691105_heather_watson_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73691000/jpg/_73691106_heather_watson_getty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Judy Murray sad at loss of Lendl</title>  
+      <description>Judy Murray says she is in mourning over the decision to end Ivan Lendl's spell as coach to her son, Andy.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26681524</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26681524</guid>  
+      <pubDate>Fri, 21 Mar 2014 12:23:39 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73727000/jpg/_73727589_murray2.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73727000/jpg/_73727590_murray2.jpg"/> 
+    </item>  
+    <item> 
+      <title>Evans beaten in final qualifier</title>  
+      <description>Britain's Dan Evans is beaten by Taiwanese Jimmy Wang in the final qualifying round of the Sony Open in Florida, USA.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26620380</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26620380</guid>  
+      <pubDate>Tue, 18 Mar 2014 17:12:54 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73640000/jpg/_73640257_dangetty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73640000/jpg/_73640258_dangetty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Murray splits with coach Lendl</title>  
+      <description>British number one Andy Murray and his coach Ivan Lendl agree to end their two-year partnership.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26646809</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26646809</guid>  
+      <pubDate>Wed, 19 Mar 2014 13:19:49 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73679000/jpg/_73679102_murivagetty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73679000/jpg/_73679103_murivagetty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Djokovic beats Federer in thriller</title>  
+      <description>Novak Djokovic fights back to beat Roger Federer in a tie-break decider in a thrilling final at Indian Wells.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26606409</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26606409</guid>  
+      <pubDate>Sun, 16 Mar 2014 23:59:11 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73621000/jpg/_73621025_478950741.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73621000/jpg/_73621026_478950741.jpg"/> 
+    </item>  
+    <item> 
+      <title>Pennetta wins Indian Wells final</title>  
+      <description>Flavia Pennetta overcomes injured Agnieszka Radwanska 6-2 6-1 in the final of the BNP Paribas Open in Indian Wells.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26605947</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26605947</guid>  
+      <pubDate>Sun, 16 Mar 2014 22:53:42 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73620000/jpg/_73620840_73620398.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73620000/jpg/_73620841_73620398.jpg"/> 
+    </item>  
+    <item> 
+      <title>Murray knocked out at Indian Wells</title>  
+      <description>Milos Raonic knocks out British number one Andy Murray in the fourth round of the BNP Paribas Open at Indian Wells.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26553345</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26553345</guid>  
+      <pubDate>Wed, 12 Mar 2014 22:02:49 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73546000/jpg/_73546491_73546484.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73546000/jpg/_73546492_73546484.jpg"/> 
+    </item>  
+    <item> 
+      <title>Murray 'shocked' by Baltacha illness</title>  
+      <description>Andy Murray offers his support to former British number one Elena Baltacha who has been diagnosed with liver cancer.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26515434</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26515434</guid>  
+      <pubDate>Mon, 10 Mar 2014 13:53:29 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73483000/jpg/_73483682_171417791(1).jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73483000/jpg/_73483683_171417791(1).jpg"/> 
+    </item>  
+    <item> 
+      <title>Men's Slams 'should be three sets'</title>  
+      <description>Maria Sharapova says "it would be more exciting" if men's Grand Slam matches were played over only three sets.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26469808</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26469808</guid>  
+      <pubDate>Fri, 07 Mar 2014 08:00:55 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73412000/jpg/_73412413_mariasharapova.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73412000/jpg/_73412414_mariasharapova.jpg"/> 
+    </item>  
+    <item> 
+      <title>Ward suffers battling defeat by Lopez</title>  
+      <description>British number three James Ward is beaten 3-6 6-2 6-4 by Feliciano Lopez at the BNP Paribas Open in California.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26511108</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26511108</guid>  
+      <pubDate>Mon, 10 Mar 2014 08:51:52 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73473000/jpg/_73473203_ward_getty2.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73473000/jpg/_73473204_ward_getty2.jpg"/> 
+    </item>  
+    <item> 
+      <title>Watson beaten by Poland's Radwanska</title>  
+      <description>Heather Watson exits the BNP Paribas Open in the second round with a 6-4 6-3 loss to Poland's Agnieszka Radwanska.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26492326</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26492326</guid>  
+      <pubDate>Sat, 08 Mar 2014 07:50:43 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73450000/jpg/_73450091_heatherwatsongetty1.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73450000/jpg/_73450092_heatherwatsongetty1.jpg"/> 
+    </item>  
+    <item> 
+      <title>Murray and Marray secure doubles win</title>  
+      <description>Andy Murray and Jonny Marray claim a winning start to their doubles partnership in the first round at Indian Wells.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26495236</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26495236</guid>  
+      <pubDate>Sat, 08 Mar 2014 09:23:36 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73454000/jpg/_73454320_marraygetty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73454000/jpg/_73454321_marraygetty.jpg"/> 
+    </item>  
+    <item> 
+      <title>Baltacha diagnosed with liver cancer</title>  
+      <description>Former British tennis number one Elena Baltacha reveals she has been diagnosed with cancer of the liver.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26488401</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26488401</guid>  
+      <pubDate>Sat, 08 Mar 2014 07:56:30 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73444000/jpg/_73444426_167141497.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73444000/jpg/_73444427_167141497.jpg"/> 
+    </item>  
+    <item> 
+      <title>Hutchins named director at Queen's</title>  
+      <description>British tennis player Ross Hutchins is named tournament director for the Aegon Championships at Queen's Club.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26454949</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26454949</guid>  
+      <pubDate>Wed, 05 Mar 2014 17:02:14 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73391000/jpg/_73391227_180380967.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73391000/jpg/_73391228_180380967.jpg"/> 
+    </item>  
+    <item> 
+      <title>BBC commentator enters Hall of Fame</title>  
+      <description>Former BBC commentator John Barrett is one of five people inducted into the International Tennis Hall of Fame for 2014.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26407517</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26407517</guid>  
+      <pubDate>Mon, 03 Mar 2014 15:41:25 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73313000/jpg/_73313618_73313611.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73314000/jpg/_73314036_73313611.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: No rush for new coach - Murray</title>  
+      <description>British number one Andy Murray says he will not rush into a decision about a new coach, as it will be "tough" to replace Ivan Lendl.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26681960</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26681960</guid>  
+      <pubDate>Fri, 21 Mar 2014 10:29:13 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73722000/png/_73722283_muraystill.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73722000/png/_73722284_muraystill.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Archive: Murray takes aim at coach Lendl</title>  
+      <description>Andy Murray hit a forehand winner directly at his coach Ivan Lendl during a charity exhibition match at Queens</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/22933020</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/22933020</guid>  
+      <pubDate>Mon, 17 Jun 2013 10:40:46 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/68214000/png/_68214839_lendlhit.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/68214000/png/_68214841_lendlhit.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Men's Slams 'should be three sets'</title>  
+      <description>Russia's Maria Sharapova says "it would be more exciting" if the men played three-set matches instead of five in Grand Slams.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26465202</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26465202</guid>  
+      <pubDate>Fri, 07 Mar 2014 07:27:24 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73417000/png/_73417265_mmtensharapovaonintwomen%26apos%3Bsday.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73417000/png/_73417266_mmtensharapovaonintwomen%26apos%3Bsday.png"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Murray seals historic Davis Cup win</title>  
+      <description>Andy Murray beats Sam Querrey in four sets to seal a historic Davis Cup win for Great Britain over the USA in San Diego.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26011235</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26011235</guid>  
+      <pubDate>Mon, 03 Feb 2014 08:14:29 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/72711000/jpg/_72711162_466609321.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/72711000/jpg/_72711163_466609321.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Ward wins dramatic Davis Cup tie</title>  
+      <description>James Ward beats Sam Querrey in dramatic fashion to give Great Britain a 2-0 lead at the Davis Cup.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/25993524</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/25993524</guid>  
+      <pubDate>Sat, 01 Feb 2014 07:01:02 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/72689000/jpg/_72689453_ward.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/72689000/jpg/_72689454_ward.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Wawrinka wins Australian Open</title>  
+      <description>Stanislas Wawrinka becomes the Australian Open champion after beating an injury-hit Rafael Nadal in Melbourne.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/25902750</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/25902750</guid>  
+      <pubDate>Sun, 26 Jan 2014 12:05:34 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/72531000/jpg/_72531281_wawrinka.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/72531000/jpg/_72531282_wawrinka.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Li Na's jokes tickle Melbourne crowd</title>  
+      <description>Li Na makes an amusing acceptance speech to the Melbourne crowd after winning the Australian Open title.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/25893680</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/25893680</guid>  
+      <pubDate>Sat, 25 Jan 2014 11:51:11 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/72519000/jpg/_72519815_australianopenwomensfinalpasb25-1.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/72519000/jpg/_72519816_australianopenwomensfinalpasb25-1.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: A hi-tech tennis coach at courtside</title>  
+      <description>Tennis technology has progressed so far that the sport's governing body has moved to regulate new data devices.</description>  
+      <link>http://www.bbc.co.uk/news/business-25878920#sa-ns_mchannel=rss&amp;ns_source=PublicRSS20-sa</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/news/business-25878920</guid>  
+      <pubDate>Mon, 27 Jan 2014 07:11:19 GMT</pubDate>  
+      <media:thumbnail width="66" height="49" url="http://news.bbcimg.co.uk/media/images/72495000/jpg/_72495537_72470107.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/72496000/jpg/_72496805_72470107.jpg"/> 
+    </item>  
+    <item> 
+      <title>VIDEO: Sampras 'never seen anything like' Nadal</title>  
+      <description>Fourteen-time Grand Slam winner Pete Sampras says he has "never seen anything like" Rafael Nadal after watching the Spaniard play live for the first time in his Australian Open semi-final win over Roger Federer.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/25893638</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/25893638</guid>  
+      <pubDate>Sat, 25 Jan 2014 09:18:27 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/72517000/png/_72517977_mmtenauosamprasonnadal.png"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/72517000/png/_72517978_mmtenauosamprasonnadal.png"/> 
+    </item>  
+    <item> 
+      <title>Players are ignoring female coaches</title>  
+      <description>Modern players are making a "big mistake" by not employing more female coaches, says tennis great Billie Jean King</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26540923</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26540923</guid>  
+      <pubDate>Wed, 12 Mar 2014 07:15:28 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73521000/jpg/_73521988_73521949.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73521000/jpg/_73521989_73521949.jpg"/> 
+    </item>  
+    <item> 
+      <title>Robson adds Hadad to coaching team</title>  
+      <description>Laura Robson is preparing to return to competition after adding Colombian Mauricio Hadad to her coaching team.</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26509586</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26509586</guid>  
+      <pubDate>Mon, 10 Mar 2014 06:42:19 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73472000/jpg/_73472080_laurarobsonafp.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73472000/jpg/_73472081_laurarobsonafp.jpg"/> 
+    </item>  
+    <item> 
+      <title>Who will be Murray's next coach?</title>  
+      <description>Andy Murray struck gold with coach Ivan Lendl but who can replace the ice cool Czech? BBC Sport's Russell Fuller names a few possibilities</description>  
+      <link>http://www.bbc.co.uk/sport/0/tennis/26657905</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/tennis/26657905</guid>  
+      <pubDate>Wed, 19 Mar 2014 20:17:19 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73690000/jpg/_73690878_murray_lendl_2_getty.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73691000/jpg/_73691050_murray_lendl_2_getty.jpg"/> 
+    </item>  
+    <item> 
+      <title>'Djokovic faces season of ups and downs'</title>  
+      <description>Novak Djokovic picked up his first title of 2014 in Indian Wells, but his long-time mentor tells Russell Fuller it could be a season of readjustment</description>  
+      <link>http://www.bbc.co.uk/sport/0/cricket/26609361</link>  
+      <guid isPermaLink="false">http://www.bbc.co.uk/sport/0/cricket/26609361</guid>  
+      <pubDate>Mon, 17 Mar 2014 10:48:52 GMT</pubDate>  
+      <media:thumbnail width="66" height="37" url="http://news.bbcimg.co.uk/media/images/73625000/jpg/_73625997_novakdjokovicafp.jpg"/>  
+      <media:thumbnail width="144" height="81" url="http://news.bbcimg.co.uk/media/images/73625000/jpg/_73625998_novakdjokovicafp.jpg"/> 
+    </item> 
+  </channel> 
+</rss>
