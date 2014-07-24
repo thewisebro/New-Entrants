@@ -1,6 +1,22 @@
-from core import forms
-from lostfound.html_output import _html_output
+from django import forms
+from buysell.html_output import _html_output
 
+class detailsForm(forms.Form):
+  item_name = forms.CharField()
+  cost = forms.IntegerField()
+  status = forms.CharField()
+  detail = forms.CharField()
+  phone_number = forms.CharField()
+  email = forms.EmailField()
+
+class requestedForm(forms.Form):
+  item_name = forms.CharField()
+  item_description = forms.CharField()
+  should_cost_at_most = forms.IntegerField()
+  phone_number = forms.CharField()
+  email = forms.EmailField()
+
+# For BaseModelFormFunction
 def as_div(base_form):
   return _html_output(
       base_form,
