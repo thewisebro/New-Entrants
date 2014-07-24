@@ -704,7 +704,7 @@ function delete_playlist(id)
     
 }
 
-function reanme_playlist(where, id)
+function rename_playlist(where, id)
 {
   if(where=='list')
   {
@@ -746,6 +746,7 @@ function reanme_playlist(where, id)
                   var new_name = $('#playlistName input').val();
                   $('#playlistName').html(capitalize(new_name));
                   $('ul#playlists li#playlist_'+id).html('<span>'+capitalize(new_name)+'</span>');
+                  $('ul#playlists li#shared_'+id).html('<span>'+capitalize(new_name)+'</span>');
                   
                    $.post('playlist_rename/',{name:new_name, id:id}, function(data){
                          get_json('playlists');
@@ -762,4 +763,12 @@ function reanme_playlist(where, id)
         });
     
   }
+}
+
+
+
+function private_toggle_playlist(id)
+{
+  $.get('playlist_private_toggle/',{id:id});
+  get_json('public_playlists'); 
 }

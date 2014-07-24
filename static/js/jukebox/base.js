@@ -645,12 +645,32 @@ function display_playlist(id){
       playlist_open_now = [];
       var usong_count=0;
       var songs = playlist.songs.split('b');
+      var public_str = "Private";
+      if(playlist.private)
+      {
+          public_str = "Public";
+      }
+      var owner_str = '<option value="add_to_queue">Add To Queue</option>';
+      if(playlist.owner)
+      {
+          owner_str +=
+              '<option value="delete_'+play_id+'">Delete</option>'+
+              '<option value="rename_'+play_id+'">Rename</option>'+
+              '<option id="public_toggle" value="publicToggle_'+play_id+'">Make '+public_str+'</option>';
+      }
+
       $("#playlist_view").empty();
       $("#playlist_view").append('<div id="playlistBanner"></div>');
   //    debugger;
       $("#playlistBanner").append('<div id="layerBanner" style="background:url(\'\/static/images/jukebox/gradientCover.png\'); " ></div>');
       $("#playlistBanner").append('<ul><li></li><li></li><li></li><li></li><li></li></ul>');
-      $("#playlistBanner").append('<div id="playlistInfo"><div id="playlistName">'+playlist.name+'</div><div id="playlistSongCount">'+songs.length+' Songs</div></div>');
+      $("#playlistBanner").append('<div id="playlistInfo"><div id="playlistName">'+playlist.name+'</div>'+
+          '<div id="playlistSongCount">'+
+            '<select id="playlist_options">'+
+              '<option value="default">---</option>'+
+               owner_str +
+            '</select>'+
+          songs.length+' Songs</div></div>');
       $("#playlist_view").append('<div id="viewPlaylist"><div id="playlistContentFull"></div></div>');
       var html = '<ul id="play_sortable">';
       for(var j=0; j<songs.length; j++)
@@ -690,6 +710,7 @@ function display_playlist(id){
       dragging();
       playlist_song_options_binder(play_id);
       options_binder();
+      playlist_options_binder();
     });
 }
 
@@ -1145,6 +1166,39 @@ $('.share_url').bind('click', function(){
 }
 
 
+function playlist_options_binder()
+{
+
+    $("#playlist_options").bind('change', function(){
+            var val = $(this).val();
+             if(val=="add_to_queue")
+             {
+                add_queue_playlist();
+             }
+             else if(val.split('_')[0]=="delete")
+             {
+                delete_playlist(val.split('_')[1]);
+             }
+             else if(val.split('_')[0]=="rename")
+             {
+                rename_playlist('mainbody', val.split('_')[1]);
+             }
+             else if(val.split('_')[0]=="publicToggle")
+             {
+                private_toggle_playlist(val.split('_')[1]);
+                var tog_text = $("#public_toggle").text();
+                if(tog_text=="Make Private") tog_text="Make Public";
+                else tog_text="Make Private";
+                $("#public_toggle").text(tog_text);
+             }
+
+             $("#playlist_options").val("default");
+
+        });
+
+}
+
+
 
 
 
@@ -1405,6 +1459,10 @@ $(document).ready(function(){
 
 function reload()
 {
+  $.ajax('playlists/',contentType= "application/json").done( function(data){
+          playlists_json=data; 
+          playlists_open=true;  
+          add_songs_url();
   hash = document.location.href.split('#')[1];
   if(!hash) hash="";
   hash = hash.replace(/\/$/, '');
@@ -1420,9 +1478,22 @@ function reload()
     }
     else
     {
-      display_playlists();
+        display_playlists();
     }
   }
+  else if( name == 'shared' )
+  {
+    if(hash.length == 2 || hash.length == 4)
+    {
+     display_public_playlists();
+    display_playlist(Number(hash[1]));
+    }
+    else
+    {
+        display_public_playlists();
+    }
+  }
+  });
 }
 
 function login()
@@ -1430,12 +1501,7 @@ function login()
 
   $(document).on("login", function(){
           if(login_cancel){ login_cancel=false; return;}
-           console.log('asa');
-           $.ajax('playlists/',contentType= "application/json").done( function(data){
-              playlists_json=data;
-              playlists_open=true;
               reload();
-              });
            logged_in=true;
            $("#signin_button").text('Sign Out');
            login_cancel=false;
@@ -1447,12 +1513,7 @@ function login()
             var uid = $('#jb_username').val();
             var pwd = $('#jb_password').val();
             $.post('/login/',{username:uid, password:pwd}, function(data){
-           $.ajax('playlists/',contentType= "application/json").done( function(data){
-              playlists_json=data;
-              playlists_open=true;
               reload();
-              });
-           //         get_json('playlists');
                     $("#signin_button").text('Sign Out');
                     logged_in = true;
                     $('#signin_cancel').click();
@@ -1466,11 +1527,7 @@ function login()
   $("#signin_button").on('click', function(){
             if(logged_in)
             $.get('/logout/', function(){
-           $.ajax('playlists/',contentType= "application/json").done( function(data){
-              playlists_json=data;
-              playlists_open=true;
               reload();
-              });
            //     get_json('playlists');
                 $("#signin_button").text('Sign In');
                 logged_in = false;

@@ -342,7 +342,7 @@ class PublicPrivatePlaylistView(CreateAPIView):
   serializer_class = PlaylistSerializer
   permission_classes = (IsOwnerOrReadOnly,)
   def get(self,request):
-    playlist_id = int(self.request.POST.get('id',''))
+    playlist_id = int(self.request.GET.get('id',''))
     active = self.request.user.is_active
     if active :
       user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
@@ -350,6 +350,7 @@ class PublicPrivatePlaylistView(CreateAPIView):
       if len(playlists) == 1 :
         playlist = playlists[0]
         playlist.private = not playlist.private
+        playlist.save()
     return Response('')
 
 
@@ -357,9 +358,13 @@ class PublicPlaylistAllJsonView(ListAPIView):
   serializer_class = PlaylistSerializer
   def get_queryset(self):
     playlists = Playlist.objects.filter(private=False).order_by('-public_count')
+    """
+#Commented as all playlists are shown ( First shared playlists not of user were shown )
+
     if self.request.user.is_active:
       user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
       playlists = playlists.exclude(person=user.id)
+    """
     return playlists
 
 

@@ -1,7 +1,7 @@
 from HTMLParser import HTMLParser
 from django.forms import widgets
 from rest_framework import serializers
-from jukebox.models import Song, Artist, Album, Playlist
+from jukebox.models import *
 #from jukebox.views import get_json_Queue
 
 def get_json_Queue(song):
@@ -132,9 +132,10 @@ class PlaylistSerializer(serializers.ModelSerializer):
 class PlaylistDescSerializer(serializers.ModelSerializer):
   person = serializers.Field(source='person.username')
   songs_list = serializers.SerializerMethodField('get_songs_list')
+  owner = serializers.SerializerMethodField('get_owner')
   class Meta:
     model = Playlist
-    fields = ('id', 'songs', 'name', 'songs_list')
+    fields = ('id', 'songs', 'name', 'songs_list', 'private', 'owner')
     depth = 2
 
   def get_songs_list(self, obj):
@@ -149,6 +150,14 @@ class PlaylistDescSerializer(serializers.ModelSerializer):
       lsongs[key]=SongSerializer(lsongs[key]).data
 
     return lsongs
+
+  def get_owner(self, obj):
+    request = self.context.get('request', None)
+    if(request and request.user and request.user.username):                                           # if anonymous user user.username=''
+      user = Jukebox_Person.objects.get_or_create(person=request.user)[0]                             # user logged in
+      return user==obj.person
+    return False
+
 
 
 class PlayQueueSerializer(serializers.Serializer):
