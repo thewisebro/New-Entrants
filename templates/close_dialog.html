@@ -2,6 +2,7 @@
 
 {% block scripts %}
   <script type="text/javascript">
+    parent.user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
     parent.close_dialog("{{ dialog_name }}");
   </script>
 {% endblock %}

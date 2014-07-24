@@ -287,7 +287,7 @@ function display_add_events(position,events,calendar){
      console.log(e);
    }
  }
- //$('#content-events').pickify_users();
+ $('#content-events').pickify_users();
  if(calendar.more === true && $('#see-more-events').length === 0){
    $('#content').append("<div id='see-more-events' class='see-more'><span class='button2' onclick='see_more_events(\""+calendar.name+"\");'>See More</span></div>");
  }
