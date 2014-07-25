@@ -203,6 +203,7 @@ THIRD_PARTY_APPS = (
   'django_extensions',
   'django_cron',
   'haystack',
+  'filemanager',
 )
 
 CHANNELI_APPS = (

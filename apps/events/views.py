@@ -17,7 +17,7 @@ from django.conf import settings
 from events.models import *
 from groups.models import Group
 from events.forms import EventFormGenerator
-from api.filemanager import FileManager
+from filemanager import FileManager
 
 logger = logging.getLogger('channel-i_logger')
 
