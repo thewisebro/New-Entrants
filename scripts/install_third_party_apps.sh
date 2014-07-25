@@ -1,6 +1,10 @@
 #!/bin/bash
 
-cd ~/channeli/third_party_apps
+if [ "$USER" == "root" ]; then
+  cd /home/apps/channeli/third_party_apps
+else
+  cd ~/channeli/third_party_apps
+fi
 
 for dir in *
 do
