@@ -31,9 +31,6 @@ JUKEBOX_SONGS_BASEURL = '/songs/'
 # Add apps to python path
 sys.path.append(PROJECT_ROOT + '/apps')
 
-# Add third_party_apps to python path
-sys.path.append(PROJECT_ROOT + '/third_party_apps')
-
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )

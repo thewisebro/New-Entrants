@@ -8,7 +8,7 @@ apt-get install rubygems
 apt-get install python-mysqldb
 apt-get install python-pygresql
 
-pip install Django\==1.6.1
+pip install Django\==1.6.5
 
 # Installing PIL
 apt-get build-dep python-imaging
