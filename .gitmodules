@@ -1,0 +1,30 @@
+[submodule "third_party_apps/django-crispy-forms"]
+	path = third_party_apps/django-crispy-forms
+	url = https://github.com/IMGIITRoorkee/django-crispy-forms.git
+[submodule "third_party_apps/django-taggit-jquery-tag-it"]
+	path = third_party_apps/django-taggit-jquery-tag-it
+	url = https://github.com/IMGIITRoorkee/django-taggit-jquery-tag-it.git
+[submodule "third_party_apps/django-compressor"]
+	path = third_party_apps/django-compressor
+	url = https://github.com/IMGIITRoorkee/django-compressor.git
+[submodule "third_party_apps/django-cron"]
+	path = third_party_apps/django-cron
+	url = https://github.com/IMGIITRoorkee/django-cron.git
+[submodule "third_party_apps/django-extensions"]
+	path = third_party_apps/django-extensions
+	url = https://github.com/IMGIITRoorkee/django-extensions.git
+[submodule "third_party_apps/django-rest-framework"]
+	path = third_party_apps/django-rest-framework
+	url = https://github.com/IMGIITRoorkee/django-rest-framework.git
+[submodule "third_party_apps/django-debug-toolbar"]
+	path = third_party_apps/django-debug-toolbar
+	url = https://github.com/IMGIITRoorkee/django-debug-toolbar.git
+[submodule "third_party_apps/django-taggit"]
+	path = third_party_apps/django-taggit
+	url = https://github.com/IMGIITRoorkee/django-taggit.git
+[submodule "third_party_apps/django-threadedcomments"]
+	path = third_party_apps/django-threadedcomments
+	url = https://github.com/IMGIITRoorkee/django-threadedcomments.git
+[submodule "third_party_apps/django-fluent-comments"]
+	path = third_party_apps/django-fluent-comments
+	url = https://github.com/IMGIITRoorkee/django-fluent-comments.git
