@@ -68,3 +68,7 @@ pip install python-dateutil
 
 # fuzzy wuzzy
 pip install -e git+https://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy
+
+# memcached
+apt-get install memcached
+pip install python-memcached
