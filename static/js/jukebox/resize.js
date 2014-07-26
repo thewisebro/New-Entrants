@@ -178,13 +178,13 @@ console.log(n+"final");
            var $this = $(this);
             if($this.hasClass('selectedthing')){
                $this.removeClass("selectedthing");
-               $("#artist_view").animate({left:'220', right:'0'},200);
+               $("#artist_view").animate({left:'200', right:'0'},200);
               $("#artist_panel_hide").animate({left:'420', top:'145'},200);
              // $("#rightside").animate({right:'0'},200);
             }
             else{
               $this.addClass("selectedthing");
-              $("#artist_view").animate({left:'0', right:'220'},200);
+              $("#artist_view").animate({left:'0', right:'200'},200);
               $("#artist_panel_hide").animate({left:'200', top:'145'},200);
              // $("#rightside").animate({right:'220'},200);
             }

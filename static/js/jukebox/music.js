@@ -23,12 +23,11 @@ function getRandomArrayElements(arr, count) {
 
 
     function lAlbums(){
-
         setTimeout(function() {
               $(".nano").nanoScroller({ preventPageScrolling: true });
               listopen='true';
-              $('#oneAlbumOpened').animate({left:'220',right:'0'},300);
-              $('#album_panel_hide').animate({left:'420',top:'185'},300);
+              $('#oneAlbumOpened').animate({left:'200',right:'0'},300);
+              // $('#album_panel_hide').animate({left:'420',top:'185'},300);
 
              // $("#rightside").animate({right:'0',opacity:'1'},300); 
             },10);  
@@ -39,8 +38,8 @@ function getRandomArrayElements(arr, count) {
 
         setTimeout(function() {
       	      $(".nano").nanoScroller({ preventPageScrolling: true });
-              $("#artist_view").animate({left:'220', right:'0'},300);
-              $("#artist_panel_hide").animate({left:'420', top:'145'},300);
+              $("#artist_view").animate({left:'200', right:'0'},300);
+              // $("#artist_panel_hide").animate({left:'420', top:'145'},300);
              // $("#rightside").animate({right:'0',opacity:'1'},300);
 },10);
     
@@ -50,7 +49,7 @@ function getRandomArrayElements(arr, count) {
            // nano scroll bar start
       	      $(".nano").nanoScroller({ preventPageScrolling: true });
               $("#playlist_view").animate({left:'220', right:'0'},300);
-              $("#playlist_panel_hide").animate({left:'420', top:'145'},300);
+              // $("#playlist_panel_hide").animate({left:'420', top:'145'},300);
 },10);
 
     }
@@ -484,6 +483,8 @@ $(".open_queue").on("click",function(){
       queue_visible_toggle=false;
       $("#queue_trash").css({'display':'none'});
       $("#popular_artists_list").css({'visibility':'hidden'});
+      $("#play_queue_icon").find('i').removeClass().addClass("icon-align-justify");
+
       $("#popular_artists").removeClass("popular_artists_after").addClass("popular_artists_before");
       $("#play_queue_icon").animate({opacity:1,left:15});
     }
@@ -491,7 +492,8 @@ $(".open_queue").on("click",function(){
       queue_visible_toggle=true;
       $("#queue_trash").css({'display':'block'});
       $("#popular_artists_list").css({'visibility':'visible'});
-      $("#play_queue_icon").animate({opacity:0.5,left:162});
+      $("#play_queue_icon").animate({left:180},300);//162
+      $("#play_queue_icon").find('i').removeClass().addClass("icon-remove");
       $("#popular_artists").removeClass("popular_artists_before").addClass("popular_artists_after");
     }
     });

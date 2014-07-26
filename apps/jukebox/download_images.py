@@ -37,7 +37,10 @@ def add_error(err,line):
 def get_album_art(album):
   if(album.album_art):
     return
-  url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+urllib.quote_plus(album.album)+"+album+art"
+  if album.language=='hindi':
+    url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+urllib.quote_plus(album.album)+"+movie+album+art"
+  else:
+    url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+urllib.quote_plus(album.album)+"+album+art"
   url = urllib2.urlopen(url,timeout=5).read(10000000)
   js = json.loads(url)
   a=js['responseData']['results'][0]['url']
@@ -75,7 +78,7 @@ def get_artist_pic(artist):
 
 
 def work_albums():
-  albums = Album.objects.all()
+  albums = Album.objects.filter(album_art='')
   for album in albums:
     try:
       get_album_art(album)

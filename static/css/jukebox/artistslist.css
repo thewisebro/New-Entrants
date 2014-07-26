@@ -4,7 +4,7 @@
 
 }
 #artistsListHeader{
-		position: relative;
+	position: relative;
 	margin-top: 45px;
 	margin-bottom: 10px;
 
@@ -131,6 +131,7 @@ margin-top: 30px;
   font-family: "helvetica_neue_medium";
   padding-bottom: 5px;
   margin-bottom: 5px;
+  margin-left: 180px;
 }
 
 #popular_list
@@ -156,7 +157,8 @@ border-bottom: 0px;
 }
 
 #popular_list>ul>li:hover{
-	background-color:#d0d0d0;
+	/*background-color:#d0d0d0;*/
+	background-color: white;
 }
 
 .popular_item{
@@ -181,10 +183,14 @@ float:left
 }
 
 #p_song_name{
-	font-size: 12px;
+  font-size: 12px;
   cursor: pointer;
   margin-left:10px;
   line-height: 32px;
+  width: 318px;
+  text-overflow: ellipsis;
+overflow: hidden;
+white-space: nowrap;
 }
 
 #p_alb_name{
@@ -346,4 +352,51 @@ background: #5E5E5E;
     margin-top: 6px !important;
     margin-left: -18px;
     font-size: 13px;
+}
+
+
+
+@media all and (max-width: 1300px) and (min-width:500px){
+	#p_song_name{
+		width: 75%;
+  }
+	
+}
+
+/*991 px */
+
+
+
+@media all and (max-width: 1200px) and (min-width:400px){
+
+	.artist_album_pic{
+		width: 100px;
+		height: 100px;
+	}
+	#left_album_list{
+		width: 180px;
+	}
+	#left_album_list{
+		width: 180px;
+	}
+}
+
+
+@media all and (max-width: 1200px) and (min-width:400px){
+
+	.artist_album_pic{
+		width: 80px;
+		height: 80px;
+	}
+	#artist_song_list{
+		position: relative;
+		right: 0px;
+		margin-left: 0px;
+		margin-top: 80px;
+	}
+
+	#popular_heading{
+		margin-left: 100px;
+	}
+	
 }

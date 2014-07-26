@@ -356,6 +356,7 @@ margin: 0 auto;
         background-color: #FFF;
 left: 0px;
 right: 220px;
+padding-bottom: 70px;
 }
 
 #centerdata{
@@ -726,6 +727,7 @@ cursor:pointer;
          border-bottom: 1px solid #E0E0E0;
          margin-top: 0px;
          visibility:hidden;
+         top: -18px;
 }
 
 #popular_artists_list> div.pane{
@@ -911,7 +913,7 @@ cursor: pointer;
 #oneAlbumOpened{
 	position: absolute;
 	right: 0px;
-	left: 220px;
+	left: 0px;
 	height: 800px;
 	background-color: white;
 }
@@ -1555,12 +1557,13 @@ cursor: pointer;
   display:none;
   float: right;
 position: relative;
-top: -30px;
+top: -26px;
 color: #686868;
 cursor: pointer;
 width: 20px;
 height: 20px;
       text-align: center;  
+      right: 24px;
 }
 /* blur css*/
 .blur_back{
@@ -1592,9 +1595,9 @@ border: 1px solid #BBB;
             border-bottom: 12px solid #FFF;
             border-left: 10px solid rgba(0, 0, 0, 0);
             border-right: 10px solid rgba(0, 0, 0, 0);
-right: 12px;
+right: 25px;
 top: -12px;
-     box-shadow: 0 0 95px rgba(0, 0, 0, 0.4);
+     /*box-shadow: 0 0 95px rgba(0, 0, 0, 0.4);*/
 
 }
 
@@ -2002,17 +2005,17 @@ cursor:pointer;
 }
 
 .song_setting_box{
-width: 130px;
-        background-color: #FFF;
-position: absolute;
-display: none;
-left: 34px;
-top: 3px;
-     font-size: 12px;
-color: #808080;
-       border-radius: 2px;
-box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-border: 1px solid #BBB;
+	width: 130px;
+	background-color: #FFF;
+	position: absolute;
+	display: none;
+	/*left: 34px;*/
+	top: 3px;
+	font-size: 12px;
+	color: #808080;
+	border-radius: 2px;
+	box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+	border: 1px solid #BBB;
 }
 
 .song_setting_box ul li {
@@ -2269,17 +2272,33 @@ text-indent: 6px;
 cursor: pointer;
 }
 /* artist_lang*/
+#language_options_div{
+width: 200px;
+background: #444;
+position: fixed;
+}
 
 #artist_language{
-margin-top: 2px;
-background: #333;
+margin-top: 0px;
+background: #242424;
 height: 30px;
 color: #AAA;
-       font-size: 14px;
-       text-indent: 10px;
-       margin-bottom:20px;
-       border-radius:3px;
-       border-bottom:1px solid #202020;
+font-size: 14px;
+text-indent: 10px;
+width: 100%;
+position: relative;
+z-index: 2;
+cursor: pointer;
+border: 0px;
+border-bottom: 1px solid #333;
+}
+
+#artist_language>option{
+	background: #242424;
+height: 30px;
+color: #AAA;
+font-size: 14px;
+text-indent: 10px;
 }
 
 #artist_language>span{
@@ -2310,9 +2329,22 @@ cursor: pointer;
     border-bottom:0px;
 }
 #artist_language_icon{
-
 float: right;
 position: relative;
 top: 5px;
 right: 10px;
+}
+.albumImage{
+	width: 300px;
+	height: 300px;
+}
+
+/*media queries*/
+
+@media all and (max-width: 1400px) and (min-width:500px){
+   .albumImage{
+		width: 120px;
+		height: 120px;
+		float: left;
+	}
 }

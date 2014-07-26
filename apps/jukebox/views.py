@@ -47,7 +47,7 @@ for key in artists.keys():
   artists_search[artists[key]['artist'].lower()]=key
 
 
-all_albums = open(JC.ALL_ALBUMS_JSON_FILE,'r+')
+all_albums = open(JC.ALBUMS_JSON_FILE,'r+')
 all_artists = open(JC.ALL_ARTISTS_JSON_FILE,'r+')
 all_albums = json.loads(all_albums.readline())
 all_artists = json.loads(all_artists.readline())
@@ -133,8 +133,12 @@ class AlbumsJsonView(ListAPIView):
   """
     To show a list of albums
   """
-  queryset = Album.objects.order_by('album')
-  serializer_class = AlbumSerializer
+  def get(self, request, *args, **kwargs):
+    context = {}
+    lang = Album.objects.values('language').distinct()
+    for language in lang:
+      context[JC.lang_choices[language['language']]] = AlbumSerializer(Album.objects.filter(language=language['language']).order_by('album'), many=True).data
+    return Response(context)
 
 
 class SongsJsonView(ListAPIView):
@@ -244,6 +248,14 @@ class AddToPlaylistView(CreateAPIView):
           playlist.songs = songs
         else:
           playlist.songs += 'b'+songs
+          songs = playlist.songs.split('b')
+          tsongs = []
+          for i in range(0,len(songs)):
+            if songs[i] in tsongs:
+              continue
+            tsongs.append(songs[i])
+          songs = tsongs
+          playlist.songs = 'b'.join(songs)
         playlist.save()
     return Response('')
 
@@ -417,25 +429,31 @@ class SearchJsonView(ListAPIView):
         'artists' : dict_search(artists,'artist',q,5),
     })"""
     songs1 = Song.objects.filter(song__istartswith=q)[:5]
-    songs2 = Song.objects.filter(song__icontains=q).exclude(song__istartswith=q)[:5]
+    songs2 = Song.objects.filter(song__icontains=q)
+    songs_length = songs2.count()
+    songs2 = songs2.exclude(song__istartswith=q)[:5]
     songs = list(chain(songs1,songs2))
     songs = SongSerializer(songs[:5],many=True)
 #print songs
     artists1 = Artist.objects.filter(artist__istartswith=q)[:5]
-    artists2 = Artist.objects.filter(artist__icontains=q).exclude(artist__istartswith=q)[:5]
+    artists2 = Artist.objects.filter(artist__icontains=q)
+    artists_length = artists2.count()
+    artists2 = artists2.exclude(artist__istartswith=q)[:5]
     artists = list(chain(artists1,artists2))
     artists = SearchArtistSerializer(artists[:5],many=True)
     albums1 = Album.objects.filter(album__istartswith=q)[:5]
-    albums2 = Album.objects.filter(album__icontains=q).exclude(album__istartswith=q)[:5]
+    albums2 = Album.objects.filter(album__icontains=q)
+    albums_length = albums2.count()
+    albums2 = albums2.exclude(album__istartswith=q)[:5]
     albums = list(chain(albums1,albums2))
     albums = SearchAlbumSerializer(albums[:5],many=True)
 # songs = SongSerializer(Song.objects.filter(song__icontains=q)[:5],many=True)
 #albums = AlbumSerializer(Album.objects.filter(album__icontains=q)[:5],many=True)
 #artists = ArtistSerializer(Artist.objects.filter(artist__icontains=q)[:5], many=True)
     context.update({                                    # For multiple models and lists usage in ListView
-        'songs' : songs.data,
-        'albums' : albums.data,
-        'artists' : artists.data,
+        'songs' : [songs_length, songs.data],
+        'albums' : [albums_length, albums.data],
+        'artists' : [artists_length, artists.data],
         })
 #song_keys = search_json(q.lower(),songs_search)
 #print song_keys
