@@ -271,7 +271,7 @@ function activities_html(data,i){
  // html += data.activities[i].student_name;
   if(data.activities[i].activity_type=='ASK_QUES')
   {
-    html += '<a href="#"><img class="feed-propic" src=""></a>' +
+    html += '<a href="#"><img class="feed-propic" src="'+data.activities[i].photo_url+'"></a>' +
             '<div class="feed-text">' +
               '<div class="feed-line">' + 
                 '<a class="person-name" href="#">' + 
@@ -302,7 +302,7 @@ function activities_html(data,i){
   }
   else if(data.activities[i].activity_type=='POST_ANS')
   {
-          html += '<a href="#"><img class="feed-propic" src=""></a>' +
+          html += '<a href="#"><img class="feed-propic" src="'+data.activities[i].photo_url+'"></a>' +
                   '<div class="feed-text">' +
                     '<div class="feed-line">' + 
                       '<a class="person-name" href="#">' + 

@@ -69,6 +69,7 @@ def question_dict(question,profile):
     'follow_unfollow': follow_bool,
     'same_profile': same_profile,
     'student_name': question.profile.student.name,
+    'photo_url': question.profile.student.user.photo_url,
     'answers_number': len(Answer.objects.filter(question=question))
   }
 
@@ -98,22 +99,28 @@ def activity_dict(activity,profile):
   if activity.activity_type == 'FOL_QUES':
     obj = question_dict(activity.content.question, profile)
     student_name = activity.content.profile.student.name
+    photo_url = activity.content.profile.student.user.photo_url
   elif activity.activity_type == 'UP_ANS':
     obj = answer_dict(activity.content.answer, profile)
     student_name = activity.content.profile.student.name
+    photo_url = activity.content.profile.student.user.photo_url
   elif activity.activity_type == 'ASK_QUES':
     obj = question_dict(activity.content, profile)
     student_name = activity.content.profile.student.name
+    photo_url = activity.content.profile.student.user.photo_url
   elif activity.activity_type == 'POST_ANS':
     obj = answer_dict(activity.content, profile)
     student_name = activity.content.profile.student.name
+    photo_url = activity.content.profile.student.user.photo_url
   else:
     obj = tag_dict(activity.content.tag, profile)
     student_name = activity.content.content_object.student.name
+    photo_url = activity.content.content_object.student.user.photo_url
   return {
     'activity_type': activity.activity_type,
     'object_id': activity.object_id,
     'object': obj,
+    'photo_url': photo_url,
     'student_name': student_name
   }
 
