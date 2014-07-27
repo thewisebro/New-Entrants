@@ -213,9 +213,12 @@ function add_LS_queue(song)
   var song_name = song.song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
    + ' </div>'
-   + '<div class="qinfo">'
-   + '<div class="qsong">'+song_name+'</div>'
-   + '<div class="qartist">'+artist_name+'</div></div>';
+   + '<div class="qinfo" style="padding-right:5px;">'
+   + '<div class="qsong">'+song_name+'</div>';
+              if (banned_artists.indexOf(song.artists[0].id) >= 0)
+                html += '<div class="qartist">'+song.album.album+'</div></div>';
+              else
+                html += '<div class="qartist">'+artist_name+'</div></div>';
 $( "<div class='qitem song' id='"+id+"'></div>" ).html( html ).appendTo( $("#queue_content"));
 
 add_in_queue(song.id,queue.length);
@@ -234,9 +237,12 @@ function add_next_queue(song)
   var song_name = song.song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
    + ' </div>'
-   + '<div class="qinfo">'
-   + '<div class="qsong">'+song_name+'</div>'
-   + '<div class="qartist">'+artist_name+'</div></div>';
+   + '<div class="qinfo" style="padding-right:5px;">'
+   + '<div class="qsong">'+song_name+'</div>';
+              if (banned_artists.indexOf(song.artists[0].id) >= 0)
+                html += '<div class="qartist">'+song.album.album+'</div></div>';
+              else
+                html += '<div class="qartist">'+artist_name+'</div></div>';
    var elm=$( "<div class='qitem song' id='"+id+"'></div>" ).html( html );
           var cnt = 0;
           var qselect = false;
@@ -271,9 +277,12 @@ function add_queue_song(song)
   var song_name = song.song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
    + ' </div>'
-   + '<div class="qinfo">'
-   + '<div class="qsong">'+song_name+'</div>'
-   + '<div class="qartist">'+artist_name+'</div></div>';
+   + '<div class="qinfo" style="padding-right:5px;">'
+   + '<div class="qsong">'+song_name+'</div>';
+              if (banned_artists.indexOf(song.artists[0].id) >= 0)
+                html += '<div class="qartist">'+song.album.album+'</div></div>';
+              else
+                html += '<div class="qartist">'+artist_name+'</div></div>';
 var elem = $( "<div class='qitem song' id='"+id+"'></div>" ).html( html ).appendTo( $("#queue_content"));
 $(".qsong").width($(".qitem").width()-50);
 $(".qartist").width($(".qitem").width()-50);
@@ -340,9 +349,12 @@ function clone_element_song(id)
               var song_name = songs_url[id].song;
               var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
                  + ' </div>'
-                 + '<div class="qinfo">'
-                 + '<div class="qsong">'+song_name+'</div>'
-                 + '<div class="qartist">'+artist_name+'</div></div>';
+                 + '<div class="qinfo" style="padding-right:5px;">'
+                 + '<div class="qsong">'+song_name+'</div>';
+              if (banned_artists.indexOf(songs_url[id].artists[0].id) >= 0)
+                html += '<div class="qartist">'+songs_url[id].album.album+'</div></div>';
+              else
+                html += '<div class="qartist">'+artist_name+'</div></div>';
               return $( "<div class='qitem song' id='"+idn+"'></div>" ).html( html );
 
             }
@@ -357,9 +369,12 @@ function clone_element_song(id)
                   var song_name = songs_url[id].song;
                   var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
                      + ' </div>'
-                     + '<div class="qinfo">'
-                     + '<div class="qsong">'+song_name+'</div>'
-                     + '<div class="qartist">'+artist_name+'</div></div>';
+                     + '<div class="qinfo" style="padding-right:5px;>'
+                     + '<div class="qsong">'+song_name+'</div>';
+              if (banned_artists.indexOf(songs_url[id].artists[0].id) >= 0)
+                html += '<div class="qartist">'+songs_url[id].album.album+'</div></div>';
+              else
+                html += '<div class="qartist">'+artist_name+'</div></div>';
                   return $( "<div class='qitem song' id='"+idn+"'></div>" ).html( html );
               });
             }
@@ -428,10 +443,13 @@ function dragging() {
 appendTo: "body",
 helper: function(event)
        {
-         if ($(this).hasClass('song')) return clone_element_song($(this).attr('id').split('_')[1]);
+         if ($(this).hasClass('song')) {
+          var temp_clone_song = clone_element_song($(this).attr('id').split('_')[1]);
+          return temp_clone_song.css({'border':'1px solid #DDD'});
+        }
           else if($(this).hasClass('album'))
-          {
-                 return $(this).clone();
+          {      var temp_clone = $(this).clone();
+                 return temp_clone.css({'width':'120','height':'120'});
           }
        },
 cursorAt: {top: 5,left: 5},

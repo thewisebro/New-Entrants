@@ -110,6 +110,12 @@ class IndexView(TemplateView):
     For index page, i.e., starting page : For now -> Trending page
   """
   template_name='jukebox/base.html'
+  def get_context_data(self, **kwargs):
+    context = super(IndexView, self).get_context_data(**kwargs)
+    context.update({
+        'banned_artists': JC.banned_artists
+        })
+    return context
 #url = 'search/'
 
 
@@ -464,6 +470,8 @@ class SearchAllJsonView(ListAPIView):
   """
     For three way search :  Song, Album, Artist
   """
+# dictionary search
+  """
   def get(self, request, format=None):
     context = {}
     q = self.request.GET.get('q').lower()                       # q -> Search String coming
@@ -473,5 +481,13 @@ class SearchAllJsonView(ListAPIView):
 #song_keys = search_json(q.lower(),songs_search)
 #print song_keys
     return Response(context)
-
+  """
+# DB search
+  serializer_class = SongSerializer
+  def get_queryset(self):
+    q = self.request.GET.get('q','')
+    songs1 = Song.objects.filter(song__istartswith=q)[:100]
+    songs2 = Song.objects.filter(song__icontains=q)
+    songs2 = songs2.exclude(song__istartswith=q)[:100]
+    return list(chain(songs1,songs2))[:100]
 

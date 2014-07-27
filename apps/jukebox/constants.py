@@ -19,3 +19,5 @@ lang_choices = {
       'punjabi':'Punjabi',
       'mal':'Malyali'
       }
+
+banned_artists = []      # artists like 'Movies', 'Hindi'

@@ -131,7 +131,7 @@ margin-top: 30px;
   font-family: "helvetica_neue_medium";
   padding-bottom: 5px;
   margin-bottom: 5px;
-  margin-left: 180px;
+  margin-left: 190px;
 }
 
 #popular_list
@@ -139,6 +139,7 @@ margin-top: 30px;
 border: 1px solid #E0E0E0;
         
 border-bottom: 0px;
+margin-bottom: 80px;
 }
 
 #popular_list>ul>li {
@@ -215,6 +216,10 @@ background: #FFF;
 	width: 160px;
 	height: 160px;
 	float: left;
+	padding:5px;
+	border-radius: 2px;
+	border:#DDD 1px solid;
+	background: #FFF;
 }
 
 .artist_album_pic img{
@@ -225,7 +230,7 @@ background: #FFF;
 #artist_song_list{
 	position: relative;
 	right: 0px;
-	margin-left: 180px;
+	margin-left: 190px;
 }
 
 
@@ -391,8 +396,8 @@ background: #5E5E5E;
 	#artist_song_list{
 		position: relative;
 		right: 0px;
-		margin-left: 0px;
-		margin-top: 80px;
+		margin-left: 100px;
+		margin-top: 0px;
 	}
 
 	#popular_heading{

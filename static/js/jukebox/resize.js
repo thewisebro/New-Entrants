@@ -23,7 +23,7 @@
 
 
 
-
+//container item_wrapper item 
   function resizeit(divwidth,itemwrapper,itemimage) {
     // width of the div .. "divwidth"   artists_items
     // class of the complete item .. "itemwrapper"  item_wrapperAlb
