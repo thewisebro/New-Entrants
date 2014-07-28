@@ -58,7 +58,7 @@ def Ie(path, channel):
           print "\n>>>>>>>>>>>>>>>>>>>>>>       <<<<<<<<<<<<<<<<<<<<<<<<<<<"
           print title
           print "Counter: "+str(counter)
-          print des
+          #print des
 
           req = Request(link)
           #opener = urllib2.build_opener()
@@ -105,12 +105,15 @@ def Ie(path, channel):
                     try:
                       image_link = image.get("src")
                       ext = os.path.splitext(image_link)[1]
+                      if "?" in ext:
+                        ext = ext.split('?')[0]
+                      ext = ext.lower()
                       unique_image_name = str(p.pk)
                       image_name =  unique_image_name + ext
                       image_path = "images/" + image_name
                       p.image_path = image_path
                       p.save()
-                      wget = 'wget -nc -O %s "%s"' % (image_name, image_link)
+                      wget = 'wget -U firefox -nc -O %s "%s"' % (image_name, image_link)
                       download = subprocess.Popen(wget, shell = True)
                       download.wait()
                     except:
@@ -121,13 +124,14 @@ def Ie(path, channel):
                   print "Saved_Without_image "
                   continue
         else:
-          print "\nAlready stored!"
-          print archive
-          print "Counter: "+ str(counter)
+          print "\nAlready There..."
+          #print archive
+          #print "Counter: "+ str(counter)
       except Exception as e:
         print "\n"+title
         print link
         print "Counter: "+ str(counter)
+        print ">>>>>>>>ERROR!!<<<<<<<<<<<"
         print e
         pass
   except Exception as e:

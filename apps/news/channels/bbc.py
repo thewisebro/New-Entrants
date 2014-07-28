@@ -87,7 +87,6 @@ def Bbc(path, channel):
                     article_content +=  str(paragraph) + "\n<br>"  #paragraph.contents[0].encode('utf8')   # converting unicode to a normal string object
 
               if article_content is not None:
-
                 #if image_link is None:
                 #image_link = "noimage"
                 p = News(item= article_content)
@@ -102,12 +101,17 @@ def Bbc(path, channel):
                   try:
                     #image_link = image.get("src")
                     ext = os.path.splitext(image_link)[1]
+                    if "?" in ext:
+                      ext = ext.split('?')[0]
+                    ext = ext.lower()
+                    if ext is None or ext is '':
+                      ext = '.jpg'
                     unique_image_name = str(p.pk)
                     image_name =  unique_image_name + ext
                     image_path = "images/" + image_name
                     p.image_path = image_path
                     p.save()
-                    wget = 'wget -nc -O %s "%s"' % (image_name, image_link)
+                    wget = 'wget -U firefox -nc -O %s "%s"' % (image_name, image_link)
                     download = subprocess.Popen(wget, shell = True)
                     download.wait()
                   #except Exception as e:
@@ -119,6 +123,8 @@ def Bbc(path, channel):
                 else:
                   print "Saved_Without_image "+str(p.pk)
                   continue
+        else:
+          print "\n Already There...."
       except:
         pass
   #except Exception as e:
