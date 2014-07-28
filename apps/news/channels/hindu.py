@@ -93,6 +93,11 @@ def Hindu(path, channel):
                     # Single image
                     try:
                       ext = os.path.splitext(image_link)[1]
+                      if "?" in ext:
+                        ext = ext.split('?')[0]
+                      ext = ext.lower()
+                      if ext is None or ext is '':
+                        ext = '.jpg'
                       #unique_image_name = hashlib.sha1(str(source) + str(title)).hexdigest()
                       unique_image_name = str(p.pk)
                       #unique_image_name = str(uuid.uuid1()).replace('-','_')
@@ -100,7 +105,7 @@ def Hindu(path, channel):
                       image_path = "images/" + image_name
                       p.image_path = image_path
                       p.save()
-                      wget = 'wget -nc -O %s "%s"' % (image_name, image_link)
+                      wget = 'wget -U firefox -nc -O %s "%s"' % (image_name, image_link)
                       download = subprocess.Popen(wget, shell = True)
                       download.wait()
                       print("Saved_with_image")
@@ -117,6 +122,11 @@ def Hindu(path, channel):
                     img_link = img.get('src')
                     try:
                       ext = os.path.splitext(img_link)[1]
+                      if "?" in ext:
+                        ext = ext.split('?')[0]
+                      ext = ext.lower()
+                      if ext is None or ext is '':
+                        ext = '.jpg'
                       unique_image_name = str(p.pk)+"-"+str(incrementor)
                       image_name =  unique_image_name + ext
                       image_path = "images/" + image_name
@@ -130,6 +140,8 @@ def Hindu(path, channel):
                       pass
                     #except Exception as e: print "Exception accured while downloading :",e,"      wget '"+img_link+"'"
                   print("Saved_with_imageset")
+        else:
+          print "\n Already There..."
       except:
         pass
   #except Exception as e:
