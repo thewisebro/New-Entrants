@@ -1,8 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
-from channels import hindu, ie, msn, toi, yahoo, bbc #, nyt
+import os, sys
+#sys.path.append(os.path.join(os.path.abspath("../../../..")))
+
+#from django.core.management import setup_environ
+#os.environ.setdefault("DJANGO_SETTINGS_MODULE", "channeli.settings")
 from django.conf import settings
-import os
+from news.channels import hindu, ie, msn, toi, yahoo, bbc #, nyt
 
 def load_data():
   #path = os.path.dirname(__file__)
