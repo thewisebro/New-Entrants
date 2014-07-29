@@ -31,10 +31,10 @@ background-color: #444;
 }
 #oaoWrapper{
 	width: 100%;
-	min-height: 100%;
-	border-right: 1px solid #DDD;
-	box-shadow: 1px 1px 1px #eee;
-	background-color: #fff;
+	/*min-height: 100%;*/
+	/*border-right: 1px solid #DDD;
+	box-shadow: 1px 1px 1px #eee*/;
+	/*background-color: #fff;*/
 }
 
 #oaoWrapper>div{
@@ -45,7 +45,7 @@ background-color: #444;
 
 #oaoLeft{
 position: relative;
-min-height: 100%;
+/*min-height: 100%;*/
 width: 460px;
 padding: 30px 20px 0px 30px;
 

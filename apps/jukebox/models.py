@@ -7,7 +7,7 @@ from django.core.files.storage import FileSystemStorage
 from api import model_constants as MC
 
 from jukebox import constants as JC
-import nucleus
+from nucleus.models import User
 
 # jukebox.models starts
 
@@ -114,7 +114,7 @@ class Song(models.Model):
 
 
 class Jukebox_Person(models.Model):
-  person = models.OneToOneField(nucleus.models.User)
+  person = models.OneToOneField(User)
   songs_listen = models.TextField()
 
   def add_songs_listen(self, song):
@@ -131,7 +131,7 @@ class Playlist(models.Model):
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   songs = models.TextField(null=True, blank=True)                                     # TextField:-> Large amount of songs with 'b' in between
   private = models.BooleanField(default=True)
-  liked_by = models.ManyToManyField(nucleus.models.User, related_name='jukebox_playlist_likes')
+  liked_by = models.ManyToManyField(User, related_name='jukebox_playlist_likes')
   public_count = models.PositiveIntegerField(default=0)          # For Trending Playlists
   def __unicode__(self):
     return self.name

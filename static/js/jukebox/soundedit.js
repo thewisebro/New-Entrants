@@ -382,11 +382,11 @@ function Player() {
     
     $("#shufflepic").on("click",function(){
         if(self.shuffle){
-          $("#shufflepic").html("<span>0</span>");
+           $("#shufflepic").find('img').attr("src","/static/images/jukebox/shufflepicwhite.png");
           self.shuffle=false;
         }
         else{ 
-          $("#shufflepic").html("<span>1</span>");
+          $("#shufflepic").find('img').attr("src","/static/images/jukebox/shufflepic.png");
           self.shuffle=true;
         }
         
@@ -510,9 +510,10 @@ function Player() {
      if(self.loopSetting==0){
       //setting 0 is default , no looping
       //switch to next state 1
+      $("#looppic span").html("1");
      self.loopSetting=1;
      //change css 
-      $("#looppic").html("<span>1</span>");
+      $("#looppic").find('img').attr("src","/static/images/jukebox/looppicwhite.png");
      // self.loopSound(self.currentSound);
          }
      else if(self.loopSetting==1){
@@ -520,14 +521,16 @@ function Player() {
       //switch to next state 2
       self.loopSetting=2;
       //change css
-      $("#looppic").html("<span>2</span>");
+      $("#looppic span").html("");
      }
      else if(self.loopSetting==2){
      //full playlist loop
     //switch  to next state 0
       self.loopSetting=0;
+      $("#looppic span").html("");
      //change css
-      $("#looppic").html("<span>0</span>");
+      // $("#looppic").html("<span>0</span>");
+      $("#looppic").find('img').attr("src","/static/images/jukebox/looppic.png");
      }
     });
 

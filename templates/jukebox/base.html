@@ -25,6 +25,11 @@
 
   <body>
   <!-- <div id="loading_line"></div> -->
+  <!-- <div id="loading_div_spinner">
+  <div id="spinner_div">
+    <i class="icon-spinner icon-spin icon-large"></i>
+  </div>
+  </div> -->
   <div id="center_trending" style="display:none;"></div>
   <div id="center_artists" style="display:none;"></div>
   <div id="center_albums" style="display:none;"></div>
@@ -125,10 +130,10 @@
 							<div id="albums_text">Albums</div>
 						</a>	
 
-						<a id="albums_link" onClick="lStumble();">
+						<!-- <a id="albums_link" onClick="lStumble();">
 							<div id="albums_icon"><i class=" icon-spinner"></i></div>
 							<div id="albums_text">New Releases</div>
-						</a>
+						</a> -->
            
 				</div>
         <div id="playlist_navigation">
@@ -142,7 +147,9 @@
               <div id="home_text" style="">Shared Playlists</div>
             </a>
           
-        </div>
+        </div>  
+
+        <!--
         <div id="settings_navigation">
           <div class="upper_crease"></div>
            <a id="playlists_link">
@@ -150,15 +157,15 @@
               <div id="home_text" style="">Settings</div>
             </a>
 
-				<!--	<div id="playlists">	
+				<div id="playlists">	
 						
 							<a id="home_link">
 								  icon-align-justify   icon-bookmark  
 							<div id="home_icon"><i class="icon-heart" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
 							<div id="home_text" style="margin-left: 16px;">My Playlists</div>
 							</a>
-					</div> -->	<!-- playlists -->
-				<!--	<div id="playlist_view">
+					</div> 
+					<div id="playlist_view">
 						<a href="">Favsongs</a>
 						<a href="">my songs</a>
 						<a href="">happy time</a>
@@ -173,10 +180,10 @@
 								</a>
 							</div>
 					</div>
-          -->
+          
 
 				</div>
-
+        -->
 			</div>
 <!--    <span id="trending">Trending</span>
     <span id="artists" >Artists</span>
@@ -297,6 +304,7 @@
 	<div id="musicbarSide">
 	<div id="looppic">
 	<img src="{{ STATIC_URL }}images/jukebox/looppic.png">
+  <span></span>
 	</div>
 	<div id="shufflepic">
 	<img src="{{ STATIC_URL }}images/jukebox/shufflepic.png">
@@ -332,8 +340,14 @@
   </div> <!-- div #bigwrapper ends -->
 </body>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+      $( window ).load(function() {
+    $('body').css({'opacity':'1'});
+});
+      </script>
     <script src="{{ STATIC_URL }}js/csrf.js"></script>
     <script src="{{ STATIC_URL }}js/common.js"></script>
+    <script src="{{ STATIC_URL }}js/jukebox/fuse.min.js"></script>
     <!-- // <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/keymap.js"></script>  -->
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/keyboard.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}jquery/nanoscroller/jquery.nanoscroller.min.js"></script>
@@ -379,9 +393,10 @@ $('#centerdata').css('width',$(window).width()-180-240);
   <script src="{{ STATIC_URL }}js/jukebox/base.js">
   </script>
   <!-- last fm use to get similar artist tracks -->
-  <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfm.api.cache.js"></script>
+<!--  <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfm.api.cache.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfm.api.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfm.api.md5.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/json2.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfmuse.js"></script>
+  -->
 </html>

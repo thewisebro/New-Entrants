@@ -490,4 +490,3 @@ class SearchAllJsonView(ListAPIView):
     songs2 = Song.objects.filter(song__icontains=q)
     songs2 = songs2.exclude(song__istartswith=q)[:100]
     return list(chain(songs1,songs2))[:100]
-

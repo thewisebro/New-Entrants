@@ -50,8 +50,8 @@ box-shadow: inset -1px 0px 5px #222;
 	left: 0px;
 	min-height: 1200px;
 	background-color: #fff;
-	border-right: 1px solid #DDD;
-	box-shadow: 1px 1px 1px #EEE;
+	/*border-right: 1px solid #DDD;
+	box-shadow: 1px 1px 1px #EEE;*/
 }
 #playlist_view{
 	position: absolute;
@@ -60,8 +60,8 @@ box-shadow: inset -1px 0px 5px #222;
 	left: 0px;
 	min-height: 1200px;
 	background-color: #fff;
-	border-right: 1px solid #DDD;
-	box-shadow: 1px 1px 1px #EEE;
+	/*border-right: 1px solid #DDD;
+	box-shadow: 1px 1px 1px #EEE;*/
 }
 #artist_banner{
 	width: 100%;
