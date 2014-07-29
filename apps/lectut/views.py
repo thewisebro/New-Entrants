@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from nucleus.models import Batch , Course, User, Student
+from nucleus.models import Batch, Course, User, Student
 from forms import *
+from models import *
 
 # Create your views here.
 '''def create_profile(request):

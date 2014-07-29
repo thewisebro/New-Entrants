@@ -38,6 +38,9 @@ class BaseUpload(models.Model):
 class UploadImage(BaseUpload):
   upload_image=models.ImageField(upload_to='lectut/images/')
 
+  def __unicode__(self):
+    return str(self.upload_image)
+
 '''class UploadVideo(BaseUpload):
   upload_video=models.FileField(upload_to='lectut/videos' , null=True)
   def matche_file_type(cls, iname, ifile, request):
@@ -83,7 +86,7 @@ Act_Types = (
     )
 class Activity(models.Model):
    log=models.ForeignKey(Upload)
-   act_type=models.CharField(max_length=3 , choices=Act_Types)
+   act_type=models.CharField(max_length=3 , choices=Act_Types , default='tut')
 
    #Creates Activity when Upload model is created
    def create_activity(sender, instance, *args, **kwargs):
