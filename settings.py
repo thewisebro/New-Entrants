@@ -22,6 +22,7 @@ COMPRESS_OFFLINE = False
 GLOBAL_MEDIA_ROOT = '/home/apps/channeli_media/'
 NEWS_MEDIA_ROOT = GLOBAL_MEDIA_ROOT + 'news/'
 NEWS_IMAGES_ROOT = NEWS_MEDIA_ROOT + 'images/'
+NEWS_XML_ROOT = NEWS_MEDIA_ROOT + 'xml_files/'
 NEWS_MEDIA_URL = '/newsmedia/'
 
 JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
