@@ -6,7 +6,7 @@ from notices.models import *
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from notices.serializer import *
-
+from django.db.models import Q
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from django.views.generic import TemplateView
 import simplejson
@@ -131,9 +131,9 @@ class GetNotice(RetrieveAPIView):
   queryset = Notice.objects.all()
   serializer_class = GetNoticeSerializer
 
-
 class NoticeSearch(ListAPIView):
   def get_queryset(self):
+    queryset = []
     query = self.request.GET.get('q', '')
     mode = self.kwargs['mode']
     if(mode=="old"):
@@ -148,22 +148,28 @@ class NoticeSearch(ListAPIView):
       query1=queryset1.filter(uploader__category__main_category=mc)
     else:
       query1=queryset1.filter(uploader__category__name=subc)
-    words = query.split(' ')
-    un_queryset = {}			#unsorted(with respect to frequency) queryset
-    count = {}
-    for word in words:
-		  result = query1.filter(subject__icontains=word)
-		  for temp in result:
-			  if temp.id in un_queryset:
-				  count[temp.id] = count[temp.id]+1
-			  else:
-				  un_queryset[temp.id] = temp
-				  count[temp.id] = 1
-    date_sorted_queryset=sorted(un_queryset, key= lambda l : un_queryset[l].datetime_modified, reverse=True)
-    count_date_sorted_queryset=sorted(date_sorted_queryset, key= lambda l: count[l], reverse=True)
-    queryset = []				#Sorted queryset
-    for notice_id in count_date_sorted_queryset:
-		  queryset.append(un_queryset[notice_id])
+
+    if query[:2]==">>":
+      print "abcd"
+      query=query[2:].split("--")
+      queryset = query1.filter(datetime_modified__gt=datetime.fromtimestamp(int(query[0])/1000.0)).filter(datetime_modified__lt=datetime.fromtimestamp(int(query[1])/1000.0))
+
+    else:
+      words = query.split(' ')
+      un_queryset = {}			#unsorted(with respect to frequency) queryset
+      count = {}
+      for word in words:
+        result = query1.filter(Q(subject__icontains=word) | Q(content__icontains=word))
+        for temp in result:
+          if temp.id in un_queryset:
+            count[temp.id] = count[temp.id]+1
+          else:
+            un_queryset[temp.id] = temp
+            count[temp.id] = 1
+      date_sorted_queryset=sorted(un_queryset, key= lambda l : un_queryset[l].datetime_modified, reverse=True)
+      count_date_sorted_queryset=sorted(date_sorted_queryset, key= lambda l: count[l], reverse=True)
+      for notice_id in count_date_sorted_queryset:
+        queryset.append(un_queryset[notice_id])
     return queryset
   serializer_class = GetNoticeSerializer
 

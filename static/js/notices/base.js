@@ -37,72 +37,73 @@ $(document).on("load_app_notices", function(e, h1, h2, h3, h4, h5){
   }
   if(hash1=="new"||hash1=="old")
   {
-    if(search_string!="")
-      search_string="";
-    if(hash2==m_category && hash3==sub_category)
-    same=1;
-    else
-    {
-  console.log("abcqw");
-      temp_store = new Array(50);
-      same=0;
-      m_category=hash2;
-      sub_category=hash3;
-    }
+        if(search_string!="")
+          search_string="";
+        if(hash2==m_category && hash3==sub_category)
+        same=1;
+        else
+        {
+      console.log("abcqw");
+          temp_store = new Array(50);
+          same=0;
+          m_category=hash2;
+          sub_category=hash3;
+        }
   }
+
   else if(hash1=="search")
   {
-    if(hash3==m_category && hash4==sub_category)
-    same=1;
-    else
-    {
-      same=0;
-      m_category=hash3;
-      sub_category=hash4;
-    }
+        if(hash3==m_category && hash4==sub_category)
+        same=1;
+        else
+        {
+          same=0;
+          m_category=hash3;
+          sub_category=hash4;
+        }
   }
-  console.log(m_category);
-  if(m_category=="All"&&sub_category=="All")
-  {
-    all=1;
-    if(mode=="new")
-    {
-      temp_store=store;
-      temp_total_pages=total_pages;
-      temp_notices_on_last_page=notices_on_last_page;
-    }
-    else
-    {
-      temp_store=old_store;
-      temp_total_pages=old_total_pages;
-      temp_notices_on_last_page=old_notices_on_last_page;
-    }
-  }
-  else
-    all=0;
-  console.log(all);
-  checklist={};
-  more=0;
-  t=0;
-  if(hash1 == "content")
-  {
-      display_notice(parseInt(hash2));
-  }
-  else
-  {
-    	$('#content').html('Welcome To Notice Board!<br>');
-      if(!(0 in temp_store) || !(49 in temp_store))
-    	{
-  console.log("bharat");
-      		gap_scanner(1, 1);
-    	}
+      console.log(m_category);
+      if(m_category=="All"&&sub_category=="All")
+      {
+          all=1;
+          if(mode=="new")
+          {
+            temp_store=store;
+            temp_total_pages=total_pages;
+            temp_notices_on_last_page=notices_on_last_page;
+          }
+          else
+          {
+            temp_store=old_store;
+            temp_total_pages=old_total_pages;
+            temp_notices_on_last_page=old_notices_on_last_page;
+          }
+      }
+      else
+        all=0;
+      console.log(all);
+      checklist={};
+      more=0;
+      t=0;
+      if(hash1 == "content")
+      {
+          display_notice(parseInt(hash2));
+      }
       else
       {
-  console.log("bharat5");
-  console.log(same);
-		    get_privelege();
+          $('#content').html('Welcome To Notice Board!<br>');
+          if(!(0 in temp_store) || !(49 in temp_store))
+          {
+      console.log("bharat");
+              gap_scanner(1, 1);
+          }
+          else
+          {
+      console.log("bharat5");
+      console.log(same);
+            get_privelege();
+          }
       }
-  }
 });
 
 function get_privelege()
@@ -135,6 +136,7 @@ function get_privelege()
 	{
 		if(privelege==1)
 		{
+      console.log("c1")
         		$('a#Upload').remove();
         		html = '<a id = "Upload" href="notices/upload/">Upload</a><br>';
         		html += '<div id = "show_uploads" onclick="upload_change_page(1)">Show/Edit Uploads</div><br>';
@@ -576,10 +578,31 @@ function gap_scanner(page_no, t)                 // Fills the appropriate gaps w
     }
 }
 
+function check_if_date(query2)
+{
+  console.log("entered check_if_date")
+  console.log(query2)
+  url=""
+  if(query2.split("--").length==2)
+  {
+    parts=query2.split("--");
+    parts[0]=Date.parse(parts[0]);
+    parts[1]=Date.parse(parts[1]);
+    url = ">>" + parts.join().replace(",", "--");
+  }
+  else if(!isNaN(Date.parse(query2)))
+  {
+    x = Date.parse(query2)
+    url = ">>" + x.toString() + "--" + (x+86400000).toString();
+  }
+    console.log(url);
+  return url
+}
+
 function search()
 {
         console.log("search_function_enter");
-	j=0;
+	j=0;url="";
 	query1=$("#search_data").val();
   if(query1=="")
     query1=search_string;
@@ -587,28 +610,33 @@ function search()
   {
     search_string=query1;
   }
-  if(query1=="")
-    j=1;
-	query=query1.split(" ");
-	t=0;
-	k=query.length;
-	if(j!=1)
-	{
-		for(var i=0; i<k;i++)
-		{
-			if(query[t]=="")
-			query.splice(t,1);
-			else
-	 		t++;
-		}
-	}
-	url="";
-	for(var i=0; i<query.length-1; i++)
-	{
-		url+=query[i]+"+";
-	}
-	url+=query[query.length-1];
-        console.log("done");
+  if(check_if_date(query1))
+    url=check_if_date(query1);
+  else
+  {
+      if(query1=="")
+        j=1;
+      query=query1.split(" ");
+      t=0;
+      k=query.length;
+      if(j!=1)
+      {
+        for(var i=0; i<k;i++)
+        {
+          if(query[t]=="")
+          query.splice(t,1);
+          else
+          t++;
+        }
+      }
+      url="";
+      for(var i=0; i<query.length-1; i++)
+      {
+        url+=query[i]+"+";
+      }
+      url+=query[query.length-1];
+  }
+          console.log(url);
   $.ajax({
       type: 'get',
       url : 'notices/search/' + mode + '/' + m_category + '/' + sub_category + '/?q=' + url,
