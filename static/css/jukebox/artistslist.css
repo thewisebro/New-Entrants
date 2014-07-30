@@ -126,7 +126,7 @@ margin-top: 30px;
 }
 
 #popular_heading{
-  color: #008DDE;
+  color: #ff5d42;
   font-size: 16px;
   font-family: "helvetica_neue_medium";
   padding-bottom: 5px;
@@ -152,19 +152,25 @@ margin-bottom: 80px;
 }
 
 
+.song_in_span:hover{
+	color: #ff5d42;
+}
 
 #popular_list>ul>li:nth-child(2n){
 	background-color: #f9f9f9;
 }
 
 #popular_list>ul>li:hover{
-	/*background-color:#d0d0d0;*/
-	background-color: white;
+	background-color: #2A2A2A;
+	color: #DDD;
+}
+
+#popular_list>ul>li:hover .artist_options{
+	color: #DDD;
 }
 
 .popular_item{
 	color:#444;
-
 }
 
 #popular_list>ul>li>div{
@@ -179,9 +185,9 @@ float:left
 	padding-right: 5px;
 }
 
-#p_song_name:hover{
- color: #008dde;
-}
+/*#p_song_name:hover{
+ color: #ff5d42;
+}*/
 
 #p_song_name{
   font-size: 12px;
@@ -328,9 +334,10 @@ background: #5E5E5E;
 }
 
 .list_icon{
+	border-radius: 2px;
 	display: none;
 	position: absolute;
-	background: #444;
+	/*background: #666;*/
 	width: 26px;
 	height: 26px;
 	margin-top: 3px;
@@ -340,11 +347,20 @@ background: #5E5E5E;
 	text-indent: 6px;
 	text-align: center;
 	border-radius: 1px;
+	background:-webkit-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-webkit-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-moz-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-ms-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-o-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
 }
 
-.list_icon:hover{
-	background-color:#008DDE; 
-}
+/*.list_icon:hover{
+	background:-webkit-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-webkit-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-moz-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-ms-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-o-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+}*/
 
 #popular_list>ul>li:hover .list_icon{
 	display: block;

@@ -57,6 +57,21 @@ margin-top: 20px;
 margin-left: 20px;
 }
 
+#jbtext>span{
+	font-family: "helvetica_neue_bold","Arial","sans-serif";
+}
+
+#jbtext{
+	font-family: "helvetica_neue_thin","Arial","sans-serif";
+font-size: 20px;
+line-height: 30px;
+color: white;
+position: absolute;
+left: 71px;
+top: 25px;
+text-shadow: 1px 2px 0px #000;
+}
+
 #logo a{
 	color: #616161;
 	text-decoration: none;
@@ -77,13 +92,14 @@ margin-left: 20px;
 
 #jblogo
 {
-	width: 40px;
-	height: 28px;
-	background-color: #008DDE;
+	width: 30px;
+	height: 30px;
 	color: #FFF;
 	text-align: center;
-	padding-top: 12px;
 	float: left;
+	background: url(/static/images/jukebox/jblogo.png);
+	margin-left: 15px;
+margin-top: 5px;
 }
 
 /*=========================================nav bar================================*/
@@ -140,7 +156,11 @@ margin-left: 20px;
 	margin-right: 2px;
 
 }
-
+#shared_icon{
+	position: relative;
+	font-size: 16px;
+	margin-right: 2px;
+}
 #navigation>a :nth-child(2){
 	font-size: 13px;
 }
@@ -621,7 +641,11 @@ font-size: 12px;
 }  
 
 #musicBlueSlider{
-	background-color: #008dde;
+	background:-webkit-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-webkit-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-moz-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-ms-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-o-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
 }
 
 #ui-sliderlarge-handle:hover,:active{
@@ -676,7 +700,7 @@ font-size: 12px;
 	right: 0px;
 	width: 199px;
 	height: 100%;
-	min-height: 700px;
+	/*min-height: 700px;*/
 	z-index: 1;
 	padding-left: 10px;
 	padding-right: 10px;
@@ -736,7 +760,9 @@ cursor:pointer;
          border-bottom: 1px solid #E0E0E0;
          margin-top: 0px;
          visibility:hidden;
-         top: -18px;
+         /*top: -18px;*/
+         overflow: visible;
+         z-index: -1;
 }
 
 #popular_artists_list> div.pane{
@@ -828,7 +854,7 @@ color:#757575;
 }
 
 .qsong:hover{
-	color:#008DDE;
+	color:#ff5d42;
 	/*color: #D8511D;*/
 }
 .qartist:hover{
@@ -840,7 +866,8 @@ color:#757575;
 
 #queue_content{
   padding:0px!important;
-  margin-bottom: 141px;
+  margin-bottom: 99px;
+/*top: 18px;*/
 }
 
 .trash{
@@ -1004,7 +1031,7 @@ cursor: pointer;
 }
 
 .activeSearch{
-	border-bottom: 3px solid #008DDE;
+	border-bottom: 3px solid #ff5d42;
 }
 #searchButton:hover{
 	color: white;
@@ -1156,7 +1183,7 @@ cursor: pointer;
 }
 
 .searchResultList li:hover .itemName{
-	color: #008DDE;
+	color: #ff5d42;
 }
 
 #seeMore{
@@ -1178,7 +1205,7 @@ cursor: pointer;
 }
 
 #seeMore:hover{
-	color: #008DDE;
+	color: #ff5d42;
 	background-color: #f0f0f0;
 	-webkit-transition-property:color, text;
 	-webkit-transition-duration: 0.1s, 0.1s;
@@ -1287,10 +1314,10 @@ font-weight: bold;
 	-o-transition-property:color, text;
 	-o-transition-duration:0.1s;
 	-o-transition-timing-function: linear, ease-in;
-display: -moz-box;
+/*display: -moz-box;
 display: -webkit-box;
 display: -ms-flexbox;
-display: box;
+display: box;*/
 }
 
 #searchContentFull>ul>li:hover{
@@ -1298,7 +1325,7 @@ display: box;
 }
 
 #searchContentFull>ul>li>div{
-
+	float: left;
 }
 #searchContentFull>ul>li:nth-child(2n-1){
   background-color:#eee;
@@ -1357,10 +1384,10 @@ color: #fff;
 	-o-transition-property:color, text;
 	-o-transition-duration:0.1s;
 	-o-transition-timing-function: linear, ease-in;
-display: -moz-box;
+/*display: -moz-box;
 display: -webkit-box;
 display: -ms-flexbox;
-display: box;
+display: box;*/
 }
 
 /*changed search playlist*/
@@ -1370,7 +1397,7 @@ display: box;
 
 /*changed search playlist*/
 #playlistContentFull>ul>li>div{
-
+	float: left;
 }
 #playlistContentFull>ul>li:nth-child(2n-1){
   background-color:#eee;
@@ -1395,11 +1422,11 @@ display: box;
 }
 
 .iDname{
--moz-box-flex: 16;
+/*-moz-box-flex: 16;
 -webkit-box-flex: 16;
 -ms-flex: 16;
-box-flex: 16;
-width: 1%;
+box-flex: 16;*/
+width: 30%;
 padding: 9px 10px 0px 0px;
          font-size: 12px;
 overflow: hidden;
@@ -1408,23 +1435,26 @@ overflow: hidden;
 
 .iDname:hover{
   cursor:pointer;
-color:#008DDE;
+color:#ff5d42;
 }
 
 .iDoptions{
-position:relative;
-width: 1%;
-       -webkit-box-flex: 2.0;
+
+       /*-webkit-box-flex: 2.0;
        -moz-box-flex: 2.0;
        -ms-flex: 2.0;
-       box-flex: 2.0;
+       box-flex: 2.0;*/
+
+position: absolute;
 padding: 9px 0px 0px 0px;
-         font-size:18px;
-cursor:pointer;
-color:#aaa;
+font-size: 18px;
+cursor: pointer;
+color: #aaa;
+right: 7px;
+float: right;
 }
 .iDoptions:hover{
-color:#008DDE !important;
+color:#ff5d42 !important;
 }
 
 #playlistContentFull>ul>li:hover .iDoptions{
@@ -1433,38 +1463,38 @@ color:#333;
 }
 
 .iDalbum{
-width: 1%;
+width: 30%;
 padding: 9px 10px 0px 0px;
          font-size: 12px;
-         -moz-box-flex: 16;
+         /*-moz-box-flex: 16;
          -webkit-box-flex: 16;
          -ms-flex: 16;
-         box-flex: 16;
+         box-flex: 16;*/
 overflow: hidden;
           text-overflow: ellipsis;
 }
 
 .iDalbum:hover{
 cursor:pointer;
-color:#008DDE;
+color:#ff5d42;
 }
 
 
 .iDartist{
-width: 1%;
+width: 30%;
 padding: 9px 0px 0px 0px;
          font-size: 12px;
-         -moz-box-flex: 16;
+         /*-moz-box-flex: 16;
          -webkit-box-flex: 16;
          -ms-flex: 16;
-         box-flex: 16;
+         box-flex: 16;*/
 overflow: hidden;
           text-overflow: ellipsis;
 }
 
 .iDartist:hover{
   cursor:pointer;
-color:#008DDE;
+color:#ff5d42;
 
 }
 
@@ -1658,6 +1688,7 @@ position: relative;
 height: 100%;
 width: 100%;
        background-color: #FFF;
+       margin-bottom: 53px;
 }
 
 #playlistInfo{
@@ -1789,7 +1820,7 @@ cursor:pointer;
 
 #add_to_playlist_submit{
 position: absolute;
-background: #008DDE;
+background: #ff5d42;
 width: 37px;
 height: 37px;
 right: 48px;
@@ -1814,7 +1845,7 @@ width: 100%;
 #add_new_button{
 width: 200px;
 height: 17px;
-        background-color: #008DDE;
+        background-color: #ff5d42;
 margin: 0px auto;
 color: #FFF;
        font-size: 14px;
@@ -1835,7 +1866,7 @@ background-color: #018BDC;
 
 #add_new_submit{
 position: absolute;
-background: #008DDE;
+background: #ff5d42;
 width: 37px;
 height: 37px;
 right: 48px;
@@ -1846,7 +1877,7 @@ cursor:pointer;
 
 #as_prev_submit{
 position: absolute;
-background: #008DDE;
+background: #ff5d42;
 width: 37px;
 height: 37px;
 right: 48px;
@@ -2016,7 +2047,7 @@ cursor:pointer;
 }
 
 .song_options:hover{
-  color:#008DDE;
+  color:#ff5d42;
 }
 
 .song_setting_box{
@@ -2118,7 +2149,7 @@ height: 34px;
         font-size: 14px;
         font-family: helvetica_neue_medium;
         border-radius: 3px;
-        background-color: #008DDE;
+        background-color: #ff5d42;
 color: #FFF;
 border: 1px solid #003857;
         box-shadow: 0px 1px 2px #3D3D3D;
@@ -2134,7 +2165,7 @@ height: 36px;
         line-height: 36px;
         font-size: 14px;
         border-radius: 2px;
-        background-color: #008DDE;
+        background-color: #ff5d42;
 color: #FFF;
 cursor: pointer;
 }
@@ -2216,7 +2247,7 @@ cursor:pointer;
 
 
 .album_options:hover{
-  color:#008DDE !important;
+  color:#ff5d42 !important;
 }
 
 .album_item_setting_box{
@@ -2261,7 +2292,7 @@ cursor:pointer;
 
 
 .artist_options:hover{
-  color:#008DDE !important;
+  color:#ff5d42 !important;
 }
 
 .artist_item_setting_box{
@@ -2294,16 +2325,14 @@ cursor: pointer;
 }
 
 #artist_language{
-	margin-top: 5px;
-	height: 30px;
-	color: #AAA;
-	font-size: 14px;
-	position: relative;
-	z-index: 2;
-	border: 0px;
-	border-bottom: 1px solid #333;
-	padding-left: 10px;
-	padding-bottom: 3px;
+	height: 29px;
+color: #AAA;
+font-size: 13px;
+position: relative;
+z-index: 2;
+border: 0px;
+border-bottom: 1px solid #333;
+padding-left: 10px;
 }
 
 #artist_language>option{
@@ -2316,11 +2345,13 @@ cursor: pointer;
 
 #artist_language>li{
 	float: left;
-	padding: 5px;
-	background: #333;
-	border-radius: 2px;
-	border:1px solid #222;
-	cursor: pointer;
+padding: 2px 8px;
+font-size: 12px;
+background: #333;
+border-radius: 2px;
+border: 1px solid #222;
+cursor: pointer;
+margin-top: 5px;
 }
 #artist_language>li:hover{
 	color: #FFF;
@@ -2471,7 +2502,7 @@ z-index: 21;
 position: fixed;
 background: rgba(0, 0, 0, 0.81);
 font-size: 51px;
-color: #008DDE;
+color: #ff5d42;
 
 }
 

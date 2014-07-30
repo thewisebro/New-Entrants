@@ -637,6 +637,7 @@ $("#add_to_playlist").bind("click",function(){
       if(playlists_json.playlists && playlists_json.playlists.length > 0){
          $('#add_to_saved_playlist').append('<option value=0>Save As Existing</option>');
          for(var i=0;i<playlists_json.playlists.length;i++){
+          alert('as');
          $('#add_to_saved_playlist').append('<option value='+playlists_json.playlists[i].id+'>'+playlists_json.playlists[i].name+'</option>');
         }
       }
