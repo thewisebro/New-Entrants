@@ -9,7 +9,7 @@ $(document).on("load_app_helpcenter", function(e,hash1,hash2){
   $('#tab-arrow').hide();
   $('#right-column .content').html('');
   $('#content').html('');
-  $('#content').addClass('large-width-content');
+  $('#container').addClass('large-width-content');
   if(!user.is_authenticated){
     redirect_to_home();
     return;
@@ -26,7 +26,7 @@ $(document).on("load_app_helpcenter", function(e,hash1,hash2){
 });
 
 $(document).on("unload_app_helpcenter", function(e){
-  $('#content').removeClass('large-width-content');
+  $('#container').removeClass('large-width-content');
   $('#tab-arrow').show();
 });
 
