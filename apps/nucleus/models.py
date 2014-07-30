@@ -336,8 +336,8 @@ class Course(models.Model):
   seats = models.PositiveIntegerField(blank=True, null=True)
 
   def __unicode__(self):
-    return self.course_code + ':' + self.course_name + '(' + self.semtype +\
-            ',' + self.year + ')'
+    return self.code + ':' + self.name + '(' + str(self.year) +\
+            ',' + self.get_semtype_display() + ')'
 
   def save(self, *args, **kwargs):
     self.id = str(self.year) + self.semtype + self.code
