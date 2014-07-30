@@ -7,7 +7,7 @@ PROJECT_ROOT = os.path.dirname(__file__)
 
 # Email Settings
 EMAIL_HOST = '192.168.180.11'
-EMAIL_PORT = 25
+MAIL_PORT = 25
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASS = ''
 
@@ -19,15 +19,18 @@ TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 
+GLOBAL_MEDIA_ROOT = '/home/apps/channeli_media/'
+NEWS_MEDIA_ROOT = GLOBAL_MEDIA_ROOT + 'news/'
+NEWS_IMAGES_ROOT = NEWS_MEDIA_ROOT + 'images/'
+NEWS_XML_ROOT = NEWS_MEDIA_ROOT + 'xml_files/'
+NEWS_MEDIA_URL = '/newsmedia/'
+
 JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
 JUKEBOX_MEDIA_URL = '/songsmedia/'
 JUKEBOX_SONGS_BASEURL = '/songs/'
 
 # Add apps to python path
 sys.path.append(PROJECT_ROOT + '/apps')
-
-# Add third_party_apps to python path
-sys.path.append(PROJECT_ROOT + '/third_party_apps')
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -183,7 +186,7 @@ DJANGO_CONTRIB_APPS = (
   'django.contrib.staticfiles',
   'django.contrib.admin',
   'django.contrib.humanize',
-  # Uncomment the next line to enable admin documentation:
+# Uncomment the next line to enable admin documentation:
   # 'django.contrib.admindocs',
 )
 
@@ -200,6 +203,8 @@ THIRD_PARTY_APPS = (
   'compressor',
   'django_extensions',
   'django_cron',
+  'haystack',
+  'filemanager',
 )
 
 CHANNELI_APPS = (
@@ -207,10 +212,13 @@ CHANNELI_APPS = (
   'jukebox',
   'api',
   'moderation',
+  'notices',
   'crop_image',
+  'forum',
   'groups',
   'events',
   'lectut',
+  'news',
   'lostfound',
   'notifications',
   'helpcenter',
@@ -218,6 +226,7 @@ CHANNELI_APPS = (
   'regol',
   'academics',
   'games',
+  'buysell',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
@@ -250,6 +259,13 @@ SHELL_PLUS = "ipython"
 
 SESSION_COOKIE_NAME = 'PHPSESSID'
 SESSION_ENGINE = 'nucleus.session'
+
+CACHES = {
+  'default': {
+    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+    'LOCATION': '127.0.0.1:11211',
+  }
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -287,6 +303,15 @@ LOGGING = {
       'when'     : 'midnight',
       'backupCount':365
     },
+    'buysell_file_logger': {
+      'level':'DEBUG',
+      'class':'logging.handlers.TimedRotatingFileHandler',
+      'formatter': 'verbose',
+      'filename' : os.path.join(PROJECT_ROOT, 'logs/buysell'),
+      'when'     : 'midnight',
+      'backupCount':365
+    },
+
   },
   'loggers': {
     'django.request': {
@@ -298,7 +323,29 @@ LOGGING = {
       'handlers':['lostfound_file_logger'],
       'level':'INFO'
     },
+    'buysell': {
+      'handlers':['buysell_file_logger'],
+      'level':'INFO'
+    },
+
   }
+}
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+      'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+      'URL': 'http://192.168.121.5:8983/solr/',
+      'INCLUDE_SPELLING': True,
+      # ...or for multicore...
+      # 'URL': 'http://127.0.0.1:8983/solr/mysite',
+    },
+    'autocomplete': {
+      'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+      'URL': 'http://192.168.121.5:8983/solr/',
+      'INCLUDE_SPELLING': True,
+      # ...or for multicore...
+      # 'URL': 'http://127.0.0.1:8983/solr/mysite',
+    }
 }
 
 try:

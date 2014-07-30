@@ -43,18 +43,25 @@ function dialog_iframe(data){
   }
   $('.dialog-class').css({position:'fixed'});
   $dialog.dialog('open');
-  eval(data.name+'=$dialog;')
+  eval(data.name+'=$dialog;');
 }
 
 function open_login_dialog(){
   dialog_iframe({
     name: 'login_dialog',
     title: 'Sign In',
-    width: 450,
-    height: 300,
+    width: 400,
+    height: 250,
     src: '/login_dialog/?next=/close_dialog/login_dialog/',
     close: function(){
-      $(document).trigger("login");
+      if(typeof user === "undefined") {
+        user = {
+          is_authenticated: false
+        };
+      }
+      if(user.is_authenticated) {
+        $(document).trigger("login");
+      }
     }
   });
 }
@@ -71,7 +78,7 @@ function load_pagelets(dom_elem){
       load_pagelets(this);
     });
   });
-};
+}
 
 function load_pagelet(pagelet_name){
   var $elem = $('.pagelet#'+pagelet_name);
@@ -112,24 +119,79 @@ function display_messages(messages){
     $('#messages-div').html('');
 }
 
-function open_login_dialog(){
-  dialog_iframe({
-    name: 'login_dialog',
-    title: 'Sign In',
-    width: 400,
-    height: 200,
-    src: '/login_dialog/?next=/close_dialog/login_dialog/',
-    close: function(){
-      user_logged_in = true;
-      $(document).trigger("login");
-    }
-  });
-}
-
 function logout(){
   $.get('/logout_ajax/',{
     },function(data){
-      user_logged_in = false;
+      user = {
+        is_authenticated: false
+      };
       $(document).trigger("logout");
   });
 }
+
+function user_html_name(user){
+  return "<span class='user-span' data-username='"+user.username+
+          "' data-info='"+user.info+"' data-photo='"+user.photo+"'>"+
+          user.name+"</span>";
+}
+
+$(document).ready(function(){
+  $(document).mousemove(function(e){
+    window.mouseXPos = e.pageX;
+    window.mouseYPos = e.pageY;
+  });
+});
+
+(function($){
+  var mouse_out_of_pickdiv = true;
+  var mouse_out_of_span = true;
+  var last_user_span = null;
+
+  $.fn.pickify_users = function(){
+    this.find('.user-span').mouseover(function(){
+      mouse_out_of_span = false;
+      setTimeout(function(elem){
+        if($(elem).is(':hover') && last_user_span != elem){
+          last_user_span = elem;
+          if($('.pickdiv').length === 0){
+            $('body').append("<div class='pickdiv'></div>");
+          }
+          $('.pickdiv').show();
+          $('.pickdiv').css({
+            top:window.mouseYPos-95,
+            left:window.mouseXPos-10
+          }).html(
+            "<div class='name-info-div'>"+
+              "<div class='name-div'>"+($(elem).data().shortname?
+                $(elem).data().shortname:$(elem).html())+"</div>"+
+              "<div class='info-div'>"+$(elem).data().info+"</div>"+
+            "</div>"+
+            "<img "+($(elem).data().photo?"src='"+$(elem).data().photo+"'":"src='/photo/"+
+              $(elem).attr('data-username')+"/'")+" style=''/>"
+          );
+          $('.pickdiv').mouseout(function(){
+            mouse_out_of_pickdiv = true;
+            setTimeout(function(){
+              if(!$(elem).is(':hover') && mouse_out_of_pickdiv && mouse_out_of_span){
+                $('.pickdiv').hide();
+                last_user_span = null;
+              }
+            },300);
+          });
+          $('.pickdiv').mouseover(function(){
+            mouse_out_of_pickdiv = false;
+          });
+        }
+      },300,this);
+    });
+    this.find('.user-span').mouseout(function(){
+      mouse_out_of_span = true;
+      setTimeout(function(elem){
+        if(!$(elem).is(':hover') && mouse_out_of_pickdiv && mouse_out_of_span){
+          $('.pickdiv').hide();
+          last_user_span = null;
+        }
+      },300,this);
+    });
+  };
+})(jQuery);

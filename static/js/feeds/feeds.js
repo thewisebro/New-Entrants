@@ -82,7 +82,7 @@ function display_add_feeds(position,feeds){
 //     console.log(e);
 //   }
  }
- //$('#feeds').pickify_users();
+ $('#feeds').pickify_users();
  if(more_feeds && $('#see-more-feeds').length==0){
    $('#content').append("<div id='see-more-feeds' class='see-more'><span class='button2' onclick='see_more_feeds();'>See More</span></div>");
  }

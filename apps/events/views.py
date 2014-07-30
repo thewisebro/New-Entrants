@@ -17,7 +17,7 @@ from django.conf import settings
 from events.models import *
 from groups.models import Group
 from events.forms import EventFormGenerator
-from api.filemanager import FileManager
+from filemanager import FileManager
 
 logger = logging.getLogger('channel-i_logger')
 
@@ -31,7 +31,8 @@ def calendar_dict(calendar):
 
 @login_required
 def add(request):
-  form = None
+  # form initiated to render media on template
+  form = EventFormGenerator(Calendar.objects.get(name=request.user.username, cal_type='PRI'))()
   calendar = None
   calendars = map(calendar_dict,Calendar.objects.filter(users__in = [request.user]))
   if (request.method == 'POST' and request.POST.has_key('calendar_name') and request.POST['calendar_name']):

@@ -1,0 +1,19 @@
+
+FEATURES:
+  [1]: https://sublime.wbond.net/ - For showing Dynamic Status
+
+ADDITIONS:
+  [1]: techcrunch.com - Geek
+  [2]: in.ign.com - Games
+  [3]: www.thinkdigit.com - Geek
+  [4]: discovery.com - Geek
+
+IMPROVEMENTS:
+  [1]: Bread-crumbs should be displayed for every sub-category
+       for both channel and source. Note: 'and' instaed of '/'
+  [2]: Datetime format shortening
+  [3]: Change 'Continue reading...'
+  [4]: Remove scroll position cache
+  [5]:In home page display channel as well in every item box.
+  *[6]: Search page
+  [7]: 

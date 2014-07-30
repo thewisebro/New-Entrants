@@ -26,6 +26,7 @@ def dispbatch(request):
   if active:
       student = request.user.student
       batches = student.batch_set.all()
+      import pdb; pdb.set_trace();
       courses = map(lambda x: x.course, batches)
       context = {'courses': courses}
       return render(request, 'lectut/courses.html', context)

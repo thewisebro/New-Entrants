@@ -21,7 +21,7 @@ class LectutUser(models.Model):
 class LectutBatch(models.Model):
   name=models.CharField(max_length=5 , null=True)
   lectutuser=models.ManyToManyField(LectutUser)
-  course=models.ForeignKey(Course, related_name='+')
+  course=models.ForeignKey(Course)
 
   def __unicode__(self):
      return str(self.name)

@@ -3,11 +3,17 @@
 *
   margin: 0
   padding: 0
-  font-family: 'Tahoma', sans-serif
+  font-family: 'Arial', sans-serif
   font-size: 13px
 
 body
   overflow-y: scroll
+
+.float-left
+  float: left
+
+.float-right
+  float: right
 
 #header
   position: fixed
@@ -76,6 +82,31 @@ body
     &:hover
       background-color: rgba(0, 0, 0, 0.25)
 
+    .tab-icon
+      width: 20px
+      height: 20px
+      i
+        font-size: 18px
+
+      .fa-home,
+      .fa-calendar,
+      .fa-group,
+      .fa-comments,
+      .fa-list-ul
+        padding-top: 1px
+      .fa-th-large
+        padding-top: 2px
+
+    .notices-tab-icon,
+    .news-tab-icon
+      margin-top: -2px
+      i
+        font-size: 25px
+        margin-left: -3px
+
+    .tab-name
+      margin-left: 10px
+
   .active-tab
     background-color: rgba(0, 0, 0, 0.45)
     border-left: 2px solid $blue-link
@@ -109,6 +140,35 @@ body
   padding-top: 10px
   height: 100%
 
+.large-width-content
+  max-width: 900px !important
+  width: 62% !important
+
+#header-search
+  margin-left: 30px
+  float: left
+  min-width: 450px
+  max-width: 630px
+  width: 100%
+  /* margin-left: 120px;
+  /* padding-left: 20px;
+  /* margin-top: 40px;
+  /* padding-top: 10px;
+  height: 100%
+
+#global_search_bar
+  float: left
+  font-size: 15px
+  width: 100%
+  margin-top: 6px
+  border-radius: 2px
+  border: 1px solid #d5d5d5
+  background-color: white
+  box-shadow: inset 0px 1px 1px #eeeeee
+  padding: 5px 10px
+  outline: none
+  color: #777
+
 #free-area
   position: fixed
   top: 40px
@@ -129,6 +189,13 @@ body
     width: 220px
     z-index: 50
     overflow-y: auto
+
+  #chat-column
+    position: absolute
+    top: 0px
+    right: 0px
+    bottom: 0px
+    width: 200px
 
 .app-heading
   font-size: 14px

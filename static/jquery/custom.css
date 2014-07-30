@@ -25,6 +25,11 @@
   border:0px;
 }
 
+.ui-front
+{
+  z-index: 500;
+}
+
 .ui-autocomplete
 {
   border-radius:0px;

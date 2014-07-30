@@ -1,5 +1,5 @@
 {% block DTD %}
-<!doctype html>
+<!DOCTYPE html>
 {% endblock DTD %}
 
 {% load compress %}
@@ -36,6 +36,7 @@
       <![endif]-->
       {% block scripts %}
         <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/news/news.js"></script>
       {% endblock scripts %}
     {% endcompress %}
   </body>

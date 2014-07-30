@@ -1,0 +1,175 @@
+.generic_form
+{
+width:285px;
+      margin-left:30px;
+}
+label 
+{
+float:left;
+font-family:myriad pro;
+text-align-center;
+padding-left:5px;
+padding-top:5px;
+}
+
+select
+{
+float:left;
+      margin-left:15px;
+}
+
+
+textarea
+{
+float:left;
+width:192px;
+height:88px;
+      margin-left:15px;
+}
+
+input[type="text"]
+{
+float:right;
+      margin-left:5px;
+      font-family:myriad pro;
+
+}
+input[type="submit"]
+{
+margin:0 auto;
+  text-align:center;
+     font-family:myriad pro;
+
+}
+
+#div_price_lower
+{
+display:none;
+}
+
+.submit_button
+{
+  position:absolute;
+left:38%;    
+margin:0 auto;
+width:160px;
+}
+
+div.clearfix
+{
+  padding-top:4px;
+}
+
+#itemPic
+{
+margin-left:10px;
+}
+.btn
+{
+	margin-left:-9px;
+/*	margin-top:3px;*/
+	background-color:#eeeeee;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	--border-radius:0px;
+	font-size:16px;
+	font-family:myriad pro;
+	color:#444;
+	border:1px solid #dadada;
+height:30px;
+       line-height:25px;
+}
+.btn:hover
+{
+	border:1px solid #dadada;
+	background-color:#cacaca;
+color:#ffffff;
+/*	-webkit-box-shadow: 0 1px 1px -1px black;
+	-moz-box-shadow: 0 1px 1px -1px black;
+	box-shadow: 0 1px 1px -1px black;*/
+}
+.btn-primary
+{
+	margin-left:-9px;
+	background-color:#3b8df2;
+	border-radius:3px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	--border-radius:0px;
+	font-size:16px;
+	font-family:myriad pro;
+	color:#ffffff;
+	border:1px solid #3b8df2;
+}
+.btn-primary:hover
+{
+	border:1px solid #0072ff;
+	background-color:#0072ff;
+/*	-webkit-box-shadow: 0 1px 1px -1px black;
+	-moz-box-shadow: 0 1px 1px -1px black;
+	box-shadow: 0 1px 1px -1px black;*/
+}
+#id_status
+{
+   width:194px;
+   font-size:14px;
+border:1px solid #B9B9B9;
+}
+
+#id_condition
+{
+   width:185px;
+   font-size:14px;
+border:1px solid #E2E2E2;
+       margin-left:33px;
+}
+#div_condition select
+{
+ max-height:30px;
+  width:192px;
+	margin-bottom:10px;
+	margin-left:26px;
+	text-align:center;
+	font-family:myriad pro;
+	font-size:14px;
+	overflow: hidden;
+	background: url(../../images/buysell/arrow.png) no-repeat right #fefefe;
+	background-size:10px 10px;
+	background-position:167px 10px;
+	background-color:#f0f0f0;
+	border:1px solid #b9b9b9;
+}
+#div_condition select:focus
+{
+	text-align:left;
+	font-size:14px;
+	font-family:myriad pro;
+	background-color:#ffffff;
+	border:1px solid #b9b9b9;
+    -webkit-box-shadow: 0 0 1px #b9b9b9;
+    -moz-box-shadow: 0 0 1px #b9b9b9;
+    border:1px solid #b9b9b9;
+}
+input[type="text"]
+{
+	text-align:left;
+	font-size:14px;
+	font-family:myriad pro;
+	background-color:#f0f0f0;
+	border:1px solid #b9b9b9;
+  width:184px;
+  padding:6px 0px 0px 6px;      
+}
+input[type="text"]:focus
+{
+	text-align:left;
+	font-size:14px;
+	font-family:myriad pro;
+	background-color:#ffffff;
+	border:1px solid #b9b9b9;
+    -webkit-box-shadow: 0 0 1px #b9b9b9;
+    -moz-box-shadow: 0 0 1px #b9b9b9;
+    border:1px solid #b9b9b9;
+}
+}

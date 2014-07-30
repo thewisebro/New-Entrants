@@ -1,5 +1,7 @@
 var current_tab, tabs, tabs_parent_top;
 var showLoading = true;
+var previous_hashtags = null;
+var previous_app = null;
 
 $(document).on("login", function(){
   load_pagelet("header");
@@ -41,14 +43,21 @@ function hashchangeCallback(load){
   var first_hashtag = hashtags.shift();
   if(!first_hashtag)first_hashtag = tabs[0];
   if(load)
-    load_app(first_hashtag,function(){
+    load_app(first_hashtag, function(){
+      if(previous_app !== first_hashtag){
+        $(document).trigger("unload_app_"+previous_app, [first_hashtag,
+          hashtags, previous_hashtags]);
+        $(window).scrollTop(0);
+      }
       $(document).trigger("load_app_"+first_hashtag, hashtags);
+      previous_app = first_hashtag;
+      previous_hashtags = hashtags;
       $('.nano').nanoScroller();
     });
   if($.inArray(first_hashtag, tabs) > -1){
     var tab = first_hashtag;
+    $('#'+tab+'-tab').addClass('active-tab');
     if(current_tab!=tab){
-      $('#'+tab+'-tab').addClass('active-tab');
       $('#'+current_tab+'-tab').removeClass('active-tab');
     }
     var position = $('#'+tab+'-tab').position();

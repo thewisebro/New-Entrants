@@ -1,0 +1,92 @@
+{% extends "buysell/base.html" %}
+{% block title %}My-Account | Buy and Sell{% endblock title %}
+
+{% block styles %}
+{{ block.super }}
+{% endblock styles %}
+<!-- Above, page specific css/js added. Below is "content" of the main_base.html base template -->
+
+{% block account_tab %}
+active_tab
+{% endblock %}
+
+
+{% block content %}
+
+    {% if items_added %}
+    <div class="row-fluid">
+				<span class="span12 heading">Items added for sale</span>
+		</div>
+    <div class="row-fluid">
+		<div class="span6 offset3">
+			<table class="tbl" cellspacing="10">
+			  <thead>
+				<tr>
+				  <th>ITEM</th>
+				  <th>POSTED ON</th>
+				  <th><img src="{{ STATIC_URL }}images/buysell/edit.png"/></th>
+				  <th><img src="{{ STATIC_URL }}images/buysell/delete.png"/></th>
+				</tr>
+			  </thead>
+			  <tbody>
+        {% for item in items_added %}
+				<tr>
+				  <td><a href="/buysell/buy_item_details/{{ item.pk }}/">{{ item.item_name }}</a></td>
+				  <td><a href="/buysell/buy_item_details/{{ item.pk }}/">{{ item.post_date }}</a></td>
+				  <td><a href="/buysell/edit/item/{{item.pk}}/">Edit</a></td>
+				  <td><a id="deleteitem" href="/buysell/delete/item/{{item.pk}}/">Delete</a></td>
+          <input type="hidden" id="{{item.pk}}" value="/buysell/delete/item/{{item.pk}}/"></label>
+				</tr>
+        {% endfor %}
+			  </tbody>
+			</table>
+    {% else %}
+    <div class="row-fluid">
+				<span class="span12 heading">You have not added any item for sale.</span>
+		</div>
+    {% endif %}
+
+		</div>
+    </div>
+    <hr/>
+
+        {% if requests %}
+    <div class="row-fluid">
+				<span class="span12 heading">Items requested</span>
+		</div>
+    <div class="row-fluid">
+		<div class="span6 offset3">
+    <table class="tbl" cellspacing="10">
+			  <thead>
+				<tr>
+				  <th>ITEM</th>
+				  <th>POSTED ON</th>
+				  <th><img src="{{ STATIC_URL }}images/buysell/edit.png"/></th>
+				  <th><img src="{{ STATIC_URL }}images/buysell/delete.png"/></th>
+				</tr>
+			  </thead>
+			  <tbody>
+        {% for item in requests %}
+				<tr>
+				  <td><a href="/buysell/requested_item_details/{{item.pk}}/">{{ item.item_name }}</a></td>
+				  <td><a href="/buysell/requested_item_details/{{item.pk}}/">{{ item.post_date }}</a></td>
+				  <td><a href="/buysell/edit/request/{{ item.pk }}/">Edit</a></td>
+				  <td><a id="deleteitem" href="/buysell/delete/request/{{ item.pk }}/">Delete</a></td>
+				</tr>
+        {% endfor %}
+			  </tbody>
+			</table>
+      </div>
+      {% else %}
+     <div class="row-fluid">
+				<span class="span12 heading">
+     You have not requested any item.</span>
+		</div>
+
+      {% endif %}
+		</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+{% endblock scripts %}
