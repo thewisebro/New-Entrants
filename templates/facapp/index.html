@@ -66,12 +66,12 @@
 						<div id="editable">
 	    					{% if sections %}
 							<!---////////////// load the already saved sections ///////////////////////-->
-	      						{% for section in sections %}
+	      						<!-- {% for section in sections %}
 	        						<div contentEditable="true" id="{{ section.title }}" class="section">
 	          							{{ section.content|safe }}
 	        						</div>
 	        						<button type="submit" ht="{{ section.title }}" onclick="return updateSection(this);" class="btn btn-primary" name="submit" >save</button>
-	      						{% endfor %}
+	      						{% endfor %} -->
 							<!---/////////////// already saved sections loaded /////////////////////////-->
 							{% endif %}
 							<div class="section"><p class="title"></p><p class="matter"></p></div>
@@ -83,9 +83,9 @@
 						<div id="section_list">
 							<ul id="sortable" class="list-group list-unstyled">
 								{% if sections %}
-									{% for section in sections %}
+									<!-- {% for section in sections %}
 										<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>{{ section.title }}</li>
-									{% endfor %}
+									{% endfor %} -->
 								{% endif %}
 							</ul>
 						</div>

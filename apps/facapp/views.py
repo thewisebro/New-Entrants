@@ -8,17 +8,18 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def home(request):
-  if 'title' in request.POST:
-    title = request.POST['title']
-    value = request.POST['content']
-    s = Section.objects.get(title=title)
-    s.content = value
-    s.save()
-    return HttpResponse(value)
-#   return HttpResponse(data.titles)
-  sections = Section.objects.order_by('priority')
-  titlesList = sectionData.titles
-  data = {"sections" : sections, "titles_list" : titlesList}
+  data = {}
+#   if 'title' in request.POST:
+#     title = request.POST['title']
+#     value = request.POST['content']
+#     s = Section.objects.get(title=title)
+#     s.content = value
+#     s.save()
+#     return HttpResponse(value)
+# #   return HttpResponse(data.titles)
+#   sections = Section.objects.order_by('priority')
+#   titlesList = sectionData.titles
+#   data = {"sections" : sections, "titles_list" : titlesList}
   return render(request, 'facapp/index.html', data)
 
 @csrf_exempt
