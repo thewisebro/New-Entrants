@@ -226,6 +226,7 @@ CHANNELI_APPS = (
   'academics',
   'games',
   'buysell',
+  'lectut',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
