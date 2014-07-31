@@ -218,7 +218,11 @@ class Branch(models.Model):
                                 choices=MC.DEPARTMENT_CHOICES)
   graduation = models.CharField(max_length=MC.CODE_LENGTH,
                                 choices=MC.GRADUATION_CHOICES)
-  duration = models.IntegerField(null=True, blank=True) # no of semesters
+  no_of_semesters = models.IntegerField(null=True, blank=True)
+
+  @property
+  def duration(self):
+    return self.no_of_semesters
 
   class Meta:
     verbose_name_plural = 'Branches'
@@ -235,6 +239,8 @@ class StudentBase(Role('Student')):
   semester_no = models.IntegerField()
   branch = models.ForeignKey(Branch)
   admission_year = models.IntegerField()
+  admission_semtype = models.CharField(max_length=1,
+                          choices=MC.SEMESTER_TYPE_CHOICES)
   cgpa = models.CharField(max_length=6, blank=True)
   bhawan = models.CharField(max_length=MC.CODE_LENGTH,
             choices=MC.BHAWAN_CHOICES, null=True, blank=True, default=None)
@@ -319,6 +325,7 @@ class StudentInfoAlumni(StudentInfoBase):
 
 
 class Course(models.Model):
+  id = models.CharField(primary_key=True, max_length=15)
   code = models.CharField(max_length=MC.CODE_LENGTH)
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   credits = models.IntegerField()
@@ -329,8 +336,12 @@ class Course(models.Model):
   seats = models.PositiveIntegerField(blank=True, null=True)
 
   def __unicode__(self):
-    return self.course_code + ':' + self.course_name + '(' + self.semtype +\
-            ',' + self.year + ')'
+    return self.code + ':' + self.name + '(' + str(self.year) +\
+            ',' + self.get_semtype_display() + ')'
+
+  def save(self, *args, **kwargs):
+    self.id = str(self.year) + self.semtype + self.code
+    super(Course, self).save(*args, **kwargs)
 
 
 class RegisteredBranchCourse(models.Model):

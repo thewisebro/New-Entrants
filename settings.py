@@ -41,7 +41,7 @@ MANAGERS = ADMINS
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-    'NAME': 'channeli',                   # Or path to database file if using sqlite3.
+    'NAME': 'nextone',                   # Or path to database file if using sqlite3.
                                           # The following settings are not used with sqlite3:
     'USER': 'channeli',
     'PASSWORD': 'channeli',
@@ -85,7 +85,7 @@ USE_I18N = True
 USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = True
+USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
