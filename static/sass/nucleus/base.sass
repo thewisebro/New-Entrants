@@ -129,20 +129,39 @@ body
       height: 20px
       background: url('/static/images/nucleus/css_sprites.png') -45px -70px
 
-#content, #content-back
+$footer-height: 40px
+
+#container, #content-back
   float: left
   min-width: 450px
   max-width: 630px
   width: 48%
   margin-left: 120px
   padding-left: 20px
+  min-height: 100%
+
+#container
+  position: absolute
+
+#content, #content-back
   margin-top: 40px
   padding-top: 10px
-  height: 100%
 
 .large-width-content
   max-width: 900px !important
   width: 62% !important
+
+#content
+  padding-bottom: $footer-height + 20px
+  min-height: 350px
+
+#footer-container
+  height: $footer-height
+  position: absolute
+  margin-top: 20px
+  bottom: 0px
+  left: 20px
+  right: 0px
 
 #header-search
   margin-left: 30px
