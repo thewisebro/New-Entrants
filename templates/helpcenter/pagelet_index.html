@@ -12,7 +12,7 @@
      <form name="response-form" action="" method="POST" class="uniForm"
          onsubmit="give_response();return false;">{% csrf_token %}
          {{ form.uniform }}
-       <input type="submit" class="input-button" name="submit" value="Submit"/>
+       <input type="submit" class="input-button" name="submit" style="margin-left:10px" value="Submit"/>
      </form>
   </div>
   {% if queries_exists %}

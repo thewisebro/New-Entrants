@@ -25,13 +25,18 @@
 {% block body %}
   {% pagelet "header" %}
   {% pagelet "sidebar" %}
-  <div id="content"></div>
+  <div id="container">
+    <div id="content"></div>
+    <div id="footer-container"></div>
+  </div>
   <div id="free-area">
     <div id="content-back"></div>
     <div id="right-column">
       <div class="nano">
         <div class="content"></div>
       </div>
+    </div>
+    <div id="chat-column">
     </div>
   </div>
 {% endblock %}

@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from api.filemanager import path_end
+from filemanager import path_end
 
 urlpatterns = patterns('events.views',
   (r'^add/$','add'),

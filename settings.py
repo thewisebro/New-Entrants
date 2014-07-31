@@ -22,6 +22,7 @@ COMPRESS_OFFLINE = False
 GLOBAL_MEDIA_ROOT = '/home/apps/channeli_media/'
 NEWS_MEDIA_ROOT = GLOBAL_MEDIA_ROOT + 'news/'
 NEWS_IMAGES_ROOT = NEWS_MEDIA_ROOT + 'images/'
+NEWS_XML_ROOT = NEWS_MEDIA_ROOT + 'xml_files/'
 NEWS_MEDIA_URL = '/newsmedia/'
 
 JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
@@ -30,9 +31,6 @@ JUKEBOX_SONGS_BASEURL = '/songs/'
 
 # Add apps to python path
 sys.path.append(PROJECT_ROOT + '/apps')
-
-# Add third_party_apps to python path
-sys.path.append(PROJECT_ROOT + '/third_party_apps')
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -43,7 +41,7 @@ MANAGERS = ADMINS
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-    'NAME': 'channeli',                   # Or path to database file if using sqlite3.
+    'NAME': 'nextone',                   # Or path to database file if using sqlite3.
                                           # The following settings are not used with sqlite3:
     'USER': 'channeli',
     'PASSWORD': 'channeli',
@@ -87,7 +85,7 @@ USE_I18N = True
 USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = True
+USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -206,6 +204,7 @@ THIRD_PARTY_APPS = (
   'django_extensions',
   'django_cron',
   'haystack',
+  'filemanager',
 )
 
 CHANNELI_APPS = (
@@ -263,6 +262,13 @@ SHELL_PLUS = "ipython"
 
 SESSION_COOKIE_NAME = 'PHPSESSID'
 SESSION_ENGINE = 'nucleus.session'
+
+CACHES = {
+  'default': {
+    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+    'LOCATION': '127.0.0.1:11211',
+  }
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

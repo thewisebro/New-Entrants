@@ -47,6 +47,7 @@ function hashchangeCallback(load){
       if(previous_app !== first_hashtag){
         $(document).trigger("unload_app_"+previous_app, [first_hashtag,
           hashtags, previous_hashtags]);
+        $(window).scrollTop(0);
       }
       $(document).trigger("load_app_"+first_hashtag, hashtags);
       previous_app = first_hashtag;
@@ -55,8 +56,8 @@ function hashchangeCallback(load){
     });
   if($.inArray(first_hashtag, tabs) > -1){
     var tab = first_hashtag;
+    $('#'+tab+'-tab').addClass('active-tab');
     if(current_tab!=tab){
-      $('#'+tab+'-tab').addClass('active-tab');
       $('#'+current_tab+'-tab').removeClass('active-tab');
     }
     var position = $('#'+tab+'-tab').position();

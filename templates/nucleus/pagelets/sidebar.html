@@ -6,7 +6,7 @@
   {% for tab in tabs %}
     <div id="{{ tab.name }}-tab" class="tab" onclick="tab_clicked('{{ tab.name }}');">
       <div class="tab-icon {{ tab.name }}-tab-icon float-left">
-        <i class="{{ tab.class }}"></i>
+        <i class="{{ tab.class }}" style="color:{{ tab.color }}"></i>
       </div>
       <span class="tab-name float-left">{{ tab.name|title }}</span>
     </div>

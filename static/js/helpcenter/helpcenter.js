@@ -4,6 +4,12 @@ var more_responses = true;
 var img_dp_url = '/static/images/nucleus/img_dp.png';
 
 $(document).on("load_app_helpcenter", function(e,hash1,hash2){
+  $('.active-tab').removeClass('active-tab');
+  current_tab = null;
+  $('#tab-arrow').hide();
+  $('#right-column .content').html('');
+  $('#content').html('');
+  $('#container').addClass('large-width-content');
   if(!user.is_authenticated){
     redirect_to_home();
     return;
@@ -17,6 +23,11 @@ $(document).on("load_app_helpcenter", function(e,hash1,hash2){
     else
       update_responses('first');
   });
+});
+
+$(document).on("unload_app_helpcenter", function(e){
+  $('#container').removeClass('large-width-content');
+  $('#tab-arrow').show();
 });
 
 $(document).on("logout", function(){
@@ -102,9 +113,9 @@ function display_add_responses(position,responses,close_replies){
      console.log(e);
    }
  }
- //$('#responses').pickify_users();
+ $('#responses').pickify_users();
  if(more_responses && $('#see-more-responses').length==0){
-   $('#content-down').append("<div id='see-more-responses' class='see-more'><span class='button2' onclick='see_more_responses();'>See More</span></div>");
+   $('#content').append("<div id='see-more-responses' class='see-more'><span class='button2' onclick='see_more_responses();'>See More</span></div>");
  }
  if(!more_responses && $('#see-more-responses').length==1){
   $('#see-more-responses').css('display','none');

@@ -149,12 +149,12 @@ function get_calendars(hashtags){
 function show_calendar_labels(){
   $('#labels-body').html('');
   for(var i=0;i<calendars.length;i++){
-    $('#labels-body').append("<div id='label_"+calendars[i].name+"' class='label' onclick='label_clicked(\""+calendars[i].name+"\");'>"+
+    $('#labels-body').append("<div id='label_"+calendars[i].name+"' class='label' onclick='calendar_label_clicked(\""+calendars[i].name+"\");'>"+
         "<div class='label-name'>"+calendars[i].verbose_name+"</div></div>");
   }
 }
 
-function label_clicked(calendar_name){
+function calendar_label_clicked(calendar_name){
   if(display_by_month_year){
     location.hash = 'events/'+calendar_name+'/'+active_year+'/'+active_month;
   }
@@ -287,7 +287,7 @@ function display_add_events(position,events,calendar){
      console.log(e);
    }
  }
- //$('#content-events').pickify_users();
+ $('#content-events').pickify_users();
  if(calendar.more === true && $('#see-more-events').length === 0){
    $('#content').append("<div id='see-more-events' class='see-more'><span class='button2' onclick='see_more_events(\""+calendar.name+"\");'>See More</span></div>");
  }
@@ -406,7 +406,7 @@ function show_event_options(element,e){
 }
 
 function event_container_mouse_over(event_id){
-  if(event_id !== null && event_id !== event_options_display_event_id){
+  if(event_id !== null && event_id != event_options_display_event_id){
     setTimeout(function(){$('#event-options'+event_options_display_event_id).hide();},500);
     $('.event-options-pop-up').hide();
     event_options_display_on = false;
