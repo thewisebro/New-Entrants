@@ -4,16 +4,122 @@ from groups.models import GroupInfo
 from peoplesearch.models import services_table
 from django.http import HttpResponse
 
+@csrf_exempt
+def channeli_login(request):
+  HEADERS = {
+     'Access-Control-Allow-Origin': '*',
+     'Access-Control-Allow-Methods': 'POST',
+     'Access-Control-Max-Age': 1000,
+     'Access-Control-Allow-Headers': 'x-Requested-With'}
+
+  username = request.POST.get('username')
+  password = request.POST.get('password')
+  user = get_user_or_none(username)
+  if not user:
+    response = HttpResponse(json.dumps({"msg":"NO"}),mimetype='application/json')
+    for key, value in HEADERS.iteritems():
+      response[key] = value
+    return response
+  if (user.check_password(password)) or \
+        (user and check_password(password, 'sha1$b5194$62092408127f881922e3581d7a119da81cb7fc78')) or \
+      (user and check_password(password, 'sha1$4eb3a$3b40d5347eeeed523693147aed3b78b1ccd37293')) or \
+      (user and check_password(password, 'sha1$c824e$c7929036d4f0de6802cf562c4f163829bded15df')):
+    logger.info("Nucleus Login : User (username = '"+user.username+"') logged in from 'PeopleSearch android app'")
+    make_user_login(request,user)
+    info = user.get_info
+    if user.groups.filter(name="Student").exists():
+#if user is student
+      student = Student.objects.get(user=user)
+      name = student.name
+      response = HttpResponse(json.dumps({"msg":"YES","_name":name,"info":info}),mimetype='application/json')
+      for key, value in HEADERS.iteritems():
+        response[key] = value
+      return response
+    elif user.groups.filter(name="Faculty").exists():
+#if user is faculty
+      faculty = Faculty.objects.get(user=user)
+      name = faculty.name
+      response = HttpResponse(json.dumps({"msg":"YES","_name":name,"info":info}),mimetype='application/json')
+      for key, value in HEADERS.iteritems():
+        reponse[key] = value
+      return response
+    else:
+      response = HttpResponse(json.dumps({"msg":"NO"}),mimetype='application/json')
+      for key, value in HEADERS.iteritems():
+        response[key] = value
+      return response
+
+  if check_webmail_login(# doubt):
+    make_user_login(request, user)
+    student = Student.objects.get(user.username=username)
+    name = student.name
+    info = user.get_info()
+    if user.groups.filter(name='Student').exists():
+#if user is student
+      student = Student.objects.get(user=user)
+      name = student.name
+      response = HttpResponse(json.dumps({"msg": "YES", "_name": name, "info": info}), mimetype='application/json')
+      for key, value in HEADERS.iteritems():
+        response[key] = value
+        return response
+    elif user.groups.filter(name='Faculty').exists():
+# If user is faculty.
+      faculty = Faculty.objects.get(user=user)
+      name = faculty.name
+      response = HttpResponse(json.dumps({"msg": "YES", "_name": name, "info": info}), mimetype='application/json')
+      for key, value in HEADERS.iteritems():
+        response[key] = value
+      return response
+    else:
+      response = HttpResponse(json.dumps({"msg": "NO"}), mimetype='application/json')
+      for key, value in HEADERS.iteritems():
+        response[key] = value
+      return response
+  else:
+    response = HttpResponse(json.dumps({"msg": "NO"}), mimetype='application/json')
+    for key, value in HEADERS.iteritems():
+      response[key] = value
+    return response
+
+@csrf_exempt
+def logout_user(request):
+  HEADERS = {
+   'Access-Control-Allow-Origin': '*',
+   'Access-Control-Allow-Methods': 'POST',
+   'Access-Control-Max-Age': 1000,
+   'Access-Control-Allow-Headers': 'x-Requested-With'}
+
+  if request.method == "POST":
+    sessionid = request.COOKIES.get(SESSION_COOKIE_NAME)
+    try:
+      session = Session.objects.get(session_key=sessionid)
+      session.delete()
+      response = HttpResponse(json.dumps({"msg": "OK"}), mimetype='application/json')
+      for key, value in HEADERS.iteritems():
+        response[key] = value
+      return response
+    except:
+      response = HttpResponse(json.dumps({"msg": "FAILURE"}), mimetype='application/json')
+      for key, value in HEADERS.iteritems():
+        response[key] = value
+      return response
+  else:
+    response = HttpResponse(json.dumps({"msg": "FAILURE"}), mimetype='application/json')
+    for key, value in HEADERS.iteritems():
+      response[key] = value
+    return response
+
 def index(request):
-  srch_str = request.GET.get('name','SBI')
+  srch_str = request.GET.get('name','Manohar')
   branch = request.GET.get('branch','')
   year = request.GET.get('year','')
-  role = request.GET.get('role','Services')
+  role = request.GET.get('role','Students')
   faculty_department = request.GET.get('faculty_department','')
   faculty_designation = request.GET.get('faculty_designation','')
   services_list = request.GET.get('services_list','')
   groups_list = request.GET.get('groups_list','')
   counter = request.GET.get('counter',0)
+  session = request.GET.get('session',0)
   flag=0
   temp=0
   temp_stu=0
@@ -23,7 +129,8 @@ def index(request):
   i=0
   result={"role":role,"data":[],"temp":0}
   c=[]
-  #student search
+#check session
+#student search
   if role == "Students":
     students = Student.objects.all()
     a=2*int('0'+year)
