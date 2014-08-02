@@ -4,11 +4,13 @@ import re
 from django.contrib.auth.models import AbstractUser, UserManager, Group
 from django.conf import settings
 from django.core import validators
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.db.models.base import ModelBase
 
 from core import models
 from api import model_constants as MC
+from api.utils import int2roman
 from facapp import constants as FC
 from crop_image import CropImage
 
@@ -110,14 +112,49 @@ class User(AbstractUser, models.Model):
       return Owner.objects.get(account=account, user=self)
 
   @property
-  def html_name(self):
-    return mark_safe("<span class='user-span' data-username='%s'>%s</span>"%\
-                      (self.username, self.name))
+  def photo_url(self):
+    if self.photo:
+      return self.photo.url
+    elif self.in_group('Student Group'):
+      return '/static/images/nucleus/default_group_dp.png'
+    else:
+      return settings.STATIC_URL + 'images/nucleus/default_dp.png'
 
   @property
-  def photo_url(self):
-    return self.photo.url if self.photo else settings.STATIC_URL +\
-        'images/nucleus/default_dp.png'
+  def short_name(self):
+    return self.name.title()
+
+  @property
+  def info(self):
+    if self.in_group('Student'):
+      student = self.student
+      string = MC.SIMPLIFIED_DEGREE[student.branch.degree]+' '+\
+               (student.branch.name if len(student.branch.name)<20\
+                else student.branch.code)
+      if student.semester > 0:
+        string += ' ' + int2roman(student.year) + ' Year'
+      return string
+    elif self.in_group('Faculty'):
+      return dict(DESIGNATION_CHOICES)[self.faculty.designation]+\
+          ', ' + MC.SIMPLIFIED_DEPARTMENTS[self.faculty.department]
+    elif self.in_group('Student Group'):
+      return 'Student Group'
+    else:
+      return ''
+
+  @property
+  def html_name(self):
+    if self.in_group('Student Group'):
+      return mark_safe("<span class='user-span' data-username='"+self.username+\
+          "' data-info='"+escape(self.info)+"' data-shortname='"+\
+          escape(self.group.nickname.upper())+"' data-photo='"+\
+          escape(self.photo_url)+"'>"+escape(self.short_name)+\
+          "</span>")
+    else:
+      return mark_safe("<span class='user-span' data-username='"+self.username+\
+          "' data-info='"+escape(self.info)+"' data-photo='"+\
+          escape(self.photo_url)+"'>"+escape(self.short_name)+\
+          "</span>")
 
   def serialize(self):
     return {
@@ -181,7 +218,11 @@ class Branch(models.Model):
                                 choices=MC.DEPARTMENT_CHOICES)
   graduation = models.CharField(max_length=MC.CODE_LENGTH,
                                 choices=MC.GRADUATION_CHOICES)
-  duration = models.IntegerField(null=True, blank=True) # no of semesters
+  no_of_semesters = models.IntegerField(null=True, blank=True)
+
+  @property
+  def duration(self):
+    return self.no_of_semesters
 
   class Meta:
     verbose_name_plural = 'Branches'
@@ -198,6 +239,8 @@ class StudentBase(Role('Student')):
   semester_no = models.IntegerField()
   branch = models.ForeignKey(Branch)
   admission_year = models.IntegerField()
+  admission_semtype = models.CharField(max_length=1,
+                          choices=MC.SEMESTER_TYPE_CHOICES)
   cgpa = models.CharField(max_length=6, blank=True)
   bhawan = models.CharField(max_length=MC.CODE_LENGTH,
             choices=MC.BHAWAN_CHOICES, null=True, blank=True, default=None)
@@ -215,6 +258,9 @@ class StudentBase(Role('Student')):
       self.semester = self.branch.graduation + str(year) + str(semtype_int)
     return super(StudentBase, self).save(*args, **kwargs)
 
+  @property
+  def year(self):
+    return (self.semester_no+1)/2
 
 class Student(StudentBase):
   pass
@@ -279,6 +325,7 @@ class StudentInfoAlumni(StudentInfoBase):
 
 
 class Course(models.Model):
+  id = models.CharField(primary_key=True, max_length=15)
   code = models.CharField(max_length=MC.CODE_LENGTH)
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   credits = models.IntegerField()
@@ -289,8 +336,12 @@ class Course(models.Model):
   seats = models.PositiveIntegerField(blank=True, null=True)
 
   def __unicode__(self):
-    return self.course_code + ':' + self.course_name + '(' + self.semtype +\
-            ',' + self.year + ')'
+    return self.code + ':' + self.name + '(' + str(self.year) +\
+            ',' + self.get_semtype_display() + ')'
+
+  def save(self, *args, **kwargs):
+    self.id = str(self.year) + self.semtype + self.code
+    super(Course, self).save(*args, **kwargs)
 
 
 class RegisteredBranchCourse(models.Model):

@@ -1,4 +1,5 @@
 from core import forms
+from lostfound.html_output import _html_output
 
 def as_div(base_form):
   return _html_output(

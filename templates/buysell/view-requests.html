@@ -1,0 +1,93 @@
+{% extends "buysell/base.html" %}
+{% block title %}View Requests | Buy and Sell{% endblock title %}
+
+{% block styles %}
+{{ block.super }}
+{% endblock styles %}
+
+{% block scripts %}
+{{ block.super }}
+{% endblock scripts %}
+
+{% block requests_tab %}
+active_tab
+{% endblock %}
+{% block content %}
+<div class="row-fluid">
+       {% if not searchflag %}
+      {% if table_data.object_list.0.item_name %}
+<div class="span12 heading">      Following items have been requested</div>
+      {% else %}
+  <div class="span12 heading transparent">    No requests have been added.  </div>
+      {% endif %}
+
+      {% else %}
+      {% if not table_data.object_list.0.item_name %}
+<div class="span12 heading transparent">      No results found for your query.</div>
+      {% endif %}
+      {% endif %}
+</div>
+<div class="row-fluid">
+<div id="request-table" class="span4 offset4">
+  {% for item in table_data.object_list %}
+	<div class="container-fluid item">
+					<div class="row-fluid">
+						<div class="span12">
+							<div class="row-fluid span11 offset1">
+									<a class="item-name" href="/buysell/requested_item_details/{{item.id}}/">{{ item.item_name }}</a>
+
+                <div class="row-fluid">
+								<div class="span10 item-cat">{{ item.user.get_name }}</div>
+							</div>
+                </div>
+							<div class="row-fluid">
+							<div class="span5 offset1 r-item-tag" style="padding-top:10px">Maximum Price
+								<div class="row-fluid">
+									<div class="span12 r-item-cost">
+									Rs {{ item.price_upper }}
+									</div>
+								</div>
+								</div>
+								<div class="span3 offset3 sub-tag">
+									<div class="r-item-tag">Status</div><div class="r-item-tag-value">{{ item.condition }}</div>
+								</div>
+							</div>
+								<div class="row-fluid">
+              {% if not item.user.username == request.user.username %}
+									<div class="span11 offset1">
+                  <form action="/buysell/sendmail/request/{{item.pk}}/" style="margin:0px">									<input class="submit1 btn1" style="margin-top:10px" type="submit" value="Send mail to the Inquirer">
+                    </form>
+									</div>
+                {% endif %}
+								</div>
+						</div>
+					</div>
+				</div>
+<hr style="width:451px; height:1px; background-color:#cecece"/>
+{% endfor %}
+</div>
+</div>
+<div class="pagination pagination-centered">
+<ul class="pagination">
+        {% if table_data.has_previous %}
+           <li> <a href="?page={{ table_data.previous_page_number }}">&laquo</a></li>
+        {% endif %}
+{% for page in pages %}
+{% if table_data.number == page %}
+<li class="disabled"><a href="?page={{page}}">{{page}}</a></li>
+{%else%}
+<li><a href="?page={{page}}">{{page}}</a></li>
+{% endif %}
+{% endfor %}
+
+        {% if table_data.has_next %}
+          <li><a href="?page={{ table_data.next_page_number }}">&raquo</a></li>
+        {% endif %}
+</div>
+
+
+			</div>
+
+<script type="text/javascript" src="{{STATIC_URL}}js/buysell/sticky-footer.js">
+</script>
+{% endblock %}

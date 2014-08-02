@@ -8,7 +8,7 @@ apt-get install rubygems
 apt-get install python-mysqldb
 apt-get install python-pygresql
 
-pip install Django\==1.6.1
+pip install Django\==1.6.5
 
 # Installing PIL
 apt-get build-dep python-imaging
@@ -68,3 +68,7 @@ pip install python-dateutil
 
 # fuzzy wuzzy
 pip install -e git+https://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy
+
+# memcached
+apt-get install memcached
+pip install python-memcached
