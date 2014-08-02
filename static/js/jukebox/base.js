@@ -355,11 +355,6 @@ var song_playing=0;
 var login_cancel=false;
 var default_language = 'English';
 var banned_artists = [284,285];
-
-if(logged_in=='True')
-  logged_in = true;
-else
-  logged_in=false;
 var adding_to_play = false;
 var add_to_play = [];
 
@@ -2206,8 +2201,8 @@ $(document).ready(function(){
     //for signin pic 
     if(logged_in){
         $("#signin_button").hide();
-         $("#bRight").append('<div id="login_user_pic" style="background: url('+user_photo+')"></div><div id="login_user_options">'+
-          '<ul><li>'+user_full_name+'</li>'+
+         $("#bRight").append('<div id="login_user_pic" style="background: url(/photo/'+user.username+'/)"></div><div id="login_user_options">'+
+          '<ul><li>'+user.name+'</li>'+
           '<li><a href="/" target="_blank" style="color: #ecf0f1;text-decoration:none">Channel i</a></li>'+
           '<li id="signout_from_options">Signout</li></ul><div id="down_icon"></div></div>');
         logged_in = true;
@@ -2358,8 +2353,8 @@ function login()
            logged_in=true;
            $("#signin_button").hide();
            //display artist pic
-         $("#bRight").append('<div id="login_user_pic" style="background: url('+user_photo+')"></div><div id="login_user_options">'+
-          '<ul><li>'+user_full_name+'</li>'+
+         $("#bRight").append('<div id="login_user_pic" style="background: url(/photo/'+user.username+'/)"></div><div id="login_user_options">'+
+          '<ul><li>'+user.name+'</li>'+
             '<li><a href="/" target="_blank" style="color: #ecf0f1;text-decoration:none">Channel i</a></li>'+
             '<li id="signout_from_options">Signout</li></ul><div id="down_icon"></div></div>');
            login_cancel=false;
@@ -2396,8 +2391,8 @@ function login()
               reload();
                     //something
                     $("#signin_button").hide();
-                    $("#bRight").append('<div id="login_user_pic" style="background: url('+user_photo+')"></div><div id="login_user_options">'+
-                      '<ul><li>'+user_full_name+'</li>'+
+                    $("#bRight").append('<div id="login_user_pic" style="background: url(/photo/'+user.username+'/)"></div><div id="login_user_options">'+
+                      '<ul><li>'+user.name+'</li>'+
                       '<li><a href="/" target="_blank" style="color: #ecf0f1;text-decoration:none">Channel i</a></li>'+
                       '<li id="signout_from_options">Signout</li></ul><div id="down_icon"></div></div>');
                     logged_in = true;

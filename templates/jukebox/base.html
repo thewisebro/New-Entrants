@@ -19,9 +19,8 @@
     <!--<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artistslist.css">-->
    <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css">-->
     <script>
-      var logged_in = '{{ user.is_active }}';
-      var user_photo = '';
-      var user_full_name = '';
+      var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
+      var logged_in = user.is_authenticated;
     </script>
 
   </head>
