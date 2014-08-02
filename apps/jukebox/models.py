@@ -15,7 +15,7 @@ from nucleus.models import User
 
 
 def content_file_name(instance, filename):
-  return '/'.join([instance.album.album, filename])
+  return '/'.join([instance.artists.all()[0].artist, instance.album.album, filename])
 
 
 class Artist(models.Model):

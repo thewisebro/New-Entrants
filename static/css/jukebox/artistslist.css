@@ -1,8 +1,10 @@
 
 
-#artistsList{
+.pane{
+	bottom: 73px !important;
 
 }
+
 #artistsListHeader{
 	position: relative;
 	margin-top: 45px;
@@ -48,17 +50,13 @@ box-shadow: inset -1px 0px 5px #222;
 	display: inline-block;
 	right: 220px;
 	left: 0px;
-	min-height: 1200px;
 	background-color: #fff;
-	/*border-right: 1px solid #DDD;
-	box-shadow: 1px 1px 1px #EEE;*/
 }
 #playlist_view{
 	position: absolute;
 	display: inline-block;
 	right: 220px;
 	left: 0px;
-	min-height: 1200px;
 	background-color: #fff;
 	/*border-right: 1px solid #DDD;
 	box-shadow: 1px 1px 1px #EEE;*/
@@ -169,6 +167,10 @@ margin-bottom: 80px;
 	color: #DDD;
 }
 
+#popular_list>ul>li:hover .album_options{
+	color: #DDD;
+}
+
 .popular_item{
 	color:#444;
 }
@@ -226,6 +228,41 @@ background: #FFF;
 	border-radius: 2px;
 	border:#DDD 1px solid;
 	background: #FFF;
+}
+
+.artist_album_pic:hover .album_play_icon{
+	display: block !important;
+}
+
+.artist_album_pic:hover .album_play_icon_image{
+	display: block !important;
+}
+
+.album_play_icon{
+	width: inherit;
+height: inherit;
+position: absolute;
+background: rgba(0, 0, 0, 0.6);
+display: none;
+}
+
+.album_play_icon_image{
+	position: absolute;
+width: inherit;
+height: inherit;
+text-align: center;
+display: none;
+}
+
+.album_play_icon_image>img{
+	width: 50px !important;
+height: 50px !important;
+top: 50%;
+margin-top: -25px;
+left: 50%;
+margin-left: -25px;
+position: absolute;
+cursor: pointer;
 }
 
 .artist_album_pic img{
@@ -312,6 +349,7 @@ background: #5E5E5E;
 	cursor: pointer;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
+	display: none;
 }
 
 #playlist_panel_hide:hover{
@@ -349,7 +387,7 @@ background: #5E5E5E;
 	border-radius: 1px;
 	background:-webkit-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
 	background:-webkit-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
-	background:-moz-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
+	background:-moz-linear-gradient(left,#fa2867,#ff5d42);
 	background:-ms-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
 	background:-o-linear-gradient(linear, 0% 0%, 100% 100%, from(#fa2867), to(#ff5d42));
 }

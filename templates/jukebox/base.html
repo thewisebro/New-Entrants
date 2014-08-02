@@ -1,6 +1,7 @@
 <html>
   <head>
-    <title>JukeBox</title>
+    <title>JUKEBOX</title>
+    <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}images/jukebox/jblogo.png"/>
  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/fontello.css"> <!-- fontello import -->
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css"><!-- lato regular font import -->
  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/main.css">
@@ -19,12 +20,14 @@
    <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css">-->
     <script>
       var logged_in = '{{ user.is_active }}';
+      var user_photo = '';
+      var user_full_name = '';
     </script>
 
   </head>
 
   <body>
-  <!-- <div id="loading_line"></div> -->
+  <div id="loading_line"></div>
   <!-- <div id="loading_div_spinner">
   <div id="spinner_div">
     <i class="icon-spinner icon-spin icon-large"></i>
@@ -85,7 +88,15 @@
   <!-- search div -->
 			<div id="searchDivcss" class="searchLightboxClose">
 				<div id="searchHeader">
-					<div>SEARCH JUKEBOX</div>
+					<div>SEARCH JUKEBOX
+          <i class="icon-remove-circle search-remove" onclick="closeSearch();"></i>
+          <div id="search_esc" style="
+          display: inline;
+margin-top: 1px;
+position: absolute;
+right: 276;
+">Press Esc or </div>
+          </div>
 					<div id="startTyping">Start Typing...</div>
 				</div>
 				<!-- input -->
@@ -116,10 +127,11 @@
 				</div>
 
 				<div id="navigation">
+        <!--  data-step="1" data-intro="This is the main navigation. Default view is the trending view showing all the trending songs." -->
           <div class="upper_crease"></div>
 						<a id="trending_link">
 							<div id="trending_icon"><i class="icon-fire"></i></div>
-							<div id="trending_text">Trending</div>
+							<div id="trending_text" >Trending</div>
 						</a>
 						<a id="artists_link" >
 							<div id="artists_icon"><i class="icon-star"></i></div>
@@ -138,6 +150,7 @@
            
 				</div>
         <div id="playlist_navigation">
+        <!--  data-step="2" data-intro="These are the trending songs." data-position="top" -->
           <div class="upper_crease"></div>
             <a id="playlists_link">
               <div id="home_icon"><i class="icon-heart" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
@@ -243,10 +256,12 @@
 <a id="qa">
 <span id="play_queue" class="open_queue">Play Queue</span>
 </a>
-<span id="queue_trash"><i class="icon-sort-down"></i></span>
+<span id="queue_trash"><i class="icon-ellipsis-horizontal"></i></span>
 </div>
 <div id="popular_artists_list" class="nano">
 <div id="queue_content" class="content">
+<!--  data-step="3" data-intro="This is your play queue. Played songs are added here. You can manually add songs by dropping here. You can also shuffle songs within the queue by drag-drop." data-position="left" -->
+
 </div>
 
 </div>
@@ -258,7 +273,7 @@
 <!--bottombar-->
 
 <div id="bottom">
-  <div id="mini_play">
+  <div id="mini_play" >
     <div id="mini_image">
     </div>
     <div id="mini_image">
@@ -280,12 +295,14 @@
 		</div>
 	</div>
 	<div id="bMiddle">
+  <!--   data-step="4" data-intro="This is main player." data-position="top" -->
 	<div id="musicbar">
 	<div id="musicPlayerSlider">
 	<div id="musicPlayerInfo">
 	<div id="infoLeft">
-	<div id="ilSong"><b></b></div>
-	<div id="ilArtist"></div>
+	<div id="ilSong"><b></b></div> - 
+	<div class="ilArtist artist"></div> - 
+	<div class="ilAlbum album"></div>
 	</div>
 	<div id="timeRight">
 	<span id="timePlayed">0:00</span> / <span id="totalTime">0:00</span>
@@ -327,7 +344,7 @@
 		</section> 
    <div id="signin_button">
     {% if user.is_active %}
-      Sign Out
+      
     {% else %}
      Sign in
     {% endif %}
@@ -343,7 +360,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-1.10.2.min.js"></script>
     <script type="text/javascript">
       $( window ).load(function() {
-    $('body').css({'opacity':'1'});
+    // $('body').css({'opacity':'1'});
 });
       </script>
     <script src="{{ STATIC_URL }}js/csrf.js"></script>
@@ -363,7 +380,17 @@
 <!--    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/soundmanager2.js"></script>  
 -->
 <!-- would add after adding music player bottom -->
-
+    <!-- fix for mozilla -->
+    <style type="text/css">
+    @-moz-document url-prefix() {
+        .list_icon_play{
+          margin-left: -21px;
+        }
+        .searchLightboxOpen{
+          background-color: rgba(255, 255, 255, 0.9);
+        }
+    }
+    </style>
     
     <script type="text/javascript">
     $( document ).ready(function() {
@@ -391,13 +418,19 @@ $('#centerdata').css('width',$(window).width()-180-240);
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/smoothscroll.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}zeroclipboard/ZeroClipboard.js"></script>
 
-  <script src="{{ STATIC_URL }}js/jukebox/base.js">
-  </script>
+  <script src="{{ STATIC_URL }}js/jukebox/base.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/notify.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/intro.js"></script>
   <!-- last fm use to get similar artist tracks -->
 <!--  <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfm.api.cache.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfm.api.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfm.api.md5.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/json2.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfmuse.js"></script>
+  -->
+  <!--
+  <script type="text/javascript">
+  introJs().start();
+  </script>
   -->
 </html>

@@ -231,9 +231,15 @@ class PlaylistAllJsonView(ListCreateAPIView):
     return Response(context)
 
 
+
+
   def pre_save(self, obj):
     obj.person = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]
     obj.songs = self.request.POST.get('songs','')
+    if obj.person.playlist_set.count()>50:
+      return Response('Error: User is limited to 50 playlists only')
+    if len(obj.songs.split('b'))>100:
+      return Response('Error: Length greater than 100')
     obj.name = self.request.POST.get('name','')
     obj.private = True
 
@@ -250,6 +256,8 @@ class AddToPlaylistView(CreateAPIView):
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
+        if len(playlist.songs.split('b')) + len(songs.split('b')) >  100:
+          return Response('Error: Length greater than 100')
         if playlist.songs == '':
           playlist.songs = songs
         else:
@@ -279,6 +287,8 @@ class OverwritePlaylistView(CreateAPIView):
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
+        if len(songs.split('b')) >  100:
+          return Response('Error: Length greater than 100')
         playlist.songs = songs
         playlist.save()
     return Response('')

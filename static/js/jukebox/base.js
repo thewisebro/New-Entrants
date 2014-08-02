@@ -32,10 +32,120 @@ function search_full(search_str){
 if(search_str === ""){
 
   $('#song_searchList').html('<div>Start typing to get results</div>');
+  // console.log('yo');
  return;
 }
+var q= search_str;
+  if($('#search_song_count').hasClass("search_active") && songs_open)
+  {
+       var results = [];
+       for(var i=0; i<songs_name.length; i++)
+       {
+          if(songs_name[i].toLowerCase().search(q) >=0){results.push([songs_name[i].toLowerCase().search(q) ,songs_by_name[songs_name[i]]]);}
+
+       }
+
+       results = results.sort(Comparator);
+       $('#search_song_count').html('Songs('+results.length+')');
+       results = results.slice(0,60);
+              $("#song_searchList").css({'display':'block'});
+              $("#album_searchList").css({'display':'none'});
+              $("#artist_searchList").css({'display':'none'});
+            $('#song_searchList').html($('#itemsDisplay').clone());
+            var songs = results;
+       for(var i=0; i<songs.length;i++){
+            if(songs[i][1].album.album_art=="") songs[i][1].album.album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
+
+            var html =	'		<li>'+
+		'			<div style="background-image:url(\/songsmedia\/' + songs[i][1].album.album_art+')"  class="iDsrno"></div>'+
+		'			<div class="iDname song draggable" id="song_'+songs[i][1].id+'">'+songs[i][1].song+'</div>'+
+		'			<div class="iDalbum album" id="album_'+songs[i][1].album.id+'">'+songs[i][1].album.album+'</div>';
+           if (banned_artists.indexOf(songs[i][1].artists[0].id) >= 0)
+           {
+              html += '	<div class="iDartist album" id="album_'+songs[i][1].album.id+'">'+songs[i][1].album.album+'</div>';
+           }
+           else
+           {
+              html += '	<div class="iDartist artist" id="artist_'+songs[i][1].artists[0].id+'">'+songs[i][1].artists[0].artist+'</div>';
+           }
+
+		       html += '</li>';
+            $('#song_searchList').append(html);
+    }
+  }
+      else if($('#search_album_count').hasClass("search_active") && albums_open){
+        // alert("display albums");
+              $("#song_searchList").css({'display':'none'});
+              $("#album_searchList").css({'display':'block'});
+              $("#artist_searchList").css({'display':'none'});
+                 var results = [];
+              for(var i=0; i<albums_name['English'].length; i++)
+              {
+                  if(albums_name['English'][i].toLowerCase().search(q) >=0){results.push([albums_name['English'][i].toLowerCase().search(q) ,albums_by_name['English'][albums_name['English'][i]]]);}
+
+              }
+              for(var i=0; i<albums_name['Hindi'].length; i++)
+              {
+                  if(albums_name['Hindi'][i].toLowerCase().search(q) >=0){results.push([albums_name['Hindi'][i].toLowerCase().search(q) ,albums_by_name['Hindi'][albums_name['Hindi'][i]]]);}
+
+              }
+
+                 results = results.sort(Comparator);
+                 $('#search_album_count').html('Albums('+results.length+')');
+                 results = results.slice(0,60);
+                 var html = "";
+                 for(var i=0;i< results.length; i++)
+                 {
+                   // do the album html here
+                   if(results[i][1].album_art=="") results[i][1].album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
+                    html += '<li><div style="background-image:url(\/songsmedia\/' + results[i][1].album_art+')"  class="iDsrno"></div>'+
+                      '     <div class="iDname album draggable" id="album_' +results[i][1].id+' ">'+results[i][1].album+'</div>';
+                             
+                             html += '</li>';
+
+                 }
+                 $('#album_searchList').html("");
+                  $('#album_searchList').append(html);
+      }
+      else if($('#search_artist_count').hasClass("search_active") && artists_open)
+      {
+        
+              $("#song_searchList").css({'display':'none'});
+              $("#album_searchList").css({'display':'none'});
+              $("#artist_searchList").css({'display':'block'});
+                 var results = [];
+              for(var i=0; i<artists_name.length; i++)
+              {
+                  if(artists_name[i].toLowerCase().search(q) >=0){results.push([artists_name[i].toLowerCase().search(q) ,artists_by_name[artists_name[i]]]);}
+
+              }
+
+                 results = results.sort(Comparator);
+                 $('#search_artist_count').html('Artists('+results.length+')');
+                 results = results.slice(0,60);
+                 var html="";
+                 // console.log(results);
+                 for(var i=0; i<results.length; i++)
+                 {
+                   // do the artist html here
+                   if(results[i][1].album_set[0].album_art=="") results[i][1].album_set[0].album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
+                      html += '<li><div style="background-image:url(\/songsmedia\/' + results[i][1].album_set[0].album_art+')"  class="iDsrno"></div>'+
+            
+                      '     <div class="iDname artist draggable" id="artist_' +results[i][1].id+' ">'+results[i][1].artist+'</div>';
+                             
+                             html += '</li>';
+
+                 }
+                 $('#artist_searchList').html("");
+                 $('#artist_searchList').append(html);
+      }
 
 $('#inputFor').val(search_str);
+album_ready();
+artist_ready();
+
+return;
+
     $.get('search_all/',{q:search_str}, function(data){
             var songs = data;            // only songs coming for now
             if(songs.length >= 100) $('#search_song_count').html('Songs('+songs.length+'+)');
@@ -54,8 +164,8 @@ $('#inputFor').val(search_str);
        for(var i=0; i<songs.length;i++){
             if(songs[i].album.album_art=="") songs[i].album.album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
 
-            var html =	'		<li>'+
-		'			<div style="background-image:url('+'http://192.168.121.5\/songsmedia\/' + songs[i].album.album_art+')"  class="iDsrno"></div>'+
+            var html =	'<li>'+
+		'			<div style="background-image:url(\/songsmedia\/' + songs[i].album.album_art+')"  class="iDsrno"></div>'+
 		'			<div class="iDname song draggable" id="song_'+songs[i].id+'">'+songs[i].song+'</div>'+
 		'			<div class="iDalbum album" id="album_'+songs[i].album.id+'">'+songs[i].album.album+'</div>';
            if (banned_artists.indexOf(songs[i].artists[0].id) >= 0)
@@ -138,7 +248,7 @@ $('#inputFor').val(search_str);
            $('#album_searchList').append(html);
       }
       else{
-        alert("display artist");
+        // alert("display artist");
 
               $("#song_searchList").css({'display':'none'});
               $("#album_searchList").css({'display':'none'});
@@ -226,6 +336,7 @@ var albumtag_count=0;
 var prev_artist = 'thers';
 var artisttag_count=0;
 var prev_hash="";
+var songs_open=false;
 var albums_open=false;
 var artists_open=false;
 var playlists_open=false;
@@ -261,22 +372,127 @@ $('#searchBig').bind("keyup", function (event) {
         $("#songSearch").empty();
         $("#albumSearch").empty();
         $("#artistSearch").empty();
+    $('#seeMore').hide();
         return;
       }
       else{
+  $('#seeMore').show();
         $("#startTyping").html("Search results for")
       }
     search(q);
 });
+
+function Comparator(a,b){
+  if (a[0] < b[0]) return -1;
+  if (a[0] > b[0]) return 1;
+  return 0;
+}
+
+
 function search(q)
 {
+  q= q.toLowerCase();
   if (q=='')
   {
     $("#songSearch").empty();
     $("#albumSearch").empty();
     $("#artistSearch").empty();
+    $('#seeMore').hide();
+    return;
   }
-  $.ajax({
+  else{
+  $('#seeMore').show();
+  }
+
+  if(songs_open)
+  {
+       var results = [];
+    for(var i=0; i<songs_name.length; i++)
+    {
+        if(songs_name[i].toLowerCase().search(q) >=0){results.push([songs_name[i].toLowerCase().search(q) ,songs_by_name[songs_name[i]]]);}
+
+    }
+
+       results = results.sort(Comparator);
+       $("#songSearch").empty();
+       $("#songSearch").append('<div class="searchHeading">SONGS<span> ('+results.length+')</span></div>');
+       $("#songSearch").append('<div> <ul  id="songSearchSpan" class="searchResultList" > </ul> </div>');
+       results = results.slice(0,5);
+       for(var i=0;i< results.length; i++)
+       {  
+          if(results[i][1].album.album_art=="") results[i][1].album.album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
+
+         var html = '<li class="song" id="song_'+results[i][1].id+'"><div class="searchItemImg" style="background-image:url(\/songsmedia\/' + results[i][1].album.album_art+')" ></div>'
+                  +  '<div class="searchItemDetails">'
+		              +   '<div class="itemName">'+ results[i][1].song+'</div>'
+		              +    '<div class="itemSubDetail">'+results[i][1].artists[0].artist+'</div></div></li>';
+         $("#songSearchSpan").append(html);
+       }
+  }
+  if(albums_json)
+ {
+       var results = [];
+    for(var i=0; i<albums_name['English'].length; i++)
+    {
+        if(albums_name['English'][i].toLowerCase().search(q) >=0){results.push([albums_name['English'][i].toLowerCase().search(q) ,albums_by_name['English'][albums_name['English'][i]]]);}
+
+    }
+    for(var i=0; i<albums_name['Hindi'].length; i++)
+    {
+        if(albums_name['Hindi'][i].toLowerCase().search(q) >=0){results.push([albums_name['Hindi'][i].toLowerCase().search(q) ,albums_by_name['Hindi'][albums_name['Hindi'][i]]]);}
+
+    }
+
+       results = results.sort(Comparator);
+       $("#albumSearch").empty();
+       $("#albumSearch").append('<div class="searchHeading">Albums<span> ('+results.length+')</span></div>');
+       $("#albumSearch").append('<div> <ul  id="albumSearchSpan" class="searchResultList" > </ul> </div>');
+       results = results.slice(0,5);
+       for(var i=0;i< results.length; i++)
+       {  
+         if(results[i][1].album_art=="") results[i][1].album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
+
+         var html = '<li class="album searchItem" id="album_'+results[i][1].id+'"><div class="searchItemImg" style="background-image:url(\/songsmedia\/' + results[i][1].album_art+')" ></div>'
+                  +  '<div class="searchItemDetails">'
+		              +   '<div class="itemName">'+ results[i][1].album+'</div>'
+		              +    '<div class="itemSubDetail">'+results[i][1].artists[0].artist+'</div></div></li>';
+         $("#albumSearchSpan").append(html);
+       }
+
+ }
+  if(artists_open)
+  {
+       var results = [];
+    for(var i=0; i<artists_name.length; i++)
+    {
+        if(artists_name[i].toLowerCase().search(q) >=0){results.push([artists_name[i].toLowerCase().search(q) ,artists_by_name[artists_name[i]]]);}
+
+    }
+
+       results = results.sort(Comparator);
+       $("#artistSearch").empty();
+       $("#artistSearch").append('<div class="searchHeading">Artists<span> ('+results.length+')</span></div>');
+       $("#artistSearch").append('<div> <ul  id="artistSearchSpan" class="searchResultList" > </ul> </div>');
+       results = results.slice(0,5);
+       for(var i=0; i<results.length; i++)
+       {
+         if(results[i][1].album_set[0].album_art=="") results[i][1].album_set[0].album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
+         var html = '<li class="artist searchItem" id="artist_'+results[i][1].id+'"><div class="searchItemImg" style="background-image:url(\/songsmedia\/' + results[i][1].album_set[0].album_art+')" ></div>'
+                  +  '<div class="searchItemDetails">'
+		              +   '<div class="itemName">'+ results[i][1].artist+'</div>'
+		              +    '</div></li>';
+         $("#artistSearchSpan").append(html);
+       }
+  }
+      artist_ready();
+      album_ready();
+      song_ready();
+      search_ready();
+      hash = document.location.href.split('#')[1];
+      if(!hash) hash="";
+      hash = hash.split('/');
+return;
+  /*$.ajax({
       type: 'get',
       url: 'search?q='+q,
       success: function (data) {
@@ -287,7 +503,7 @@ function search(q)
        {  
           if(data.songs[1][i].album.album_art=="") data.songs[1][i].album.album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
 
-         var html = '<li class="song" id="song_'+data.songs[1][i].id+'"><div class="searchItemImg" style="background-image:url('+'http://192.168.121.5\/songsmedia\/' + data.songs[1][i].album.album_art+')" ></div>'
+         var html = '<li class="song" id="song_'+data.songs[1][i].id+'"><div class="searchItemImg" style="background-image:url(\/songsmedia\/' + data.songs[1][i].album.album_art+')" ></div>'
                   +  '<div class="searchItemDetails">'
 		              +   '<div class="itemName">'+ data.songs[1][i].song+'</div>'
 		              +    '<div class="itemSubDetail">'+data.songs[1][i].artists[0].artist+'</div></div></li>';
@@ -301,7 +517,7 @@ function search(q)
        {  
          if(data.albums[1][i].album_art=="") data.albums[1][i].album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
 
-         var html = '<li class="album searchItem" id="album_'+data.albums[1][i].id+'"><div class="searchItemImg" style="background-image:url('+'http://192.168.121.5\/songsmedia\/' + data.albums[1][i].album_art+')" ></div>'
+         var html = '<li class="album searchItem" id="album_'+data.albums[1][i].id+'"><div class="searchItemImg" style="background-image:url(\/songsmedia\/' + data.albums[1][i].album_art+')" ></div>'
                   +  '<div class="searchItemDetails">'
 		              +   '<div class="itemName">'+ data.albums[1][i].album+'</div>'
 		              +    '<div class="itemSubDetail">'+data.albums[1][i].artists[0].artist+'</div></div></li>';
@@ -312,7 +528,7 @@ function search(q)
        $("#artistSearch").append('<div> <ul  id="artistSearchSpan" class="searchResultList" > </ul> </div>');
        for(var i=0; i<data.artists[1].length; i++)
        {
-         var html = '<li class="artist searchItem" id="artist_'+data.artists[1][i].id+'"><div class="searchItemImg" style="background-image:url('+'http://192.168.121.5\/songsmedia\/' + data.artists[1][i].artist_art+')" ></div>'
+         var html = '<li class="artist searchItem" id="artist_'+data.artists[1][i].id+'"><div class="searchItemImg" style="background-image:url(\/songsmedia\/' + data.artists[1][i].artist_art+')" ></div>'
                   +  '<div class="searchItemDetails">'
 		              +   '<div class="itemName">'+ data.artists[1][i].artist+'</div>'
 		              +    '</div></li>';
@@ -326,7 +542,7 @@ function search(q)
       if(!hash) hash="";
       hash = hash.split('/');
       }
-    });
+    });*/
 }
 
 
@@ -381,7 +597,7 @@ function display(name){
     {
       $("#centerdata").empty();
         items = albums_by_name; 
-        $("#centerdata").append('<div id="albumsList">  <div class="nano" id="left_album_list">  <div id="contentList" style="padding-top:50px;"class="content"> </div></div></div>');
+        $("#centerdata").append('<div id="albumsList">  <div class="nano" id="left_album_list">  <div id="contentList" style="padding-top:50px;bottom: 68px;"class="content"> </div></div></div>');
         $('#albumsList').append('<div id="language_options_div"><ul id="artist_language"><li>English</li><li>Hindi</li></ul></div><div id="albumContentSearch"><span id="searchIconTop"><i class="icon-search"></i></span><input type="text" id="dynamicSearch"></input></div>');
         for(var language in items)
         {
@@ -442,7 +658,7 @@ function display(name){
       }
       if(name=='albums')
       {
-        $("#centerdata").append('<div id="albumsList">  <div class="nano" id="left_album_list">  <div id="contentList" style="padding-top:50px;" class="content"></div></div></div>');
+        $("#centerdata").append('<div id="albumsList">  <div class="nano" id="left_album_list">  <div id="contentList" style="padding-top:50px;bottom: 68px;" class="content"></div></div></div>');
       }
       if(name=='artists')
       {
@@ -532,7 +748,7 @@ function display_album(id){
       $("#oaoWrapper").empty();
       $("#oaoWrapper").append('<div id="oaoLeft"></div>    <div id="oaoRight"> <div id="popular_list"></div> </div>');
       if(album.album_art=="") album.album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
-      $("#oaoLeft").append('<img class="albumImage album draggable" src="http://192.168.121.5/songsmedia/'+ album.album_art +'"  style="display:block;"></img>');  // change the css accordingly
+      $("#oaoLeft").append('<img class="albumImage album draggable" src="/songsmedia/'+ album.album_art +'"  style="display:block;"></img>');  // change the css accordingly
       $("#oaoLeft").append('<div id="oaoLInfo"> <div class="playable">'+album.album+'</div> </div>');
    //   html = "<br> Album Name: <br>" + album.album + "<br> Artists: ";
       if (banned_artists.indexOf(album.artists[0].id) < 0)
@@ -542,7 +758,7 @@ function display_album(id){
       {
          var k = album.song_set[j].id;
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class="popular_item song draggable" id="song_'+k+'"><div class="list_icon"><i class="icon-play list_icon_play"></i></div><div id="list_number">'+left_add_zero(j+1)+'</div>  <div id="p_song_name"><span class="song_in_span">'+album.song_set[j].song +'</span></div><div class="album_options"><i class="album_options_button icon-ellipsis-horizontal"></i><div class="album_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li class="share_url" id="share_'+k+'">Share</li></ul></div></div>';
+        html += '<li class="popular_item song draggable" id="song_'+k+'"><div class="list_icon"><i class="icon-play list_icon_play"></i></div><div id="list_number">'+left_add_zero(j+1)+'</div>  <div id="p_song_name"><span class="song_in_span">'+album.song_set[j].song +'</span></div><div class="album_options"><i class="album_options_button icon-ellipsis-horizontal"></i><div class="album_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li></ul></div></div>';
         if(!(album.song_set[j].id in songs_url)) songs_url[album.song_set[j].id]=album.song_set[j];
 
       }
@@ -560,7 +776,7 @@ function display_album(id){
       $("#oaoWrapper").empty();
       $("#oaoWrapper").append('<div id="oaoLeft"></div>    <div id="oaoRight"> <div id="popular_list"></div> </div>');
       if(album.album_art=="") album.album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
-      $("#oaoLeft").append('<img class="albumImage album draggable" src="http://192.168.121.5/songsmedia/'+ album.album_art +'"  style="display:block;"></img>');  // change the css accordingly
+      $("#oaoLeft").append('<img class="albumImage album draggable" src="/songsmedia/'+ album.album_art +'"  style="display:block;"></img>');  // change the css accordingly
       $("#oaoLeft").append('<div id="oaoLInfo"> <div class="playable">'+album.album+'</div> </div>');
    //   html = "<br> Album Name: <br>" + album.album + "<br> Artists: ";
       if (banned_artists.indexOf(album.artists[0].id) < 0)
@@ -570,7 +786,7 @@ function display_album(id){
       {
          var k = album.song_set[j].id;
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class="popular_item song draggable" id="song_'+k+'"><div class="list_icon"><i class="icon-play list_icon_play"></i></div><div id="list_number">'+left_add_zero(j+1)+'</div>  <div id="p_song_name"><span class="song_in_span">'+album.song_set[j].song +'</span></div><div class="album_options"><i class="album_options_button icon-ellipsis-horizontal"></i><div class="album_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li class="share_url" id="share_'+k+'">Share</li></ul></div></div>';
+        html += '<li class="popular_item song draggable" id="song_'+k+'"><div class="list_icon"><i class="icon-play list_icon_play"></i></div><div id="list_number">'+left_add_zero(j+1)+'</div>  <div id="p_song_name"><span class="song_in_span">'+album.song_set[j].song +'</span></div><div class="album_options"><i class="album_options_button icon-ellipsis-horizontal"></i><div class="album_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li></ul></div></div>';
         if(!(album.song_set[j].id in songs_url)) songs_url[album.song_set[j].id]=album.song_set[j];
 
       }
@@ -596,15 +812,21 @@ function display_artist(id){
   {
       var artist = artists_json1[id];
       $("#artist_view").empty();
-      $("#artist_view").append('<div id="artist_banner" style="background:url('+'\'http://192.168.121.5\/songsmedia\/' + artist.cover_pic +  '\'); background-size:cover; "></div>');
+      $("#artist_view").append('<div id="artist_banner" style="background:url(\/songsmedia\/' + artist.cover_pic +  '); background-size:cover; "></div>');
   //    debugger;
       $("#artist_banner").append('<div id="layer" style="background:url(\'\/static/images/jukebox/gradientCover.png\'); " ></div>');
-      $("#artist_banner").append('<div id="artistInfo"><div id="artistName">'+artist.artist+'</div><div id="artistAlbumCount">'+artist.album_set.length+' Albums</div></div>');
+      if (artist.album_set.length==1)
+          $("#artist_banner").append('<div id="artistInfo"><div id="artistName">'+artist.artist+'</div><div id="artistAlbumCount">'+artist.album_set.length+' Album</div></div>');
+      else
+          $("#artist_banner").append('<div id="artistInfo"><div id="artistName">'+artist.artist+'</div><div id="artistAlbumCount">'+artist.album_set.length+' Albums</div></div>');
       $("#artist_view").append('<div id="artist_body"></div>');
       for(var j=0; j<artist.album_set.length; j++)
       { if(artist.album_set[j].album_art=="") artist.album_set[j].album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
         html = '<div class="artist_album">'
-                + '<div class="artist_album_pic album draggable"><img src="http://192.168.121.5/songsmedia/'+ artist.album_set[j].album_art +'"></img></div>'
+                + '<div class="artist_album_pic album draggable"><div class="album_play_icon"></div>'+
+                '<div class="album_play_icon_image" ><img id="play_'+ artist.album_set[j].id +'"  src="../static/images/jukebox/icon_new_play.png" width="50px" height="50px"></div>'+
+                //'<div class="album_play_text">Play Album</div>'+
+                '<img src="/songsmedia/'+ artist.album_set[j].album_art +'"></img></div>'
                 + '<div id="popular_heading"> '+artist.album_set[j].album+' </div>'
                 + '<div id="artist_song_list">'
                 + '<div id="popular_list">'
@@ -615,7 +837,7 @@ function display_artist(id){
         var l = artist.album_set[j].song_set[k].id;
 
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class=" song popular_item draggable" id="song_'+l+'"><div class="list_icon"><i class="icon-play list_icon_play"></i></div><div id="list_number">'+left_add_zero(k+1)+'</div> <div id="p_song_name"><span class="song_in_span">'+ artist.album_set[j].song_set[k].song +'</span></div><div class="artist_options"><i class="artist_options_button icon-ellipsis-horizontal"></i><div class="artist_item_setting_box"><ul><li class="song" id="song_'+l+'">Play now</li><li class="next" id="next_'+l+'">Play next</li><li class="last" id="last_'+l+'">Play last</li><li class="options_add_to_playlist" id="add_'+l+'">Add to playlist</li><li class="share_url" id="share_'+l+'">Share</li></ul></div></div>';
+        html += '<li class=" song popular_item draggable" id="song_'+l+'"><div class="list_icon"><i class="icon-play list_icon_play"></i></div><div id="list_number">'+left_add_zero(k+1)+'</div> <div id="p_song_name"><span class="song_in_span">'+ artist.album_set[j].song_set[k].song +'</span></div><div class="artist_options"><i class="artist_options_button icon-ellipsis-horizontal"></i><div class="artist_item_setting_box"><ul><li class="song" id="song_'+l+'">Play now</li><li class="next" id="next_'+l+'">Play next</li><li class="last" id="last_'+l+'">Play last</li><li class="options_add_to_playlist" id="add_'+l+'">Add to playlist</li></ul></div></div>';
         if(!(artist.album_set[j].song_set[k].id in songs_url)) songs_url[artist.album_set[j].song_set[k].id]=artist.album_set[j].song_set[k];
 
       }
@@ -646,7 +868,7 @@ function display_artist(id){
       artist_song_options_binder();
       options_binder();
       artist_language_dialog_binder();
-      $('body').scrollTop(100);
+      $('body').scrollTop(0);
 
 
        //to adjust the height of artist image
@@ -667,36 +889,45 @@ function display_artist(id){
          });
 
 
-      $('body').animate({scrollTop:0}, '500', 'swing', function() { 
-     $(document).scroll(function () { 
+     //  $('body').animate({scrollTop:0}, '500', 'swing', function() { 
+     // $(document).scroll(function () { 
 
-       $('#artist_body').css({
-         'top' : -($(this).scrollTop()/1.4)+"px"
-         }); 
+     //   $('#artist_body').css({
+     //     'top' : -($(this).scrollTop()/1.4)+"px"
+     //     }); 
 
-       $('#artistInfo').css({
-         'top' : -($(this).scrollTop()/1.4)+textArtist+"px"
-         }); 
-       $('#layer').css({
-         'top' : -($(this).scrollTop()/1.4)+shaddow+"px"
-         }); 
+     //   $('#artistInfo').css({
+     //     'top' : -($(this).scrollTop()/1.4)+textArtist+"px"
+     //     }); 
+     //   $('#layer').css({
+     //     'top' : -($(this).scrollTop()/1.4)+shaddow+"px"
+     //     }); 
 
-       }); 
-           });
+     //   }); 
+     //       });
 
      
       /*smooth scrolling enable only on atist_view */
      $('#artist_view').smoothWheel({refer:"body"});
      $('#sidebar').smoothWheel({refer:"body"});
      $('#bottom').smoothWheel({refer:"body"});
+  $(".album_play_icon_image > img").bind('click', function(){
+      var id = $(this).attr('id').split('_')[1];
+      var songs = albums_json1[id].song_set;
+      for(var i=0; i<songs.length; i++)
+      {
+        add_LS_queue(songs[i]);
+      }
+      $('#queue_content > #song_'+songs[0].id+' ').last().click();
+      });
 
-
+  return;
   }
   url = "artists/" + id;
     $.ajax(url,contentType= "application/json").done( function(data){
       var artist = data;
       $("#artist_view").empty();
-      $("#artist_view").append('<div id="artist_banner" style="background:url('+'\'http://192.168.121.5\/songsmedia\/' + artist.cover_pic +  '\'); background-size:cover; "></div>');
+      $("#artist_view").append('<div id="artist_banner" style="background:url(\/songsmedia\/' + artist.cover_pic +  '); background-size:cover; "></div>');
   //    debugger;
       $("#artist_banner").append('<div id="layer" style="background:url(\'\/static/images/jukebox/gradientCover.png\'); " ></div>');
       $("#artist_banner").append('<div id="artistInfo"><div id="artistName">'+artist.artist+'</div><div id="artistAlbumCount">'+artist.album_set.length+' Albums</div></div>');
@@ -704,7 +935,9 @@ function display_artist(id){
       for(var j=0; j<artist.album_set.length; j++)
       { if(artist.album_set[j].album_art=="") artist.album_set[j].album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
         html = '<div class="artist_album">'
-                + '<div class="artist_album_pic album draggable"><img src="http://192.168.121.5/songsmedia/'+ artist.album_set[j].album_art +'"></img></div>'
+                + '<div class="artist_album_pic album draggable"><div class="album_play_icon"></div><div class="album_play_icon_image"><img src="../static/images/jukebox/icon_new_play.png" width="50px" height="50px"></div>'+
+                //'<div class="album_play_text">Play Album</div>'+
+                '<img src="/songsmedia/'+ artist.album_set[j].album_art +'"></img></div>'
                 + '<div id="popular_heading"> '+artist.album_set[j].album+' </div>'
                 + '<div id="artist_song_list">'
                 + '<div id="popular_list">'
@@ -715,7 +948,7 @@ function display_artist(id){
         var l = artist.album_set[j].song_set[k].id;
 
        // html += "" + album.song_set[j].song + "<br> ";
-        html += '<li class=" song popular_item draggable" id="song_'+l+'"><div class="list_icon"><i class="icon-play list_icon_play"></i></div><div id="list_number">'+left_add_zero(k+1)+'</div> <div id="p_song_name"><span class="song_in_span">'+ artist.album_set[j].song_set[k].song +'</span></div><div class="artist_options"><i class="artist_options_button icon-ellipsis-horizontal"></i><div class="artist_item_setting_box"><ul><li class="song" id="song_'+l+'">Play now</li><li class="next" id="next_'+l+'">Play next</li><li class="last" id="last_'+l+'">Play last</li><li class="options_add_to_playlist" id="add_'+l+'">Add to playlist</li><li class="share_url" id="share_'+l+'">Share</li></ul></div></div>';
+        html += '<li class=" song popular_item draggable" id="song_'+l+'"><div class="list_icon"><i class="icon-play list_icon_play"></i></div><div id="list_number">'+left_add_zero(k+1)+'</div> <div id="p_song_name"><span class="song_in_span">'+ artist.album_set[j].song_set[k].song +'</span></div><div class="artist_options"><i class="artist_options_button icon-ellipsis-horizontal"></i><div class="artist_item_setting_box"><ul><li class="song" id="song_'+l+'">Play now</li><li class="next" id="next_'+l+'">Play next</li><li class="last" id="last_'+l+'">Play last</li><li class="options_add_to_playlist" id="add_'+l+'">Add to playlist</li></ul></div></div>';
         if(!(artist.album_set[j].song_set[k].id in songs_url)) songs_url[artist.album_set[j].song_set[k].id]=artist.album_set[j].song_set[k];
 
       }
@@ -746,7 +979,7 @@ function display_artist(id){
       artist_song_options_binder();
       options_binder();
       artist_language_dialog_binder();
-      $('body').scrollTop(100);
+      // $('body').scrollTop(100);
 
 
        //to adjust the height of artist image
@@ -767,28 +1000,37 @@ function display_artist(id){
          });
 
 
-      $('body').animate({scrollTop:0}, '500', 'swing', function() { 
-     $(document).scroll(function () { 
+     //  $('body').animate({scrollTop:0}, '500', 'swing', function() { 
+     // $(document).scroll(function () { 
 
-       $('#artist_body').css({
-         'top' : -($(this).scrollTop()/1.4)+"px"
-         }); 
+     //   $('#artist_body').css({
+     //     'top' : -($(this).scrollTop()/1.4)+"px"
+     //     }); 
 
-       $('#artistInfo').css({
-         'top' : -($(this).scrollTop()/1.4)+textArtist+"px"
-         }); 
-       $('#layer').css({
-         'top' : -($(this).scrollTop()/1.4)+shaddow+"px"
-         }); 
+     //   $('#artistInfo').css({
+     //     'top' : -($(this).scrollTop()/1.4)+textArtist+"px"
+     //     }); 
+     //   $('#layer').css({
+     //     'top' : -($(this).scrollTop()/1.4)+shaddow+"px"
+     //     }); 
 
-       }); 
-           });
+     //   }); 
+     //       });
 
      
       /*smooth scrolling enable only on atist_view */
      $('#artist_view').smoothWheel({refer:"body"});
      $('#sidebar').smoothWheel({refer:"body"});
      $('#bottom').smoothWheel({refer:"body"});
+  $(".album_play_icon_image > img").bind('click', function(){
+      var id = $(this).attr('id').split('_')[1];
+      var songs = albums_json1[id].song_set;
+      for(var i=0; i<songs.length; i++)
+      {
+        add_LS_queue(songs[i]);
+      }
+      $('#queue_content > #song_'+songs[0].id+' ').last().click();
+      });
 
 
     });
@@ -823,6 +1065,10 @@ var create_playlist = function() {
       $('#create_new_play').keypress(function(e) {
             if (e.which == 13) {
                     var val = $("#create_new_play").val();
+                    if(val==""){
+                      $.notify('Cannot create Playlist with no name',{ className:'error', position:"top center"});
+                      return;
+                    }
                    // alert(val);
                    // if(val){
                     var html = $('#playlists').html();
@@ -919,7 +1165,7 @@ function display_playlists(){
       $("#contentList").append('Login Required');
     }
     $("#create_new").on('click',function(){
-      alert('sad');
+      // alert('sad');
       $("#playlist_new").empty();
       $("#playlist_new").html('<input type="text" id="create_new_play"></input>');
       $("#create_new_play").focus();
@@ -955,12 +1201,15 @@ function display_playlist(id){
     $.ajax(url,contentType= "application/json").done( function(data){
         if('detail' in data && data['detail']=='Not found')
         {
-          alert('Not yours');
+          // alert('Not yours');
           return;
         }
         if(data['songs']=='')
         {
-          alert('Empty');
+          // alert('Empty');
+          //playlist view
+          $("#playlist_view").empty();
+          $("#playlist_view").html('<div id="this_empty">This playlist is empty.</div><div id="new_music">Start typing to find new music.</div>');
           return;
         }
       var playlist = data;
@@ -983,21 +1232,29 @@ function display_playlist(id){
               '<option id="public_toggle" value="publicToggle_'+play_id+'">Make '+public_str+'</option>';
       }
 
-          html = '<div id="playlistInfo"><div id="playlistName">'+playlist.name;
+          html = '<div id="playlistInfo"><div id="playlistName">'+playlist.name+'</div>';
           pop = playlist.owner;
-          if(!playlist.private && playlist.owner!==true) html += ' by '+ playlist.owner;
-          html +='</div><div id="playlistSongCount">'+
+          if(!playlist.private && playlist.owner!==true) html += '<div id="playlistAuthorName">by '+playlist.owner+'</div>';
+          html +='<div id="playlistSongCount">'+
+          '<div id="play_all">Play All</div>'+
           '<div id="playlist_option_icon" class="icon-ellipsis-horizontal"></div>'+
             '<select id="playlist_options">'+
               '<option value="default">---</option>'+
                owner_str +
-            '</select>'+
-          songs.length+' Songs</div></div>';
+            '</select>';
+          
+          if(songs.length==1)
+              html += '0'+songs.length+' Song</div></div>';
+          else if(songs.length<10)
+              html += '0'+songs.length+' Songs</div></div>';
+          else
+              html += songs.length +' Songs</div></div>';
+
       $("#playlist_view").empty();
       $("#playlist_view").append('<div id="playlistBanner"></div>');
   //    debugger;
-      $("#playlistBanner").append('<div id="layerBanner" style="background:url(\'\/static/images/jukebox/gradientCover.png\'); " ></div>');
-      $("#playlistBanner").append('<ul><li></li><li></li><li></li><li></li><li></li></ul>');
+      $("#playlistBanner").append('<div id="layerBanner" style="background:url(\'\/static/images/jukebox/gradientCover.png\'); " >');
+      $("#playlistBanner").append('<ul><li></li><li></li><li></li><li></li><li></li></ul></div>');
       $("#playlistBanner").append(html);
       $("#playlist_view").append('<div id="viewPlaylist"><div id="playlistContentFull"></div></div>');
       var html = '<ul id="play_sortable">';
@@ -1007,7 +1264,7 @@ function display_playlist(id){
         var id = 'song_'+k;
         var image = playlist.songs_list[parseInt(songs[j])].album.album_art;
         if(image=="") image = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
-        image = 'http://192.168.121.5/songsmedia/'+image;
+        image = '/songsmedia/'+image;
         var artist_name = playlist.songs_list[parseInt(songs[j])].artists[0].artist;
         var album_name = playlist.songs_list[parseInt(songs[j])].album.album;
         var song_name = playlist.songs_list[parseInt(songs[j])].song;
@@ -1017,9 +1274,13 @@ function display_playlist(id){
         //'<div class="pqimage" style="background:url(\''+image+'\'); background-size:cover">'
 
        if (banned_artists.indexOf(artist_id) >= 0)
-        html += '<li ><div class="iDsrno" style="background-image:url('+ image+')"></div><div class="iDname song draggable" id="'+id+'">'+song_name+'</div><div class="iDalbum album" id="album_'+album_id+'">'+album_name+'</div><div class="iDartist album" id="album_'+album_id+'">'+album_name+'</div id="iDoptions"><div class="iDoptions"><i id="playlist_setting_icon" class="icon-ellipsis-horizontal"></i><div class="playlist_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li class="share_url" id="share_'+k+'">Share</li><li class="delete_from_playlist" id="delete_'+j+'_'+play_id+'">Delete</li></ul></div></div></li>';
+        html += '<li ><div class="playlist_icon"><i class="icon-play list_icon_play"></i></div><div class="iDsrno" style="background-image:url('+ image+')"></div><div class="iDname song draggable" id="'+id+'">'+song_name+'</div><div class="iDalbum album" id="album_'+album_id+'">'+album_name+'</div><div class="iDartist album" id="album_'+album_id+'">'+album_name+'</div id="iDoptions"><div class="iDoptions"><i id="playlist_setting_icon" class="icon-ellipsis-horizontal"></i><div class="playlist_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li>';
+        
        else
-        html += '<li ><div class="iDsrno" style="background-image:url('+ image+')"></div><div class="iDname song draggable" id="'+id+'">'+song_name+'</div><div class="iDalbum album" id="album_'+album_id+'">'+album_name+'</div><div class="iDartist artist" id="artist_'+artist_id+'">'+artist_name+'</div id="iDoptions"><div class="iDoptions"><i id="playlist_setting_icon" class="icon-ellipsis-horizontal"></i><div class="playlist_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li><li class="share_url" id="share_'+k+'">Share</li><li class="delete_from_playlist" id="delete_'+j+'_'+play_id+'">Delete</li></ul></div></div></li>';
+        html += '<li ><div class="playlist_icon"><i class="icon-play list_icon_play"></i></div><div class="iDsrno" style="background-image:url('+ image+')"></div><div class="iDname song draggable" id="'+id+'">'+song_name+'</div><div class="iDalbum album" id="album_'+album_id+'">'+album_name+'</div><div class="iDartist artist" id="artist_'+artist_id+'">'+artist_name+'</div id="iDoptions"><div class="iDoptions"><i id="playlist_setting_icon" class="icon-ellipsis-horizontal"></i><div class="playlist_item_setting_box"><ul><li class="song" id="song_'+k+'">Play now</li><li class="next" id="next_'+k+'">Play next</li><li class="last" id="last_'+k+'">Play last</li><li class="options_add_to_playlist" id="add_'+k+'">Add to playlist</li>';
+        if(playlist.owner===true)
+          html+= '<li class="delete_from_playlist" id="delete_'+j+'_'+play_id+'">Delete</li>';
+        html+='</ul></div></div></li>';
         if(!(playlist.songs_list[parseInt(songs[j])].id in songs_url)) songs_url[playlist.songs_list[parseInt(songs[j])].id]=playlist.songs_list[parseInt(songs[j])];
         playlist_open_now.push(playlist.songs_list[parseInt(songs[j])]);
         if($.inArray(album_id,album_present)>=0) continue;
@@ -1068,7 +1329,7 @@ function get_song_html(song)
     "<br> <span class='song' id='song_" + k + "'>Play </span> <br><br>";
 */
   var html1 = "<div class='item_wrapper song playable draggable' id='song_"+k+"' data-type='play' data-value='"+k+"'>"+
-    '<div class="item"  id="song_'+k+'" style="background:url('+'\'http://192.168.121.5\/songsmedia\/' + album_art +  '\'); background-size:cover">' +
+    '<div class="item"  id="song_'+k+'" style="background:url(\'\/songsmedia\/' + album_art +  '\'); background-size:cover">' +
    '<div class="song_options">' +
    '<i class="icon-ellipsis-horizontal setting_button"></i>' +
    '<div class="song_setting_box">'+
@@ -1076,7 +1337,6 @@ function get_song_html(song)
    '<li class="song_div next" id="next_'+k+'">Play Next</li>' +
    '<li class="song_div last" id="last_'+k+'">Play Last</li>'+
    '<li class="song_div options_add_to_playlist" id="add_'+k+'">Add to Playlist</li>'+
-   '<li class="song_div share_url" id="share_'+k+'">Share</li></ul>'+
    '</div></div>'+
    ' <div class="faint"></div>'+
    ' <a class="play_icon"><img src="../static/images/jukebox/icon_new_play.png" width="50px" height="50px"></a>'+
@@ -1195,16 +1455,18 @@ function play(id)
     $('#mini_image').css({'margin-top':'150px'});
     // alert('ssss');
     if(song.album.album_art=="") song.album.album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
-    $("#mini_image").css({'background-image':'url('+'http://192.168.121.5\/songsmedia\/' + song.album.album_art+')'});
+    $("#mini_image").css({'background-image':'url(\/songsmedia\/' + song.album.album_art+')'});
     $('#mini_image').animate({marginTop:'0px'});
 //   $("#musicPlayerPic").append('<img src="\/songsmedia\/' + song.album.album_art +  '" style="width: 32px; height: 32px;" >');
 //   Jukebox.play_url('song_'+id,'http://192.168.121.5/songs/english/'+song.file_name)
  $("#ilSong").html('<b>'+song.song+'</b>');
   var art = [];
-  for(var i=0;i<song.artists.length && i<5; i++) art.push(song.artists[i].artist);
-  $("#ilArtist").html('- '+art.join(' ,'));
+  $(".ilArtist").html(song.artists[0].artist).attr('id', 'artist_'+song.artists[0].id);
+  $(".ilAlbum").html(song.album.album).attr('id', 'album_'+song.album.id);
    // $(song_id).html(song.count);
     song_playing = id;
+    album_ready();
+    artist_ready();
     clearTimeout(interval);
     interval = setTimeout(function(){ count_increase(id); },5000);
     }
@@ -1218,13 +1480,15 @@ function play(id)
          $('#mini_image').css({'margin-top':'150px'});
         if(song.album.album_art=="") song.album.album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
 
-        $("#mini_image").css({'background-image':'url('+'http://192.168.121.5\/songsmedia\/' + song.album.album_art+')'});
+        $("#mini_image").css({'background-image':'url(\/songsmedia\/' + song.album.album_art+')'});
             $('#mini_image').animate({marginTop:'0px'});
      $("#ilSong").html('<b>'+song.song+'</b>');
-      var art = [];
-      for(i=0;i<song.artists.length && i<5; i++) art.push(song.artists[i].artist);
-      $("#ilArtist").html('- '+art.join(' ,'));
-        song_playing = id;
+  $(".ilArtist").html(song.artists[0].artist).attr('id', 'artist_'+song.artists[0].id);
+  $(".ilAlbum").html(song.album.album).attr('id', 'album_'+song.album.id);
+   // $(song_id).html(song.count);
+    song_playing = id;
+    album_ready();
+    artist_ready();
         Jukebox.play_url('song_'+id,'http://192.168.121.5/songs/english/'+song.file_name);
     clearTimeout(interval);
     interval = setTimeout(function(){ count_increase(id); },60000);
@@ -1444,6 +1708,7 @@ $('#add_new_submit').on('click',function(e){
             create_playlist_queue(val);
             $('#create_new_input').val('');
             $('#save_as_playlist_cancel').click();
+            $.notify('Created new playlist: '+val,{ className:'success', position:"top center"});
     });
 
 $('#as_prev_submit').on('click',function(e){
@@ -1453,6 +1718,8 @@ $('#as_prev_submit').on('click',function(e){
             $('#create_new_input').val('');
             $('#save_as_playlist_cancel').click();
             reload();
+            var name_playlist = $('#select_saved_playlist').find('option:selected').text();
+            $.notify('Overwrited playlist: '+ name_playlist,{ className:'success', position:"top center"});
     });
 
 
@@ -1465,6 +1732,8 @@ $('#add_to_playlist_submit').on('click',function(e){
             reload();
             adding_to_play=false;
             add_to_play = [];
+            var name_playlist = $('#add_to_saved_playlist').find('option:selected').text();
+            $.notify('Queue added to '+name_playlist,{ className:'success', position:"top center"});
     });
 
 
@@ -1477,7 +1746,7 @@ function create_playlist_queue(val)
     que.push(queue[i]);
   }
   que = que.join('b');
-  console.log(que);
+  // console.log(que);
   $.post('playlists/',{name:val,songs:que});
   get_json('playlists');
 }
@@ -1541,7 +1810,7 @@ function get_json(name)
             $('body').css({'opacity':'1'});
             $('#loading_div_spinner').css({'display':'none'});
             public_playlists_json=data; public_playlists_open=true;  add_songs_url();  }
-          console.log(name);
+          // console.log(name);
         });
 }
 
@@ -1589,6 +1858,7 @@ $('.delete_from_playlist').bind('click', function(){
       var play_id = $(this).attr('id').split('_')[2];
       $(this).parents().eq(3).remove();
       delete_from_playlist(index,play_id);
+
     });
 $('.share_url').bind('click', function(){
       var song_id = $(this).attr('id').split('_')[1];
@@ -1610,20 +1880,26 @@ function language_binder()
 
 function playlist_options_binder()
 {
-
+    $("#play_all").bind('click',function(){
+     add_queue_playlist();
+     $('#queue_content > #'+$('#play_sortable>li:nth-child(1)>.song').attr('id')).last().click()
+    });
     $("#playlist_options").bind('change', function(){
             var val = $(this).val();
              if(val=="add_to_queue")
              {
                 add_queue_playlist();
+                $.notify('Added to queue',{ className:'success', position:"top center"});
              }
              else if(val.split('_')[0]=="delete")
              {
                 delete_playlist(val.split('_')[1]);
+        
              }
              else if(val.split('_')[0]=="rename")
              {
                 rename_playlist('mainbody', val.split('_')[1]);
+
              }
              else if(val.split('_')[0]=="publicToggle")
              {
@@ -1652,7 +1928,7 @@ $("#shared_link").click(function(){ hash_change("shared"); });      // changes h
 
 function artist_ready(){
   $(".artist").on('click',function(){
-      id = $(this).attr('id').split('_')[1];
+      var id = $(this).attr('id').split('_')[1];
       hash_change('artists',id);
          });
 }
@@ -1791,7 +2067,7 @@ function playlist_song_options_binder(id, owner){
             },
         update: function(e, ui) {
            var newIndex = ui.item.index();
-          console.log(oldIndex +'    '+newIndex);
+          // console.log(oldIndex +'    '+newIndex);
           change_index_playlist(oldIndex,newIndex,id);
         } 
         });
@@ -1834,11 +2110,12 @@ function artist_language_dialog_binder(){
           // console.log(language_selected);
           $('#contentList').empty();
           // console.log(albums_json[language_selected]);
-          for (var i=0; i<albums_json[language_selected].length; i++){
-          get_album_html(albums_json[language_selected][i]);
-          }
+        for (var i=0; i<albums_name[language_selected].length; i++){
+          get_album_html(albums_by_name[language_selected][albums_name[language_selected][i]]);
+        }
       album_ready();
       song_ready();
+      $(".nano").nanoScroller();
   });
   // $('#artist_language').bind('change', function(e){
   //         var language_selected = $(this).val();
@@ -1926,6 +2203,39 @@ var albums_name = {};
 var songs_name = [];
 
 $(document).ready(function(){
+    //for signin pic 
+    if(logged_in){
+        $("#signin_button").hide();
+         $("#bRight").append('<div id="login_user_pic" style="background: url('+user_photo+')"></div><div id="login_user_options">'+
+          '<ul><li>'+user_full_name+'</li>'+
+          '<li><a href="/" target="_blank" style="color: #ecf0f1;text-decoration:none">Channel i</a></li>'+
+          '<li id="signout_from_options">Signout</li></ul><div id="down_icon"></div></div>');
+        logged_in = true;
+        $('#login_user_pic').bind('click',function(){
+          $('#login_user_options').toggle();
+       });
+       $('#login_user_options ul li').bind('click',function(){
+          $('#login_user_options').toggle();
+       });
+       //for outside div click
+       $(document).mouseup(function (e)
+            {
+               var container = $("#login_user_options");
+
+                if (!container.is(e.target) // if the target of the click isn't the container...
+                    && container.has(e.target).length === 0) // ... nor a descendant of the container
+                {
+                    container.hide();
+                }
+      }); 
+       //for signout
+                    $('#signout_from_options').bind('click',function(){
+                      $('#signin_button').click().show();
+                      $('#login_user_pic').remove();
+                      $('#login_user_options').remove();
+                    });
+    }
+
     var que = localStorage.getItem('queue');
    if(que != null && que.length>0)
     {
@@ -1936,6 +2246,8 @@ $(document).ready(function(){
           {
             add_LS_queue(qu[que[i]]);
           }
+          $('#play_queue').click();  // by default opened
+
         });
         
     }
@@ -1948,8 +2260,13 @@ $(document).ready(function(){
           closeSearch();
       });
    // loading line starts here 
+   $('#loading_line').css({'width':'0'});
+   $('#loading_line').animate({'width':'30%'});
+   $('#loading_line').animate({'width':'60%'},800);
    $.getJSON('/songsmedia/songs_json/all_artists.json', function(data){
          // loading line loading ends
+         $('#loading_line').animate({'width':'100%'},function(){$('#loading_line').animate({'left':'100%'});});
+         
          artists_json1 = data;
          for(var i in artists_json1){ artists_by_name[artists_json1[i].artist] = artists_json1[i]; artists_name.push(artists_json1[i].artist); }
          artists_name.sort();
@@ -1959,10 +2276,22 @@ $(document).ready(function(){
          albums_by_name['English'] = {};
          albums_name['English'] = [];
          for(var i in artists_json1){ for(var j = 0; j< artists_json1[i].album_set.length; j++ ){ if(albums_name['Hindi'].indexOf(artists_json1[i].album_set[j].album ) >= 0  ||  artists_json1[i].artist!="Hindi") continue; albums_by_name['Hindi'][artists_json1[i].album_set[j].album] =  albums_json1[artists_json1[i].album_set[j].id] = artists_json1[i].album_set[j]; albums_name['Hindi'].push(artists_json1[i].album_set[j].album); }}
-         for(var i in artists_json1){ for(var j = 0; j< artists_json1[i].album_set.length; j++ ){ if(albums_name['English'].indexOf(artists_json1[i].album_set[j].album ) >= 0  ||  artists_json1[i].artist=="Hindi") continue; albums_by_name['English'][artists_json1[i].album_set[j].album] =  albums_json1[artists_json1[i].album_set[j].id] = artists_json1[i].album_set[j]; albums_name['English'].push(artists_json1[i].album_set[j].album); }}
+         /*for(var i in artists_json1){ for(var j = 0; j< artists_json1[i].album_set.length; j++ ){ if(albums_name['English'].indexOf(artists_json1[i].album_set[j].album ) >= 0  ||  artists_json1[i].artist=="Hindi") continue; albums_by_name['English'][artists_json1[i].album_set[j].album] =  albums_json1[artists_json1[i].album_set[j].id] = artists_json1[i].album_set[j]; albums_name['English'].push(artists_json1[i].album_set[j].album); }}*/
+for(var i in artists_json1){ for(var j = 0; j< artists_json1[i].album_set.length; j++ ){ if(artists_json1[i].album_set[j].id in albums_json1   ||  artists_json1[i].artist=="Hindi") continue; albums_by_name['English'][artists_json1[i].album_set[j].album] =  albums_json1[artists_json1[i].album_set[j].id] = artists_json1[i].album_set[j]; albums_name['English'].push(artists_json1[i].album_set[j].album); }}
+for(var i in artists_json1){ for(var j = 0; j< artists_json1[i].album_set.length; j++ ){ if(artists_json1[i].album_set[j].id in albums_json1   ||  artists_json1[i].artist!="Hindi") continue; albums_by_name['Hindi'][artists_json1[i].album_set[j].album] =  albums_json1[artists_json1[i].album_set[j].id] = artists_json1[i].album_set[j]; albums_name['Hindi'].push(artists_json1[i].album_set[j].album); }}
         albums_name['Hindi'].sort();
         albums_name['English'].sort();
         albums_open=true;
+
+        for(var i in albums_json1){ for(var k=0; k<albums_json1[i].song_set.length ; k++){ 
+          try{
+            songs_by_name[albums_json1[i].song_set[k].song] = songs_json1[albums_json1[i].song_set[k].id] = albums_json1[i].song_set[k];
+            songs_name.push(albums_json1[i].song_set[k].song);
+          }
+          catch(err){}
+          } }
+        songs_open=true;
+
    split_hash();
     
   hash = document.location.href.split('#')[1];
@@ -1972,7 +2301,7 @@ $(document).ready(function(){
   }
 // loading
 //loading=true;
-$('body').css({'opacity':'0.4'});
+//$('body').css({'opacity':'0.4'});
 $('#loading_div_spinner').css({'display':'block'});
    get_json('trending');
  //  clip = new ZeroClipboard.Client();
@@ -2027,10 +2356,37 @@ function login()
           if(login_cancel){ login_cancel=false; return;}
               reload();
            logged_in=true;
-           $("#signin_button").text('Sign Out');
+           $("#signin_button").hide();
+           //display artist pic
+         $("#bRight").append('<div id="login_user_pic" style="background: url('+user_photo+')"></div><div id="login_user_options">'+
+          '<ul><li>'+user_full_name+'</li>'+
+            '<li><a href="/" target="_blank" style="color: #ecf0f1;text-decoration:none">Channel i</a></li>'+
+            '<li id="signout_from_options">Signout</li></ul><div id="down_icon"></div></div>');
            login_cancel=false;
+           $('#login_user_pic').bind('click',function(){
+              $('#login_user_options').toggle();
+           });
+           $('#login_user_options ul li').bind('click',function(){
+              $('#login_user_options').toggle();
+           });
 
-     });
+            $(document).mouseup(function (e)
+            {
+               var container = $("#login_user_options");
+
+                if (!container.is(e.target) // if the target of the click isn't the container...
+                    && container.has(e.target).length === 0) // ... nor a descendant of the container
+                {
+                    container.hide();
+                }
+            });
+            //for signout
+                    $('#signout_from_options').bind('click',function(){
+                      $('#signin_button').click().show();
+                      $('#login_user_pic').remove();
+                      $('#login_user_options').remove();
+                    });    
+         });
   $("#signin_button_large").on('click', function(){
           if(!logged_in)
           {
@@ -2038,8 +2394,37 @@ function login()
             var pwd = $('#jb_password').val();
             $.post('/login/',{username:uid, password:pwd}, function(data){
               reload();
-                    $("#signin_button").text('Sign Out');
+                    //something
+                    $("#signin_button").hide();
+                    $("#bRight").append('<div id="login_user_pic" style="background: url('+user_photo+')"></div><div id="login_user_options">'+
+                      '<ul><li>'+user_full_name+'</li>'+
+                      '<li><a href="/" target="_blank" style="color: #ecf0f1;text-decoration:none">Channel i</a></li>'+
+                      '<li id="signout_from_options">Signout</li></ul><div id="down_icon"></div></div>');
                     logged_in = true;
+                    $('#login_user_pic').bind('click',function(){
+                      $('#login_user_options').toggle();
+                   });
+                   $('#login_user_options ul li').bind('click',function(){
+                      $('#login_user_options').toggle();
+                   });
+
+                   //for on blur 
+                   $(document).mouseup(function (e)
+                    {
+                       var container = $("#login_user_options");
+
+                        if (!container.is(e.target) // if the target of the click isn't the container...
+                            && container.has(e.target).length === 0) // ... nor a descendant of the container
+                        {
+                            container.hide();
+                        }
+                    }); 
+                    //for signout
+                    $('#signout_from_options').bind('click',function(){
+                      $('#signin_button').click().show();
+                      $('#login_user_pic').remove();
+                      $('#login_user_options').remove();
+                    });
                     $('#signin_cancel').click();
                     $('#jb_username').val('');
                     $('#jb_password').val('');
@@ -2071,11 +2456,11 @@ function login()
 */
 function display_public_playlists(){
       $("#centerdata").empty();
-        $("#centerdata").append('<div id="playlistsList">  <div class="nano" id="left_playlist_list">  <div id="contentList" class="content"> </div></div></div>');
+        $("#centerdata").append('<div id="playlistsList">  <div class="nano" id="left_playlist_list">  <div id="contentList" class="content" style= "top: 3;"> </div></div></div>');
   if( public_playlists_open )
   {
       var data = public_playlists_json;
-        var html = '<div class="start"><div class="list_alpha"><div class="playlist_create" id="playlist_new"><div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div></div> <ul id= "playlists"></ul></div></div>';
+        var html = '<div class="start"><div class="list_alpha"> <ul id= "playlists"></ul></div></div>';
       $("#contentList").append(html);
       for(var i=0; i<data.length; i++){
         var playlist = data[i];
@@ -2090,8 +2475,8 @@ function display_public_playlists(){
   url = 'playlists_public/';
   $.ajax(url,{ type:"GET" } ,contentType= "application/json").done( function(data){
       $("#centerdata").empty();
-        $("#centerdata").append('<div id="playlistsList">  <div class="nano" id="left_playlist_list">  <div id="contentList" class="content"> </div></div></div>');
-        html = '<div class="start"><div class="list_alpha"><div class="playlist_create" id="playlist_new"><div id="plus_icon"><i class="icon-plus"></i></div><div id="create_new_div"><a id="create_new">Create New</a></div></div> <ul id= "playlists"></ul></div></div>';
+        $("#centerdata").append('<div id="playlistsList">  <div class="nano" id="left_playlist_list">  <div id="contentList" class="content" style= "top: 3;"> </div></div></div>');
+        var html = '<div class="start"><div class="list_alpha"> <ul id= "playlists"></ul></div></div>';
       $("#contentList").append(html);
       for(var i=0; i<data.length; i++){
         var playlist = data[i];

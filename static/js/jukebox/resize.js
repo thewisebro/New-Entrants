@@ -308,7 +308,7 @@ console.log(n+"final");
 // add resize class only to trending and albums
 $(window).resize(function() {
 //playlist images 
-  var widthOfDiv = $('#playlist_view').width()/5;
+  var widthOfDiv = Math.floor(($('#playlist_view').width()-1)/5);
        $('#playlistBanner ul li').css({width:widthOfDiv,height:widthOfDiv});
        $('#playlistBanner').css({height:widthOfDiv});
        $('#layerBanner').css({top:widthOfDiv-100+5});
@@ -319,7 +319,8 @@ $(window).resize(function() {
 
 
 if($("#navigation a.selected")[0]==$("#playlists_link")[0]){
-        var widthOfDiv = $('#playlist_view').width()/5;
+        var widthOfDiv = Math.floor(($('#playlist_view').width()-1)/5);
+
                     $('#playlistBanner ul li').css({width:widthOfDiv,height:widthOfDiv});
                                 $('#playlistBanner').css({height:widthOfDiv});
                                 var tops = widthOfDiv-100;

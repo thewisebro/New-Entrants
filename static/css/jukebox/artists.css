@@ -8,7 +8,7 @@ body{
 position: fixed;
 display: inline-block;
 width: 180px;
-height: 100%;
+/*height: 100%;*/
 border-right: #E9E9E9 1px solid;
 box-shadow: inset -1px 0px 5px #222;
 padding: 10px 10px 10px 10px;
@@ -64,7 +64,9 @@ color: #444;
 font-size: 24px;
 font-family:"helvetica_neue_light";
 color: #757575;
+cursor: pointer;
 }
+
 #oaoRight{
 margin-left: 20px;
 right: 30px;
@@ -195,3 +197,4 @@ margin-top: 30px;
 		font-size: 18px;
 	}
 }
+

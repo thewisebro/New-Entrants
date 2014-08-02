@@ -197,7 +197,11 @@ function remove_from_queue(insert)
 
 function delete_from_playlist(index, play_id)
 {
-  $.post('playlist_delete_from/',{id:play_id, index:index});
+  $.post('playlist_delete_from/',{id:play_id, index:index}).done(function(){
+     $.notify('Successfully deleted',{ className:'success', position:"top center"});
+  }).fail(function(){
+      $.notify('Unable to delete song',{ className:'error', position:"top center"});
+  });
 }
 
 
@@ -212,7 +216,7 @@ function add_LS_queue(song)
   var id = 'song_'+song.id;
   var image = song.album.album_art;
   if(image=="") image = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
-  image = 'http://192.168.121.5'+'\/songsmedia\/'+ image;
+  image = '\/songsmedia\/'+ image;
   var artist_name = song.artists[0].artist;
   var song_name = song.song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
@@ -237,7 +241,7 @@ function add_next_queue(song)
   var id = 'song_'+song.id;
   var image = song.album.album_art;
   if(image=="") image = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
-  image = 'http://192.168.121.5'+'\/songsmedia\/' + image;
+  image = '\/songsmedia\/' + image;
   var artist_name = song.artists[0].artist;
   var song_name = song.song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
@@ -279,7 +283,7 @@ function add_queue_song(song)
   var image = song.album.album_art;
     if(image=="") image = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
 
-  image = 'http://192.168.121.5'+'\/songsmedia\/' + image;
+  image = '\/songsmedia\/' + image;
   var artist_name = song.artists[0].artist;
   var song_name = song.song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
@@ -298,7 +302,7 @@ $(".qartist").width($(".qitem").width()-50);
           $(this).removeClass('qselected');
           });
        elem.addClass('qselected');
-       
+
 $(".qsong").width($(".qitem").width()-50);
 $(".qartist").width($(".qitem").width()-50);
 add_in_queue(song.id,queue.length);
@@ -353,10 +357,10 @@ function clone_element_song(id)
               if(image=="") image = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
 
               console.log(image);
-              image = 'http://192.168.121.5/songsmedia/'+image;
+              image = '/songsmedia/'+image;
               var artist_name = songs_url[id].artists[0].artist;
               var song_name = songs_url[id].song;
-              var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
+var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
                  + ' </div>'
                  + '<div class="qinfo" style="padding-right:5px;">'
                  + '<div class="qsong">'+song_name+'</div>';
@@ -375,10 +379,10 @@ function clone_element_song(id)
                   var image = songs_url[id].album.album_art;
                   if(image=="") image = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
 
-                  image = 'http://192.168.121.5/songsmedia/'+image;
+                  image = '/songsmedia/'+image;
                   var artist_name = songs_url[id].artists[0].artist;
                   var song_name = songs_url[id].song;
-                  var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
+var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
                      + ' </div>'
                      + '<div class="qinfo" style="padding-right:5px;>'
                      + '<div class="qsong">'+song_name+'</div>';
@@ -530,13 +534,14 @@ $(".open_queue").on("click",function(){
       $("#queue_trash").css({'display':'block'});
       $("#popular_artists_list").css({'visibility':'visible'});
       $("#play_queue_icon").animate({left:180},300);//162
-      $("#play_queue_icon").find('i').removeClass().addClass("icon-remove");
+      $("#play_queue_icon").find('i').removeClass().addClass("icon-chevron-sign-left");
       $("#popular_artists").removeClass("popular_artists_before").addClass("popular_artists_after");
     }
     });
 
 /* queue fuctions */
 $("#clear_queue").on("click",function(){
+   $.notify("Queue Cleared",{ className:'success', position:"top center"});
    $("#popular_artists_list").animate({left:"206"},100,function(){
    $("#queue_content").empty(); 
    $("#popular_artists_list").animate({opacity:1,left:0});
@@ -635,9 +640,9 @@ $("#add_to_playlist").bind("click",function(){
       $('#add_to_saved_playlist').empty();
       if(!playlists_open) get_json('playlists');
       if(playlists_json.playlists && playlists_json.playlists.length > 0){
-         $('#add_to_saved_playlist').append('<option value=0>Save As Existing</option>');
+         $('#add_to_saved_playlist').append('<option selected>Append to existing Playlist</option>');
          for(var i=0;i<playlists_json.playlists.length;i++){
-          alert('as');
+          // alert('as');
          $('#add_to_saved_playlist').append('<option value='+playlists_json.playlists[i].id+'>'+playlists_json.playlists[i].name+'</option>');
         }
       }
@@ -725,7 +730,7 @@ function playlist_banner_images(songs)
         if(song_count>=new_songs.length) return;
         if(songs_url[new_songs[song_count]].album.album_art=="") songs_url[new_songs[song_count]].album.album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
 
-        $(this).css('background-image','url(http://192.168.121.5\/songsmedia\/'+songs_url[new_songs[song_count]].album.album_art+')');
+        $(this).css('background-image','url(\/songsmedia\/'+songs_url[new_songs[song_count]].album.album_art+')');
         song_count++;
       }); 
 }
@@ -740,8 +745,19 @@ function add_queue_playlist()
 
 function delete_playlist(id)
 {
-  $('ul#playlists li#playlist_'+id).remove();
-  $.post('playlist_delete/',{id:id});
+  var name_playlist = $("#playlistName").text();
+  $.post('playlist_delete/',{id:id}).done(
+    function(){
+    $('ul#playlists li#playlist_'+id).remove();
+    $.notify('Playlist deleted: '+ name_playlist,{ className:'success', position:"top center"});
+      var num = Math.floor((Math.random() * $('#playlists li').length) + 1);
+      $('#playlists>li:nth-child('+ num+')').click();
+    }
+    ).fail(
+    function(){
+    $.notify('Unable to delete: '+ name_playlist,{ className:'error', position:"top center"});
+    }
+    );
   get_json('playlists');
     
 }
@@ -791,7 +807,11 @@ function rename_playlist(where, id)
                   $('ul#playlists li#shared_'+id).html('<span>'+capitalize(new_name)+'</span>');
                   
                    $.post('playlist_rename/',{name:new_name, id:id}, function(data){
+                        $.notify('Renamed to '+new_name,{ className:'success', position:"top center"});
                          get_json('playlists');
+
+                     }).fail(function(){
+                        $.notify('Unable to rename',{ className:'error', position:"top center"});
                      }); 
               }
             
@@ -801,7 +821,6 @@ function rename_playlist(where, id)
     $('#playlistName input').blur(function(){
             select=false; 
                   $('#playlistName').html(capitalize(old_name));
-
         });
     
   }
@@ -811,6 +830,10 @@ function rename_playlist(where, id)
 
 function private_toggle_playlist(id)
 {
-  $.get('playlist_private_toggle/',{id:id});
+  $.get('playlist_private_toggle/',{id:id}).done(function(){
+    $.notify('Successfully changed',{ className:'success', position:"top center"});
+  }).fail(function(){
+    $.notify('Unable to change',{ className:'error', position:"top center"});
+  });
   get_json('public_playlists'); 
 }

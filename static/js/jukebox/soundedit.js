@@ -19,7 +19,9 @@ function Player() {
     play: function() {
        $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_pause.png")
      //  console.log("--------------"+sound.id); 
-
+      if( $('#slider').slider("value")<5){sound.setVolume( $('#slider').slider(0));}
+        else{sound.setVolume( $('#slider').slider("value"));}
+       
        $('#'+sound.id).find('.faint').animate({'opacity':'1'},300);
        $('#'+sound.id).find('.play_icon').animate({'opacity':'1'},300);
         $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_pause.png");
@@ -382,18 +384,17 @@ function Player() {
     
     $("#shufflepic").on("click",function(){
         if(self.shuffle){
-           $("#shufflepic").find('img').attr("src","/static/images/jukebox/shufflepicwhite.png");
+           $("#shufflepic").find('img').attr("src","/static/images/jukebox/shufflepic.png");
           self.shuffle=false;
         }
         else{ 
-          $("#shufflepic").find('img').attr("src","/static/images/jukebox/shufflepic.png");
+          $("#shufflepic").find('img').attr("src","/static/images/jukebox/shufflepicwhite.png");
           self.shuffle=true;
         }
         
         })
     //volume slider
     $('#slider').slider({
-
           slide: function(event, ui) {
 
                 volume = $('#volumeicons i');
@@ -440,7 +441,6 @@ function Player() {
                 }
 
             },
-
             stop: function( event, ui ) {
                 var value = $(this).slider('value');
                 volume = $('#volumeicons i');
