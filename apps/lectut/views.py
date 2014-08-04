@@ -1,6 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
+from settings import *
+
+#import mimetypes, magic
+import mimetypes, os
+
 from nucleus.models import Batch, Course, User, Student
 from forms import *
 from models import *
@@ -27,37 +33,100 @@ def dispbatch(request):
       student = request.user.student
       batches = student.batch_set.all()
       courses = map(lambda x: x.course, batches)
-      context = {'courses': courses}
+      context = {'courses': courses,
+                 'batches': batches}
       return render(request, 'lectut/courses.html', context)
   else:
       return HttpResponse("Please log-in to view your courses")
 
-def coursepage(request, course_name):
-      return HttpResponse("bla bla")
+@login_required
+def coursepage(request, batch_id):
+       user = request.user
+       userBatch = Batch.objects.get(id=batch_id)
+       if request.method == 'POST':
+             text_form = TextUpload(request.POST)
+             file_form = FileForm(request.POST , request.FILES )
+             if text_form.is_valid():
+                new_notice=TextNotice(text=request.POST['text'] , upload_user=user,batch=userBatch)
+                new_notice.save()
+                return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
-def upload(request):
-#context={'image_form' : image_form}
-#return render (request, 'lectut/image.html', context)
-   if request.method == 'POST':
-           text_form = TextUpload(request.POST)
-           image_form = ImageForm(request.POST , request.FILES )
-           if text_form.is_valid():
-              text_form.save()
-              return HttpResponseRedirect(reverse('upload'))
+             elif file_form.is_valid():
+                file_type = getFileType(request.FILES['filename'])
+                new_file = UploadFile(upload_file = request.FILES['filename'], file_type=file_type, upload_user=user, batch=userBatch)
+                new_file.save()
+                return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
+       else:
+          text_form = TextUpload()
+          image_form = FileForm()
 
-           elif image_form.is_valid():
-              new_image = UploadImage(upload_image = request.FILES['upload_image'])
-              new_image.save()
-              a1=Activity(log=new_image)
-              a1.save()
-              return HttpResponseRedirect(reverse('upload'))
-   else:
-      text_form = TextUpload()
-      image_form = ImageForm()
+       previous_noti=UploadFile.objects.all().filter(batch_id=batch_id).order_by('-datetime_created')
 
-   previous_noti=UploadImage.objects.all().order_by('-datetime_created')
+       context = {'image_form': image_form,
+                  'text_form' : text_form,
+                  'previous_noti': previous_noti,
+                  'batch':userBatch,
+                  'name':batch_id}
+       return render( request, 'lectut/image.html', context)
 
-   context = {'image_form': image_form,
-              'text_form' : text_form,
-              'previous_noti': previous_noti}
-   return render( request, 'lectut/image.html', context)
+def getFileType(file_name):
+#mime = magic.Magic(mime=True)
+#file_type = mime.from_file(file_name)
+  extension = file_name.name.split(".")[1]
+  if extension in ['jpg','png','jpeg']:
+    file_type="image"
+  elif extension=='pdf':
+    file_type="pdf"
+  elif extension=='ppt':
+    file_type="ppt"
+  elif extension in ['dv', 'mov', 'mp4', 'avi', 'wmv']:
+    file_type="video"
+  else:
+    file_type="unknown"
+  return file_type
+
+def download_file(request, file_id):
+  download_file = UploadFile.objects.get(id = file_id)
+  path_to_file = os.path.join(MEDIA_URL, str(download_file.upload_file))
+  download_file_open = os.path.join(MEDIA_URL, str(download_file))
+  import pdb; pdb.set_trace()
+  file = open(download_file_open,"r")
+  mimetype = mimetypes.guess_type(filename)[0]
+
+  response = HttpResponse(mimetype='application/force-download')
+#response = HttpResponse(file.read(), mimetype=mimetype)
+  response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(download_file)
+  response['X-Sendfile'] = smart_str(path_to_file)
+  return response
+
+def get_path_to_file(file_name):
+  return MEDIA_URL/file_name.upload_file
+#def upload(request):
+#   user = request.user
+#   userBatch = Batch.objects.get(id=1)
+##context={'image_form' : image_form}
+##return render (request, 'lectut/image.html', context)
+#   if request.method == 'POST':
+#           text_form = TextUpload(request.POST)
+#           image_form = ImageForm(request.POST , request.FILES )
+#           if text_form.is_valid():
+#             new_notice=TextNotice(text=request.POST['text'] , upload_user=user,batch=userBatch)
+#             new_notice.save()
+#             return HttpResponseRedirect(reverse('upload'))
+#
+#           elif image_form.is_valid():
+#              new_image = UploadImage(upload_image = request.FILES['upload_image'])
+#              new_image.save()
+##a1=Activity(log=new_image)
+##             a1.save()
+#              return HttpResponseRedirect(reverse('upload'))
+#   else:
+#      text_form = TextUpload()
+#      image_form = ImageForm()
+#
+#   previous_noti=UploadImage.objects.all().order_by('-datetime_created')
+#
+#   context = {'image_form': image_form,
+#              'text_form' : text_form,
+#              'previous_noti': previous_noti}
+#   return render( request, 'lectut/image.html', context)

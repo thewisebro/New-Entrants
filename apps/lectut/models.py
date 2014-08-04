@@ -1,7 +1,7 @@
 from core import models
 from core import forms
 
-from nucleus.models import User , Course , Faculty
+from nucleus.models import User , Course , Faculty , Batch
 from threadedcomments.models import ThreadedComment
 
 from django.contrib.contenttypes import generic
@@ -26,6 +26,14 @@ class LectutBatch(models.Model):
   def __unicode__(self):
      return str(self.name)
 
+class TextNotice(models.Model):
+  text=models.CharField(max_length=500 , null=False)
+  upload_user=models.ForeignKey(User)
+  batch=models.ForeignKey(Batch)
+
+  def __unicode__(self):
+    return str(self.text)
+
 class BaseUpload(models.Model):
   class Meta:
     abstract = True
@@ -35,11 +43,14 @@ class BaseUpload(models.Model):
           self.__class__.objects.all().update(featured = False)
      super(Model, self).save(*args, **kwargs)"""
 
-class UploadImage(BaseUpload):
-  upload_image=models.ImageField(upload_to='lectut/images/')
+class UploadFile(BaseUpload):
+  upload_file=models.FileField(upload_to='lectut/images/')
+  file_type=models.CharField(max_length=10 , null=False)
+  upload_user=models.ForeignKey(User)
+  batch=models.ForeignKey(Batch)
 
   def __unicode__(self):
-    return str(self.upload_image)
+    return str(self.upload_file)
 
 '''class UploadVideo(BaseUpload):
   upload_video=models.FileField(upload_to='lectut/videos' , null=True)
