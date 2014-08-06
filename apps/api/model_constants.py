@@ -68,6 +68,7 @@ STATE_CHOICES = (
     ('RAJ', 'Rajasthan'),
     ('SIK', 'Sikkim'),
     ('TAN', 'Tamil Nadu'),
+    ('TLG', 'Telangana'),
     ('TRP', 'Tripura'),
     ('UTA', 'Uttaranchal'),
     ('UTP', 'Uttar Pradesh'),

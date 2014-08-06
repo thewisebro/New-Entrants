@@ -132,6 +132,7 @@ class Playlist(models.Model):
   songs = models.TextField(null=True, blank=True)                                     # TextField:-> Large amount of songs with 'b' in between
   private = models.BooleanField(default=True)
   liked_by = models.ManyToManyField(nucleus.models.User, related_name='jukebox_playlist_likes')
+  public_count = models.PositiveIntegerField(default=0)          # For Trending Playlists
   def __unicode__(self):
     return self.name
 

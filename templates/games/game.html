@@ -19,7 +19,7 @@
             <div id="highscores_list1">
             {% for gamescore in gamescores %} 
               <div class="leader_line">
-                <img class="highscores_image" src="/photo/{{gamescore.student.user.username}}/" />
+                <img class="highscores_image" src="{{gamescore.student.user.photo_url}}" />
                 <div class="name1">
                   {{gamescore.student.user.name}}
                 </div>

@@ -8,7 +8,7 @@ apt-get install rubygems
 apt-get install python-mysqldb
 apt-get install python-pygresql
 
-pip install Django\==1.6.1
+pip install Django\==1.6.5
 
 # Installing PIL
 apt-get build-dep python-imaging
@@ -31,12 +31,32 @@ pip install sqlparse
 # django-fluent-comments
 pip install Akismet
 
+# Install JAVA
+sudo apt-get install openjdk-7-jdk
+
+# Install jetty
+sudo apt-get install jetty
+sudo apt-get install libjetty-extra
+
+####### 'BeautifulSoup' Installation #########
+
+# python lxml parser [Dependency]
+apt-get install python-lxml
+
+# python html5lib parser [Dependency]
+apt-get install python-html5lib
+
+# python BeautifulSoup [Main installation]
+pip install BeautifulSoup
+
+#################### Ends ###################
+
+
 # django-extensions
 pip install Werkzeug
 
 # several python modules
 
-pip install beautifulsoup
 pip install xhtml2pdf
 pip install pisa
 pip install xlrd
@@ -48,3 +68,7 @@ pip install python-dateutil
 
 # fuzzy wuzzy
 pip install -e git+https://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy
+
+# memcached
+apt-get install memcached
+pip install python-memcached

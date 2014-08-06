@@ -18,7 +18,7 @@ var constants = {"All" : [], "Placement" : [], "Authorities" : Authorities, "Bha
 $(document).on("load_app_notices", function(e, h1, h2, h3, h4, h5){
   console.log("abc");
   console.log(h1);
-  $("#right-column").empty();
+  $("#right-column .content").empty();
   if(h1 == undefined || h1 == "")
   {
     console.log("abcderter");

@@ -48,7 +48,7 @@ class Event(models.Model):
   time = models.TimeField(blank=True, null=True)
   upto_date = models.DateField(blank=True, null=True)
   upto_time = models.TimeField(blank=True, null=True)
-  tlace = models.CharField(max_length=MC.TEXT_LENGTH, blank=True, verbose_name='Venue')
+  place = models.CharField(max_length=MC.TEXT_LENGTH, blank=True, verbose_name='Venue')
   description = models.CKEditorField(blank=True)
   event_type = models.CharField(max_length=MC.CODE_LENGTH, choices=EVENT_TYPE_CHOICES)
   datetime_added = models.DateTimeField(auto_now_add=True)

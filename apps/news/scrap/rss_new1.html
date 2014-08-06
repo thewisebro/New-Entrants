@@ -1,0 +1,32 @@
+<html>:
+	<head>
+		<script type="text/javascript" src="rssNew.js"></script>
+		<link rel="stylesheet" type="text/css" href="rss_new.css"/>
+	</head>
+	<body>
+		<div id="news">
+			<table id="news_table" border="1">
+				<tr id="types_row">
+					<th><a href="javascript:left_arrow_click_row1();" alt=""><img src="left_arrow.jpg"></a></th>
+					<th style="width:400px;" id="types"><h3>International</h3></th>
+					<th><a href="javascript:right_arrow_click_row1();" alt=""><img src="right_arrow.jpg"></a></th>
+				</tr>
+				<tr id="channels_row">
+					<th><a href="javascript:left_arrow_click_row2();" alt=""><img src="left_arrow.jpg"></a></th>
+					<th style="width:400px;" id="channels"><h3>Google</h3></th>
+					<th><a href="javascript:right_arrow_click_row2();" alt=""><img src="right_arrow.jpg"></a></th>
+				</tr>
+				<tr id="news_items">
+					<th colspan="3" style="width:500px;" id="data">
+            
+						<!--script type="text/javascript">
+							document.getElementById("data").innerHTML="<img src='loading.gif' style='width:350px;height:350px;'>";
+							var data="p=International&q=google_int";
+							ajax_send("GET","rss2.php",data,test);
+						</script-->
+					</th>
+				</tr>		
+			</table>
+		</div>
+	</body>
+</html>

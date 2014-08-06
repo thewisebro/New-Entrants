@@ -8,6 +8,7 @@ from HTMLParser import HTMLParser
 
 from core.views.generic import ListView,TemplateView,View,DetailView, RedirectView
 from django.core import serializers
+from core.models import Q                                   # For complex lookups
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
@@ -336,15 +337,45 @@ class DeletePlaylistView(CreateAPIView):
         playlist.delete()
     return Response('')
 
+
+class PublicPrivatePlaylistView(CreateAPIView):
+  serializer_class = PlaylistSerializer
+  permission_classes = (IsOwnerOrReadOnly,)
+  def get(self,request):
+    playlist_id = int(self.request.POST.get('id',''))
+    active = self.request.user.is_active
+    if active :
+      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
+      if len(playlists) == 1 :
+        playlist = playlists[0]
+        playlist.private = not playlist.private
+    return Response('')
+
+
+class PublicPlaylistAllJsonView(ListAPIView):
+  serializer_class = PlaylistSerializer
+  def get_queryset(self):
+    playlists = Playlist.objects.filter(private=False).order_by('-public_count')
+    if self.request.user.is_active:
+      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      playlists = playlists.exclude(person=user.id)
+    return playlists
+
+
+
 class PlaylistDescView(RetrieveAPIView):
 #queryset = Playlist.objects.all()
   serializer_class = PlaylistDescSerializer
   def get_queryset(self):
+    playlists = Playlist.objects.filter(private=False)
     active = self.request.user.is_active
     if active :
       user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
-      playlists = Playlist.objects.filter(person=user.id)
-      return playlists
+      playlists = Playlist.objects.filter(Q(person=user.id) | Q(private=False))
+    return playlists
+
+
 
 class GetSongView(RetrieveAPIView):
   queryset = Song.objects.all()
