@@ -1,0 +1,150 @@
+2014/07/31 10:22:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "gii".' in /home/namit/yii/yii/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /home/namit/yii/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('gii')
+#1 /home/namit/yii/yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /home/namit/yii/ocp/index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/namit/yii/ocp/index.php?r=gii
+---
+2014/07/31 10:26:16 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'You are not allowed to access this page.' in /home/namit/yii/yii/framework/gii/GiiModule.php:170
+Stack trace:
+#0 /home/namit/yii/yii/framework/web/CController.php(263): GiiModule->beforeControllerAction(Object(DefaultController), Object(CInlineAction))
+#1 /home/namit/yii/yii/framework/web/CWebApplication.php(282): CController->run('')
+#2 /home/namit/yii/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('gii')
+#3 /home/namit/yii/yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /home/namit/yii/ocp/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/namit/yii/ocp/index.php?r=gii
+---
+2014/07/31 10:26:40 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'You are not allowed to access this page.' in /home/namit/yii/yii/framework/gii/GiiModule.php:170
+Stack trace:
+#0 /home/namit/yii/yii/framework/web/CController.php(263): GiiModule->beforeControllerAction(Object(DefaultController), Object(CInlineAction))
+#1 /home/namit/yii/yii/framework/web/CWebApplication.php(282): CController->run('')
+#2 /home/namit/yii/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('gii')
+#3 /home/namit/yii/yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /home/namit/yii/ocp/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/namit/yii/ocp/index.php?r=gii
+---
+2014/07/31 10:26:41 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'You are not allowed to access this page.' in /home/namit/yii/yii/framework/gii/GiiModule.php:170
+Stack trace:
+#0 /home/namit/yii/yii/framework/web/CController.php(263): GiiModule->beforeControllerAction(Object(DefaultController), Object(CInlineAction))
+#1 /home/namit/yii/yii/framework/web/CWebApplication.php(282): CController->run('')
+#2 /home/namit/yii/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('gii')
+#3 /home/namit/yii/yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /home/namit/yii/ocp/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/namit/yii/ocp/index.php?r=gii
+---
+2014/07/31 11:35:34 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'ci.nucleus_user' doesn't exist. The SQL statement executed was: SHOW FULL COLUMNS FROM `nucleus_user`.
+in /home/namit/yii/ocp/protected/controllers/NucleusUserController.php (136)
+in /home/namit/yii/ocp/index.php (13)
+2014/07/31 11:35:34 [error] [exception.CDbException] exception 'CDbException' with message 'The table "nucleus_user" for active record class "NucleusUser" cannot be found in the database.' in /home/namit/yii/yii/framework/db/ar/CActiveRecord.php:2362
+Stack trace:
+#0 /home/namit/yii/yii/framework/db/ar/CActiveRecord.php(411): CActiveRecordMetaData->__construct(Object(NucleusUser))
+#1 /home/namit/yii/yii/framework/db/ar/CActiveRecord.php(79): CActiveRecord->getMetaData()
+#2 /home/namit/yii/ocp/protected/controllers/NucleusUserController.php(136): CActiveRecord->__construct('search')
+#3 /home/namit/yii/yii/framework/web/actions/CInlineAction.php(49): NucleusUserController->actionAdmin()
+#4 /home/namit/yii/yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#5 /home/namit/yii/yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#6 /home/namit/yii/yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#7 /home/namit/yii/yii/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#8 /home/namit/yii/yii/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#9 /home/namit/yii/yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#10 /home/namit/yii/yii/framework/web/CController.php(291): CFilterChain->run()
+#11 /home/namit/yii/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 /home/namit/yii/yii/framework/web/CWebApplication.php(282): CController->run('admin')
+#13 /home/namit/yii/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('nucleusUser/adm...')
+#14 /home/namit/yii/yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#15 /home/namit/yii/ocp/index.php(13): CApplication->run()
+#16 {main}
+REQUEST_URI=/namit/yii/ocp/index.php?r=nucleusUser/admin
+HTTP_REFERER=http://192.168.121.5/namit/yii/ocp/index.php?r=site/login
+---
+2014/08/06 11:50:09 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'You are not authorized to perform this action.' in /home/namit/channeli/cgi_apps/php/yii/framework/web/auth/CAccessControlFilter.php:182
+Stack trace:
+#0 /home/namit/channeli/cgi_apps/php/yii/framework/web/auth/CAccessControlFilter.php(145): CAccessControlFilter->accessDenied(Object(CWebUser), 'You are not aut...')
+#1 /home/namit/channeli/cgi_apps/php/yii/framework/web/filters/CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#3 /home/namit/channeli/cgi_apps/php/yii/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#4 /home/namit/channeli/cgi_apps/php/yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#5 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(291): CFilterChain->run()
+#6 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 /home/namit/channeli/cgi_apps/php/yii/framework/web/CWebApplication.php(282): CController->run('admin')
+#8 /home/namit/channeli/cgi_apps/php/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('clients/admin')
+#9 /home/namit/channeli/cgi_apps/php/yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#10 /home/namit/channeli/cgi_apps/php/complaint_portal/index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/complaint_portal/index.php?r=clients/admin
+HTTP_REFERER=http://namit.dev.channeli.in/complaint_portal/index.php?r=clients/create
+---
+2014/08/06 18:29:34 [error] [php] include(contact_number.php): failed to open stream: No such file or directory (/home/namit/channeli/cgi_apps/php/yii/framework/YiiBase.php:427)
+Stack trace:
+#0 /home/namit/channeli/cgi_apps/php/yii/framework/validators/CValidator.php(186): import()
+#1 /home/namit/channeli/cgi_apps/php/yii/framework/base/CModel.php(287): createValidator()
+#2 /home/namit/channeli/cgi_apps/php/yii/framework/base/CModel.php(260): Clients->createValidators()
+#3 /home/namit/channeli/cgi_apps/php/yii/framework/base/CModel.php(304): Clients->getValidators()
+#4 /home/namit/channeli/cgi_apps/php/yii/framework/web/helpers/CHtml.php(1414): Clients->isAttributeRequired()
+#5 /home/namit/channeli/cgi_apps/php/yii/framework/web/widgets/CActiveForm.php(597): activeLabelEx()
+#6 /home/namit/channeli/cgi_apps/php/complaint_portal/protected/views/clients/_form.php(23): CActiveForm->labelEx()
+#7 /home/namit/channeli/cgi_apps/php/yii/framework/web/CBaseController.php(126): require()
+#8 /home/namit/channeli/cgi_apps/php/yii/framework/web/CBaseController.php(95): ClientsController->renderInternal()
+#9 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(869): ClientsController->renderFile()
+#10 /home/namit/channeli/cgi_apps/php/complaint_portal/protected/views/clients/create.php(18): ClientsController->renderPartial()
+#11 /home/namit/channeli/cgi_apps/php/yii/framework/web/CBaseController.php(126): require()
+#12 /home/namit/channeli/cgi_apps/php/yii/framework/web/CBaseController.php(95): ClientsController->renderInternal()
+#13 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(869): ClientsController->renderFile()
+#14 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(782): ClientsController->renderPartial()
+#15 /home/namit/channeli/cgi_apps/php/complaint_portal/protected/controllers/ClientsController.php(79): ClientsController->render()
+#16 /home/namit/channeli/cgi_apps/php/yii/framework/web/actions/CInlineAction.php(49): ClientsController->actionCreate()
+#17 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(308): CInlineAction->runWithParams()
+#18 /home/namit/channeli/cgi_apps/php/yii/framework/web/filters/CFilterChain.php(133): ClientsController->runAction()
+#19 /home/namit/channeli/cgi_apps/php/yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#20 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#21 /home/namit/channeli/cgi_apps/php/yii/framework/web/filters/CInlineFilter.php(58): ClientsController->filterAccessControl()
+#22 /home/namit/channeli/cgi_apps/php/yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#23 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(291): CFilterChain->run()
+#24 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(265): ClientsController->runActionWithFilters()
+#25 /home/namit/channeli/cgi_apps/php/yii/framework/web/CWebApplication.php(282): ClientsController->run()
+#26 /home/namit/channeli/cgi_apps/php/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#27 /home/namit/channeli/cgi_apps/php/yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#28 /home/namit/channeli/cgi_apps/php/complaint_portal/index.php(13): CWebApplication->run()
+REQUEST_URI=/complaint_portal/index.php?r=clients/create
+in /home/namit/channeli/cgi_apps/php/complaint_portal/protected/views/clients/_form.php (23)
+in /home/namit/channeli/cgi_apps/php/complaint_portal/protected/views/clients/create.php (18)
+in /home/namit/channeli/cgi_apps/php/complaint_portal/protected/controllers/ClientsController.php (79)
+2014/08/06 18:30:08 [error] [php] include(description.php): failed to open stream: No such file or directory (/home/namit/channeli/cgi_apps/php/yii/framework/YiiBase.php:427)
+Stack trace:
+#0 /home/namit/channeli/cgi_apps/php/yii/framework/validators/CValidator.php(186): import()
+#1 /home/namit/channeli/cgi_apps/php/yii/framework/base/CModel.php(287): createValidator()
+#2 /home/namit/channeli/cgi_apps/php/yii/framework/base/CModel.php(260): Clients->createValidators()
+#3 /home/namit/channeli/cgi_apps/php/yii/framework/base/CModel.php(304): Clients->getValidators()
+#4 /home/namit/channeli/cgi_apps/php/yii/framework/web/helpers/CHtml.php(1414): Clients->isAttributeRequired()
+#5 /home/namit/channeli/cgi_apps/php/yii/framework/web/widgets/CActiveForm.php(597): activeLabelEx()
+#6 /home/namit/channeli/cgi_apps/php/complaint_portal/protected/views/clients/_form.php(23): CActiveForm->labelEx()
+#7 /home/namit/channeli/cgi_apps/php/yii/framework/web/CBaseController.php(126): require()
+#8 /home/namit/channeli/cgi_apps/php/yii/framework/web/CBaseController.php(95): ClientsController->renderInternal()
+#9 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(869): ClientsController->renderFile()
+#10 /home/namit/channeli/cgi_apps/php/complaint_portal/protected/views/clients/create.php(18): ClientsController->renderPartial()
+#11 /home/namit/channeli/cgi_apps/php/yii/framework/web/CBaseController.php(126): require()
+#12 /home/namit/channeli/cgi_apps/php/yii/framework/web/CBaseController.php(95): ClientsController->renderInternal()
+#13 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(869): ClientsController->renderFile()
+#14 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(782): ClientsController->renderPartial()
+#15 /home/namit/channeli/cgi_apps/php/complaint_portal/protected/controllers/ClientsController.php(79): ClientsController->render()
+#16 /home/namit/channeli/cgi_apps/php/yii/framework/web/actions/CInlineAction.php(49): ClientsController->actionCreate()
+#17 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(308): CInlineAction->runWithParams()
+#18 /home/namit/channeli/cgi_apps/php/yii/framework/web/filters/CFilterChain.php(133): ClientsController->runAction()
+#19 /home/namit/channeli/cgi_apps/php/yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#20 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#21 /home/namit/channeli/cgi_apps/php/yii/framework/web/filters/CInlineFilter.php(58): ClientsController->filterAccessControl()
+#22 /home/namit/channeli/cgi_apps/php/yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#23 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(291): CFilterChain->run()
+#24 /home/namit/channeli/cgi_apps/php/yii/framework/web/CController.php(265): ClientsController->runActionWithFilters()
+#25 /home/namit/channeli/cgi_apps/php/yii/framework/web/CWebApplication.php(282): ClientsController->run()
+#26 /home/namit/channeli/cgi_apps/php/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#27 /home/namit/channeli/cgi_apps/php/yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#28 /home/namit/channeli/cgi_apps/php/complaint_portal/index.php(13): CWebApplication->run()
+REQUEST_URI=/complaint_portal/index.php?r=clients/create
+in /home/namit/channeli/cgi_apps/php/complaint_portal/protected/views/clients/_form.php (23)
+in /home/namit/channeli/cgi_apps/php/complaint_portal/protected/views/clients/create.php (18)
+in /home/namit/channeli/cgi_apps/php/complaint_portal/protected/controllers/ClientsController.php (79)
