@@ -91,7 +91,7 @@ if __name__ == '__main__':
         email_ids.append(event_user.user.get_email())
     while email_ids:
       first_100_email_ids = email_ids[:100]
-     email_ids = email_ids[100:]
+      email_ids = email_ids[100:]
       try:
         msg = EmailMessage(subject,content,'Event',first_100_email_ids)
         msg.content_subtype = "html"

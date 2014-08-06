@@ -583,14 +583,15 @@ function check_if_date(query2)
   console.log("entered check_if_date")
   console.log(query2)
   url=""
-  if(query2.split("--").length==2)
+  if(query2.split("-").length==2)
   {
-    parts=query2.split("--");
+    parts=query2.split("-");
     parts[0]=Date.parse(parts[0]);
     parts[1]=Date.parse(parts[1]);
-    url = ">>" + parts.join().replace(",", "--");
+    if(parts[0]>1262284200000 && parts[1]>1262284200000)
+    url = ">>" + parts.join().replace(",", "-");
   }
-  else if(!isNaN(Date.parse(query2)))
+  else if(!isNaN(Date.parse(query2)) && Date.parse(query2)>1262284200000)
   {
     x = Date.parse(query2)
     url = ">>" + x.toString() + "--" + (x+86400000).toString();
