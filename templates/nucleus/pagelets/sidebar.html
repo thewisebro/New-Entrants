@@ -4,7 +4,12 @@
 </script>
 <div id="sidebar-tabs">
   {% for tab in tabs %}
-    <div id="{{ tab }}-tab" class="tab" onclick="tab_clicked('{{ tab }}');">{{ tab|title }}</div>
+    <div id="{{ tab.name }}-tab" class="tab" onclick="tab_clicked('{{ tab.name }}');">
+      <div class="tab-icon {{ tab.name }}-tab-icon float-left">
+        <i class="{{ tab.class }}" style="color:{{ tab.color }}"></i>
+      </div>
+      <span class="tab-name float-left">{{ tab.name|title }}</span>
+    </div>
   {% endfor %}
   <div id="tab-arrow"><div></div></div>
 </div>

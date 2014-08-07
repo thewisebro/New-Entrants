@@ -3,11 +3,17 @@
 *
   margin: 0
   padding: 0
-  font-family: 'Tahoma', sans-serif
+  font-family: 'Arial', sans-serif
   font-size: 13px
 
 body
   overflow-y: scroll
+
+.float-left
+  float: left
+
+.float-right
+  float: right
 
 #header
   position: fixed
@@ -39,7 +45,22 @@ body
   #user-account
     float: right
     margin-right: 20px
-    font-size: 14px
+
+    #user-thumbnail
+      float: right
+      width: 25px
+      height: 25px
+      margin-left: 10px
+      margin-top: 8px
+
+      img
+        width: auto
+        height: 100%
+        border-radius: 2px
+
+    #user-name
+      float: right
+      font-size: 14px
 
 #sidebar-tabs
   position: fixed
@@ -51,8 +72,8 @@ body
   background: #333
 
   .tab
-    width: 110px
-    padding: 10px 0px 10px 10px
+    width: 108px
+    padding: 10px 0px 10px 12px
     height: 20px
     line-height: 20px
     cursor: pointer
@@ -61,8 +82,36 @@ body
     &:hover
       background-color: rgba(0, 0, 0, 0.25)
 
+    .tab-icon
+      width: 20px
+      height: 20px
+      i
+        font-size: 18px
+
+      .fa-home,
+      .fa-calendar,
+      .fa-group,
+      .fa-comments,
+      .fa-list-ul
+        padding-top: 1px
+      .fa-th-large
+        padding-top: 2px
+
+    .notices-tab-icon,
+    .news-tab-icon
+      margin-top: -2px
+      i
+        font-size: 25px
+        margin-left: -3px
+
+    .tab-name
+      margin-left: 10px
+
   .active-tab
     background-color: rgba(0, 0, 0, 0.45)
+    border-left: 2px solid $blue-link
+    width: 108px
+    padding: 10px 0px 10px 10px
     &:hover
       background-color: rgba(0, 0, 0, 0.45)
 
@@ -80,16 +129,64 @@ body
       height: 20px
       background: url('/static/images/nucleus/css_sprites.png') -45px -70px
 
-#content, #content-back
+$footer-height: 40px
+
+#container, #content-back
   float: left
   min-width: 450px
   max-width: 630px
   width: 48%
   margin-left: 120px
   padding-left: 20px
+  min-height: 100%
+
+#container
+  position: absolute
+
+#content, #content-back
   margin-top: 40px
   padding-top: 10px
+
+.large-width-content
+  max-width: 900px !important
+  width: 62% !important
+
+#content
+  padding-bottom: $footer-height + 20px
+  min-height: 350px
+
+#footer-container
+  height: $footer-height
+  position: absolute
+  margin-top: 20px
+  bottom: 0px
+  left: 20px
+  right: 0px
+
+#header-search
+  margin-left: 30px
+  float: left
+  min-width: 450px
+  max-width: 630px
+  width: 100%
+  /* margin-left: 120px;
+  /* padding-left: 20px;
+  /* margin-top: 40px;
+  /* padding-top: 10px;
   height: 100%
+
+#global_search_bar
+  float: left
+  font-size: 15px
+  width: 100%
+  margin-top: 6px
+  border-radius: 2px
+  border: 1px solid #d5d5d5
+  background-color: white
+  box-shadow: inset 0px 1px 1px #eeeeee
+  padding: 5px 10px
+  outline: none
+  color: #777
 
 #free-area
   position: fixed
@@ -98,7 +195,7 @@ body
   right: 0
   left: 0
   z-index: -50
-  background: #f8f8f8
+  background: #eee
 
   #content-back
     margin-top: 0
@@ -112,9 +209,17 @@ body
     z-index: 50
     overflow-y: auto
 
+  #chat-column
+    position: absolute
+    top: 0px
+    right: 0px
+    bottom: 0px
+    width: 200px
+
 .app-heading
   font-size: 14px
   font-family: $sans-serif
   font-weight: bold
   color: $red
+  margin-top: 10px
   margin-bottom: 10px

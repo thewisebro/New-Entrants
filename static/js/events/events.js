@@ -1,3 +1,5 @@
+//@ sourceURL=events.js
+
 var calendars = null;
 var events_per_request = 20;
 var display_by_month_year = false;
@@ -13,6 +15,11 @@ $(document).on("load_app_events", function(e){
   for(var i=1;i<arguments.length;i++)
     hashtags.push(arguments[i]);
   load_events_page(hashtags);
+});
+
+$(document).on("unload_app_events", function(e){
+    $('#right-column .content').html('');
+    calendar_div_shown = false;
 });
 
 function on_login_and_logout(){
@@ -69,6 +76,10 @@ function load_events_page(hashtags){
       '</div>'
     );
     calendar_div_shown = true;
+    if(calendars){
+      show_calendar_labels();
+      set_calendar();
+    }
   }
   if(!calendars){
     get_calendars(hashtags);
@@ -138,12 +149,12 @@ function get_calendars(hashtags){
 function show_calendar_labels(){
   $('#labels-body').html('');
   for(var i=0;i<calendars.length;i++){
-    $('#labels-body').append("<div id='label_"+calendars[i].name+"' class='label' onclick='label_clicked(\""+calendars[i].name+"\");'>"+
+    $('#labels-body').append("<div id='label_"+calendars[i].name+"' class='label' onclick='calendar_label_clicked(\""+calendars[i].name+"\");'>"+
         "<div class='label-name'>"+calendars[i].verbose_name+"</div></div>");
   }
 }
 
-function label_clicked(calendar_name){
+function calendar_label_clicked(calendar_name){
   if(display_by_month_year){
     location.hash = 'events/'+calendar_name+'/'+active_year+'/'+active_month;
   }
@@ -161,7 +172,7 @@ function load_calendar(calendar_name){
   var calendar = get_calendar_from_name(calendar_name);
   change_active_label(calendar_name);
   $('#content-events').html('');
-  if(calendar.events.length==0){
+  if(calendar.events.length === 0){
     update_events(calendar,'first',events_per_request);
   }
   else{
@@ -204,8 +215,8 @@ function event_html(Event,calendar_name){
          "<div style='clear:both'></div><div class='event-options-pop-up'><div onclick='edit_event("+Event.id+",event);'>Edit</div>"+
          "<div onclick='delete_event("+Event.id+",event);'>Delete</div></div>":"")+
          "</div>"+(calendar_name=='all' || (calendar_name=='virtual_calendar' && virtual_calendar.calendar_name == 'all')?
-         "<div class='shown-cal-name' "+(Event.shown_calendar_name=='Groups Calendar'?"style='color:#43b167'":"")
-           +">"+Event.shown_calendar_name+"</div>":"")+
+         "<div class='shown-cal-name' "+(Event.shown_calendar_name=='Groups Calendar'?"style='color:#43b167'":"")+
+         ">"+Event.shown_calendar_name+"</div>":"")+
          "</div>"+
       "</div> "+
       "<div class='event'>"+
@@ -213,14 +224,15 @@ function event_html(Event,calendar_name){
           "<div class='event-time'>"+(Event.time?Event.time:"Event Title")+"</div>"+
           "<div class='event-name'>"+Event.title+"</div>"+
           "<div style='clear:both'></div>"+
-        "</div>"
+        "</div>";
+
   if(Event.duration)
     html+=
         "<div class='event-duration'>"+
           "<div class='event-left'>Duration</div>"+
           "<div class='event-right'>"+Event.duration+"</div>"+
           "<div style='clear:both'></div>"+
-        "</div>"
+        "</div>";
 
   if(Event.added_by)
     html+=
@@ -228,21 +240,21 @@ function event_html(Event,calendar_name){
           "<div class='event-left'>By</div>"+
           "<div class='event-right'>"+Event.added_by+"</div>"+
           "<div style='clear:both'></div>"+
-        "</div>"
+        "</div>";
   if(Event.place)
     html+=
         "<div class='event-place'>"+
           "<div class='event-left'><div title='Venue' class='event-place-icon'></div></div>"+
           "<div class='event-right'>"+Event.place+"</div>"+
           "<div style='clear:both'></div>"+
-        "</div>"
+        "</div>";
   if(Event.description)
     html+=
         "<div class='event-short-description'>"+
           "<div class='event-left'><div title='Description' class='event-detail-icon'></div></div>"+
           "<div class='event-right'>"+Event.description+"</div>"+
           "<div style='clear:both'></div>"+
-        "</div>"
+        "</div>";
   html+=
       "</div>"+
     "</div> ";
@@ -275,11 +287,11 @@ function display_add_events(position,events,calendar){
      console.log(e);
    }
  }
- //$('#content-events').pickify_users();
- if(calendar.more == true && $('#see-more-events').length==0){
+ $('#content-events').pickify_users();
+ if(calendar.more === true && $('#see-more-events').length === 0){
    $('#content').append("<div id='see-more-events' class='see-more'><span class='button2' onclick='see_more_events(\""+calendar.name+"\");'>See More</span></div>");
  }
- if(calendar.more == false && $('#see-more-events').length>0){
+ if(calendar.more === false && $('#see-more-events').length > 0){
    $('#see-more-events').remove();
  }
  $('.event-right').find('img').click(function(){
@@ -300,15 +312,15 @@ function see_more_events(calendar_name){
 var today = new Date(),display_month=null,display_year=null;
 
 function getFirstDay(theYear, theMonth){
-    var firstDate = new Date(theYear,theMonth,1)
+    var firstDate = new Date(theYear,theMonth,1);
     return (firstDate.getDay()+6)%7; // Monday as 0
 }
 function getMonthLen(theYear, theMonth) {
-    var oneDay = 1000 * 60 * 60 * 24
-    var thisMonth = new Date(theYear, theMonth, 1)
-    var nextMonth = new Date(theYear, theMonth + 1, 1)
+    var oneDay = 1000 * 60 * 60 * 24;
+    var thisMonth = new Date(theYear, theMonth, 1);
+    var nextMonth = new Date(theYear, theMonth + 1, 1);
     var len = Math.ceil((nextMonth.getTime() -
-        thisMonth.getTime())/oneDay)
+        thisMonth.getTime())/oneDay);
     return len;
 }
 
@@ -317,8 +329,8 @@ var Months = ["January","February","March","April","May","June","July","August",
 var Weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 
 function set_calendar(){
-  if(display_month == null) display_month = today.getMonth();
-  if(display_year == null) display_year = today.getFullYear();
+  if(display_month === null) display_month = today.getMonth();
+  if(display_year === null) display_year = today.getFullYear();
   $.get('/events/get_events_dates',{
       month : display_month+1,
       year : display_year
@@ -327,8 +339,8 @@ function set_calendar(){
       $('#week-bar').html('<div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>');
       var dates = data.dates;
       var first_day = getFirstDay(display_year,display_month);
-      $('#month-name').html("<div onclick='location.hash=\"events/all/"+(display_year)+"/"+(display_month+1)
-                       +"\"'>"+Months[display_month].toUpperCase()+" "+display_year+"</div>");
+      $('#month-name').html("<div onclick='location.hash=\"events/all/"+(display_year)+"/"+(display_month+1)+
+        "\"'>"+Months[display_month].toUpperCase()+" "+display_year+"</div>");
       $('#date-matrix').html('');
       for(var i=0;i<first_day;i++)
         $('#date-matrix').append("<div></div>");
@@ -394,7 +406,7 @@ function show_event_options(element,e){
 }
 
 function event_container_mouse_over(event_id){
-  if(event_id != null && event_id != event_options_display_event_id){
+  if(event_id !== null && event_id != event_options_display_event_id){
     setTimeout(function(){$('#event-options'+event_options_display_event_id).hide();},500);
     $('.event-options-pop-up').hide();
     event_options_display_on = false;

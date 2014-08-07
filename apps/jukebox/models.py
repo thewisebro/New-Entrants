@@ -13,19 +13,24 @@ import nucleus
 
 
 
-"""
-class Person(models.Model):
-  person = models.OneToOneField(nucleus.models.Person, related_name='jukebox_person')
-  def __unicode__(self):
-    return self.person
-"""
+
 def content_file_name(instance, filename):
   return '/'.join([instance.album.album, filename])
 
 
 class Artist(models.Model):
   artist = models.CharField(max_length=MC.TEXT_LENGTH)
-  cover_pic = models.ImageField(upload_to=JC.ARTIST_PIC_DIR, max_length=MC.TEXT_LENGTH)
+  upload_storage = FileSystemStorage(location=JC.ARTIST_PIC_DIR, base_url='/uploads')
+  cover_pic = models.ImageField(upload_to='artist/',storage=upload_storage, max_length=MC.TEXT_LENGTH)
+  lang_choices = (
+      ('eng' , 'English'),
+      ('hindi' , 'Hindi'),
+      ('tamil','Tamil'),
+      ('telugu','Telugu'),
+      ('punjabi','Punjabi'),
+      ('mal','Malyali')
+  )
+  language = models.CharField(max_length=10, choices=lang_choices)
   def __unicode__(self):
     return self.artist
 
@@ -39,7 +44,17 @@ class Album(models.Model):
   artists = models.ManyToManyField(Artist, blank=True, null=True)              # Multiple Artists (feat.)
 #genres = models.ManyToManyField(Genre)                # Multiple Genres
   year = models.IntegerField(max_length=4, default = datetime.datetime.today().year)
-  album_art = models.ImageField(upload_to=JC.ALBUMART_DIR, max_length=MC.TEXT_LENGTH)
+  upload_storage = FileSystemStorage(location=JC.ALBUMART_DIR, base_url='/uploads')
+  album_art = models.ImageField(upload_to='albumart/',storage = upload_storage, max_length=MC.TEXT_LENGTH)
+  lang_choices = (
+      ('eng' , 'English'),
+      ('hindi' , 'Hindi'),
+      ('tamil','Tamil'),
+      ('telugu','Telugu'),
+      ('punjabi','Punjabi'),
+      ('mal','Malyali')
+  )
+  language = models.CharField(max_length=10, choices=lang_choices)
   def __unicode__(self):
     return self.album
 
@@ -54,7 +69,11 @@ class Song(models.Model):
   genres = models.ManyToManyField(Genre)                 # Multiple Genres
   lang_choices = (
       ('eng' , 'English'),
-      ('hindi' , 'Hindi')
+      ('hindi' , 'Hindi'),
+      ('tamil','Tamil'),
+      ('telugu','Telugu'),
+      ('punjabi','Punjabi'),
+      ('mal','Malyali')
   )
   language = models.CharField(max_length=10, choices=lang_choices)
 #  date_added = models.DateField(auto_now_add=True)        # For the date item is added
@@ -94,12 +113,26 @@ class Song(models.Model):
     super(Song,self).delete(*args,**kwargs)                         # delete the usual way
 
 
+class Jukebox_Person(models.Model):
+  person = models.OneToOneField(nucleus.models.User)
+  songs_listen = models.TextField()
+
+  def add_songs_listen(self, song):
+    if self.songs_listen != '':
+      self.songs_listen += 'b'
+    self.songs_listen += str(song.id)
+    self.save()
+
+  def __unicode__(self):
+    return unicode(self.person.id)
+
 class Playlist(models.Model):
-  person = models.ForeignKey(nucleus.models.User, related_name='jukebox_person')
+  person = models.ForeignKey(Jukebox_Person)
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   songs = models.TextField(null=True, blank=True)                                     # TextField:-> Large amount of songs with 'b' in between
   private = models.BooleanField(default=True)
   liked_by = models.ManyToManyField(nucleus.models.User, related_name='jukebox_playlist_likes')
+  public_count = models.PositiveIntegerField(default=0)          # For Trending Playlists
   def __unicode__(self):
     return self.name
 

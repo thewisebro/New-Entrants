@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 class Manager(models.Manager):
@@ -19,3 +20,7 @@ class Model(models.Model):
   objects = Manager()
   class Meta:
     abstract = True
+  def save(self, *args, **kwargs):
+    if not self.datetime_created:
+      self.datetime_created = datetime.now()
+    super(Model, self).save(*args, **kwargs)

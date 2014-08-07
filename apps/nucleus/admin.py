@@ -80,13 +80,17 @@ class StudentAdmin(ModelAdmin):
     'user':('username',),
   }
 
+class CourseAdmin(ModelAdmin):
+  exclude = ['id']
+  search_fields = ['code', 'name']
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Owner)
 admin.site.register(WebmailAccount)
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(StudentInfo)
-admin.site.register(Course)
+admin.site.register(Course, CourseAdmin)
 admin.site.register(RegisteredBranchCourse)
 admin.site.register(RegisteredCourseChange)
 admin.site.register(Batch)
@@ -94,5 +98,5 @@ admin.site.register(Faculty)
 admin.site.register(GlobalVar)
 admin.site.register(Alumni)
 admin.site.register(StudentAlumni, StudentAdmin)
-admin.site.register(StudentAlumniInfo)
+admin.site.register(StudentInfoAlumni)
 admin.site.register(RegisteredCourseChangeAlumni)
