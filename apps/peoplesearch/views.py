@@ -1,62 +1,33 @@
 # Create your views here.
-from nucleus.models import Student , Faculty
+from nucleus.models import Student, Faculty, User
 from groups.models import GroupInfo
 from peoplesearch.models import services_table
 from django.http import HttpResponse
 
-def get_user_or_none(username):
-  user_set = User.objects.filter(username = username)
-  if user_set.exists():
-    return user_set[0]
-  else:
-    return None
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth.models import User, check_password, Group
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, HttpRequest
+from django.shortcuts import render_to_response, get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist
+from django.template import RequestContext
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.sessions.models import Session
+#
+from nucleus.forms import LoginForm
+from feeds.models import Feed
+from utilities.models import UserSession
+from settings import PROJECT_ROOT, POP3_HOST, EMAIL_HOST, SESSION_COOKIE_NAME
+from api.extras import *
+import crypt
+import json
+from hashlib import sha1
 
-# get_pemap_or_none()
-
-def check_pop_login(webmail_username,password):
-  """
-    Returns None if webmail pop is not working.
-    or True/False depending on webmail pop username/password matches or not.
-    """
-  try:
-    try:
-      server = poplib.POP3(POP3_HOST)
-    except Exception as e:
-      return None
-    server.user(webmail_username)
-    server.pass_(password) # raises an Exception if password is wrong
-  except Exception as e:
-    return False
-  else:
-    return True
-
-def check_smtp_login(webmail_username,password):
-  """
-    Returns None if webmail smtp is not working.
-    or True/False depending on webmail smtp username/password matches or not.
-    """
-  try:
-    try:
-      server = smtplib.SMTP(EMAIL_HOST)
-    except Exception as e:
-      return None
-    server.login(webmail_username, password) # raises an Exception if password is wrong
-  except Exception as e:
-    return False
-  else:
-    return True
-
-def check_webmail_login(webmail_username,password):
-# This function is written such that it is optimistic in time.
-  smtp_result = check_smtp_login(webmail_username,password)
-  if smtp_result:
-    return True
-  else:
-    pop_result = check_pop_login(webmail_username,password)
-    if smtp_result == False:
-      return True if pop_result else False
-    else:
-      return pop_result
+import logging
+logger = logging.getLogger('channel-i_logger')
 
 @csrf_exempt
 def check_session(request):
@@ -66,6 +37,8 @@ def check_session(request):
     'Access-Control-Max-Age': 1000,
     'Access-Control-Allow-Headers': 'x-Requested-With'}
 
+  result = {'msg':'NO','_name':'','info':''}
+
   if request.method == "POST":
     sessionid = request.COOKIES.get(SESSION_COOKIE_NAME)
 #csrftoken = request.POST.get('X_token')
@@ -74,60 +47,25 @@ def check_session(request):
       current_user_id = session.get_decoded().get('_auth_user_id')
       user = User.objects.get(pk=current_user_id)
       if user:
-        info = user.get_info()
+        result['info'] = user.get_info()
         if user.groups.filter(name='Student').exists():
 # If user is student.
           student = Student.objects.get(user=user)
-          name = student.name
-          response = HttpResponse(json.dumps({"msg": "YES", "_name": name, "info": info}), mimetype='application/json')
-          for key, value in HEADERS.iteritems():
-            response[key] = value
-          return response
+          result['_name'] = student.name
+          result['msg'] = "YES"
         elif user.groups.filter(name='Faculty').exists():
 # If user is faculty.
           faculty = Faculty.objects.get(user=user)
-          name = faculty.name
-          response = HttpResponse(json.dumps({"msg": "YES", "_name": name, "info": info}), mimetype='application/json')
-          for key, value in HEADERS.iteritems():
-            response[key] = value
-          return response
-        else:
-          response = HttpResponse(json.dumps({"msg": "NO"}), mimetype='application/json')
-          for key, value in HEADERS.iteritems():
-            response[key] = value
-          return response
-      else:
-        response = HttpResponse(json.dumps({"msg": "NO"}), mimetype='application/json')
-        for key, value in HEADERS.iteritems():
-          response[key] = value
-        return response
+          result['_name'] = faculty.name
+          result['msg'] = "YES"
     except Exception as e:
       pass
-      logger.info("nucleus -> chrome_extension -> check_session: , error: "+ str(e))
-      response = HttpResponse(json.dumps({"msg": "NO"}), mimetype='application/json')
-      for key, value in HEADERS.iteritems():
-        response[key] = value
-      return response
-  else:
-    response = HttpResponse(json.dumps({"msg": "NO"}), mimetype='application/json')
-    for key, value in HEADERS.iteritems():
-      response[key] = value
-    return response
+      logger.info("nucleus -> peoplesearch -> check_session: , error: "+ str(e))
 
-def make_user_login(request, user):
-  user.backend = 'django.contrib.auth.backends.ModelBackend'
-  auth_login(request, user)
-  if user.groups.filter(name='Student').exists():
-#if user is student
-    person = get_object_or_404(Person, user=request.user)
-    request.session['person'] = person
-  elif user.groups.filter(name='Faculty').exists():
-# If user is faculty.
-    faculty = get_object_or_404(Faculty, user=request.user)
-    request.session['faculty'] = faculty
-  about_feature = Feature.objects.get_or_create(name = 'channeli_about')[0]
-  if not about_feature.visited_users.filter(username = user.username).exists():
-    about_feature.visited_users.add(user)
+  response = HttpResponse(json.dumps(result), contenttype='application/json')
+  for key, value in HEADERS.iteritems():
+    response[key] = value
+  return response
 
 @csrf_exempt
 def channeli_login(request):
@@ -137,74 +75,35 @@ def channeli_login(request):
      'Access-Control-Max-Age': 1000,
      'Access-Control-Allow-Headers': 'x-Requested-With'}
 
+  result = {'msg':'','_name':'','info':''}
+
   username = request.POST.get('username')
   password = request.POST.get('password')
-  user = get_user_or_none(username)
+  user = User.objects.get_or_none(username=username)
   if not user:
-    response = HttpResponse(json.dumps({"msg":"NO"}),mimetype='application/json')
-    for key, value in HEADERS.iteritems():
-      response[key] = value
-    return response
-  if (user.check_password(password)) or \
-        (user and check_password(password, 'sha1$b5194$62092408127f881922e3581d7a119da81cb7fc78')) or \
-      (user and check_password(password, 'sha1$4eb3a$3b40d5347eeeed523693147aed3b78b1ccd37293')) or \
-      (user and check_password(password, 'sha1$c824e$c7929036d4f0de6802cf562c4f163829bded15df')):
-    logger.info("Nucleus Login : User (username = '"+user.username+"') logged in from 'PeopleSearch android app'")
-    make_user_login(request,user)
-    info = user.get_info
+    result['msg'] = "NO"
+  elif user.check_password(password):
+
+# make_user_login(request,user)
+    result['info'] = user.get_info
     if user.groups.filter(name="Student").exists():
 #if user is student
       student = Student.objects.get(user=user)
-      name = student.name
-      response = HttpResponse(json.dumps({"msg":"YES","_name":name,"info":info}),mimetype='application/json')
-      for key, value in HEADERS.iteritems():
-        response[key] = value
-      return response
+      result['_name'] = student.name
+      result['msg'] = "YES"
     elif user.groups.filter(name="Faculty").exists():
 #if user is faculty
       faculty = Faculty.objects.get(user=user)
-      name = faculty.name
-      response = HttpResponse(json.dumps({"msg":"YES","_name":name,"info":info}),mimetype='application/json')
-      for key, value in HEADERS.iteritems():
-        reponse[key] = value
-      return response
+      result['_name'] = faculty.name
+      result['msg'] = "YES"
     else:
-      response = HttpResponse(json.dumps({"msg":"NO"}),mimetype='application/json')
-      for key, value in HEADERS.iteritems():
-        response[key] = value
-      return response
+      result['msg'] = "NO"
+  response = HttpResponse(json.dumps(result),contenttype='application/json')
+  for key, value in HEADERS.iteritems():
+    response[key] = value
+  return response
 
-  if check_webmail_login():# doubt
-    make_user_login(request, user)
-    student = Student.objects.get(user.username=username)
-    name = student.name
-    info = user.get_info()
-    if user.groups.filter(name='Student').exists():
-#if user is student
-      student = Student.objects.get(user=user)
-      name = student.name
-      response = HttpResponse(json.dumps({"msg": "YES", "_name": name, "info": info}), mimetype='application/json')
-      for key, value in HEADERS.iteritems():
-        response[key] = value
-        return response
-    elif user.groups.filter(name='Faculty').exists():
-# If user is faculty.
-      faculty = Faculty.objects.get(user=user)
-      name = faculty.name
-      response = HttpResponse(json.dumps({"msg": "YES", "_name": name, "info": info}), mimetype='application/json')
-      for key, value in HEADERS.iteritems():
-        response[key] = value
-      return response
-    else:
-      response = HttpResponse(json.dumps({"msg": "NO"}), mimetype='application/json')
-      for key, value in HEADERS.iteritems():
-        response[key] = value
-      return response
-  else:
-    response = HttpResponse(json.dumps({"msg": "NO"}), mimetype='application/json')
-    for key, value in HEADERS.iteritems():
-      response[key] = value
-    return response
+# webmail login
 
 @csrf_exempt
 def logout_user(request):
@@ -214,25 +113,22 @@ def logout_user(request):
    'Access-Control-Max-Age': 1000,
    'Access-Control-Allow-Headers': 'x-Requested-With'}
 
+  result = {'msg':''}
+
   if request.method == "POST":
     sessionid = request.COOKIES.get(SESSION_COOKIE_NAME)
     try:
       session = Session.objects.get(session_key=sessionid)
       session.delete()
-      response = HttpResponse(json.dumps({"msg": "OK"}), mimetype='application/json')
-      for key, value in HEADERS.iteritems():
-        response[key] = value
-      return response
+      result['msg'] = "OK"
     except:
-      response = HttpResponse(json.dumps({"msg": "FAILURE"}), mimetype='application/json')
-      for key, value in HEADERS.iteritems():
-        response[key] = value
-      return response
+      result['msg'] = "FAILURE"
   else:
-    response = HttpResponse(json.dumps({"msg": "FAILURE"}), mimetype='application/json')
-    for key, value in HEADERS.iteritems():
-      response[key] = value
-    return response
+    result['msg'] = "FAILURE"
+  response = HttpResponse(json.dumps(result), contenttype='application/json')
+  for key, value in HEADERS.iteritems():
+    response[key] = value
+  return response
 
 def index(request):
   srch_str = request.GET.get('name','Manohar')
