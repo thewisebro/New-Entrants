@@ -4,6 +4,131 @@ from groups.models import GroupInfo
 from peoplesearch.models import services_table
 from django.http import HttpResponse
 
+def get_user_or_none(username):
+  user_set = User.objects.filter(username = username)
+  if user_set.exists():
+    return user_set[0]
+  else:
+    return None
+
+# get_pemap_or_none()
+
+def check_pop_login(webmail_username,password):
+  """
+    Returns None if webmail pop is not working.
+    or True/False depending on webmail pop username/password matches or not.
+    """
+  try:
+    try:
+      server = poplib.POP3(POP3_HOST)
+    except Exception as e:
+      return None
+    server.user(webmail_username)
+    server.pass_(password) # raises an Exception if password is wrong
+  except Exception as e:
+    return False
+  else:
+    return True
+
+def check_smtp_login(webmail_username,password):
+  """
+    Returns None if webmail smtp is not working.
+    or True/False depending on webmail smtp username/password matches or not.
+    """
+  try:
+    try:
+      server = smtplib.SMTP(EMAIL_HOST)
+    except Exception as e:
+      return None
+    server.login(webmail_username, password) # raises an Exception if password is wrong
+  except Exception as e:
+    return False
+  else:
+    return True
+
+def check_webmail_login(webmail_username,password):
+# This function is written such that it is optimistic in time.
+  smtp_result = check_smtp_login(webmail_username,password)
+  if smtp_result:
+    return True
+  else:
+    pop_result = check_pop_login(webmail_username,password)
+    if smtp_result == False:
+      return True if pop_result else False
+    else:
+      return pop_result
+
+@csrf_exempt
+def check_session(request):
+  HEADERS = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST',
+    'Access-Control-Max-Age': 1000,
+    'Access-Control-Allow-Headers': 'x-Requested-With'}
+
+  if request.method == "POST":
+    sessionid = request.COOKIES.get(SESSION_COOKIE_NAME)
+#csrftoken = request.POST.get('X_token')
+    try:
+      session = Session.objects.get(session_key=sessionid)
+      current_user_id = session.get_decoded().get('_auth_user_id')
+      user = User.objects.get(pk=current_user_id)
+      if user:
+        info = user.get_info()
+        if user.groups.filter(name='Student').exists():
+# If user is student.
+          student = Student.objects.get(user=user)
+          name = student.name
+          response = HttpResponse(json.dumps({"msg": "YES", "_name": name, "info": info}), mimetype='application/json')
+          for key, value in HEADERS.iteritems():
+            response[key] = value
+          return response
+        elif user.groups.filter(name='Faculty').exists():
+# If user is faculty.
+          faculty = Faculty.objects.get(user=user)
+          name = faculty.name
+          response = HttpResponse(json.dumps({"msg": "YES", "_name": name, "info": info}), mimetype='application/json')
+          for key, value in HEADERS.iteritems():
+            response[key] = value
+          return response
+        else:
+          response = HttpResponse(json.dumps({"msg": "NO"}), mimetype='application/json')
+          for key, value in HEADERS.iteritems():
+            response[key] = value
+          return response
+      else:
+        response = HttpResponse(json.dumps({"msg": "NO"}), mimetype='application/json')
+        for key, value in HEADERS.iteritems():
+          response[key] = value
+        return response
+    except Exception as e:
+      pass
+      logger.info("nucleus -> chrome_extension -> check_session: , error: "+ str(e))
+      response = HttpResponse(json.dumps({"msg": "NO"}), mimetype='application/json')
+      for key, value in HEADERS.iteritems():
+        response[key] = value
+      return response
+  else:
+    response = HttpResponse(json.dumps({"msg": "NO"}), mimetype='application/json')
+    for key, value in HEADERS.iteritems():
+      response[key] = value
+    return response
+
+def make_user_login(request, user):
+  user.backend = 'django.contrib.auth.backends.ModelBackend'
+  auth_login(request, user)
+  if user.groups.filter(name='Student').exists():
+#if user is student
+    person = get_object_or_404(Person, user=request.user)
+    request.session['person'] = person
+  elif user.groups.filter(name='Faculty').exists():
+# If user is faculty.
+    faculty = get_object_or_404(Faculty, user=request.user)
+    request.session['faculty'] = faculty
+  about_feature = Feature.objects.get_or_create(name = 'channeli_about')[0]
+  if not about_feature.visited_users.filter(username = user.username).exists():
+    about_feature.visited_users.add(user)
+
 @csrf_exempt
 def channeli_login(request):
   HEADERS = {
@@ -49,7 +174,7 @@ def channeli_login(request):
         response[key] = value
       return response
 
-  if check_webmail_login(# doubt):
+  if check_webmail_login():# doubt
     make_user_login(request, user)
     student = Student.objects.get(user.username=username)
     name = student.name
