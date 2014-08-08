@@ -1,4 +1,5 @@
 import os
+from BeautifulSoup import BeautifulSoup
 
 from django.contrib.auth.models import User
 from django.shortcuts import render
@@ -15,6 +16,9 @@ from django.conf import settings
 from filemanager import FileManager
 from notices.models import *
 from notices.forms import *
+from notices.utils import *
+
+PeopleProxyUrl = "http://people.iitr.ernet.in/"
 
 def index(request):
   user = request.user
@@ -40,9 +44,10 @@ def upload(request):
       if form.is_valid():
         uploader = Uploader.objects.get(user=request.user, category=category)
         notice = form.save(commit=False)
+        notice.content = html_parsing_while_uploading(notice.content)
         notice.uploader = uploader
         notice.save()
-        return HttpResponseRedirect(reverse('notices_index'))
+        return HttpResponseRedirect('/#notices')
     else:
       form =  NoticeForm()
   context = {'category' : category, 'categories' : categories, 'form' : form, 'privelege' : privelege}
@@ -265,16 +270,19 @@ def edit(request, pk):
       notice = form.save(commit=False)
       n.subject = notice.subject
       n.reference = notice.reference
-      n.content = notice.content
+      n.content = html_parsing_while_uploading(notice.content)
       n.expire_date = notice.expire_date
       n.re_edited = True
       n.save()
       tnotice.datetime_created=n.datetime_modified
       tnotice.save()
-      return HttpResponseRedirect(reverse('notices_index'))
+      return HttpResponseRedirect('/#notices')
   else:
+    print n.content
+    print "abc"
+    print remove_pdfimages
     form =  EditForm(
-              initial={'subject' : n.subject, 'reference' : n.reference , 'expire_date' : n.expire_date , 'content' : n.content, 'category' : n.uploader.category.name})
+              initial={'subject' : n.subject, 'reference' : n.reference , 'expire_date' : n.expire_date , 'content' : remove_pdfimages(n.content), 'category' : n.uploader.category.name})
   context = {'form' : form, 'privelege' : privelege, 'category' : n.uploader.category.name}
   return render(request, 'notices/edit.html', context)
 
@@ -286,7 +294,7 @@ def delete(request, pk):
     tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=-1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created)
     tnotice.save()
     n.delete()
-  return HttpResponseRedirect(reverse('notices_index'))
+  return HttpResponseRedirect('/#notices')
 
 @login_required
 def browse(request,category_name,path):
@@ -300,3 +308,4 @@ def browse(request,category_name,path):
         ckeditor_baseurl='/media/notices/uploads/'+category.name,
         maxspace=50*1024, maxfilesize=5*1024)
     return fm.render(request,path)
+

@@ -35,8 +35,8 @@ class NoticeUser(models.Model):
   user = models.OneToOneField(User)
   categories = models.ManyToManyField('Category')
   subscribed = models.BooleanField(default = False)
-  read_notices = models.ManyToManyField(Notice, related_name = 'read_noticeuser_set')
-  starred_notices = models.ManyToManyField(Notice, related_name = 'starred_noticeuser_set')
+  read_notices = models.ManyToManyField(Notice, related_name = 'read_noticeuser_set', blank=True)
+  starred_notices = models.ManyToManyField(Notice, related_name = 'starred_noticeuser_set', blank=True)
 
   def __unicode__(self):
 	return unicode(self.user)
