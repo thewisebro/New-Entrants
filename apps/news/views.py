@@ -211,7 +211,7 @@ def sports(request):
     else:
       marker = 1
       channel = Channel.objects.get(name='Sports')
-      news = News.objects.filter(channel = channel).order_by('-article_date')[:20]
+      news = News.objects.filter(channel = channel).order_by('-article_date')#[:20]
       json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker})
       return HttpResponse(json,content_type='application/json')
   except:

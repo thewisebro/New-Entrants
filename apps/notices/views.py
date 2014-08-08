@@ -1,15 +1,20 @@
+import os
+
 from django.contrib.auth.models import User
 from django.shortcuts import render
-from notices.forms import *
 from django.http import HttpResponseRedirect, HttpResponse
-from notices.models import *
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from notices.serializer import *
-
+from django.db.models import Q
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from django.views.generic import TemplateView
 import simplejson
+from django.conf import settings
+
+from filemanager import FileManager
+from notices.models import *
+from notices.forms import *
 
 def index(request):
   user = request.user
@@ -23,20 +28,24 @@ def index(request):
 
 @login_required
 def upload(request):
-  NoticeForm = GenerateNoticeForm(request.user)
+  category = None
+  categories = request.user.category_set.all()
   privelege = request.user.uploader_set.all().exists()
-  if request.method == 'POST' and privelege:
-    form = NoticeForm(request.POST)
-    if form.is_valid():
-      c=Category.objects.get(name=form.cleaned_data['category'])
-      uploader = Uploader.objects.get(user=request.user, category=c)
-      notice = form.save(commit=False)
-      notice.uploader = uploader
-      notice.save()
-      return HttpResponseRedirect(reverse('notices_index'))
-  else:
-    form =  NoticeForm()
-  context = {'form' : form, 'privelege' : privelege}
+  form = DummyForm()
+  if (privelege and request.method == 'POST' and request.POST.has_key('category_name') and request.POST['category_name']):
+    category = Category.objects.get(name = request.POST['category_name'])
+    NoticeForm = GenerateNoticeForm(category)
+    if request.POST.has_key('Submit'):
+      form = NoticeForm(request.POST)
+      if form.is_valid():
+        uploader = Uploader.objects.get(user=request.user, category=category)
+        notice = form.save(commit=False)
+        notice.uploader = uploader
+        notice.save()
+        return HttpResponseRedirect(reverse('notices_index'))
+    else:
+      form =  NoticeForm()
+  context = {'category' : category, 'categories' : categories, 'form' : form, 'privelege' : privelege}
   return render(request, 'notices/upload.html', context)
 
 class PrivelegeJsonView(TemplateView):
@@ -131,9 +140,9 @@ class GetNotice(RetrieveAPIView):
   queryset = Notice.objects.all()
   serializer_class = GetNoticeSerializer
 
-
 class NoticeSearch(ListAPIView):
   def get_queryset(self):
+    queryset = []
     query = self.request.GET.get('q', '')
     mode = self.kwargs['mode']
     if(mode=="old"):
@@ -148,22 +157,29 @@ class NoticeSearch(ListAPIView):
       query1=queryset1.filter(uploader__category__main_category=mc)
     else:
       query1=queryset1.filter(uploader__category__name=subc)
-    words = query.split(' ')
-    un_queryset = {}			#unsorted(with respect to frequency) queryset
-    count = {}
-    for word in words:
-		  result = query1.filter(subject__icontains=word)
-		  for temp in result:
-			  if temp.id in un_queryset:
-				  count[temp.id] = count[temp.id]+1
-			  else:
-				  un_queryset[temp.id] = temp
-				  count[temp.id] = 1
-    date_sorted_queryset=sorted(un_queryset, key= lambda l : un_queryset[l].datetime_modified, reverse=True)
-    count_date_sorted_queryset=sorted(date_sorted_queryset, key= lambda l: count[l], reverse=True)
-    queryset = []				#Sorted queryset
-    for notice_id in count_date_sorted_queryset:
-		  queryset.append(un_queryset[notice_id])
+
+    if query[:2]==">>":
+      print "abcd"
+      query=query[2:].split("--")
+      queryset = query1.filter(datetime_modified__gt=datetime.fromtimestamp(int(query[0])/1000.0)).filter(datetime_modified__lt=datetime.fromtimestamp(int(query[1])/1000.0))
+
+    else:
+      words = query.split(' ')
+      un_queryset = {}			#unsorted(with respect to frequency) queryset
+      count = {}
+      for word in words:
+        result = query1.filter(Q(subject__icontains=word) | Q(content__icontains=word))
+        for temp in result:
+          print word
+          if temp.id in un_queryset:
+            count[temp.id] = count[temp.id]+1
+          else:
+            un_queryset[temp.id] = temp
+            count[temp.id] = 1
+      date_sorted_queryset=sorted(un_queryset, key= lambda l : un_queryset[l].datetime_modified, reverse=True)
+      count_date_sorted_queryset=sorted(date_sorted_queryset, key= lambda l: count[l], reverse=True)
+      for notice_id in count_date_sorted_queryset:
+        queryset.append(un_queryset[notice_id])
     return queryset
   serializer_class = GetNoticeSerializer
 
@@ -272,4 +288,15 @@ def delete(request, pk):
     n.delete()
   return HttpResponseRedirect(reverse('notices_index'))
 
-
+@login_required
+def browse(request,category_name,path):
+  print "abc"
+  category = Category.objects.get(name = category_name)
+  if request.user in category.users.all():
+    if not os.path.exists(settings.MEDIA_ROOT+'notices/uploads/'+category.name):
+      os.chdir(settings.MEDIA_ROOT+'notices/uploads/')
+      os.mkdir(category.name)
+    fm = FileManager(basepath=settings.MEDIA_ROOT+'notices/uploads/'+category.name,
+        ckeditor_baseurl='/media/notices/uploads/'+category.name,
+        maxspace=50*1024, maxfilesize=5*1024)
+    return fm.render(request,path)
