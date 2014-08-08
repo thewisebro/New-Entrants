@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.utils.encoding import *
 from settings import *
 
 #import mimetypes, magic
@@ -30,19 +31,27 @@ def tester(request):
 def dispbatch(request):
   active = request.user.is_active
   if active:
+    if request.user.in_group('student'):
       student = request.user.student
       batches = student.batch_set.all()
       courses = map(lambda x: x.course, batches)
       context = {'courses': courses,
                  'batches': batches}
       return render(request, 'lectut/courses.html', context)
+    elif request.user.in_group('faculty'):
+      return HttpResponse("You are a faculty")
   else:
       return HttpResponse("Please log-in to view your courses")
 
 @login_required
 def coursepage(request, batch_id):
        user = request.user
+       if request.user.in_group('faculty'):
+         userType = 1
+       else:
+         userType = 0
        userBatch = Batch.objects.get(id=batch_id)
+       request.session['batchId'] = batch_id
        if request.method == 'POST':
              text_form = TextUpload(request.POST)
              file_form = FileForm(request.POST , request.FILES )
@@ -66,7 +75,8 @@ def coursepage(request, batch_id):
                   'text_form' : text_form,
                   'previous_noti': previous_noti,
                   'batch':userBatch,
-                  'name':batch_id}
+                  'name':batch_id,
+                  'userType':userType}
        return render( request, 'lectut/image.html', context)
 
 def getFileType(file_name):
@@ -88,19 +98,27 @@ def getFileType(file_name):
 def download_file(request, file_id):
   download_file = UploadFile.objects.get(id = file_id)
   path_to_file = os.path.join(MEDIA_URL, str(download_file.upload_file))
-  download_file_open = os.path.join(MEDIA_URL, str(download_file))
-  import pdb; pdb.set_trace()
+  download_file_open = download_file.upload_file.path
   file = open(download_file_open,"r")
-  mimetype = mimetypes.guess_type(filename)[0]
+#mimetype = mimetypes.guess_type(filename)[0]
 
   response = HttpResponse(mimetype='application/force-download')
 #response = HttpResponse(file.read(), mimetype=mimetype)
   response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(download_file)
-  response['X-Sendfile'] = smart_str(path_to_file)
+  response['X-Sendfile'] = smart_str(download_file_open)
   return response
 
 def get_path_to_file(file_name):
   return MEDIA_URL/file_name.upload_file
+
+@login_required
+def delete(request , file_id):
+  user = request.user
+  batch_id = request.session['batchId']
+  if request.user.in_group('faculty'):
+    UploadFile.objects.get(pk=file_id).delete()
+  return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
+
 #def upload(request):
 #   user = request.user
 #   userBatch = Batch.objects.get(id=1)

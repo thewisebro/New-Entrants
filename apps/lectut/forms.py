@@ -4,6 +4,7 @@ from models import *
 
 class FileForm(forms.Form):
   filename=forms.FileField()
+#name=forms.CharField()
 
 class TextUpload(forms.Form):
   text=forms.CharField(label='Enter notice' ,widget = forms.Textarea(attrs={'cols': 60, 'rows': 10}))

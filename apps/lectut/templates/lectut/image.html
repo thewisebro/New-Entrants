@@ -1,12 +1,14 @@
 <!-- Add jQuery library -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.min.js"></script>
+
+<!-- Add bootstrap files-->
+<script type="text/javascript" src="{{ STATIC_URL }}/bootstrap/js/bootstrap.js"></script>
+<link rel="stylesheet" src="{{STATIC_URL }}/bootstrap/css/bootstrap.min.css">
 
 <!-- Add fancyBox -->
 <link rel="stylesheet" href="{{ STATIC_URL }}/jquery/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 <script type="text/javascript" src="{{ STATIC_URL }}/jquery/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-<!-- Add mousewheel plugin (this is optional) -->
-<script type="text/javascript" src="/fancybox/lib/jquery.mousewheel-3.0.6.pack.js"></script>
 
 <!-- Optionally add helpers - button, thumbnail and/or media -->
 <link rel="stylesheet" href="{{ STATIC_URL }}/jquery/fancybox/source/helpers/jquery.fancybox-buttons.css?v=1.0.5" type="text/css" media="screen" />
@@ -15,6 +17,13 @@
 
 <link rel="stylesheet" href="{{ STATIC_URL }}/jquery/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
 <script type="text/javascript" src="{{ STATIC_URL }}/jquery/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+
+<!-- Add video.js for embedding videos-->
+<link href="{{ STATIC_URL }}/jquery/video-js/video-js.css" rel="stylesheet">
+<script src="{{ STATIC_URL }}/jquery/video-js/video.js"></script>
+<script>
+  videojs.options.flash.swf = "{{ STATIC_URL }}/jquery/video-js/video-js.swf"
+</script>
 
 <body>
 <h2>{{ batch.name }} ({{ batch.course.name}})</h2>
@@ -27,15 +36,49 @@
          <!--iframe id="select"></iframe-->
          <input type="Submit" id=" Submit" value="Submit">
          <br>
+         <div class="feeds">
+           <ul class="nav nav-tabs" id="myTab">
+           <li class="active"><a href="#uploads">Uploads</a></li>
+           <li><a href="#notices">Notices</a></li>
+           </ul>
+           <div class="tab-content">
+                   <div id="uploads" class="tab-pane fade in active">
          <!--p id="choices"></p-->
          {% for noti in previous_noti%}
             <h4>{{noti.upload_user.name}}</h4>
-            <a class="fancybox" rel="group1" href="{{ MEDIA_URL }}/{{noti}}"><img src="{{ MEDIA_URL }}/{{noti}}" height="100" width="100"></a>
-            {{ noti }}
+            {% if noti.file_type == 'image'%}
+              <a class="fancybox" rel="group1" href="{{ MEDIA_URL }}/{{noti}}"><img src="{{ MEDIA_URL }}/{{noti}}" height="100" width="100"></a>
+              {{ noti }}
+              <br>
+            {% elif noti.file_type == 'video'%}
+              <video id="{{noti}}" class="video-js vjs-default-skin"
+                controls preload="auto" width="640" height="264"
+                poster="http://video-js.zencoder.com/oceans-clip.png"
+                data-setup='{"example_option":true}'>
+                <source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4' />
+                <source src="http://video-js.zencoder.com/oceans-clip.webm" type='video/webm' />
+                <source src="http://video-js.zencoder.com/oceans-clip.ogv" type='video/ogg' />
+                <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+              </video>
+              <!--video width="100" height="100" controls>
+              <source src="{{ MEDIA_URL }}/{{noti}}" type="video/mp4">
+              <source src="{{ MEDIA_URL }}/{{noti}}" type="video/ogg">
+              <object data="{{ MEDIA_URL }}/{{noti}}" width="320" height="240">
+                <embed src="{{ MEDIA_URL }}/{{noti}}" width="320" height="240">
+              </object> 
+              </video--> 
+            {%elif noti.file_type == 'pdf'%}
+              <a href="{{ MEDIA_URL }}{{noti}}" target="_blank"><img src="{{ MEDIA_URL }}lectut/images/pdf-icon.png" height="100" width="100"></a>
+            {%endif%}
             <a href="/lectut/disp/download/{{ noti.id }}/">Download</a>
-            <br>
-         {% endfor %}
-
+            <a href="/lectut/disp/delete/{{ noti.id }}/">Delete</a>
+          {% endfor %}
+          </div>
+          <div id="notices" class="tab-pane fade">
+          <p>No notices yet</p>
+          </div>
+         </div> 
+        </div>
 <!--a class="fancybox" rel="group" href="{{ MEDIA_URL }}/lectut/images/images_1.jpg"><img src="{{ MEDIA_URL }}/lectut/images/images_2.jpg" alt="" /></a-->
 <!--a class="fancybox" rel="group" href="image_2.jpg"><img src="{{ MEDIA_URL }}/lectut/images/images_2.jpg" alt="" /></a-->
 <script>
@@ -44,18 +87,24 @@
     var act_type=prompt("Please enter the type of file:\nLecture\nTutorial\nExam Paper\nSolution","Lecture");
   }
 </script>
-
 <script type="text/javascript">
   $(document).ready(function() {
-          $(".fancybox").fancybox();
-            });
+                $(".fancybox").fancybox();
+                            });
 
   $(document).ready(function(){
-      $("#Submit").fancybox({
-      type : "iframe",
-      href : "login.html"
-          });
-      });
+            $("#Submit").fancybox({
+                    type : "iframe",
+                    href : "login.html"
+                                  });
+                  });
+  $(document).ready(function(){ 
+              $("#myTab a").click(function(e){
+                                e.preventDefault();
+                                                      $(this).tab('show');
+                                                                                });
+
 </script>
+
 </form>
 </body>

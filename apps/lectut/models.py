@@ -45,6 +45,7 @@ class BaseUpload(models.Model):
 
 class UploadFile(BaseUpload):
   upload_file=models.FileField(upload_to='lectut/images/')
+  name=models.CharField(max_length=100 , null=False)
   file_type=models.CharField(max_length=10 , null=False)
   upload_user=models.ForeignKey(User)
   batch=models.ForeignKey(Batch)
