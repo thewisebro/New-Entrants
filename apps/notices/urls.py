@@ -1,5 +1,7 @@
 from django.conf.urls import patterns, url
 from notices.views import *
+from filemanager import path_end
+
 urlpatterns = patterns('',
     url(r'^list_notices/(?P<mode>\w+)/(?P<llim>\d+)/(?P<hlim>\d+)/(?P<id>\d+)/$', NoticeListView.as_view(), name='noticelist'),
     url(r'^upload/$', 'notices.views.upload', name='upload'),
@@ -16,4 +18,5 @@ urlpatterns = patterns('',
     url(r'^get_notice/(?P<pk>\d+)/$', GetNotice.as_view(), name = 'getnotice'),
     url(r'^temp_max_notices/(?P<mode>\w+)/(?P<mc>\w+)/(?P<subc>\w+)$', TempMaxNotice.as_view(), name = 'getnotice'),
     url(r'^temp_list_notices/(?P<mode>\w+)/(?P<mc>\w+)/(?P<subc>\w+)/(?P<llim>\d+)/(?P<hlim>\d+)/(?P<id>\d+)/$', TempNoticeListView.as_view(), name='noticelist'),
+    url(r'^browse/(?P<category_name>\w+)/'+path_end,'notices.views.browse'),
 )
