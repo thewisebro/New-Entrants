@@ -6,9 +6,11 @@ function dialog_iframe(data){
 
   if(!$dialog){
     var height,margin;
-    if($(window).height()>(data.height+100)){
+    var related_window_height = $(window).height();
+    related_window_height -= (1-data.height/related_window_height)*150;
+    if(related_window_height>(data.height+100)){
       height = data.height;
-      margin = ($(window).height()-height)/2;
+      margin = (related_window_height-height)/2;
     }
     else{
       margin = 50;
@@ -50,8 +52,8 @@ function open_login_dialog(){
   dialog_iframe({
     name: 'login_dialog',
     title: 'Sign In',
-    width: 400,
-    height: 250,
+    width: 410,
+    height: 260,
     src: '/login_dialog/?next=/close_dialog/login_dialog/',
     close: function(){
       if(typeof user === "undefined") {

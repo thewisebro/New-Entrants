@@ -155,7 +155,8 @@ $(document).on('load_app_news', function(){
 });
 
 $(document).on("logout", function(){
-  redirect_to_home();
+  if(get_current_app() == 'news')
+    redirect_to_home();
 });
 
 function get_home( res ) {
