@@ -58,8 +58,8 @@ class CustomUserManager(UserManager, models.Manager):
 class UserPhoto(CropImage):
   unique_name = 'user_photo'
   field_name = 'photo'
-  width = 100
-  height = 100
+  width = 150
+  height = 150
 
   @classmethod
   def get_instance(cls, request, pk):

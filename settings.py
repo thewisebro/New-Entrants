@@ -262,6 +262,7 @@ CRISPY_CLASS_CONVERTERS = {
   'datetimewidget': "textinput textInput",
   'emailinput': "textinput textInput",
   'numberinput': "textinput textInput",
+  'readonlytextinput': "textinput textInput readonlytextinput",
 }
 
 COMPRESS_PRECOMPILERS = (

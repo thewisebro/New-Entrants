@@ -65,6 +65,10 @@
   border-color:#b6cee6;
 }
 
+.uniForm .ctrlHolder.focused {
+  background: none !important;
+}
+
 .chosen-results
 {
   width: auto !important;
@@ -80,8 +84,18 @@
 {
   float: left !important;
   width: 200px !important;
-  margin: 0px;
-  line-height: 25px;
+  margin: 0px !important;
+  line-height: 25px !important;
+}
+
+.uniForm .textInput
+{
+  text-indent: 3px !important;
+}
+
+.readonlytextinput
+{
+  background-color: #f8f8f8 !important;
 }
 
 .cke

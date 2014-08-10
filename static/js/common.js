@@ -1,3 +1,51 @@
+var loaded_scripts = [];
+var loaded_styles = [];
+
+$(document).on('ready', function(){
+  var scripts = $('script');
+  for(var i=0; i<scripts.length; i++){
+    var script = scripts[i];
+    var src = script.getAttribute('src');
+    if(src)
+      loaded_scripts.push(src);
+  }
+  var styles = $('link[rel=stylesheet]');
+  for(i=0; i<styles.length; i++){
+    var style = styles[i];
+    var href = style.getAttribute('href');
+    if(href)
+      loaded_styles.push(href);
+  }
+});
+
+function load_script(script){
+  if($.inArray(script, loaded_scripts) == -1){
+    loaded_scripts.push(script);
+    return $.cachedScript(script);
+  }
+}
+
+function load_css(href){
+  if($.inArray(href, loaded_styles) == -1){
+    $('head').append('<link rel="stylesheet" href="'+href+'" type="text/css" />');
+    loaded_styles.push(href);
+  }
+}
+
+function load_scripts_in_pipe(scripts, callback){
+  var deferred = new $.Deferred(), pipe = deferred;
+
+  $.each(scripts , function(i, val){
+    pipe = pipe.pipe(function(){
+      return load_script(val);
+    });
+  });
+
+  if(callback)
+    pipe = pipe.pipe(callback);
+  deferred.resolve();
+}
+
 function dialog_iframe(data){
   var $dialog;
   try {
@@ -8,7 +56,7 @@ function dialog_iframe(data){
     var height,margin;
     var related_window_height = $(window).height();
     related_window_height -= (1-data.height/related_window_height)*150;
-    if(related_window_height>(data.height+100)){
+    if(related_window_height > data.height){
       height = data.height;
       margin = (related_window_height-height)/2;
     }
@@ -33,7 +81,8 @@ function dialog_iframe(data){
       },
       open: function(event, ui){
         $('#'+data.name+'-div').html(""+
-          "<iframe id='"+data.name+"-iframe' src='"+data.src+"' width='100%' height='98%' frameborder=0></iframe>"
+          "<iframe id='"+data.name+"-iframe' src='"+data.src+
+          "' width='100%' height='98%' frameborder=0></iframe>"
         );
       }
     };
@@ -82,11 +131,55 @@ function load_pagelets(dom_elem){
   });
 }
 
+function fill_data_in_pagelet(pagelet_name, html){
+  var $elem = $('.pagelet#'+pagelet_name);
+  var wrapped_html = $('<div>'+html+'</div>');
+  var styles = wrapped_html.find('link[rel=stylesheet]');
+  var scripts = wrapped_html.find('script');
+  var messages = wrapped_html.find('messages');
+  for(var i=0; i<styles.length; i++){
+    var style = styles[i];
+    var href = style.getAttribute('href');
+    if(href) load_css(href);
+  }
+  styles.remove();
+  scripts.remove();
+  messages.remove();
+  html = wrapped_html.html();
+  $elem.html(html);
+  display_messages(eval(messages.html()));
+  var script_src_list = [];
+  for(i=0; i<scripts.length; i++){
+    var script = scripts[i];
+    var src = script.getAttribute('src');
+    if(src) script_src_list.push(src);
+  }
+  load_scripts_in_pipe(script_src_list, function(){
+    setup_form();
+  });
+  $(document).trigger("pagelet_loaded_"+pagelet_name);
+  ajaxform_success = function(data){
+    fill_data_in_pagelet(pagelet_name, data);
+  };
+  forms = $elem.find('form');
+  for(i=0; i<forms.length; i++){
+    var $form = $(forms[i]);
+    if($form.attr('action') === '')
+      $form.attr('action',$elem.attr('pagelet-url'));
+    $form.ajaxForm({
+      success: ajaxform_success
+    });
+  }
+  load_pagelets($elem);
+}
+
 function load_pagelet(pagelet_name){
   var $elem = $('.pagelet#'+pagelet_name);
-  $elem.load($elem.attr('pagelet-url'),function(){
-    $(document).trigger("pagelet_loaded_"+pagelet_name);
-    load_pagelets($elem);
+  $.ajax({
+    type: "GET",
+    url: $elem.attr('pagelet-url')
+  }).done(function(html){
+    fill_data_in_pagelet(pagelet_name, html);
   });
 }
 

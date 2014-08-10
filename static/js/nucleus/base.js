@@ -92,6 +92,11 @@ function redirect_to_home(){
   hashchangeCallback(true);
 }
 
+function redirect_to_hash(hash){
+  history.replaceState({},hash,'/#'+hash);
+  hashchangeCallback(true);
+}
+
 function take_feedback(){
   dialog_iframe({
     name:'feedback_dialog',
