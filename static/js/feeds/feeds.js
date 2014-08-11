@@ -9,7 +9,7 @@ $(document).on("load_app_home", function(e){
 
 function load_feeds_page(){
   $('#content').html("<div id='feeds'></div>");
-  if(feeds.length == 0){
+  if(feeds.length === 0){
     update_feeds('first');
     setInterval(function(){update_feeds('previous');},feeds_pulling_interval);
   }
@@ -20,7 +20,11 @@ function load_feeds_page(){
 }
 
 function update_feeds(action,number){
-  if(action == 'previous')showLoading = false;
+  if(action == 'previous'){
+    if(feeds.length === 0)
+      return;
+    showLoading = false;
+  }
   $.get("/feeds/fetch",
     {'action' : action,
      'id' : action == 'previous' ? feeds[0].id : (feeds.length ? feeds[feeds.length-1].id : null),
@@ -67,7 +71,7 @@ function feed_html(feed){
 //        (feed.link ? "<a class='feed-external-link' href='"+feed.link+"' target='_blank'></a>" : "")+
 //      "</div>"+
       "<div class='feed-text'>"+feed.content+"</div>"+
-    "</div>"
+    "</div>";
 }
 
 function display_add_feeds(position,feeds){
@@ -83,7 +87,7 @@ function display_add_feeds(position,feeds){
 //   }
  }
  $('#feeds').pickify_users();
- if(more_feeds && $('#see-more-feeds').length==0){
+ if(more_feeds && $('#see-more-feeds').length === 0){
    $('#content').append("<div id='see-more-feeds' class='see-more'><span class='button2' onclick='see_more_feeds();'>See More</span></div>");
  }
  if(!more_feeds && $('#see-more-feeds').length==1){

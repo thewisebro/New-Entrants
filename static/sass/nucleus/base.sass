@@ -6,6 +6,10 @@
   font-family: 'Arial', sans-serif
   font-size: 13px
 
+a
+  color: $blue-link
+  text-decoration: none
+
 body
   overflow-y: scroll
 
@@ -69,7 +73,7 @@ body
   left: 0
   width: 120px
   z-index: 200
-  background: #333
+  background: #282828
 
   .tab
     width: 108px
@@ -156,8 +160,10 @@ $footer-height: 40px
   min-height: 350px
 
 #footer-container
-  height: $footer-height
+  height: $footer-height - 11px
   position: absolute
+  padding-top: 10px
+  border-top: 1px solid $border-gray
   margin-top: 20px
   bottom: 0px
   left: 20px
@@ -223,3 +229,9 @@ $footer-height: 40px
   color: $red
   margin-top: 10px
   margin-bottom: 10px
+
+#footer
+  &, a
+    color: #777
+  a :hover
+    text-decoration: underline

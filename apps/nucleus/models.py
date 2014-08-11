@@ -58,8 +58,8 @@ class CustomUserManager(UserManager, models.Manager):
 class UserPhoto(CropImage):
   unique_name = 'user_photo'
   field_name = 'photo'
-  width = 100
-  height = 100
+  width = 150
+  height = 150
 
   @classmethod
   def get_instance(cls, request, pk):
@@ -118,7 +118,7 @@ class User(AbstractUser, models.Model):
     if self.photo:
       return self.photo.url
     elif self.in_group('Student Group'):
-      return '/static/images/nucleus/default_group_dp.png'
+      return settings.STATIC_URL + 'images/nucleus/default_group_dp.png'
     else:
       return settings.STATIC_URL + 'images/nucleus/default_dp.png'
 
@@ -461,6 +461,43 @@ class PHPSession(models.Model):
     return self.session_key
 
 
+class FriendRequest(models.Model):
+  from_user = models.ForeignKey(User, related_name='friendrequests_to')
+  to_user = models.ForeignKey(User, related_name='friendrequests_from')
+
+  class Meta:
+    unique_together = ['from_user', 'to_user']
+
+  def __unicode__(self):
+    return 'From: ' + unicode(self.from_user) + ', To: ' +\
+                      unicode(self.to_user)
+
+
+class IntroAd(models.Model):
+  name = models.CharField(max_length = MC.TEXT_LENGTH, unique=True)
+  visited_users = models.ManyToManyField(User)
+
+  def __unicode__(self):
+    return 'IntroAd: ' + self.name
+
+
+class UserLog(models.Model):
+  user = models.ForeignKey(User)
+  name = models.CharField(max_length=MC.TEXT_LENGTH)
+  value = models.CharField(max_length=MC.TEXT_LENGTH)
+
+  def __unicode__(self):
+    return self.name + ':' + unicode(self.user)
+
+
+class Log(models.Model):
+  name = models.CharField(max_length=MC.TEXT_LENGTH)
+  value = models.CharField(max_length=MC.TEXT_LENGTH)
+
+  def __unicode__(self):
+    return self.name
+
+
 class GlobalVarMeta(ModelBase):
   _cache_prefix = 'GlobalVar:'
 
@@ -489,6 +526,9 @@ class GlobalVarMeta(ModelBase):
       pair.delete()
     cache_key = cls._cache_prefix + key
     cache.set(cache_key, None)
+
+  def has_key(cls, key):
+    return cls.objects.filter(key=key).exists()
 
 class GlobalVar(models.Model):
   key = models.CharField(max_length=MC.TEXT_LENGTH)

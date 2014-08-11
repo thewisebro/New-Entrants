@@ -1,33 +1,106 @@
 {% extends "base.html" %}
 
+{% block title %}Channel-I | Login{% endblock %}
+
 {% block styles %}
-  <link rel="stylesheet" href="/static/css/login.css" type="text/css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/fonts.sass" type="text/sass">
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.sass" type="text/sass">
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/login.sass" type="text/sass">
+  <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css" type="text/css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}jquery/custom.css" type="text/css">
 {% endblock %}
 
 {% block scripts %}
+  {{ block.super }}
+  <script src="{{ STATIC_URL }}jquery/jquery-ui.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}jquery/modernizr.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/common.js"></script>
+  <script type="text/javascript">
+    $('body').ready(function(){
+      display_messages({{ django_messages }});
+      $('[autofocus]').focus();
+      if (!Modernizr.input.placeholder){
+        $('[placeholder]').focus(function(){
+          var input = $(this);
+          if (input.val() == input.attr('placeholder')){
+            input.val('');
+            input.removeClass('placeholder');
+          }
+        }).blur(function(){
+            var input = $(this);
+            if (input.val() == '' || input.val() == input.attr('placeholder')){
+              input.addClass('placeholder');
+              input.val(input.attr('placeholder'));
+            }
+          }).blur();
+        $('[placeholder]').parents('form').submit(function() {
+          $(this).find('[placeholder]').each(function() {
+            var input = $(this);
+            if (input.val() == input.attr('placeholder')) {
+              input.val('');
+            }
+          })
+        });
+      }
+    });
+    function login_help(){
+      var username = $('input[name=username]').val();
+      dialog_iframe({
+        name:'login_help_dialog',
+        title:'Having trouble signing in ?',
+        width:800,
+        height:500,
+        src:'/helpcenter/login_help/'+(username?username+'/':'')
+      });
+    }
+  </script>
 {% endblock %}
 
 {% block body %}
+  {% if not dialog %}
+	<div id="header">
+		<div id="header_link_wrapper">
+      {% for link in login_page_links %}
+			  <a class="header_link" target="_blank" href="{% link_url link %}">{% link_verbose_name link %}</a>
+      {% endfor %}
+		</div>
+	</div>
 
-  {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
-  {% endif %}
-
-  <form method="post" action="">
-    {% csrf_token %}
-    <table>
-      <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-      </tr>
-      <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-      </tr>
-    </table>
-
-    <input id="login_submit" type="submit" value="login" />
-    <input type="hidden" name="next" value="{{ next }}" />
-  </form>
-
+	<div id="container">
+		<div id="lower_main">
+			<div id="logo_wrapper">
+				<a id="logo" href="/"></a>
+				<div id ="tagline">It's everything you need it to be.</div>
+			</div>
+      <div id="messages-div">
+      </div>
+			<div id="main_body_wrapper">
+				<a href="/jukebox/"><div id ="display_space"></div></a>
+        {% endif %}
+				<div id ="login_area" {% if dialog %}style="float:left; margin:20px 50px"{% endif %}>
+					<div id="login_boxes">
+            <form id='login-form' action="{{ action }}" method="POST">{% csrf_token %}
+              {{ form.non_field_errors }}
+              <div class="input-wrapper" id="username_space">
+                <input type="text" name="{{ form.username.name }}" placeholder="Username" autofocus="true"/>
+              </div>
+              <div class="input-wrapper" id="password_space">
+                <input type="password" name="{{ form.password.name }}" placeholder="Password"/>
+              </div>
+              <div class="checkbox-wrapper" id="password_space"><label for="id_remember_me">Stay signed in: &nbsp; </label>{{ form.remember_me }}</div>
+              <input class="input-button" type="submit" id="sign_in_button" value="Sign in"/>
+					  </form>
+          </div>
+					{% if not dialog %}
+          <div id ="helptext"><span onclick="login_help();">Having trouble signing in ?</span></div>
+				  {% endif %}
+        </div>
+        {% if not dialog %}
+			</div>
+		</div>
+  <div id="footer-wrapper">
+    {% include "footer.html" %}
+  </div>
+	</div>
+{% endif %}
 {% endblock %}
