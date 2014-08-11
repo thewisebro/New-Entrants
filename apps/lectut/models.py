@@ -43,16 +43,32 @@ class BaseUpload(models.Model):
           self.__class__.objects.all().update(featured = False)
      super(Model, self).save(*args, **kwargs)"""
 
+Act_Types = (
+            ('lec' , 'Lecture'),
+            ('tut' , 'Tutorial'),
+            ('sol' , 'Solution'),
+            ('que' , 'Question'),
+            ('exm' , 'Exam Papers')
+            )
+
 class UploadFile(BaseUpload):
   upload_file=models.FileField(upload_to='lectut/images/')
   name=models.CharField(max_length=100 , null=False)
   file_type=models.CharField(max_length=10 , null=False)
+  upload_type=models.CharField(max_length=3 , choices=Act_Types , default='tut')
+  privacy=models.BooleanField(default=False)      #false means visible to all
   upload_user=models.ForeignKey(User)
   batch=models.ForeignKey(Batch)
 
   def __unicode__(self):
     return str(self.upload_file)
 
+class DownloadLog(models.Model):
+  uploadfile = models.ForeignKey(UploadFile)
+  user = models.ForeignKey(User)
+
+  def __unicode__(self):
+    return self.id
 '''class UploadVideo(BaseUpload):
   upload_video=models.FileField(upload_to='lectut/videos' , null=True)
   def matche_file_type(cls, iname, ifile, request):
@@ -75,13 +91,14 @@ class UploadPdf(BaseUpload):
           ext = os.path.splitext(iname)[1].lower()
           return ext in ['.pdf']
 '''
-class Upload(models.Model):
-  content_type=models.ForeignKey(ContentType)
+class Activity(models.Model):
+  content_type=models.ForeignKey(ContentType, related_name='lectut')
   object_id=models.PositiveIntegerField()
-  lectutbatch=models.ForeignKey(LectutBatch)
   Upload = generic.GenericForeignKey('content_type','object_id')
 
-  def create_upload(sender, instance, *args, **kwargs):
+  def __init__(self):
+    return self.object_id
+  '''def create_upload(sender, instance, *args, **kwargs):
       if kwargs['created']:
                sku = u'%s%s%s' % ()
                u = Upload()
@@ -90,24 +107,14 @@ class Upload(models.Model):
   post_save.connect(create_upload, sender=BaseUpload)
 
 
-Act_Types = (
-        ('tut' , 'Tutorial'),
-        ('sol' , 'Solution'),
-        ('que' , 'Question'),
-        ('exm' , 'Exam Papers')
-    )
-class Activity(models.Model):
-   log=models.ForeignKey(Upload)
-   act_type=models.CharField(max_length=3 , choices=Act_Types , default='tut')
-
    #Creates Activity when Upload model is created
-   def create_activity(sender, instance, *args, **kwargs):
+  def create_activity(sender, instance, *args, **kwargs):
             if kwargs['created']:
                       sku = u'%s%s%s' % (instance.log)
                       s = Activity( log=instance)
                       s.save()
 
-   post_save.connect(create_activity, sender=Upload)
+  post_save.connect(create_activity, sender=Upload)'''
 
 class FluentComments(models.Model):
   threaded_comments=models.ForeignKey(ThreadedComment)

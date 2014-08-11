@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.utils.encoding import *
+from django.utils.encoding import smart_str
 from settings import *
 
 #import mimetypes, magic
@@ -58,13 +58,20 @@ def coursepage(request, batch_id):
              if text_form.is_valid():
                 new_notice=TextNotice(text=request.POST['text'] , upload_user=user,batch=userBatch)
                 new_notice.save()
+                notice_activity = Activity(upload=new_notice)
+                notice_activity.save()
                 return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
              elif file_form.is_valid():
                 file_type = getFileType(request.FILES['filename'])
-                new_file = UploadFile(upload_file = request.FILES['filename'], file_type=file_type, upload_user=user, batch=userBatch)
+                new_file = UploadFile(upload_file = request.FILES['filename'], file_type=file_type, upload_user=user, batch=userBatch , upload_type="tut" , privacy=False)
                 new_file.save()
+                image_activity = Activity(upload=new_file)
+                image_activity.save()
                 return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
+             else:
+               text_form = TextUpload()
+               image_form = FileForm()
        else:
           text_form = TextUpload()
           image_form = FileForm()
@@ -102,6 +109,9 @@ def download_file(request, file_id):
   file = open(download_file_open,"r")
 #mimetype = mimetypes.guess_type(filename)[0]
 
+  downloadlog = DownloadLog(uploadfile=download_file , user = request.user)
+  downloadlog.save()
+
   response = HttpResponse(mimetype='application/force-download')
 #response = HttpResponse(file.read(), mimetype=mimetype)
   response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(download_file)
@@ -118,6 +128,20 @@ def delete(request , file_id):
   if request.user.in_group('faculty'):
     UploadFile.objects.get(pk=file_id).delete()
   return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
+
+def userfiles(request , processType , batchId):
+  user = request.user
+  if processType == 'Upload':
+    if batchId == 'all':
+      required_files = UploadFile.objects.all().filter(upload_user=user).order_by('-datetime_created')
+    else:
+      required_files = UploadFile.objects.all().filter(upload_user=user).filter(batch_id=batchId).order_by('-datetime_created')
+  elif processType == 'Download':
+    if batchId == 'all':
+      return
+  context= {'previous_noti':required_files,
+            'processtype': processType}
+  return render(request,'lectut/image.html',context)
 
 #def upload(request):
 #   user = request.user
