@@ -22,6 +22,7 @@ var apps_scripts = {
     '/static/js/news/news.js'
   ],
   'helpcenter':[
+    '/static/handlebars/helpcenter/templates.js',
     '/static/js/prettydate.js',
     '/static/js/helpcenter/helpcenter.js'
   ],

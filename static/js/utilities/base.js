@@ -1,8 +1,10 @@
 var settings_tabs = ['profile', 'password', 'email', 'sessions'];
 
 $(document).on("load_app_settings", function(e, hash1){
-  if(!user.is_authenticated)
+  if(!user.is_authenticated){
     redirect_to_home();
+    return;
+  }
   $('.active-tab').removeClass('active-tab');
   current_tab = null;
   $('#tab-arrow').hide();
