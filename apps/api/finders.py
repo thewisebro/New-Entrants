@@ -55,3 +55,63 @@ class HandlebarsFinder(BaseFinder):
           path = safe_join(root, f)
           path = path.split(self.root)[1][1:]
           yield path, self.storage
+
+class SassFinder(BaseFinder):
+  def __init__(self):
+    self.root = safe_join(settings.STATIC_ROOT, 'SASS_CACHE/')
+    self.storage = FileSystemStorage(location=self.root)
+    self.storage.prefix = ''
+
+  def find_imports(self, path, STATIC_PATH, done):
+    result = False
+    with open(path, 'r') as f:
+      for line in f:
+        if line.startswith('@import'):
+          import_file = eval(line[8:])
+          import_path = os.path.join(os.path.dirname(path),import_file)
+          import_path = os.path.abspath(import_path)
+          rel_path = import_path.split(STATIC_PATH)[1][1:]+'.css'
+          if not import_path in done:
+            if self.find(rel_path, done=done, check=True) == True:
+              result = True
+            done.append(import_path)
+    return result
+
+  def find(self, path, all=False, done=None, check=False):
+    if done is None:
+      done = []
+    if path.endswith('.css'):
+      cache_path = safe_join(self.root, path)
+      cache_dir_path = '/'.join(cache_path.split('/')[:-1])
+      for STATIC_PATH in settings.STATICFILES_DIRS:
+        source_path = safe_join(STATIC_PATH, path[:-4]+'.sass')
+        if os.path.exists(source_path):
+          if not os.path.exists(cache_dir_path):
+            os.makedirs(cache_dir_path)
+          if self.find_imports(source_path, STATIC_PATH, done=done) or\
+              not os.path.exists(cache_path) or\
+              os.path.getmtime(cache_path) < os.path.getmtime(source_path):
+              command = ['sass', '-I', STATIC_PATH, '--cache-location',
+                safe_join(settings.PROJECT_ROOT,'.sass-cache/'), '--compass',
+                source_path, cache_path]
+              subprocess.call(command)
+              if check:
+                return True
+          return cache_path
+    return []
+
+  def list(self, ignore_patterns):
+    for STATIC_PATH in settings.STATICFILES_DIRS:
+      for root, dirs, files in os.walk(STATIC_PATH):
+        for f in files:
+          if f.endswith('.sass'):
+            path = safe_join(root, f)
+            path = path.split(STATIC_PATH)[1][1:]
+            # create cache
+            path = path[:-5]+'.css'
+            self.find(path)
+    for root, dirs, files in os.walk(self.root):
+      for f in files:
+        path = safe_join(root, f)
+        path = path.split(self.root)[1][1:]
+        yield path, self.storage

@@ -136,6 +136,7 @@ STATICFILES_FINDERS = (
 # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
   'compressor.finders.CompressorFinder',
   'api.finders.HandlebarsFinder',
+  'api.finders.SassFinder',
 )
 
 # Make this unique, and don't share it with anybody.
