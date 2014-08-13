@@ -21,10 +21,13 @@
   </script>
 {% endblock %}
 
-{% block styles %}
+{% block compressed_styles %}
   <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/fonts.sass" type="text/sass">
   <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.sass" type="text/sass">
   <link rel="stylesheet" href="{{ STATIC_URL }}sass/helpcenter/login_help.sass" type="text/sass">
+{% endblock %}
+
+{% block styles %}
   {{ form.media.css }}
   <style type="text/css">
     #content{

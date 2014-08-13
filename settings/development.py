@@ -3,7 +3,8 @@
 import os
 import sys
 
-PROJECT_ROOT = os.path.dirname(__file__)
+SETTINGS_DIR = os.path.dirname(__file__)
+PROJECT_ROOT = os.path.dirname(SETTINGS_DIR)
 
 # Email Settings
 EMAIL_HOST = '192.168.180.11'
@@ -382,6 +383,6 @@ HAYSTACK_CONNECTIONS = {
 }
 
 try:
-  from production.settings import *
+  from local_settings import *
 except ImportError:
   pass

@@ -155,7 +155,8 @@ function fill_data_in_pagelet(pagelet_name, html){
     if(src) script_src_list.push(src);
   }
   load_scripts_in_pipe(script_src_list, function(){
-    setup_form();
+    if(typeof setup_form != "undefined")
+      setup_form();
   });
   $(document).trigger("pagelet_loaded_"+pagelet_name);
   ajaxform_success = function(data){

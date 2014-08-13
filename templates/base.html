@@ -18,25 +18,26 @@
     {% block head %}
     {% endblock head %}
     {% compress css file %}
-      {% block styles %}
-      {% endblock styles %}
+      {% block compressed_styles %}
+      {% endblock %}
     {% endcompress %}
-    {% compress js %}
-      {% block pre_scripts %}
-      {% endblock pre_scripts %}
-    {% endcompress %}
-
+    {% block styles %}
+    {% endblock %}
+    {% block pre_scripts %}
+    {% endblock pre_scripts %}
   </head>
   <body>
     {% block body %}
     {% endblock body %}
+    <!--[if IE]>
+      <script type="text/javascript" src="{{ STATIC_URL }}js/es5-shim.min.js"></script>
+    <![endif]-->
+    {% block scripts %}
+      <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+    {% endblock scripts %}
     {% compress js %}
-      <!--[if IE]>
-        <script type="text/javascript" src="{{ STATIC_URL }}js/es5-shim.min.js"></script>
-      <![endif]-->
-      {% block scripts %}
-        <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
-      {% endblock scripts %}
+      {% block compressed_scripts %}
+      {% endblock %}
     {% endcompress %}
   </body>
 </html>
