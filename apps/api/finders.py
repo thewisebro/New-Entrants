@@ -8,7 +8,7 @@ from django.utils._os import safe_join
 
 class HandlebarsFinder(BaseFinder):
   def __init__(self):
-    self.root = safe_join(settings.STATIC_ROOT, 'CACHE/')
+    self.root = safe_join(settings.STATIC_ROOT, 'HANDLEBARS_CACHE/')
     self.storage = FileSystemStorage(location=self.root)
     self.storage.prefix = ''
     self.file_name = 'templates.js'

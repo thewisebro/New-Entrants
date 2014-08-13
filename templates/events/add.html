@@ -11,12 +11,9 @@
   </script>
 {% endblock %}
 
-{% block compressed_styles %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.sass" type="text/sass"/>
-{% endblock %}
-
 {% block styles %}
   {{ form.media.css }}
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.sass" type="text/sass"/>
   <style type="text/css">
   </style>
 {% endblock %}

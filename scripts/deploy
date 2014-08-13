@@ -1,7 +1,5 @@
 #!/bin/bash
 
 python prod_manage.py collectstatic --noinput
-python prod_manage.py compress -f
-chmod g+rw -R static_root
 python prod_manage.py cachepages
 touch production/wsgi.py
