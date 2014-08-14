@@ -4,9 +4,11 @@ import re
 from django.contrib.auth.models import AbstractUser, UserManager, Group
 from django.conf import settings
 from django.core import validators
+from django.core.cache import cache
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.db.models.base import ModelBase
+from django.db import models as django_models
 
 from core import models
 from api import model_constants as MC
@@ -56,8 +58,8 @@ class CustomUserManager(UserManager, models.Manager):
 class UserPhoto(CropImage):
   unique_name = 'user_photo'
   field_name = 'photo'
-  width = 100
-  height = 100
+  width = 150
+  height = 150
 
   @classmethod
   def get_instance(cls, request, pk):
@@ -116,7 +118,7 @@ class User(AbstractUser, models.Model):
     if self.photo:
       return self.photo.url
     elif self.in_group('Student Group'):
-      return '/static/images/nucleus/default_group_dp.png'
+      return settings.STATIC_URL + 'images/nucleus/default_group_dp.png'
     else:
       return settings.STATIC_URL + 'images/nucleus/default_dp.png'
 
@@ -181,7 +183,7 @@ class WebmailAccount(models.Model):
 
 
 def Role(group_name):
-  class SubUser(models.Model):
+  class UserOneToOne(models.Model):
     user = models.OneToOneField(User, primary_key=True)
     __metaclass__ = models.base.ModelBase
     @property
@@ -204,7 +206,7 @@ def Role(group_name):
 
     class Meta:
       abstract = True
-  return SubUser
+  return UserOneToOne
 
 
 ########################## Student Models #############################
@@ -230,8 +232,7 @@ class Branch(models.Model):
   def __unicode__(self):
     return self.code + ':' + self.name + '(' + self.graduation + ')'
 
-
-class StudentBase(Role('Student')):
+class AbstractStudentBase(django_models.Model):
   # semester field for backward compatibility, never change it's value
   # directly.
   semester = models.CharField(max_length=MC.CODE_LENGTH,
@@ -256,22 +257,37 @@ class StudentBase(Role('Student')):
       year = (self.semester_no + 1)/2
       semtype_int = (self.semester_no + 1)%2
       self.semester = self.branch.graduation + str(year) + str(semtype_int)
-    return super(StudentBase, self).save(*args, **kwargs)
+    return super(AbstractStudentBase, self).save(*args, **kwargs)
 
   @property
   def year(self):
     return (self.semester_no+1)/2
 
+class StudentBase(Role('Student'), AbstractStudentBase):
+  class Meta:
+    abstract = True
+
 class Student(StudentBase):
-  pass
+  @staticmethod
+  def post_save_receiver(sender, **kwargs):
+    instance = kwargs['instance']
+    if kwargs['created']:
+      StudentInfo.objects.get_or_create(student=instance)
 
 class StudentAlumni(StudentBase):
   @property
   def role(self):
     return 'Alumni'
 
+class StudentUser(User, AbstractStudentBase):
+  user = models.OneToOneField(User, primary_key=True, parent_link=True)
+  class Meta:
+    verbose_name = 'Student User (Dummy)'
+    verbose_name_plural = 'Student Users (Dummy)'
+    db_table = 'nucleus_student'
+    managed = False
 
-class StudentInfoBase(models.Model):
+class AbstractStudentInfo(django_models.Model):
   fathers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   fathers_occupation = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   fathers_office_address = models.CharField(max_length=MC.TEXT_LENGTH,
@@ -308,15 +324,26 @@ class StudentInfoBase(models.Model):
     abstract = True
 
 
-class StudentInfo(StudentInfoBase):
+class StudentInfo(models.Model, AbstractStudentInfo):
   student = models.OneToOneField(Student, primary_key=True)
 
   class Meta:
     verbose_name = 'Student Information'
     verbose_name_plural = 'Students Information'
 
+  def __unicode__(self):
+    return unicode(self.student.user)
 
-class StudentInfoAlumni(StudentInfoBase):
+class StudentUserInfo(StudentUser, AbstractStudentInfo):
+  student = models.OneToOneField(StudentUser, primary_key=True, parent_link=True)
+
+  class Meta:
+    verbose_name = 'Student User Information (Dummy)'
+    verbose_name_plural = 'Students User Information (Dummy)'
+    db_table = 'nucleus_studentinfo'
+    managed = False
+
+class StudentInfoAlumni(models.Model, AbstractStudentInfo):
   studentalumni = models.OneToOneField(StudentAlumni, primary_key=True)
 
   class Meta:
@@ -340,7 +367,7 @@ class Course(models.Model):
             ',' + self.get_semtype_display() + ')'
 
   def save(self, *args, **kwargs):
-    self.id = str(self.year) + self.semtype + self.code
+    self.id = self.code + ':' + str(self.year) + self.semtype
     super(Course, self).save(*args, **kwargs)
 
 
@@ -434,14 +461,74 @@ class PHPSession(models.Model):
     return self.session_key
 
 
+class FriendRequest(models.Model):
+  from_user = models.ForeignKey(User, related_name='friendrequests_to')
+  to_user = models.ForeignKey(User, related_name='friendrequests_from')
+
+  class Meta:
+    unique_together = ['from_user', 'to_user']
+
+  def __unicode__(self):
+    return 'From: ' + unicode(self.from_user) + ', To: ' +\
+                      unicode(self.to_user)
+
+
+class IntroAd(models.Model):
+  name = models.CharField(max_length = MC.TEXT_LENGTH, unique=True)
+  visited_users = models.ManyToManyField(User)
+
+  def __unicode__(self):
+    return 'IntroAd: ' + self.name
+
+
+class UserLog(models.Model):
+  user = models.ForeignKey(User)
+  name = models.CharField(max_length=MC.TEXT_LENGTH)
+  value = models.CharField(max_length=MC.TEXT_LENGTH)
+
+  def __unicode__(self):
+    return self.name + ':' + unicode(self.user)
+
+
+class Log(models.Model):
+  name = models.CharField(max_length=MC.TEXT_LENGTH)
+  value = models.CharField(max_length=MC.TEXT_LENGTH)
+
+  def __unicode__(self):
+    return self.name
+
+
 class GlobalVarMeta(ModelBase):
+  _cache_prefix = 'GlobalVar:'
+
   def __getitem__(cls, key):
-    return cls.objects.get(key=key).value
+    cache_key = cls._cache_prefix + key
+    value = cache.get(cache_key)
+    if value is None:
+      obj = cls.objects.get_or_none(key=key)
+      if not obj is None:
+        value = obj.value
+        cache.set(cache_key, value)
+    if value is None:
+      raise KeyError
+    return value
 
   def __setitem__(cls, key, value):
     pair = cls.objects.get_or_create(key=key)[0]
     pair.value = value
     pair.save()
+    cache_key = cls._cache_prefix + key
+    cache.set(cache_key, value)
+
+  def __delitem__(cls, key):
+    pair = cls.objects.get_or_none(key=key)
+    if pair:
+      pair.delete()
+    cache_key = cls._cache_prefix + key
+    cache.set(cache_key, None)
+
+  def has_key(cls, key):
+    return cls.objects.filter(key=key).exists()
 
 class GlobalVar(models.Model):
   key = models.CharField(max_length=MC.TEXT_LENGTH)

@@ -49,9 +49,7 @@ other_apps = ['events', 'lectut','notices','placement','thinktank',
 
 
 external_links = {
-  'imglink' : {'name':'Information Management Group',
-    'url':'http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html'
-  },
+  'imglink' : {'name':'Information Management Group', 'url':'http://img.channeli.in'},
   'iitr' : {'name':'IITR Home', 'url':'http://www.iitr.ac.in'},
   'webmail' : {'name':'Webmail', 'url':'http://mail.iitr.ac.in/iwc'},
   'library' : {'name':'Library', 'url':'http://mgcl.iitr.ac.in'},

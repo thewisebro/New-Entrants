@@ -5,6 +5,14 @@ from crispy_forms.helper import FormHelper
 
 class FormBase(object):
   def __init__(self, *args, **kwargs):
+    if hasattr(self, 'Meta'):
+      if hasattr(self.Meta, 'labels'):
+        labels = self.Meta.labels
+        for field in labels:
+          self.fields[field].label = labels[field]
+      if hasattr(self.Meta, 'required_fields'):
+        for field in self.Meta.required_fields:
+          self.fields[field].required = True
     self.helper = FormHelper(self)
 
   def uniform(self, *args, **kwargs):

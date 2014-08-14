@@ -19,6 +19,7 @@ actual_urlpatterns = patterns('',
   url(r'^jukebox/', include('jukebox.urls')),
   url(r'^games/', include('games.urls')),
   url(r'^helpcenter/', include('helpcenter.urls')),
+  url(r'^settings/', include('utilities.urls')),
   url(r'^taggit_autocomplete/', include('taggit_autocomplete.urls')),
   url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 <<<<<<< HEAD

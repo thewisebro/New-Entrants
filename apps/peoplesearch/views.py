@@ -29,6 +29,10 @@ from hashlib import sha1
 import logging
 logger = logging.getLogger('channel-i_logger')
 
+def make_user_login(request,user):
+  user.backend='django.contrib.auth.backends.ModelBackend'
+  auth_login(request, user)
+
 @csrf_exempt
 def check_session(request):
   HEADERS = {
@@ -83,8 +87,7 @@ def channeli_login(request):
   if not user:
     result['msg'] = "NO"
   elif user.check_password(password):
-
-# make_user_login(request,user)
+    make_user_login(request,user)
     result['info'] = user.get_info
     if user.groups.filter(name="Student").exists():
 #if user is student
