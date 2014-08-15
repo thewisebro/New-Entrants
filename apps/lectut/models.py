@@ -12,7 +12,7 @@ from django.db.models.signals import post_save
 fs = FileSystemStorage(location='Uploads')
 
 # Create your models here.
-class LectutUser(models.Model):
+'''class LectutUser(models.Model):
   user=models.OneToOneField(User)
 
   def __unicode__(self):
@@ -24,7 +24,7 @@ class LectutBatch(models.Model):
   course=models.ForeignKey(Course)
 
   def __unicode__(self):
-     return str(self.name)
+     return str(self.name)'''
 
 class TextNotice(models.Model):
   text=models.CharField(max_length=500 , null=False)
@@ -43,19 +43,19 @@ class BaseUpload(models.Model):
           self.__class__.objects.all().update(featured = False)
      super(Model, self).save(*args, **kwargs)"""
 
-Act_Types = (
+'''Act_Types = (
             ('lec' , 'Lecture'),
             ('tut' , 'Tutorial'),
             ('sol' , 'Solution'),
             ('que' , 'Question'),
             ('exm' , 'Exam Papers')
             )
-
+'''
 class UploadFile(BaseUpload):
   upload_file=models.FileField(upload_to='lectut/images/')
   name=models.CharField(max_length=100 , null=False)
   file_type=models.CharField(max_length=10 , null=False)
-  upload_type=models.CharField(max_length=3 , choices=Act_Types , default='tut')
+  upload_type=models.CharField(max_length=3 , default='tut')
   privacy=models.BooleanField(default=False)      #false means visible to all
   upload_user=models.ForeignKey(User)
   batch=models.ForeignKey(Batch)
@@ -96,8 +96,6 @@ class Activity(models.Model):
   object_id=models.PositiveIntegerField()
   Upload = generic.GenericForeignKey('content_type','object_id')
 
-  def __init__(self):
-    return self.object_id
   '''def create_upload(sender, instance, *args, **kwargs):
       if kwargs['created']:
                sku = u'%s%s%s' % ()
@@ -130,4 +128,12 @@ class FluentComments(models.Model):
        self.serial_num = serial_num + 1
        super(notification, self).save()'''
 
+"""
+| lectut_lectutbatch                     |
+| lectut_lectutbatch_lectutuser          |
+| lectut_lectutuser                      |
+| lectut_upload                          |
+| lostfound_founditems                   |
+| lostfound_lostitems
+"""
 

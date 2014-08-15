@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Channel i | About{% endblock %}
+
+{% block styles %}
+		<link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.sass" type="text/sass"/>
+		<link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/about.sass" type="text/sass"/>
+{% endblock %}
+
+{% block body %}
+	    <div id="header">
+		    <div id="header_container">
+            <div id="header_img">
+            <a href="https://www.facebook.com/IMGIITRoorkee">
+              <img src="{{ STATIC_URL }}images/nucleus/about/imglogo.png" alt=""/>
+            </a>
+			    </div>
+			    <div class="clear"></div>
+			</div>
+		</div>
+		<!-- header ends. -->
+		
+	    <div id="banner">
+		    <div id="banner_text">
+			    <div id="text4">Introducing</div>
+			    <div id="text1">Channel i</div>
+			    <div id="text2">It's everything you need it to be</div>
+			    <div id="text3">Simpler . Cleaner . Better
+				    <div id="line"></div>
+				</div>
+			</div>
+		</div>
+		<!-- banner ends. -->
+		
+		<div id="main_content">
+		    <div id="begin_content">What's new?
+				<div id="line"></div>
+			</div>
+			
+		    <div class="features">
+			    <div class="left_text">
+				    <div class="feature_name">Better Design</div>
+					<div id="line"></div>
+				    <div class="feature_desc">The new Channel i is built around <br/>the idea that you must be close to <br/> what you need.</div>
+				</div>
+				<div id="img_design" class="right_image"><img src="{{ STATIC_URL }}images/nucleus/about/design.png" alt="" /></div>
+				<div class="clear"></div>
+			</div>
+			
+		    <div class="features">
+			    <div class="right_text">
+				    <div class="feature_name">Applications</div>
+					<div id="line"></div>
+				    <div class="feature_desc">All the apps you love, now just a <br/> click away.</div>
+				</div>
+				<div id="img_apps" class="left_image"><img src="{{ STATIC_URL }}images/nucleus/about/apps.png" alt="" /></div>
+				<div class="clear"></div>
+			</div>
+			
+		    <div class="features">
+			    <div class="left_text">
+				    <div class="feature_name">Events</div>
+					<div id="line"></div>
+				    <div class="feature_desc">Now, see upcoming events, get <br/> reminders and even create your <br/> personal task list.</div>
+				</div>
+				<div id="img_events" class="right_image"><img src="{{ STATIC_URL }}images/nucleus/about/events.png" alt="" /></div>
+				<div class="clear"></div>
+			</div>
+			
+		    <div class="features">
+			    <div class="right_text">
+				    <div class="feature_name">Notifications</div>
+					<div id="line"></div>
+				    <div class="feature_desc">Know everything the moment <br/> it happens.</div>
+				</div>
+				<div id="img_notify" class="left_image"><img src="{{ STATIC_URL }}images/nucleus/about/notify.png" alt="" /></div>
+				<div class="clear"></div>
+			</div>
+			
+		    <div class="features">
+			    <div class="left_text">
+				    <div class="feature_name">Feeds</div>
+					<div id="line"></div>
+				    <div class="feature_desc">Get important feeds and stay updated.</div>
+				</div>
+				<div id="img_feeds" class="right_image"><img src="{{ STATIC_URL }}images/nucleus/about/feeds.png" alt="" /></div>
+				<div class="clear"></div>
+			</div>
+			
+		    <div class="features">
+			    <div class="right_text">
+				    <div class="feature_name">Games</div>
+					<div id="line"></div>
+				    <div class="feature_desc">Compete with your friends and climb <br/> the institute leaderboard.</div>
+				</div>
+				<div id="img_games" class="left_image"><img src="{{ STATIC_URL }}images/nucleus/about/games.png" alt="" /></div>
+				<div class="clear"></div>
+			</div>
+			
+		    <div class="features">
+			    <div class="left_text">
+				    <div class="feature_name">Campus Groups</div>
+					<div id="line"></div>
+				    <div class="feature_desc">Now the campus groups get a platform <br/> to represent themselves.</div>
+				</div>
+				<div id="img_groups" class="right_image"><img src="{{ STATIC_URL }}images/nucleus/about/groups.png" alt="" /></div>
+				<div class="clear"></div>
+			</div>
+			
+		    <div class="features">
+			    <div class="right_text">
+				    <div class="feature_name">Themes</div>
+					<div id="line"></div>
+				    <div class="feature_desc">Now personalize your home page <br/> according to your taste.</div>
+				</div>
+				<div id="img_themes" class="left_image"><img src="{{ STATIC_URL }}images/nucleus/about/themes.png" alt="" /></div>
+				<div class="clear"></div>
+			</div>
+			
+		    <div class="features">
+			    <div class="left_text">
+				    <div class="feature_name">Settings</div>
+					<div id="line"></div>
+				    <div class="feature_desc">From email subscriptions to your <br/> personal information, control everything <br/> from one dashboard.</div>
+				</div>
+				<div id="img_settings" class="right_image"><img src="{{ STATIC_URL }}images/nucleus/about/settings.png" alt="" /></div>
+				<div class="clear"></div>
+			</div>
+			
+		    <div id="end_content">
+			    <div id="text1">And a lot more to come.</div>
+			    <div id="text2">This is just the beginning...</div>
+			    <a href="/"><div id="button">Take me to Channel i</div></a>
+			</div>
+		</div>
+		<!-- main_content ends. -->
+	  {% include "footer.html" %}	
+		<!-- footer ends. -->
+{% endblock %}

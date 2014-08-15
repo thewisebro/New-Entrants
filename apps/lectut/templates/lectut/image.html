@@ -26,31 +26,34 @@
 </script>
 
 <body>
-<h2>{{ batch.name }} ({{ batch.course.name}})</h2>
-<form action="{% url 'coursepage' batch_id=name %}" method="post" enctype="multipart/form-data">{% csrf_token %}
-         <p>
-             {{text_form}}
-             {{image_form}}
-         </p>
-         {% load staticfiles%}
-         <!--iframe id="select"></iframe-->
-         <input type="Submit" id=" Submit" value="Submit">
-         <a href="{% url 'dispbatch' %}"><input type="button" value="My uploads"></a>
-         <a href="{% url 'dispbatch' %}"><input type="button" value="My downloads"></a>
-         <br>
-         <div class="feeds">
-           <ul class="nav nav-tabs" id="myTab">
-           <li class="active"><a href="#uploads">Uploads</a></li>
-           <li><a href="#notices">Notices</a></li>
-           </ul>
+  {% if viewType == 'Coursepage' %}
+    <h2>{{ batch.name }} ({{ batch.course.name}})</h2>
+    <form action="{% url 'coursepage' batch_id=batch.id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+      <p>
+        {{text_form}}
+        {{image_form}}
+      </p>
+      <!--iframe id="select"></iframe-->
+      <input type="Submit" id=" Submit" value="Submit">
+    </form>
+    <a href="{% url 'useruploads' batch_id=batch.id %}"><input type="button" value="My uploads"></a>
+    <a href="{% url 'userdownloads' batch_id=batch.id %}"><input type="button" value="My downloads"></a>
+    <br>
+    <div class="feeds">
+      <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a href="#uploads">Uploads</a></li>
+        <li><a href="#notices">Notices</a></li>
+      </ul>
+  {% endif %}
            <div class="tab-content">
                    <div id="uploads" class="tab-pane fade in active">
          <!--p id="choices"></p-->
+           {% load staticfiles %}
          {% for noti in previous_noti%}
             <h4>{{noti.upload_user.name}}</h4>
             {% if noti.file_type == 'image'%}
               <a class="fancybox" rel="group1" href="{{ MEDIA_URL }}/{{noti}}"><img src="{{ MEDIA_URL }}/{{noti}}" height="100" width="100"></a>
-              {{ noti }}
+              {{noti.name }}
               <br>
             {% elif noti.file_type == 'video'%}
               <video id="{{noti}}" class="video-js vjs-default-skin"
@@ -60,7 +63,7 @@
                 <source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4' />
                 <source src="http://video-js.zencoder.com/oceans-clip.webm" type='video/webm' />
                 <source src="http://video-js.zencoder.com/oceans-clip.ogv" type='video/ogg' />
-                <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+                {{noti.name}}
               </video>
               <!--video width="100" height="100" controls>
               <source src="{{ MEDIA_URL }}/{{noti}}" type="video/mp4">
@@ -70,10 +73,13 @@
               </object> 
               </video--> 
             {%elif noti.file_type == 'pdf'%}
-              <a href="{{ MEDIA_URL }}{{noti}}" target="_blank"><img src="{{ MEDIA_URL }}lectut/images/pdf-icon.png" height="100" width="100"></a>
+              <a href="{{ MEDIA_URL }}{{noti}}" target="_blank"><img src="{{ MEDIA_URL }}lectut/images/pdf.png" height="100" width="100"></a>
+              {{noti.name}}
             {%endif%}
             <a href="/lectut/disp/download/{{ noti.id }}/">Download</a>
-            <a href="/lectut/disp/delete/{{ noti.id }}/">Delete</a>
+            {% if userType == '1' %}
+              <a href="/lectut/disp/delete/{{ noti.id }}/">Delete</a>
+            {% endif %}
           {% endfor %}
           </div>
           <div id="notices" class="tab-pane fade">
@@ -101,5 +107,4 @@
                                   });
                   });
 </script>
-</form>
 </body>

@@ -31,7 +31,8 @@ $(document).on("unload_app_helpcenter", function(e){
 });
 
 $(document).on("logout", function(){
-  redirect_to_home();
+  if(get_current_app() == 'helpcenter')
+    redirect_to_home();
 });
 
 function update_responses(action,id){

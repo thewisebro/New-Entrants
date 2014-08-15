@@ -4,11 +4,11 @@ from models import *
 
 class FileForm(forms.Form):
   FILE_CHOICES= (
-      ('Lecture' , 'Lecture'),
-      ('Tutorial' , 'Tutorial'),
-      ('Solution' , 'Solution'),
-      ('Exam Paper' , 'Exam Paper'),
-      ('Question' , 'Question')
+      ('Lec' , 'Lecture'),
+      ('Tut' , 'Tutorial'),
+      ('Sol' , 'Solution'),
+      ('ExP' , 'Exam Paper'),
+      ('Que' , 'Question')
       )
   filename=forms.FileField()
   upload_name=forms.CharField()

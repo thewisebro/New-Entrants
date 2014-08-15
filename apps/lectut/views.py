@@ -45,46 +45,45 @@ def dispbatch(request):
 
 @login_required
 def coursepage(request, batch_id):
-       user = request.user
-       if request.user.in_group('faculty'):
-         userType = 1
-       else:
-         userType = 0
-       userBatch = Batch.objects.get(id=batch_id)
-       request.session['batchId'] = batch_id
-       if request.method == 'POST':
-             text_form = TextUpload(request.POST)
-             file_form = FileForm(request.POST , request.FILES )
-             if text_form.is_valid():
-                new_notice=TextNotice(text=request.POST['text'] , upload_user=user,batch=userBatch)
-                new_notice.save()
-                notice_activity = Activity(upload=new_notice)
-                notice_activity.save()
-                return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
+  user = request.user
+  userType=getUserType(user)
+  userBatch = Batch.objects.get(id=batch_id)
+  request.session['batchId'] = batch_id
+  if request.method == 'POST':
+    text_form = TextUpload(request.POST)
+    file_form = FileForm(request.POST , request.FILES )
+    if text_form.is_valid():
+      new_notice=TextNotice(text=request.POST['text'] , upload_user=user,batch=userBatch)
+      new_notice.save()
+      notice_activity = Activity(Upload=new_notice)
+      notice_activity.save()
+      return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
-             elif file_form.is_valid():
-                file_type = getFileType(request.FILES['filename'])
-                new_file = UploadFile(upload_file = request.FILES['filename'], file_type=file_type, upload_user=user, batch=userBatch , upload_type="tut" , privacy=False)
-                new_file.save()
-                image_activity = Activity(upload=new_file)
-                image_activity.save()
-                return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
-             else:
-               text_form = TextUpload()
-               image_form = FileForm()
-       else:
-          text_form = TextUpload()
-          image_form = FileForm()
+    elif file_form.is_valid():
+      file_type = getFileType(request.FILES['filename'])
+      upload_type = request.POST['upload_type']
+      file_name=request.POST['upload_name']
+      new_file = UploadFile(upload_file = request.FILES['filename'], file_type=file_type, upload_user=user, name=file_name ,batch=userBatch , upload_type=upload_type , privacy=False)
+      new_file.save()
+      image_activity = Activity(Upload=new_file)
+      image_activity.save()
+      return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
+    else:
+      text_form = TextUpload()
+      image_form = FileForm()
+  else:
+    text_form = TextUpload()
+    image_form = FileForm()
 
-       previous_noti=UploadFile.objects.all().filter(batch_id=batch_id).order_by('-datetime_created')
+  previous_noti=UploadFile.objects.all().filter(batch_id=batch_id).order_by('-datetime_created')
 
-       context = {'image_form': image_form,
-                  'text_form' : text_form,
-                  'previous_noti': previous_noti,
-                  'batch':userBatch,
-                  'name':batch_id,
-                  'userType':userType}
-       return render( request, 'lectut/image.html', context)
+  context = {'image_form': image_form,
+             'text_form' : text_form,
+             'previous_noti': previous_noti,
+             'batch':userBatch,
+             'userType':userType,
+             'viewType':'Coursepage'}
+  return render( request, 'lectut/image.html', context)
 
 def getFileType(file_name):
 #mime = magic.Magic(mime=True)
@@ -121,6 +120,12 @@ def download_file(request, file_id):
 def get_path_to_file(file_name):
   return MEDIA_URL/file_name.upload_file
 
+def getUserType(user):
+  if user.in_group('faculty'):
+    return 1
+  else:
+    return 0
+
 @login_required
 def delete(request , file_id):
   user = request.user
@@ -129,18 +134,34 @@ def delete(request , file_id):
     UploadFile.objects.get(pk=file_id).delete()
   return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
-def userfiles(request , processType , batchId):
+def useruploads(request , batch_id):
   user = request.user
-  if processType == 'Upload':
-    if batchId == 'all':
-      required_files = UploadFile.objects.all().filter(upload_user=user).order_by('-datetime_created')
-    else:
-      required_files = UploadFile.objects.all().filter(upload_user=user).filter(batch_id=batchId).order_by('-datetime_created')
-  elif processType == 'Download':
-    if batchId == 'all':
-      return
+  userType=getUserType(user)
+  userBatch = Batch.objects.get(id=batch_id)
+  if batch_id == 'all':
+    required_files = UploadFile.objects.all().filter(upload_user=user).order_by('-datetime_created')
+  else:
+    required_files = UploadFile.objects.all().filter(upload_user=user).filter(batch_id=batch_id).order_by('-datetime_created')
+
   context= {'previous_noti':required_files,
-            'processtype': processType}
+            'userBatch':userBatch,
+            'userType':userType,
+            'viewType':'MyUploads'}
+  return render(request,'lectut/image.html',context)
+
+def userdownloads(request , batch_id):
+  user = request.user
+  userType=getUserType(user)
+  userBatch = Batch.objects.get(id=batch_id)
+  if batch_id == 'all':
+    fileIds = DownloadLog.objects.all().filter(user=user).order_by('-datetime_created')
+  else:
+    fileIds = DownloadLog.objects.all().filter(user=user).filter(batch_id=batch_id).order_by('-datetime_created')
+
+  context= {'previous_noti':required_files,
+            'userBatch':userBatch,
+            'userType':userType,
+            'viewType':'MyDownloads'}
   return render(request,'lectut/image.html',context)
 
 #def upload(request):
