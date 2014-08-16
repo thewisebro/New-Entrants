@@ -13,6 +13,16 @@ $(document).on("logout", function(){
   load_pagelet("sidebar");
 });
 
+$(document).on("pagelet_loaded_header", function(){
+
+  $('#global_search_bar').on("keydown", function(event){
+      if(event.which==13 && current_tab=="notices")
+      {
+       search();
+      }
+  });
+});
+
 $(document).on("pagelet_loaded_sidebar",function(){
   tabs = $('.tab').map(function(){return this.id.split('-')[0];});
   tabs_parent_top = $('#sidebar-tabs').position().top;

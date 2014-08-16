@@ -165,7 +165,7 @@ class NoticeSearch(ListAPIView):
 
     if query[:2]==">>":
       print "abcd"
-      query=query[2:].split("--")
+      query=query[2:].split("-")
       queryset = query1.filter(datetime_modified__gt=datetime.fromtimestamp(int(query[0])/1000.0)).filter(datetime_modified__lt=datetime.fromtimestamp(int(query[1])/1000.0))
 
     else:

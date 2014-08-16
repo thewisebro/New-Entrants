@@ -161,10 +161,12 @@ function additional_features()
 
 function newold_and_search_bar()
 {
-  console.log(all);
+  console.log("test1");
 	html = '<div id="newold_buttons" style="margin-bottom:4px;"><input type="button" id="new_button" onclick="newold_clicked(\'new\')" value="New">';
 	html += '<input type="button" id="old_button" onclick="newold_clicked(\'old\')" value="Old"><br></div>';
-	html += '<div id="search_bar">Search: <input type="text" id="search_data" placeholder="' + search_string + '" onkeydown="if (event.keyCode == 13) search()"><br></div>';
+	$("#global_search_bar").val("");
+	$("#global_search_bar").attr('placeholder', search_string);
+//  html += '<div id="search_bar">Search: <input type="text" id="search_data" placeholder="' + search_string + '" onkeydown="if (event.keyCode == 13) search()"><br></div>';
 	$('#content').append(html);
   if(starred==1)
 	additional_features();
@@ -190,6 +192,7 @@ function newold_and_search_bar()
 	}
 	else
   {
+      console.log("testw1");
       console.log("gsdad");
     if(hash1 == "search")
     {
@@ -594,7 +597,7 @@ function check_if_date(query2)
   else if(!isNaN(Date.parse(query2)) && Date.parse(query2)>1262284200000)
   {
     x = Date.parse(query2)
-    url = ">>" + x.toString() + "--" + (x+86400000).toString();
+    url = ">>" + x.toString() + "-" + (x+86400000).toString();
   }
     console.log(url);
   return url
@@ -602,40 +605,42 @@ function check_if_date(query2)
 
 function search()
 {
-        console.log("search_function_enter");
+  console.log("sr");
 	j=0;url="";
-	query1=$("#search_data").val();
+	query1=$("#global_search_bar").val();
   if(query1=="")
+  {
     query1=search_string;
+  }
   else
   {
     search_string=query1;
   }
-  if(check_if_date(query1))
-    url=check_if_date(query1);
-  else
+  console.log(search_string);
+  check_if_date(search_string)
+  if(url=="")
   {
-      if(query1=="")
-        j=1;
-      query=query1.split(" ");
-      t=0;
-      k=query.length;
-      if(j!=1)
+    if(query1=="")
+      j=1;
+    query=query1.split(" ");
+    t=0;
+    k=query.length;
+    if(j!=1)
+    {
+      for(var i=0; i<k;i++)
       {
-        for(var i=0; i<k;i++)
-        {
-          if(query[t]=="")
-          query.splice(t,1);
-          else
-          t++;
-        }
+        if(query[t]=="")
+        query.splice(t,1);
+        else
+        t++;
       }
-      url="";
-      for(var i=0; i<query.length-1; i++)
-      {
-        url+=query[i]+"+";
-      }
-      url+=query[query.length-1];
+    }
+    url="";
+    for(var i=0; i<query.length-1; i++)
+    {
+      url+=query[i]+"+";
+    }
+    url+=query[query.length-1];
   }
           console.log(url);
   $.ajax({
@@ -656,78 +661,78 @@ function search()
     });
 }
 
-function display_search_list(page_no)
+function display_search_list(page_no, store1, pages1, last_page_notices1)
 {
       		$('#page_numbers').remove();
 		html = '<div id="page_numbers">';
-      		for(var i=0; i<no_of_pages-1; i++)
+      		for(var i=0; i<pages1-1; i++)
       		{
         		html += '<span id="number-' + (i+1) + '" class="numbers_list" onclick="search_change_page('+ (i+1) + ')">' + (i+1) +'</span>';
       		}
-      		html += '<span id="number-' + no_of_pages + '"class="numbers_list" onclick="search_change_page('+ no_of_pages +  ')">' + no_of_pages + '</span>';
+      		html += '<span id="number-' + pages1 + '"class="numbers_list" onclick="search_change_page('+ pages1 +  ')">' + pages1 + '</span>';
       		html += '</div>';
       		$('#content').append(html);
       $('div#notice_list').remove();
       html = '<div id="notice_list">';
 	var k = 0;
-      if(page_no < no_of_pages || (page_no == no_of_pages && last_page_notices==0))
+      if(page_no < pages1 || (page_no == pages1 && last_page_notices1==0))
         k = 10;
       else
-        k = last_page_notices;
+        k = last_page_notices1;
       var a=(page_no-1)*10, b=a+k;
 	if(starred==1)
 	{
       for(var i=a; i<b; i++)
       {
-              if(check_upload_array[search_store[i].id]==1)
+              if(check_upload_array[store1[i].id]==1)
               {
-                if(read_array[search_store[i].id]==1)
+                if(read_array[store1[i].id]==1)
                 {
-                  if(star_array[search_store[i].id]==1)
+                  if(star_array[store1[i].id]==1)
                   {
-                    html += '<div style="background-color:gray;" class="notice_info" id="notice_' + search_store[i].id + '" onclick="open_notice(' + search_store[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + search_store[i].id + '" onclick="add_to_checklist(' + search_store[i].id + ', event)">'  + '<span class="read" id="notice_read_' + search_store[i].id + '">R&nbsp</span><span class="starred" onclick="star_notice(' + search_store[i].id + ', event)">S&nbsp</span>' + search_store[i].subject + '<span class="edit" onclick="edit_notice(' + search_store[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + search_store[i].id + ', event)">&nbsp&nbspDelete</span></div>';
+                    html += '<div style="background-color:gray;" class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">'  + '<span class="read" id="notice_read_' + store1[i].id + '">R&nbsp</span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '<span class="edit" onclick="edit_notice(' + store1[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + store1[i].id + ', event)">&nbsp&nbspDelete</span></div>';
                   }
                   else
                   {
-                    html += '<div class="notice_info" id="notice_' + search_store[i].id + '" onclick="open_notice(' + search_store[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + search_store[i].id + '" onclick="add_to_checklist(' + search_store[i].id + ', event)">' + '<span class="read" id="notice_read_' + search_store[i].id + '">R&nbsp</span><span class="starred" onclick="star_notice(' + search_store[i].id + ', event)">S&nbsp</span>' + search_store[i].subject + '<span class="edit" onclick="edit_notice(' + search_store[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + search_store[i].id + ', event)">&nbsp&nbspDelete</span></div>';
+                    html += '<div class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">' + '<span class="read" id="notice_read_' + store1[i].id + '">R&nbsp</span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '<span class="edit" onclick="edit_notice(' + store1[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + store1[i].id + ', event)">&nbsp&nbspDelete</span></div>';
                   }
                 }
 
                 else
                 {
-                  if(star_array[search_store[i].id]==1)
+                  if(star_array[store1[i].id]==1)
                   {
-                    html += '<div style="background-color:gray;" class="notice_info" id="notice_' + search_store[i].id + '" onclick="open_notice(' + search_store[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + search_store[i].id + '" onclick="add_to_checklist(' + search_store[i].id + ', event)">' + '<span class="read" id="notice_read_' + search_store[i].id + '"></span><span class="starred" onclick="star_notice(' + search_store[i].id + ', event)">S&nbsp</span>' + search_store[i].subject + '<span class="edit" onclick="edit_notice(' + search_store[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + search_store[i].id + ', event)">&nbsp&nbspDelete</span></div>';
+                    html += '<div style="background-color:gray;" class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">' + '<span class="read" id="notice_read_' + store1[i].id + '"></span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '<span class="edit" onclick="edit_notice(' + store1[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + store1[i].id + ', event)">&nbsp&nbspDelete</span></div>';
                   }
                   else
                   {
-                    html += '<div class="notice_info" id="notice_' + search_store[i].id + '" onclick="open_notice(' + search_store[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + search_store[i].id + '" onclick="add_to_checklist(' + search_store[i].id + ', event)">' + '<span class="read" id="notice_read_' + search_store[i].id + '"></span><span class="starred" onclick="star_notice(' + search_store[i].id + ', event)">S&nbsp</span>' + search_store[i].subject + '<span class="edit" onclick="edit_notice(' + search_store[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + search_store[i].id + ', event)">&nbsp&nbspDelete</span></div>';
+                    html += '<div class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">' + '<span class="read" id="notice_read_' + store1[i].id + '"></span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '<span class="edit" onclick="edit_notice(' + store1[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + store1[i].id + ', event)">&nbsp&nbspDelete</span></div>';
                   }
                 }
               }
               else
               {
-                  if(read_array[search_store[i].id]==1)
+                  if(read_array[store1[i].id]==1)
                   {
-                    if(star_array[search_store[i].id]==1)
+                    if(star_array[store1[i].id]==1)
                     {
-                      html += '<div style="background-color:gray;" class="notice_info" id="notice_' + search_store[i].id + '" onclick="open_notice(' + search_store[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + search_store[i].id + '" onclick="add_to_checklist(' + search_store[i].id + ', event)">'  + '<span class="read" id="notice_read_' + search_store[i].id + '">R&nbsp</span><span class="starred" onclick="star_notice(' + search_store[i].id + ', event)">S&nbsp</span>' + search_store[i].subject + '</div>';
+                      html += '<div style="background-color:gray;" class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">'  + '<span class="read" id="notice_read_' + store1[i].id + '">R&nbsp</span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '</div>';
                     }
                     else
                     {
-                      html += '<div class="notice_info" id="notice_' + search_store[i].id + '" onclick="open_notice(' + search_store[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + search_store[i].id + '" onclick="add_to_checklist(' + search_store[i].id + ', event)">' + '<span class="read" id="notice_read_' + search_store[i].id + '">R&nbsp</span><span class="starred" onclick="star_notice(' + search_store[i].id + ', event)">S&nbsp</span>' + search_store[i].subject + '</div>';
+                      html += '<div class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">' + '<span class="read" id="notice_read_' + store1[i].id + '">R&nbsp</span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '</div>';
                     }
                   }
 
                   else
                   {
-                    if(star_array[search_store[i].id]==1)
+                    if(star_array[store1[i].id]==1)
                     {
-                      html += '<div style="background-color:gray;" class="notice_info" id="notice_' + search_store[i].id + '" onclick="open_notice(' + search_store[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + search_store[i].id + '" onclick="add_to_checklist(' + search_store[i].id + ', event)">' + '<span class="read" id="notice_read_' + search_store[i].id + '"></span><span class="starred" onclick="star_notice(' + search_store[i].id + ', event)">S&nbsp</span>' + search_store[i].subject + '</div>';
+                      html += '<div style="background-color:gray;" class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">' + '<span class="read" id="notice_read_' + store1[i].id + '"></span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '</div>';
                     }
                     else
                     {
-                      html += '<div class="notice_info" id="notice_' + search_store[i].id + '" onclick="open_notice(' + search_store[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + search_store[i].id + '" onclick="add_to_checklist(' + search_store[i].id + ', event)">' + '<span class="read" id="notice_read_' + search_store[i].id + '"></span><span class="starred" onclick="star_notice(' + search_store[i].id + ', event)">S&nbsp</span>' + search_store[i].subject + '</div>';
+                      html += '<div class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">' + '<span class="read" id="notice_read_' + store1[i].id + '"></span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '</div>';
                     }
                 }
               }
@@ -738,7 +743,7 @@ function display_search_list(page_no)
 	{
       		for(var i=a; i<b; i++)
       		{
-        		html += '<div class="notice_info" onclick="open_notice(' + search_store[i].id + ')">' + search_store[i].subject + '</div>';
+        		html += '<div class="notice_info" onclick="open_notice(' + store1[i].id + ')">' + store1[i].subject + '</div>';
 		}
 	}
       html += '</div>';
