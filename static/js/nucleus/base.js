@@ -1,4 +1,4 @@
-var current_tab, tabs, tabs_parent_top;
+var tabs, tabs_parent_top;
 var showLoading = true;
 var previous_hashtags = null;
 var previous_app = null;
@@ -27,9 +27,10 @@ $(document).on("pagelet_loaded_sidebar",function(){
   tabs = $('.tab').map(function(){return this.id.split('-')[0];});
   tabs_parent_top = $('#sidebar-tabs').position().top;
   var load = true;
-  if(current_tab)
+  if(typeof current_tab === 'undefined')
+    current_tab = undefined;
+  else if(current_tab)
     load = false;
-  current_tab = undefined;
   hashchangeCallback(load);
 });
 
@@ -98,6 +99,11 @@ function get_app_hashtags(){
 
 function redirect_to_home(){
   history.replaceState({},'home','/');
+  hashchangeCallback(true);
+}
+
+function redirect_to_hash(hash){
+  history.replaceState({},hash,'/#'+hash);
   hashchangeCallback(true);
 }
 

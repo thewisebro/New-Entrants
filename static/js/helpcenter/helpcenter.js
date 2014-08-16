@@ -4,16 +4,16 @@ var more_responses = true;
 var img_dp_url = '/static/images/nucleus/img_dp.png';
 
 $(document).on("load_app_helpcenter", function(e,hash1,hash2){
+  if(!user.is_authenticated){
+    redirect_to_home();
+    return;
+  }
   $('.active-tab').removeClass('active-tab');
   current_tab = null;
   $('#tab-arrow').hide();
   $('#right-column .content').html('');
   $('#content').html('');
   $('#container').addClass('large-width-content');
-  if(!user.is_authenticated){
-    redirect_to_home();
-    return;
-  }
   $('#content').load('/helpcenter/pagelet_index/',function(){
     if(hash1=='exact'){
       $('#give_response').hide();
@@ -31,7 +31,8 @@ $(document).on("unload_app_helpcenter", function(e){
 });
 
 $(document).on("logout", function(){
-  redirect_to_home();
+  if(get_current_app() == 'helpcenter')
+    redirect_to_home();
 });
 
 function update_responses(action,id){
@@ -54,51 +55,26 @@ function update_responses(action,id){
   );
 }
 
-function reply_html(reply){
-  return ""+
-    "<div class='reply-main'>"+
-      "<img class='profile-pic-small' src='"+(reply.username == 'img'?img_dp_url:reply.user_photo)+"'/>"+
-      "<div class='reply-text'>" + reply.text + "</div>"+
-    "</div>"
+function reply_html(reply) {
+  return Handlebars.helpcenter_templates.reply({
+    reply: reply,
+    profile_pic_url: (reply.username == 'img') ? img_dp_url : reply.user_photo
+  });
 }
-function response_html(response,close_replies){
-  var html = ""+
-    "<div class='query-box'>"+
-      "<div class='query-main'>"+
-        "<input class='seen' type='checkbox' "+('resolved' in response?"onchange='checkbox_clicked(this,"+response.id+");' "+(response.resolved?"checked='checked'":""):"style='display:none;' ")+"/>"+
-        "<div class='query-main-content' onclick='min_max("+response.id+");'>"+
-          "<img class='profile-pic' src='"+response.user_photo+"'/>"+
-          "<div class='person-name'>"+(response.user_name)+"</div>"+
-          "<div class='min-max' id='min-max"+response.id+"'>"+(close_replies?"&#9660;":"&#9650;")+"</div>"+
-          "<div class='posted'>"+prettyDate(response.datetime)+"</div>"+
-          "<div class='posted'>"+response.response_type+"</div>"+
-          "<div class='query-app-name'>"+
-            (response.app in channeli_apps?"<a target='_blank' href='"+channeli_apps[response.app]['url']+"'>"+channeli_apps[response.app]['name']+"</a>":response.app)+
-          "</div>"+
-          "<div class='query-text'>"+response.text+"</div>"+
-        "</div>"+
-      "</div>"+
-      "<div id='replies"+response.id+"' class='replies'"+(close_replies?" style='display:none'":"")+">"+
-        "<div id='main-replies"+response.id+"'>"
-  for(var i=0;i<response.replies.length;i++)
-    html += reply_html(response.replies[i]);
 
-  html += ""+
-        "</div>"+
-        (response.username!='anonymous' || response.replies.length==0
-          ?"<div class='write-reply'>"+
-            "<img class='profile-pic-small' src='"+(user_in_img?img_dp_url:user.photo)+"'/>"+
-              "<form action='' method='POST' onsubmit='give_reply(\""+response.id+"\");return false;'>"+
-                "<textarea id='reply"+response.id+"' name='reply' class='reply-box' type='text'></textarea>"+
-                "<input class='input-button' type='submit' name='submit' style='margin-top:1px;margin-left:10px;' value='"+
-                  (response.username!='anonymous' ? 'Reply' : 'Email') +"'/>"+
-              "</form>"+
-          "</div>"
-          :"")+
-      "</div>"+
-    "</div>"
-
-  return html;
+function response_html(response, close_replies) {
+  response.pretty_datetime = prettyDate(response.datetime);
+  for(var i=0; i<response.replies.length; i++){
+    var reply = response.replies[i];
+    reply.html = reply_html(reply);
+  }
+  var context = {
+    response: response,
+    close_replies: close_replies,
+    channeli_apps: channeli_apps,
+    reply_pic_url: (user_in_img ? img_dp_url : user.photo)
+  };
+  return Handlebars.helpcenter_templates.response(context);
 }
 
 function display_add_responses(position,responses,close_replies){
@@ -114,8 +90,8 @@ function display_add_responses(position,responses,close_replies){
    }
  }
  $('#responses').pickify_users();
- if(more_responses && $('#see-more-responses').length==0){
-   $('#content').append("<div id='see-more-responses' class='see-more'><span class='button2' onclick='see_more_responses();'>See More</span></div>");
+ if(more_responses && $('#see-more-responses').length === 0){
+   $('#content').append(Handlebars.helpcenter_templates.see_more());
  }
  if(!more_responses && $('#see-more-responses').length==1){
   $('#see-more-responses').css('display','none');

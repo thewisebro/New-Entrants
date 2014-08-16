@@ -2,8 +2,6 @@ import json
 from datetime import datetime
 
 from django.contrib.sessions.backends.cached_db import SessionStore as DbStore
-from django.contrib.sessions.models import Session
-from django.utils.encoding import force_unicode
 
 from nucleus.models import PHPSession, User
 

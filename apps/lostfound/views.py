@@ -14,7 +14,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.html import escape
 from django.conf import settings
 
-from settings import MEDIA_ROOT, MEDIA_URL
 from lostfound.models import *
 from lostfound.forms import BaseModelFormFunction
 # from api.forms import *

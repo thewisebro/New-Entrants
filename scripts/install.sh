@@ -38,7 +38,7 @@ sudo apt-get install openjdk-7-jdk
 sudo apt-get install jetty
 sudo apt-get install libjetty-extra
 
-####### 'BeautifulSoup' Installation #########
+####### 'BeautifulSoup' Installation ########
 
 # python lxml parser [Dependency]
 apt-get install python-lxml
@@ -50,7 +50,6 @@ apt-get install python-html5lib
 pip install BeautifulSoup
 
 #################### Ends ###################
-
 
 # django-extensions
 pip install Werkzeug
@@ -72,3 +71,10 @@ pip install -e git+https://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy
 # memcached
 apt-get install memcached
 pip install python-memcached
+
+# haystack
+pip install django-haystack
+
+# django-user-agents
+pip install pyyaml ua-parser user-agents
+pip install django-user-agents
