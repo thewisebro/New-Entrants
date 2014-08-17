@@ -10,11 +10,6 @@ var privelege=0, first_time_visit=0, starred=0, select_category=0;
 var checklist, search_store, check_upload_array={}, upload_array, star_array={}, read_array={};				      //star_array stores the ids of notices who are starred for a particular user.read_array is similar
 //search_store stores the results of a particular search
 
-var Authorities = ["All", "Academics", "CPO", "DOSW", "Alumni Affairs", "Construction", "Central Library", "CD", "Deans", "Heads", "Hospital", "Registrar", "Finance", "Ps to Director", "Steno to Deputy Director", "QIP", "Senate", "ISC"];
-var Bhawans = ["All", "Azad", "Cautley", "Ganga", "Govind", "Jawahar", "Rajendra", "Ravindra", "Sarojini", "Kasturba", "Malviya", "Rajeev", "Radhakrishnan"];
-var Departments = ["All", "Alternative Hydro Energy Centre", "Architecture and Planning", "Biotechnology", "Chemical", "Civil", "Chemistry", "Earth Science", "Earthquake", "Electrical", "Electronics and Computer Science", "Hydrology", "Humanities", "DPT", "Management Studies", "Mechanical and Indstrial", "Metallurgy", "Physics", "Water Resources Development and Management", "Institute Computer Centre"];
-var constants = {"All" : [], "Placement" : [], "Authorities" : Authorities, "Bhawans" : Bhawans, "Departments" : Departments}
-
 $(document).on("load_app_notices", function(e, h1, h2, h3, h4, h5){
   console.log("abc");
   console.log(h1);
@@ -91,7 +86,7 @@ $(document).on("load_app_notices", function(e, h1, h2, h3, h4, h5){
       }
       else
       {
-          $('#content').html('Welcome To Notice Board!<br>');
+          $('#content').html(welcome_html());
           if(!(0 in temp_store) || !(49 in temp_store))
           {
       console.log("bharat");
@@ -120,15 +115,13 @@ function get_privelege()
       			{
 				      privelege=1;
         			$('a#Upload').remove();
-        			html = '<a id = "Upload" href="notices/upload/">Upload</a><br>';
-        			html += '<div id = "show_uploads" onclick="upload_change_page(1)">Show/Edit Uploads</div><br>';
-        			$('#content').append(html);
+        			$('#content').append(upload_html());
       			}
-			      newold_and_search_bar();
+			      newold_buttons();
     		},
 		    error: function ()
 		    {
-			    newold_and_search_bar();
+			    newold_buttons();
 		    }
   });
 	}
@@ -138,44 +131,36 @@ function get_privelege()
 		{
       console.log("c1")
         		$('a#Upload').remove();
-        		html = '<a id = "Upload" href="notices/upload/">Upload</a><br>';
-        		html += '<div id = "show_uploads" onclick="upload_change_page(1)">Show/Edit Uploads</div><br>';
-        		$('#content').append(html);
+        		$('#content').append(upload_html());
 		}
-		newold_and_search_bar();
+		newold_buttons();
 	}
 }
 
-function load_bar(name)
+function load_cat_bar(name)
 {
-  html = '<div id="category_master_div"><div id="select_category" style="display:inline;width=143px;height:16px;" onclick="display_categories()">' + name + '</div><br></div>';
-  $('#content').append(html);
+  $('#content').append(load_cat_bar_html(name));
 }
 
 function additional_features()
 {
-  html = '<div id="additional"><div id="main_check" style="float:left;"><input type="checkbox" style="margin-top:2px;" id = "all_select" onclick="select_all()"></div>';
-	html += '<div id="super_more"><div id="more" style="background-color:#E7E7E7;float:left;margin-left:146px;" onclick="show_menu(event)">More:</div></div><br><br></div>'
-  $('#content').append(html);
+  $('#content').append(additional_features_html());
 }
 
-function newold_and_search_bar()
+function newold_buttons()
 {
   console.log("test1");
-	html = '<div id="newold_buttons" style="margin-bottom:4px;"><input type="button" id="new_button" onclick="newold_clicked(\'new\')" value="New">';
-	html += '<input type="button" id="old_button" onclick="newold_clicked(\'old\')" value="Old"><br></div>';
 	$("#global_search_bar").val("");
 	$("#global_search_bar").attr('placeholder', search_string);
-//  html += '<div id="search_bar">Search: <input type="text" id="search_data" placeholder="' + search_string + '" onkeydown="if (event.keyCode == 13) search()"><br></div>';
-	$('#content').append(html);
+	$('#content').append(newold_buttons_html());
   if(starred==1)
 	additional_features();
   if(hash1!="show_uploads")
   {
     if(sub_category=="All")
-      load_bar(m_category)
+      load_cat_bar(m_category)
     else
-      load_bar(sub_category);
+      load_cat_bar(sub_category);
   }
 
   if(first_time_visit==0)
@@ -199,26 +184,33 @@ function newold_and_search_bar()
       if(hash5==undefined||hash5==""||same==0)
 	    search();
       else
-      display_search_list(parseInt(hash5));
+      {
+        console.log("before_loading_search_number_bar")
+        load_numbers_bar(no_of_pages, "search_");
+        console.log("before_loading_search_results")
+        list_notices(parseInt(hash5), search_store, no_of_pages, last_page_notices);
+        console.log("after_loading_search_results")
+      }
     }
     else if(hash1 == "show_uploads")
     {
+      load_numbers_bar(pages, "upload_");
       if(hash3==undefined||hash3=="")
-	    show_uploads(1);
+	    list_notices(1, upload_array, pages, last_page_no);
       else
-	    show_uploads(parseInt(hash3));
+	    list_notices(parseInt(hash3), upload_array, pages, last_page_no);
     }
     else if(all==1)
     {
       console.log("bhaerat");
-	    load_numbers_bar();
+	    load_numbers_bar(temp_total_pages, "");
     }
     else
     {
       if(same==0)
 	      get_total_notices_no();
       else
-        load_numbers_bar();
+        load_numbers_bar(temp_total_pages, "");
     }
   }
 }
@@ -252,7 +244,10 @@ function get_total_notices_no()
             else if(hash1=="show_uploads")
             {
               if(hash3!=undefined&&hash3!="")
-              show_uploads(parseInt(hash3));
+              {
+                load_numbers_bar(pages, "upload_");
+                list_notices(parseInt(hash3), upload_array, pages, last_page_no);
+              }
               else
               {
                 upload_change_page(1);
@@ -266,7 +261,7 @@ function get_total_notices_no()
               gap_scanner(1,1);
             }
             else
-      			load_numbers_bar();
+      			load_numbers_bar(temp_total_pages, "");
     		  }
   		  });
       }
@@ -282,24 +277,17 @@ function get_total_notices_no()
       			temp_total_pages = Math.floor(data.total_notices/10) ;
       			if (temp_notices_on_last_page > 0)
         		  temp_total_pages++;
-      			load_numbers_bar();
+      			load_numbers_bar(temp_total_pages, "");
           }
         });
       }
 }
 
-function load_numbers_bar()
+function load_numbers_bar(tp, mode1)
 {
-      tp=temp_total_pages;
       $('div#page_numbers').remove();
-      html = '<div id="page_numbers">';
-      for(var i=0; i<tp-1; i++)
-      {
-        html += '<span id="number-' + (i+1) + '" class="numbers_list" onclick="change_page('+ (i+1) + ')">' + (i+1) +'</span>';
-      }
-      html += '<span id="number-' + tp + '"class="numbers_list" onclick="change_page('+ tp +  ')">' + tp + '</span>';
-      html += '</div>';
-      $('#content').append(html);
+      $('#content').append(load_numbers_bar_html(tp, mode1));
+      if(mode1=="")
       first_time_check();
 }
 
@@ -341,82 +329,44 @@ function search_change_page(page_no)
   }
 }
 
-function list_notices(page_no)
+function list_notices(page_no, tstore, ttotal_pages, tnotices_on_last_page)
 {
-  console.log("listpeaagya");
+      console.log("listpeaagya");
       $('div#notice_list').remove();
       html = '<div id="notice_list">';
       var k = 0;
-      if(page_no < temp_total_pages || (page_no == temp_total_pages && temp_notices_on_last_page==0))
+      if(page_no < ttotal_pages || (page_no == ttotal_pages && tnotices_on_last_page==0))
         k = 10;
       else
-        k = temp_notices_on_last_page;
+        k = tnotices_on_last_page;
       var a=(page_no-1)*10, b=a+k;
-      if(starred==1)
+      context = {};
+      for(var i=a; i<b; i++)
       {
-        for(var i=a; i<b; i++)
-        {
-            if(check_upload_array[temp_store[i].id]==1)
-            {
-              if(read_array[temp_store[i].id]==1)
-              {
-                if(star_array[temp_store[i].id]==1)
-                {
-                  html += '<div style="background-color:gray;" class="notice_info" id="notice_' + temp_store[i].id + '" onclick="open_notice(' + temp_store[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + temp_store[i].id + '" onclick="add_to_checklist(' + temp_store[i].id + ', event)">' + '<span class="read" id=notice_read_' + temp_store[i].id + '>R&nbsp</span><span class="starred" onclick="star_notice(' + temp_store[i].id + ', event)">S&nbsp</span>' + temp_store[i].subject + '<span class="edit" onclick="edit_notice(' + temp_store[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + temp_store[i].id + ', event)">&nbsp&nbspDelete</span></div>';
-                }
-                else
-                {
-                  html += '<div class="notice_info" id="notice_' + temp_store[i].id + '" onclick="open_notice(' + temp_store[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + temp_store[i].id + '" onclick="add_to_checklist(' + temp_store[i].id + ', event)">' + '<span class="read" id=notice_read_' + temp_store[i].id + '>R&nbsp</span><span class="starred" onclick="star_notice(' + temp_store[i].id + ', event)">S&nbsp</span>' + temp_store[i].subject + '<span class="edit" onclick="edit_notice(' + temp_store[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + temp_store[i].id + ', event)">&nbsp&nbspDelete</span></div>';
-                }
-              }
+            context["notice"] = tstore[i]
 
-              else
-              {
-                if(star_array[temp_store[i].id]==1)
-                {
-                  html += '<div style="background-color:gray;" class="notice_info" id="notice_' + temp_store[i].id + '" onclick="open_notice(' + temp_store[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + temp_store[i].id + '" onclick="add_to_checklist(' + temp_store[i].id + ', event)">' + '<span class="read" id=notice_read_' + temp_store[i].id + '></span><span class="starred" onclick="star_notice(' + temp_store[i].id + ', event)">S&nbsp</span>' + temp_store[i].subject + '<span class="edit" onclick="edit_notice(' + temp_store[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + temp_store[i].id + ', event)">&nbsp&nbspDelete</span></div>';
-                }
-                else
-                {
-                  html += '<div class="notice_info" id="notice_' + temp_store[i].id + '" onclick="open_notice(' + temp_store[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + temp_store[i].id + '" onclick="add_to_checklist(' + temp_store[i].id + ', event)">' + '<span class="read" id=notice_read_' + temp_store[i].id + '></span><span class="starred" onclick="star_notice(' + temp_store[i].id + ', event)">S&nbsp</span>' + temp_store[i].subject + '<span class="edit" onclick="edit_notice(' + temp_store[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + temp_store[i].id + ', event)">&nbsp&nbspDelete</span></div>';
-                }
-              }
-            }
-           else
-           {
-              if(read_array[temp_store[i].id]==1)
-              {
-                if(star_array[temp_store[i].id]==1)
-                {
-                  html += '<div style="background-color:gray;" class="notice_info" id="notice_' + temp_store[i].id + '" onclick="open_notice(' + temp_store[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + temp_store[i].id + '" onclick="add_to_checklist(' + temp_store[i].id + ', event)">' + '<span class="read" id=notice_read_' + temp_store[i].id + '>R&nbsp</span><span class="starred" onclick="star_notice(' + temp_store[i].id + ', event)">S&nbsp</span>' + temp_store[i].subject + '</div>';
-                }
-                else
-                {
-                  html += '<div class="notice_info" id="notice_' + temp_store[i].id + '" onclick="open_notice(' + temp_store[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + temp_store[i].id + '" onclick="add_to_checklist(' + temp_store[i].id + ', event)">' + '<span class="read" id=notice_read_' + temp_store[i].id + '>R&nbsp</span><span class="starred" onclick="star_notice(' + temp_store[i].id + ', event)">S&nbsp</span>' + temp_store[i].subject + '</div>';
-                }
-              }
+            if(starred==1)
+              context["anonymous"] = 0;
+            else
+              context["anonymous"] = 1;
 
-              else
-              {
-                if(star_array[temp_store[i].id]==1)
-                {
-                  html += '<div style="background-color:gray;" class="notice_info" id="notice_' + temp_store[i].id + '" onclick="open_notice(' + temp_store[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + temp_store[i].id + '" onclick="add_to_checklist(' + temp_store[i].id + ', event)">' + '<span class="read" id=notice_read_' + temp_store[i].id + '></span><span class="starred" onclick="star_notice(' + temp_store[i].id + ', event)">S&nbsp</span>' + temp_store[i].subject + '</div>';
-                }
-                else
-                {
-                  html += '<div class="notice_info" id="notice_' + temp_store[i].id + '" onclick="open_notice(' + temp_store[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + temp_store[i].id + '" onclick="add_to_checklist(' + temp_store[i].id + ', event)">' + '<span class="read" id=notice_read_' + temp_store[i].id + '></span><span class="starred" onclick="star_notice(' + temp_store[i].id + ', event)">S&nbsp</span>' + temp_store[i].subject + '</div>';
-                }
-              }
-           }
-        }
-      }
-      else
-      {
+            if(check_upload_array[tstore[i].id]==1)
+              context["edit"] = 1;
+            else
+              context["edit"] = 0;
 
-        for(var i=a; i<b; i++)
-        {
-          html += '<div class="notice_info" onclick="open_notice(' + temp_store[i].id + ')">' + temp_store[i].subject + '</div>';
-        }
+            if(read_array[tstore[i].id]==1)
+              context["read"] = 1;
+            else
+              context["read"] = 0;
+
+            if(star_array[tstore[i].id]==1)
+              context["star"] = 1;
+            else
+              context["star"] = 0;
+
+            $('#content').append(list_notices_html(context));
+
       }
       html += '</div>';
       $('#content').append(html);
@@ -430,12 +380,8 @@ function display_notice(id)
     url : 'notices/get_notice/' + id,
     success: function(data)
     {
-      html = '<p>Subject : ' + data.subject + '<br>';
-      html += 'Reference : ' + data.reference + '<br>';
-      html += 'Category : ' + data.category + '<br>';
-      html += 'Content : ' + data.content + '<br></p>';
       $('#content').empty();
-      $('#content').append(html);
+      $('#content').append(display_notice_html(data));
     },
     error: function(data)
     {
@@ -475,7 +421,7 @@ function gap_filler(llim, hlim, temp, page_no)
                   store = temp_store;
                 else
                   old_store = temp_store;
-              list_notices(page_no);
+                list_notices(page_no, temp_store, temp_total_pages, temp_notices_on_last_page);
             }
         },
       });
@@ -498,7 +444,7 @@ function gap_filler(llim, hlim, temp, page_no)
             get_total_notices_no();
            }
            else if(page_no)
-           list_notices(page_no);
+           list_notices(page_no, temp_store, temp_total_pages, temp_notices_on_last_page);
            else
            get_privelege();
         },
@@ -577,7 +523,7 @@ function gap_scanner(page_no, t)                 // Fills the appropriate gaps w
     if(!gap_end)
     {
       console.log("wqerty");
-      list_notices(page_no);
+      list_notices(page_no, temp_store, temp_total_pages, temp_notices_on_last_page);
     }
 }
 
@@ -655,101 +601,13 @@ function search()
         no_of_pages++;
         search_store = new Array(len);
         search_store = data;
-        console.log("done");
+        console.log("search_done");
+        console.log(search_store);
+        console.log("search_ends");
         search_change_page(1);
       }
     });
 }
-
-function display_search_list(page_no, store1, pages1, last_page_notices1)
-{
-      		$('#page_numbers').remove();
-		html = '<div id="page_numbers">';
-      		for(var i=0; i<pages1-1; i++)
-      		{
-        		html += '<span id="number-' + (i+1) + '" class="numbers_list" onclick="search_change_page('+ (i+1) + ')">' + (i+1) +'</span>';
-      		}
-      		html += '<span id="number-' + pages1 + '"class="numbers_list" onclick="search_change_page('+ pages1 +  ')">' + pages1 + '</span>';
-      		html += '</div>';
-      		$('#content').append(html);
-      $('div#notice_list').remove();
-      html = '<div id="notice_list">';
-	var k = 0;
-      if(page_no < pages1 || (page_no == pages1 && last_page_notices1==0))
-        k = 10;
-      else
-        k = last_page_notices1;
-      var a=(page_no-1)*10, b=a+k;
-	if(starred==1)
-	{
-      for(var i=a; i<b; i++)
-      {
-              if(check_upload_array[store1[i].id]==1)
-              {
-                if(read_array[store1[i].id]==1)
-                {
-                  if(star_array[store1[i].id]==1)
-                  {
-                    html += '<div style="background-color:gray;" class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">'  + '<span class="read" id="notice_read_' + store1[i].id + '">R&nbsp</span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '<span class="edit" onclick="edit_notice(' + store1[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + store1[i].id + ', event)">&nbsp&nbspDelete</span></div>';
-                  }
-                  else
-                  {
-                    html += '<div class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">' + '<span class="read" id="notice_read_' + store1[i].id + '">R&nbsp</span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '<span class="edit" onclick="edit_notice(' + store1[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + store1[i].id + ', event)">&nbsp&nbspDelete</span></div>';
-                  }
-                }
-
-                else
-                {
-                  if(star_array[store1[i].id]==1)
-                  {
-                    html += '<div style="background-color:gray;" class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">' + '<span class="read" id="notice_read_' + store1[i].id + '"></span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '<span class="edit" onclick="edit_notice(' + store1[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + store1[i].id + ', event)">&nbsp&nbspDelete</span></div>';
-                  }
-                  else
-                  {
-                    html += '<div class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">' + '<span class="read" id="notice_read_' + store1[i].id + '"></span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '<span class="edit" onclick="edit_notice(' + store1[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + store1[i].id + ', event)">&nbsp&nbspDelete</span></div>';
-                  }
-                }
-              }
-              else
-              {
-                  if(read_array[store1[i].id]==1)
-                  {
-                    if(star_array[store1[i].id]==1)
-                    {
-                      html += '<div style="background-color:gray;" class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">' + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">'  + '<span class="read" id="notice_read_' + store1[i].id + '">R&nbsp</span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '</div>';
-                    }
-                    else
-                    {
-                      html += '<div class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">' + '<span class="read" id="notice_read_' + store1[i].id + '">R&nbsp</span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '</div>';
-                    }
-                  }
-
-                  else
-                  {
-                    if(star_array[store1[i].id]==1)
-                    {
-                      html += '<div style="background-color:gray;" class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">' + '<span class="read" id="notice_read_' + store1[i].id + '"></span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '</div>';
-                    }
-                    else
-                    {
-                      html += '<div class="notice_info" id="notice_' + store1[i].id + '" onclick="open_notice(' + store1[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + store1[i].id + '" onclick="add_to_checklist(' + store1[i].id + ', event)">' + '<span class="read" id="notice_read_' + store1[i].id + '"></span><span class="starred" onclick="star_notice(' + store1[i].id + ', event)">S&nbsp</span>' + store1[i].subject + '</div>';
-                    }
-                }
-              }
-
-		}
-	}
-	else
-	{
-      		for(var i=a; i<b; i++)
-      		{
-        		html += '<div class="notice_info" onclick="open_notice(' + store1[i].id + ')">' + store1[i].subject + '</div>';
-		}
-	}
-      html += '</div>';
-      $('#content').append(html);
-}
-
 
 function star_notice(id, e)
 {
@@ -854,58 +712,6 @@ function bring_uploads()
    });
 }
 
-function show_uploads(page_no)
-{
-		      html = '<div id="page_numbers">';
-      		for(var i=0; i<pages-1; i++)
-      		{
-        		html += '<span id="number-' + (i+1) + '" class="numbers_list" onclick="upload_change_page('+ (i+1) + ')">' + (i+1) +'</span>';
-      		}
-      		html += '<span id="number-' + pages + '"class="numbers_list" onclick="upload_change_page('+ pages +  ')">' + pages + '</span>';
-      		html += '</div>';
-      		$('#content').append(html);
-      $('div#notice_list').remove();
-      html = '<div id="notice_list">';
-	var k = 0;
-      if(page_no < pages || (page_no == pages && last_page_no==0))
-        k = 10;
-      else
-        k = last_page_no;
-      var a=(page_no-1)*10, b=a+k;
-	if(starred==1)
-	{
-      for(var i=a; i<b; i++)
-      {
-          if(read_array[upload_array[i].id]==1)
-          {
-			        if(star_array[upload_array[i].id]==1)
-			        {
-        			    html += '<div style="background-color:gray;" class="notice_info" id="notice_' + upload_array[i].id + '" onclick="open_notice(' + upload_array[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + upload_array[i].id + '" onclick="add_to_checklist(' + upload_array[i].id + ', event)">' + '<span class="read" id=notice_read_' + upload_array[i].id + '>R&nbsp</span><span class="starred" onclick="star_notice(' + upload_array[i].id + ', event)">S&nbsp</span>' + upload_array[i].subject + '<span class="edit" onclick="edit_notice(' + upload_array[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + upload_array[i].id + ', event)">&nbsp&nbspDelete</span></div>';
-			        }
-			        else
-			        {
-        			    html += '<div class="notice_info" id="notice_' + upload_array[i].id + '" onclick="open_notice(' + upload_array[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + upload_array[i].id + '" onclick="add_to_checklist(' + upload_array[i].id + ', event)">' + '<span class="read" id=notice_read_' + upload_array[i].id + '>R&nbsp</span><span class="starred" onclick="star_notice(' + upload_array[i].id + ', event)">S&nbsp</span>' + upload_array[i].subject + '<span class="edit" onclick="edit_notice(' + upload_array[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + upload_array[i].id + ', event)">&nbsp&nbspDelete</span></div>';
-			        }
-          }
-
-          else
-          {
-			        if(star_array[upload_array[i].id]==1)
-			        {
-        			  html += '<div style="background-color:gray;" class="notice_info" id="notice_' + upload_array[i].id + '" onclick="open_notice(' + upload_array[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + upload_array[i].id + '" onclick="add_to_checklist(' + upload_array[i].id + ', event)">' + '<span class="read" id=notice_read_' + upload_array[i].id + '></span><span class="starred" onclick="star_notice(' + upload_array[i].id + ', event)">S&nbsp</span>' + upload_array[i].subject + '<span class="edit" onclick="edit_notice(' + upload_array[i].id + ', event)">&nbsp&nbspEdit</span><span class="delete" onclick="delete_notice(' + upload_array[i].id + ', event)">&nbsp&nbspDelete</span></div>';
-			        }
-			        else
-			        {
-        			    html += '<div class="notice_info" id="notice_' + upload_array[i].id + '" onclick="open_notice(' + upload_array[i].id + ')">'  + '<input type="checkbox" class="check" id="check-' + upload_array[i].id + '" onclick="add_to_checklist(' + upload_array[i].id + ', event)">' + '<span class="read" id=notice_read_' + upload_array[i].id + '></span><span class="starred" onclick="star_notice(' + upload_array[i].id + ', event)">S&nbsp</span>' + upload_array[i].subject + '<span class="edit" onclick="edit_notice(' + upload_array[i].id + ', event)">&nbsp&nbspEdit</</span><span class="delete" onclick="delete_notice(' + upload_array[i].id + ', event)">&nbsp&nbspDelete</span></div>';
-			        }
-          }
-
-		}
-	}
-      html += '</div>';
-      $('#content').append(html);
-}
-
 function edit_notice(id, e)
 {
   window.location.href = 'notices/edit_notice/'+id
@@ -1005,12 +811,7 @@ function show_menu(e)
   else
   {
     $("#more").css("background-color", "#97968D");
-    html = '<div id="menu" style="width:130px;height:70px;position:absolute;background-color:rgb(202, 228, 13);margin-top:16px;margin-left:159px;">'
-    html += '<div style="margin-top:2px;margin-left:7%;" onclick="read_star_checklist(3)">Mark as read</div>'
-    html += '<div style="margin-left:7%;" onclick="read_star_checklist(4)">Mark as unread</div>'
-    html += '<div style="margin-left:7%;" onclick="read_star_checklist(1)">Mark as starred</div>'
-    html += '<div style="margin-left:7%;" onclick="read_star_checklist(2)">Mark as unstarred</div></div>'
-    $('#super_more').append(html);
+    $('#super_more').append(more_html());
     more=1;
   }
 }
@@ -1028,6 +829,10 @@ function read_star_checklist(t)
 	  q += a[i]+'+';
     if(t==1)
     {
+      m
+      m
+      m
+      m
 	    star_array[a[i]]=1;
       $("#notice_"+a[i]).css("background-color" , "gray");
     }
@@ -1062,9 +867,8 @@ function read_star_checklist(t)
     url: url+q,
     error : function()
     {
-      html = 'Error';
       $('#content').empty();
-      $('#content').append(html);
+      $('#content').append('Error');
     }
 	});
 }
@@ -1075,17 +879,7 @@ function display_categories()
   if(select_category==0)
   {
     $("#select_category").css("background-color", "#97968D");
-    html = '<div id="category_menu" style="width:860px;height:181px;position:absolute;background-color:rgb(202, 228, 13);">'
-    html += '<div id="category_list" style="float:left;">'
-    var a = Object.keys(constants);
-    for(var i=0;i<5;i++)
-      html += '<div style="margin-top:2px;" onclick="change_category_bar_name(\'' + a[i] +'\', \'All\')"  onmouseover="display_sub_categories(\'' + a[i] + '\')">' + a[i] + '</div>';
-    html += '</div>'
-    html += '<div id="category_details" style="width:650px;float:left;margin-left:15%;">'
-    html += '<div id="category_child1" style="float:left;width:290px;"></div>'
-    html += '<div id="category_child2" style="float:left;width:290px;"></div>'
-    html += '</div></div>'
-    $('#category_master_div').append(html);
+    $('#category_master_div').append(display_categories_html());
     select_category=1;
   }
   else
@@ -1100,24 +894,16 @@ function display_sub_categories(main_category)
 {
   var len=constants[main_category].length;
   var k=Math.min(len, 11)
-  html='';
-  for(var i=0;i<k;i++)
-  html += '<div id="' + main_category + '_' + i + '" onclick="change_category_bar_name(\'' + main_category + '\',\'' + constants[main_category][i] + '\')">' + constants[main_category][i] + '</div>'
-  $('#category_child1').empty();
-  $('#category_child2').empty();
-  $('#category_child1').append(html);
-  html='';
-  var j;
-  for(j=k;j<len;j++)
-  html += '<div id="' + main_category + '_' + j + '" onclick="change_category_bar_name(\'' + main_category + '\',\'' + constants[main_category][j] + '\')">' + constants[main_category][j] + '</div>'
-  if(j!=9)
-  $('#category_child2').append(html);
+  $('#category_child1').empty(); $('#category_child2').empty();
+  $('#category_child1').append(display_sub_categories_html(0, k, main_category));
+  $('#category_child2').append(display_sub_categories_html(k, len, main_category));
 }
 
 function change_category_bar_name(main_category, category)
 {
   if(m_category==main_category && sub_category==category)
   {
+    m
     $("#select_category").css("background-color", "white");
     $('#category_menu').remove();
     select_category=0;
@@ -1169,3 +955,66 @@ function newold_clicked(ns)       //ns stands for new status, storing the mode o
     }
   }
 }
+
+function welcome_html()
+{
+      return Handlebars.notices_templates.welcome();
+}
+
+function upload_html()
+{
+    return Handlebars.notices_templates.upload();
+}
+
+function load_cat_bar_html(name)
+{
+    return Handlebars.notices_templates.load_cat_bar({name : name});
+}
+
+function additional_features_html()
+{
+    return Handlebars.notices_templates.additional_features();
+}
+
+function newold_buttons_html()
+{
+    return Handlebars.notices_templates.newold_buttons();
+}
+
+function load_numbers_bar_html(tp23, mode1)
+{
+    numbers = [];
+    for(var i=1;i<tp23;i++)numbers.push(i);
+    return Handlebars.notices_templates.load_numbers_bar({ tp : tp23 , numbers : numbers, mode1 : mode1});
+}
+
+function display_notice_html(data)
+{
+    return Handlebars.notices_templates.display_notice({data : data});
+}
+
+function more_html()
+{
+    return Handlebars.notices_templates.more();
+}
+
+function display_categories_html(a)
+{
+    var a = Object.keys(constants);
+    return Handlebars.notices_templates.display_categories({a : a});
+}
+
+function display_sub_categories_html(initi, finali, main_category)
+{
+    sub_categories = {};
+    for(var i=initi;i<finali;i++)
+    {
+      sub_categories[i] = constants[main_category][i];
+    }
+    return Handlebars.notices_templates.display_sub_categories({ sub_categories : sub_categories , main_category : main_category});
+}
+
+function list_notices_html()
+{
+    return Handlebars.notices_templates.list_notices(context);
+gt}

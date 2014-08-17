@@ -2,7 +2,9 @@ import re
 import os
 import subprocess
 from BeautifulSoup import BeautifulSoup
-from settings import MEDIA_ROOT, PROJECT_ROOT
+from django.conf import settings
+MEDIA_ROOT = settings.MEDIA_ROOT
+PROJECT_ROOT = settings.PROJECT_ROOT
 
 PeopleProxyUrl = "http://people.iitr.ernet.in/"
 

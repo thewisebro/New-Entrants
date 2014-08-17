@@ -1,0 +1,50 @@
+{{#if anonymous}}
+  <div class="notice_info" onclick="open_notice({{ notice.id }})"> {{ notice.subject }} </div>
+{{else}}
+  <div 
+      {{#if star}} style="background-color:gray;" {{/if}} 
+      class="notice_info" 
+      id="notice_{{ notice.id }}"
+      onclick="open_notice({{ notice.id }})">
+
+    <input 
+      type="checkbox" 
+      class="check" 
+      id="check-{{ notice.id }}" 
+      onclick="add_to_checklist({{notice.id}}, event)">
+   
+    {{#if read}} 
+      <span 
+        class="read" 
+        id=notice_read_{{notice.id}}>
+          R&nbsp
+      </span>
+    {{/if}}
+
+      <span 
+        class="starred" 
+        onclick="star_notice({{ notice.id }}, event)">
+          S&nbsp
+      </span>
+      
+    <span 
+      class="subject">
+      {{ notice.subject }}
+    </span>
+     
+    {{#if edit}} 
+      <span 
+        class="edit" 
+        onclick="edit_notice({{ notice.id }}, event)">
+          &nbsp&nbspEdit
+      </span>
+
+      <span 
+        class="delete" 
+        onclick="delete_notice({{ notice.id }}, event)">
+        &nbsp&nbspDelete
+      </span>
+    {{/if}}
+
+  </div>
+{{/if}}
