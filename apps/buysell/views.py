@@ -29,7 +29,6 @@ from PIL import Image
 import StringIO
 from urlparse import urlparse
 import urllib2
-import settings
 import collections
 
 logger = logging.getLogger('buysell')
