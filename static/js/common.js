@@ -46,6 +46,10 @@ function load_scripts_in_pipe(scripts, callback){
   deferred.resolve();
 }
 
+String.prototype.toProperCase = function() {
+    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+
 function dialog_iframe(data){
   var $dialog;
   try {
@@ -222,6 +226,16 @@ function logout(){
         is_authenticated: false
       };
       $(document).trigger("logout");
+  });
+}
+
+function take_feedback(){
+  dialog_iframe({
+    name:'feedback_dialog',
+    title:'Feedback',
+    width:600,
+    height:360,
+    src:'/helpcenter/feedback/'
   });
 }
 

@@ -2,7 +2,7 @@ var settings_tabs = ['profile', 'password', 'email', 'sessions'];
 
 $(document).on("load_app_settings", function(e, hash1){
   if(!user.is_authenticated){
-    redirect_to_home();
+    nucleus.redirect_to_home();
     return;
   }
   $('.active-tab').removeClass('active-tab');
@@ -10,7 +10,7 @@ $(document).on("load_app_settings", function(e, hash1){
   $('#tab-arrow').hide();
   $('#right-column .content').html('');
   if(hash1 === undefined)
-    redirect_to_hash('settings/profile');
+    nucleus.redirect_to_hash('settings/profile/');
   if($.inArray(hash1, settings_tabs)>-1)
     load_settings_tab(hash1);
 });
@@ -22,7 +22,7 @@ $(document).on("unload_app_helpcenter", function(e){
 
 $(document).on("logout", function(){
   if(get_current_app() == 'settings')
-    redirect_to_home();
+    nucleus.redirect_to_home();
 });
 
 function load_settings_tab(hash1){
