@@ -235,6 +235,7 @@ CHANNELI_APPS = (
   'groups',
   'events',
   'news',
+  'connections',
   'lostfound',
   'notifications',
   'helpcenter',
@@ -277,7 +278,7 @@ SHELL_PLUS = "ipython"
 
 SESSION_COOKIE_NAME = 'PHPSESSID'
 SESSION_ENGINE = 'nucleus.session'
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 CACHES = {
   'default': {
