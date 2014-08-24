@@ -1,6 +1,4 @@
 from django.conf.urls import patterns, include, url
-from django.views.static import serve
-import settings
 
 urlpatterns = patterns('games',
   (r'^$','views.index'),

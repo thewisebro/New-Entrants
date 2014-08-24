@@ -289,13 +289,15 @@ class AbstractStudentBase(django_models.Model):
                               choices=MC.SEMESTER_CHOICES)
   semester_no = models.IntegerField()
   branch = models.ForeignKey(Branch)
-  admission_year = models.IntegerField()
+  admission_year = models.IntegerField(verbose_name='Admission Year')
   admission_semtype = models.CharField(max_length=1,
-                          choices=MC.SEMESTER_TYPE_CHOICES)
+                          choices=MC.SEMESTER_TYPE_CHOICES,
+                          verbose_name='Admission Semester')
   cgpa = models.CharField(max_length=6, blank=True)
   bhawan = models.CharField(max_length=MC.CODE_LENGTH,
             choices=MC.BHAWAN_CHOICES, null=True, blank=True, default=None)
-  room_no = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
+  room_no = models.CharField(max_length=MC.CODE_LENGTH, blank=True,
+                              verbose_name='Room No')
 
   class Meta:
     ordering = ['semester','branch']
@@ -338,37 +340,51 @@ class StudentUser(User, AbstractStudentBase):
     managed = False
 
 class AbstractStudentInfo(django_models.Model):
-  fathers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  fathers_occupation = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
+  fathers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='Father\'s Name')
+  fathers_occupation = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='Father\'s Occupation')
   fathers_office_address = models.CharField(max_length=MC.TEXT_LENGTH,
-                                            blank=True)
-  fathers_office_phone_no = models.CharField(max_length=12, blank=True)
-  mothers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  permanent_address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  home_contact_no = models.CharField(max_length=12, blank=True)
+                  blank=True, verbose_name='Father\'s Office Address')
+  fathers_office_phone_no = models.CharField(max_length=12, blank=True,
+                  verbose_name='Father\'s Office Phone No')
+  mothers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='Mother\'s Name')
+  permanent_address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='Permanent Address')
+  home_contact_no = models.CharField(max_length=12, blank=True,
+                  verbose_name='Home Contact No')
   state = models.CharField(max_length=3, choices=MC.STATE_CHOICES, blank=True)
   city = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   pincode = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
-  bank_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  bank_account_no = models.CharField(max_length=25, blank=True)
-  passport_no = models.CharField(max_length=25, blank=True)
+  bank_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='Bank Name')
+  bank_account_no = models.CharField(max_length=25, blank=True,
+                  verbose_name='Bank Account No')
+  passport_no = models.CharField(max_length=25, blank=True,
+                  verbose_name='Passport No')
   nearest_station = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
-                                      choices=MC.RAILWAY_CHOICES)
-  local_guardian_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
+                  choices=MC.RAILWAY_CHOICES, verbose_name='Nearest Station')
+  local_guardian_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='Local Guardian\'s Name')
   local_guardian_address = models.CharField(max_length=MC.TEXT_LENGTH,
-                                            blank=True)
-  local_guardian_contact_no = models.CharField(max_length=12, blank=True)
+                  blank=True, verbose_name='Local Guardian\'s Address')
+  local_guardian_contact_no = models.CharField(max_length=12, blank=True,
+                  verbose_name='Local Guardian\'s Contact No')
   category = models.CharField(max_length=3, choices=MC.CATEGORY_CHOICES,
-                              blank=True)
+                  blank=True)
   nationality = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  marital_status = models.CharField(max_length=3,
-                            choices=MC.MARITAL_STATUS_CHOICES, blank=True)
+  marital_status = models.CharField(max_length=3, blank=True,
+                  choices=MC.MARITAL_STATUS_CHOICES,
+                  verbose_name='Marital Status')
   blood_group = models.CharField(max_length=3, choices=MC.BLOOD_GROUP_CHOICES,
-                                  blank=True)
-  physically_disabled = models.BooleanField(default=False, blank=True)
+                  blank=True, verbose_name='Blood Group')
+  physically_disabled = models.BooleanField(default=False, blank=True,
+                  verbose_name='Physically Disabled')
   fulltime = models.BooleanField(default=False, blank=True)
   resident = models.BooleanField(default=True, blank=True)
-  license_no = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
+  license_no = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='License No')
 
   class Meta:
     abstract = True

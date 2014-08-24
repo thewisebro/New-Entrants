@@ -16,6 +16,7 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 
 DEBUG = True
+PRODUCTION = False
 TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
@@ -157,6 +158,7 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.messages.middleware.MessageMiddleware',
   'api.middlewares.DelegateMiddleware',
   'django_user_agents.middleware.UserAgentMiddleware',
+  'admin_reorder.middleware.ModelAdminReorder',
   # Uncomment the next line for simple clickjacking protection:
   # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -222,6 +224,7 @@ THIRD_PARTY_APPS = (
   'django_user_agents',
   'haystack',
   'filemanager',
+  'admin_reorder',
 )
 
 CHANNELI_APPS = (
@@ -383,6 +386,8 @@ HAYSTACK_CONNECTIONS = {
       # 'URL': 'http://127.0.0.1:8983/solr/mysite',
     }
 }
+
+from admin_settings import *
 
 try:
   from local_settings import *
