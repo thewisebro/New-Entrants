@@ -1,5 +1,5 @@
 var current_state = null;
-
+var right_visible = true;
 function yes_category(){
   var html =        '<div id="forum-category">' +
                   '<div id="category-box">' +
@@ -31,7 +31,11 @@ function yes_category(){
   return html;
 }
 
+$(document).on("unload_app_forum",function(){
+   right_visible = false;
+   });
 $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
+
     //html = '';
     //html += '<div id="tag_search"><form action="" method="post" onsubmit="search_tag();return false;">';
     //html += '<input type="text" name="tag_key">';
@@ -69,9 +73,9 @@ $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
     {
       next_state = 'yes_category';
     }
-    if(next_state != current_state || right_column_app != 'forum')
+    if((next_state != current_state) || (right_visible === false))
     {
-      right_column_app = 'forum';
+      right_visible = true;
       current_state = next_state;
       var html = '';
       if(current_state == 'yes_category')
@@ -124,16 +128,55 @@ function escapeStr(str)
 
 function question_html(data){
   var html = '';
-  html += '<div id = "question_'+data.question.id+'">' + data.question.id + '<br>' + data.question.title + '<br>' + data.question.description + '<br><br>';
-  if(data.question.follow_unfollow=="true")
-    html += '<div id = "follow_unfollow_'+data.question.id+'"><button onclick="unfollow_question('+data.question.id+')">Unfollow</button></div>';
-  else
-    html += '<div id = "follow_unfollow_'+data.question.id+'"><button onclick="follow_question('+data.question.id+')">Follow</button></div>';
+  html += '<div class="feed-box">' +
+            '<a href="#"><img class="feed-propic" src="'+data.question.photo_url+'"></a>' +
+              '<div class="feed-text">';
+  html += '<div class="feed-line">' +
+            '<a class="person-name" href="#">' + data.question.student_name + '</a>' +
+            '<span>\'s question </span>' +
+          '</div>'; //feed-line
+
+
+  html += '<div class="feed-description">' +
+            '<div class="question-page-title">' +
+              data.question.title + 
+            '</div>' + 
+            '<div class="question-page-description">' +
+              data.question.description +
+            '</div>';
+  html += '<div class="tags">';
   for(i=0;i<data.tags.length;i++)
   {
-    html += '<div id = "tag_'+data.tags[i].name+'"><a href="#forum/tag/'+data.tags[i].name+'">' + data.tags[i].name + '</a></div>';
+    html += '<a href="#forum/tag/'+data.tags[i].name+'">' + '<div class="question-tag">' +data.tags[i].name + '</div>' + '</a>' + '  ';
   }
-  html += '<br><br></div>';
+  html += '<div class="clear"></div>';
+  html += '</div>'; // tags
+  if(data.question.follow_unfollow=="true")
+    html += '<div id = "follow_unfollow_'+data.question.id+'" style="float:left">' + 
+              '<div class="follow-question-button">' +
+                '<button class="grey-button" onclick="unfollow_question('+data.question.id+','+data.question.num_followers+')">Followed</button>' + 
+              '</div>' + //follow-question-button
+            '<div class="clear"></div>' +
+            '</div>';
+  else
+    html += '<div id = "follow_unfollow_'+data.question.id+'" style="float:left">' + 
+              '<div class="follow-question-button">' +
+                '<button class="blue-button" onclick="follow_question('+data.question.id+','+data.question.num_followers+')">Follow Question</button>' + 
+              '</div>' + //follow-question-button
+            '<div class="clear"></div>' +
+            '</div>';
+  if(data.question.num_followers < 1)
+    html += '<div class="followers-number">' + '<div id="followers_number_'+data.question.id+'" style="float:left">' + '</div>' + '<div id="followers_word" style="float:left">' + '</div>' + '</div>';
+  if(data.question.num_followers == 1)
+    html += '<div class="followers-number">' + '<div id="followers_number_'+data.question.id+'" style="float:left">' + data.question.num_followers + '</div>' + '<div id="followers_word" style="float:left">' + ' Follower' + '</div>' + '</div>';
+  if(data.question.num_followers > 1)
+    html += '<div class="followers-number">' + '<div id="followers_number_'+data.question.id+'" style="float:left">' + data.question.num_followers + '</div>' + '<div id="followers_word" style="float:left">' + ' Followers' + '</div>' + '</div>';
+  html += '<div class="clear"></div>';
+  html += '</div>'; //feed-description
+  html += '</div>'; //feed-text
+  html += '</div>'; //feed-box
+  html += '<div class="hr"></div>';
+  //html += '</div>';
   return html;
 }
 
@@ -200,9 +243,9 @@ function questions1_html(data,i){
   var html = '';
   html += '<div id = "question_'+data.questions[i].id+'">' + '<a href="#forum/question/'+data.questions[i].id+'">Question ' + data.questions[i].id + '</a>' + '<br>' + data.questions[i].title + '<br>' + data.questions[i].description + '<br>';
   if(data.questions[i].follow_unfollow=="true")
-    html += '<div id = "follow_unfollow_'+data.questions[i].id+'"><button onclick="unfollow_question('+data.questions[i].id+')">Unfollow</button></div>';
+    html += '<div id = "follow_unfollow_'+data.questions[i].id+'"><button onclick="unfollow_question('+data.questions[i].id+')">Followed</button></div>';
   else
-    html += '<div id = "follow_unfollow_'+data.questions[i].id+'"><button onclick="follow_question('+data.questions[i].id+')">Follow</button></div>';
+    html += '<div id = "follow_unfollow_'+data.questions[i].id+'"><button onclick="follow_question('+data.questions[i].id+')">Follow Question</button></div>';
   html += '<br><br></div>';
   return html;
 }
@@ -211,12 +254,12 @@ function questions_html(data,i,type_question){
   var html = '' +
          '<div class="feed-box">' +
           '<a herf="#"></a>' +
-          '<a href="#"><img class="feed-propic" src=""></a>' +
+          '<a href="#"><img class="feed-propic" src="'+data.questions[i].photo_url+'"></a>' +
           '<div class="feed-text">' +
             '<div class="feed-line">' + 
-              '<a class="person-name-no-text" href="#">' + 
+              '<span>' + 
                 data.questions[i].student_name + 
-              '</a>' +
+              '</span>' +
             '</div>' + //feed-line
             '<div class="feed-description">' + 
               '<div class="feed-question">' +
@@ -233,8 +276,13 @@ function questions_html(data,i,type_question){
   if(type_question==1)
     html += 'Be the first one to answer';
   else
-    html += data.questions[i].answers_number +
-           ' Answers';
+  {
+    html += data.questions[i].answers_number;
+    if(data.questions[i].answers_number <= 1)
+      html += ' Answer';
+    else
+      html += ' Answers';
+  }
   html +=       '</a>' +
               '</div>' + //feed-bottom-line
             '</div>' + //feed-texit
@@ -253,12 +301,28 @@ function allanswers_html(data){
   html += '<div id = "answers_'+data.question.id+'">';
   for(i=0;i<data.answers.length;i++)
   {
-    html += '<a href="#forum/answer/'+data.answers[i].id+'">Answer </a>';
-    html += data.answers[i].description + '<br>';
+    html += '<div class="feed-box">' +
+              '<a href="#"><img class="feed-propic" src="'+data.answers[i].photo_url+'"></a>' +
+               '<div class="feed-text">' +
+                 '<div class="feed-line">' + 
+                   '<span>' + '<a class="person-name" href="#">' + 
+                     data.answers[i].student_name +
+                   '</a>' + '</span>' +
+                   //'<div class="clear"></div>' +
+                 '</div>'; //feed-line
+
+    html += '<div class="feed-description">';
+   // html += '<a href="#forum/answer/'+data.answers[i].id+'">Answer </a>';
+    html += data.answers[i].description;
+    html += '</div>'; //feed-description
+    html += '<div class="feed-bottom-line">'; 
     html += '<div id="comments_'+data.answers[i].id+'">';
     html += '<div id="show_hide_comments_'+data.answers[i].id+'" onclick="show_comments('+data.answers[i].id+')"> Show comments </div>';
     html += '<div id="answer_comments_'+data.answers[i].id+'"></div>';
-    html += '</div>';
+    html += '</div>'; //comments_
+    html += '</div>'; //feed-bottom-line
+    html += '</div>'; //feed-text
+    html += '</div>'; //feed-box
   }
   html += '</div>';
   return html;
@@ -267,35 +331,38 @@ function allanswers_html(data){
 function activities_html(data,i){
   var html = '';
   html += '<div class = "feed-box">';
-  html += '<a href="#"></a>';
+ // html += '<a href="#"></a>';
  // html += data.activities[i].student_name;
   if(data.activities[i].activity_type=='ASK_QUES')
   {
     html += '<a href="#"><img class="feed-propic" src="'+data.activities[i].photo_url+'"></a>' +
             '<div class="feed-text">' +
               '<div class="feed-line">' + 
-                '<a class="person-name" href="#">' + 
-                  data.activities[i].student_name + 
-                '</a>' +
                 '<span>' +
+                  data.activities[i].student_name + 
                   ' asked a question' +
                 '</span>' +
               '</div>' + //feed-line
               '<div class="feed-description">' + 
-                '<div class="feed-question">' +
-                  '<a class="question-title" href="/#forum/question/'+data.activities[i].object.id+'">' +
-                    data.activities[i].object.title +
-                  '</a>' +
-                  '<div class="question-description">' +
-                    data.activities[i].object.description +
-                  '</div>' + //question-description
-                '</div>' + //feed-question
+                '<a href="/#forum/question/'+data.activities[i].object.id+'">' +
+                  '<div class="feed-question">' +
+                    '<div class="question-title">' +
+                      data.activities[i].object.title +
+                    '</div>' +
+                    '<div class="question-description">' +
+                      data.activities[i].object.description +
+                    '</div>' + //question-description
+                  '</div>' + //feed-question
+                '</a>' + //feed-question
               '</div>' + //feed description
               '<div class="feed-bottom-line">' +
                 '<a class="answers-number" href="/#forum/question/'+data.activities[i].object.id+'">' +
-                  data.activities[i].object.answers_number +
-                  ' Answers' +
-                '</a>' +
+                  data.activities[i].object.answers_number;
+                  if(data.activities[i].object.answers_number <= 1)
+                    html += ' Answer';
+                  else
+                    html += ' Answers';
+       html += '</a>' +
               '</div>' + //feed-bottom-line
             '</div>'; //feed-text
 
@@ -305,12 +372,13 @@ function activities_html(data,i){
           html += '<a href="#"><img class="feed-propic" src="'+data.activities[i].photo_url+'"></a>' +
                   '<div class="feed-text">' +
                     '<div class="feed-line">' + 
-                      '<a class="person-name" href="#">' + 
+                      '<span>' + 
                         data.activities[i].student_name + 
-                      '</a>' +
+                      '</span>' +
                       ' answered a question' +
                     '</div>' + //feed-line
                     '<div class="feed-description">' +
+                      '<a href="/#forum/question/'+data.activities[i].object.question_id+'">' +
                       '<div class="feed-answer-box">' +
                         '<div class="question-title-box">' +
                           '<div class="question-title">' +
@@ -325,6 +393,7 @@ function activities_html(data,i){
                           data.activities[i].object.description +
                         '</div>' + //answer-box
                       '</div>' + //feed-answer-box
+                      '</a>' +
                     '</div>' + //feed-description
                   '</div>';//feed-text
 
@@ -346,6 +415,7 @@ function activities_html(data,i){
 }
 
 function ask_question(){
+  /*
   var html = '<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front dialog-class" tabindex="-1" role="dialog" style="position: fixed; height: auto; width: 920px; top: 50px; left: 327px; display: block;" aria-describedby="add_event_dialog-div" aria-labelledby="ui-id-1">' + 
                '<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">' +
                  '<span id="ui-id-1" class="ui-dialog-title">Ask Question</span>' +
@@ -358,7 +428,27 @@ function ask_question(){
                  '<iframe id="add_event_dialog-iframe" src="/forum/ask_question/" width="100%" height="98%" frameborder="0"></iframe>' +
                '</div>' +
              '</div>';
-  $('body').append(html);
+  
+  var html = '<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front dialog-class" tabindex="-1" role="dialog" style="position: fixed; height: auto; width: 920px; top: 50px; left: 327px; display: block;" aria-describedby="add_event_dialog-div" aria-labelledby="ui-id-1">' + 
+               '<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">' +
+                 '<span id="ui-id-1" class="ui-dialog-title">Ask Question</span>' +
+                 '<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" aria-disabled="false" title="close">' +
+                   '<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>' +
+                   '<span class="ui-button-text">close</span>' +
+                 '</button>' +
+               '</div>' +
+               '<div id="add_event_dialog-div" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: 205px;">' +
+                 '<iframe id="add_event_dialog-iframe" src="/forum/ask_question/" width="100%" height="98%" frameborder="0"></iframe>' +
+               '</div>' +
+             '</div>';
+*/
+  dialog_iframe({
+    name:'forum_ask_question',
+    title:'Ask Question',
+    width:1000,
+    height:450,
+    src:'/forum/ask_question/'
+  });
 }
 
 function display_question(id){
@@ -371,9 +461,20 @@ function display_question(id){
       html += question_html(data);
       if (data.question.same_profile=="false")
       {
+        html += '<div class="feed-box">' +
+                  '<a href="#"><img class="feed-propic" src="'+data.question.viewer_photo+'"></a>';
+
+        html += '<div class="feed-text">';
         html += '<div id="answer_form"><form action="" method="post" onsubmit="add_answer('+data.question.id+');return false;">';
-        html += '<input type="text" name="answer">';
-        html += '<input type="submit" value="Submit"></div>';
+        html += '<textarea name="answer" class="answer-field" placeholder="Add your answer">' + '</textarea>';
+        html += '<div class="submit-button">';
+        html += '<input type="submit" value="Submit" class="blue-button">';
+        html += '</div>'; //submit-button
+        html += '</div>'; //answer_form
+        html += '<div class="clear"></div>';
+        html += '</div>'; //feed-text
+        html += '</div>'; //feed-box
+        html += '<div class="hr"></div>';
       }
       html += allanswers_html(data);
       $('#content').append(html);
@@ -423,24 +524,67 @@ function display_answer(answer_id){
     });
 }
 
-function follow_question(question_id){
+function follow_question(question_id,followers_number){
   $.get('forum/follow_question/',
     {
       'question_id': question_id
     },function(data)
     {
-      var html =  '<button onclick="unfollow_question('+question_id+');"> Unfollow </button>';
+      var x = followers_number + 1;
+      var html = null;
+      if(x == 2)
+      {
+        html = ' Followers';
+        $('#followers_word').html(html);
+      }
+      if(x == 1)
+      {
+        html = ' Follower';
+        $('#followers_word').html(html);
+      }
+      followers_number = x;
+      html = '' + x +'';
+      $('#followers_number_'+question_id).html(html);
+      html =  '<div class="follow-button-box">' + 
+                '<button class="grey-button" onclick="unfollow_question('+question_id+','+followers_number+');"> Followed </button>' +
+              '</div>' + //follow-button-box
+              '<div class="clear"></div>';
       $('#follow_unfollow_'+question_id).html(html);
     });
 }
 
-function unfollow_question(question_id){
+function unfollow_question(question_id,followers_number){
   $.get('forum/unfollow_question/',
     {
       'question_id': question_id
     },function(data)
     {
-      var html =  '<button onclick="follow_question('+question_id+');"> Follow </button>';
+      var x = followers_number - 1;
+      var html = null;
+      if(followers_number == 2)
+      {
+        html = ' Follower';
+        $('#followers_word').html(html);
+      }
+      if(followers_number == 1)
+      {
+        html = '';
+        $('#followers_word').html(html);
+      }
+      followers_number = x;
+      if(x === 0)
+      {
+        html = '';
+      }
+      else
+      {
+        html = '' + x +'';
+      }
+      $('#followers_number_'+question_id).html(html);
+      html =  '<div class="follow-button-box">' +
+                    '<button class="blue-button" onclick="follow_question('+question_id+','+followers_number+');"> Follow Question </button>' +
+                  '</div>' + //follow-button-box
+                  '<div class="clear"></div>';
       $('#follow_unfollow_'+question_id).html(html);
     });
 }
@@ -533,6 +677,7 @@ function display_activity(single,username){
       }
       html += '</div>'; //forum-feed
       $('#content').html(html);
+      $('#content').pickify_users();
       var category_name = "all";
       change_active_label(category_name);
     });
@@ -610,6 +755,7 @@ function display_category(type_question){
       }
       html += '</div>'; //forum-feed
       $('#content').html(html);
+      $('#content').pickify_users();
       var category_name = location.hash.substr(1).split('/')[1];
       change_active_label(category_name);
     });

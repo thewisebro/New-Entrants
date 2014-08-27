@@ -49,7 +49,9 @@ def answer_dict(answer,profile):
     'upvote': upvote_bool,
     'downvote': downvote_bool,
     'same_profile': same_profile,
-    'upvote_count': upvote_count
+    'student_name': answer.profile.student.user.html_name,
+    'upvote_count': upvote_count,
+    'photo_url': answer.profile.student.user.photo_url
   }
 
 
@@ -67,8 +69,11 @@ def question_dict(question,profile):
     'title': question.title,
     'description': question.description,
     'follow_unfollow': follow_bool,
+    'num_followers': ProfileQuestionFollowed.objects.filter(question_id = question.pk).count(),
     'same_profile': same_profile,
-    'student_name': question.profile.student.name,
+    'student_name': question.profile.student.user.html_name,
+    'viewer_name': profile.student.name,
+    'viewer_photo': profile.student.user.photo_url,
     'photo_url': question.profile.student.user.photo_url,
     'answers_number': len(Answer.objects.filter(question=question))
   }
@@ -98,23 +103,23 @@ def tagitem_content(tagitem,profile):
 def activity_dict(activity,profile):
   if activity.activity_type == 'FOL_QUES':
     obj = question_dict(activity.content.question, profile)
-    student_name = activity.content.profile.student.name
+    student_name = activity.content.profile.student.user.html_name
     photo_url = activity.content.profile.student.user.photo_url
   elif activity.activity_type == 'UP_ANS':
     obj = answer_dict(activity.content.answer, profile)
-    student_name = activity.content.profile.student.name
+    student_name = activity.content.profile.student.user.html_name
     photo_url = activity.content.profile.student.user.photo_url
   elif activity.activity_type == 'ASK_QUES':
     obj = question_dict(activity.content, profile)
-    student_name = activity.content.profile.student.name
+    student_name = activity.content.profile.student.user.html_name
     photo_url = activity.content.profile.student.user.photo_url
   elif activity.activity_type == 'POST_ANS':
     obj = answer_dict(activity.content, profile)
-    student_name = activity.content.profile.student.name
+    student_name = activity.content.profile.student.user.html_name
     photo_url = activity.content.profile.student.user.photo_url
   else:
     obj = tag_dict(activity.content.tag, profile)
-    student_name = activity.content.content_object.student.name
+    student_name = activity.content.content_object.student.user.html_name
     photo_url = activity.content.content_object.student.user.photo_url
   return {
     'activity_type': activity.activity_type,
@@ -209,7 +214,7 @@ def remove_upvote(request):
   answer_id = request.GET['answer_id']
   answer = Answer.objects.get(id=answer_id)
   profile = Profile.get_profile(request.user.student)
-  if ProfileAnswerFollowed.objects.filter(profile=profile,question=question).exists():
+  if ProfileAnswerUpvoted.objects.filter(profile=profile,answer=answer).exists():
     ProfileAnswerUpvoted.objects.get(profile=profile,answer=answer).delete()
   count = len(ProfileAnswerUpvoted.objects.filter(answer=answer))
   json_data = simplejson.dumps({'count':count})
@@ -297,7 +302,7 @@ def search_tag(request):
   return HttpResponse(json_data, mimetype='application/json')
 
 def answer_comments(request,answer_id):
-  answer = Answer.objects.get(pk=answer_id)
+  answer = Answer.objects.get(id=answer_id)
   return render(request,'forum/answer_comments.html',{'answer': answer,})
 
 
