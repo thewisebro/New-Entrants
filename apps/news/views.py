@@ -70,7 +70,7 @@ def home(request):
       newsuser.save()
       map(lambda c: (store_default_pref(newsuser, c)), Channel.objects.all())
     marker = 1
-    news = News.objects.all().order_by('-article_date')[:50]
+    news = News.objects.order_by('-article_date')[:20]
     json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker})
     return HttpResponse(json, content_type='application/json')
 
@@ -211,7 +211,7 @@ def sports(request):
     else:
       marker = 1
       channel = Channel.objects.get(name='Sports')
-      news = News.objects.filter(channel = channel).order_by('-article_date')[:20]
+      news = News.objects.filter(channel = channel).order_by('-article_date')#[:20]
       json = simplejson.dumps({'news':map(lambda x:prepare_content(x), news), 'marker': marker})
       return HttpResponse(json,content_type='application/json')
   except:
@@ -385,12 +385,12 @@ def related_news(item_1, item_2):
 
 
 def html_data_extracter(request):
-  path = os.path.dirname(__file__)
-  path = os.path.join(path, 'xml_files/')
-  print(path)
-  print(os.getcwd())
+  #path = os.path.dirname(__file__)
+  #path = os.path.join(path, 'xml_files/')
+  #print(path)
+  path = settings.NEWS_XML_ROOT
   os.chdir(settings.NEWS_IMAGES_ROOT)
-  print(os.getcwd())
+  #print(os.getcwd())
   try:
     #ht(path, 'national')
     #ht(path, 'sports')
@@ -401,6 +401,15 @@ def html_data_extracter(request):
     ie.Entertainment(path)
     msn.Entertainment(path)
     bbc.Entertainment(path)
+    """
+
+    bbc.selectAll(path)
+    hindu.selectAll(path)
+    toi.selectAll(path)
+    ie.selectAll(path)
+    msn.selectAll(path)
+    yahoo.selectAll(path)
+
     """
     hindu.Technology(path)
     toi.Technology(path)
@@ -413,6 +422,7 @@ def html_data_extracter(request):
     toi.Health(path)
     ie.Health(path)
     bbc.Health(path)
+    """
 
     return HttpResponse("Task Completed!!")
   except Exception as e:

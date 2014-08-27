@@ -31,11 +31,17 @@ def calendar_dict(calendar):
 
 @login_required
 def add(request):
-  form = None
+  # form initiated to render media on template
+  form = EventFormGenerator(Calendar.objects.get(name=request.user.username, cal_type='PRI'))()
   calendar = None
-  calendars = map(calendar_dict,Calendar.objects.filter(users__in = [request.user]))
-  if (request.method == 'POST' and request.POST.has_key('calendar_name') and request.POST['calendar_name']):
-    calendar = Calendar.objects.get(name = request.POST['calendar_name'])
+  calendars = Calendar.objects.filter(users__in = [request.user])
+  if calendars.count() == 1:
+    calendar = calendars[0]
+  calendars = map(calendar_dict, calendars)
+  if (request.method == 'POST' and calendar or\
+      (request.POST.has_key('calendar_name') and request.POST['calendar_name'])):
+    if not calendar:
+      calendar = Calendar.objects.get(name = request.POST['calendar_name'])
     EventForm = EventFormGenerator(calendar)
     if calendar.users.filter(username = request.user.username).count() == 0:
       return HttpResponse('')

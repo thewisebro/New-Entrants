@@ -101,12 +101,17 @@ def Yahoo(path, channel):
               if image_link is not None:
                 try:
                   ext = os.path.splitext(image_link)[1]
+                  if "?" in ext:
+                    ext = ext.split('?')[0]
+                  ext = ext.lower()
+                  if ext is None or ext is '':
+                      ext = '.jpg'
                   unique_image_name = str(p.pk)
                   image_name =  unique_image_name + ext
                   image_path = "images/" + image_name
                   p.image_path = image_path
                   p.save()
-                  wget = 'wget -nc -O %s "%s"' % (image_name, image_link)
+                  wget = 'wget -U firefox -nc -O %s "%s"' % (image_name, image_link)
                   download = subprocess.Popen(wget, shell = True)
                   download.wait()
                 except:
@@ -116,6 +121,8 @@ def Yahoo(path, channel):
               else:
                 print "Saved_Without_image "+str(p.pk)
                 continue
+        else:
+          print "\n Already There..."
       except:
         pass
   #except Exception as e:

@@ -12,13 +12,13 @@
 {% endblock %}
 
 {% block styles %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/fonts.sass" type="text/sass">
-  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.sass" type="text/sass">
-  <link rel="stylesheet" href="{{ STATIC_URL }}sass/helpcenter/login_help.sass" type="text/sass">
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/fonts.css" type="text/css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.css" type="text/css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/helpcenter/login_help.css" type="text/css">
   {{ form.media.css }}
   <style type="text/css">
     #content{
-      margin-left:15px;
+      margin-left:10px;
     }
     #heading{
       margin:20px 10px;
@@ -33,7 +33,7 @@
    <div id="heading">We value your feedback highly.</div>
    <form action="" method="POST" class="uniForm">{% csrf_token %}
      {{ form.uniform }}
-     <input type="submit" class="input-button" name="submit" value="Submit"/>
+     <input type="submit" class="input-button" name="submit" style="margin-left:10px" value="Submit"/>
    </form>
    </div>
 {% endblock body %}

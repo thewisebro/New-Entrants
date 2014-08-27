@@ -10,7 +10,7 @@ update nci.nucleus_user inner join ci.nucleus_person on (nci.nucleus_user.id = c
 
 update nci.nucleus_user inner join ci.facapp_faculty on (nci.nucleus_user.id = ci.facapp_faculty.user_id) set nci.nucleus_user.name=ci.facapp_faculty.name, nci.nucleus_user.photo=ci.facapp_faculty.photo, nci.nucleus_user.email=ci.facapp_faculty.alternate_mail_id, nci.nucleus_user.contact_no=ci.facapp_faculty.phone;
 
-insert into nci.nucleus_branch (code,name,degree,department,graduation,duration) select code,name,degree,department,graduation,duration from ci.nucleus_branch;
+insert into nci.nucleus_branch (code,name,degree,department,graduation,no_of_semesters) select code,name,degree,department,graduation,duration from ci.nucleus_branch;
 
 insert into nci.nucleus_student (user_id,branch_id,admission_year,cgpa,bhawan,room_no) select user_id,branch_id,admission_year,cgpa,bhawan,room_no from ci.nucleus_person;
 

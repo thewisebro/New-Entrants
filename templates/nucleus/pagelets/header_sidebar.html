@@ -1,0 +1,38 @@
+<script type="text/javascript">
+  var channeli_apps = {{ channeli_apps }};
+  var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
+</script>
+
+<div id="header">
+  <div id="header-title"><a href="/">Channel i</a></div>
+  <div id="header-search">
+    <input type="search" name="q" id="global_search_bar" autocomplete="off" placeholder="Search here"/>
+  </div>
+  <div id="header-options">
+    {% if user.is_authenticated %}
+      <div id="logout" class="header-option" onclick="logout();">Sign Out</div>
+      <div class="header-option" onclick="location.hash='#helpcenter'">Help Center</div>
+      <div class="header-option" onclick="take_feedback();">Feedback</div>
+      <div id="user-account">
+        <div id="user-thumbnail"><img src="{{ user.photo_url }}"/></div>
+        <span id="user-name">{{ user.name }}</span>
+      </div>
+    {% else %}
+      <div id="login" class="header-option" onclick="open_login_dialog();">Sign In</div>
+    {% endif %}
+  </div>
+</div>
+
+<div id="sidebar">
+  <div id="sidebar-tabs">
+    {% for tab in tabs %}
+      <div id="{{ tab.name }}-tab" class="tab" onclick="nucleus.tab_clicked('{{ tab.name }}');">
+        <div class="tab-icon {{ tab.name }}-tab-icon float-left">
+          <i class="{{ tab.class }}" style="color:{{ tab.color }}"></i>
+        </div>
+        <span class="tab-name float-left">{{ tab.name|title }}</span>
+      </div>
+    {% endfor %}
+    <div id="tab-arrow"><div></div></div>
+  </div>
+</div>

@@ -52,14 +52,14 @@ def Toi(path, channel):
           print "\n>>>>>>>>>>>>>>>>>>>>>>       <<<<<<<<<<<<<<<<<<<<<<<<<<<"
           print title
           print "Counter: "+str(counter)
-          print des
-          print "cp"
+          #print des
+          #print "cp"
 
           req = Request(link)
           html_page = ""
           html_page = urlopen(req).read()
           soup = BeautifulSoup(html_page, convertEntities=BeautifulSoup.HTML_ENTITIES)
-          print "cp-1"
+          #print "cp-1"
           if html_page is not None:
              news_item = soup.find("div",{"class":"Normal"})
 
@@ -73,7 +73,7 @@ def Toi(path, channel):
               article_text = news_item.findAll(text = True)
               article_content = ""
               if len(article_text) is not 0:
-                print "cp-2"
+                #print "cp-2"
                 for text in article_text:
                   if text is not None:
                     #print(text.encode('utf8'))
@@ -96,12 +96,17 @@ def Toi(path, channel):
                   try:
                     image_link = image.get("src")
                     ext = os.path.splitext(image_link)[1]
+                    if "?" in ext:
+                      ext = ext.split('?')[0]
+                    ext = ext.lower()
+                    if ext is None or ext is '':
+                      ext = '.jpg'
                     unique_image_name = str(p.pk)
                     image_name =  unique_image_name + ext
                     image_path = "images/" + image_name
                     p.image_path = image_path
                     p.save()
-                    wget = 'wget -nc -O %s "%s"' % (image_name, image_link)
+                    wget = 'wget -U firefox -nc -O %s "%s"' % (image_name, image_link)
                     download = subprocess.Popen(wget, shell = True)
                     download.wait()
                   except Exception as e:

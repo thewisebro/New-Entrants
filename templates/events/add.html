@@ -13,24 +13,26 @@
 
 {% block styles %}
   {{ form.media.css }}
-  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.sass" type="text/sass"/>
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.css" type="text/css"/>
   <style type="text/css">
-    .cke{
-      margin-left:10px !important;
-    }
   </style>
 {% endblock %}
 
 {% block body %}
   <form class="uniForm" id='add-event-form' action="" method="POST">{% csrf_token %}
-    <div class='edit-line'>
-      <label class='field-label-big'>Calendar : </label><div class='field'><select name='calendar_name' onchange="$('input[name=reset]').click();">
-       <option value=''> ---------- </option>
-       {% for cal in calendars %}
+
+    <div id="div_id_calendar" class="ctrlHolder focused">
+      <label for="id_calendar" class="requiredField">
+        Calendar<span class="asteriskField">*</span>
+      </label>
+      <select class="select" id="id_calendar" name="calendar_name"  onchange="$('input[name=reset]').click();">
+        <option value="">---------</option>
+        {% for cal in calendars %}
          <option value='{{ cal.name }}' {% if cal.name == calendar.name %}selected='selected'{% endif %}>{{ cal.verbose_name }}</option>
-       {% endfor %}
-      </select></div>
+        {% endfor %}
+      </select>
     </div>
+
     <input type="submit" name="reset" style="display:none;"/>
     {% if calendar %}
       {{ form.uniform }}

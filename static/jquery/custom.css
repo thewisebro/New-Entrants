@@ -1,14 +1,26 @@
 .ui-dialog{
   padding:0px;
-  border-radius:0px;
-  box-shadow: 0px 3px 14px #333;
+  border-top-left-radius:3px;
+  border-top-right-radius:3px;
+  border-bottom-left-radius:3px;
+  border-bottom-right-radius:3px;
+  display: block;
+  position: absolute;
+  background-color: #FFF;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 25px;
+  border: 1px solid #BBB;
 }
 
 .ui-dialog-titlebar{
-  border-radius:0px;
   border:0px;
   border-bottom:1px solid #d5d5d5;
-  background:#ffffff;
+  border-radius: 0px;
+  border-top-left-radius:3px;
+  border-top-right-radius:3px;
+  background: #F1F2F4;
+  text-indent: 5px;
+  color: #444;
+  font-size: 14px;
 }
 
 .ui-dialog-title{
@@ -17,12 +29,17 @@
 }
 
 .ui-dialog .ui-dialog-content{
-  padding:15px;
+  /*padding:15px;*/
 }
 
 .ui-dialog-content iframe
 {
   border:0px;
+}
+
+.ui-front
+{
+  z-index: 500;
 }
 
 .ui-autocomplete
@@ -48,6 +65,10 @@
   border-color:#b6cee6;
 }
 
+.uniForm .ctrlHolder.focused {
+  background: none !important;
+}
+
 .chosen-results
 {
   width: auto !important;
@@ -63,8 +84,18 @@
 {
   float: left !important;
   width: 200px !important;
-  margin: 0px;
-  line-height: 25px;
+  margin: 0px !important;
+  line-height: 25px !important;
+}
+
+.uniForm .textInput
+{
+  text-indent: 3px !important;
+}
+
+.readonlytextinput
+{
+  color: #808080 !important;
 }
 
 .cke
