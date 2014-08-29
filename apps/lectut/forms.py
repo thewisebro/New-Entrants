@@ -14,7 +14,7 @@ class FileForm(forms.Form):
   upload_name=forms.CharField()
   upload_type=forms.ChoiceField(choices=FILE_CHOICES)
 
-class TextUpload(forms.Form):
+class TextForm(forms.Form):
   text=forms.CharField(label='Enter notice' ,widget = forms.Textarea(attrs={'cols': 60, 'rows': 10}))
 
   def save(self, *args, **kwargs):

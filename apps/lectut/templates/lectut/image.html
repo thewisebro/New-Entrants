@@ -28,7 +28,7 @@
 <body>
   {% if viewType == 'Coursepage' %}
     <h2>{{ batch.name }} ({{ batch.course.name}})</h2>
-    <form action="{% url 'coursepage' batch_id=batch.id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <form action="{% url 'uploadFile' batch_id=batch.id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
       <p>
         {{text_form}}
         {{image_form}}
@@ -49,13 +49,25 @@
                    <div id="uploads" class="tab-pane fade in active">
          <!--p id="choices"></p-->
            {% load staticfiles %}
-         {% for noti in previous_noti%}
-            <h4>{{noti.upload_user.name}}</h4>
-            {% if noti.file_type == 'image'%}
-              <a class="fancybox" rel="group1" href="{{ MEDIA_URL }}/{{noti}}"><img src="{{ MEDIA_URL }}/{{noti}}" height="100" width="100"></a>
-              {{noti.name }}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+            </ul>
+{% endif %}
+          {% if file_form.non_field_errors %}
+            {% for error in file_form.non_field_errors %}
+                {{error}}
+             {% endfor %}
+           {% endif %}
+         {% for upload in previous_uploads%}
+            <h4>{{upload.upload_user.name}}</h4>
+            {% if upload.file_type == 'image'%}
+              <a class="fancybox" rel="group1" href="{{ MEDIA_URL }}/{{upload}}"><img src="{{ MEDIA_URL }}/{{upload}}" height="100" width="100"></a>
+              {{upload.name }}
               <br>
-            {% elif noti.file_type == 'video'%}
+            {% elif upload.file_type == 'video'%}
               <video id="{{noti}}" class="video-js vjs-default-skin"
                 controls preload="auto" width="640" height="264"
                 poster="http://video-js.zencoder.com/oceans-clip.png"
@@ -63,7 +75,7 @@
                 <source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4' />
                 <source src="http://video-js.zencoder.com/oceans-clip.webm" type='video/webm' />
                 <source src="http://video-js.zencoder.com/oceans-clip.ogv" type='video/ogg' />
-                {{noti.name}}
+                {{upload.name}}
               </video>
               <!--video width="100" height="100" controls>
               <source src="{{ MEDIA_URL }}/{{noti}}" type="video/mp4">
@@ -72,13 +84,13 @@
                 <embed src="{{ MEDIA_URL }}/{{noti}}" width="320" height="240">
               </object> 
               </video--> 
-            {%elif noti.file_type == 'pdf'%}
-              <a href="{{ MEDIA_URL }}{{noti}}" target="_blank"><img src="{{ MEDIA_URL }}lectut/images/pdf.png" height="100" width="100"></a>
-              {{noti.name}}
+            {%elif upload.file_type == 'pdf'%}
+              <a href="{{ MEDIA_URL }}{{upload}}" target="_blank"><img src="{{ MEDIA_URL }}lectut/images/pdf.png" height="100" width="100"></a>
+              {{upload.name}}
             {%endif%}
-            <a href="/lectut/disp/download/{{ noti.id }}/">Download</a>
+            <a href="/lectut/disp/download/{{ upload.id }}/">Download</a>
             {% if userType == '1' %}
-              <a href="/lectut/disp/delete/{{ noti.id }}/">Delete</a>
+              <a href="/lectut/disp/delete/{{ upload.id }}/">Delete</a>
             {% endif %}
           {% endfor %}
           </div>
@@ -87,7 +99,6 @@
           </div>
          </div> 
         </div>
-<!--a class="fancybox" rel="group" href="{{ MEDIA_URL }}/lectut/images/images_1.jpg"><img src="{{ MEDIA_URL }}/lectut/images/images_2.jpg" alt="" /></a-->
 <!--a class="fancybox" rel="group" href="image_2.jpg"><img src="{{ MEDIA_URL }}/lectut/images/images_2.jpg" alt="" /></a-->
 <script>
   function choosetype()
@@ -96,6 +107,7 @@
   }
 </script>
 <script type="text/javascript">
+         {% load staticfiles%}
   $(document).ready(function() {
                 $(".fancybox").fancybox();
                             });

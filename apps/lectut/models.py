@@ -69,22 +69,8 @@ class DownloadLog(models.Model):
 
   def __unicode__(self):
     return self.id
-'''class UploadVideo(BaseUpload):
-  upload_video=models.FileField(upload_to='lectut/videos' , null=True)
-  def matche_file_type(cls, iname, ifile, request):
-        # the extensions that lectut will recognise for the uploaded video
-        filename_extensions = ['.dv', '.mov', '.mp4', '.avi', '.wmv',]
-        ext = os.path.splitext(iname)[1].lower()
-        return ext in filename_extensions
 
-class UploadPPT(BaseUpload):
-  upload_ppt=models.FileField(upload_to='lectut/ppts', null=True)
-  def matche_file_type(cls, iname, ifile, request):
-        # the extensions that lectut will recognise for the uploaded ppt
-        ext = os.path.splitext(iname)[1].lower()
-        return ext in ['.ppt']
-
-class UploadPdf(BaseUpload):
+'''class UploadPdf(BaseUpload):
   upload_pdf=models.FileField(upload_to='lectut/pdf',null=True)
   def matche_file_type(cls, iname, ifile, request):
           # the extensions that lectut will recognise for the uploaded pdf
