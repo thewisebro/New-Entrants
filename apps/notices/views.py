@@ -18,6 +18,7 @@ from notices.models import *
 from notices.forms import *
 from notices.utils import *
 
+privelege=0
 PeopleProxyUrl = "http://people.iitr.ernet.in/"
 
 def index(request):
@@ -34,7 +35,6 @@ def index(request):
 def upload(request):
   category = None
   categories = request.user.category_set.all()
-  privelege = request.user.uploader_set.all().exists()
   form = DummyForm()
   if (privelege and request.method == 'POST' and request.POST.has_key('category_name') and request.POST['category_name']):
     category = Category.objects.get(name = request.POST['category_name'])
@@ -55,40 +55,13 @@ def upload(request):
 
 class PrivelegeJsonView(TemplateView):
   def get(self, request):
+    global privelege
     privelege = request.user.uploader_set.all().exists()
-    privelege = {'privelege' : privelege}
-    privelege_json = simplejson.dumps(privelege)
+    privelege1 = {'privelege' : privelege}
+    privelege_json = simplejson.dumps(privelege1)
     return HttpResponse(privelege_json, mimetype="application/json")
 
 class NoticeListView(ListAPIView):
-  serializer_class = NoticeListViewSerializer
-  def get_queryset(self):
-    mode = self.kwargs['mode']
-    llim = int(self.kwargs['llim'])                                #lower limit
-    hlim = int(self.kwargs['hlim'])                                #higher limit
-    first_notice_id = int(self.kwargs['id'])                       #id of the first notice relative to which the number of notices to be sent is realized
-    if(mode=="new"):
-      queryset = Notice.objects.filter(expired_status=False)
-    else:
-      queryset = Notice.objects.filter(expired_status=True)
-    a = 0
-    count = 0
-    temp = 0
-    if first_notice_id!=0:
-      while temp==0:
-        query = queryset.order_by('-datetime_modified')[a:a+10]
-        for x in query:
-          if x.id==first_notice_id:
-            temp=1
-            break
-          count += 1
-        a += 10
-    llim = llim + count
-    hlim = hlim + count + 1
-    queryset = queryset.order_by('-datetime_modified')[llim:hlim]
-    return queryset
-
-class TempNoticeListView(ListAPIView):
   serializer_class = NoticeListViewSerializer
   def get_queryset(self):
     mode = self.kwargs['mode']
@@ -106,7 +79,9 @@ class TempNoticeListView(ListAPIView):
     temp = 0
     if first_notice_id!=0:
       while temp==0:
-        if(subc=="All"):
+        if(mc=="All"):
+          query = queryset.order_by('-datetime_modified')[a:a+10]
+        elif(subc=="All"):
           query = queryset.filter(uploader__category__main_category=mc).order_by('-datetime_modified')[a:a+10]
         else:
           query = queryset.filter(uploader__category__name=subc).order_by('-datetime_modified')[a:a+10]
@@ -118,7 +93,9 @@ class TempNoticeListView(ListAPIView):
         a += 10
     llim = llim + count
     hlim = hlim + count + 1
-    if(subc=="All"):
+    if(mc=="All"):
+      queryset = queryset.order_by('-datetime_modified')[llim:hlim]
+    elif(subc=="All"):
        queryset = queryset.filter(uploader__category__main_category=mc).order_by('-datetime_modified')[llim:hlim]
     else:
        queryset = queryset.filter(uploader__category__name=subc).order_by('-datetime_modified')[llim:hlim]
@@ -188,6 +165,7 @@ class NoticeSearch(ListAPIView):
     return queryset
   serializer_class = GetNoticeSerializer
 
+@login_required
 def read_star_notice(request, id1, action):              #action determines whether the function of this view is to star, unstar, read or unread a notice
   user1 = request.user
   notice_user = NoticeUser.objects.get(user=user1)
@@ -202,6 +180,7 @@ def read_star_notice(request, id1, action):              #action determines whet
   success = simplejson.dumps(success)
   return HttpResponse(success, mimetype="application/json")
 
+@login_required
 def mul_read_star_notice(request, action):              #action determines whether the function of this view is to star, unstar, read or unread a notice
   user1 = request.user
   notice_user = NoticeUser.objects.get(user=user1)
@@ -248,16 +227,16 @@ class Read_notice_list(TemplateView):
 class Show_Uploads(ListAPIView):
   def get_queryset(self):
     queryset = []
-    uploaders = self.request.user.uploader_set.all()
-    for i in uploaders:
-      queryset += i.notice_set.all().order_by('-datetime_modified')
+    if privelege:
+      uploaders = self.request.user.uploader_set.all()
+      for i in uploaders:
+        queryset += i.notice_set.all().order_by('-datetime_modified')
     return queryset
   serializer_class = NoticeListViewSerializer
 
 @login_required
 def edit(request, pk):
   NoticeForm = EditForm()
-  privelege = request.user.uploader_set.all().exists()
   n = Notice.objects.get(id=pk)
   if request.method == 'POST' and privelege:
     form = EditForm(request.POST)
@@ -289,7 +268,6 @@ def edit(request, pk):
 @login_required
 def delete(request, pk):
   n = Notice.objects.get(id=pk)
-  privelege = request.user.uploader_set.all().exists()
   if privelege:
     tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=-1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created)
     tnotice.save()

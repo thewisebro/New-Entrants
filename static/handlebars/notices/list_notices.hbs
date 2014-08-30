@@ -13,13 +13,13 @@
       id="check-{{ notice.id }}" 
       onclick="add_to_checklist({{notice.id}}, event)">
    
-    {{#if read}} 
       <span 
         class="read" 
         id=notice_read_{{notice.id}}>
+    {{#if read}} 
           R&nbsp
-      </span>
     {{/if}}
+      </span>
 
       <span 
         class="starred" 

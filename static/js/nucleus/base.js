@@ -18,7 +18,7 @@ $(document).on("pagelet_loaded_header", function(){
   $('#global_search_bar').on("keydown", function(event){
       if(event.which==13 && current_tab=="notices")
       {
-       search();
+        set_search_string();
       }
   });
 });
