@@ -1,5 +1,6 @@
 var search_total_pages, search_last_page_notices, search_store;		//variables for search results
 var upload_total_pages, upload_last_page_notices, upload_array;		//variables for show_uploads results
+var starred_total_pages, starred_last_page_notices, starred_array;		//variables for show_starred results
 var total_pages, last_page_notices;		//variables for general new notice display(all)
 var old_total_pages, old_last_page_notices;		//variables for general expired notice display(all)
 var temp_total_pages, temp_last_page_notices;		//variables for general notice display(specific category)
@@ -17,20 +18,24 @@ var h1,h2,h3,h4,h5;
 */
 
 var privelege=0, first_time_visit=0, static_divs_created=0, star_perm=0, select_category=0;
-var checklist, check_upload_array={}, star_array={}, read_array={};
+var checklist, check_upload_array={}, check_star_array={}, read_array={};
 
 /*
-    1.star_array stores the ids of notices who are starred for a particular user.read_array is similar
+    1.check_star_array stores the ids of notices who are starred for a particular user.read_array is similar
     2.search_store stores the results of a particular search
     3.star_perm is 0 when the app is being used anonymously
 */
 
 function first_time_functions()                 //This function is responsible for calling 6 important basic functions to store necessary data
 {
+    $("#global_search_bar").val("");
+    $("#global_search_bar").attr('placeholder', 'Search In Notices');
     get_privelege();                            //First time function 1
 }
 
 $(document).on("load_app_notices", function(e, hash1, hash2, hash3, hash4, hash5){
+
+    $("#container").attr({class : "large-width-content"})
     h1=hash1;    //The function redirection can only be called once the first_time_functions have played their part. So, we store the current state variables for now.
     h2=hash2;
     h3=hash3;
@@ -44,6 +49,17 @@ $(document).on("load_app_notices", function(e, hash1, hash2, hash3, hash4, hash5
       redirection();
 });
 
+$(document).on("unload_app_notices", function(e, hash1, hash2, hash3, hash4, hash5){
+    $("#container").removeAttr("class")
+});
+
+$('#global_search_bar').on("keydown", function(event){
+        if(event.which==13 && current_tab=="notices")
+              {
+                      set_search_string();
+              }
+});
+
 function redirection()            //The main controller function which defines the function path, execution will follow
 {
     if(h1 == "content")                              //If the main_mode is content, cut the crap and directly display the notice
@@ -54,13 +70,22 @@ function redirection()            //The main controller function which defines t
     }
     else
     {
-
-        if(h1==main_mode && h2==sub_mode && h3==m_category && h4==sub_category)     //Setting the value of the same_except_page_no variable
-          same_except_page_no=1;
+        if(h1=="starred" || h1=="uploads")
+        {
+          console.log(main_mode);
+          console.log(main_mode);
+          console.log("asfdghjk");
+          if(h1==main_mode)     //Setting the value of the same_except_page_no variable
+            same_except_page_no=1;
+          else
+            same_except_page_no=0;
+        }
         else
         {
-          console.log("abcqw");
-          same_except_page_no=0;
+          if(h1==main_mode && h2==sub_mode && h3==m_category && h4==sub_category)     //Setting the value of the same_except_page_no variable
+            same_except_page_no=1;
+          else
+            same_except_page_no=0;
         }
 
         if(h1 == undefined || h1 == "")                           //Setting default values to the primary parameters, if they are undefined
@@ -97,12 +122,18 @@ function redirection()            //The main controller function which defines t
         else
           all=0;
 
+        if(same_except_page_no==0)
+          evaluate_breadcrumbs();
+
+        $("#category_menu").remove();
+        $("#menu").remove();
+        $('#all_select').prop('checked', false);
         checklist={};
         more=0;
         if(sub_category=="All")
-          $("#select_category").text(m_category);
+          $("#category_name").text(m_category);
         else
-          $("#select_category").text(sub_category);
+          $("#category_name").text(sub_category);
 
       
         if(main_mode=="display")
@@ -142,11 +173,32 @@ function redirection()            //The main controller function which defines t
                   list_notices(parseInt(cur_page_no), temp_store, temp_total_pages, temp_last_page_notices);                                                                                                    //Simply call the list function, if nothing except the page no has changed
               }
         }
-        else if(main_mode=="show_uploads")
+        else if(main_mode=="uploads")
         {
+            cur_page_no = h2;
+            sub_mode = "new";
+            m_category = "All";
+            sub_category = "All";
+
             if(!same_except_page_no)
               load_numbers_bar(upload_total_pages, "upload_");
-            list_notices(1, upload_array, upload_total_pages, upload_last_page_notices);
+            list_notices(parseInt(cur_page_no), upload_array, upload_total_pages, upload_last_page_notices);
+        }
+        else if(main_mode=="starred")
+        {
+            sub_mode = "new";
+            m_category = "All";
+            sub_category = "All";
+            cur_page_no = h2;
+
+            len = starred_array.length;             //Recalculating parameters, as they might have changed due to addition of star notices
+            starred_total_pages=Math.floor(len/10);
+            starred_last_page_notices=len%10;
+            if(starred_last_page_notices>0)
+              starred_total_pages++;
+            if(!same_except_page_no)
+              load_numbers_bar(starred_total_pages, "starred_");
+            list_notices(parseInt(cur_page_no), starred_array, starred_total_pages, starred_last_page_notices);
         }
         else if(main_mode=="search")
         {
@@ -175,19 +227,22 @@ function create_static_divs()                //Create static buttons like upload
     $("#right-column").empty();
     $('#content').html(welcome_html());
     if(privelege==1)
-      $('#content').append(upload_html());
-    $('#content').append(newold_buttons_html());
-    if(star_perm==1)
-    {
-      $('#content').append(additional_features_html());
-    }
+      $('#notices-header').append(upload_html());
+
     if(sub_category=="All")
       $('#content').append(load_cat_bar_html(m_category));
     else
       $('#content').append(load_cat_bar_html(sub_category));
     
+    if(star_perm==1)
+    {
+      $('#content').append(additional_features_html());
+    }
+
+    $('#additional').append(newold_buttons_html());
+    $('#content').append('<br><div id="breadcrumbs_container"><div id="breadcrumbs"></div></div><br>');
+    $('#content').append('<div id="notice_list"></div><br>');
     $('#content').append('<div id="page_numbers"></div>')
-    $('#content').append('<div id="notice_list"></div>');
     console.log("switched_to_noties_create : static divs created")
 }
 
@@ -275,10 +330,11 @@ function gap_filler(llim, hlim, temp)
 
 function load_numbers_bar(tp, mode1)        //tp = total pages, mode1 = new, old, search, upload
 {
-      $('div#page_numbers').empty();
-      $('div#page_numbers').append(load_numbers_bar_html(tp, mode1));
-      if(mode1=="")
-        first_time_check();
+      $("#page_numbers").pagination({
+          pages: tp,
+          cssStyle: 'light-theme',
+          onPageClick : window[mode1 + 'change_page']
+      });
 }
 
 function change_page(number)
@@ -293,7 +349,12 @@ function open_notice(id)
 
 function upload_change_page(page_no)
 {
-  location.hash = '#notices/show_uploads/new/All/All/' + page_no;
+  location.hash = '#notices/uploads/' + page_no;
+}
+
+function starred_change_page(page_no)
+{
+  location.hash = '#notices/starred/' + page_no;
 }
 
 function search_change_page(page_no)
@@ -340,7 +401,7 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
             else
               context["read"] = 0;
 
-            if(star_array[tstore[i].id]==1)
+            if(check_star_array[tstore[i].id]==1)
               context["star"] = 1;
             else
               context["star"] = 0;
@@ -461,17 +522,44 @@ function star_notice(id, e)
           e.stopPropagation();
         else
           e.cancelBubble = true;
-      if(star_array[id]==1)
+      if(check_star_array[id]==1)
       {
+
+        len = starred_array.length;
+        for(var i=0; i<len; i++)
+          if(starred_array[i].id==id)
+          {
+              starred_array.splice(i,1);
+              break;
+          }
+
         url = 'notices/read_star_notice/'+id+'/'+'remove_starred';
-        delete star_array[id];
-          $("#notice_"+id).css("background-color" , "white");
+        delete check_star_array[id];
+          $("#star_shape_" + id).attr({style : "color: white"})
       }
       else
       {
         url = 'notices/read_star_notice/'+id+'/'+'add_starred';
-        star_array[id]=1;
-          $("#notice_"+id).css("background-color" , "gray");
+        check_star_array[id]=1;
+
+        if(main_mode=="display")
+          store_to_use = temp_store;
+        else if(main_mode=="search")
+          store_to_use = search_store;
+        else if(main_mode=="uploads")
+          store_to_use = upload_array;
+        else if(main_mode=="starred")
+          store_to_use = starred_array;
+
+        len = store_to_use.length;
+        for(var i=0; i<len; i++)
+          if(store_to_use[i].id==id)
+          {
+              insert_and_maintain_datesort(store_to_use[i]);
+              break;
+          }
+        check_star_array[id] = 1;
+        $("#star_shape_" + id).attr({style : "color: yellow"})
       }
       $.ajax({
       type: 'post',
@@ -500,7 +588,7 @@ function read_notice(id)
 
 function edit_notice(id, e)
 {
-  window.location.href = 'notices/edit_notice/'+id
+  window.location.href = 'notices/edit_notice/'+id;
 	if(e.stopPropagation)
     	e.stopPropagation();
   	else
@@ -537,18 +625,22 @@ function add_to_checklist(id, e)
 function select_all()
 {
     var x = document.getElementById("all_select").checked;
-    var k;
-    if(parseInt(cur_page_no)<temp_total_pages||temp_last_page_notices==0)
+    var k,mode_prefix;
+
+    if(main_mode=="display")
+        mode_prefix="temp";
+    else if(main_mode=="uploads")
+        mode_prefix="upload";
+    else if(main_mode=="search")
+        mode_prefix="search";
+    else if(main_mode=="starred")
+        mode_prefix="starred";
+
+    if(parseInt(cur_page_no)<window[mode_prefix + "_total_pages"]||window[mode_prefix + "_last_page_notices"]==0)
       k=10;
     else
-    {
-      if(main_mode=="display")
-          k=temp_last_page_notices;
-      else if(main_mode=="show_uploads")
-          k=upload_last_page_notices;
-      else if(main_mode=="search")
-          k=search_last_page_notices;
-    }
+      k=window[mode_prefix + "_last_page_notices"];
+    console.log(x);
     if(x)
     {
         $('.check').prop('checked', true);
@@ -589,6 +681,37 @@ function show_menu(e)
     }
 }
 
+function insert_and_maintain_datesort(notice)
+{
+  console.log(notice);
+   len = starred_array.length
+     if(len==0)
+       starred_array.push(notice);
+     else if(len==1)
+     {
+         if(notice.datetime_modified>=starred_array[0].datetime_modified)
+          starred_array.splice(0, 0, notice);
+         else
+          starred_array.splice(1, 0, notice);
+     }  
+     else
+     {
+       if(notice.datetime_modified>=starred_array[0].datetime_modified)
+        starred_array.splice(0, 0, notice);
+       else if(notice.datetime_modified<=starred_array[len-1].datetime_modified)
+        starred_array.splice(len, 0, notice);
+       else
+       {
+         for(var i=1;i<len;i++)
+           if(notice.datetime_modified<=starred_array[i-1].datetime_modified && notice.datetime_modified>=starred_array[i].datetime_modified)
+           {
+             starred_array.splice(i, 0, notice);
+             break;
+           }
+       }
+     }
+}
+
 function read_star_checklist(t)
 {
     console.log("entered read_star_checklist t :" + t);
@@ -597,19 +720,50 @@ function read_star_checklist(t)
     k=a.length;
     url = 'notices/mul_read_star_notice/';
     var q = "?q=";
+    store_to_use = [];
+    if(main_mode=="display")
+      store_to_use = temp_store;
+    else if(main_mode=="search")
+      store_to_use = search_store;
+    else if(main_mode=="uploads")
+      store_to_use = upload_array;
+    else if(main_mode=="starred")
+      store_to_use = starred_array;
+
     for(var i=0;i<k;i++)
     {
       q += a[i]+'+';
       if(t==1)
       {
-        star_array[a[i]]=1;
-        $("#notice_"+a[i]).css("background-color" , "gray");
+        if(check_star_array[a[i]]==1)
+          continue;
+        len = store_to_use.length;
+        for(var m=0; m<len; m++)
+          if(store_to_use[m].id==a[i])
+          {
+              insert_and_maintain_datesort(store_to_use[m]);
+              break;
+          }
+        
+        check_star_array[a[i]]=1;
+        $("#star_shape_" + a[i]).attr({style : "color: yellow"})
       }
       else if(t==2)
       {
         console.log(a[i]);
-        delete star_array[a[i]];
-        $("#notice_"+a[i]).css("background-color" , "white");
+        if(check_star_array[a[i]]==undefined)
+          continue;
+
+        len = starred_array.length;
+        for(var m=0; m<len; m++)
+          if(starred_array[m].id==a[i])
+          {
+              starred_array.splice(m,1);
+              break;
+          }
+
+        delete check_star_array[a[i]];
+        $("#star_shape_" + a[i]).attr({style : "color: white"})
       }
       else if(t==3)
       {
@@ -690,6 +844,63 @@ function newold_clicked(ns)       //ns stands for new status, storing the sub_mo
       location.hash = url_temp;
     }
 }
+
+function evaluate_breadcrumbs()
+{
+    if(sub_mode=="new")
+      notice_prefix = "Current"
+    if(sub_mode=="old")
+      notice_prefix = "Expired"
+
+    if(main_mode=="display")
+    {
+      if(all==1)
+      create_breadcrumbs(notice_prefix + "Notices", "All", 1);
+      else
+      create_breadcrumbs(notice_prefix + "Notices", m_category, sub_category, 1);
+    }
+    else if(main_mode=="search")
+    {
+      if(all==1)
+        create_breadcrumbs("SearchedNotices", notice_prefix, "All", 0);
+      else
+        create_breadcrumbs("SearchedNotices", notice_prefix, m_category, sub_category, 0);
+    }
+    else if(main_mode=="uploads")
+      create_breadcrumbs("UploadedNotices", "All", 0);
+    else if(main_mode=="starred")
+      create_breadcrumbs("StarredNotices", "All", 0);
+}
+
+function create_breadcrumbs()
+{
+  console.log("entered : create_breadcrumbs");
+  console.log(arguments[0] + arguments[1] + arguments[2]);
+  $('#breadcrumbs').empty();
+  var code = arguments[arguments.length-1];
+  for (var i = 0; i < arguments.length-2; i++) 
+  {
+      $('#breadcrumbs').append(create_breadcrumb_html(arguments[i], code));
+      $('#breadcrumbs').append('>> ');
+      code++;
+  }
+  $('#breadcrumbs').append(create_breadcrumb_html(arguments[arguments.length-2], 3));
+}
+
+function breadcrumb_clicked(tag_type)
+{
+  console.log(tag_type);
+  url = "";
+  if(tag_type==0)                                             //coded 0 : main_mode
+    url = '#notices/' + main_mode + '/new/All/All/1'
+  if(tag_type==1)                                              //coded 1 : sub_mode
+    url = '#notices/' + main_mode + '/' + sub_mode + '/All/All/1'
+  if(tag_type==2)                                            //coded 2 : m_category
+    url = '#notices/' + main_mode + '/' + sub_mode + '/' + m_category + '/All/1'
+  if(tag_type!=3)
+  location.hash = url;
+}
+
 //Following are the functions that are called the first time, notices is clicked
 
 function get_privelege()
@@ -746,9 +957,11 @@ function bring_starred_notices()      			// A function that brings all the starr
 	success: function(data)
 	{
 		len = Object.keys(data).length;
+    starred_array = new Array(len);
 		for(var i=0;i<len;i++)
 		{
-			star_array[data[i]]=1;
+      starred_array[i] = data[i];
+			check_star_array[data[i].id]=1;
 		}
     console.log("loaded : starred_notices");
     bring_read_notices();                 //First time function 4, in case user is an uploader
@@ -794,6 +1007,10 @@ function bring_uploads()
           upload_array[i] = data[i];
           check_upload_array[data[i].id]=1;
         }
+        upload_array.sort(function(a, b){
+           var dateA=new Date(a.datetime_modified), dateB=new Date(b.datetime_modified);
+            return dateB-dateA; //sort by date descending
+        })
         console.log("loaded : bring_uploads");
         bring_starred_notices();              //First time function 3, in case user is an uploader
       }
@@ -862,6 +1079,7 @@ function upload_html()
 
 function load_cat_bar_html(name)
 {
+    console.log("name : " + name + sub_category)
     return Handlebars.notices_templates.load_cat_bar({name : name});
 }
 
@@ -911,4 +1129,9 @@ function display_sub_categories_html(initi, finali, main_category)
 function list_notices_html()
 {
     return Handlebars.notices_templates.list_notices(context);
+}
+
+function create_breadcrumb_html(tag, code)
+{
+    return Handlebars.notices_templates.create_breadcrumb({tag : tag, code : code});
 }

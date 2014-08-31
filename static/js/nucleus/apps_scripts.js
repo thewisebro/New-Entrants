@@ -11,6 +11,7 @@ var apps_scripts = {
   'notices':[
     '/static/handlebars/notices/templates.js',
     '/static/js/notices/constants.js',
+    '/static/js/notices/jquery.simplePagination.js',
     '/static/js/notices/base.js'
   ],
   'events':[

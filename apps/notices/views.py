@@ -200,17 +200,12 @@ def mul_read_star_notice(request, action):              #action determines wheth
   success = simplejson.dumps(success)
   return HttpResponse(success, mimetype="application/json")
 
-class Star_notice_list(TemplateView):
-  def get(self, request):
-    user = NoticeUser.objects.get(user=request.user)
-    notices = user.starred_notices.all().order_by('-datetime_modified')
-    dictionary = {}
-    t=0
-    for i in notices:
-      dictionary[t] = i.id
-      t=t+1
-    d_json = simplejson.dumps(dictionary)
-    return HttpResponse(d_json, mimetype="application/json")
+class Show_Starred(ListAPIView):
+  def get_queryset(self):
+    user = NoticeUser.objects.get(user=self.request.user)
+    queryset = user.starred_notices.all().order_by('-datetime_modified')
+    return queryset
+  serializer_class = NoticeListViewSerializer
 
 class Read_notice_list(TemplateView):
   def get(self, request):
@@ -286,4 +281,17 @@ def browse(request,category_name,path):
         ckeditor_baseurl='/media/notices/uploads/'+category.name,
         maxspace=50*1024, maxfilesize=5*1024)
     return fm.render(request,path)
+
+"""class Star_notice_list(TemplateView):
+  def get(self, request):
+    user = NoticeUser.objects.get(user=request.user)
+    notices = user.starred_notices.all().order_by('-datetime_modified')
+    dictionary = {}
+    t=0
+    for i in notices:
+      dictionary[t] = i.id
+      t=t+1
+    d_json = simplejson.dumps(dictionary)
+    return HttpResponse(d_json, mimetype="application/json")
+"""
 

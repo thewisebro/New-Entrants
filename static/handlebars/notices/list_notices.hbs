@@ -2,7 +2,6 @@
   <div class="notice_info" onclick="open_notice({{ notice.id }})"> {{ notice.subject }} </div>
 {{else}}
   <div 
-      {{#if star}} style="background-color:gray;" {{/if}} 
       class="notice_info" 
       id="notice_{{ notice.id }}"
       onclick="open_notice({{ notice.id }})">
@@ -24,7 +23,8 @@
       <span 
         class="starred" 
         onclick="star_notice({{ notice.id }}, event)">
-          S&nbsp
+      
+              <i class="fa fa-star" id="star_shape_{{ notice.id }}" {{#if star}} style="color:yellow;" {{/if}}></i>&nbsp
       </span>
       
     <span 
