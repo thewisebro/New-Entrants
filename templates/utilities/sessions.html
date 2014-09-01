@@ -1,0 +1,49 @@
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}sass/utilities/sessions.css"/>
+
+<messages>{{ django_messages }}</messages>
+
+<div class='form-div'>
+<div class="sub-heading">
+  <div style='float:left;'>Current Session</div>
+</div>
+
+{% for session in sessions %}
+  {% if session.session_key == current_session_key %}
+    <div class = "session">
+      <b>IP :</b> {{session.ip}} </br>
+      <b>Browser :</b> {{session.browser}} </br>
+      <b>OS :</b> {{session.os}}</br></br>
+    </div>
+  {% endif %}
+{% endfor %}
+
+{% if sessions|length|add:"-1" == 0 %}
+  <div class = "empty-msg"> No other logged in sessions </div>
+{% endif %}
+
+{% if sessions|length|add:"-1" > 0 %}
+  <div class="sub-heading">
+    <div style='float:left;'>
+      You are logged in from {{sessions|length|add:"-1"}} other
+      {% if sessions|length|add:"-1" > 1 %}locations {% else %} location {% endif %}
+    </div>
+  </div>
+  {% for session in sessions %}
+    {% if not session.session_key == current_session_key %}
+      <div class = "session">
+        <div class = "session-data">
+          <b>IP :</b> {{session.ip}} </br>
+          <b>Browser :</b> {{session.browser}} </br>
+          <b>OS :</b> {{session.os}}</br></br>
+        </div>
+        <form method='post' action=''>
+          {% csrf_token %}
+          <input type='hidden' name='num' value='{{session.id}}'/>
+          <input type='submit' name='submit' value='Sign Out'/>
+        </form>
+        <div style="clear:both"></div>
+      </div>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+</div>
