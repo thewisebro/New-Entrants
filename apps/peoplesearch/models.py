@@ -1,7 +1,7 @@
 from core import models
 
 # Create your models here.
-class services_table(models.Model):
+class Services(models.Model):
 # Insurance_companies = models.CharField(max_length=30)
 # Employment_bureau = models.CharField(max_length=30)
 # Courier_services = models.CharField(max_length=30)

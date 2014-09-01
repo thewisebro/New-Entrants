@@ -1,14 +1,14 @@
 # Create your views here.
 from nucleus.models import Student, Faculty, User
 from groups.models import GroupInfo
-from peoplesearch.models import services_table
+from peoplesearch.models import Services
 from django.http import HttpResponse
 
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from django.contrib.auth.models import User, check_password, Group
+from django.contrib.auth.models import check_password, Group
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpRequest
 from django.shortcuts import render_to_response, get_object_or_404
@@ -16,12 +16,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
+#from settings import SESSION_COOKIE_NAME
 #
 from nucleus.forms import LoginForm
 from feeds.models import Feed
 from utilities.models import UserSession
-from settings import PROJECT_ROOT, POP3_HOST, EMAIL_HOST, SESSION_COOKIE_NAME
-from api.extras import *
 import crypt
 import json
 from hashlib import sha1
@@ -32,6 +31,13 @@ logger = logging.getLogger('channel-i_logger')
 def make_user_login(request,user):
   user.backend='django.contrib.auth.backends.ModelBackend'
   auth_login(request, user)
+  session_key = request.session._get_session_key()
+  user_session = UserSession.objects.create(user=user, session_key=session_key)
+#user_session.ip = get_client_ip(request)
+# user_session.browser = request.user_agent.browser.family
+# user_session.os = request.user_agent.os.family
+  user_session.save()
+  return session_key.encode('utf-8')
 
 @csrf_exempt
 def check_session(request):
@@ -41,35 +47,31 @@ def check_session(request):
     'Access-Control-Max-Age': 1000,
     'Access-Control-Allow-Headers': 'x-Requested-With'}
 
-  result = {'msg':'NO','_name':'','info':''}
+  c=[]
+  result = {"msg":"NO","_name":"","info":"", "session_variable":""}
 
   if request.method == "POST":
-    sessionid = request.COOKIES.get(SESSION_COOKIE_NAME)
+    sessionid=request.POST.get("session_key","")
+#    sessionid = request.COOKIES.get(SESSION_COOKIE_NAME)
 #csrftoken = request.POST.get('X_token')
     try:
       session = Session.objects.get(session_key=sessionid)
       current_user_id = session.get_decoded().get('_auth_user_id')
-      user = User.objects.get(pk=current_user_id)
+      user = User.objects.get_or_none(pk=current_user_id)
       if user:
-        result['info'] = user.get_info()
-        if user.groups.filter(name='Student').exists():
-# If user is student.
-          student = Student.objects.get(user=user)
-          result['_name'] = student.name
-          result['msg'] = "YES"
-        elif user.groups.filter(name='Faculty').exists():
-# If user is faculty.
-          faculty = Faculty.objects.get(user=user)
-          result['_name'] = faculty.name
-          result['msg'] = "YES"
+        result["info"] = user.info()
+        result["_name"] = user.name
+        result["msg"] = "YES"
+        result["session_variable"] = session
     except Exception as e:
       pass
       logger.info("nucleus -> peoplesearch -> check_session: , error: "+ str(e))
 
-  response = HttpResponse(json.dumps(result), contenttype='application/json')
-  for key, value in HEADERS.iteritems():
-    response[key] = value
-  return response
+#  response = HttpResponse(json.dumps(result), contenttype='application/json')
+  c.append(result)
+#  for key, value in HEADERS.iteritems():
+#    response[key] = value
+  return HttpResponse(c)
 
 @csrf_exempt
 def channeli_login(request):
@@ -79,32 +81,29 @@ def channeli_login(request):
      'Access-Control-Max-Age': 1000,
      'Access-Control-Allow-Headers': 'x-Requested-With'}
 
-  result = {'msg':'','_name':'','info':''}
-
+  c=[]
+  result = {"msg":"NO","_name":"","info":"","session_variable":""}
+  print request.method
   username = request.POST.get('username')
   password = request.POST.get('password')
+  print username
+  print password
   user = User.objects.get_or_none(username=username)
   if not user:
     result['msg'] = "NO"
   elif user.check_password(password):
-    make_user_login(request,user)
-    result['info'] = user.get_info
-    if user.groups.filter(name="Student").exists():
-#if user is student
-      student = Student.objects.get(user=user)
-      result['_name'] = student.name
-      result['msg'] = "YES"
-    elif user.groups.filter(name="Faculty").exists():
-#if user is faculty
-      faculty = Faculty.objects.get(user=user)
-      result['_name'] = faculty.name
-      result['msg'] = "YES"
-    else:
-      result['msg'] = "NO"
-  response = HttpResponse(json.dumps(result),contenttype='application/json')
-  for key, value in HEADERS.iteritems():
-    response[key] = value
-  return response
+# make_user_login(request,user)
+    result['info'] = user.info.encode('utf-8')
+    result['_name'] = user.name.encode('utf-8')
+    result['msg'] = "YES"
+    result['session_variable'] = make_user_login(request,user)
+  else:
+    result['msg'] = "USER NO"
+#response = HttpResponse(result)
+# for key, value in HEADERS.iteritems():
+#   result[key] = value
+  c.append(result)
+  return HttpResponse(c)
 
 # webmail login
 
@@ -116,22 +115,24 @@ def logout_user(request):
    'Access-Control-Max-Age': 1000,
    'Access-Control-Allow-Headers': 'x-Requested-With'}
 
+  c=[]
   result = {'msg':''}
 
   if request.method == "POST":
-    sessionid = request.COOKIES.get(SESSION_COOKIE_NAME)
+    sessionid = request.POST.get("session_key")
     try:
-      session = Session.objects.get(session_key=sessionid)
+      session = UserSession.objects.get(session_key=sessionid)
       session.delete()
       result['msg'] = "OK"
     except:
       result['msg'] = "FAILURE"
   else:
     result['msg'] = "FAILURE"
-  response = HttpResponse(json.dumps(result), contenttype='application/json')
-  for key, value in HEADERS.iteritems():
-    response[key] = value
-  return response
+#  response = HttpResponse(json.dumps(result), contenttype='application/json')
+#  for key, value in HEADERS.iteritems():
+#    response[key] = value
+  c.append(result)
+  return HttpResponse(c)
 
 def index(request):
   srch_str = request.GET.get('name','Manohar')
@@ -229,7 +230,7 @@ def index(request):
 
 #services search
   if role == "Services":
-    services = services_table.objects.all()
+    services = Services.objects.all()
     if srch_str != "":
       flag = 1
       services = services.filter(name__icontains = srch_str)
@@ -295,7 +296,7 @@ def index(request):
       faculties = Faculty.objects.all()
       faculties = faculties.filter(user__name__icontains = srch_str)
       temp_fac = faculties.count()
-      services = services_table.objects.all()
+      services = Services.objects.all()
       services = services.filter(name__icontains = srch_str)
       temp_ser = services.count()
       groups = GroupInfo.objects.all()

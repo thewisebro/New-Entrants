@@ -1,5 +1,5 @@
 from django.contrib import admin
-from peoplesearch.models import services_table
+from peoplesearch.models import Services
 
-admin.site.register(services_table)
+admin.site.register(Services)
 
