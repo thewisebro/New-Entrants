@@ -184,9 +184,9 @@ class User(AbstractUser, models.Model):
       to_user = user,
       status = 1
     )
-    to_user__user_info = {'name': user.name, 'enr': user.username, 'status': 0, 'is_chat_on': 0}
-    client.hmset('user:'+user.username, to_user__user_info)
-    client.sadd('friends:'+self.username, user.username)
+    to_user__user_info = {'user_id': user.pk,'name': user.name, 'username': user.username, 'status': 0, 'is_chat_on': 0, 'photo': user.photo_url}
+    client.hmset('user:'+str(user.pk), to_user__user_info)
+    client.sadd('friends:'+str(self.pk), user.pk)
     if symmetric:
       user.add_connection(self, False)
     return connection
@@ -197,9 +197,9 @@ class User(AbstractUser, models.Model):
       connection.status = status
       connection.save()
       if status is 1:
-        client.sadd('friends:'+self.username, user.username)
+        client.sadd('friends:'+str(self.pk), user.pk)
       elif status is 3:
-        client.srem('friends:'+self.username, user.username)
+        client.srem('friends:'+str(self.pk), user.pk)
       if symmetric:
         user.update_connection(self, status, False)
       return connection
@@ -209,7 +209,7 @@ class User(AbstractUser, models.Model):
   def remove_connection(self, user, symmetric=True):
     connection = Connection.objects.filter(from_user=self, to_user=user)
     connection.delete()
-    client.srem('friends:'+self.username, user.username)
+    client.srem('friends:'+str(self.pk), user.pk)
     if symmetric:
       user.remove_connection(self, False)
     return

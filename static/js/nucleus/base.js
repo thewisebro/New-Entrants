@@ -10,16 +10,6 @@
   var previous_hashtags = null;
   var previous_app = null;
 
-  $(document).on("login", function(){
-    load_pagelet("header_sidebar");
-    $(window).scrollTop(0);
-  });
-
-  $(document).on("logout", function(){
-    load_pagelet("header_sidebar");
-    $(window).scrollTop(0);
-  });
-
   $(document).on("pagelet_loaded_header_sidebar",function(){
     tabs = $('.tab').map(function(){return this.id.split('-')[0];});
     tabs_parent_top = $('#sidebar-tabs').position().top;

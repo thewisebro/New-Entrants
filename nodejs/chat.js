@@ -1,6 +1,6 @@
 /* Chat Server */
 
-var server_port = 8080;
+var server_port = 8088;
 //var http = require('http');
 //var server = http.createServer().listen(server_port);
 var io = require('socket.io')(server_port);
@@ -36,35 +36,29 @@ Array.prototype.remove = function() {
     return this;
 };
 
-var sockets = new Object();
+var _sockets = new Object();
 var name_enr_map = new Object();
-var current_user;
-
-
-//io.configure(function(){
+var sid;
 
 io.use(function(socket, next){
-  console.log(socket);
-  //var cookie_manager = cookie.parse(data.headers.cookie);
-  //var sid = cookie_manager["sessionid"];
-  //console.log(sid);
-  next();
-  /*
-  if(client.get("sid/"+sid), function(error, result){
+  var cookie_manager = cookie.parse(socket.handshake.headers.cookie);
+  sid = cookie_manager["PHPSESSID"];
+  console.log("\n\n<----------------------------------------------------------->");
+  console.log(sid);
+  client.get("session:"+sid, function(error, result){
     if(error){
       console.log("Error: "+error);
     }
-    if(result.toString() != ""){
+    else if(result != null){
       console.log("Session Active");
-      //return accept(null, true);
+      socket.user = JSON.parse(result);
       next();
-      }else{
-        console.log("Session Inactive");
-      }
+    }
+    else{
+      console.log("Session Inactive");
+    }
   });
-  */
-  //next(new Error('not authorized');
-  //return accept(null, false);
+  next(new Error('not authorized'));
 });
 
 /* PRODUCTION LEVEL COFIG SETTINGS */
@@ -84,33 +78,27 @@ io.set('transports', [
 ]);
 */
 
+io.on('connection', function(socket){
+  var current_user = new Object();
+  current_user = socket.user;
+  console.log(current_user);
 
-
-
-
-
-function get_friends_online_status(username){
-  var OL_friend_status = new Array();
-  client.smembers("friends:"+username, function(err, reply){
-    for(var i=0; i<reply.length; i++)
-    {
-      var _status = 0;
-      client.hget("user:"+reply[i], "status", function(err, data){
-        _status = data;
-      });
-      OL_friend_status.push({'username': reply[i], 'status': _status, 'last_active': '5min'});
-      }
-      get_friends_online_status(username, OL_friend_status);
-  });
-  return OL_friend_status;
-}
-
-io.sockets.on('connection', function(socket){
-  client.hget("user:11110059", "is_chat_on", function(err, reply){
+  client.hget("user:" + current_user.user_id, "is_chat_on", function(err, reply){
     if(reply == 1)
     {
-      client.hset("user:11110059", "status", 1, function(err, reply){
-        console.log(reply);
+      client.hset("user:" + current_user.user_id, "status", 1, function(err, reply){
+        current_user.status = 1;
+
+        if(current_user.user_id in _sockets)
+        {
+          _sockets[ current_user.user_id ].push(socket.id);
+        }
+        else
+        {
+          _sockets[ current_user.user_id ] = new Array();
+          _sockets[ current_user.user_id ].push(socket.id);
+        }
+        console.log(_sockets);
       });
       console.log("Chat is already on..");
     }
@@ -121,46 +109,185 @@ io.sockets.on('connection', function(socket){
 
   /*****************************************************************/
 
-  var OL_friend_status = new Array();
-  async.series([
-  client.smembers("friends:11110059", function(err, reply){
-    for(var i=0; i<reply.length; i++)
-    {
-      client.hget("user:"+reply[i], "status", function(err, _status){
-        OL_friend_status.push({'username': reply[i], 'status': _status, 'last_active': '5min'});
-        console.log(OL_friend_status);
-      });
-    }
-    console.log(OL_friend_status);
-  }),
-
-  //console.log(get_friends_online_status("11110059"));
-  //socket.emit("online_users_list", );
+  client.smembers("friends:" + current_user.user_id, function(err, items){
+    var OL_friend_status = new Array();
+    async.eachSeries(items,
+      function(item, callback){
+        client.hgetall("user:"+item, function(err, data){
+          OL_friend_status.push(data);
+          callback();
+        });
+      },
+      function(err){
+        if(err){
+          console.log("Error occured!");
+        } else{
+          async.parallel([
+            (function(){  // Function-1
+              var json_payload = {'friends': OL_friend_status};
+              socket.emit("friends_list", json_payload);
+            })(),
+            send_conn_status( OL_friend_status )  // Function-2
+          ],
+          function(err, results){
+            console.log("Task Done.");
+          });
+        }
+      }
+    );
+  });
   /******************************************************************/
 
   socket.on("chaton", function(){
-    client.hset("user:11110059", "is_chat_on", 1, function(err, reply){
-      console.log(reply);
-      client.hset("user:11110059", "status", 1, function(err, reply){
-        console.log(reply);
-      });
+    console.log("IN CHATON");
+    client.hmset("user:"+current_user.user_id, {"is_chat_on": 1, "status": 1}, function(err, reply){
+      propogate_chat_status("chat_on");
     });
   });
 
   socket.on("chatoff", function(){
-    client.hset("user:11110059", "is_chat_on", 0, function(err, reply){
-      console.log(reply);
-      client.hset("user:11110059", "status", 0, function(err, reply){
-        console.log(reply);
-      });
+    console.log("IN CHATOFF");
+    client.hmset("user:"+current_user.user_id, {"is_chat_on": 1, "status": 1}, function(err, reply){
+      propogate_chat_status("chat_off");
     });
   });
 
   socket.on('disconnect', function(){
-    client.hset("user:11110059", "status", 0, function(err, reply){
-      console.log(reply);
-    });
     console.log(socket.id+" is disconnected");
+    if(current_user.user_id in _sockets)
+    {
+      _sockets[ current_user.user_id ].remove(socket.id);
+      console.log(_sockets);
+      if(_sockets[current_user.user_id].length == 0)
+      {
+        client.hset("user:"+current_user.user_id, "status", 0, function(err, reply){
+          current_user.status = 0;
+          send_disconn_status(); // Here argument '0' is the current user status.
+        });
+      }
+     }
   });
-});
 
+
+/* FUNCTIONS MODULE */
+function propogate_chat_status( chat_status ) // Handles both "chat_on" and "chat_off" status.
+{
+  var current_user_status = {"chat_on": 1, "chat_off": 0};
+  client.smembers("friends:" + current_user.user_id, function(err, items){
+    if(err){
+      console.log("Error occured!");
+    }
+    else
+    {
+       /* TASK-1 */
+       if(chat_status == "chat_on")
+       {
+         var OL_friend_status = new Array();
+         async.eachSeries(items,
+           function(item, callback){
+            client.hgetall("user:"+item, function(err, data){
+              OL_friend_status.push(data);
+              callback();
+            });
+           },
+           function(err){
+             if(err){
+              console.log("Error occured!");
+             }
+             else
+             {
+               for(var _counter_1=0; _counter_1< OL_friend_status.length; _counter_1++)
+               {
+                  var item = items[_counter_1];
+                  client.hgetall("user:"+item, function(err, data){
+                    if(_sockets[current_user.user_id] != undefined)
+                    {
+                      for(var _counter_1=0; _counter_1<_sockets[current_user.user_id]; _counter_1++)
+                      {
+                        var _sock = _sockets[current_user.user_id][_counter_1];
+                        io.to(_sock).emit("friends_list", {"friends": OL_friend_status});
+                      }
+                    }
+                  });
+               }
+             }
+           }
+         );
+       }
+       /* ENDS */
+
+       /* TASK-2 */
+       for(var k=0; k<items.length; k++)
+       {
+          var friend_id = items[k];
+          var friend_socks = new Array();
+          if(_sockets[friend_id] != undefined)
+          {
+            friend_socks = _sockets[friend_id];
+            for(var _counter_2=0; _counter_2<friend_socks.length; _counter_2++)
+            {
+              var _sock = friend_socks[_counter_2];
+              io.to(_sock).emit("update_friend_status", {"user_id": current_user.user_id, "status": current_user_status[chat_status] });
+              console.log("Friend status update sent.");
+            }
+          }
+          else
+            continue;
+       }
+       /* ENDS */
+    }
+  });
+}
+
+function send_conn_status(ou_list) // Function to send friend status update in OU list.
+{
+  var _status = 1;
+  for(var _counter_1=0; _counter_1<ou_list.length; _counter_1++)
+  {
+      var friend_id = ou_list[_counter_1]["user_id"];
+      var friend_socks = new Array();
+      if(_sockets[friend_id] != undefined)
+      {
+        friend_socks = _sockets[friend_id];
+        for(var _counter_2=0; _counter_2<friend_socks.length; _counter_2++)
+        {
+          var _sock = friend_socks[_counter_2];
+          io.to(_sock).emit("update_friend_status", {"user_id": current_user.user_id, "status": _status});
+          console.log("Conn status update sent.");
+        }
+      }
+      else
+        continue;
+  }
+}
+
+function send_disconn_status() // Function to send friend status update in OU list.
+{
+  var _status = 0;
+  client.smembers("friends:" + current_user.user_id, function(err, items){
+    if(err){
+      console.log("Error occured!");
+    } else{
+        for(var k=0; k<items.length; k++)
+        {
+          var friend_id = items[k];
+          var friend_socks = new Array();
+          if(_sockets[friend_id] != undefined)
+          {
+            friend_socks = _sockets[friend_id];
+            for(var _counter=0; _counter<friend_socks.length; _counter++)
+            {
+              var _sock = friend_socks[_counter];
+              io.to(_sock).emit("update_friend_status", {"user_id": current_user.user_id, "status": _status});
+              console.log("Disconn status update sent.");
+            }
+          }
+          else
+            continue;
+        }
+    }
+  });
+}
+/* FUNCTIONS MODULE ENDS */
+
+});
