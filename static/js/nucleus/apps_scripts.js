@@ -27,6 +27,7 @@ var apps_scripts = {
     '/static/js/helpcenter/helpcenter.js'
   ],
   'settings':[
+    '/static/handlebars/utilities/templates.js',
     '/static/js/utilities/base.js'
   ]
 };
