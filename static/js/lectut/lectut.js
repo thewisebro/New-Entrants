@@ -27,18 +27,26 @@ function uploadFile(batch_id)
   }
 }
 
+$(document).ready(function() {
 $("#uploadFile").submit(function(event) {
   var $form = $(this);
   formData =  $form.serialize();
-  var batch_id = document.getElementById("batch_id");
+  var batch_id = $('#batch_id').text();
   $.ajax({
        type: 'POST',
-       url: 'lectut/disp/uploadFile/'+batch_id,
+       url: '/lectut/disp/upload/'+batch_id+'/',
+       data:formData,
 
        success:function(data){
+       alert(batch_id+"success reached");
+       if(data.msg)
+       {
+         document.getElementById('errorMsg').innerHTML=data.msg;
+       }
        },
        error:function(data){
-         alert(data);
+         alert('Something went wrong');
          },
          });
   });  
+});

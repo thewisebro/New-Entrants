@@ -1,6 +1,7 @@
 <!-- Add jQuery library -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL}}/js/lectut/lectut.js"></script>
 
 <!-- Add bootstrap files-->
 <!--script type="text/javascript" src="{{ STATIC_URL }}/bootstrap/js/bootstrap.js"></script>
@@ -28,10 +29,13 @@
 <body>
   {% if viewType == 'Coursepage' %}
     <h2>{{ batch.name }} ({{ batch.course.name}})</h2>
-    <form action="{% url 'uploadFile' batch_id=batch.id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <form id='uploadFile' method="post" enctype="multipart/form-data">{% csrf_token %}
       <p>
         {{text_form}}
         {{image_form}}
+        {{file_form}}
+        <div type='hidden' id="batch_id" value="{{ batch.id }}">{{batch.id}}</div>
+        <div id="errorMsg"></div>
       </p>
       <!--iframe id="select"></iframe-->
       <input type="Submit" id=" Submit" value="Submit">
@@ -57,9 +61,7 @@
             </ul>
 {% endif %}
           {% if file_form.non_field_errors %}
-            {% for error in file_form.non_field_errors %}
-                {{error}}
-             {% endfor %}
+                {{file_form.non_field_errors}}
            {% endif %}
          {% for upload in previous_uploads%}
             <h4>{{upload.upload_user.name}}</h4>
@@ -83,7 +85,7 @@
               <object data="{{ MEDIA_URL }}/{{noti}}" width="320" height="240">
                 <embed src="{{ MEDIA_URL }}/{{noti}}" width="320" height="240">
               </object> 
-              </video--> 
+              </video action="{% url 'uploadFile' batch_id=batch.id %}"--> 
             {%elif upload.file_type == 'pdf'%}
               <a href="{{ MEDIA_URL }}{{upload}}" target="_blank"><img src="{{ MEDIA_URL }}lectut/images/pdf.png" height="100" width="100"></a>
               {{upload.name}}

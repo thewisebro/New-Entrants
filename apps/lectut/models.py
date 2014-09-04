@@ -34,6 +34,14 @@ class TextNotice(models.Model):
   def __unicode__(self):
     return str(self.text)
 
+  def as_dict(self):
+    fileData={
+      'text':str(self.text),
+      'upload_user':str(self.upload_user.name),
+      'batch':str(self.batch)
+    }
+    return fileData
+
 class BaseUpload(models.Model):
   class Meta:
     abstract = True
@@ -62,6 +70,19 @@ class UploadFile(BaseUpload):
 
   def __unicode__(self):
     return str(self.upload_file)
+
+  def as_dict(self):
+    imageData={
+      'upload_file':str(self.upload_file),
+      'name':self.name,
+      'file_type':self.file_type,
+      'upload_type':self.upload_type,
+      'privacy':self.privacy,
+      'upload_user':str(self.upload_user.name),
+      'batch':str(self.batch)
+    }
+    return imageData
+
 
 class DownloadLog(models.Model):
   uploadfile = models.ForeignKey(UploadFile)

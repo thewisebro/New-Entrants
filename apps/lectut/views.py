@@ -48,10 +48,12 @@ def coursepage(request, batch_id):
   image_form = FileForm()
 
   previous_uploads=UploadFile.objects.all().filter(batch_id=batch_id).order_by('-datetime_created')
+  previous_notices=TextNotice.objects.all().filter(batch_id=batch_id).order_by('-datetime_created')
 
   context = {'image_form': image_form,
              'text_form' : text_form,
              'previous_uploads': previous_uploads,
+             'previous_notices':previous_notices,
              'batch':userBatch,
              'userType':userType,
              'viewType':'Coursepage'}
@@ -60,6 +62,7 @@ def coursepage(request, batch_id):
 def uploadFile(request , batch_id):
   user = request.user
   userBatch = Batch.objects.get(id=batch_id)
+  import pdb;pdb.set_trace();
   if request.method == 'POST':
     text_form = TextForm(request.POST)
     file_form = FileForm(request.POST , request.FILES )
@@ -68,28 +71,33 @@ def uploadFile(request , batch_id):
       new_notice.save()
       notice_activity = Activity(Upload=new_notice)
       notice_activity.save()
+      new_notice=new_notice.as_dict()
       return HttpResponse(simplejson.dumps(new_notice), content_type="application/json")
-#      return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
     elif file_form.is_valid():
       upload_file = request.FILES['filename']
       file_type = getFileType(upload_file)
       upload_type = request.POST['upload_type']
       file_name=request.POST['upload_name']
+      import pdb;pdb.set_trace();
 
-#if file_type!='Video' and  upload_file._size>MAX_FILE_SIZE:
-#file_form.errors['__all__']=file_form.error_class(["File too large.Must be smaller than 5MB"])
-#       msg = "File too large"
-# return HttpResponse(simplejson.dumps(msg, mime_type='application/json')
-#elif upload_file._size>MAX_VIDEO_SIZE:
-#        raise file_form.ValidationError("Video too large.Must be smaller than 20MB")
+      if file_type!='Video' and  upload_file._size>MAX_FILE_SIZE:
+        msg = "File too large.Must be smaller than 5MB"
+      elif upload_file._size>MAX_VIDEO_SIZE:
+        msg = "Video too large.Must be smaller than 20MB"
+      else:
+        new_file = UploadFile(upload_file = upload_file, file_type=file_type, upload_user=user, name=file_name ,batch=userBatch , upload_type=upload_type , privacy=False)
+        new_file.save()
+        file_activity = Activity(Upload=new_file)
+        file_activity.save()
+        return HttpResponse(simplejson.dumps(new_file.as_dict()), content_type='application/json')
+    else:
+      msg = "Please fill all the fields"
 
-      new_file = UploadFile(upload_file = upload_file, file_type=file_type, upload_user=user, name=file_name ,batch=userBatch , upload_type=upload_type , privacy=False)
-      new_file.save()
-      file_activity = Activity(Upload=new_file)
-      file_activity.save()
-      return HttpResponse(simplejson.dumps(new_file), content_type="application/json")
-#      return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
+    if msg:
+      return HttpResponse(simplejson.dumps(msg), content_type='application/json')
+    else:
+      return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
 def getFileType(file_name):
 #mime = magic.Magic(mime=True)
