@@ -4,6 +4,7 @@ from nucleus.models import User
 from datetime import datetime
 from core.models.fields import CKEditorField
 from notices.constants import *
+from notices.constants import *
 
 class AbstractNotice(models.Model):
   subject = models.CharField(max_length=100)
@@ -53,6 +54,9 @@ class Category(models.Model):
   main_category = models.CharField(max_length=20,choices = OPTIONS)
   name = models.CharField(max_length=100)
   code = models.CharField(max_length=100)
+
+  class Meta:
+    verbose_name_plural = "Categories"
 
   def __unicode__(self):
     return self.name

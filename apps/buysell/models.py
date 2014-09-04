@@ -2,7 +2,8 @@ from core import models
 from nucleus.models import User
 from api import model_constants as MC
 from buysell.constants import *
-from settings import MEDIA_ROOT
+from django.conf import settings
+MEDIA_ROOT = settings.MEDIA_ROOT
 
 class ItemsForSale(models.Model):
   user = models.ForeignKey(User)
