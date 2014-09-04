@@ -4,7 +4,7 @@ from core import models
 from core.models.mixins import Taggable
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from nucleus.models import Student
+from nucleus.models import User
 from api import model_constants as MC
 
 from taggit_autocomplete.managers import TaggableManager
@@ -36,7 +36,7 @@ class Question(models.Model, Taggable):
 
 
 class Profile(models.Model):
-  student = models.OneToOneField(Student, primary_key=True)
+  user = models.OneToOneField(User, primary_key=True)
   tags_followed = TaggableManager()
   questions_followed = models.ManyToManyField(Question, null=True, blank=True,
       through='ProfileQuestionFollowed', related_name='following_profiles')
@@ -45,14 +45,14 @@ class Profile(models.Model):
   answers_down = models.ManyToManyField('Answer', null=True, blank=True, related_name='downvoted_by')
 
   def __unicode__(self):
-    return self.student.user.username
+    return self.user.username
 
   @staticmethod
-  def get_profile(student):
+  def get_profile(user):
     try:
-      return student.profile
+      return user.profile
     except Profile.DoesNotExist:
-      return Profile.objects.create(student=student)
+      return Profile.objects.create(user=user)
 
 class ProfileQuestionFollowed(models.Model):
   profile = models.ForeignKey(Profile)

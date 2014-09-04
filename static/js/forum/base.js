@@ -35,7 +35,10 @@ $(document).on("unload_app_forum",function(){
    right_visible = false;
    });
 $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
-
+    if(!user.is_authenticated){
+      nucleus.redirect_to_home();
+      return;
+    }
     //html = '';
     //html += '<div id="tag_search"><form action="" method="post" onsubmit="search_tag();return false;">';
     //html += '<input type="text" name="tag_key">';
@@ -132,7 +135,7 @@ function question_html(data){
             '<a href="#"><img class="feed-propic" src="'+data.question.photo_url+'"></a>' +
               '<div class="feed-text">';
   html += '<div class="feed-line">' +
-            '<a class="person-name" href="#">' + data.question.student_name + '</a>' +
+            '<a class="person-name" href="#">' + data.question.user_name + '</a>' +
             '<span>\'s question </span>' +
           '</div>'; //feed-line
 
@@ -166,11 +169,11 @@ function question_html(data){
             '<div class="clear"></div>' +
             '</div>';
   if(data.question.num_followers < 1)
-    html += '<div class="followers-number">' + '<div id="followers_number_'+data.question.id+'" style="float:left">' + '</div>' + '<div id="followers_word" style="float:left">' + '</div>' + '</div>';
+    html += '<div class="followers-number">' + '<div id="followers_number_'+data.question.id+'" style="float:left;margin-right:2px">' + '</div>' + '<div id="followers_word" style="float:left">' + '</div>' + '</div>';
   if(data.question.num_followers == 1)
-    html += '<div class="followers-number">' + '<div id="followers_number_'+data.question.id+'" style="float:left">' + data.question.num_followers + '</div>' + '<div id="followers_word" style="float:left">' + ' Follower' + '</div>' + '</div>';
+    html += '<div class="followers-number">' + '<div id="followers_number_'+data.question.id+'" style="float:left;margin-right:2px">' + data.question.num_followers + '</div>' + '<div id="followers_word" style="float:left">' + ' Follower' + '</div>' + '</div>';
   if(data.question.num_followers > 1)
-    html += '<div class="followers-number">' + '<div id="followers_number_'+data.question.id+'" style="float:left">' + data.question.num_followers + '</div>' + '<div id="followers_word" style="float:left">' + ' Followers' + '</div>' + '</div>';
+    html += '<div class="followers-number">' + '<div id="followers_number_'+data.question.id+'" style="float:left;margin-right:2px">' + data.question.num_followers + '</div>' + '<div id="followers_word" style="float:left">' + ' Followers' + '</div>' + '</div>';
   html += '<div class="clear"></div>';
   html += '</div>'; //feed-description
   html += '</div>'; //feed-text
@@ -232,8 +235,28 @@ function singleanswer_html(data){
 }
 
 function answer_html(data){
-  var html = '';
-  html += '<a href="#forum/answer/'+data.answer.id+'">Answer </a>' +  data.answer.description + '<br><br>';
+  html = '<div class="feed-box">' +
+           '<a href="#"><img class="feed-propic" src="'+data.answer.photo_url+'"></a>' +
+             '<div class="feed-text">' +
+               '<div class="feed-line">' + 
+                 '<span>' + '<a class="person-name" href="#">' + 
+                   data.answer.user_name +
+                 '</a>' + '</span>' +
+                                                                                                                                //'<div class="clear"></div>' +
+               '</div>'; //feed-line
+
+  html += '<div class="feed-description">';
+         // html += '<a href="#forum/answer/'+data.answers[i].id+'">Answer </a>';
+  html += data.answer.description;
+  html += '</div>'; //feed-description
+  html += '<div class="feed-bottom-line">'; 
+  html += '<div id="comments_'+data.answer.id+'">';
+  html += '<div id="show_hide_comments_'+data.answer.id+'" onclick="show_comments('+data.answer.id+')"> Show comments </div>';
+  html += '<div id="answer_comments_'+data.answer.id+'"></div>';
+  html += '</div>'; //comments_
+  html += '</div>'; //feed-bottom-line
+  html += '</div>'; //feed-text
+  html += '</div>'; //feed-box
   return html;
 }
 
@@ -258,7 +281,7 @@ function questions_html(data,i,type_question){
           '<div class="feed-text">' +
             '<div class="feed-line">' + 
               '<span>' + 
-                data.questions[i].student_name + 
+                data.questions[i].user_name + 
               '</span>' +
             '</div>' + //feed-line
             '<div class="feed-description">' + 
@@ -306,7 +329,7 @@ function allanswers_html(data){
                '<div class="feed-text">' +
                  '<div class="feed-line">' + 
                    '<span>' + '<a class="person-name" href="#">' + 
-                     data.answers[i].student_name +
+                     data.answers[i].user_name +
                    '</a>' + '</span>' +
                    //'<div class="clear"></div>' +
                  '</div>'; //feed-line
@@ -332,14 +355,14 @@ function activities_html(data,i){
   var html = '';
   html += '<div class = "feed-box">';
  // html += '<a href="#"></a>';
- // html += data.activities[i].student_name;
+ // html += data.activities[i].user_name;
   if(data.activities[i].activity_type=='ASK_QUES')
   {
     html += '<a href="#"><img class="feed-propic" src="'+data.activities[i].photo_url+'"></a>' +
             '<div class="feed-text">' +
               '<div class="feed-line">' + 
                 '<span>' +
-                  data.activities[i].student_name + 
+                  data.activities[i].user_name + 
                   ' asked a question' +
                 '</span>' +
               '</div>' + //feed-line
@@ -373,9 +396,9 @@ function activities_html(data,i){
                   '<div class="feed-text">' +
                     '<div class="feed-line">' + 
                       '<span>' + 
-                        data.activities[i].student_name + 
+                        data.activities[i].user_name + 
+                        ' answered a question' +
                       '</span>' +
-                      ' answered a question' +
                     '</div>' + //feed-line
                     '<div class="feed-description">' +
                       '<a href="/#forum/question/'+data.activities[i].object.question_id+'">' +
@@ -386,7 +409,7 @@ function activities_html(data,i){
                           '</div>' + //question-title
                         '</div>' + //question-title-box
                         '<div class="answer-line">' +
-                          data.activities[i].student_name +
+                          data.activities[i].user_name +
                           '\'s answer:' +
                         '</div>' + //answer-line
                         '<div class="answer-box">' +
@@ -477,7 +500,8 @@ function display_question(id){
         html += '<div class="hr"></div>';
       }
       html += allanswers_html(data);
-      $('#content').append(html);
+      $('#content').html(html);
+      $('#content').pickify_users();
     });
 }
 
@@ -502,11 +526,11 @@ function add_answer(question_id){
   $.post('forum/add_answer/',
     {
       'question_id': question_id,
-      'description': $('input[name=answer]').val(),
+      'description': $('textarea[name=answer]').val(),
     },function(data)
     {
       $('#answers_'+question_id).prepend(answer_html(data));
-      $('input[name=answer]').val('');
+      $('textarea[name=answer]').val('');
     });
   return false;
 }
@@ -760,4 +784,11 @@ function display_category(type_question){
       change_active_label(category_name);
     });
 }
-
+/*
+function display_question_followers(question_id){
+  $.get('forum/fetch_question_followers/',
+    {
+      'question_id': question_id
+    },function(data)
+    {
+  */    

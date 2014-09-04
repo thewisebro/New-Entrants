@@ -14,7 +14,7 @@ def ask_question(request):
     if form.is_valid():
       print request.POST['tags']
       new_question = form.save(commit=False)
-      new_question.profile = Profile.get_profile(request.user.student)
+      new_question.profile = Profile.get_profile(request.user)
       new_question.save()
       form.save_m2m()
       return  HttpResponse("Question added")
@@ -49,9 +49,9 @@ def answer_dict(answer,profile):
     'upvote': upvote_bool,
     'downvote': downvote_bool,
     'same_profile': same_profile,
-    'student_name': answer.profile.student.user.html_name,
+    'user_name': answer.profile.user.html_name,
     'upvote_count': upvote_count,
-    'photo_url': answer.profile.student.user.photo_url
+    'photo_url': answer.profile.user.photo_url
   }
 
 
@@ -71,10 +71,10 @@ def question_dict(question,profile):
     'follow_unfollow': follow_bool,
     'num_followers': ProfileQuestionFollowed.objects.filter(question_id = question.pk).count(),
     'same_profile': same_profile,
-    'student_name': question.profile.student.user.html_name,
-    'viewer_name': profile.student.name,
-    'viewer_photo': profile.student.user.photo_url,
-    'photo_url': question.profile.student.user.photo_url,
+    'user_name': question.profile.user.html_name,
+    'viewer_name': profile.user.name,
+    'viewer_photo': profile.user.photo_url,
+    'photo_url': question.profile.user.photo_url,
     'answers_number': len(Answer.objects.filter(question=question))
   }
 
@@ -103,35 +103,39 @@ def tagitem_content(tagitem,profile):
 def activity_dict(activity,profile):
   if activity.activity_type == 'FOL_QUES':
     obj = question_dict(activity.content.question, profile)
-    student_name = activity.content.profile.student.user.html_name
-    photo_url = activity.content.profile.student.user.photo_url
+    user_name = activity.content.profile.user.html_name
+    photo_url = activity.content.profile.user.photo_url
   elif activity.activity_type == 'UP_ANS':
     obj = answer_dict(activity.content.answer, profile)
-    student_name = activity.content.profile.student.user.html_name
-    photo_url = activity.content.profile.student.user.photo_url
+    user_name = activity.content.profile.user.html_name
+    photo_url = activity.content.profile.user.photo_url
   elif activity.activity_type == 'ASK_QUES':
     obj = question_dict(activity.content, profile)
-    student_name = activity.content.profile.student.user.html_name
-    photo_url = activity.content.profile.student.user.photo_url
+    user_name = activity.content.profile.user.html_name
+    photo_url = activity.content.profile.user.photo_url
   elif activity.activity_type == 'POST_ANS':
     obj = answer_dict(activity.content, profile)
-    student_name = activity.content.profile.student.user.html_name
-    photo_url = activity.content.profile.student.user.photo_url
+    user_name = activity.content.profile.user.html_name
+    photo_url = activity.content.profile.user.photo_url
   else:
     obj = tag_dict(activity.content.tag, profile)
-    student_name = activity.content.content_object.student.user.html_name
-    photo_url = activity.content.content_object.student.user.photo_url
+    user_name = activity.content.content_object.user.html_name
+    photo_url = activity.content.content_object.user.photo_url
   return {
     'activity_type': activity.activity_type,
     'object_id': activity.object_id,
     'object': obj,
     'photo_url': photo_url,
-    'student_name': student_name
+    'user_name': user_name
   }
-
+"""def profile_dict(profile):
+  return {
+    'html_name': profile.user.html_name,
+    '
+"""
 def fetch_questions(request):
   type_question = int(request.GET.get('type_question'))
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   if type_question == 0:
     questions = Question.objects.all()
     json_data = simplejson.dumps({'questions':map(lambda q:question_dict(q, profile), questions)})
@@ -162,7 +166,7 @@ def fetch_questions(request):
 def fetch_question(request):
   question_id = request.GET['question_id']
   question = Question.objects.get(id=question_id)
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   profile.viewed.add(question)
   tags = question.tags.all()
   answers = Answer.objects.filter(question=question).annotate(upvote_count=Count('upvoted_by')).order_by('-upvote_count')
@@ -178,15 +182,15 @@ def add_answer(request):
   questions = Question.objects.filter(id=question_id)
   users = map(lambda s:s.profile,questions)
   url = '#'
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   answer = question.answers.create(description=description, profile=profile)
-  save_notification('forum','your questions was answered', url, users, answer)
+ #save_notification('forum','your questions was answered', url, users, answer)
   json_data = simplejson.dumps({'answer':answer_dict(answer,profile)})
   return HttpResponse(json_data, mimetype='application/json')
 
 def fetch_answer(request):
   answer_id = request.GET['answer_id']
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   answer = Answer.objects.get(id=answer_id)
   question = answer.question
   tags = question.tags.all()
@@ -197,7 +201,7 @@ def fetch_answer(request):
 def follow_question(request):
   question_id = request.GET['question_id']
   question = Question.objects.get(id=question_id)
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   if not ProfileQuestionFollowed.objects.filter(profile=profile,question=question).exists():
     ProfileQuestionFollowed.objects.create(profile=profile,question=question)
   return HttpResponse()
@@ -205,7 +209,7 @@ def follow_question(request):
 def unfollow_question(request):
   question_id = request.GET['question_id']
   question = Question.objects.get(id=question_id)
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   if ProfileQuestionFollowed.objects.filter(profile=profile,question=question).exists():
     ProfileQuestionFollowed.objects.get(profile=profile,question=question).delete()
   return HttpResponse()
@@ -213,7 +217,7 @@ def unfollow_question(request):
 def remove_upvote(request):
   answer_id = request.GET['answer_id']
   answer = Answer.objects.get(id=answer_id)
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   if ProfileAnswerUpvoted.objects.filter(profile=profile,answer=answer).exists():
     ProfileAnswerUpvoted.objects.get(profile=profile,answer=answer).delete()
   count = len(ProfileAnswerUpvoted.objects.filter(answer=answer))
@@ -223,7 +227,7 @@ def remove_upvote(request):
 def remove_downvote(request):
   answer_id = request.GET['answer_id']
   answer = Answer.objects.get(id=answer_id)
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   if profile.answers_down.filter(id=answer.pk).exists():
    profile.answers_down.remove(answer)
   return HttpResponse()
@@ -231,7 +235,7 @@ def remove_downvote(request):
 def upvote_answer(request):
   answer_id = request.GET['answer_id']
   answer = Answer.objects.get(id=answer_id)
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   if not ProfileAnswerUpvoted.objects.filter(profile=profile, answer=answer).exists():
     ProfileAnswerUpvoted.objects.create(profile=profile,answer=answer)
   if profile.answers_down.filter(id=answer_id).exists():
@@ -243,7 +247,7 @@ def upvote_answer(request):
 def downvote_answer(request):
   answer_id = request.GET['answer_id']
   answer = Answer.objects.get(id=answer_id)
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   if not profile.answers_down.filter(id=answer.pk).exists():
     profile.answers_down.add(answer)
   if ProfileAnswerUpvoted.objects.filter(profile=profile,answer=answer).exists():
@@ -254,7 +258,7 @@ def downvote_answer(request):
 
 def fetch_tag(request):
   tag_name = request.GET['tag_name']
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   tag = Tag.objects.get(name=tag_name)
   tag_item = TaggedItem.objects.filter(tag=tag,content_type=ContentType.objects.get_for_model(Question))
   questions = map(lambda t:tagitem_content(t,profile), tag_item)
@@ -264,20 +268,20 @@ def fetch_tag(request):
 def fetch_activity(request):
   single = int(request.GET['single'])
   username = int(request.GET['username'])
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   if single == 0:
     activities = Activity.objects.filter(Q(activity_type='POST_ANS')|Q(activity_type='ASK_QUES'))
   else:
     if username == 0:
       activities = Activity.objects.filter(profile=profile)
     else:
-      activities = Activity.objects.filter(profile__student__user__username=username)
+      activities = Activity.objects.filter(profile__user__user__username=username)
   json_data = simplejson.dumps({'activities':map(lambda act:activity_dict(act, profile), activities)})
   return HttpResponse(json_data, mimetype='application/json')
 
 def follow_tag(request):
   tag_name = request.GET['tag_name']
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   tag = Tag.objects.get(name=tag_name)
   if not profile.tags_followed.filter(id=tag.id).exists():
     profile.tags_followed.add(tag)
@@ -287,7 +291,7 @@ def follow_tag(request):
 
 def unfollow_tag(request):
   tag_name = request.GET['tag_name']
-  profile = Profile.get_profile(request.user.student)
+  profile = Profile.get_profile(request.user)
   tag = Tag.objects.get(name=tag_name)
   if profile.tags_followed.filter(id=tag.id).exists():
     tag_item = TaggedItem.objects.get(tag=tag,content_type=ContentType.objects.get_for_model(Profile),object_id=profile.pk)
@@ -304,5 +308,8 @@ def search_tag(request):
 def answer_comments(request,answer_id):
   answer = Answer.objects.get(id=answer_id)
   return render(request,'forum/answer_comments.html',{'answer': answer,})
-
-
+"""
+def fetch_question_followers(request):
+  question = Question.objects.get(id=question_id)
+  profiles = question.following_profiles.all()
+"""
