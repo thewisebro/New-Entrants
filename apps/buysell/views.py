@@ -11,14 +11,16 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.files.base import ContentFile
 from django.core.files import File
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
 
 from buysell.forms import *
 from datetime import date, timedelta, datetime
 from buysell.models import *
 from buysell.constants import *
-from settings import MEDIA_ROOT
-from settings import MEDIA_URL
 from notifications.models import Notification
+
+MEDIA_ROOT = settings.MEDIA_ROOT
+MEDIA_URL = settings.MEDIA_URL
 
 import os, logging
 import re
@@ -27,7 +29,6 @@ from PIL import Image
 import StringIO
 from urlparse import urlparse
 import urllib2
-import settings
 import collections
 
 logger = logging.getLogger('buysell')
