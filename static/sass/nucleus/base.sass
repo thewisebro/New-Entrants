@@ -50,15 +50,18 @@ body
       text-decoration: none
       cursor: pointer
 
+    #login.div-button
+      margin-top: 7px
+
   #user-account
     float: right
     margin-right: 20px
+    cursor: pointer
 
     #user-thumbnail
       float: right
       width: 25px
       height: 25px
-      margin-left: 10px
       margin-top: 8px
 
       img
@@ -66,9 +69,35 @@ body
         height: 100%
         border-radius: 2px
 
-    #user-name
-      float: right
-      font-size: 14px
+  #user-name
+    float: right
+    font-size: 14px
+    margin-right: 10px
+
+  #account-navigation
+    position: fixed
+    right: 10px
+    top: 50px
+    width: 150px
+    line-height: normal
+    background: $white
+    border: 1px solid $border-gray
+    border-radius: 2px
+    display: none
+
+    #navigation-options
+      .navigation-option
+        padding: 0px 10px
+        height: 30px
+        line-height: 30px
+        cursor: pointer
+        border-bottom: 1px solid $border-gray
+        color: #555
+        &:hover
+          background: #fbfbfb
+          color: $blue-link
+      #logout
+        border: 0px
 
 #sidebar-tabs
   position: fixed
@@ -155,8 +184,8 @@ $footer-height: 40px
   padding-top: 10px
 
 .large-width-content
-  max-width: 900px !important
-  width: 62% !important
+  max-width: none !important
+  width: 64% !important
 
 #content
   padding-bottom: $footer-height + 20px

@@ -3,7 +3,6 @@ import json as simplejson
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.contrib.auth.models import User
 from django.db.models import Q
 
 from feeds.models import *
