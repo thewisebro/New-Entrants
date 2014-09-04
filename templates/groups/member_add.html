@@ -1,0 +1,55 @@
+{% extends "groups/members_edit.html" %}
+
+{% load tags %}
+{% load macros %}
+
+{% block gtab_add_member %}gtabbox-selected{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery-ui.js"></script>
+<script type="text/javascript">
+  $('body').ready(function(){
+        $('#id_username').autocomplete({
+            source:'/settings/person_search/',
+            minLength:1
+           });
+       });
+</script>
+{% endblock %}
+
+{% block right_content %}
+    <div class="page_info">
+      <p>{{page_info}}</p>
+    </div>
+    {% if form.errors %}
+     <p style = "color: red;">
+       Please Correct the error below.
+     </p>
+    {% endif %}
+    <form action = "" method = "post" >
+       {% csrf_token %}
+       <div class="edit-categories">
+         {% macro editable_field_div field %}
+           {% if field.label == "Username" %} 
+             <div class="edit-row">
+               <div class="field-label-big">{{field.label}}</div>
+               <div class="field">{{field}}</div>
+               <div class="field">{{field.errors}}</div>
+             </div>
+           {% else %}
+             <div class="edit-row">
+               <div class="field-label-big">{{field.label}}</div>
+               <div class="field">{{field}}</div>
+               <div class="field">{{field.errors}}</div>
+             </div>
+           {% endif %}
+         {% endmacro %}
+         {% usemacro editable_field_div form.username %}
+         {% usemacro editable_field_div form.post %}
+         <input class="input-button" type = "submit" name ="submit_button" value = "Submit">
+         <input class="input-button" type="button" name="reset" value="Reset" onclick="location='';">
+
+       </div>
+    </form>
+{% endblock %}

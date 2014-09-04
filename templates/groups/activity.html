@@ -1,0 +1,29 @@
+{% extends "groups/base.html" %}
+
+{% block activity-tab-class %}content-tab-active{% endblock%}
+
+{% block app_scripts %}
+ {{ block.super }}
+  <script type='text/javascript'>
+    var group_username = '{{ username }}';
+    var group_name = '{{ group.name }}';
+  </script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/prettydate.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/groups/activity.js"></script>
+{% endblock %}
+
+{% block group_content %}
+  {% if can_edit %}
+    <div id="activity-form-div">
+       <form name="activity-form" action="" method="POST">{% csrf_token %}
+         <div style="margin-left:10px">
+           <div class="field">
+             <textarea name="text" class='activity-text'></textarea>
+           </div>  
+           <input type="submit" class="input-button" name="submit" value="Post"/>
+         </div>
+       </form>
+    </div>
+  {% endif %}
+  <div id="activities"></div>
+{% endblock group_content %}

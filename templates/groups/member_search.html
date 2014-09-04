@@ -1,0 +1,55 @@
+{% extends "groups/base.html" %}
+
+{% block app_content %}
+
+<h3>Member Search</h3>
+
+{% include "generic_form.html" with action=action form=form %}
+
+{% if results %}
+
+<h4>Search Results</h4>
+<table>
+  <tr>
+    <td>S. No.</td>
+    <th>Enrollment No.</th>
+    <th>Name</th>
+    <th>Branch</th>
+    <th></th>
+    <th></th>
+  </tr>
+  {% for person in results %}
+  <tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ person.user.username }}</td>
+    <td>{{ person.name }}</td>
+    <td>{{ person.branch }}</td>
+    <td>
+{% if person == group.admin %}
+Admin
+{% else %}
+    {% if person in group.members.all %}
+  <a href="javascript:null()" onclick="switchMemberStatus({{ group.id }}, '{{ person.user.username }}', this);">Delete</a> 
+   {% else %}
+       <a href="javascript:null()" onclick="switchMemberStatus({{ group.id }}, '{{ person.user.username }}', this);">Add</a>
+    {% endif %}
+{% endif %}
+    </td>
+    <td><a href="javascript:null()" onclick="confirmAdminChange('{{ group.id }}','{{ person.user.username }}','{{ group.admin.name }}')">Make Admin</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% else %}
+
+{% if request.method == 'POST' %}
+No search results found !
+{% endif %}
+
+{% endif %} 
+
+<br /><a href="{% url groups.views.member_add_multiple group.id %}"><button><div class="text">Add Multiple Members</div></button></a>
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/groups/switchMembership.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/groups/confirmAdminChange.js"></script>
+{% endblock app_content %}
