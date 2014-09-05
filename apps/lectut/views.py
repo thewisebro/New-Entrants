@@ -119,13 +119,13 @@ def download_file(request, file_id):
   download_file = UploadFile.objects.get(id = file_id)
   path_to_file = os.path.join(MEDIA_URL, str(download_file.upload_file))
   download_file_open = download_file.upload_file.path
-  file = open(download_file_open,"r")
+  file_check = open(download_file_open,"r")
 #mimetype = mimetypes.guess_type(filename)[0]
 
   downloadlog = DownloadLog(uploadfile=download_file , user = request.user)
   downloadlog.save()
 
-  response = HttpResponse(mimetype='application/force-download')
+  response = HttpResponse(file_check.read(),mimetype='application/force-download')
 #response = HttpResponse(file.read(), mimetype=mimetype)
   response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(download_file)
   response['X-Sendfile'] = smart_str(download_file_open)
