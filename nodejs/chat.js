@@ -147,7 +147,7 @@ io.on('connection', function(socket){
 
   socket.on("chatoff", function(){
     console.log("IN CHATOFF");
-    client.hmset("user:"+current_user.user_id, {"is_chat_on": 1, "status": 1}, function(err, reply){
+    client.hmset("user:"+current_user.user_id, {"is_chat_on": 0, "status": 0}, function(err, reply){
       propogate_chat_status("chat_off");
     });
   });
