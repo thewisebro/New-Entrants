@@ -133,6 +133,12 @@ def activity_dict(activity,profile):
     'html_name': profile.user.html_name,
     '
 """
+def tag_count(tag):
+  return {
+    'tag_name':Tag.objects.get(id=tag['tag']).name,
+    'question_count':tag['x']
+  }
+
 def fetch_questions(request):
   type_question = int(request.GET.get('type_question'))
   profile = Profile.get_profile(request.user)
@@ -313,3 +319,19 @@ def fetch_question_followers(request):
   question = Question.objects.get(id=question_id)
   profiles = question.following_profiles.all()
 """
+
+def fetch_topics(request):
+  profile = Profile.get_profile(request.user)
+  followed_tags = profile.tags_followed.all()
+  tagged_items = TaggedItem.objects.filter(tag__in=followed_tags)
+  tagged_items_question = tagged_items.filter(content_type=ContentType.objects.get_for_model(Question))
+  number = tagged_items_question.values('tag').annotate(x=Count('tag')).order_by('-x')
+  tagged_items_not = TaggedItem.objects.exclude(tag__in=followed_tags)
+  tagged_items_question_not = tagged_items_not.filter(content_type=ContentType.objects.get_for_model(Question))
+  number_not = tagged_items_question_not.values('tag').annotate(x=Count('tag')).order_by('-x')
+  json_data = simplejson.dumps({'followed_tags':map(tag_count,number),'unfollowed_tags':map(tag_count,number_not)})
+  return HttpResponse(json_data, mimetype='application/json')
+
+
+
+

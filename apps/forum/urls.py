@@ -19,5 +19,6 @@ urlpatterns = patterns('forum.views',
  #url(r'^fetch_question_followers/$','fetch_question_followers',name='fetch_question_followers'),
   url(r'^search_tag/$','search_tag',name='search_tag'),
   url(r'^answer_comments/(?P<answer_id>\w+)/$','answer_comments',name='answer_comments'),
+  url(r'^fetch_topics/$','fetch_topics',name='fetch_topics')
   #url(r'^fetch_unanswered/$','fetch_unanswered',name='fetch_unanswered'),
 )

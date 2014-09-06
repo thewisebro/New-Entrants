@@ -64,6 +64,8 @@ $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
       else
       {}
     }
+    else if(hash1 == 'tags')
+    {}
     else if(hash1 == 'unanswered')
     {
       next_state = 'yes_category';
@@ -93,6 +95,8 @@ $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
     }
     else if(hash1 == 'questions')
       display_questions();
+    else if(hash1 =='tags')
+      display_tags();
     else if(hash1 == 'question')
       display_question(hash2);
     else if(hash1 == 'answer')
@@ -136,7 +140,7 @@ function question_html(data){
               '<div class="feed-text">';
   html += '<div class="feed-line">' +
             '<a class="person-name" href="#">' + data.question.user_name + '</a>' +
-            '<span>\'s question </span>' +
+            '<span>asked</span>' +
           '</div>'; //feed-line
 
 
@@ -395,7 +399,7 @@ function activities_html(data,i){
           html += '<a href="#"><img class="feed-propic" src="'+data.activities[i].photo_url+'"></a>' +
                   '<div class="feed-text">' +
                     '<div class="feed-line">' + 
-                      '<span>' + 
+                      '<span href="#">' + 
                         data.activities[i].user_name + 
                         ' answered a question' +
                       '</span>' +
@@ -792,3 +796,31 @@ function display_question_followers(question_id){
     },function(data)
     {
   */    
+function display_tags(){
+  $.get('forum/fetch_topics/',
+    {
+    },function(data)
+    {
+      var html = '';
+      for(var i=0;i < data.followed_tags.length ;i++)
+      {
+        html += '<a href="#forum/tag/'+data.followed_tags[i].tag_name+'">' + '<div class="question-tag">' + data.followed_tags[i].tag_name + '</div>' + '</a>';
+        html += '   x';
+        html += data.followed_tags[i].question_count;
+        html += '<br>';
+      }
+      html += '<br><br>';
+      for(i=0;i < data.unfollowed_tags.length ;i++)
+      {
+        html += '<a href="#forum/tag/'+data.unfollowed_tags[i].tag_name+'">' + '<div class="question-tag">' + data.unfollowed_tags[i].tag_name + '</div>' + '</a>';
+        html += '   x';
+        html += data.unfollowed_tags[i].question_count;
+        html += '<br>';
+      }
+      $('#content').html(html);
+    });
+}
+
+
+
+
