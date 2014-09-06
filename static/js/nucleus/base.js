@@ -2,13 +2,24 @@
 
   namespace("nucleus",
       get_current_app, get_app_hashtags,
-      redirect_to_hash, redirect_to_home, tab_clicked
+      redirect_to_hash, redirect_to_home, tab_clicked,
+      make_tabs_inactive, make_tabs_active
   );
 
   var tabs, tabs_parent_top;
   var showLoading = true;
   var previous_hashtags = null;
   var previous_app = null;
+  var account_navigation_open = false;
+
+  $(document).ready(function(){
+    $('body').click(function(){
+      if(account_navigation_open)
+        $('#account-navigation').hide();
+        account_navigation_open = false;
+    });
+  });
+
 
   $(document).on("login", function(){
     load_pagelet("header_sidebar");
@@ -20,7 +31,21 @@
     $(window).scrollTop(0);
   });
 
+  function attach_bindings_on_header_sidebar(){
+    $('#user-account').click(function(e){
+      if(!account_navigation_open){
+        $('#account-navigation').show();
+        account_navigation_open = true;
+        e.stopPropagation();
+      }
+    });
+    $('#notifications-count').click(function(){
+      location.hash = 'notifications';
+    });
+  }
+
   $(document).on("pagelet_loaded_header_sidebar",function(){
+    attach_bindings_on_header_sidebar();
     tabs = $('.tab').map(function(){return this.id.split('-')[0];});
     tabs_parent_top = $('#sidebar-tabs').position().top;
     var load = true;
@@ -44,6 +69,16 @@
 
   function tab_clicked(tab){
       location.hash = tab;
+  }
+
+  function make_tabs_inactive(){
+    current_tab = null;
+    $('.active-tab').removeClass('active-tab');
+    $('#tab-arrow').hide();
+  }
+
+  function make_tabs_active(){
+    $('#tab-arrow').show();
   }
 
   function hashchangeCallback(load){
