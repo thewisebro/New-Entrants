@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.db.models import Q
 
 from notifications.models import Notification, UserNotification
-
+from api.utils import ajax_login_required
 
 def notification_dict(usernotification):
   notification = usernotification.notification
@@ -17,11 +17,9 @@ def notification_dict(usernotification):
     'viewed': 1 if usernotification.viewed else 0
   }
 
-
+@ajax_login_required
 def fetch(request):
-  data = json.dumps({})
-  if request.is_ajax() and request.method == 'GET' and\
-                          request.user.is_authenticated():
+  if request.is_ajax() and request.method == 'GET':
     usernotifications = request.user.usernotification_set.all()
     not_viewed = usernotifications.filter(viewed=False).count()
     action = request.GET['action']

@@ -43,7 +43,7 @@ def fetch(request):
       else:
         feeds = feeds.filter(pk__gt = pk)
         json = simplejson.dumps({'feeds':map(feed_dict,feeds)})
-      return HttpResponse(json,mimetype='application/json')
+      return HttpResponse(json, content_type='application/json')
 #    except Exception as e:
 #      logger.exception('Exception accured in feeds/fetch : '+str(e))
 #      return HttpResponse('')

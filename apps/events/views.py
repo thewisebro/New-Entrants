@@ -18,6 +18,7 @@ from events.models import *
 from groups.models import Group
 from events.forms import EventFormGenerator
 from filemanager import FileManager
+from api.utils import dialog_login_required, ajax_login_required
 
 logger = logging.getLogger('channel-i_logger')
 
@@ -29,7 +30,7 @@ def calendar_dict(calendar):
   if calendar.cal_type == 'GRP':
     return {'name':calendar.name,'verbose_name':Group.objects.get(user__username = calendar.name).name}
 
-@login_required
+@dialog_login_required
 def add(request):
   # form initiated to render media on template
   form = EventFormGenerator(Calendar.objects.get(name=request.user.username, cal_type='PRI'))()
@@ -65,7 +66,7 @@ def add(request):
   })
 
 
-@login_required
+@dialog_login_required
 def edit(request,event_id):
   event = Event.objects.get(pk = event_id)
   if event.calendar.users.filter(username=request.user.username).count() == 0:
@@ -86,7 +87,7 @@ def edit(request,event_id):
       'form':form,
   })
 
-@login_required
+@ajax_login_required
 def delete(request):
   if request.is_ajax() and request.method == 'POST':
     event_id = request.POST['id']
@@ -118,7 +119,7 @@ def get_calendars(request):
     calendars += map(lambda cal:{'name':cal.name,'verbose_name':cal.name},public_calendars)+\
                   [{'name':'groups','verbose_name':'Groups'}]
     json = simplejson.dumps({'calendars':calendars})
-    return HttpResponse(json,content_type='application/json')
+    return HttpResponse(json, content_type='application/json')
 
 def get_events_dates(request):
   if request.is_ajax() and request.method == 'GET':

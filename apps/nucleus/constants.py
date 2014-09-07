@@ -1,3 +1,5 @@
+DEFAULT_PASSWORD = 'helloiitr'
+
 tabs = [
   ('home', False, [], 'fa fa-home', '#41AAF0'),
   ('apps', False, [], 'fa fa-th-large', '#F14D39'),
