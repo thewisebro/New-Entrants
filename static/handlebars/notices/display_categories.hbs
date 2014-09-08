@@ -1,10 +1,10 @@
-<div id="category_menu" style="width:860px;height:181px;position:absolute;background-color:rgb(202, 228, 13);">
-<div id="category_list" style="float:left;">
+<div id="category_menu">
+<div id="category_list">
 {{#each a}}
-<div style="margin-top:2px;" onclick="change_category_bar_name('{{ this }}', 'All')"  onmouseover="display_sub_categories('{{ this }}')"> {{this }} </div>
+<div class="main_categories" onclick="change_category_bar_name('{{ this }}', 'All')"  onmouseover="display_sub_categories('{{ this }}')"> {{this }} </div>
 {{/each}}
 </div>
-<div id="category_details" style="width:650px;float:left;margin-left:15%;">
-<div id="category_child1" style="float:left;width:290px;"></div>
-<div id="category_child2" style="float:left;width:290px;"></div>
+<div id="category_details">
+<div id="category_child1"></div>
+<div id="category_child2"></div>
 </div></div>

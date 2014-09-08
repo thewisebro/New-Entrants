@@ -61,6 +61,11 @@ class PrivelegeJsonView(TemplateView):
     privelege_json = simplejson.dumps(privelege1)
     return HttpResponse(privelege_json, mimetype="application/json")
 
+class GetConstants(TemplateView):
+  def get(self, request):
+    constants_list = simplejson.dumps(MAIN_CATEGORIES)
+    return HttpResponse(constants_list, mimetype="application/json")
+
 class NoticeListView(ListAPIView):
   serializer_class = NoticeListViewSerializer
   def get_queryset(self):
@@ -246,6 +251,8 @@ def edit(request, pk):
       n.reference = notice.reference
       n.content = html_parsing_while_uploading(notice.content)
       n.expire_date = notice.expire_date
+      for user in n.read_noticeuser_set.all():
+        n.read_noticeuser_set.remove(user)
       n.re_edited = True
       n.save()
       tnotice.datetime_created=n.datetime_modified

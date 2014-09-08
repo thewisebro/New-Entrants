@@ -1,4 +1,4 @@
-#notices-type-header
+#app_name, #category_name
   font-size: 14px
   font-family: "Arial", sans-serif
   font-weight: bold
@@ -6,9 +6,16 @@
   margin-bottom: 10px
   float: left
 
+#category_name
+  margin-right: 4px
+
+#notices_wrap
+  padding-top: 6px
+
 #notices-header
   margin-top: 10px
-  height: 22px
+  height: 36px
+  border-bottom: 1px solid #D0D0D0
 
 li
   cursor: pointer
@@ -16,6 +23,221 @@ li
 .fa-star
   color: white
 
-#menu
-  margin-top: 15px
-  margin-left: 13px
+#notice_list
+  border: 1px solid #D0D0D0
+  border-bottom: 0px
+
+.notice_info
+  padding: 10px
+  background: #FFF
+  border-bottom: 1px solid #D0D0D0
+
+.read
+  background: #F7F7F7
+
+.unread
+  background: #FFF
+
+.edit,.delete
+  float: right
+  cursor: pointer
+  font-weight: bold
+  color: #505050
+  &:hover
+    color: #0072DC
+
+.notice_date,.notice_subject,.notice_source
+  font-weight: bold
+  color: #333
+  margin-right: 10px
+
+.notice_date,.notice_source
+  float: left
+
+.notice_source
+  width: 120px
+
+.notice_date
+  margin-right: 20px
+
+.notice_subject
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+  max-width: 600px
+
+.subject_wrap
+  margin-left: 270px
+
+.check,.starred
+  float: left
+  margin-right: 10px
+  cursor: pointer
+
+.button4:hover
+  text-decoration: none
+  background: #FCFCFC
+
+.button4
+  color: #666666
+  font-size: 12px
+  line-height: 24px
+  font-weight: bold
+  text-align: center
+  border: 1px solid #bbbbbb
+  min-width: 14px
+  padding: 0 7px
+  border-radius: 3px
+  cursor: pointer
+  background: #efefef
+  background: -moz-linear-gradient(top, white 0%, #efefef 100%)
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, white), color-stop(100%, #efefef))
+  background: -webkit-linear-gradient(top, white 0%, #efefef 100%)
+  background: -o-linear-gradient(top, white 0%, #efefef 100%)
+  background: -ms-linear-gradient(top, white 0%, #efefef 100%)
+  background: linear-gradient(top, #ffffff 0%, #efefef 100%)
+ 
+#select_bars
+  text-align: center
+  padding-top: 2px
+  margin-right: 5px
+  float: left
+  &:hover
+    color: #DD4B39
+
+.categories
+  font-size: 14px
+
+#category_name
+  float: left
+
+.twin_button_left
+  float: right
+  border-top-right-radius: 0px
+  border-bottom-right-radius: 0px
+
+.twin_button_right
+  float: right
+  border-left: 0px
+  border-top-left-radius: 0px
+  border-bottom-left-radius: 0px
+
+.active1
+  background: #666666
+  color: white
+  border-color: #444444
+  cursor: default
+  &:hover
+    background: #666666
+    color: white
+    border-color: #444444
+    cursor: default
+
+#filters,#additional
+  height: 36px
+
+#breadcrumbs_container
+  float: left
+
+#back
+  display: none
+
+#category_menu
+  background-color: #FFF
+  border: 1px solid #D0D0D0
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.25)
+  border-radius: 3px
+  min-height: 180px
+  margin-top: 26px
+  position: absolute
+
+.actions
+  background-color: #FFF
+  border: 1px solid #D0D0D0
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.25)
+  border-radius: 3px
+  position: absolute
+
+#category_list
+  float: left
+  position: absolute
+  bottom: 0px
+  top: 0px
+  padding: 5px
+  background: #F7F7F7
+  border-right: 1px solid #E0E0E0
+
+#category_details
+  width: 650px
+  float: left
+  margin-left: 110px
+
+#category_child1
+  float: left
+  width: 290px
+  margin: 5px 10px 5px 0px
+
+#category_child2
+  float: left
+  width: 290px
+  margin: 5px 10px
+
+.main_categories
+  padding: 5px
+  font-weight: bold
+  border-radius: 2px
+  &:hover
+    background: #DDD
+    cursor: pointer
+
+.sub_categories
+  padding: 5px
+  font-weight: bold
+  color: #8F8F8F
+  border: 1px solid #FFF
+  &:hover
+    cursor: pointer
+    background: #F8F8F8
+    border: 1px solid #EEE
+    border-radius: 2px
+    color: #333
+
+.breadcrumbs_class
+  font-weight: bold
+  color: #505050
+  cursor: pointer
+  &:hover
+    color: #0072DC
+   
+.breadcrumb_i, .breadcrumbs_class
+  margin-right: 7px
+ 
+.star_on
+  color :  #AAA
+
+.star_off
+  color : #F1C40F
+
+#main_check
+  padding-right: 10px
+  padding-left: 10px
+  margin-right: 7px
+  max-height: 24px
+  float: left
+  cursor: default
+
+#all_select
+  margin-top: 5.5px
+  cursor: pointer
+
+#_info
+  margin-top: 10px
+  background-color: #FFF
+  border: 1px solid #D0D0D0
+  border-radius: 2px
+
+#_subject
+  float: left
+
+#_subject_value
+  float: left

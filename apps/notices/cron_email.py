@@ -1,14 +1,3 @@
-#!/usr/bin/python
-import os, sys
-sys.path.append(os.getcwd())
-try:
-  from apache import override as settings
-except:
-  import settings
-#from django.core.management import setup_environ
-#setup_environ(settings)
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
-
 import time as ptime
 from BeautifulSoup import BeautifulSoup
 from notices.models import *
@@ -30,24 +19,27 @@ def get_subject_content(notice):
   content = render_to_string('notices/email.html',{'PeopleProxyUrl':PeopleProxyUrl,'notice':notice_dict_for_email(notice)})
   return subject,content
 
-if __name__ == '__main__':
-  notices = Notice.objects.filter(emailsend=False)
+def send_mails():
+  notices = Notice.objects.filter(subject="t11")
   for notice in notices:
+    print notice
     notice.emailsend = True
     notice.save()
     notice_users = notice.uploader.category.noticeuser_set.all()
     subject,content = get_subject_content(notice)
     email_ids = []
     for notice_user in notice_users:
+      print notice_user
       if notice_user.subscribed:
+        print notice_user.user.email
         email_ids.append(notice_user.user.email)
     while email_ids:
       first_100_email_ids = email_ids[:100]
       email_ids = email_ids[100:]
+      print first_100_email_ids
       try:
         msg = EmailMessage(subject,content,'eNotice',first_100_email_ids)
         msg.content_subtype = "html"
         msg.send()
       except Exception as e:
         print "Exception",e
-      ptime.sleep(30)

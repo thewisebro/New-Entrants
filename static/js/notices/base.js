@@ -4,27 +4,49 @@ var starred_total_pages, starred_last_page_notices, starred_array;		//variables 
 var total_pages, last_page_notices;		//variables for general new notice display(all)
 var old_total_pages, old_last_page_notices;		//variables for general expired notice display(all)
 var temp_total_pages, temp_last_page_notices;		//variables for general notice display(specific category)
-var store = new Array(50), temp_store = new Array(50), old_store= new Array(50);    //store stands for new store or the store of new notices.
-var emptyarray = new Array(50);
+var store, temp_store, old_store;    //store stands for new store or the store of new notices.
+var emptyarray;
 
-var main_mode="display", sub_mode="", m_category="All", sub_category="All", cur_page_no="1", more, name_to_display, all=1, same_except_page_no=1, search_string="", search_string_changed=0;
+var main_mode, sub_mode, m_category, sub_category, cur_page_no, more, name_to_display, all, same_except_page_no, search_string, search_string_changed;
 var h1,h2,h3,h4,h5;
 /*
   1.Values of sub_mode can be either new or old
   2.same_except_page_no stores if everything is same except the page number
-  2.same_except_page_no stores if the newly arrived categories(h3, h4) matches with the old ones
-  3.Values of main mode can be display, upload, search, content
-  4.The all variable stores if the both the m_category and sub_category are equal to "All" or not.
+  3.same_except_page_no stores if the newly arrived categories(h3, h4) matches with the old ones
+  4.Values of main mode can be display, upload, search, content
+  5.The all variable stores if the both the m_category and sub_category are equal to "All" or not.
+  6.Initial value of variables in line 10 can't be [display, new, All, All, 1] or ["", "", "", "", ""] because they are supposed to be different from the hashes(#notices and #notice/display/new/All/All/1), that arrive on reload, so that the static divs are created.
 */
 
-var privelege=0, first_time_visit=0, static_divs_created=0, star_perm=0, select_category=0;
-var checklist, check_upload_array={}, check_star_array={}, read_array={};
+var privelege, first_time_visit, static_divs_created, star_perm, select_category, prev_url="#notices/new/All/All/1";
+var checklist, check_upload_array, check_star_array, read_array;
 
 /*
     1.check_star_array stores the ids of notices who are starred for a particular user.read_array is similar
     2.search_store stores the results of a particular search
     3.star_perm is 0 when the app is being used anonymously
 */
+
+initialize_global_variables();
+
+function initialize_global_variables()
+{
+  store = new Array(50);
+  temp_store = new Array(50);
+  old_store = new Array(50);
+  emptyarray = new Array(50);
+  all=1;
+  same_except_page_no=1;
+  main_mode="display";
+  sub_mode="";
+  m_category="All";
+  sub_category="All";
+  cur_page_no="1";
+  search_string="";
+  search_string_changed=0;
+  privelege=0; first_time_visit=0; static_divs_created=0; star_perm=0; select_category=0;
+  check_upload_array={}; check_star_array={}; read_array={};
+}
 
 function first_time_functions()                 //This function is responsible for calling 6 important basic functions to store necessary data
 {
@@ -51,6 +73,37 @@ $(document).on("load_app_notices", function(e, hash1, hash2, hash3, hash4, hash5
 
 $(document).on("unload_app_notices", function(e, hash1, hash2, hash3, hash4, hash5){
     $("#container").removeAttr("class")
+    $("#global_search_bar").val("");
+    $("#global_search_bar").attr('placeholder', 'Search here');
+});
+
+$(document).on("login", function(){
+    console.log("login entered");
+  if(current_tab=="notices")
+  {
+    initialize_global_variables();
+    first_time_visit=0;
+    hashtags = [h1, h2, h3, h4, h5];
+    $(document).trigger("load_app_notices", hashtags);
+  }
+});
+
+$(document).on("logout", function(){
+    console.log("logout entered");
+  if(current_tab=="notices")
+  {
+    same_except_page_no=1;
+    check_upload_array={}; check_star_array={}; read_array={};
+    privelege=0; static_divs_created=0; star_perm=0; select_category=0;
+    if(h1!="content")
+    {
+       create_static_divs();
+       static_divs_created=1;
+    }
+    evaluate_breadcrumbs();
+    hashtags = [h1, h2, h3, h4, h5];
+    $(document).trigger("load_app_notices", hashtags);
+  }
 });
 
 $('#global_search_bar').on("keydown", function(event){
@@ -78,14 +131,32 @@ function redirection()            //The main controller function which defines t
           if(h1==main_mode)     //Setting the value of the same_except_page_no variable
             same_except_page_no=1;
           else
+          {
+            $("#category_name").text("All");
+            if(h1=="starred")
+              $("#app_name").text("Starred Notices");
+            else
+              $("#app_name").text("Uploaded Notices");
+            $("#select_bars").removeAttr("onclick");
+            $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
+            $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
+            $("#filters").slideUp(400);
             same_except_page_no=0;
+          }
         }
         else
         {
           if(h1==main_mode && h2==sub_mode && h3==m_category && h4==sub_category)     //Setting the value of the same_except_page_no variable
             same_except_page_no=1;
           else
+          {
+            $("#app_name").text("Notices");
+            $("#select_bars").removeAttr("onclick");
+            $("#select_bars").attr("onclick", "display_categories();");
+            $("#back").hide("fade", 200, function(){$("#bars").show("fade", 200);});
+            $("#filters").slideDown(400);
             same_except_page_no=0;
+          }
         }
 
         if(h1 == undefined || h1 == "")                           //Setting default values to the primary parameters, if they are undefined
@@ -117,6 +188,7 @@ function redirection()            //The main controller function which defines t
         sub_category=h4;
         cur_page_no=h5;
 
+
         if(m_category=="All"&&sub_category=="All")                          //Setting the value of the all variable
           all=1;
         else
@@ -125,6 +197,14 @@ function redirection()            //The main controller function which defines t
         if(same_except_page_no==0)
           evaluate_breadcrumbs();
 
+        if(sub_mode=="new")                             //coloring the appropriate new old filter
+          not_sub_mode="old";
+        else
+          not_sub_mode="new";
+        $('#' + sub_mode + '_button').addClass("active1")
+        $('#' + not_sub_mode + '_button').removeClass("active1")
+  
+        $('#' + sub_mode + '_button').addClass("active1");
         $("#category_menu").remove();
         $("#menu").remove();
         $('#all_select').prop('checked', false);
@@ -163,6 +243,7 @@ function redirection()            //The main controller function which defines t
                     console.log("display all!=1 same_except_page_no=0")
                     temp_store = new Array(50);
                     get_total_notices_no();
+      			        load_numbers_bar(temp_total_pages, ""); //loading the numbers bar, since we already know the total pages,last page notices
                     first_time_check();
                     gap_filler_first_time("temp"); //Since temp_store is newly created, it needs to have the first 50 notices. Just call this                                                      function and it'll automatically direct it to gap_scanner() after the first 50 notices                                                        arrive
                 }
@@ -180,8 +261,7 @@ function redirection()            //The main controller function which defines t
             m_category = "All";
             sub_category = "All";
 
-            if(!same_except_page_no)
-              load_numbers_bar(upload_total_pages, "upload_");
+            load_numbers_bar(upload_total_pages, "upload_");
             list_notices(parseInt(cur_page_no), upload_array, upload_total_pages, upload_last_page_notices);
         }
         else if(main_mode=="starred")
@@ -190,14 +270,17 @@ function redirection()            //The main controller function which defines t
             m_category = "All";
             sub_category = "All";
             cur_page_no = h2;
-
+            
             len = starred_array.length;             //Recalculating parameters, as they might have changed due to addition of star notices
             starred_total_pages=Math.floor(len/10);
             starred_last_page_notices=len%10;
             if(starred_last_page_notices>0)
               starred_total_pages++;
             if(!same_except_page_no)
-              load_numbers_bar(starred_total_pages, "starred_");
+            {
+              $("#filters").slideUp(1000);
+            }
+            load_numbers_bar(starred_total_pages, "starred_");
             list_notices(parseInt(cur_page_no), starred_array, starred_total_pages, starred_last_page_notices);
         }
         else if(main_mode=="search")
@@ -205,7 +288,10 @@ function redirection()            //The main controller function which defines t
             $("#global_search_bar").val("");
             $("#global_search_bar").attr('placeholder', search_string);
             if(same_except_page_no && !search_string_changed)
+            {
+              load_numbers_bar(search_total_pages, "search_");
               list_notices(parseInt(cur_page_no), search_store, search_total_pages, search_last_page_notices);
+            }
             else
             {
               search_string_changed = 0;
@@ -228,19 +314,17 @@ function create_static_divs()                //Create static buttons like upload
     $('#content').html(welcome_html());
     if(privelege==1)
       $('#notices-header').append(upload_html());
-
     if(sub_category=="All")
-      $('#content').append(load_cat_bar_html(m_category));
+      $('#notices-header').append(load_cat_bar_html(m_category));
     else
-      $('#content').append(load_cat_bar_html(sub_category));
-    
-    if(star_perm==1)
-    {
-      $('#content').append(additional_features_html());
-    }
+      $('#notices-header').append(load_cat_bar_html(sub_category));
+    $('#content').append('<div id="filters"></div>');
+    $('#filters').append('<div id="breadcrumbs_container"><div id="breadcrumbs"></div></div>');
+    $('#filters').append(newold_buttons_html());
 
-    $('#additional').append(newold_buttons_html());
-    $('#content').append('<br><div id="breadcrumbs_container"><div id="breadcrumbs"></div></div><br>');
+    $('#content').append('<div id="additional"></div>');
+    if(star_perm==1)
+      $('#additional').append(additional_features_html());
     $('#content').append('<div id="notice_list"></div><br>');
     $('#content').append('<div id="page_numbers"></div>')
     console.log("switched_to_noties_create : static divs created")
@@ -330,8 +414,10 @@ function gap_filler(llim, hlim, temp)
 
 function load_numbers_bar(tp, mode1)        //tp = total pages, mode1 = new, old, search, upload
 {
+      console.log("pagination reset");
       $("#page_numbers").pagination({
           pages: tp,
+          currentPage : cur_page_no,
           cssStyle: 'light-theme',
           onPageClick : window[mode1 + 'change_page']
       });
@@ -349,11 +435,15 @@ function open_notice(id)
 
 function upload_change_page(page_no)
 {
+  if(main_mode!="uploads" && main_mode!="starred")
+    prev_url = location.hash;
   location.hash = '#notices/uploads/' + page_no;
 }
 
 function starred_change_page(page_no)
 {
+  if(main_mode!="uploads" && main_mode!="starred")
+    prev_url = location.hash;
   location.hash = '#notices/starred/' + page_no;
 }
 
@@ -409,6 +499,9 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
             $('#notice_list').append(list_notices_html(context));
 
       }
+      $(".notice_date").each(function() {
+              $(this).text($(this).text().substr(0,10));
+              });
 }
 
 function display_notice(id)
@@ -453,7 +546,8 @@ function check_if_date()
       {
         parts=search_string.split("-");
         parts[0]=Date.parse(parts[0]);
-        parts[1]=Date.parse(parts[1]);
+        parts[1]=Date.parse(parts[1]) + 86400000;
+        console.log(parts[1]);
         if(parts[0]>1262284200000 && parts[1]>1262284200000)
         url = ">>" + parts.join().replace(",", "-");
       }
@@ -535,7 +629,7 @@ function star_notice(id, e)
 
         url = 'notices/read_star_notice/'+id+'/'+'remove_starred';
         delete check_star_array[id];
-          $("#star_shape_" + id).attr({style : "color: white"})
+          $("#star_shape_" + id).attr({style : "color:#AAA"});
       }
       else
       {
@@ -559,7 +653,7 @@ function star_notice(id, e)
               break;
           }
         check_star_array[id] = 1;
-        $("#star_shape_" + id).attr({style : "color: yellow"})
+        $("#star_shape_" + id).attr({style : "color:#F1C40F"})
       }
       $.ajax({
       type: 'post',
@@ -624,6 +718,7 @@ function add_to_checklist(id, e)
 
 function select_all()
 {
+    //$('#all_select').click();
     var x = document.getElementById("all_select").checked;
     var k,mode_prefix;
 
@@ -746,7 +841,7 @@ function read_star_checklist(t)
           }
         
         check_star_array[a[i]]=1;
-        $("#star_shape_" + a[i]).attr({style : "color: yellow"})
+        $("#star_shape_" + a[i]).attr({style : "color:#F1C40F"})
       }
       else if(t==2)
       {
@@ -763,17 +858,17 @@ function read_star_checklist(t)
           }
 
         delete check_star_array[a[i]];
-        $("#star_shape_" + a[i]).attr({style : "color: white"})
+        $("#star_shape_" + a[i]).attr({style : "color: #AAA"})
       }
       else if(t==3)
       {
         read_array[a[i]]=1;
-        $("#notice_read_"+a[i]).text("R ");
+        $("#notice_"+a[i]).attr({class : "notice_info read"});
       }
       else
       {
         delete read_array[a[i]];
-        $("#notice_read_"+a[i]).empty();
+        $("#notice_"+a[i]).attr({class : "notice_info unread"});
       }
     }
     q=q.substring(0,q.length-1);
@@ -801,13 +896,13 @@ function display_categories()
   console.log("hello");
   if(select_category==0)
   {
-    $("#select_category").css("background-color", "#97968D");
-    $('#category_master_div').append(display_categories_html());
+    $('#select_bars').css("color", "#DD4B39")
+    $('#button_category_app_name').append(display_categories_html());
     select_category=1;
   }
   else
   {
-    $("#select_category").css("background-color", "white");
+    $('#select_bars').css("color", "#666666")
     $('#category_menu').remove();
     select_category=0;
   }
@@ -825,7 +920,6 @@ function display_sub_categories(main_category)
 function change_category_bar_name(main_category, category)
 {
     console.log("entered change_category_bar_name")
-    $("#select_category").css("background-color", "white");
     $('#category_menu').remove();
     select_category=0;
     if(m_category==main_category && sub_category==category)
@@ -866,10 +960,6 @@ function evaluate_breadcrumbs()
       else
         create_breadcrumbs("SearchedNotices", notice_prefix, m_category, sub_category, 0);
     }
-    else if(main_mode=="uploads")
-      create_breadcrumbs("UploadedNotices", "All", 0);
-    else if(main_mode=="starred")
-      create_breadcrumbs("StarredNotices", "All", 0);
 }
 
 function create_breadcrumbs()
@@ -881,7 +971,7 @@ function create_breadcrumbs()
   for (var i = 0; i < arguments.length-2; i++) 
   {
       $('#breadcrumbs').append(create_breadcrumb_html(arguments[i], code));
-      $('#breadcrumbs').append('>> ');
+      $('#breadcrumbs').append('<i class="fa fa-angle-right breadcrumb_i"><i> ');
       code++;
   }
   $('#breadcrumbs').append(create_breadcrumb_html(arguments[arguments.length-2], 3));
@@ -944,9 +1034,24 @@ function get_total_notices_no_first_time()
               if (old_last_page_notices > 0)
         		    old_total_pages++;
               console.log("loaded : total_notices_no old and new");
-              gap_filler_first_time("new");
+              get_constants();
           }
           });
+}
+
+function get_constants()      			// A function that brings all main_categories and sub_categories
+{
+        $.ajax({
+        type: 'get',
+        url: 'notices/get_constants/',
+        success: function(data)
+        {
+          constants = data;
+          console.log(data);
+          console.log("loaded : get_constants");
+          gap_filler_first_time("new");
+        }
+        });
 }
 
 function bring_starred_notices()      			// A function that brings all the starred notice corresponding to a particular user
@@ -1135,3 +1240,11 @@ function create_breadcrumb_html(tag, code)
 {
     return Handlebars.notices_templates.create_breadcrumb({tag : tag, code : code});
 }
+
+$(window).load(function(){
+
+$(".notice_date").each(function() {
+        $(this).text($(this).text().substr(0,10));
+        });
+}
+);

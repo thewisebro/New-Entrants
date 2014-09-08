@@ -35,8 +35,8 @@ class NoticeUser(models.Model):
   user = models.OneToOneField(User)
   categories = models.ManyToManyField('Category')
   subscribed = models.BooleanField(default = False)
-  read_notices = models.ManyToManyField(Notice, related_name = 'read_noticeuser_set', blank=True)
-  starred_notices = models.ManyToManyField(Notice, related_name = 'starred_noticeuser_set', blank=True)
+  read_notices = models.ManyToManyField(Notice, related_name = 'read_noticeuser_set', blank=True, null=True)
+  starred_notices = models.ManyToManyField(Notice, related_name = 'starred_noticeuser_set', blank=True, null=True)
 
   def __unicode__(self):
 	return unicode(self.user)
@@ -53,7 +53,7 @@ class Category(models.Model):
   users = models.ManyToManyField(User, through='Uploader')
   main_category = models.CharField(max_length=20,choices = OPTIONS)
   name = models.CharField(max_length=100)
-  code = models.CharField(max_length=100)
+  code = models.CharField(max_length=100, unique=True)
 
   class Meta:
     verbose_name_plural = "Categories"
