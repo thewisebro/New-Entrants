@@ -1,13 +1,9 @@
-{% extends "base.html" %}
+{% extends "dialog_base.html" %}
 
 {% block scripts %}
   {{ block.super }}
   {{ form.media.js }}
   <script type="text/javascript">
-    {% if close %}
-      parent.display_messages({{ django_messages }});
-      parent.login_help_dialog.dialog('close');
-    {% endif %}
     $('body').ready(function(){
         $('#id_user_type').change();
       }

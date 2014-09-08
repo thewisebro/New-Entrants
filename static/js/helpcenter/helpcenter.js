@@ -8,9 +8,7 @@ $(document).on("load_app_helpcenter", function(e,hash1,hash2){
     nucleus.redirect_to_home();
     return;
   }
-  $('.active-tab').removeClass('active-tab');
-  current_tab = null;
-  $('#tab-arrow').hide();
+  nucleus.make_tabs_inactive();
   $('#right-column .content').html('');
   $('#content').html('');
   $('#container').addClass('large-width-content');
@@ -27,7 +25,7 @@ $(document).on("load_app_helpcenter", function(e,hash1,hash2){
 
 $(document).on("unload_app_helpcenter", function(e){
   $('#container').removeClass('large-width-content');
-  $('#tab-arrow').show();
+  nucleus.make_tabs_active();
 });
 
 $(document).on("logout", function(){

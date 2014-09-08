@@ -15,12 +15,12 @@ class Taggable(models.Model):
 
 class TrashableManager(models.Manager):
   use_for_related_fields = True
-  def get_query_set(self):
-    return super(TrashableManager, self).get_query_set().filter(trashed=False)
+  def get_queryset(self):
+    return super(TrashableManager, self).get_queryset().filter(trashed=False)
 
 class TrashedManager(models.Manager):
-  def get_query_set(self):
-    return super(TrashableManager, self).get_query_set().filter(trashed=True)
+  def get_queryset(self):
+    return super(TrashableManager, self).get_queryset().filter(trashed=True)
 
 class Trashable(models.Model):
   trashed = models.BooleanField(default=False)

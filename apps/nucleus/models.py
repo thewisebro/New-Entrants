@@ -21,8 +21,8 @@ client = redis.Redis("localhost")
 ############################# Base Models #############################
 
 class OwnerActiveManager(models.Manager):
-  def get_query_set(self):
-    return super(OwnerActiveManager, self).get_query_set().filter(active=True)
+  def get_queryset(self):
+    return super(OwnerActiveManager, self).get_queryset().filter(active=True)
 
 class Owner(models.Model):
   account = models.ForeignKey('User', related_name='account_owners')
@@ -139,7 +139,7 @@ class User(AbstractUser, models.Model):
         string += ' ' + int2roman(student.year) + ' Year'
       return string
     elif self.in_group('Faculty'):
-      return dict(DESIGNATION_CHOICES)[self.faculty.designation]+\
+      return dict(FC.DESIGNATION_CHOICES)[self.faculty.designation]+\
           ', ' + MC.SIMPLIFIED_DEPARTMENTS[self.faculty.department]
     elif self.in_group('Student Group'):
       return 'Student Group'
@@ -160,12 +160,24 @@ class User(AbstractUser, models.Model):
           escape(self.photo_url)+"'>"+escape(self.short_name)+\
           "</span>")
 
+  @property
+  def role_group(self):
+    if self.in_group('Student'):
+      return 'Student'
+    elif self.in_group('Faculty'):
+      return 'Faculty'
+    elif self.in_group('Student Group'):
+      return 'Student Group'
+    else:
+      return 'Other'
+
   def serialize(self):
     return {
       'is_authenticated': True,
       'username': self.username,
       'name': self.name,
-      'photo': self.photo_url
+      'photo': self.photo_url,
+      'role': self.role_group,
     }
 
   @property

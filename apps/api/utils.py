@@ -1,3 +1,9 @@
+import json
+from functools import wraps
+
+from django.http import HttpResponse
+from django.shortcuts import render
+
 def get_client_ip(request):
   x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
   if x_forwarded_for:
@@ -15,3 +21,35 @@ def int2roman(number):
       result += numeral
       number -= value
   return result
+
+def pagelet_login_required(view):
+  @wraps(view)
+  def wrapped_view(request, *args, **kwargs):
+    if request.user.is_authenticated():
+      return view(request, *args, **kwargs)
+    else:
+      return render(request, 'pagelet_base.html')
+  return wrapped_view
+
+def dialog_login_required(view):
+  @wraps(view)
+  def wrapped_view(request, *args, **kwargs):
+    if request.user.is_authenticated():
+      return view(request, *args, **kwargs)
+    else:
+      return render(request, 'dialog_base.html')
+  return wrapped_view
+
+def ajax_login_required(view):
+  @wraps(view)
+  def wrapped_view(request, *args, **kwargs):
+    if request.user.is_authenticated():
+      return view(request, *args, **kwargs)
+    else:
+      return HttpResponse(json.dumps({}), content_type='application/json')
+  return wrapped_view
+
+def escape_with_quotes(value):
+  if not isinstance(value, basestring):
+    value = str(value)
+  return '"%s"'%(value.replace("\\","\\\\").replace(r'"',r'\"'))
