@@ -45,10 +45,15 @@ def coursepage(request, batch_id):
   request.session['batchId'] = batch_id
   userType=getUserType(user)
   text_form = TextForm()
-  image_form = FileForm()
+  image_form = FileForm(userType)
 
   previous_uploads=UploadFile.objects.all().filter(batch_id=batch_id).order_by('-datetime_created')
+  for upload in previous_uploads:
+    upload = upload.as_dict()
+
   previous_notices=TextNotice.objects.all().filter(batch_id=batch_id).order_by('-datetime_created')
+  for notice in previous_notices:
+    notice = notice.as_dict()
 
   context = {'image_form': image_form,
              'text_form' : text_form,

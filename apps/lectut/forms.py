@@ -16,6 +16,11 @@ class FileForm(forms.Form):
   upload_name=forms.CharField()
   upload_type=forms.ChoiceField(choices=FILE_CHOICES)
 
+  def __init__(self,userType,*args,**kwargs):
+    super(FileForm, self).__init__(*args, **kwargs)
+    if userType=='1':
+      self.fields['privacy']=forms.BooleanField()
+
 '''  def clean(self):
     filename = self.cleaned_data.get("filename")
     import pdb; pdb.set_trace#();
