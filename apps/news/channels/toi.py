@@ -6,6 +6,7 @@ from BeautifulSoup import BeautifulSoup, NavigableString
 # Python Imports
 from xml.etree import ElementTree
 from urllib2 import Request, urlopen, URLError
+from dateutil import parser
 import re
 import subprocess
 import os
@@ -43,23 +44,23 @@ def Toi(path, channel):
         if len(archive) is 0:
           link = item.find('link').text
           des_content = item.find('description').text
-          dt = datetime.datetime.now()
-          published_date = datetime.datetime(dt.year,dt.month,dt.day)
+          pub_date_string = item.findtext('pubDate')
+          published_date = parser.parse(pub_date_string)
 
           des_soup = BeautifulSoup(des_content, convertEntities=BeautifulSoup.HTML_ENTITIES)
           des = des_soup.contents[0]
+          if des.startswith( '<img ' ):
+            des = ''
 
           print "\n>>>>>>>>>>>>>>>>>>>>>>       <<<<<<<<<<<<<<<<<<<<<<<<<<<"
           print title
           print "Counter: "+str(counter)
-          #print des
-          #print "cp"
+          print des
 
           req = Request(link)
           html_page = ""
           html_page = urlopen(req).read()
           soup = BeautifulSoup(html_page, convertEntities=BeautifulSoup.HTML_ENTITIES)
-          #print "cp-1"
           if html_page is not None:
              news_item = soup.find("div",{"class":"Normal"})
 
@@ -73,7 +74,6 @@ def Toi(path, channel):
               article_text = news_item.findAll(text = True)
               article_content = ""
               if len(article_text) is not 0:
-                #print "cp-2"
                 for text in article_text:
                   if text is not None:
                     #print(text.encode('utf8'))
@@ -83,6 +83,7 @@ def Toi(path, channel):
 
               p = News(item= article_content)
               p.title = title
+              print des
               p.description_text = smart_str(des)
               p.source = source
               p.channel = channel
@@ -96,6 +97,7 @@ def Toi(path, channel):
                   try:
                     image_link = image.get("src")
                     ext = os.path.splitext(image_link)[1]
+                    print ext
                     if "?" in ext:
                       ext = ext.split('?')[0]
                     ext = ext.lower()
@@ -114,6 +116,8 @@ def Toi(path, channel):
                     pass
                   #except Exception as e: print "Exception accured while downloading :",e,"      wget '"+image_link+"'"
                   print "Saved_with_image"
+                else:
+                  print "No Image Found!!"
               else:
                 print "Saved_Without_image "
                 continue
