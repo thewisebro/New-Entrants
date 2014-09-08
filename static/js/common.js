@@ -1,5 +1,6 @@
 var loaded_scripts = [];
 var loaded_styles = [];
+var current_dialog;
 
 $(document).on('ready', function(){
   var scripts = $('script');
@@ -45,6 +46,10 @@ function load_scripts_in_pipe(scripts, callback){
     pipe = pipe.pipe(callback);
   deferred.resolve();
 }
+
+String.prototype.toProperCase = function() {
+    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
 
 function dialog_iframe(data){
   var $dialog;
@@ -95,6 +100,7 @@ function dialog_iframe(data){
   $('.dialog-class').css({position:'fixed'});
   $dialog.dialog('open');
   eval(data.name+'=$dialog;');
+  current_dialog = $dialog;
 }
 
 function open_login_dialog(){
@@ -119,6 +125,25 @@ function open_login_dialog(){
 
 function close_dialog(dialog_name){
   eval(dialog_name).dialog('close');
+  current_dialog = null;
+}
+
+function check_user_data(is_authenticated, username){
+  if(user.is_authenticated != is_authenticated ||
+      (user.is_authenticated && user.username != username)){
+    user.is_authenticated = is_authenticated;
+    if(user.is_authenticated)
+      user.username = username;
+    if(current_dialog){
+      try{
+        current_dialog.dialog('close');
+      } catch(e){}
+    }
+    if(is_authenticated)
+      $(document).trigger('login');
+    else
+      $(document).trigger('logout');
+  }
 }
 
 function load_pagelets(dom_elem){
@@ -135,8 +160,9 @@ function fill_data_in_pagelet(pagelet_name, html){
   var $elem = $('.pagelet#'+pagelet_name);
   var wrapped_html = $('<div>'+html+'</div>');
   var styles = wrapped_html.find('link[rel=stylesheet]');
-  var scripts = wrapped_html.find('script');
+  var scripts = wrapped_html.find('script[src]');
   var messages = wrapped_html.find('messages');
+  var userdata = wrapped_html.find('userdata');
   for(var i=0; i<styles.length; i++){
     var style = styles[i];
     var href = style.getAttribute('href');
@@ -145,9 +171,14 @@ function fill_data_in_pagelet(pagelet_name, html){
   styles.remove();
   scripts.remove();
   messages.remove();
+  userdata.remove();
   html = wrapped_html.html();
   $elem.html(html);
-  display_messages(eval(messages.html()));
+  display_messages(eval($(messages).attr('data')));
+  check_user_data(
+      eval($(userdata).attr('is_authenticated')),
+      $(userdata).attr('username')
+  );
   var script_src_list = [];
   for(i=0; i<scripts.length; i++){
     var script = scripts[i];
@@ -155,7 +186,8 @@ function fill_data_in_pagelet(pagelet_name, html){
     if(src) script_src_list.push(src);
   }
   load_scripts_in_pipe(script_src_list, function(){
-    setup_form();
+    if(typeof setup_form != "undefined")
+      setup_form();
   });
   $(document).trigger("pagelet_loaded_"+pagelet_name);
   ajaxform_success = function(data){
@@ -173,13 +205,14 @@ function fill_data_in_pagelet(pagelet_name, html){
   load_pagelets($elem);
 }
 
-function load_pagelet(pagelet_name){
+function load_pagelet(pagelet_name, callback){
   var $elem = $('.pagelet#'+pagelet_name);
   $.ajax({
     type: "GET",
     url: $elem.attr('pagelet-url')
   }).done(function(html){
     fill_data_in_pagelet(pagelet_name, html);
+    if(callback)callback();
   });
 }
 
@@ -221,6 +254,16 @@ function logout(){
         is_authenticated: false
       };
       $(document).trigger("logout");
+  });
+}
+
+function take_feedback(){
+  dialog_iframe({
+    name:'feedback_dialog',
+    title:'Feedback',
+    width:600,
+    height:360,
+    src:'/helpcenter/feedback/'
   });
 }
 

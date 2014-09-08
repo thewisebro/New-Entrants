@@ -6,6 +6,7 @@ from BeautifulSoup import BeautifulSoup, NavigableString
 # Python Imports
 from xml.etree import ElementTree
 from urllib2 import Request, urlopen, URLError
+from dateutil import parser
 import re
 import subprocess
 import os
@@ -43,11 +44,9 @@ def Hindu(path, channel):
         if len(archive) is 0:
           link = item.find('link').text
           des = item.find('description').text
-          pub_date = item.find('pubDate')
-          print "PUB DATE = "
-          print list(pub_date)
-          dt = datetime.datetime.now()
-          published_date = datetime.datetime(dt.year,dt.month,dt.day)
+          pub_date_string = item.findtext('pubDate')
+          published_date = parser.parse(pub_date_string)
+
           print "\n>>>>>>>>>>>>>>>>>>>>>>       <<<<<<<<<<<<<<<<<<<<<<<<<<<"
           print title
           print "Counter: "+str(counter)

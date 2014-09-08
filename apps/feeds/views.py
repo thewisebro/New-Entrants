@@ -3,7 +3,6 @@ import json as simplejson
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.contrib.auth.models import User
 from django.db.models import Q
 
 from feeds.models import *
@@ -44,7 +43,7 @@ def fetch(request):
       else:
         feeds = feeds.filter(pk__gt = pk)
         json = simplejson.dumps({'feeds':map(feed_dict,feeds)})
-      return HttpResponse(json,mimetype='application/json')
+      return HttpResponse(json, content_type='application/json')
 #    except Exception as e:
 #      logger.exception('Exception accured in feeds/fetch : '+str(e))
 #      return HttpResponse('')

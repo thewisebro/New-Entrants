@@ -34,7 +34,7 @@ function update_feeds(action,number){
       if(action != 'previous'){
         feeds = feeds.concat(data.feeds);
         more_feeds = data.more?true:false;
-        if(get_current_app() == 'home')
+        if(nucleus.get_current_app() == 'home')
           display_add_feeds('end',data.feeds);
       }
       else{

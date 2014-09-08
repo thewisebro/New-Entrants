@@ -1,0 +1,69 @@
+{% extends "pagelet_base.html" %}
+
+{% block scripts %}
+  <script type="text/javascript">
+    var channeli_apps = {{ channeli_apps }};
+    var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
+  </script>
+
+  {% if pass_change %}
+    <script type='text/javascript'>
+      dialog_iframe({
+        name:'pass_change',
+        title: 'Change Password',
+        width: 350,
+        height: 260,
+        src:'/settings/password_firstyear/'
+      });
+    </script>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div id="header">
+    <div id="header-title"><a href="/">Channel i</a></div>
+    <div id="header-search">
+      <input type="search" name="q" id="global_search_bar" autocomplete="off" placeholder="Search here"/>
+    </div>
+    <div id="header-options">
+      {% if user.is_authenticated %}
+        <div id="user-account">
+          <div id="user-thumbnail"><img src="{{ user.photo_url }}"/></div>
+        </div>
+        {% if not_viewed_notifications_count == 0 %}
+          <div id="notifications-count" class="notifications-count-inact">0</div>
+        {% else %}
+          <div id="notifications-count">{{ not_viewed_notifications_count }}</div>
+        {% endif %}
+        <div id="user-name">{{ user.name }}</div>
+      {% else %}
+        <div id="login" class="header-option div-button" onclick="open_login_dialog();">Sign In</div>
+      {% endif %}
+    </div>
+    {% if user.is_authenticated %}
+    <div id="account-navigation">
+      <div id="navigation-user"></div>
+      <div id="navigation-options">
+        <div class="navigation-option" onclick="location.hash='#settings';">Settings</div>
+        <div class="navigation-option" onclick="take_feedback();">Give feedback</div>
+        <div class="navigation-option" onclick="location.hash='#helpcenter'">Help Center</div>
+        <div class="navigation-option" id="logout" onclick="logout();">Sign Out</div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div id="sidebar">
+    <div id="sidebar-tabs">
+      {% for tab in tabs %}
+        <div id="{{ tab.name }}-tab" class="tab" onclick="nucleus.tab_clicked('{{ tab.name }}');">
+          <div class="tab-icon {{ tab.name }}-tab-icon float-left">
+            <i class="{{ tab.class }}" style="color:{{ tab.color }}"></i>
+          </div>
+          <span class="tab-name float-left">{{ tab.name|title }}</span>
+        </div>
+      {% endfor %}
+      <div id="tab-arrow"><div></div></div>
+    </div>
+  </div>
+{% endblock %}
