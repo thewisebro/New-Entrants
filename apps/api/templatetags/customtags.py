@@ -4,6 +4,9 @@ from django.template import Library
 from django.template.defaulttags import url as default_url
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
+from django.utils.html import escape
+
+from nucleus.constants import channeli_apps,external_links
 
 from nucleus.constants import channeli_apps,external_links
 
@@ -32,6 +35,18 @@ def pagelet(context, pagelet_name, *args, **kwargs):
     url = reverse(pagelet_name, args=args, kwargs=kwargs)
   return """<div id="%s" class="pagelet" pagelet-url="%s"></div>""" % (pagelet_name, url)
 
+
+@register.simple_tag(takes_context=True)
+def pagelet_metadata(context, *args, **kwargs):
+  django_messages = context.get('django_messages', [])
+  escaped_messages = escape(str(django_messages))
+  user = context.get('user')
+  if user.is_authenticated():
+    userdata = "<userdata username='%s' is_authenticated='true' />" % escape(
+                user.username)
+  else:
+    userdata = "<userdata username='' is_authenticated='false' />"
+  return mark_safe(userdata + ('<messages data="%s" />' % escaped_messages))
 
 @register.filter
 def jsonify(obj):

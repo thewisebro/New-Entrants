@@ -1,4 +1,6 @@
 *.sw*
+!*.swf
 *.pyc
 *~
 .sass-cache/*
+settings/local_settings.py

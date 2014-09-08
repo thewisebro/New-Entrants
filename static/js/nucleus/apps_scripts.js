@@ -5,6 +5,10 @@ var apps_scripts = {
     '/static/js/prettydate.js',
     '/static/js/feeds/feeds.js'
   ],
+  'notifications':[
+    '/static/js/prettydate.js',
+    '/static/js/notifications/base.js'
+  ],
   'forum':[
     '/static/js/forum/base.js'
   ],
@@ -22,10 +26,12 @@ var apps_scripts = {
     '/static/js/news/news.js'
   ],
   'helpcenter':[
+    '/static/handlebars/helpcenter/templates.js',
     '/static/js/prettydate.js',
     '/static/js/helpcenter/helpcenter.js'
   ],
   'settings':[
+    '/static/handlebars/utilities/templates.js',
     '/static/js/utilities/base.js'
   ]
 };
