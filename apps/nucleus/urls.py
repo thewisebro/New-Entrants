@@ -1,8 +1,7 @@
 from django.conf.urls import patterns, include, url
 
 pagelet_patterns = patterns('nucleus.pagelets',
-  url(r'^header/$', 'header', name='header'),
-  url(r'^sidebar/$', 'sidebar', name='sidebar'),
+  url(r'^header_sidebar/$', 'header_sidebar', name='header_sidebar'),
 )
 
 urlpatterns = patterns('',

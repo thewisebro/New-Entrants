@@ -15,13 +15,14 @@ from django.utils.html import escape
 
 from core import forms
 from helpcenter.models import *
-from api.utils import get_client_ip
+from api.utils import get_client_ip, pagelet_login_required,\
+                      ajax_login_required, dialog_login_required
 from helpcenter.forms import *
 from nucleus.models import User, WebmailAccount
 
 logger = logging.getLogger('channel-i_logger')
 
-@login_required
+@pagelet_login_required
 def pagelet_index(request):
   ResponseForm = ResponseFormGen(request.user)
   form = ResponseForm()
@@ -29,7 +30,7 @@ def pagelet_index(request):
   queries_exists = False
   if not user_in_img:
     queries_exists = Response.objects.filter(user=request.user).exists()
-  return render(request, 'helpcenter/pagelet_index.html', {
+  return render(request, 'helpcenter/pagelets/index.html', {
       'form': form,
       'user_in_img': user_in_img,
       'queries_exists': queries_exists,
@@ -72,7 +73,7 @@ def response_dict(response, user=None):
     })
   return res_dict
 
-@login_required
+@ajax_login_required
 def fetch(request):
   if request.is_ajax() and request.method == 'GET':
     user_in_img = request.user.in_group('Helpcenter Admin')
@@ -92,7 +93,7 @@ def fetch(request):
     return HttpResponse(json,content_type='application/json')
   return HttpResponse("")
 
-@login_required
+@ajax_login_required
 def give_response(request):
   if request.is_ajax() and request.method == 'POST':
     text = request.POST['text']
@@ -105,7 +106,7 @@ def give_response(request):
       return HttpResponse(json,content_type='application/json')
   return HttpResponse("")
 
-@login_required
+@ajax_login_required
 def give_reply(request):
   if request.is_ajax() and request.method == 'POST':
     user_in_img = request.user.in_group('Helpcenter Admin')
@@ -131,14 +132,15 @@ def send_a_mail(email, msg):
   server.sendmail(fromaddr, toaddrs, message)
   server.quit()
 
-@login_required
+@ajax_login_required
 def set_resolved(request):
   if request.is_ajax() and request.method == 'POST' and request.user.in_group('Helpcenter Admin'):
     response = Response.objects.get(pk=request.POST['response_id'])
     value = int(request.POST['value'])
     response.resolved = True if value else False
     response.save()
-    logger.info("Helpcenter : User("+request.user.username+") set resolved = '"+('True' if value else 'False')+"' in response (id="+str(response.pk)+").")
+    logger.info("Helpcenter : User("+request.user.username+") set resolved = '"+\
+        ('True' if value else 'False')+"' in response (id="+str(response.pk)+").")
     json = simplejson.dumps({'response':response_dict(response,request.user)})
     return HttpResponse(json,content_type='application/json')
   return HttpResponse('')
@@ -172,19 +174,21 @@ def login_help(request, username=''):
         close = True
     else:
       close = True
-  return render(request, 'helpcenter/login_help.html', {
+  if close:
+    return HttpResponseRedirect(reverse('close_dialog', kwargs={
+              'dialog_name': 'login_help_dialog'
+    }))
+  return render(request, 'helpcenter/dialogs/login_help.html', {
       'form': form,
       'post': post,
       'option': option,
-      'close': close
   })
 
 
-@login_required
+@dialog_login_required
 def feedback(request):
   ResponseForm = ResponseFormGen(request.user)
   form = ResponseForm()
-  close = False
   if request.method == 'POST':
     form = ResponseForm(request.POST)
     if form.is_valid():
@@ -193,8 +197,9 @@ def feedback(request):
       Response.objects.create(user=request.user,text=text,response_type='feedback',app=app)
       messages.info(request,'Thank you for your feedback.')
       logger.info("Helpcenter : User("+request.user.username+") gave a feedback.")
-      close = True
-  return render(request, 'helpcenter/feedback.html', {
+      return HttpResponseRedirect(reverse('close_dialog', kwargs={
+              'dialog_name': 'feedback_dialog'
+      }))
+  return render(request, 'helpcenter/dialogs/feedback.html', {
       'form':form,
-      'close':close
   })

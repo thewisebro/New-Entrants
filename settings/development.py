@@ -16,6 +16,7 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 
 DEBUG = True
+PRODUCTION = False
 TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
@@ -25,6 +26,8 @@ NEWS_MEDIA_ROOT = GLOBAL_MEDIA_ROOT + 'news/'
 NEWS_IMAGES_ROOT = NEWS_MEDIA_ROOT + 'images/'
 NEWS_XML_ROOT = NEWS_MEDIA_ROOT + 'xml_files/'
 NEWS_MEDIA_URL = '/newsmedia/'
+
+CHAT_SYSTEM_DEBUG = False
 
 JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
 JUKEBOX_MEDIA_URL = '/songsmedia/'
@@ -86,7 +89,7 @@ USE_I18N = True
 USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = False
+USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -156,7 +159,9 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
   'api.middlewares.DelegateMiddleware',
+  'api.middlewares.AjaxMessaging',
   'django_user_agents.middleware.UserAgentMiddleware',
+  'admin_reorder.middleware.ModelAdminReorder',
   # Uncomment the next line for simple clickjacking protection:
   # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -222,6 +227,7 @@ THIRD_PARTY_APPS = (
   'django_user_agents',
   'haystack',
   'filemanager',
+  'admin_reorder',
 )
 
 CHANNELI_APPS = (
@@ -235,6 +241,7 @@ CHANNELI_APPS = (
   'groups',
   'events',
   'news',
+  'connections',
   'lostfound',
   'notifications',
   'helpcenter',
@@ -278,7 +285,7 @@ SHELL_PLUS = "ipython"
 
 SESSION_COOKIE_NAME = 'PHPSESSID'
 SESSION_ENGINE = 'nucleus.session'
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 CACHES = {
   'default': {
@@ -286,6 +293,8 @@ CACHES = {
     'LOCATION': '127.0.0.1:11211',
   }
 }
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -383,6 +392,8 @@ HAYSTACK_CONNECTIONS = {
       # 'URL': 'http://127.0.0.1:8983/solr/mysite',
     }
 }
+
+from admin_settings import *
 
 try:
   from local_settings import *

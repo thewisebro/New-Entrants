@@ -29,7 +29,7 @@ var current_selected_source = ""; // Tracks the current source
 
 $(document).on('load_app_news', function(){
   if(!user.is_authenticated){
-    redirect_to_home();
+    nucleus.redirect_to_home();
     return;
   }
 
@@ -156,7 +156,7 @@ $(document).on('load_app_news', function(){
 
 $(document).on("logout", function(){
   if(get_current_app() == 'news')
-    redirect_to_home();
+    nucleus.redirect_to_home();
 });
 
 function get_home( res ) {

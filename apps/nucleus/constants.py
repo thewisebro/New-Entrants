@@ -1,3 +1,5 @@
+DEFAULT_PASSWORD = 'helloiitr'
+
 tabs = [
   ('home', False, [], 'fa fa-home', '#41AAF0'),
   ('apps', False, [], 'fa fa-th-large', '#F14D39'),
@@ -21,17 +23,16 @@ channeli_apps = {
   'ebooks' : {'name':'E-Books', 'url':'/ebooks/'},
   'vle' : {'name':'VLE', 'url':'/vle/'},
   'games' : {'name':'Games', 'url':'/games/'},
-  'jukebox' : {'name':'JukeBox', 'url':'/jukebox/'},
+  'jukebox' : {'name':'JukeBox', 'url':'/#jukebox/'},
   'notices' : {'name':'Notice-Board', 'url':'/notices/'},
   'grades' : {'name':'Grades Online', 'url':'/grades/'},
   'androidnotices' : {'name':'Notice-Board Android App',
     'url':'https://market.android.com/details?id=in.ernet.iitr.people'},
-  'notices' : {'name':'Notice-Board', 'url':'/notices/'},
   'kriti' : {'name':'Kriri', 'url':'/kriti/'},
   'facapp' : {'name':'Faculty Profile', 'url':'/facapp/'},
   'softwares':{'name':'Download Softwares', 'url':'/softwares/'},
   'messmenu' : {'name':'Mess Menu', 'url':'/messmenu/'},
-  'helpcenter' : {'name':'Help Center', 'url':'/helpcenter/'},
+  'helpcenter' : {'name':'Help Center', 'url':'/#helpcenter/'},
   'peoplesearch' : {'name':'People Search',
     'url':'http://people.iitr.ernet.in/PeopleSearch/'
   },
