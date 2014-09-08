@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block pre_scripts %}
+  <script type="text/javascript">
+    parent.display_messages({{ django_messages}});
+    var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
+    parent.check_user_data(user.is_authenticated, user.username||'');
+  </script>
+{% endblock %}

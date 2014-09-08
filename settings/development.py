@@ -157,6 +157,7 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
   'api.middlewares.DelegateMiddleware',
+  'api.middlewares.AjaxMessaging',
   'django_user_agents.middleware.UserAgentMiddleware',
   'admin_reorder.middleware.ModelAdminReorder',
   # Uncomment the next line for simple clickjacking protection:
@@ -289,6 +290,8 @@ CACHES = {
     'LOCATION': '127.0.0.1:11211',
   }
 }
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

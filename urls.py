@@ -7,6 +7,7 @@ admin.autodiscover()
 actual_urlpatterns = patterns('',
   url(r'', include('nucleus.urls')),
   url(r'^feeds/', include('feeds.urls')),
+  url(r'^notifications/', include('notifications.urls')),
   url(r'^events/', include('events.urls')),
   url(r'^lostfound/', include('lostfound.urls')),
   url(r'^buysell/', include('buysell.urls')),
