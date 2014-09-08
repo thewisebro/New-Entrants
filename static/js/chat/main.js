@@ -3,6 +3,7 @@ var document_state_var = 0;
 //$(document).ready(function(){
 //});
 
+//localStorage.debug = '*';
 
 $(document).on("pagelet_loaded_header_sidebar",function(){
   if(user.is_authenticated && document_state_var == 0){

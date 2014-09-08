@@ -3,8 +3,7 @@
 import os
 import sys
 
-SETTINGS_DIR = os.path.dirname(__file__)
-PROJECT_ROOT = os.path.dirname(SETTINGS_DIR)
+PROJECT_ROOT = os.path.dirname(__file__)
 
 # Email Settings
 EMAIL_HOST = '192.168.180.11'
@@ -16,7 +15,6 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 
 DEBUG = True
-PRODUCTION = False
 TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
@@ -26,8 +24,6 @@ NEWS_MEDIA_ROOT = GLOBAL_MEDIA_ROOT + 'news/'
 NEWS_IMAGES_ROOT = NEWS_MEDIA_ROOT + 'images/'
 NEWS_XML_ROOT = NEWS_MEDIA_ROOT + 'xml_files/'
 NEWS_MEDIA_URL = '/newsmedia/'
-
-CHAT_SYSTEM_DEBUG = False
 
 JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
 JUKEBOX_MEDIA_URL = '/songsmedia/'
@@ -106,8 +102,6 @@ NAS_MEDIA_ROOT = '/home/apps/nas/'
 # Public URL of NAS folder
 NAS_PUBLIC_URL = 'http://www.iitr.ac.in/media/'
 
-STATIC_PATH = os.path.join(PROJECT_ROOT, 'static') + os.sep
-
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -138,8 +132,6 @@ STATICFILES_FINDERS = (
   'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
   'compressor.finders.CompressorFinder',
-  'api.finders.HandlebarsFinder',
-  'api.finders.SassFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -159,20 +151,8 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
   'api.middlewares.DelegateMiddleware',
-  'django_user_agents.middleware.UserAgentMiddleware',
-  'admin_reorder.middleware.ModelAdminReorder',
   # Uncomment the next line for simple clickjacking protection:
   # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
-
-PASSWORD_HASHERS = (
-  'django.contrib.auth.hashers.SHA1PasswordHasher',
-  'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-  'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-  'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-  'django.contrib.auth.hashers.BCryptPasswordHasher',
-  'django.contrib.auth.hashers.MD5PasswordHasher',
-  'django.contrib.auth.hashers.CryptPasswordHasher',
 )
 
 CRON_CLASSES = (
@@ -223,15 +203,13 @@ THIRD_PARTY_APPS = (
   'compressor',
   'django_extensions',
   'django_cron',
-  'django_user_agents',
   'haystack',
   'filemanager',
-  'admin_reorder',
 )
 
 CHANNELI_APPS = (
   'nucleus',
-  'jukebox',
+  #'jukebox',
   'api',
   'moderation',
   'notices',
@@ -240,7 +218,6 @@ CHANNELI_APPS = (
   'groups',
   'events',
   'news',
-  'connections',
   'lostfound',
   'notifications',
   'helpcenter',
@@ -249,7 +226,6 @@ CHANNELI_APPS = (
   'academics',
   'games',
   'buysell',
-  'utilities',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
@@ -271,7 +247,6 @@ CRISPY_CLASS_CONVERTERS = {
   'datetimewidget': "textinput textInput",
   'emailinput': "textinput textInput",
   'numberinput': "textinput textInput",
-  'readonlytextinput': "textinput textInput readonlytextinput",
 }
 
 COMPRESS_PRECOMPILERS = (
@@ -283,7 +258,6 @@ SHELL_PLUS = "ipython"
 
 SESSION_COOKIE_NAME = 'PHPSESSID'
 SESSION_ENGINE = 'nucleus.session'
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 CACHES = {
   'default': {
@@ -320,19 +294,6 @@ LOGGING = {
       'filters': ['require_debug_false'],
       'class': 'django.utils.log.AdminEmailHandler'
     },
-    'console':{
-      'level':'DEBUG',
-      'class':'logging.StreamHandler',
-      'formatter': 'simple'
-    },
-    'file_logger': {
-      'level':'DEBUG',
-      'class':'logging.handlers.TimedRotatingFileHandler',
-      'formatter': 'verbose',
-      'filename' : os.path.join(PROJECT_ROOT, 'logs/django'),
-      'when'     : 'midnight',
-      'backupCount':365
-    },
     'lostfound_file_logger': {
       'level':'DEBUG',
       'class':'logging.handlers.TimedRotatingFileHandler',
@@ -357,18 +318,15 @@ LOGGING = {
       'level': 'ERROR',
       'propagate': True,
     },
-    'channel-i_logger': {
-      'handlers':['file_logger', 'console'],
-      'level':'INFO'
-    },
     'lostfound': {
-      'handlers':['lostfound_file_logger', 'console'],
+      'handlers':['lostfound_file_logger'],
       'level':'INFO'
     },
     'buysell': {
-      'handlers':['buysell_file_logger', 'console'],
+      'handlers':['buysell_file_logger'],
       'level':'INFO'
     },
+
   }
 }
 
@@ -389,9 +347,7 @@ HAYSTACK_CONNECTIONS = {
     }
 }
 
-from admin_settings import *
-
 try:
-  from local_settings import *
+  from production.settings import *
 except ImportError:
   pass
