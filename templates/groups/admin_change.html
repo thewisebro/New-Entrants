@@ -12,6 +12,7 @@
      </p>
     {% endif %}
     <form action = "" method = "post" class="uniForm">
+    {% csrf_token %}
        <div class="edit-categories">
          {{ form.uniform }}
          <input class="input-button" type = "submit" name ="submit_button" value = "Submit">

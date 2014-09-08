@@ -234,7 +234,7 @@ def member_add(request, username):
         except User.DoesNotExist as e:
           form = MemberAddForm(instance=groupinfo)
           return render_to_response('groups/member_add.html', {
-              'msg': 'Specified person not found',
+              'msg': 'Specified student not found',
               'form' : form,
               'group' : group,
               'page_info':page_info,
@@ -288,7 +288,7 @@ def member_delete(request,username):
       members_list = request.POST.getlist('members')
       check = True
       for member_to_be_deleted in members_list :
-        student = Person.objects.get(pk=str(member_to_be_deleted))
+        student = Student.objects.get(pk=str(member_to_be_deleted))
         m = Membership.objects.get(student=student,groupinfo=groupinfo)
         if m :
           m.delete()
@@ -402,7 +402,7 @@ def admin_change(request, username):
       form = form(request.POST)
       if form.is_valid() :
         member = form.cleaned_data['student']
-        username = str(member).partition(':')[0]
+        username = str(member).rpartition(':')[0].partition(':')[2]
         u = User.objects.get(username=username)
         new_admin = u.student
         if group.admin <> new_admin:
@@ -416,7 +416,7 @@ def admin_change(request, username):
           msg = 'Successfully changed'
           messages.success(request,msg)
         else:
-          msg='Specified Person is already admin of the group.'
+          msg='Specified Student is already admin of the group.'
           messages.error(request,msg)
         return render_to_response('groups/admin_change.html', {
               'form' : form,
@@ -533,7 +533,8 @@ def post_change(request,username):
       if form.is_valid() :
         member = form.cleaned_data['student']
         postname = form.cleaned_data['post']
-        username = str(member).partition(':')[0]
+        username = str(member).rpartition(':')[0].partition(':')[2]
+        print username
         postobj = groupinfo.posts.get_or_create(post_name=postname)[0]
         u = User.objects.get(username=username)
         p = u.student
@@ -558,7 +559,7 @@ def post_change(request,username):
 @login_required
 def subscriber(request,username):
   """
-    Subscribe/Unscubscribes a person to a group.
+    Subscribe/Unscubscribes a student to a group.
   """
   try:
     group = Group.objects.get(user__username=username)
@@ -586,7 +587,7 @@ def subscriber(request,username):
     json = json.dumps({'subscribers':subscribers})
     return HttpResponse(json,mimetype='application/json')
   else:
-    return HttpResponseRedirect('/groups'+username)
+    return HttpResponseRedirect('/groups/'+username)
 
 @login_required
 def activate(request,username):
@@ -616,7 +617,7 @@ def activate(request,username):
     messages.success(request,'Your group has been successfully activated')
     return HttpResponseRedirect(reverse('groups.views.group_details',args=[username]))
   else:
-    return HttpResponseRedirect('/groups'+username)
+    return HttpResponseRedirect('/groups/'+username)
 
 @login_required
 def group_activity(request,username):

@@ -1,11 +1,10 @@
 from core import forms
 from groups import models
-#from api.custom_checkboxes import CustomCheckboxSelectMultiple
 
 class GroupForm(forms.ModelForm) :
   class Meta :
     model   = models.Group
-    exclude = ('admin', 'members', 'group_admin','user','is_active')
+    exclude = ('admin','user','is_active')
 
   def __init__(self, *args, **kwargs):
     super(GroupForm, self).__init__(*args, **kwargs)
@@ -15,7 +14,7 @@ class GroupForm(forms.ModelForm) :
 class GroupInfoForm(forms.ModelForm) :
   class Meta :
     model   = models.GroupInfo
-    exclude = ('subscribers','group','members','posts','photo')
+    exclude = ('subscribers','group','members','posts')
 
   def __init__(self, *args, **kwargs):
     super(GroupInfoForm, self).__init__(*args, **kwargs)
@@ -53,7 +52,7 @@ def PostChangeFormGen(groupinfo):
   class PostChangeForm(forms.ModelForm):
     class Meta:
       model = models.Membership
-      exclude = ('groupinfo')
+      exclude = ('groupinfo',)
     def __init__(self, *args, **kwargs):
       super(PostChangeForm, self).__init__(*args, **kwargs)
       self.fields['student'].queryset = groupinfo.members
