@@ -76,7 +76,7 @@ def is_user_django_loginable(user, password):
 def get_webmail_account(username):
   """ Returns WebmailAccount instance or None
   """
-  webmail_account = WebmailAccount.objects.get_or_none(user__username=username)
-  if webmail_account:
-    return webmail_account
+  webmail_accounts = WebmailAccount.objects.filter(user__username=username)
+  if webmail_accounts.exists():
+    return webmail_accounts[0]
   return WebmailAccount.objects.get_or_none(webmail_id=username)

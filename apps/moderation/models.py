@@ -15,7 +15,7 @@ class Report(models.Model):
   moderated_by = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,
                                     related_name='moderated_reports')
 
-class Reportable(djangomodels.Model):
+class Reportable(models.mixins.Trashable):
   reports = generic.GenericRelation(Report)
 
   class Meta:

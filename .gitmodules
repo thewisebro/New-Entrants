@@ -31,3 +31,6 @@
 [submodule "third_party_apps/django-filemanager"]
 	path = third_party_apps/django-filemanager
 	url = https://github.com/IMGIITRoorkee/django-filemanager.git
+[submodule "third_party_apps/django-modeladmin-reorder"]
+	path = third_party_apps/django-modeladmin-reorder
+	url = https://github.com/mishbahr/django-modeladmin-reorder

@@ -16,12 +16,13 @@ from api.utils import int2roman
 from facapp import constants as FC
 from crop_image import CropImage
 
-
+import redis
+client = redis.Redis("localhost")
 ############################# Base Models #############################
 
 class OwnerActiveManager(models.Manager):
-  def get_query_set(self):
-    return super(OwnerActiveManager, self).get_query_set().filter(active=True)
+  def get_queryset(self):
+    return super(OwnerActiveManager, self).get_queryset().filter(active=True)
 
 class Owner(models.Model):
   account = models.ForeignKey('User', related_name='account_owners')
@@ -98,7 +99,8 @@ class User(AbstractUser, models.Model):
                                 verbose_name='Date of Birth')
   contact_no = models.CharField(max_length=12, blank=True,
                                 verbose_name='Contact No')
-  connections = models.ManyToManyField('self', blank=True, null=True)
+  connections = models.ManyToManyField('self', through='Connection', symmetrical=False,
+                                      related_name='related_to+', blank=True, null=True)
   objects = CustomUserManager()
 
   def __unicode__(self):
@@ -137,7 +139,7 @@ class User(AbstractUser, models.Model):
         string += ' ' + int2roman(student.year) + ' Year'
       return string
     elif self.in_group('Faculty'):
-      return dict(DESIGNATION_CHOICES)[self.faculty.designation]+\
+      return dict(FC.DESIGNATION_CHOICES)[self.faculty.designation]+\
           ', ' + MC.SIMPLIFIED_DEPARTMENTS[self.faculty.department]
     elif self.in_group('Student Group'):
       return 'Student Group'
@@ -158,12 +160,24 @@ class User(AbstractUser, models.Model):
           escape(self.photo_url)+"'>"+escape(self.short_name)+\
           "</span>")
 
+  @property
+  def role_group(self):
+    if self.in_group('Student'):
+      return 'Student'
+    elif self.in_group('Faculty'):
+      return 'Faculty'
+    elif self.in_group('Student Group'):
+      return 'Student Group'
+    else:
+      return 'Other'
+
   def serialize(self):
     return {
       'is_authenticated': True,
       'username': self.username,
       'name': self.name,
-      'photo': self.photo_url
+      'photo': self.photo_url,
+      'role': self.role_group,
     }
 
   @property
@@ -176,6 +190,54 @@ class User(AbstractUser, models.Model):
     return User.objects.filter(account_owners__user=self,
                                 account_owners__active=True)
 
+  def add_connection(self, user, symmetric=True):
+    connection, created = Connection.objects.get_or_create(
+      from_user = self,
+      to_user = user,
+      status = 1
+    )
+    to_user__user_info = {'name': user.name, 'enr': user.username, 'status': 0, 'is_chat_on': 0}
+    client.hmset('user:'+user.username, to_user__user_info)
+    client.sadd('friends:'+self.username, user.username)
+    if symmetric:
+      user.add_connection(self, False)
+    return connection
+
+  def update_connection(self, user, status, symmetric=True):
+    if status in (1,3):
+      connection = Connection.objects.get(from_user=self, to_user=user)
+      connection.status = status
+      connection.save()
+      if status is 1:
+        client.sadd('friends:'+self.username, user.username)
+      elif status is 3:
+        client.srem('friends:'+self.username, user.username)
+      if symmetric:
+        user.update_connection(self, status, False)
+      return connection
+    else:
+      return
+
+  def remove_connection(self, user, symmetric=True):
+    connection = Connection.objects.filter(from_user=self, to_user=user)
+    connection.delete()
+    client.srem('friends:'+self.username, user.username)
+    if symmetric:
+      user.remove_connection(self, False)
+    return
+
+  def get_friends(self):
+    #return Connection.objects.filter(from_user=self, status=1)
+    return self.connections.filter(
+      to_people__status=1,
+      to_people__from_user=self
+    )
+
+  def get_connections(self, status):
+    return self.connections.filter(
+      to_people__status=status,
+      to_people__from_user=self
+    )
 
 class WebmailAccount(models.Model):
   webmail_id = models.CharField(max_length=15, primary_key=True)
@@ -239,13 +301,15 @@ class AbstractStudentBase(django_models.Model):
                               choices=MC.SEMESTER_CHOICES)
   semester_no = models.IntegerField()
   branch = models.ForeignKey(Branch)
-  admission_year = models.IntegerField()
+  admission_year = models.IntegerField(verbose_name='Admission Year')
   admission_semtype = models.CharField(max_length=1,
-                          choices=MC.SEMESTER_TYPE_CHOICES)
+                          choices=MC.SEMESTER_TYPE_CHOICES,
+                          verbose_name='Admission Semester')
   cgpa = models.CharField(max_length=6, blank=True)
   bhawan = models.CharField(max_length=MC.CODE_LENGTH,
             choices=MC.BHAWAN_CHOICES, null=True, blank=True, default=None)
-  room_no = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
+  room_no = models.CharField(max_length=MC.CODE_LENGTH, blank=True,
+                              verbose_name='Room No')
 
   class Meta:
     ordering = ['semester','branch']
@@ -288,37 +352,51 @@ class StudentUser(User, AbstractStudentBase):
     managed = False
 
 class AbstractStudentInfo(django_models.Model):
-  fathers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  fathers_occupation = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
+  fathers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='Father\'s Name')
+  fathers_occupation = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='Father\'s Occupation')
   fathers_office_address = models.CharField(max_length=MC.TEXT_LENGTH,
-                                            blank=True)
-  fathers_office_phone_no = models.CharField(max_length=12, blank=True)
-  mothers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  permanent_address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  home_contact_no = models.CharField(max_length=12, blank=True)
+                  blank=True, verbose_name='Father\'s Office Address')
+  fathers_office_phone_no = models.CharField(max_length=12, blank=True,
+                  verbose_name='Father\'s Office Phone No')
+  mothers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='Mother\'s Name')
+  permanent_address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='Permanent Address')
+  home_contact_no = models.CharField(max_length=12, blank=True,
+                  verbose_name='Home Contact No')
   state = models.CharField(max_length=3, choices=MC.STATE_CHOICES, blank=True)
   city = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
   pincode = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
-  bank_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  bank_account_no = models.CharField(max_length=25, blank=True)
-  passport_no = models.CharField(max_length=25, blank=True)
+  bank_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='Bank Name')
+  bank_account_no = models.CharField(max_length=25, blank=True,
+                  verbose_name='Bank Account No')
+  passport_no = models.CharField(max_length=25, blank=True,
+                  verbose_name='Passport No')
   nearest_station = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
-                                      choices=MC.RAILWAY_CHOICES)
-  local_guardian_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
+                  choices=MC.RAILWAY_CHOICES, verbose_name='Nearest Station')
+  local_guardian_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='Local Guardian\'s Name')
   local_guardian_address = models.CharField(max_length=MC.TEXT_LENGTH,
-                                            blank=True)
-  local_guardian_contact_no = models.CharField(max_length=12, blank=True)
+                  blank=True, verbose_name='Local Guardian\'s Address')
+  local_guardian_contact_no = models.CharField(max_length=12, blank=True,
+                  verbose_name='Local Guardian\'s Contact No')
   category = models.CharField(max_length=3, choices=MC.CATEGORY_CHOICES,
-                              blank=True)
+                  blank=True)
   nationality = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  marital_status = models.CharField(max_length=3,
-                            choices=MC.MARITAL_STATUS_CHOICES, blank=True)
+  marital_status = models.CharField(max_length=3, blank=True,
+                  choices=MC.MARITAL_STATUS_CHOICES,
+                  verbose_name='Marital Status')
   blood_group = models.CharField(max_length=3, choices=MC.BLOOD_GROUP_CHOICES,
-                                  blank=True)
-  physically_disabled = models.BooleanField(default=False, blank=True)
+                  blank=True, verbose_name='Blood Group')
+  physically_disabled = models.BooleanField(default=False, blank=True,
+                  verbose_name='Physically Disabled')
   fulltime = models.BooleanField(default=False, blank=True)
   resident = models.BooleanField(default=True, blank=True)
-  license_no = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
+  license_no = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+                  verbose_name='License No')
 
   class Meta:
     abstract = True
@@ -464,6 +542,8 @@ class PHPSession(models.Model):
 class FriendRequest(models.Model):
   from_user = models.ForeignKey(User, related_name='friendrequests_to')
   to_user = models.ForeignKey(User, related_name='friendrequests_from')
+  is_declined = models.BooleanField(default=False)
+  is_seen = models.BooleanField(default=False)
 
   class Meta:
     unique_together = ['from_user', 'to_user']
@@ -537,3 +617,11 @@ class GlobalVar(models.Model):
 
   def __unicode__(self):
     return self.key + ':' + self.value
+
+class Connection(models.Model):
+  from_user = models.ForeignKey(User, related_name='from_people')
+  to_user = models.ForeignKey(User, related_name='to_people')
+  status = models.IntegerField(choices=MC.CONNECTION_STATUS)
+
+  def __unicode__(self):
+    return self.from_user.name+": "+self.to_user.name

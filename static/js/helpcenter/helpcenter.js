@@ -5,12 +5,10 @@ var img_dp_url = '/static/images/nucleus/img_dp.png';
 
 $(document).on("load_app_helpcenter", function(e,hash1,hash2){
   if(!user.is_authenticated){
-    redirect_to_home();
+    nucleus.redirect_to_home();
     return;
   }
-  $('.active-tab').removeClass('active-tab');
-  current_tab = null;
-  $('#tab-arrow').hide();
+  nucleus.make_tabs_inactive();
   $('#right-column .content').html('');
   $('#content').html('');
   $('#container').addClass('large-width-content');
@@ -27,12 +25,12 @@ $(document).on("load_app_helpcenter", function(e,hash1,hash2){
 
 $(document).on("unload_app_helpcenter", function(e){
   $('#container').removeClass('large-width-content');
-  $('#tab-arrow').show();
+  nucleus.make_tabs_active();
 });
 
 $(document).on("logout", function(){
-  if(get_current_app() == 'helpcenter')
-    redirect_to_home();
+  if(nucleus.get_current_app() == 'helpcenter')
+    nucleus.redirect_to_home();
 });
 
 function update_responses(action,id){
@@ -67,6 +65,10 @@ function response_html(response, close_replies) {
   for(var i=0; i<response.replies.length; i++){
     var reply = response.replies[i];
     reply.html = reply_html(reply);
+  }
+  if(response.app in channeli_apps){
+    response.app_url = channeli_apps[response.app].url;
+    response.app_name = channeli_apps[response.app].name;
   }
   var context = {
     response: response,

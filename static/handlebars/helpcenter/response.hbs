@@ -17,12 +17,12 @@
       <div class='posted'>{{ response.pretty_datetime }}</div>
       <div class='posted'>{{ response.response_type }}</div>
       <div class='query-app-name'>
-      {{#ifCond response.app 'in' channeli_apps }}
-        <a target='_blank' href='{{ channeli_apps.[@response.app].url }}'
-        >{{ channeli_apps.[@response.app].name }}</a>
+      {{#if response.app_name }}
+        <a target='_blank' href='{{ response.app_url }}'
+        >{{ response.app_name }}</a>
       {{else}}
         {{ response.app }}
-      {{/ifCond}}
+      {{/if}}
       </div>
       <div class='query-text'>{{{ response.text }}}</div>
     </div>
