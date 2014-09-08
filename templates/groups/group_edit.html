@@ -1,6 +1,4 @@
 {% extends "groups/base.html" %}
-{% load tags %}
-{% load macros %}
 
 {% block edit-tab-class %}content-tab-active{% endblock%}
 
@@ -34,24 +32,10 @@
     </p>
   </div>  
   {% endif %}
-  <form action = "" method = "post" >
+  <form action = "" method = "post" class="uniForm">
     {% csrf_token %}
     <div class="edit-categories">
-      {% macro editable_field_div field %}
-        <div class="edit-row">  
-          {{field.errors}} 
-          <div class="field-label-big">{{field.label}}</div>
-          <div class="field">{{field}}</div>
-        </div>
-      {% endmacro %}
-      {% usemacro editable_field_div form1.name %}
-      {% usemacro editable_field_div form1.nickname %}
-      {% usemacro editable_field_div form1.website %}
-      {% usemacro editable_field_div form1.description %}
-      {% usemacro editable_field_div form2.mission %}
-      {% usemacro editable_field_div form2.founding_year %}
-      {% usemacro editable_field_div form2.phone_no %}
-      {% usemacro editable_field_div form2.email %}  
+      {{ form.uniform }}
       <input class="input-button" type = "submit" name ="submit_button" value = "Save Changes">
       <input class="input-button" type="button" name="reset" value="Reset" onclick="location='';">
     </div>

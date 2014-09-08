@@ -1,9 +1,8 @@
-from django import forms
-from core.forms import Form, ModelForm
+from core import forms
 from groups import models
 #from api.custom_checkboxes import CustomCheckboxSelectMultiple
 
-class GroupForm(ModelForm) :
+class GroupForm(forms.ModelForm) :
   class Meta :
     model   = models.Group
     exclude = ('admin', 'members', 'group_admin','user','is_active')
@@ -13,7 +12,7 @@ class GroupForm(ModelForm) :
     self.fields['description'].widget.attrs.update({'class' : 'big-field'})
 
 
-class GroupInfoForm(ModelForm) :
+class GroupInfoForm(forms.ModelForm) :
   class Meta :
     model   = models.GroupInfo
     exclude = ('subscribers','group','members','posts','photo')
@@ -29,11 +28,11 @@ class MemberAddMultiple(forms.Form) :
   username_list = forms.CharField(widget=forms.Textarea,label="Enrollment no. list")
 
 def MemberAddFormGen(groupinfo):
-  class MemberAddForm(ModelForm):
+  class MemberAddForm(forms.ModelForm):
     username = forms.CharField(label="Name/Enrollment No.")
     class Meta:
       model = models.Membership
-      exclude = ('person','groupinfo')
+      exclude = ('student','groupinfo')
     def __init__(self, *args, **kwargs):
       super(MemberAddForm, self).__init__(*args, **kwargs)
       self.fields['post'].queryset = groupinfo.posts
@@ -51,26 +50,26 @@ def PostDeleteForm(choices):
   return PostDelete
 
 def PostChangeFormGen(groupinfo):
-  class PostChangeForm(ModelForm):
+  class PostChangeForm(forms.ModelForm):
     class Meta:
       model = models.Membership
       exclude = ('groupinfo')
     def __init__(self, *args, **kwargs):
       super(PostChangeForm, self).__init__(*args, **kwargs)
-      self.fields['person'].queryset = groupinfo.members
+      self.fields['student'].queryset = groupinfo.members
       self.fields['post'].queryset = groupinfo.posts
       self.fields['post'].empty_label = None
-      self.fields['person'].empty_label = None
+      self.fields['student'].empty_label = None
   return PostChangeForm
 
 def AdminChangeFormGen(groupinfo):
-  class AdminChangeForm(ModelForm):
+  class AdminChangeForm(forms.ModelForm):
     class Meta:
       model = models.Membership
       exclude = ('post','groupinfo')
     def __init__(self, *args, **kwargs):
       super(AdminChangeForm, self).__init__(*args, **kwargs)
-      self.fields['person'].queryset = groupinfo.members
+      self.fields['student'].queryset = groupinfo.members
   return AdminChangeForm
 
 

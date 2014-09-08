@@ -217,8 +217,8 @@ def member_add(request, username):
         'error_msg': 'No group found',
         'group' : group,
         }, context_instance=RequestContext(request))
-  student = request.session.get('student')
   user = request.user
+  student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   MemberAddForm = forms.MemberAddFormGen(groupinfo)
   page_info = 'Add a Member'
@@ -339,7 +339,7 @@ def member_add_multiple(request,username):
           try:
             user_to_add = User.objects.get(username=username)
           except User.DoesNotExist as e:
-            result = ': Person not Found/Incorrect Enrollment no.'
+            result = ': Student not Found/Incorrect Enrollment no.'
             status.append(result)
             continue
           student_to_add = user_to_add.student
@@ -350,9 +350,9 @@ def member_add_multiple(request,username):
               membership.save()
               result = ': Added successfully'
             else:
-              result = ': Person already a member of the group'
+              result = ': Student already a member of the group'
           else:
-            result = ": Person not found/Incorrect Enrollment number."
+            result = ": Student not found/Incorrect Enrollment number."
           status.append(result)
         results = zip(usernames,status)
         form = forms.MemberAddMultiple()
@@ -397,10 +397,7 @@ def admin_change(request, username):
   groupinfo = GroupInfo.objects.get(group=group)
   form = forms.AdminChangeFormGen(groupinfo)
   page_info = 'Change Admin'
-  print group.admin
-  print student
   if group.admin == student or group.user == user:
-    print "abc"
     if request.method == 'POST':
       form = form(request.POST)
       if form.is_valid() :
