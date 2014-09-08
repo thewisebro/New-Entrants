@@ -6,7 +6,6 @@ class Group(Role('Student Group')):
   '''
     Group Details
   '''
-  name = models.CharField(max_length=MC.TEXT_LENGTH)
   nickname = models.CharField(max_length=MC.TEXT_LENGTH)
   website = models.URLField(blank=True)
   description = models.TextField(blank=True)
@@ -14,7 +13,7 @@ class Group(Role('Student Group')):
   is_active = models.BooleanField(default=False)
 
   def __unicode__(self):
-    return str(self.name)
+    return str(self.user.name)
 
   def save(self,*args,**kwargs):
     return_value = super(Group,self).save(*args, **kwargs)
@@ -39,12 +38,9 @@ class GroupInfo(models.Model):
   group = models.OneToOneField('Group')
   mission = models.TextField(blank=True, null=True)
   founding_year = models.CharField(max_length=MC.TEXT_LENGTH, null=True, blank=True)
-  phone_no = models.CharField(max_length=MC.PHONE_NO_LENGTH, null=True, blank=True)
   members = models.ManyToManyField(Student, related_name="groupinfos", through="Membership")
   posts = models.ManyToManyField(Post)
   subscribers= models.ManyToManyField(User, blank=True)
-  email = models.EmailField(blank=True, null=True)
-  photo = models.ImageField(upload_to='groups/photo/', blank=True)
   def __unicode__(self):
     return str(self.group)
 

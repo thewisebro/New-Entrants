@@ -1,20 +1,20 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.template import RequestContext 
+from django.template import RequestContext
 from django.forms.models import modelformset_factory
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.utils import simplejson
 from django.utils.html import escape
-from api.forms import AsDivBaseModelFormSet, AsDivList, BaseModelFormFunction
 from django.template.defaultfilters import urlize
-from events.models import * 
+from events.models import *
 import datetime
 from django.core.urlresolvers import reverse
 from groups import forms
 from groups.models import *
-from nucleus.models import Person
+from nucleus.models import Student
+
+import json
 
 @login_required
 def index(request):
@@ -33,29 +33,29 @@ def group_edit(request,username):
     return render_to_response('groups/group_info.html', {
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
-  person = request.session.get('person')
   user = request.user
-  if group.is_active == True or group.admin == person or group.user == user: 
+  student = user.student
+  if group.is_active == True or group.admin == student or group.user == user:
     count = group.groupinfo.members.count()
-    if group.user == user or group.admin == person:
+    if group.user == user or group.admin == student:
       can_edit = True
       subscribers = get_subscribers_no(group)
       subscribed = is_user_subscribed(user,group)
       if request.method == 'POST':
         form1 = forms.GroupForm(request.POST,instance=group)
-        form2 = forms.GroupInfoForm(request.POST,instance=groupinfo) 
+        form2 = forms.GroupInfoForm(request.POST,instance=groupinfo)
         if form1.is_valid() and form2.is_valid():
           form1.save()
           form2.save()
           return HttpResponseRedirect('/groups/'+username+'/')
-        else:  
+        else:
           return render_to_response('groups/group_edit.html', {
                   'form1' : form1,
-                  'form2' : form2, 
+                  'form2' : form2,
                   'group':group,
-                  'count':count, 
-                  'subscribers':subscribers, 
-                  'can_edit':can_edit, 
+                  'count':count,
+                  'subscribers':subscribers,
+                  'can_edit':can_edit,
                   'username':username,
                   'subscribed' : subscribed,
                   'is_active':group.is_active, },
@@ -65,23 +65,23 @@ def group_edit(request,username):
         form2 = forms.GroupInfoForm(instance=groupinfo)
         return render_to_response('groups/group_edit.html', {
                   'form1' : form1,
-                  'form2' : form2, 
+                  'form2' : form2,
                   'group':group,
                   'count':count,
                   'subscribers':subscribers,
-                  'can_edit':can_edit, 
-                  'username':username, 
+                  'can_edit':can_edit,
+                  'username':username,
                   'subscribed':subscribed,
                   'is_active':group.is_active},
                   context_instance = RequestContext(request))
-    else:  
+    else:
       return HttpResponseRedirect('/groups/'+username)
   else:
-    return HttpResponseRedirect('/')  
+    return HttpResponseRedirect('/')
 
 r"""
 def get_subscribers_no(group):
-  if group.is_active : 
+  if group.is_active :
     cal,created = Calendar.objects.get_or_create(name = group.user.username)
     if created:
       cal.users.add(group.user)
@@ -89,7 +89,7 @@ def get_subscribers_no(group):
       cal.cal_type = 'GRP'
       cal.save()
     subscribers = cal.eventsuser_set.count()
-    return subscribers  
+    return subscribers
   else:
     return 0
 
@@ -97,12 +97,12 @@ def is_user_subscribed(user,group):
   if Calendar.objects.filter(name = group.user.username,cal_type = 'GRP').exists():
     eventuser = EventsUser.objects.get_or_create(user = user)[0]
     grp_cal = Calendar.objects.get(name = group.user.username)
-    subscribed = False 
+    subscribed = False
     if eventuser.calendars.filter(name = grp_cal.name,cal_type='GRP').exists():
       subscribed = True
     return subscribed
   else:
-    return False   
+    return False
 """
 
 def get_subscribers_no(group):
@@ -119,13 +119,13 @@ def group_details(request,username):
     return render_to_response('groups/index.html', {
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
-  person = request.session.get('person')
   user = request.user
-  if group.is_active == True or group.user == user or group.admin == person:
+  student = user.student
+  if group.is_active == True or group.user == user or group.admin == student:
     can_edit = False
     subscribers = get_subscribers_no(group)
     subscribed = is_user_subscribed(user,group)
-    if group.user == user or group.admin == person:
+    if group.user == user or group.admin == student:
       can_edit = True
     groupinfo = GroupInfo.objects.get_or_create(group=group)[0]
     m = Membership.objects.filter(groupinfo=groupinfo)
@@ -140,7 +140,7 @@ def group_details(request,username):
         'subscribed':subscribed,
         }, context_instance=RequestContext(request))
   else:
-    return HttpResponseRedirect('/')  
+    return HttpResponseRedirect('/')
 
 @login_required
 def group_events(request,username):
@@ -150,13 +150,13 @@ def group_events(request,username):
     return render_to_response('groups/index.html', {
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
-  person = request.session.get('person')
   user = request.user
-  if group.is_active == True or group.user == user or group.admin == person:
+  student = user.student
+  if group.is_active == True or group.user == user or group.admin == student:
     can_edit = False
     subscribers = get_subscribers_no(group)
     subscribed = is_user_subscribed(user,group)
-    if group.user == user or group.admin == person:
+    if group.user == user or group.admin == student:
       can_edit = True
     groupinfo = GroupInfo.objects.get_or_create(group=group)[0]
     m = Membership.objects.filter(groupinfo=groupinfo)
@@ -171,7 +171,7 @@ def group_events(request,username):
         'subscribed':subscribed,
         }, context_instance=RequestContext(request))
   else:
-    return HttpResponseRedirect('/')  
+    return HttpResponseRedirect('/')
 
 @login_required
 def group_members(request,username):
@@ -180,17 +180,17 @@ def group_members(request,username):
   except Group.DoesNotExist as e:
     return render_to_response('groups/group_members.html', {
         'error_msg': 'No group found',
-        }, context_instance=RequestContext(request)) 
-  person = request.session.get('person')
+        }, context_instance=RequestContext(request))
+  student = request.session.get('student')
   user = request.user
-  if group.is_active == True or group.user == user or group.admin == person:
+  if group.is_active == True or group.user == user or group.admin == student:
     can_edit = False
     subscribers = get_subscribers_no(group)
     subscribed = is_user_subscribed(user,group)
-    if group.user == user or group.admin == person:
+    if group.user == user or group.admin == student:
       can_edit = True
     groupinfo = GroupInfo.objects.get_or_create(group=group)[0]
-    m = Membership.objects.filter(groupinfo=groupinfo).order_by('person__admission_year','person__name')
+    m = Membership.objects.filter(groupinfo=groupinfo).order_by('student__admission_year','student__user__name')
     count = group.groupinfo.members.count()
     return render_to_response('groups/group_members.html', {
         'group' : group,
@@ -202,8 +202,8 @@ def group_members(request,username):
         'subscribed':subscribed,
         }, context_instance=RequestContext(request))
   else:
-    return HttpResponseRedirect('/')  
-   
+    return HttpResponseRedirect('/')
+
 
 @login_required
 def member_add(request, username):
@@ -217,12 +217,12 @@ def member_add(request, username):
         'error_msg': 'No group found',
         'group' : group,
         }, context_instance=RequestContext(request))
-  person = request.session.get('person')
+  student = request.session.get('student')
   user = request.user
   groupinfo = GroupInfo.objects.get(group=group)
   MemberAddForm = forms.MemberAddFormGen(groupinfo)
   page_info = 'Add a Member'
-  if group.user == user or group.admin == person:
+  if group.user == user or group.admin == student:
     if request.method == 'POST':
       form = MemberAddForm(request.POST,instance=groupinfo)
       if form.is_valid():
@@ -230,7 +230,7 @@ def member_add(request, username):
         post = form.cleaned_data['post']
         try:
           user = User.objects.get(username=username)
-          person_to_add = user.person
+          student_to_add = user.student
         except User.DoesNotExist as e:
           form = MemberAddForm(instance=groupinfo)
           return render_to_response('groups/member_add.html', {
@@ -239,21 +239,21 @@ def member_add(request, username):
               'group' : group,
               'page_info':page_info,
               }, context_instance=RequestContext(request))
-        if person_to_add not in groupinfo.members.all():
+        if student_to_add not in groupinfo.members.all():
           postobj = groupinfo.posts.get_or_create(post_name=post)[0]
-          membership = Membership.objects.create(person=user.person,post=postobj,groupinfo=groupinfo)
+          membership = Membership.objects.create(student=user.student,post=postobj,groupinfo=groupinfo)
           membership.save()
           msg = 'Member added successfully'
           messages.success(request,msg)
         else:
           msg = "Specified member already exist"
-          messages.error(request,msg)  
+          messages.error(request,msg)
         form = MemberAddForm(instance=groupinfo)
-        return render_to_response('groups/member_add.html', { 'form':form, 'group':group, 'page_info':page_info}, context_instance = RequestContext(request)) 
+        return render_to_response('groups/member_add.html', { 'form':form, 'group':group, 'page_info':page_info}, context_instance = RequestContext(request))
       else:
         msg = 'Please enter a correct Enrollment No.'
         messages.error(request,msg)
-        form = MemberAddForm(instance=groupinfo)   
+        form = MemberAddForm(instance=groupinfo)
         return render_to_response('groups/member_add.html', {
         'group':group,'page_info':page_info,'form':form}, context_instance = RequestContext(request))
     else :
@@ -262,13 +262,13 @@ def member_add(request, username):
       form = MemberAddForm(instance=groupinfo)
       return render_to_response('groups/member_add.html', {
         'form' : form,'group':group,'page_info':page_info}, context_instance = RequestContext(request))
-  else:  
+  else:
     return HttpResponseRedirect('/groups/'+username)
 
 @login_required
 def member_delete(request,username):
   """
-  Remove members 
+  Remove members
   """
   try:
     group = Group.objects.get(user__username=username)
@@ -277,21 +277,21 @@ def member_delete(request,username):
         'error_msg': 'No Group found',
         'group' : group,
         }, context_instance=RequestContext(request))
-  person = request.session.get('person')
   user = request.user
+  student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   choices = groupinfo.members.all()
   form = forms.MemberDeleteForm(choices)
   page_info = 'Delete members'
-  if group.user == user or group.admin == person:
+  if group.user == user or group.admin == student:
     if request.method == 'POST':
       members_list = request.POST.getlist('members')
       check = True
       for member_to_be_deleted in members_list :
-        person = Person.objects.get(pk=str(member_to_be_deleted))
-        m = Membership.objects.get(person=person,groupinfo=groupinfo)
+        student = Person.objects.get(pk=str(member_to_be_deleted))
+        m = Membership.objects.get(student=student,groupinfo=groupinfo)
         if m :
-          m.delete()  
+          m.delete()
         else:
           check = False
       if check is True:
@@ -299,14 +299,14 @@ def member_delete(request,username):
         messages.success(request,msg)
       else:
         msg='Some error occured'
-        messages.error(request,msg)      
+        messages.error(request,msg)
       form = forms.MemberDeleteForm(choices)
       return render_to_response('groups/member_delete.html', {
         'group':group,'form':form,'page_info':page_info}, context_instance = RequestContext(request))
     else :
       return render_to_response('groups/member_delete.html', {
         'form' : form,'group':group,'page_info':page_info}, context_instance = RequestContext(request))
-  else:  
+  else:
     return HttpResponseRedirect('/groups/'+username)
 
 @login_required
@@ -321,11 +321,11 @@ def member_add_multiple(request,username):
         'error_msg': 'No group found',
         'group' : group,
         }, context_instance=RequestContext(request))
-  person = request.session.get('person')
   user = request.user
+  student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   page_info="Add Multiple Members"
-  if group.user == user or group.admin == person:
+  if group.user == user or group.admin == student:
     if request.method == 'POST' :
       form = forms.MemberAddMultiple(request.POST)
       if form.is_valid() :
@@ -342,19 +342,19 @@ def member_add_multiple(request,username):
             result = ': Person not Found/Incorrect Enrollment no.'
             status.append(result)
             continue
-          person_to_add = user_to_add.person
-          if person_to_add:  
-            if person_to_add not in groupinfo.members.all():
+          student_to_add = user_to_add.student
+          if student_to_add:
+            if student_to_add not in groupinfo.members.all():
               postobj = groupinfo.posts.get_or_create(post_name='Member')[0]
-              membership = Membership.objects.create(person=person_to_add,post=postobj,groupinfo=groupinfo)
+              membership = Membership.objects.create(student=student_to_add,post=postobj,groupinfo=groupinfo)
               membership.save()
               result = ': Added successfully'
-            else:  
+            else:
               result = ': Person already a member of the group'
           else:
-            result = ": Person not found/Incorrect Enrollment number."    
-          status.append(result)  
-        results = zip(usernames,status)      
+            result = ": Person not found/Incorrect Enrollment number."
+          status.append(result)
+        results = zip(usernames,status)
         form = forms.MemberAddMultiple()
         return render_to_response('groups/member_add_multiple.html', {
               'results': results,
@@ -369,7 +369,7 @@ def member_add_multiple(request,username):
                 'form' : form,
                 'group' :group,
                 'page_info':page_info,
-                }, context_instance=RequestContext(request))     
+                }, context_instance=RequestContext(request))
     else:
       form = forms.MemberAddMultiple()
       return render_to_response('groups/member_add_multiple.html', {
@@ -384,7 +384,7 @@ def member_add_multiple(request,username):
 @login_required
 def admin_change(request, username):
   """
-    Changes Admin of a Group 
+    Changes Admin of a Group
   """
   try:
     group = Group.objects.get(user__username=username)
@@ -392,19 +392,22 @@ def admin_change(request, username):
     return render_to_response('groups/admin_change.html', {
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
-  person = request.session.get('person')
   user = request.user
+  student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   form = forms.AdminChangeFormGen(groupinfo)
   page_info = 'Change Admin'
-  if group.admin == person or group.user == user:
+  print group.admin
+  print student
+  if group.admin == student or group.user == user:
+    print "abc"
     if request.method == 'POST':
-      form = form(request.POST) 
+      form = form(request.POST)
       if form.is_valid() :
-        member = form.cleaned_data['person']
+        member = form.cleaned_data['student']
         username = str(member).partition(':')[0]
         u = User.objects.get(username=username)
-        new_admin = u.person
+        new_admin = u.student
         if group.admin <> new_admin:
           if Calendar.objects.filter(name=group.user.username,cal_type='GRP').exists():
             cal = Calendar.objects.get(name=group.user.username,cal_type='GRP')
@@ -441,11 +444,11 @@ def post_add(request,username):
         'error_msg': 'No group found',
         'group' : group,
         }, context_instance=RequestContext(request))
-  person = request.session.get('person')
   user = request.user
+  student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   page_info = 'Add a Post'
-  if group.user == user or group.admin == person:
+  if group.user == user or group.admin == student:
     if request.method == 'POST':
       form = forms.PostAdd(request.POST)
       if form.is_valid() :
@@ -455,26 +458,26 @@ def post_add(request,username):
           msg = 'Post added successfully'
           messages.success(request,msg)
         else:
-          msg = "Specified post already exist" 
+          msg = "Specified post already exist"
           messages.error(request,msg)
         form = forms.PostAdd()
-        return render_to_response('groups/post_add.html', { 'msg':msg,'form':form, 'group':group, 'page_info':page_info }, context_instance = RequestContext(request)) 
+        return render_to_response('groups/post_add.html', { 'msg':msg,'form':form, 'group':group, 'page_info':page_info }, context_instance = RequestContext(request))
       else:
-        msg = 'Please enter a valid Post'  
+        msg = 'Please enter a valid Post'
         messages.error(request,msg)
         return render_to_response('groups/post_add.html', {
         'msg' : msg, 'group':group, 'page_info':page_info,}, context_instance = RequestContext(request))
     else :
-      form = forms.PostAdd() 
+      form = forms.PostAdd()
       return render_to_response('groups/post_add.html', {
         'form' : form,'group':group, 'page_info':page_info}, context_instance = RequestContext(request))
-  else:  
+  else:
     return HttpResponseRedirect('/groups/'+username)
 
 @login_required
 def post_delete(request,username):
   """
-  Deletes a post and defaults the post of the affected members. 
+  Deletes a post and defaults the post of the affected members.
   """
   try:
     group = Group.objects.get(user__username=username)
@@ -483,13 +486,13 @@ def post_delete(request,username):
         'error_msg': 'No group found',
         'group' : group,
         }, context_instance=RequestContext(request))
-  person = request.session.get('person')
   user = request.user
+  student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   page_info = 'Delete Posts'
   choices = groupinfo.posts.all().exclude(post_name="Member")
   form = forms.PostDeleteForm(choices)
-  if group.user == user or group.admin == person:
+  if group.user == user or group.admin == student:
     if request.method == 'POST':
       posts = request.POST.getlist('posts')
       for post in posts:
@@ -499,21 +502,21 @@ def post_delete(request,username):
           newpost = groupinfo.posts.get_or_create(post_name="Member")[0]
           member.post = newpost
           member.save()
-        postobj.delete() 
+        postobj.delete()
       msg = "Successfully deleted"
-      messages.success(request,msg) 
+      messages.success(request,msg)
       return render_to_response('groups/post_delete.html', {
         'form' : form,'group':group, 'page_info':page_info,}, context_instance = RequestContext(request))
     else :
       return render_to_response('groups/post_delete.html', {
         'form' : form,'group':group, 'page_info':page_info,}, context_instance = RequestContext(request))
-  else:  
+  else:
     return HttpResponseRedirect('/groups/'+username)
 
 @login_required
 def post_change(request,username):
   """
-  Changes the post of the selected member 
+  Changes the post of the selected member
   """
   try:
     group = Group.objects.get(user__username=username)
@@ -522,22 +525,22 @@ def post_change(request,username):
         'error_msg': 'No group found',
         'group' : group,
         }, context_instance=RequestContext(request))
-  person = request.session.get('person')
   user = request.user
+  student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   page_info = 'Change Post'
   form = forms.PostChangeFormGen(groupinfo)
-  if group.user == user or group.admin == person:
+  if group.user == user or group.admin == student:
     if request.method == 'POST':
-      form = form(request.POST) 
+      form = form(request.POST)
       if form.is_valid() :
-        member = form.cleaned_data['person']
+        member = form.cleaned_data['student']
         postname = form.cleaned_data['post']
         username = str(member).partition(':')[0]
         postobj = groupinfo.posts.get_or_create(post_name=postname)[0]
         u = User.objects.get(username=username)
-        p = u.person
-        m = Membership.objects.filter(person=p,groupinfo=groupinfo)
+        p = u.student
+        m = Membership.objects.filter(student=p,groupinfo=groupinfo)
         a = m[0]
         a.post = postobj
         a.save()
@@ -548,15 +551,15 @@ def post_change(request,username):
               'group' : group,
               'page_info': page_info,
               }, context_instance=RequestContext(request))
-       
+
     else :
       return render_to_response('groups/post_change.html', {
         'form' : form,'group':group, 'page_info':page_info,}, context_instance = RequestContext(request))
-  else:  
+  else:
     return HttpResponseRedirect('/groups/'+username)
 
 @login_required
-def subscriber(request,username): 
+def subscriber(request,username):
   """
     Subscribe/Unscubscribes a person to a group.
   """
@@ -568,23 +571,23 @@ def subscriber(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   if request.is_ajax() and request.method == 'POST' and group.is_active:
-    person = request.session.get('person')
     user = request.user
+    student = user.student
     subscribed = request.POST['subscribed']
     msg='filler'
     if subscribed == 'False':
       if not is_user_subscribed(user,group):
         group.groupinfo.subscribers.add(user)
         msg = 'Successfully subscribed to '+str(group.name)
-      else:  
+      else:
         msg = 'Already a Subscriber'
     else:
       group.groupinfo.subscribers.remove(user)
       msg = 'Successfully unsubscribed from '+str(group.name)
     subscribers = get_subscribers_no(group)
-    messages.success(request,msg ) 
-    json = simplejson.dumps({'subscribers':subscribers})
-    return HttpResponse(json,mimetype='application/json')  
+    messages.success(request,msg )
+    json = json.dumps({'subscribers':subscribers})
+    return HttpResponse(json,mimetype='application/json')
   else:
     return HttpResponseRedirect('/groups'+username)
 
@@ -594,15 +597,15 @@ def activate(request,username):
     Activates the group's account
   """
   try:
-    group = Group.objects.get(user__username=username)  
+    group = Group.objects.get(user__username=username)
   except Group.DoesNotExist as e:
     return render_to_response('groups/index.html', {
         'error_msg': 'No group found',
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  person = request.session.get('person')
-  if group.user == user or group.admin == person:
+  student = user.student
+  if group.user == user or group.admin == student:
     group.is_active = True
     group.save()
     cal,created = Calendar.objects.get_or_create(name = group.user.username)
@@ -626,13 +629,13 @@ def group_activity(request,username):
     return render_to_response('groups/index.html', {
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
-  person = request.session.get('person')
   user = request.user
-  if group.is_active == True or group.user == user or group.admin == person:
+  student = user.student
+  if group.is_active == True or group.user == user or group.admin == student:
     can_edit = False
     subscribers = get_subscribers_no(group)
     subscribed = is_user_subscribed(user,group)
-    if group.user == user or group.admin == person:
+    if group.user == user or group.admin == student:
       can_edit = True
     groupinfo = GroupInfo.objects.get_or_create(group=group)[0]
     m = Membership.objects.filter(groupinfo=groupinfo)
@@ -651,7 +654,7 @@ def group_activity(request,username):
         'subscribed':subscribed,
         }, context_instance=RequestContext(request))
   else:
-    return HttpResponseRedirect('/')  
+    return HttpResponseRedirect('/')
 
 def activity_dict(activity):
   return {
@@ -673,6 +676,6 @@ def fetch_activities(request):
       activities = group.groupactivity_set.all()
     elif action == 'next':
       activities = group.groupactivity_set.filter(pk__lt = pk)
-    json = simplejson.dumps({'activities':map(activity_dict,activities[:number]),'more':int(activities.count()>number)})
+    json = json.dumps({'activities':map(activity_dict,activities[:number]),'more':int(activities.count()>number)})
     return HttpResponse(json,mimetype='application/json')
 

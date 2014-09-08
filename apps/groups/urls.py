@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns ('groups.views',
   (r'^$', 'index'),
@@ -17,4 +17,4 @@ urlpatterns = patterns ('groups.views',
   (r'^(?P<username>\w+)/change_post/$', 'post_change'),
   (r'^(?P<username>\w+)/subscriber/$', 'subscriber'),
   (r'^(?P<username>\w+)/activate/$', 'activate'),
-) 
+)

@@ -1,9 +1,9 @@
 from django import forms
-from api.forms import BaseForm, BaseModelForm
+from core.forms import Form, ModelForm
 from groups import models
-from api.custom_checkboxes import CustomCheckboxSelectMultiple
+#from api.custom_checkboxes import CustomCheckboxSelectMultiple
 
-class GroupForm(BaseModelForm) :
+class GroupForm(ModelForm) :
   class Meta :
     model   = models.Group
     exclude = ('admin', 'members', 'group_admin','user','is_active')
@@ -13,11 +13,11 @@ class GroupForm(BaseModelForm) :
     self.fields['description'].widget.attrs.update({'class' : 'big-field'})
 
 
-class GroupInfoForm(BaseModelForm) :
+class GroupInfoForm(ModelForm) :
   class Meta :
     model   = models.GroupInfo
     exclude = ('subscribers','group','members','posts','photo')
-              
+
   def __init__(self, *args, **kwargs):
     super(GroupInfoForm, self).__init__(*args, **kwargs)
     self.fields['mission'].widget.attrs.update({'class' : 'big-field'})
@@ -29,7 +29,7 @@ class MemberAddMultiple(forms.Form) :
   username_list = forms.CharField(widget=forms.Textarea,label="Enrollment no. list")
 
 def MemberAddFormGen(groupinfo):
-  class MemberAddForm(BaseModelForm):
+  class MemberAddForm(ModelForm):
     username = forms.CharField(label="Name/Enrollment No.")
     class Meta:
       model = models.Membership
@@ -37,21 +37,21 @@ def MemberAddFormGen(groupinfo):
     def __init__(self, *args, **kwargs):
       super(MemberAddForm, self).__init__(*args, **kwargs)
       self.fields['post'].queryset = groupinfo.posts
-      self.fields['post'].empty_label = None 
+      self.fields['post'].empty_label = None
   return MemberAddForm
 
-def MemberDeleteForm(choices):      
+def MemberDeleteForm(choices):
   class MemberDelete(forms.Form):
-    members = forms.ModelMultipleChoiceField(queryset=choices, widget=CustomCheckboxSelectMultiple)
+    members = forms.ModelMultipleChoiceField(queryset=choices, widget=forms.CheckboxSelectMultiple)
   return MemberDelete
 
-def PostDeleteForm(choices):      
+def PostDeleteForm(choices):
   class PostDelete(forms.Form):
-    posts = forms.ModelMultipleChoiceField(queryset=choices, widget=CustomCheckboxSelectMultiple)
+    posts = forms.ModelMultipleChoiceField(queryset=choices, widget=forms.CheckboxSelectMultiple)
   return PostDelete
 
 def PostChangeFormGen(groupinfo):
-  class PostChangeForm(BaseModelForm):
+  class PostChangeForm(ModelForm):
     class Meta:
       model = models.Membership
       exclude = ('groupinfo')
@@ -59,12 +59,12 @@ def PostChangeFormGen(groupinfo):
       super(PostChangeForm, self).__init__(*args, **kwargs)
       self.fields['person'].queryset = groupinfo.members
       self.fields['post'].queryset = groupinfo.posts
-      self.fields['post'].empty_label = None 
-      self.fields['person'].empty_label = None 
+      self.fields['post'].empty_label = None
+      self.fields['person'].empty_label = None
   return PostChangeForm
 
 def AdminChangeFormGen(groupinfo):
-  class AdminChangeForm(BaseModelForm):
+  class AdminChangeForm(ModelForm):
     class Meta:
       model = models.Membership
       exclude = ('post','groupinfo')
@@ -72,8 +72,8 @@ def AdminChangeFormGen(groupinfo):
       super(AdminChangeForm, self).__init__(*args, **kwargs)
       self.fields['person'].queryset = groupinfo.members
   return AdminChangeForm
-      
 
-      
 
-    
+
+
+
