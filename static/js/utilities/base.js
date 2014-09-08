@@ -10,9 +10,7 @@ $(document).on("load_app_settings", function(e, hash1){
     nucleus.redirect_to_home();
     return;
   }
-  $('.active-tab').removeClass('active-tab');
-  current_tab = null;
-  $('#tab-arrow').hide();
+  nucleus.make_tabs_inactive();
   $('#right-column .content').html('');
   if(hash1 === undefined)
     nucleus.redirect_to_hash('settings/profile');
@@ -22,12 +20,12 @@ $(document).on("load_app_settings", function(e, hash1){
 
 $(document).on("unload_app_settings", function(e){
   $('#container').removeClass('large-width-content');
-  $('#tab-arrow').show();
+  nucleus.make_tabs_active();
   $('#right-column .content').empty();
 });
 
 $(document).on("logout", function(){
-  if(get_current_app() == 'settings')
+  if(nucleus.get_current_app() == 'settings')
     nucleus.redirect_to_home();
 });
 
