@@ -29,12 +29,12 @@ class Response(models.Model):
     if not Notification.filter(app='helpcenter', instance=self).exists():
       if flag:
         Notification.save_notification('helpcenter', "A user "+escape(self.text[0].lower()+self.text[1:]).replace('\n','<br>'),
-            '/helpcenter/queries/#'+str(self.pk), Group.objects.get(name='Helpcenter Admin').user_set.all(), self)
+            '#helpcenter/queries/'+str(self.pk), Group.objects.get(name='Helpcenter Admin').user_set.all(), self)
       else:
         Notification.save_notification('helpcenter', self.user.html_name+(' gave a feedback: ' if\
             self.response_type=='feedback' else ' asked for help: ')+\
             "<div class='sub-text'>"+escape(self.text).replace('\n','<br>')+"</div>",
-            '/helpcenter/queries/#'+str(self.pk),
+            '#helpcenter/queries/'+str(self.pk),
             Group.objects.get(name='Helpcenter Admin').user_set.all(), self)
     return result
 
@@ -57,7 +57,7 @@ class Response(models.Model):
 
 class Reply(models.Model):
   user = models.ForeignKey(User)
-  by_img = models.BooleanField()
+  by_img = models.BooleanField(default=False)
   response = models.ForeignKey(Response)
   number = models.IntegerField()
   text = models.TextField()
@@ -80,10 +80,10 @@ class Reply(models.Model):
       if self.response.user:
         Notification.save_notification('helpcenter', "IMG replied on your query :<div class='sub-text'>"+\
             escape(self.text).replace('\n','<br>')+"</div>",
-            '/helpcenter/queries/#'+str(self.response.pk), [self.response.user], self)
+            '#helpcenter/queries/'+str(self.response.pk), [self.response.user], self)
     else:
       Notification.save_notification('helpcenter', self.user.html_name + " replied on query :<div class='sub-text'>"+\
-          escape(self.text).replace('\n','<br>')+"</div>", '/helpcenter/queries/#'+str(self.response.pk),
+          escape(self.text).replace('\n','<br>')+"</div>", '#helpcenter/queries/'+str(self.response.pk),
           Group.objects.get(name='Helpcenter Admin').user_set.all(), self)
     return result
 

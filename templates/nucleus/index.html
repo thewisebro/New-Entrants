@@ -25,8 +25,8 @@
   <script src="{{ STATIC_URL }}js/nucleus/apps_scripts.js" type="text/javascript"></script>
   <script src="{{ STATIC_URL }}js/nucleus/base.js" type="text/javascript"></script>
   <!--script src="http://192.168.121.5:8080/socket.io/socket.io.js" type="text/javascript"></script-->
-  <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
-  <script src="{{ STATIC_URL }}js/chat/main.js" type="text/javascript"></script>
+  <!--script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
+  <script src="{{ STATIC_URL }}js/chat/main.js" type="text/javascript"></script-->
 {% endblock %}
 
 {% block body %}
@@ -47,8 +47,26 @@
       </div>
     </div>
     <div id="chat-column">
-      <button class="btn1" onclick="chaton();">Chat On</button>
-      <button class="btn2" onclick="chatoff();">Chat Off</button>
+      <div class="online-users">
+      </div>
+      <div class="search-box">
+        <div class="chat-search-box">
+          <input type="text" name="chat-search" class="chat-search" placeholder="search">
+        </div>
+        <div class=chat-settings-box>
+          <i class="fa fa-cog"></i>
+        </div>
+      </div>
+      <div class="chat-boxes">
+        <div class="chat-box">
+          <div class="chat-box-header">
+          </div>
+          <div class="chat-message-bar">
+          </div>
+        </div>
+      </div>
+      <!--button class="btn1" onclick="chaton();">Chat On</button>
+      <button class="btn2" onclick="chatoff();">Chat Off</button-->
     </div>
   </div>
 {% endblock %}

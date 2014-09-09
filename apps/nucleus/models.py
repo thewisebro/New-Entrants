@@ -21,8 +21,8 @@ client = redis.Redis("localhost")
 ############################# Base Models #############################
 
 class OwnerActiveManager(models.Manager):
-  def get_query_set(self):
-    return super(OwnerActiveManager, self).get_query_set().filter(active=True)
+  def get_queryset(self):
+    return super(OwnerActiveManager, self).get_queryset().filter(active=True)
 
 class Owner(models.Model):
   account = models.ForeignKey('User', related_name='account_owners')
@@ -139,7 +139,7 @@ class User(AbstractUser, models.Model):
         string += ' ' + int2roman(student.year) + ' Year'
       return string
     elif self.in_group('Faculty'):
-      return dict(DESIGNATION_CHOICES)[self.faculty.designation]+\
+      return dict(FC.DESIGNATION_CHOICES)[self.faculty.designation]+\
           ', ' + MC.SIMPLIFIED_DEPARTMENTS[self.faculty.department]
     elif self.in_group('Student Group'):
       return 'Student Group'
@@ -160,12 +160,24 @@ class User(AbstractUser, models.Model):
           escape(self.photo_url)+"'>"+escape(self.short_name)+\
           "</span>")
 
+  @property
+  def role_group(self):
+    if self.in_group('Student'):
+      return 'Student'
+    elif self.in_group('Faculty'):
+      return 'Faculty'
+    elif self.in_group('Student Group'):
+      return 'Student Group'
+    else:
+      return 'Other'
+
   def serialize(self):
     return {
       'is_authenticated': True,
       'username': self.username,
       'name': self.name,
-      'photo': self.photo_url
+      'photo': self.photo_url,
+      'role': self.role_group,
     }
 
   @property
@@ -184,9 +196,9 @@ class User(AbstractUser, models.Model):
       to_user = user,
       status = 1
     )
-    to_user__user_info = {'name': user.name, 'enr': user.username, 'status': 0, 'is_chat_on': 0}
-    client.hmset('user:'+user.username, to_user__user_info)
-    client.sadd('friends:'+self.username, user.username)
+    to_user__user_info = {'user_id': user.pk,'name': user.name, 'username': user.username, 'status': 0, 'is_chat_on': 0, 'photo': user.photo_url}
+    client.hmset('user:'+str(user.pk), to_user__user_info)
+    client.sadd('friends:'+str(self.pk), user.pk)
     if symmetric:
       user.add_connection(self, False)
     return connection
@@ -197,9 +209,9 @@ class User(AbstractUser, models.Model):
       connection.status = status
       connection.save()
       if status is 1:
-        client.sadd('friends:'+self.username, user.username)
+        client.sadd('friends:'+str(self.pk), user.pk)
       elif status is 3:
-        client.srem('friends:'+self.username, user.username)
+        client.srem('friends:'+str(self.pk), user.pk)
       if symmetric:
         user.update_connection(self, status, False)
       return connection
@@ -209,7 +221,7 @@ class User(AbstractUser, models.Model):
   def remove_connection(self, user, symmetric=True):
     connection = Connection.objects.filter(from_user=self, to_user=user)
     connection.delete()
-    client.srem('friends:'+self.username, user.username)
+    client.srem('friends:'+str(self.pk), user.pk)
     if symmetric:
       user.remove_connection(self, False)
     return

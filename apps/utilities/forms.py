@@ -1,6 +1,25 @@
+from django.db.models import Q
+
 from core import forms
 from core.forms.mixins import FormMixin
-from nucleus.models import StudentUserInfo
+from nucleus.models import StudentUserInfo, User
+from events.models import Calendar, EventsUser
+
+
+class GenProfileForm(forms.ModelForm, FormMixin):
+  class Meta:
+    model = User
+    fields = [
+      'username',
+      'first_name',
+      'gender',
+      'birth_date',
+      'email',
+      'contact_no',
+    ]
+    read_only_fields = ['username']
+    required_fields = ('first_name', 'gender', 'birth_date')
+
 
 class ProfileFormPrimary(forms.ModelForm, FormMixin):
   class Meta:
@@ -63,3 +82,32 @@ class ProfileFormExtra(forms.ModelForm):
       'resident',
       'license_no',
     ]
+
+
+class ChangePasswordForm(forms.Form):
+  password = forms.CharField(label='Current Password', widget=forms.PasswordInput, required=True, min_length=4)
+  password1 = forms.CharField(label='New Password', widget=forms.PasswordInput, required=True, min_length=4)
+  password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput, required=True, min_length=4)
+
+
+class ChangePasswordFirstYearForm(forms.Form):
+  password1 = forms.CharField(label='Enter New Password', widget=forms.PasswordInput, required=True, min_length=4)
+  password2 = forms.CharField(label='Enter Again', widget=forms.PasswordInput, required=True, min_length=4)
+
+
+class EmailForm(forms.Form):
+  email = forms.EmailField()
+
+def EventsSubscribeFormGen(user):
+  class EventsSubscribeForm(forms.ModelForm):
+    class Meta:
+      model = EventsUser
+      exclude = ('user',)
+      widgets = {
+        'calendars' : forms.CheckboxSelectMultiple,
+      }
+    def __init__(self, *args, **kwargs):
+      super(EventsSubscribeForm, self).__init__(*args, **kwargs)
+      self.fields['calendars'].queryset = Calendar.objects.exclude(Q(cal_type = 'PRI'),~Q(name = user.username))
+      self.fields['email_subscribed'].widget.attrs = {'onchange':'subscription_checkbox_clicked(this)'}
+  return EventsSubscribeForm

@@ -2,12 +2,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
 from core import models
-from core.models.mixins import Trashable
 from nucleus.models import User
-from moderation.models import Reportable
 import api.model_constants as MC
 
-class Feed(models.Model, Trashable, Reportable):
+class Feed(models.Model):
   app = models.CharField(max_length=MC.CODE_LENGTH)
   user = models.ForeignKey(User, blank=True, null=True)
   content = models.TextField(blank=True)

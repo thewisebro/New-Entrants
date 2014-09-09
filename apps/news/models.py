@@ -43,6 +43,7 @@ class Channel(models.Model):
 
 class Source(models.Model):
   name = models.CharField(max_length=20)
+  default_banner = models.ImageField(upload_to = 'news/banners/')
   #read_status = models.ManyToManyField('NewsUser', through='ReadStatus')
 
   def __unicode__(self):
