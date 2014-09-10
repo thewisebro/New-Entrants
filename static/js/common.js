@@ -267,6 +267,24 @@ function take_feedback(){
   });
 }
 
+function submit_report(object_pk, content_type_pk){
+  $.get('/moderation/report_info/',{
+    content_type_pk: content_type_pk,
+    object_pk: object_pk
+  },function(data){
+    if(data.open_dialog){
+      dialog_iframe({
+        name:'report_dialog',
+        title:'Report Item',
+        width:280,
+        height:280,
+        src:'/moderation/submit_report/?content_type_pk='+
+            content_type_pk+'&object_pk='+object_pk
+      });
+    }
+  });
+}
+
 function user_html_name(user){
   return "<span class='user-span' data-username='"+user.username+
           "' data-info='"+user.info+"' data-photo='"+user.photo+"'>"+

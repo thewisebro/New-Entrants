@@ -3,6 +3,7 @@ var loaded_scripts_apps = [];
 var apps_scripts = {
   'home':[
     '/static/js/prettydate.js',
+    '/static/handlebars/feeds/templates.js',
     '/static/js/feeds/feeds.js'
   ],
   'notifications':[
