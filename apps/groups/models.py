@@ -54,7 +54,6 @@ class Membership(models.Model):
 class GroupActivity(models.Model):
   group = models.ForeignKey(Group)
   text = models.TextField()
-  datetime = models.DateTimeField(auto_now_add = True)
 
   class Meta:
     ordering = ['-id']

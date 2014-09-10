@@ -1,16 +1,15 @@
-{#% extends "nucleus/home.html" %#}
-{#% load tags %#}
-
 {% block active-home %}{% endblock %}
 
 {% block tab_initial %}groups{% endblock %}
 
 {% block app_scripts %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/groups/subscribe.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/csrf.js"></script>
   <script type='text/javascript'>
-    $('body').ready(function(){
+ /*   $('body').ready(function(){
       $('#content').pickify_users();
-    });  
+    });*/
   </script>
 {% endblock %}
 
@@ -24,7 +23,7 @@
 {% block content %}
 {% if error_msg %}
   {{error_msg}}
-{% else %}  
+{% else %}
   <div id="groups-header">
     <img id="groups-profile-pic" src="/photo/{{username}}/"/>
     <div id="groups-details">
@@ -42,15 +41,15 @@
       {% if group.is_active %}
         {% if subscribed %}
           <div id='subscribe-button' class="div-button" onclick="subscribe('{{username}}','{{subscribed}}');">Unsubscribe</div>
-        {% else %} 
+        {% else %}
           <div id='subscribe-button' class="div-button" onclick="subscribe('{{username}}','{{subscribed}}');">Subscribe</div>
-        {% endif %}  
+        {% endif %}
       {% endif %}
     </div>
     {% block edit-member %}
     {% endblock %}
     {% block add-event %}
-    {% endblock %}  
+    {% endblock %}
   </div>
   <div id="content-top-bar">
     <div class="content-tab {% block about-tab-class %}{% endblock %}" onclick="location ='/groups/{{username}}/'">About</div>
@@ -59,13 +58,13 @@
     <div class="content-tab {% block events-tab-class %}{% endblock %}" onclick="location ='/groups/{{username}}/events/'">Events</div>
     {% if can_edit %}
       <div class="content-tab {% block edit-tab-class %}{% endblock %}" onclick="location = '/groups/{{group.user.username}}/edit'">Edit</div>
-    {% endif %}  
+    {% endif %}
   </div>
   <div id="groups-container">
     <div id="groups-empty-div"></div>
     <div id="groups-content">
      {% block group_content %}
-     {% endblock group_content %}   
+     {% endblock group_content %}
     </div>
   </div>
   <div style="clear:both"></div>

@@ -585,7 +585,7 @@ def subscriber(request,username):
     subscribers = get_subscribers_no(group)
     messages.success(request,msg )
     json = json.dumps({'subscribers':subscribers})
-    return HttpResponse(json,mimetype='application/json')
+    return HttpResponse(json,content_type='application/json')
   else:
     return HttpResponseRedirect('/groups/'+username)
 
@@ -657,7 +657,7 @@ def group_activity(request,username):
 def activity_dict(activity):
   return {
     'id' : activity.pk,
-    'datetime' : activity.datetime.strftime('%Y-%m-%d %H:%M:%S'),
+    'datetime' : activity.datetime_created.strftime('%Y-%m-%d %H:%M:%S'),
     'text' : urlize(escape(activity.text).replace('\n','<br>')),
   }
 
@@ -667,13 +667,13 @@ def fetch_activities(request):
     action = request.POST['action']
     group_username = request.POST['group_username']
     pk = request.POST['id']
-    json = None
+    json_data = None
     number = int(request.POST['number'])
     group = Group.objects.get(user__username = group_username)
     if action == 'first':
       activities = group.groupactivity_set.all()
     elif action == 'next':
       activities = group.groupactivity_set.filter(pk__lt = pk)
-    json = json.dumps({'activities':map(activity_dict,activities[:number]),'more':int(activities.count()>number)})
-    return HttpResponse(json,mimetype='application/json')
+    json_data = json.dumps({'activities':map(activity_dict,activities[:number]),'more':int(activities.count()>number)})
+    return HttpResponse(json_data,content_type='application/json')
 

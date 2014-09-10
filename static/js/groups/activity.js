@@ -1,16 +1,17 @@
 var activities = Array();
-var activities_per_request = items_per_request;
+var activities_per_request = 20;
 var more_activities=true;
 
 function update_activities(action){
   $.post("/groups/fetch_activities",
     {'action' : action,
-     'id' : (activities.length ? activities[activities.length-1].id : null),  
+     'id' : (activities.length ? activities[activities.length-1].id : null),
      'number' : activities_per_request,
      'group_username':group_username,
     },
     function(data){
         activities = activities.concat(data.activities);
+        console.log(activities);
         more_activities = data.more?true:false;
         display_add_activities('end',data.activities);
     }  
