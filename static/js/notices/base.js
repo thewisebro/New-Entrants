@@ -18,7 +18,7 @@ var h1,h2,h3,h4,h5;
   6.Initial value of variables in line 10 can't be [display, new, All, All, 1] or ["", "", "", "", ""] because they are supposed to be different from the hashes(#notices and #notice/display/new/All/All/1), that arrive on reload, so that the static divs are created.
 */
 
-var privelege, first_time_visit, static_divs_created, star_perm, select_category, prev_url="#notices/new/All/All/1";
+var privelege, first_time_visit, static_divs_created, star_perm, select_category, prev_url="#notices/display/new/All/All/1";
 var checklist, check_upload_array, check_star_array, read_array;
 
 /*
@@ -175,9 +175,9 @@ function redirection()            //The main controller function which defines t
             static_divs_created=1;            //made 1, so that switched_to_notices is not called again, 4 lines later
           }
         }
-       
+
         if(main_mode=="content" && static_divs_created==0)
-        {          
+        {
             create_static_divs();
         }
 
@@ -270,7 +270,6 @@ function redirection()            //The main controller function which defines t
             m_category = "All";
             sub_category = "All";
             cur_page_no = h2;
-            
             len = starred_array.length;             //Recalculating parameters, as they might have changed due to addition of star notices
             starred_total_pages=Math.floor(len/10);
             starred_last_page_notices=len%10;
@@ -437,6 +436,8 @@ function upload_change_page(page_no)
 {
   if(main_mode!="uploads" && main_mode!="starred")
     prev_url = location.hash;
+  if(prev_url=="#notices")
+    prev_url = '#notices/display/new/All/All/1';
   location.hash = '#notices/uploads/' + page_no;
 }
 
@@ -444,6 +445,8 @@ function starred_change_page(page_no)
 {
   if(main_mode!="uploads" && main_mode!="starred")
     prev_url = location.hash;
+  if(prev_url=="#notices")
+    prev_url = '#notices/display/new/All/All/1';
   location.hash = '#notices/starred/' + page_no;
 }
 
@@ -452,12 +455,12 @@ function search_change_page(page_no)
   url_temp = '#notices/search/' + sub_mode + '/' + m_category + '/' + sub_category + '/' + page_no;
   if(location.hash == url_temp)
   {
-  	hashtags = ["search", sub_mode, m_category, sub_category, String(page_no)];
-  	$(document).trigger("load_app_notices", hashtags);
+    hashtags = ["search", sub_mode, m_category, sub_category, String(page_no)];
+    $(document).trigger("load_app_notices", hashtags);
   }
   else
   {
-	  location.hash=url_temp;
+    location.hash=url_temp;
   }
 }
 
@@ -673,10 +676,10 @@ function read_notice(id)
 	{
 		url = 'notices/read_star_notice/'+id+'/'+'add_read';
 		read_array[id]=1;
-	  $.ajax({
-	  type: 'post',
-	  url: url
-	  });
+    $.ajax({
+    type: 'post',
+    url: url
+    });
   }
 }
 
@@ -684,22 +687,22 @@ function edit_notice(id, e)
 {
   window.location.href = 'notices/edit_notice/'+id;
 	if(e.stopPropagation)
-    	e.stopPropagation();
-  	else
-    	e.cancelBubble = true;
+    e.stopPropagation();
+    else
+    e.cancelBubble = true;
 }
 
 function delete_notice(id, e)
 {
   var r = confirm("Are you sure you want to delete this Notice? Once Deleted, the Notice cannot be recovered!");
-  if(r==true)
+  if(r===true)
   {
     window.location.href = 'notices/delete_notice/'+id;
   }
-	  if(e.stopPropagation)
+    if(e.stopPropagation)
       e.stopPropagation();
-  	else
-    	e.cancelBubble = true;
+    else
+      e.cancelBubble = true;
 }
 
 function add_to_checklist(id, e)
@@ -1046,7 +1049,10 @@ function get_constants()      			// A function that brings all main_categories a
         url: 'notices/get_constants/',
         success: function(data)
         {
-          constants = data;
+          for(var i=0; i<data['order'].length; i++)
+          {
+            constants[data['order'][i]] = data[data['order'][i]];
+          }
           console.log(data);
           console.log("loaded : get_constants");
           gap_filler_first_time("new");

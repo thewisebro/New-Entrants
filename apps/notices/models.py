@@ -3,6 +3,9 @@ from core.forms import ModelForm
 from nucleus.models import User
 from datetime import datetime
 from core.models.fields import CKEditorField
+from django.core.cache import cache, get_cache
+import simplejson
+
 from notices.constants import *
 from notices.constants import *
 
@@ -51,7 +54,7 @@ class Uploader(models.Model):
 
 class Category(models.Model):
   users = models.ManyToManyField(User, through='Uploader')
-  main_category = models.CharField(max_length=20,choices = OPTIONS)
+  main_category = models.CharField(max_length=20)
   name = models.CharField(max_length=100)
   code = models.CharField(max_length=100, unique=True)
 
@@ -61,3 +64,30 @@ class Category(models.Model):
   def __unicode__(self):
     return self.name
 
+  def save(self):
+    super(Category, self).save()
+    Category.set_cache()
+
+  def delete(self):
+    super(Category, self).delete()
+    Category.set_cache()
+
+  @classmethod
+  def set_cache(self):
+    mc = {'order' : []}
+    for c in Category.objects.all():
+      if(c.main_category not in mc):
+        mc[c.main_category] = []
+        mc['order'].append(c.main_category)
+      mc[c.main_category].append(c.name)
+    for i in mc['order']:
+      if len(mc[i])==1 and mc[i][0]=='All':
+        mc[i] = []
+    mc['order'] = sorted(mc['order'])
+    t=0
+    for num in range(len(mc['order'])):
+        if mc[mc['order'][num]]==[]:
+          mc['order'].insert(t, mc['order'][num])
+          del mc['order'][num+1]
+          t = t+1
+    cache.set('main_categories_cached', simplejson.dumps(mc))

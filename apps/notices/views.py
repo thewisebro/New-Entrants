@@ -59,12 +59,13 @@ class PrivelegeJsonView(TemplateView):
     privelege = request.user.uploader_set.all().exists()
     privelege1 = {'privelege' : privelege}
     privelege_json = simplejson.dumps(privelege1)
-    return HttpResponse(privelege_json, mimetype="application/json")
+    return HttpResponse(privelege_json, content_type="application/json")
 
 class GetConstants(TemplateView):
   def get(self, request):
-    constants_list = simplejson.dumps(MAIN_CATEGORIES)
-    return HttpResponse(constants_list, mimetype="application/json")
+    if(not cache.get('main_categories_cached')):
+      Category.set_cache()
+    return HttpResponse(cache.get('main_categories_cached'), content_type="application/json")
 
 class NoticeListView(ListAPIView):
   serializer_class = NoticeListViewSerializer
@@ -76,6 +77,7 @@ class NoticeListView(ListAPIView):
       queryset = Notice.objects.filter(expired_status=False)
     mc = self.kwargs['mc']
     subc = self.kwargs['subc']
+    print subc
     llim = int(self.kwargs['llim'])                                #lower limit
     hlim = int(self.kwargs['hlim'])                                #higher limit
     first_notice_id = int(self.kwargs['id'])                       #id of the first notice relative to which the number of notices to be sent is realized
@@ -109,7 +111,7 @@ class NoticeListView(ListAPIView):
 class Maxnumber(TemplateView):
   def get(self, request):
     number_json = simplejson.dumps({'total_new_notices' : len(Notice.objects.filter(expired_status=False)),'total_old_notices' : len(Notice.objects.filter(expired_status=True)) })
-    return HttpResponse(number_json, mimetype="application/json")
+    return HttpResponse(number_json, content_type="application/json")
 
 class TempMaxNotice(TemplateView):
   def get(self, request, mode, mc, subc):
@@ -121,7 +123,7 @@ class TempMaxNotice(TemplateView):
       number_json = simplejson.dumps({'total_notices' : len(queryset.filter(uploader__category__main_category=mc))})
     else:
       number_json = simplejson.dumps({'total_notices' : len(queryset.filter(uploader__category__name=subc))})
-    return HttpResponse(number_json, mimetype="application/json")
+    return HttpResponse(number_json, content_type="application/json")
 
 class GetNotice(RetrieveAPIView):
   queryset = Notice.objects.all()
@@ -173,7 +175,7 @@ class NoticeSearch(ListAPIView):
 @login_required
 def read_star_notice(request, id1, action):              #action determines whether the function of this view is to star, unstar, read or unread a notice
   user1 = request.user
-  notice_user = NoticeUser.objects.get(user=user1)
+  notice_user = NoticeUser.objects.get_or_create(user=user1)[0]
   notice_temp = Notice.objects.get(id=id1)
   if action=="add_starred":
     notice_user.starred_notices.add(notice_temp)
@@ -183,12 +185,12 @@ def read_star_notice(request, id1, action):              #action determines whet
 		notice_user.starred_notices.remove(notice_temp)
   success = {'success' : 'true'}
   success = simplejson.dumps(success)
-  return HttpResponse(success, mimetype="application/json")
+  return HttpResponse(success, content_type="application/json")
 
 @login_required
 def mul_read_star_notice(request, action):              #action determines whether the function of this view is to star, unstar, read or unread a notice
   user1 = request.user
-  notice_user = NoticeUser.objects.get(user=user1)
+  notice_user = NoticeUser.objects.get_or_create(user=user1)[0]
   list1 = request.GET.get('q', '')
   ids = list1.split(' ')
   for i in ids:
@@ -203,18 +205,18 @@ def mul_read_star_notice(request, action):              #action determines wheth
 		  notice_user.read_notices.remove(notice_temp)
   success = {'success' : 'true'}
   success = simplejson.dumps(success)
-  return HttpResponse(success, mimetype="application/json")
+  return HttpResponse(success, content_type="application/json")
 
 class Show_Starred(ListAPIView):
   def get_queryset(self):
-    user = NoticeUser.objects.get(user=self.request.user)
+    user = NoticeUser.objects.get_or_create(user=self.request.user)[0]
     queryset = user.starred_notices.all().order_by('-datetime_modified')
     return queryset
   serializer_class = NoticeListViewSerializer
 
 class Read_notice_list(TemplateView):
   def get(self, request):
-    user = NoticeUser.objects.get(user=request.user)
+    user = NoticeUser.objects.get_or_create(user=request.user)[0]
     notices = user.read_notices.all().order_by('-datetime_modified')
     dictionary = {}
     t=0
@@ -222,7 +224,7 @@ class Read_notice_list(TemplateView):
       dictionary[t] = i.id
       t=t+1
     d_json = simplejson.dumps(dictionary)
-    return HttpResponse(d_json, mimetype="application/json")
+    return HttpResponse(d_json, content_type="application/json")
 
 class Show_Uploads(ListAPIView):
   def get_queryset(self):
@@ -299,6 +301,6 @@ def browse(request,category_name,path):
       dictionary[t] = i.id
       t=t+1
     d_json = simplejson.dumps(dictionary)
-    return HttpResponse(d_json, mimetype="application/json")
+    return HttpResponse(d_json, content_type="application/json")
 """
 
