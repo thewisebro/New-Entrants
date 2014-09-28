@@ -129,16 +129,28 @@ function close_dialog(dialog_name){
 }
 
 function check_user_data(is_authenticated, username){
+  if(!(is_authenticated === true || is_authenticated === false))
+    return;
   if(user.is_authenticated != is_authenticated ||
       (user.is_authenticated && user.username != username)){
-    user.is_authenticated = is_authenticated;
-    if(user.is_authenticated)
-      user.username = username;
+    if(is_authenticated){
+      user = {
+        is_authenticated: true,
+        username: username
+      };
+    }
+    else{
+      user = {
+        is_authenticated: false
+      };
+    }
     if(current_dialog){
       try{
         current_dialog.dialog('close');
       } catch(e){}
     }
+    console.log('is_authenticated: '+is_authenticated);
+    console.log('username: '+username);
     if(is_authenticated)
       $(document).trigger('login');
     else
