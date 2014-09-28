@@ -1,15 +1,44 @@
 <div id="_notices-header">
+    <div id="_source_wrap">
+      <div id="_prev" class="button4 button-div" onclick="location.hash = '#notices/content/{{ prev_id }}'">Prev</div>
+      <div id="_next" class="button4 button-div" onclick="location.hash = '#notices/content/{{ next_id }}'">Next</div>
+      <div style="clear:both"></div>
+    </div>
   <div id="_home" class="button4 button-div" onclick="location.hash = '#notices/'">Home</div>
   <div id="_back" class="button4 button-div" onclick="back_clicked()">Back</div>
   <div style="clear:both"></div>
 </div>
 <div id="_info">
   <div id="_subject_wrap">
-  <div id="_subject">Subject : </div>
-  <div id="_subject_value">{{ data.subject }} </div>
-  <div style="clear:both"></div>
+    <div id="_subject" class="_details">Subject : </div>
+    <div id="_subject_value" class="_details">{{ data.subject }} </div>
+    <div style="clear:both"></div>
   </div>
-  <div id="_reference">Reference : {{ data.reference }}</div>
-  <div id="_source">Category : {{ data.category }}</div>
-  <div id="_content">Content : {{{ data.content }}}</div>
+
+  <div id="_source_date_ref_wrap">
+
+    <div id="_source_wrap">
+      <div id="_source" class="_details">Posted By : </div>
+      <div id="_source_value" class="_details">{{ data.category }} </div>
+      <div style="clear:both"></div>
+    </div>
+
+    <div id="_date_wrap">
+      <div id="_date" class="_details">Posted On : </div>
+      <div id="_date_value" class="_details">{{ data.datetime_modified }} </div>
+      <div style="clear:both"></div>
+    </div>
+
+    {{#if ref_exist}}
+      <div id="_ref_wrap">
+        <div id="_reference" class="_details">Reference No. :</div>
+        <div id="_reference_value" class="_details">{{ data.reference }} </div>
+        <div style="clear:both"></div>
+      </div>
+    {{/if}}
+
+    <div style="clear:both"></div>
+  </div>
+
+  <div id="_content">{{{ data.content }}}</div>
 </div>

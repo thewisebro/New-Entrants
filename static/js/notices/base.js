@@ -7,7 +7,7 @@ var temp_total_pages, temp_last_page_notices;		//variables for general notice di
 var store, temp_store, old_store;    //store stands for new store or the store of new notices.
 var emptyarray;
 
-var main_mode, sub_mode, m_category, sub_category, cur_page_no, more, name_to_display, all, same_except_page_no, search_string, search_string_changed;
+var main_mode, sub_mode, m_category, sub_category, cur_page_no, more, name_to_display, all, same_except_page_no, search_string, search_string_changed, content_bundle=1;
 var h1,h2,h3,h4,h5;
 /*
   1.Values of sub_mode can be either new or old
@@ -429,6 +429,10 @@ function change_page(number)
 
 function open_notice(id)
 {
+  if(main_mode!="content")
+    prev_url = location.hash;
+  if(prev_url=="#notices")
+    prev_url = '#notices/display/new/All/All/1';
   location.hash = '#notices/content/' + id;
 }
 
@@ -637,7 +641,6 @@ function star_notice(id, e)
       else
       {
         url = 'notices/read_star_notice/'+id+'/'+'add_starred';
-        check_star_array[id]=1;
 
         if(main_mode=="display")
           store_to_use = temp_store;
@@ -734,7 +737,7 @@ function select_all()
     else if(main_mode=="starred")
         mode_prefix="starred";
 
-    if(parseInt(cur_page_no)<window[mode_prefix + "_total_pages"]||window[mode_prefix + "_last_page_notices"]==0)
+    if(parseInt(cur_page_no)<window[mode_prefix + "_total_pages"]||window[mode_prefix + "_last_page_notices"]===0)
       k=10;
     else
       k=window[mode_prefix + "_last_page_notices"];
@@ -899,13 +902,13 @@ function display_categories()
   console.log("hello");
   if(select_category==0)
   {
-    $('#select_bars').css("color", "#DD4B39")
+    $('#select_bars').addClass("select_bars_clicked");
     $('#button_category_app_name').append(display_categories_html());
     select_category=1;
   }
   else
   {
-    $('#select_bars').css("color", "#666666")
+    $('#select_bars').removeClass("select_bars_clicked");
     $('#category_menu').remove();
     select_category=0;
   }
@@ -944,6 +947,7 @@ function newold_clicked(ns)       //ns stands for new status, storing the sub_mo
 
 function evaluate_breadcrumbs()
 {
+    var notice_prefix;
     if(sub_mode=="new")
       notice_prefix = "Current"
     if(sub_mode=="old")
@@ -1213,7 +1217,29 @@ function load_numbers_bar_html(tp23, mode1)
 
 function display_notice_html(data)
 {
-    return Handlebars.notices_templates.display_notice({data : data});
+    console.log(data);
+    var ref_exist = 0;
+    if(data.reference!="")
+      ref_exist = 1;
+
+    if(main_mode=="display")
+      store_to_use = temp_store;
+    else if(main_mode=="search")
+      store_to_use = search_store;
+    else if(main_mode=="uploads")
+      store_to_use = upload_array;
+    else if(main_mode=="starred")
+      store_to_use = starred_array;
+
+    len = store_to_use.length;
+    for(var i=0; i<len; i++)
+      if(store_to_use[i].id==id)
+      {
+          insert_and_maintain_datesort(store_to_use[i]);
+          break;
+      }
+
+    return Handlebars.notices_templates.display_notice({data : data, ref_exist : ref_exist});
 }
 
 function more_html()
