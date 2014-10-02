@@ -108,6 +108,56 @@ class NoticeListView(ListAPIView):
        queryset = queryset.filter(uploader__category__name=subc).order_by('-datetime_modified')[llim:hlim]
     return queryset
 
+class ContentFirstTimeBringNotices1(ListAPIView):              #Brings 50 notices corresponding to the id in the url, when first opened in content mode
+  serializer_class = NoticeListViewSerializer
+  def get_queryset(self):
+    nid = self.kwargs['nid']
+    notice_list = Notice.objects.filter(expired_status=False).order_by('datetime_modified')         #Check in new notices
+    i=0
+    for notice in notice_list:
+      print notice.id, nid
+      if notice.id == int(nid):
+        break
+      i=i+1
+    global set1
+    if i!=len(notice_list):
+      begin = i-i%50
+      end = begin + 50
+      page_no = i/10 + 1
+      queryset = notice_list[begin:end]
+      set1 = {}
+      set1["begin"] = begin
+      set1["end"] = end-1
+      set1["mode"] = "new"
+      set1["page_no"] = page_no
+      set1["status"] = "500"
+      return queryset
+
+    notice_list = Notice.objects.filter(expired_status=True).order_by('datetime_modified')       #Check in old notices
+    i=0
+    for notice in notice_list:
+      print notice.id, nid
+      if notice.id == int(nid):
+        break
+      i=i+1
+    if i!=len(notice_list):
+      begin = i-i%50
+      end = begin + 50
+      page_no = i/10 + 1
+      queryset = notice_list[begin:end]
+      set1 = {}
+      set1["begin"] = begin
+      set1["end"] = end-1
+      set1["mode"] = "old"
+      set1["page_no"] = page_no
+      set1["status"] = "500"
+      return queryset
+
+class ContentFirstTimeBringNotices2(TemplateView):              #Brings 50 notices corresponding to the id in the url, when first opened in content mode
+  def get(self, request):
+    set2 = simplejson.dumps(set1)
+    return HttpResponse(set2, content_type="application/json")
+
 class Maxnumber(TemplateView):
   def get(self, request):
     number_json = simplejson.dumps({'total_new_notices' : len(Notice.objects.filter(expired_status=False)),'total_old_notices' : len(Notice.objects.filter(expired_status=True)) })
@@ -229,6 +279,7 @@ class Read_notice_list(TemplateView):
 class Show_Uploads(ListAPIView):
   def get_queryset(self):
     queryset = []
+    print privelege, "asd"
     if privelege:
       uploaders = self.request.user.uploader_set.all()
       for i in uploaders:

@@ -1,7 +1,7 @@
 {{#if anonymous}}
   <div class="notice_info" onclick="open_notice({{ notice.id }})">
     <div class="notice_date">{{ notice.datetime_modified }}</div>
-    <div class="notice_source">{{ notice.category_name }}</div>
+    <div class="notice_source">{{ notice.category }}</div>
     <div class="subject_wrap">
       <div class="notice_subject">{{ notice.subject }}</div>
       <div style="clear:both"><div>
@@ -13,12 +13,11 @@
       class='notice_info {{#if read}}read{{else}}unread {{/if}}'
       id="notice_{{ notice.id }}"
       onclick="open_notice({{ notice.id }})">
-
-    <input 
-      type="checkbox" 
-      class="check" 
-      id="check-{{ notice.id }}" 
-      onclick="add_to_checklist({{notice.id}}, event)">
+    
+      <input class="check" 
+        onclick="add_to_checklist({{notice.id}}, event)"
+        type="checkbox" 
+        id="check-{{ notice.id }}">
    
       <span 
         class="starred" 
@@ -28,7 +27,7 @@
       </span>
 
       <div class="notice_date">{{ notice.datetime_modified }}</div>
-      <div class="notice_source">{{ notice.category_name }}</div>
+      <div class="notice_source">{{ notice.category }}</div>
       <div class="subject_wrap">
 
         {{#if edit}} 
