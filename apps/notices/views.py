@@ -17,6 +17,8 @@ from filemanager import FileManager
 from notices.models import *
 from notices.forms import *
 from notices.utils import *
+import pytz
+from datetime import datetime
 
 privelege=0
 PeopleProxyUrl = "http://people.iitr.ernet.in/"
@@ -200,7 +202,9 @@ class NoticeSearch(ListAPIView):
     if query[:2]==">>":
       print "abcd"
       query=query[2:].split("-")
-      queryset = query1.filter(datetime_modified__gt=datetime.fromtimestamp(int(query[0])/1000.0)).filter(datetime_modified__lt=datetime.fromtimestamp(int(query[1])/1000.0))
+      init_date = pytz.utc.localize(datetime.fromtimestamp(int(query[0])/1000.0))     #make the object aware from unaware
+      final_date = pytz.utc.localize(datetime.fromtimestamp(int(query[1])/1000.0))
+      queryset = query1.filter(datetime_modified__gt=init_date).filter(datetime_modified__lt=final_date)
 
     else:
       words = query.split(' ')

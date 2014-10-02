@@ -7,7 +7,7 @@ var temp_total_pages, temp_last_page_notices;		//variables for general notice di
 var store, temp_store, old_store;    //store stands for new store or the store of new notices.
 var emptyarray;
 
-var main_mode, sub_mode, m_category, sub_category, cur_page_no, store_to_use, more, name_to_display, all, same_except_page_no, search_string, search_string_changed, prev_content_url, content_button_state, no_notices;
+var main_mode, sub_mode, m_category, sub_category, cur_page_no, store_to_use, more, name_to_display, all, same_except_page_no, search_string, search_string_changed, prev_content_url, content_button_state, no_notices, binding_done;
 var h1,h2,h3,h4,h5;
 /*
   1.Values of sub_mode can be either new or old
@@ -17,6 +17,7 @@ var h1,h2,h3,h4,h5;
   5.The all variable stores if the both the m_category and sub_category are equal to "All" or not.
   6.Initial value of variables in line 10 can't be [display, new, All, All, 1] or ["", "", "", "", ""] because they are supposed to be different from the hashes(#notices and #notice/display/new/All/All/1), that arrive on reload, so that the static divs are created.
   7.Pre variables store the state of the app before someone goes in content mode.
+  8.binding_done stores if the binding is done with the "Actions" div.
 */
 
 var privelege, first_time_visit, static_divs_created, star_perm, select_category, prev_url;
@@ -38,6 +39,7 @@ function initialize_global_variables()
   emptyarray = new Array(50);
   all=1;
   no_notices=0;
+  binding_done=0;
 //  same_except_page_no=1;
   main_mode="display";
   sub_mode="";
@@ -169,6 +171,8 @@ function redirection()            //The main controller function which defines t
             $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
           console.log("6starred_uploads_yes");
             $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
+            $('#select_bars').tooltip("destroy");
+            $('#select_bars').tooltip({content: "Go Back", position: {at: "right+5 top-20"}});
             $("#filters").slideUp(400);
           console.log("7starred_uploads_yes");
             same_except_page_no=0;
@@ -185,6 +189,8 @@ function redirection()            //The main controller function which defines t
             $("#select_bars").removeAttr("onclick");
             $("#select_bars").attr("onclick", "display_categories(event);");
             $("#back").hide("fade", 200, function(){$("#bars").show("fade", 200);});
+            $('#select_bars').tooltip("destroy");
+            $('#select_bars').tooltip({content: "Display category menu", position: {at: "right+5 top-20"}});
             $("#filters").slideDown(400);
             same_except_page_no=0;
           }
@@ -375,7 +381,8 @@ function create_static_divs()                //Create static buttons like upload
     $('#content').append('<div id="page_numbers"></div>');
     console.log("switched_to_notices_create : static divs created");
     $('#more').bind("click", bind_unbind_tooltip);
-    $('#main_check').tooltip({content: "Check all notices on this page", position: {at: "left center"}});
+    $('#main_check').tooltip({position: {at: "right+5 top-20"}});
+    $('#select_bars').tooltip({position: {at: "right+5 top-20"}});
 }
 
 function get_total_notices_no()       //This function is only meant for general notice display(categories other than All, All)
@@ -559,6 +566,16 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
       for(var i=a; i<b; i++)
       {
             context["notice"] = tstore[i];
+            var d = context.notice.datetime_modified.split('T')[0];
+            d = Date.parse(d);
+            if(d.getTime() == Date.parse("today").getTime())
+              context["notice_date"] = "Today";
+            else if(d.getTime() == Date.parse("yesterday").getTime())
+              context["notice_date"] = "Yesterday";
+            else if(d.getYear() == Date.parse("today").getYear())
+              context["notice_date"] = d.toString('dd MMM');
+            else
+              context["notice_date"] = d.toString('dd MMM yyyy');
 
             if(star_perm==1)
               context["anonymous"] = 0;
@@ -598,6 +615,25 @@ function display_notice(id)
     {
       $('#content').empty();
       $('#content').append(display_notice_html(data));
+      var count=0;
+      for(var i=0;i<$('#_content img').length;i++)
+      {
+        var len1 = $('#_content img')[i].src.split('/').length;
+        for(var j=0;j<$('#_content a').length;j++)
+        {
+          var len2 = $('#_content a')[j].href.split('/').length;
+          console.log("here");
+          if($('#_content img')[i].src.split('/')[len1-1].split('.png')[0] == $('#_content a')[j].href.split('/')[len2-1].split('.pdf')[0])
+            {
+              console.log("there");
+              console.log($('#_content a')[j].href);
+              href1 = $('#_content a')[j].href.replace(window.location.origin,'').replace(/\%20/g, ' ');
+              $('#_content a')[j].a;
+              $('a[href="' + href1 + '"]').replaceWith('<div class="button4 button-div" onclick="window.location=\''+ href1 +'\'">Download pdf</div>');
+            }
+        }
+      }
+
     },
     error: function(data)
     {
@@ -621,19 +657,30 @@ function check_if_date()
 {
       console.log("entered check_if_date");
       url="";
-      if(search_string.split("-").length==2)
+      if(search_string.split("to ").length==2)
       {
-        parts=search_string.split("-");
-        parts[0]=Date.parse(parts[0]);
-        parts[1]=Date.parse(parts[1]) + 86400000;
+        console.log("entered check_ifdate");
+        parts=search_string.split("to ");
+
+        parts[0]=parts[0].replace( /(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3");      //Conversion of MM-DD-YYYY to DD-MM-YYYY
+        parts[0]=parts[0].replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3");
+        parts[1]=parts[1].replace( /(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3");
+        parts[1]=parts[1].replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3");
+
+        parts[0]=Date.parse(parts[0]).getTime();
+        parts[1]=Date.parse(parts[1]).add(1).days().getTime();
         console.log(parts[1]);
-        if(parts[0]>1262284200000 && parts[1]>1262284200000)
+//        if(parts[0]>1262284200000 && parts[1]>1262284200000)
         url = ">>" + parts.join().replace(",", "-");
+        console.log("url : ", url);
       }
       else if(!isNaN(Date.parse(search_string)) && Date.parse(search_string)>1262284200000 && Date.parse(search_string)<2531673000000)
       {
-        x = Date.parse(search_string);
-        url = ">>" + x.toString() + "-" + (x+86400000).toString();
+        var temp = search_string;
+        temp=temp.replace( /(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3");      //Conversion of MM-DD-YYYY to DD-MM-YYYY
+        temp=temp.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3");
+        x = Date.parse(temp);
+        url = ">>" + x.getTime() + "-" + x.add(1).days().getTime();
       }
       console.log("url : " + url);
       return url;
@@ -782,19 +829,20 @@ function add_to_checklist(id, e)
     delete checklist[id];
   else
     checklist[id]=1;
-	if(e.stopPropagation)
-    e.stopPropagation();
-  else
-    e.cancelBubble = true;
   if(Object.keys(checklist).length===0)
   {
     $('#more').unbind("click", show_menu);
     $('#more').bind("click", bind_unbind_tooltip);
+    binding_done=0;
   }
   else
   {
-    $('#more').unbind("click", bind_unbind_tooltip);
-    $('#more').bind("click", show_menu);
+    if(binding_done===0)
+    {
+      $('#more').unbind("click", bind_unbind_tooltip);
+      $('#more').bind("click", show_menu);
+      binding_done=1;
+    }
   }
 }
 
@@ -820,24 +868,34 @@ function select_all()
     console.log(x);
     if(x)
     {
-        $('.check').prop('checked', true);
-        $('#more').unbind("click", bind_unbind_tooltip);
-        $('#more').bind("click", show_menu);
+        console.log("11");
+        $('.checkboxes').prop('checked', true);
+        if(binding_done==0)
+        {
+          $('#more').unbind("click", bind_unbind_tooltip);
+          $('#more').bind("click", show_menu);
+          binding_done=1;
+        }
         for(var i=0; i<k; i++)
         {
-            id = $('.check')[i].id[6]+$('.check')[i].id[7];
+            id = $('.checkboxes')[i].id[6]+$('.checkboxes')[i].id[7];
             checklist[parseInt(id)]=1;
         }
     }
     else
     {
-        $('.check').prop('checked', false);
-        $('#more').unbind("click", show_menu);
-        $('#more').bind("click", bind_unbind_tooltip);
+        console.log("22");
+        $('.checkboxes').prop('checked', false);
         for(var i=0; i<k; i++)
         {
-            id = $('.check')[i].id[6]+$('.check')[i].id[7];
+            id = $('.checkboxes')[i].id[6]+$('.checkboxes')[i].id[7];
             delete checklist[parseInt(id)];
+        }
+        if(Object.keys(checklist).length===0)
+        {
+          $('#more').unbind("click", show_menu);
+          $('#more').bind("click", bind_unbind_tooltip);
+          binding_done=0;
         }
     }
 }
@@ -845,20 +903,16 @@ function select_all()
 function show_menu(e)
 {
     console.log(e);
+    console.log("below e");
     if(more==1)
     {
-      console.log("11");
       $("#super_more").empty();
       more=0;
     }
     else
     {
-      if(Object.keys(checklist).length !== 0)
-      {
-      console.log("12");
         $('#super_more').append(more_html());
         more=1;
-      }
     }
     if(e.stopPropagation)
         e.stopPropagation();
@@ -1011,9 +1065,15 @@ function display_sub_categories(main_category, e)
 {
   var len=constants[main_category].length;
   var k=Math.min(len, 11);
-  $('#category_child1').empty(); $('#category_child2').empty();
-  $('#category_child1').append(display_sub_categories_html(0, k, main_category));
-  $('#category_child2').append(display_sub_categories_html(k, len, main_category));
+  $('#category_details').empty(); $('#category_child2').empty();
+  if(len!==0)
+  {
+    $('#category_details').append('<div id="category_child1"></div><div id="category_child2"></div>');
+    $('#category_child1').append(display_sub_categories_html(0, k, main_category));
+    $('#category_child2').append(display_sub_categories_html(k, len, main_category));
+  }
+  else
+    $('#category_details').append('<div class="no_sub_categories">No sub-categories</div>');
 }
 
 $('html').click(function(){
@@ -1210,6 +1270,15 @@ function bind_unbind_tooltip()
                     $('#more').tooltip("destroy");
                 }, 500 );
         });
+}
+
+function stop_propagation(e)
+{
+    console.log("entered stop_propagtion");
+    if(e.stopPropagation)
+        e.stopPropagation();
+    else
+        e.cancelBubble = true;
 }
 
 //Following are the functions that are called the first time, notices is clicked
@@ -1481,24 +1550,6 @@ function display_notice_html(data)
     var ref_exist = 0;
     if(data.reference!="")
       ref_exist = 1;
-/*
-    if(main_mode=="display")
-      store_to_use = temp_store;
-    else if(main_mode=="search")
-      store_to_use = search_store;
-    else if(main_mode=="uploads")
-      store_to_use = upload_array;
-    else if(main_mode=="starred")
-      store_to_use = starred_array;
-
-    len = store_to_use.length;
-    for(var i=0; i<len; i++)
-      if(store_to_use[i].id==id)
-      {
-          insert_and_maintain_datesort(store_to_use[i]);
-          break;
-      }
-*/
     return Handlebars.notices_templates.display_notice({data : data, ref_exist : ref_exist});
 }
 

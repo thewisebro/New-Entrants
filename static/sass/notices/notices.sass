@@ -28,7 +28,6 @@ li
   border-bottom: 0px
 
 .notice_info
-  padding: 10px
   background: #FFF
   border-bottom: 1px solid #D0D0D0
   cursor: pointer
@@ -52,20 +51,29 @@ li
   color: #333
   margin-right: 10px
 
-.notice_date,.notice_source
+.notice_date,.notice_source, #date_source_subject_wrap
   float: left
 
-.notice_source
+.nsdjhadsiotice_source
   width: 120px
 
+#date_source_subject_wrap
+  padding: 10px 5px
+
+.star_check_present
+  max-width: calc(100% - 70px)
+
+.star_check_absent
+  max-width: calc(100% - 20px)
+
 .notice_date
+  width: 78px
   margin-right: 20px
 
 .notice_subject
   white-space: nowrap
   overflow: hidden
   text-overflow: ellipsis
-  max-width: 600px
 
 .subject_wrap
   margin-left: 270px
@@ -73,7 +81,11 @@ li
 .check,.starred
   float: left
   cursor: pointer
-  margin-right: 10px
+  padding: 10px 5px
+  height: 17px
+
+.check
+  padding-left: 10px
 
 .button4:hover
   text-decoration: none
@@ -151,9 +163,11 @@ li
   border: 1px solid #D0D0D0
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.25)
   border-radius: 3px
-  min-height: 180px
-  margin-top: 26px
+  margin-top: 30px
   position: absolute
+
+#category_details
+  min-height: 180px
 
 .actions
   padding: 1px
@@ -320,3 +334,20 @@ img
   left: 72px
   border-color: #666 transparent
   border-width: 0 10px 10px
+
+.no_sub_categories
+  margin: auto
+  color: silver
+  font-size: 27px
+  width: 225px
+  margin-top: 75px
+
+#_content img
+  margin-bottom: 10px
+
+#edit_delete
+  padding: 10px
+  float: right
+
+.star_check_present_with_edit
+  max-width: calc(100% - 155px)
