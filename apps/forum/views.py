@@ -89,8 +89,12 @@ def tag_dict(tag,profile):
     follow_bool = "true"
   else:
     follow_bool = "false"
+  x = TagDescription.objects.get_or_create(tag=tag)
+  y = x[0]
   return {
     'name': tag.name,
+    'description': y.description,
+    'photo_url': y.photo_url,
     'follow_unfollow': follow_bool
   }
 
@@ -266,6 +270,7 @@ def fetch_tag(request):
   tag_name = request.GET['tag_name']
   profile = Profile.get_profile(request.user)
   tag = Tag.objects.get(name=tag_name)
+  tag_exists = TagDescription.objects.get_or_create(tag=tag)
   tag_item = TaggedItem.objects.filter(tag=tag,content_type=ContentType.objects.get_for_model(Question))
   questions = map(lambda t:tagitem_content(t,profile), tag_item)
   json_data = simplejson.dumps({'questions':map(lambda q:question_dict(q, profile), questions),'tag':tag_dict(tag,profile)})

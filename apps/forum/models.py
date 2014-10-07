@@ -8,6 +8,7 @@ from nucleus.models import User
 from api import model_constants as MC
 
 from taggit_autocomplete.managers import TaggableManager
+from taggit.models import Tag,TaggedItem
 
 class Question(models.Model, Taggable):
   profile = models.ForeignKey('Profile', related_name='added')
@@ -148,3 +149,8 @@ class Activity(models.Model):
   def __unicode__(self):
     return self.activity_type
 
+
+class TagDescription(models.Model):
+  description = models.TextField()
+  photo_url = models.URLField()
+  tag = models.OneToOneField(Tag,primary_key = True)
