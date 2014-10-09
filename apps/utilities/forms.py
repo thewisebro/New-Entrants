@@ -2,8 +2,23 @@ from django.db.models import Q
 
 from core import forms
 from core.forms.mixins import FormMixin
-from nucleus.models import StudentUserInfo
+from nucleus.models import StudentUserInfo, User
 from events.models import Calendar, EventsUser
+
+
+class GenProfileForm(forms.ModelForm, FormMixin):
+  class Meta:
+    model = User
+    fields = [
+      'username',
+      'first_name',
+      'gender',
+      'birth_date',
+      'email',
+      'contact_no',
+    ]
+    read_only_fields = ['username']
+    required_fields = ('first_name', 'gender', 'birth_date')
 
 
 class ProfileFormPrimary(forms.ModelForm, FormMixin):

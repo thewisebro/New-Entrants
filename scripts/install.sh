@@ -8,7 +8,7 @@ apt-get install rubygems
 apt-get install python-mysqldb
 apt-get install python-pygresql
 
-pip install Django\==1.6.5
+pip install Django\==1.7
 
 # Installing PIL
 apt-get build-dep python-imaging
@@ -17,6 +17,9 @@ ln -s /usr/lib/x86_64-linux-gnu/libz.so /usr/lib/libz.so
 ln -s /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib/libjpeg.so
 ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/libfreetype.so
 pip install PIL
+
+# Installing Pillow
+pip install Pillow
 
 # django-compressor
 pip install django-appconf

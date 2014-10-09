@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from nucleus.constants import tabs
+from nucleus.constants import tabs, DEFAULT_PASSWORD
 
 def header_sidebar(request):
   if request.user.is_authenticated():
@@ -18,6 +18,7 @@ def header_sidebar(request):
   }
   if request.user.is_authenticated():
     context.update({
+      'pass_change': request.user.check_password(DEFAULT_PASSWORD),
       'not_viewed_notifications_count': request.user.usernotification_set\
         .filter(viewed=False).count()
     })

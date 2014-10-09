@@ -1,9 +1,14 @@
+import json as simplejson
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from forum.models import *
 from forum.forms import *
+<<<<<<< HEAD
 import simplejson
+=======
+>>>>>>> master
 from core.models import Count,Q
 from taggit.models import Tag,TaggedItem
 

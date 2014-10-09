@@ -42,6 +42,38 @@ DEPARTMENT_CHOICES = (
     ('QIP', 'Quality Improvement Programme'),
 )
 
+SIMPLIFIED_DEPARTMENTS = {
+    'AHEC':'Alternate Hydro Energy Centre',
+    'ASED':'App. Science and Eng. Department',
+    'CNT':'Centre for Nanotechnology',
+    'ARCD':'Architecture Department',
+    'BTD':'Biotechnology Department',
+    'CHED':'Chemical Engineering Department',
+    'CDM':'Centre of Disaster Mitigation',
+    'CYD':'Chemistry Department',
+    'CED':'Civil Engineering Department',
+    'CSED':'CSE Department',
+    'CT':'Centre for Transportation Systems',
+    'EQD':'Earthquake Department',
+    'ESD':'Earth Sciences Department',
+    'EED':'Electrical Engineering Department',
+    'ECED':'ECE Department',
+    'HSD':'HS Department',
+    'HYD':'Hydrology Department',
+    'MSD':'Management Studies Department',
+    'MAD':'Mathematics Department',
+    'MIED':'MIE Department',
+    'MMED':'MME Department',
+    'PTD':'Paper Technology Department',
+    'PPED':'Polymer and Process Eng. Department',
+    'PHD':'Physics Department',
+    'WRDMD':'WRDM Department',
+    'CDM':'Centre for Disaster Mitigation',
+    'ICC':'Institute Computer Centre',
+    'IIC':'Institute Instrumentation Centre',
+    'QIP':'Quality Improvement Programme',
+}
+
 STATE_CHOICES = (
     ('ADP', 'Andhra Pradesh'),
     ('ARP', 'Arunachal Pradesh'),

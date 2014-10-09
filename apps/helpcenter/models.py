@@ -57,7 +57,7 @@ class Response(models.Model):
 
 class Reply(models.Model):
   user = models.ForeignKey(User)
-  by_img = models.BooleanField()
+  by_img = models.BooleanField(default=False)
   response = models.ForeignKey(Response)
   number = models.IntegerField()
   text = models.TextField()

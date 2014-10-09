@@ -27,6 +27,8 @@ NEWS_IMAGES_ROOT = NEWS_MEDIA_ROOT + 'images/'
 NEWS_XML_ROOT = NEWS_MEDIA_ROOT + 'xml_files/'
 NEWS_MEDIA_URL = '/newsmedia/'
 
+CHAT_SYSTEM_DEBUG = False
+
 JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
 JUKEBOX_MEDIA_URL = '/songsmedia/'
 JUKEBOX_SONGS_BASEURL = '/songs/'
@@ -87,7 +89,7 @@ USE_I18N = True
 USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = False
+USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -157,6 +159,7 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
   'api.middlewares.DelegateMiddleware',
+  'api.middlewares.AjaxMessaging',
   'django_user_agents.middleware.UserAgentMiddleware',
   'admin_reorder.middleware.ModelAdminReorder',
   # Uncomment the next line for simple clickjacking protection:
@@ -254,6 +257,7 @@ INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
 
 FEED_APPS = (
   'events',
+  'lostfound',
 )
 
 FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
@@ -289,6 +293,8 @@ CACHES = {
     'LOCATION': '127.0.0.1:11211',
   }
 }
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -372,20 +378,24 @@ LOGGING = {
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-      'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-      'URL': 'http://192.168.121.5:8983/solr/',
+      'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+      'URL': 'http://192.168.121.5:9200/',
+      'INDEX_NAME': 'channeli',
       'INCLUDE_SPELLING': True,
       # ...or for multicore...
       # 'URL': 'http://127.0.0.1:8983/solr/mysite',
     },
     'autocomplete': {
-      'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-      'URL': 'http://192.168.121.5:8983/solr/',
+      'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+      'URL': 'http://192.168.121.5:9200/',
+      'INDEX_NAME': 'channeli',
       'INCLUDE_SPELLING': True,
       # ...or for multicore...
       # 'URL': 'http://127.0.0.1:8983/solr/mysite',
     }
 }
+
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 from admin_settings import *
 
