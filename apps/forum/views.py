@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from forum.models import *
 from forum.forms import *
-from django.utils import simplejson
+import simplejson
 from core.models import Count,Q
 from taggit.models import Tag,TaggedItem
 
@@ -91,11 +91,15 @@ def tag_dict(tag,profile):
     follow_bool = "false"
   x = TagDescription.objects.get_or_create(tag=tag)
   y = x[0]
+  tag_item_question = TaggedItem.objects.filter(tag=tag,content_type=ContentType.objects.get_for_model(Question))
+  tag_item_person = TaggedItem.objects.filter(tag=tag,content_type=ContentType.objects.get_for_model(Profile))
   return {
     'name': tag.name,
     'description': y.description,
     'photo_url': y.photo_url,
-    'follow_unfollow': follow_bool
+    'follow_unfollow': follow_bool,
+    'questions_number': tag_item_question.count(),
+    'followers_number': tag_item_person.count()
   }
 
 def tag_name(tag):
@@ -171,7 +175,7 @@ def fetch_questions(request):
     questions = Question.objects.raw('''Select id, datetime_created, profile_id, datetime_modified, description, title,answers_count+4*hit_count+followers-2*(datediff(now(),datetime_created)) as total from (%s) AS myalias order by total;'''%internal)
     json_data = simplejson.dumps({'questions':map(lambda q:question_dict(q, profile), questions)})
 
-  return HttpResponse(json_data, mimetype='application/json')
+  return HttpResponse(json_data, content_type='application/json')
 
 def fetch_question(request):
   question_id = request.GET['question_id']
@@ -182,7 +186,7 @@ def fetch_question(request):
   answers = Answer.objects.filter(question=question).annotate(upvote_count=Count('upvoted_by')).order_by('-upvote_count')
   json_data = simplejson.dumps({'question':question_dict(question,profile),'answers':map(lambda a:answer_dict(a,profile), answers),
       'tags':map(lambda t:tag_dict(t,profile), tags)})
-  return HttpResponse(json_data, mimetype='application/json')
+  return HttpResponse(json_data, content_type='application/json')
 
 
 def add_answer(request):
@@ -196,7 +200,7 @@ def add_answer(request):
   answer = question.answers.create(description=description, profile=profile)
  #save_notification('forum','your questions was answered', url, users, answer)
   json_data = simplejson.dumps({'answer':answer_dict(answer,profile)})
-  return HttpResponse(json_data, mimetype='application/json')
+  return HttpResponse(json_data, content_type='application/json')
 
 def fetch_answer(request):
   answer_id = request.GET['answer_id']
@@ -206,7 +210,7 @@ def fetch_answer(request):
   tags = question.tags.all()
   json_data = simplejson.dumps({'answer':answer_dict(answer,profile),'question':question_dict(question,profile),
       'tags':map(lambda t:tag_dict(t,profile), tags)})
-  return HttpResponse(json_data, mimetype='application/json')
+  return HttpResponse(json_data, content_type='application/json')
 
 def follow_question(request):
   question_id = request.GET['question_id']
@@ -232,7 +236,7 @@ def remove_upvote(request):
     ProfileAnswerUpvoted.objects.get(profile=profile,answer=answer).delete()
   count = len(ProfileAnswerUpvoted.objects.filter(answer=answer))
   json_data = simplejson.dumps({'count':count})
-  return HttpResponse(json_data, mimetype='application/json')
+  return HttpResponse(json_data, content_type='application/json')
 
 def remove_downvote(request):
   answer_id = request.GET['answer_id']
@@ -252,7 +256,7 @@ def upvote_answer(request):
     profile.answers_down.remove(answer)
   count = len(ProfileAnswerUpvoted.objects.filter(answer=answer))
   json_data = simplejson.dumps({'count':count})
-  return HttpResponse(json_data, mimetype='application/json')
+  return HttpResponse(json_data, content_type='application/json')
 
 def downvote_answer(request):
   answer_id = request.GET['answer_id']
@@ -264,17 +268,17 @@ def downvote_answer(request):
     ProfileAnswerUpvoted.objects.get(profile=profile,answer=answer).delete()
   count = len(ProfileAnswerUpvoted.objects.filter(answer=answer))
   json_data = simplejson.dumps({'count':count})
-  return HttpResponse(json_data, mimetype='application/json')
+  return HttpResponse(json_data, content_type='application/json')
 
 def fetch_tag(request):
   tag_name = request.GET['tag_name']
   profile = Profile.get_profile(request.user)
   tag = Tag.objects.get(name=tag_name)
-  tag_exists = TagDescription.objects.get_or_create(tag=tag)
+#tag_exists = TagDescription.objects.get_or_create(tag=tag)
   tag_item = TaggedItem.objects.filter(tag=tag,content_type=ContentType.objects.get_for_model(Question))
   questions = map(lambda t:tagitem_content(t,profile), tag_item)
   json_data = simplejson.dumps({'questions':map(lambda q:question_dict(q, profile), questions),'tag':tag_dict(tag,profile)})
-  return HttpResponse(json_data, mimetype='application/json')
+  return HttpResponse(json_data, content_type='application/json')
 
 def fetch_activity(request):
   single = int(request.GET['single'])
@@ -288,7 +292,7 @@ def fetch_activity(request):
     else:
       activities = Activity.objects.filter(profile__user__user__username=username)
   json_data = simplejson.dumps({'activities':map(lambda act:activity_dict(act, profile), activities)})
-  return HttpResponse(json_data, mimetype='application/json')
+  return HttpResponse(json_data, content_type='application/json')
 
 def follow_tag(request):
   tag_name = request.GET['tag_name']
@@ -314,7 +318,7 @@ def search_tag(request):
   tag_key = request.POST['tag_key']
   tags = Tag.objects.filter(Q(name__icontains=tag_key))
   json_data = simplejson.dumps({'tags':map(tag_name,tags)})
-  return HttpResponse(json_data, mimetype='application/json')
+  return HttpResponse(json_data, content_type='application/json')
 
 def answer_comments(request,answer_id):
   answer = Answer.objects.get(id=answer_id)
@@ -335,7 +339,7 @@ def fetch_topics(request):
   tagged_items_question_not = tagged_items_not.filter(content_type=ContentType.objects.get_for_model(Question))
   number_not = tagged_items_question_not.values('tag').annotate(x=Count('tag')).order_by('-x')
   json_data = simplejson.dumps({'followed_tags':map(tag_count,number),'unfollowed_tags':map(tag_count,number_not)})
-  return HttpResponse(json_data, mimetype='application/json')
+  return HttpResponse(json_data, content_type='application/json')
 
 
 

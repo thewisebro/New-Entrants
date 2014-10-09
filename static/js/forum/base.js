@@ -43,7 +43,7 @@ $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
     //html += '<div id="tag_search"><form action="" method="post" onsubmit="search_tag();return false;">';
     //html += '<input type="text" name="tag_key">';
     //html += '<input type="submit" value="Search"></div>';
-    $('#content').html('');
+    $('#forum-feed').remove();
     var next_state = null;
     if(!hash1)
     {
@@ -83,10 +83,19 @@ $(document).on("load_app_forum",function(e,hash1,hash2,hash3,hash4){
       right_visible = true;
       current_state = next_state;
       var html = '';
+       var html1 = '';
       if(current_state == 'yes_category')
       {
         html = yes_category();
+        html1 = '<div id="forum-header">' +
+                   '<div id="forum-type-header">Forum</div>' +
+                   '<div id="forum-home-button" class="button-div">' +
+
+                     '<div class="button2"><a href="#forum">Home</a></div>' +
+                   '</div>' + 
+                 '</div>';
       }
+      $('#content').html(html1);
       $('#right-column .content').html(html);
     }
     if(!hash1)
@@ -139,8 +148,7 @@ function question_html(data){
             '<a href="#"><img class="feed-propic" src="'+data.question.photo_url+'"></a>' +
               '<div class="feed-text">';
   html += '<div class="feed-line">' +
-            '<a class="person-name" href="#">' + data.question.user_name + '</a>' +
-            '<span>asked</span>' +
+            '<span>' + data.question.user_name + ' asked </span>' +
           '</div>'; //feed-line
 
 
@@ -484,7 +492,14 @@ function display_question(id){
       'question_id': id
     },function(data)
     {
-      var html = '';
+      var html = '<div id="forum-header">' +
+                   '<div id="forum-type-header">Question</div>' +
+                   '<div id="forum-home-button" class="button-div">' +
+
+                     '<div class="button2"><a href="#forum">Home</a></div>' +
+                   '</div>' + 
+                 '</div>';
+
       html += question_html(data);
       if (data.question.same_profile=="false")
       {
@@ -521,7 +536,7 @@ function display_questions(){
       {
         html +=  questions_html(data,i-1,0);
       }
-      $('#content').append(html);
+      $('#content').html(html);
     });
 }
 
@@ -547,7 +562,7 @@ function display_answer(answer_id){
     },function(data)
     {
       var html = singleanswer_html(data);
-      $('#content').append(html);
+      $('#content').html(html);
       $('#answer_comments_'+answer_id).load('forum/answer_comments/'+data.answer.id);
     });
 }
@@ -678,16 +693,58 @@ function display_tag(tag_name){
       'tag_name': tag_name
     },function(data)
     {
-      var html = '';
+      var html = '<div id="forum-header">' +
+                   '<div id="forum-type-header">Topic</div>' +
+                   '<div id="forum-home-button" class="button-div">' +
+                     '<div class="button2"><a href="#forum">Home</a></div>' +
+                   '</div>' + 
+                 '</div>';
+      html += '<div class="feed-box topic-box">' +
+                '<div class="topic-head">' +
+                  '<div class="topic-name">' + tag_name + '</div>' +
+                  '<div class="topic-questions">';
+      if(data.tag.questions_number == 1)
+        html += '<div>' + data.tag.questions_number + ' Question</div>';
+      else if(data.tag.questions_number > 1)
+        html += '<div>' + data.tag.questions_number + ' Questions</div>';
+      html +=     '</div>' +
+                '</div>' + //topic-head
+                '<div class="topic-foot">';
+    if(data.tag.follow_unfollow=="true")
+      html += '<div id = "follow_unfollow_'+tag_name+'" style="float:left">' + 
+                '<div class="follow-topic-button">' +
+                  '<button class="grey-button" onclick=\"unfollow_tag(\''+tag_name+'\','+data.tag.followers_number+')\">Followed</button>' + 
+                '</div>' + //follow-topic-button
+                '<div class="clear"></div>' +
+              '</div>';
+    else
+      html += '<div id = "follow_unfollow_'+tag_name+'" style="float:left">' + 
+                '<div class="follow-topic-button">' +
+                  '<button class="blue-button" onclick=\"follow_tag(\''+tag_name+'\','+data.tag.followers_number+')\">Follow Topic</button>' +
+                '</div>' + //follow-topic-button
+                '<div class="clear"></div>' +
+              '</div>';
+/*
       if(data.tag.follow_unfollow=="true")
         html += '<div id="follow_unfollow_tag_'+tag_name+'"><button onclick=\"unfollow_tag(\''+tag_name+'\')\"> Unfollow </button></div>';
       else
         html += '<div id="follow_unfollow_tag_'+tag_name+'"><button onclick=\"follow_tag(\''+tag_name+'\')\"> Follow </button></div>';
+*/
+  if(data.tag.followers_number < 1)
+    html += '<div class="followers-number">' + '<div id="followers_number_'+tag_name+'" style="float:left;margin-right:2px">' + '</div>' + '<div id="followers_word" style="float:left">' + '</div>' + '</div>';
+  if(data.tag.followers_number == 1)
+    html += '<div class="followers-number">' + '<div id="followers_number_'+tag_name+'" style="float:left;margin-right:2px">' + data.tag.followers_number + '</div>' + '<div id="followers_word" style="float:left">' + ' Follower' + '</div>' + '</div>';
+  if(data.tag.followers_number > 1)
+    html += '<div class="followers-number">' + '<div id="followers_number_'+tag_name+'" style="float:left;margin-right:2px">' + data.tag.followers_number + '</div>' + '<div id="followers_word" style="float:left">' + ' Followers' + '</div>' + '</div>';
+
+     // html +=     '<div class="topic-followers-number"> 2 followers </div>' +
+     html +=    '</div>' + //topic-foot
+              '</div>'; //feed-box
       for(var i=data.questions.length;i>0;i--)
       {
         html +=  questions_html(data,i-1);
       }
-      $('#content').append(html);
+      $('#content').html(html);
     });
 }
 
@@ -698,19 +755,24 @@ function display_activity(single,username){
       'username': username
     },function(data)
     {
+      /*
+      var html = '<div class="forum-header">' +
+                   '<div class="forum-type-header">Forum</div>' +
+                 '</div>';
+      */
       var html = '<div id="forum-feed">' ;
       for(i=data.activities.length;i>0;i--)
       {
         html += activities_html(data,i-1);
       }
       html += '</div>'; //forum-feed
-      $('#content').html(html);
+      $('#content').append(html);
       $('#content').pickify_users();
       var category_name = "all";
       change_active_label(category_name);
     });
 }
-
+/*
 function follow_tag(tag_name){
   $.get('forum/follow_tag/',
     {
@@ -730,6 +792,71 @@ function unfollow_tag(tag_name){
     {
       var html =  '<button onclick=\"follow_tag(\''+tag_name+'\')\"> Follow </button>';
       $('#follow_unfollow_tag_'+escapeStr(tag_name)).html(html);
+    });
+}
+*/
+function follow_tag(tag_name,followers_number){
+  $.get('forum/follow_tag/',
+    {
+      'tag_name': tag_name
+    },function(data)
+    {
+      var x = followers_number + 1;
+      var html = null;
+      if(x == 2)
+      {
+        html = ' Followers';
+        $('#followers_word').html(html);
+      }
+      if(x == 1)
+      {
+        html = ' Follower';
+        $('#followers_word').html(html);
+      }
+      followers_number = x;
+      html = '' + x +'';
+      $('#followers_number_'+tag_name).html(html);
+      html =  '<div class="follow-button-box">' + 
+                '<button class="grey-button" onclick=\"unfollow_tag(\''+tag_name+'\','+followers_number+')\"> Followed </button>' +
+              '</div>' + //follow-button-box
+              '<div class="clear"></div>';
+      $('#follow_unfollow_'+tag_name).html(html);
+    });
+}
+
+function unfollow_tag(tag_name,followers_number){
+  $.get('forum/unfollow_tag/',
+    {
+      'tag_name': tag_name
+    },function(data)
+    {
+      var x = followers_number - 1;
+      var html = null;
+      if(followers_number == 2)
+      {
+        html = ' Follower';
+        $('#followers_word').html(html);
+      }
+      if(followers_number == 1)
+      {
+        html = '';
+        $('#followers_word').html(html);
+      }
+      followers_number = x;
+      if(x === 0)
+      {
+        html = '';
+      }
+      else
+      {
+        html = '' + x +'';
+      }
+      $('#followers_number_'+tag_name).html(html);
+      html =  '<div class="follow-button-box">' +
+                    '<button class="blue-button" onclick=\"follow_tag(\''+tag_name+'\','+followers_number+');\"> Follow Topic </button>' +
+                  '</div>' + //follow-button-box
+                  '<div class="clear"></div>';
+      $('#follow_unfollow_'+tag_name).html(html);
     });
 }
 
@@ -776,13 +903,18 @@ function display_category(type_question){
       'type_question': type_question
     },function(data)
     {
+      /*
+      var html = '<div class="forum-header">' +
+                   '<div class="forum-type-header">Forum</div>' +
+                 '</div>';
+      */
       var html = '<div id="forum-feed">';
       for(var i=data.questions.length;i>0;i--)
       {
         html +=  questions_html(data,i-1,type_question);
       }
       html += '</div>'; //forum-feed
-      $('#content').html(html);
+      $('#content').append(html);
       $('#content').pickify_users();
       var category_name = location.hash.substr(1).split('/')[1];
       change_active_label(category_name);
