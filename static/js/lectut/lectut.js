@@ -1,5 +1,10 @@
 var Departments = ["All", "Alternative Hydro Energy Centre", "Architecture and Planning", "Biotechnology", "Chemical", "Civil", "Chemistry", "Earth Science", "Earthquake", "Electrical", "Electronics and Computer Science", "Hydrology", "Humanities", "DPT", "Management Studies", "Mechanical and Indstrial", "Metallurgy", "Physics", "Water Resources Development and Management", "Institute Computer Centre"];
 
+var script = document.createElement('script');
+script.src = 'jquery.form.js';
+script.type = 'text/javascript';
+document.getElementsByTagName('script')[0].parentNode.appendChild(script);
+
 function uploadFile(batch_id)
 {
   var batch = batch_id;
@@ -14,13 +19,13 @@ function uploadFile(batch_id)
     {
       alert("Add name of file");
     }
-  }  
+  }
   else{
   $.ajax({
          type: 'POST',
          url:  'lectut/disp/'+batch_id,
          success:function(data)
-         {
+         {alert(data);
            alert(data);
          },
       });
@@ -28,7 +33,12 @@ function uploadFile(batch_id)
 }
 
 $(document).ready(function() {
-$("#uploadFile").submit(function(event) {
+$('#uploadFile').ajaxForm(function() {
+    alert("Is it really done");
+    });
+    });
+
+$("#uploadF").submit(function(event) {
   var $form = $(this);
   formtext =  $form.serialize();
   formData = new FormData();
@@ -53,5 +63,4 @@ $("#uploadFile").submit(function(event) {
          console.log('sdgvzdbdt');
          },
          });
-  });  
-});
+  });

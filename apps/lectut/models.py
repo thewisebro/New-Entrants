@@ -83,6 +83,13 @@ class UploadFile(BaseUpload):
     }
     return imageData
 
+class Reminders(models.Model):
+  text = models.CharField(max_length=50 , null=False)
+  batch = models.ForeignKey(Batch)
+  user = models.ForeignKey(User)
+
+  def __unicode__(self):
+    return str(self.text)
 
 class DownloadLog(models.Model):
   uploadfile = models.ForeignKey(UploadFile)
@@ -142,7 +149,7 @@ class FluentComments(models.Model):
 | lectut_upload                          |
 | lostfound_founditems                   |
 | lostfound_lostitems
-"""
+
 
 class FileUpload(models.Model):
    file_id = models.BigIntegerField(primary_key=True)
@@ -158,5 +165,5 @@ class FileUpload(models.Model):
    file_type = modelsCharField(max_lenght=1, choices=file_type_list)
    faculty = models.ForeignKey(Faculty)
    course = models.ForeignKey(Course)
-
+"""
 

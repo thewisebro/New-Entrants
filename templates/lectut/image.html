@@ -2,6 +2,7 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL}}/js/lectut/lectut.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL}}/js/lectut/jquery.form.js"></script> 
 
 <!-- Add bootstrap files-->
 <!--script type="text/javascript" src="{{ STATIC_URL }}/bootstrap/js/bootstrap.js"></script>
@@ -26,14 +27,14 @@
   videojs.options.flash.swf = "{{ STATIC_URL }}/jquery/video-js/video-js.swf"
 </script>
 
-<body>
-  {% if viewType == 'Coursepage' %}
-    <h2>{{ batch.name }} ({{ batch.course.name}})</h2>
-    <form id='uploadFile' action="{% url 'upload' batch_id = batch.id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
-      <p>
-        {{text_form}}
-        {{image_form}}
-        {{file_form}}
+  <body>
+    {% if viewType == 'Coursepage' %}
+        <h2>{{ batch.name }} ({{ batch.course.name}})</h2>
+            <form id='uploadFile' action="upload/"  method="post" enctype="multipart/form-data">{% csrf_token %}
+                  <p>
+                          {{text_form}}
+                          {{image_form}}
+                          {{file_form}}
         <div type='hidden' id="batch_id" value="{{ batch.id }}">{{batch.id}}</div>
         <div id="errorMsg"></div>
       </p>
@@ -42,6 +43,7 @@
     </form>
     <a href="{% url 'useruploads' batch_id=batch.id %}"><input type="button" value="My uploads"></a>
     <a href="{% url 'userdownloads' batch_id=batch.id %}"><input type="button" value="My downloads"></a>
+    <a href="{% url 'batchMembers' batch_id=batch.id %}"><input type="button" value="My downloads"></a>
     <br>
     <div class="feeds">
       <ul class="nav nav-tabs" id="myTab">
@@ -119,6 +121,11 @@
                     type : "iframe",
                     href : "login.html"
                                   });
+            });
+   $(document).ready(function() {
+     $('#uploadFile').ajaxForm(function() { 
+                       alert("is it really done??"); 
+     });
                   });
 </script>
 </body>

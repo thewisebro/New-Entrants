@@ -9,7 +9,7 @@ from settings import *
 
 #import mimetypes, magic
 import mimetypes, os
-import json as simplejson
+import json
 
 from nucleus.models import Batch, Course, User, Student
 from forms import *
@@ -77,7 +77,7 @@ def uploadFile(request , batch_id):
       notice_activity = Activity(Upload=new_notice)
       notice_activity.save()
       new_notice=new_notice.as_dict()
-      return HttpResponse(simplejson.dumps(new_notice), content_type="application/json")
+      return HttpResponse(json.dumps(new_notice), content_type="application/json")
 
     elif file_form.is_valid():
       upload_file = request.FILES['filename']
@@ -95,12 +95,12 @@ def uploadFile(request , batch_id):
         new_file.save()
         file_activity = Activity(Upload=new_file)
         file_activity.save()
-        return HttpResponse(simplejson.dumps(new_file.as_dict()), content_type='application/json')
+        return HttpResponse(json.dumps(new_file.as_dict()), content_type='application/json')
     else:
       msg = "Please fill all the fields"
 
     if msg:
-      return HttpResponse(simplejson.dumps(msg), content_type='application/json')
+      return HttpResponse(json.dumps(msg), content_type='application/json')
     else:
       return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
@@ -130,7 +130,7 @@ def download_file(request, file_id):
   downloadlog = DownloadLog(uploadfile=download_file , user = request.user)
   downloadlog.save()
 
-  response = HttpResponse(file_check.read(),mimetype='application/force-download')
+  response = HttpResponse(file_check.read(),content_type='application/force-download')
 #response = HttpResponse(file.read(), mimetype=mimetype)
   response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(download_file)
   response['X-Sendfile'] = smart_str(download_file_open)
@@ -167,7 +167,7 @@ def useruploads(request , batch_id):
             'userType':userType,
             'viewType':'MyUploads'}
 #return render(request,'lectut/image.html',context)
-  return HttpResponse(simplejson.dumps(content), content_type="application/json")
+  return HttpResponse(json.dumps(content), content_type="application/json")
 
 def userdownloads(request , batch_id):
   user = request.user
@@ -183,7 +183,13 @@ def userdownloads(request , batch_id):
             'userType':userType,
             'viewType':'MyDownloads'}
 #return render(request,'lectut/image.html',context)
-  return HttpResponse(simplejson.dumps(context), content_type="application/json")
+  return HttpResponse(json.dumps(context), content_type="application/json")
+
+def batchMembers(request , batch_id):
+  currentBatch = Batch.objects.get(id = batch_id)
+  students = currentBatch.students.all()
+#  return currentBatch.students
+  return HttpResponse(json.dumps(students), content_type="application/json")
 
 #def upload(request):
 #   user = request.user
