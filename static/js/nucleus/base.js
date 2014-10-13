@@ -24,7 +24,7 @@
      var content_type = xhr.getResponseHeader('content-type') || "";
      if(content_type.indexOf('json') > -1){
        var data = xhr.responseJSON;
-       if(data.ajax_messages.length > 0)
+       if(data.ajax_messages && data.ajax_messages.length > 0)
          display_messages(data.ajax_messages);
        check_user_data(data.is_user_authenticated, data.user_username);
      }

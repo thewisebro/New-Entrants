@@ -38,7 +38,6 @@
 .feed-text
   margin-left: 45px
   min-width: 275px
-  font-family: "Tahoma" "Myriad Pro"
   font-size: 12px
   color: #484848
   text-align: justify
@@ -53,7 +52,7 @@
     height: auto !important
 
 .feed-line
-  background: #F9F9F9
+  background: #fafafa
   min-height: 5px
   border-bottom: 1px solid #EEE
   padding: 7px 10px
@@ -63,9 +62,19 @@
 
 .feed-description
   padding: 10px
-  a
-    color: #0072dc
-    text-decoration: none
+
+.feed-detail
+  display: block
+  border: 1px solid #e0e0e0
+  color: #444
+  padding: 10px
+  border-radius: 2px
+  font-weight: bold
+  font-size: 13px
+  margin-bottom: 10px
+  &:hover
+    border-left: 2px solid #3893e7
+    padding-left: 9px
 
 .feed-external-link
   width: 12px
@@ -85,3 +94,23 @@
   margin-left: 50px
   margin-top: 20px
   width: 300px
+
+.feed-bottom
+  line-height: 16px
+  .app-icon
+    width: 15px !important
+    height: 15px !important
+    float: left
+  .app-url
+    float: left
+    margin-left: 5px
+  .feed-date
+    float: right
+    color: #797979
+  .report
+    float: right
+    color: #797979
+    margin-right: 12px
+    cursor: pointer
+    &:hover
+      color: $blue-link
