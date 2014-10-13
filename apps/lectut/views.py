@@ -191,6 +191,26 @@ def batchMembers(request , batch_id):
 #  return currentBatch.students
   return HttpResponse(json.dumps(students), content_type="application/json")
 
+def createReminder(request):
+  if request.method == 'POST':
+    if ReminderForm.is_valid():
+      user = request.user
+      batch = request.Session['batch_id']
+      text = request.POST['text']
+      ReminderToAdd = Reminders(text = text , batch = batch , user = user)
+      ReminderToAdd.save()
+      return HttpResponse(json.dumps(ReminderToAdd), content_type="application/json")
+    else:
+      msg = "Invalid entry"
+      return HttpResponse(json.dumps(msg), content_type="application/json")
+
+def getReminder(request):
+  student = request.user.student
+  batches = student.batch_set.all()
+  reminders = Reminders.objects.all().filter(batch__in=batches).filter(datetime_created >=timezone.now()).order_by('datetime_created')
+  context = {'reminders':reminders}
+  return HttpRsponse(request, 'lectut/reminders.html',context)
+
 #def upload(request):
 #   user = request.user
 #   userBatch = Batch.objects.get(id=1)
