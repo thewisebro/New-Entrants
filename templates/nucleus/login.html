@@ -76,7 +76,7 @@
       </div>
 			<div id="main_body_wrapper">
 				<a href="/jukebox/"><div id ="display_space"></div></a>
-        {% endif %}
+  {% endif %}
 				<div id ="login_area" {% if dialog %}style="float:left; margin:20px 50px"{% endif %}>
 					<div id="login_boxes">
             <form id='login-form' action="{{ action }}" method="POST">{% csrf_token %}
@@ -95,12 +95,12 @@
           <div id ="helptext"><span onclick="login_help();">Having trouble signing in ?</span></div>
 				  {% endif %}
         </div>
-        {% if not dialog %}
+  {% if not dialog %}
 			</div>
 		</div>
   <div id="footer-wrapper">
     {% include "footer.html" %}
   </div>
 	</div>
-{% endif %}
+  {% endif %}
 {% endblock %}

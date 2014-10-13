@@ -28,6 +28,9 @@ class ModelFeed(object):
   def on_save(self, sender, **kwargs):
     instance = kwargs["instance"]
     instance_type = ContentType.objects.get_for_model(sender)
+    if getattr(instance, 'trashed', None):
+      self.delete_feed(instance.pk, instance_type)
+      return
     created = kwargs["created"]
     app = self.Meta.app
     result = self.save(instance, created)
@@ -56,6 +59,13 @@ class ModelFeed(object):
         feed.tags.all().delete()
         self.add_tags(feed, tags)
 
+  def delete_feed(self, instance_id, instance_type):
+    try:
+      feed = Feed.objects.get(instance_type=instance_type, instance_id=instance_id)
+      feed.delete()
+    except Feed.DoesNotExist:
+      pass
+
   def on_delete(self, sender, **kwargs):
     if kwargs.has_key('instance'):
       instance = kwargs["instance"]
@@ -64,14 +74,9 @@ class ModelFeed(object):
       instance_id = kwargs['pk']
     instance_type = ContentType.objects.get_for_model(sender)
     self.delete(instance_id)
-    app = self.Meta.app
-    try:
-      feed = Feed.objects.get(instance_type=instance_type, instance_id=instance_id)
-      feed.trash()
-    except:
-      pass
+    self.delete_feed(instance_id, instance_type)
 
-  def delete(self,instance_pk):
+  def delete(self, instance_pk):
     pass
 
   @classmethod
