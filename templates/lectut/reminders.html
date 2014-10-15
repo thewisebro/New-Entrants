@@ -4,9 +4,11 @@
   </head>
   <body>
     <div id="reminders">
-      {{for reminder in reminders}}
-        <div id="">
+      {% for reminder in reminders %}
+        <div id="{{reminder.id}}">
+          reminder.text
         </div>
+      {% endfor %}  
     </div>
   </body>
 </html>
