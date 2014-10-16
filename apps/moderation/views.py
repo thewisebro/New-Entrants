@@ -59,22 +59,25 @@ def submit_report(request):
     'form': form
   })
 
-@ajax_login_required
 def report_info(request):
-  content_type_pk = request.GET['content_type_pk']
-  object_pk = request.GET['object_pk']
   open_dialog = True
-  try:
-    content_type = ContentType.objects.get(pk=content_type_pk)
-    model = content_type.model_class()
-    assert issubclass(model, Reportable)
-    content = model.objects.get(pk=object_pk)
-  except:
+  if not request.user.is_authenticated():
     open_dialog = False
-  if Report.objects.filter(content_type=content_type,
-      object_id=object_pk, reported_by=request.user).exists():
-    open_dialog = False
-    messages.info(request, "You've already reported this item.")
+    messages.info(request, "Please sign in to report this item.")
+  else:
+    content_type_pk = request.GET['content_type_pk']
+    object_pk = request.GET['object_pk']
+    try:
+      content_type = ContentType.objects.get(pk=content_type_pk)
+      model = content_type.model_class()
+      assert issubclass(model, Reportable)
+      content = model.objects.get(pk=object_pk)
+    except:
+      open_dialog = False
+    if Report.objects.filter(content_type=content_type,
+        object_id=object_pk, reported_by=request.user).exists():
+      open_dialog = False
+      messages.info(request, "You've already reported this item.")
   json_data = json.dumps({
     'open_dialog': open_dialog,
   })
