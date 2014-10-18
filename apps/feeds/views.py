@@ -1,13 +1,11 @@
-import logging
 import json as simplejson
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.db.models import Q
 
+from moderation.models import Reportable
 from feeds.models import *
-
-logger = logging.getLogger('channel-i_logger')
 
 def feed_dict(feed):
   dictionary = {
@@ -16,6 +14,9 @@ def feed_dict(feed):
     'datetime' : feed.last_modified.strftime('%Y-%m-%d %H:%M:%S'),
     'content' : feed.content,
     'link' : feed.link,
+    'reportable': issubclass(feed.instance_type.model_class(), Reportable),
+    'content_type_pk': feed.instance_type.pk,
+    'object_pk': feed.instance.pk
   }
   if feed.user:
     dictionary.update({
@@ -30,7 +31,7 @@ def fetch(request):
       action = request.GET['action']
       pk = request.GET['id']
       json = None
-      feeds = Feed.objects.all()
+      feeds = Feed.objects.filter(shown_feed=None)
       #if not user.is_authenticated or not request.user.in_group('Student'):
         #feeds = feeds.exclude(app__in=['vle','buysell'])
       if not action == 'previous':
@@ -45,5 +46,4 @@ def fetch(request):
         json = simplejson.dumps({'feeds':map(feed_dict,feeds)})
       return HttpResponse(json, content_type='application/json')
 #    except Exception as e:
-#      logger.exception('Exception accured in feeds/fetch : '+str(e))
 #      return HttpResponse('')
