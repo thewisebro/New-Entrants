@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xlmns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>
+		People Search
+	</title>
+	<link rel="stylesheet" type="text/css" href="../../static/css/peoplesearch/peoplestyle.css" />
+  <link rel="icon" type="image/jpg"  href="../../static/images/peoplesearch/peoplesearch.jpg">
+</head>
+
+<body style="background:#d8d8d8 url('../../static/images/peoplesearch/ps_01.jpg') repeat-x;">
+    <div id="container" style="padding-top:230px;">
+	<div id="div_main" style="margin-left:170px">
+	    <div id="div_left_big_image">
+			<img src="../../static/images/peoplesearch/ps_04.gif" alt="People search" />
+	    </div>
+	    <div id="div_right">
+		<div id="div_up">
+			    <img src="../../static/images/peoplesearch/ps_07.gif" alt="People search" />
+		</div>
+		<div id="div_down">
+		    <p>
+			<form method="get" action="http://192.168.121.5:8080/peoplesearch/index/">
+			    <div id="tabs">
+				<div id="all_tab" onClick="javascript:switchSearch('all')" class="active_tab">
+				    <div id="img_all_left" class="active_left">
+				    </div>
+				    <div class="tab_text">
+					All
+				    </div>
+				    <div id="img_all_right" class="active_right">
+				    </div>
+				</div>
+				<div id="stud_tab" onClick="javascript:switchSearch('stud')" class="inactive_tab">
+				    <div id="img_stud_left" class="inactive_left">
+				    </div>
+				    <div class="tab_text">
+					Students
+				    </div>
+				    <div id="img_stud_right" class="inactive_right">
+				    </div>
+				</div>
+				<div id="fac_tab" onClick="javascript:switchSearch('fac')" class="inactive_tab">
+				    <div id="img_fac_left" class="inactive_left">
+				    </div>
+				    <div class="tab_text">
+					Faculty
+				    </div>
+				    <div id="img_fac_right" class="inactive_right">
+				    </div>
+				</div>
+				<div id="serv_tab" onClick="javascript:switchSearch('serv')" class="inactive_tab">
+				    <div id="img_serv_left" class="inactive_left">
+				    </div>
+				    <div class="tab_text">
+					Services
+				    </div>
+				    <div id="img_serv_right" class="inactive_right">
+				    </div>
+				</div>
+			    </div>
+			    <div id="searchbar">
+				<input type="text" name="name" id="searchbox" value="">
+				<input type="submit" value=" " name="submit" id="search_button"/>
+			    </div>
+			    <div style="clear:both"></div>
+			    <div id="advanced_main">
+				<div id="advanced">
+				    <div id="all" >
+				    </div>
+				    <div id="stud" style="display:none">
+<!--					<select name="student_programme" style="margin-top:5px">
+					    <option value="null">Programme</option>
+					    <option value="1">Under Graduate</option>
+					    <option value="2">Post Graduate</option>
+					    <option value="3">Ph. D</option>
+					</select>
+					<br /> -->
+					<select name="year" style="margin-top:5px;">
+					    <option value="">Year</option>
+					    <option value="1">First Year</option>
+					    <option value="2">Second Year</option>
+					    <option value="3">Third Year</option>
+					    <option value="4">Fourth Year</option>
+					    <option value="5">Fifth Year</option>
+					</select>
+					<br />
+						<select name="branch" style="margin-top:5px">
+							<!--Disciplines here-->
+              <option value="">Select Course</option>
+              <option value="ACA">Advanced Chemical Analysis (PG)</option>
+              <option value="AGPT">Geophysical Technology (PG)</option>
+              <option value="AHEC">Alternate Hydro Energy Centre (PHD)</option>
+              <option value="AHES">Alternate Hydro Energy Systems (PG)</option>
+              <option value="AR">Architecture and Planning (UG)</option>
+              <option value="ARCD">Architecture Department (PHD)</option>
+              <option value="ASED">Applied Science and Engineering Department (PHD)</option>
+              <option value="BST">Building Technology (PG)</option>
+              <option value="BT">Biotechnology (UG)</option>
+              <option value="BTD">Biotechnology Department (PHD)</option>
+              <option value="BTMS">Biotechnology (PG)</option>
+              <option value="CAG">Control & Guidance (PG)</option>
+              <option value="CAPPD">Computer Aided Process Plant Design (PG)</option>
+              <option value="CCR">CAD,CAM & Robotics (PG)</option>
+              <option value="CDM">Disaster Management and Mitigation (PHD)</option>
+              <option value="CE">Civil Engineering (UG)</option>
+              <option value="CED">Civil Engineering Department (PHD)</option>
+              <option value="CES">Civil Engineering with specialisation in Structures (UG)</option>
+              <option value="CH">Chemical Engineering (UG)</option>
+              <option value="CHED">Chemical Engineering Department (PHD)</option>
+              <option value="CHH">B. Tech. (Chemical Engineering) and M. Tech. (Hydrocarbon Engineering) (UG)</option>
+              <option value="CHMS">Chemistry (PG)</option>
+              <option value="CNT">Centre of Nanotechnology (PHD)</option>
+              <option value="CRE">Corrosion Engineering (PG)</option>
+              <option value="CSAE">Computer Science & Engineering (PG)</option>
+              <option value="CSE">Computer Science and Engineering (UG)</option>
+              <option value="CSEC">Communication Systems  (PG)</option>
+              <option value="CSED">Computer Science and Engineering Department (PHD)</option>
+              <option value="CSI">B. Tech. (Computer Science & Engineering) and M. Tech. (Information Technology) (UG)</option>
+              <option value="CT">Centre for Transportation Systems (PHD)</option>
+              <option value="CYD">Chemistry Department (PHD)</option>
+              <option value="DMM">Disaster Mitigation and Management (PG)</option>
+              <option value="DWRD">Water Resources Development (PG)</option>
+              <option value="ECE">Electronics & Communication Engineering (UG)</option>
+              <option value="ECED">Electronics and Communication Engineering (PHD)</option>
+              <option value="ECW">B. Tech. (Electronics & Communication Engineering) and M. Tech. (Wireless Communication) (UG)</option>
+              <option value="EDPE">Electric Drives and Power Electronics (PG)</option>
+              <option value="EE">Electrical Engineering (UG)</option>
+              <option value="EED">Electrical Engineering Department (PHD)</option>
+              <option value="EEG">Environmental Engineering (PG)</option>
+              <option value="EMRL">Environmental Management of Rivers and Lakes (PG)</option>
+              <option value="EPE">B. Tech. (Electrical Engineering) and M.Tech. (Power Electronics) (UG)</option>
+              <option value="EQD">Earthquake Department (PHD)</option>
+              <option value="ESD">Earth Sciences Department (PHD)</option>
+              <option value="GE">Geomatics Engineering (PG)</option>
+              <option value="GPT">Geophysical Technology (UG)</option>
+              <option value="GT">Geological Technology (UG)</option>
+              <option value="GTE">Geotechnical Engineering (PG)</option>
+              <option value="GWH">Ground Water Hydrology (PG)</option>
+              <option value="HENG">Hydraulics Engineering (PG)</option>
+              <option value="HSD">Humanities and Social Sciences Department (PHD)</option>
+              <option value="HSEM">Hydroelectric System Engineering and Management (PG)</option>
+              <option value="HY">Hydrology (PG)</option>
+              <option value="HYD">Hydrology Department (PHD)</option>
+              <option value="IFS">Infrastructure Systems (PG)</option>
+              <option value="II">Institute Instrumentation (PHD)</option>
+              <option value="IN">Production and Industrial Engineering (UG)</option>
+              <option value="INM">Industrial Metallurgy (PG)</option>
+              <option value="IPA">Industrial Pollution Abatement (PG)</option>
+              <option value="ISHM">Industrial Safety and Hazards Management (PG)</option>
+              <option value="ISP">Instrumentation and Signal Processing (PG)</option>
+              <option value="IT">Information Technology (PG)</option>
+              <option value="IWM">Irrigation Water Management (PG)</option>
+              <option value="MAD">Mathematics Department (PHD)</option>
+              <option value="MAR">Architecture and Planning (PG)</option>
+              <option value="MBA">Management and Business Administration (PG)</option>
+              <option value="MCA">Master of Computer Application (PG)</option>
+              <option value="MDE">Machine Design Engineering (PG)</option>
+              <option value="ME">Mechanical Engineering (UG)</option>
+              <option value="MES">Applied Geology (PG)</option>
+              <option value="MEV">Micro Electronic and VLSI (PG)</option>
+              <option value="MGLT">Geological Technology (PG)</option>
+              <option value="MGPT">Geophysical Technology (PG)</option>
+              <option value="MHY">Hydrology (PG)</option>
+              <option value="MIED">Mechanical and Industrial Engineering  (PHD)</option>
+              <option value="MMED">Metallurgical and Materials Engineering (PHD)</option>
+              <option value="MMT">Metallurgy Dual (UG)</option>
+              <option value="MSAM">Applied Mathematics (PG)</option>
+              <option value="MSC">Chemistry (UG)</option>
+              <option value="MSCPH">Physics (PG)</option>
+              <option value="MSD">Management Studies  (PHD)</option>
+              <option value="MSIM">M.sc Industrial Mathematics and Informatics (PG)</option>
+              <option value="MSM">Applied Mathematics (UG)</option>
+              <option value="MSP">Physics (UG)</option>
+              <option value="MT">Metallurgical & Materials Engineering (UG)</option>
+              <option value="MURP">Master of Urban and Regional Planning (PG)</option>
+              <option value="NT">Nanotechnology (PG)</option>
+              <option value="PEM">B. Tech. (Process Engineering) and M.B.A. (UG)</option>
+              <option value="PHD">Physics  (PHD)</option>
+              <option value="PHM">Physical Metallurgy (PG)</option>
+              <option value="PISE">Production & Industrial Systems Engineering (PG)</option>
+              <option value="PKG">Packaging Technology (PG)</option>
+              <option value="PP">Pulp & Paper Technology (UG)</option>
+              <option value="PPE">Pulp & Paper Engineering (PG)</option>
+              <option value="PPED">Polymer and Process Engineering Department (PHD)</option>
+              <option value="PS">Polymer Science and Technology (UG)</option>
+              <option value="PSE">Power System Engineering (PG)</option>
+              <option value="PST">Polymer Science and Technology (UG)</option>
+              <option value="PTD">Paper Technology Department (PHD)</option>
+              <option value="RFM">RF and Microwave Engineering (PG)</option>
+              <option value="SAC">System and Control (PG)</option>
+              <option value="SD">Soil Dynamics (PG)</option>
+              <option value="SDV">Semiconductor Design and VLSI Technology (PG)</option>
+              <option value="SE">Structural Engineering (PG)</option>
+              <option value="SMC">System Modelling and Control (PG)</option>
+              <option value="SSEM">Solid State Electronic Materials (PG)</option>
+              <option value="STD">Structural Dynamics (PG)</option>
+              <option value="SVRA">Seismic Vulnerability & Risk Assessment (PG)</option>
+              <option value="SWH">Surface Water Hydrology (PG)</option>
+              <option value="TE">Transportation Engineering (PG)</option>
+              <option value="TEMI">Thermal Engineering (PG)</option>
+              <option value="TPH">Civil Engineering with specialisation in Structures (UG)</option>
+              <option value="TSE">Thermal Systems Engineering (PG)</option>
+              <option value="WEMI">Welding Engineering (PG)</option>
+              <option value="WM">Watershed Management (PG)</option>
+              <option value="WRD">Water Resources Development (PG)</option>
+              <option value="WRDMD">Water Resources Development and Management  (PHD)</option>
+						</select> 
+					<br />
+				    </div>
+				    <div id="fac" style="display:none">
+					<select name="faculty_designation" style="margin-top:13px;">
+					    <!--Posts here-->
+              <option value="">Select Designation</option>
+              <option value="HOD">Head Of Department</option>
+              <option value="HOC">Head Of Centre</option>
+              <option value="EP">Emeritus Professor</option>
+              <option value="GF">Guest Faculty</option>
+              <option value="WS">Workshop Superintendent</option>
+              <option value="AWS">Assistant Workshop Superintendent</option>
+              <option value="RF">Retired Faculty</option>
+              <option value="SP">System Programmer</option>
+              <option value="PRO">Professor</option>
+              <option value="LEC">Lecturar</option>
+              <option value="PI">Professor Incharge</option>
+              <option value="VS">Visiting Scientist</option>
+              <option value="VP">Visiting Professor</option>
+              <option value="SO">Scientific Officer</option>
+              <option value="AP">Assistant Professor</option>
+              <option value="CSO">Chief Scientific Officer</option>
+              <option value="CP">Chair Professor</option>
+              <option value="SSO">Senior Scientific Officer</option>
+              <option value="JP">Joint Professor</option>
+              <option value="ASP">Associate Professor</option>
+              <option value="EF">Ex Faculty</option>
+              <option value="EMF">Emeritus Fellows</option>
+              <option value="APC">Assistant Professor (Contract)</option>
+              <option value="OC">On Contract Professor</option>
+					</select>
+					<br />
+					<select name="faculty_department" style="margin-top:17px;">
+					    <!--Departments here-->
+              <option value="">Select Department</option>
+              <option value="AHEC">Alternate Hydro Energy Centre</option>
+              <option value="ASED">Applied Science and Engineering Department</option>
+              <option value="CNT">Centre for Nanotechnology</option>
+              <option value="ARCD">Architecture and Planning Department</option>
+              <option value="BTD">Biotechnology Department</option>
+              <option value="CHED">Chemical Engineering Department</option>
+              <option value="CDM">Centre of Excellence in Disaster Mitigation and Management</option>
+              <option value="CYD">Chemistry Department</option>
+              <option value="CED">Civil Engineering Department</option>
+              <option value="CSED">Computer Science and Engineering Department</option>
+              <option value="CT">Centre for Transportation Systems</option>
+              <option value="EQD">Earthquake Department</option>
+              <option value="ESD">Earth Sciences Department</option>
+              <option value="EED">Electrical Engineering Department</option>
+              <option value="ECED">Electronics and Communication Engineering Department</option>
+              <option value="HSD">Humanities and Social Sciences Department</option>
+              <option value="HYD">Hydrology Department</option>
+              <option value="MSD">Management Studies Department</option>
+              <option value="MAD">Mathematics Department</option>
+              <option value="MIED">Mechanical and Industrial Engineering Department</option>
+              <option value="MMED">Metallurgical and Materials Engineering Department</option>
+              <option value="PTD">Paper Technology Department</option>
+              <option value="PPED">Polymer and Process Engineering Department</option>
+              <option value="PHD">Physics Department</option>
+              <option value="WRDMD">Water Resources Development and Management Department</option>
+              <option value="CDM">Centre for Disaster Mitigation</option>
+              <option value="ICC">Institute Computer Centre</option>
+              <option value="IIC">Institute Instrumentation Centre</option>
+              <option value="QIP">Quality Improvement Programme</option>
+					</select>
+					<br />
+				    </div>
+				    <div id="serv" style="display:none">
+						<select name="services_list" style="margin-top:35px">
+						    <!--Services list here-->
+                <option value="">Select Service</option>
+                <option value="INSURANCE COMPANIES">INSURANCE COMPANIES</option>
+                <option value="EMPLOYMENT BUREAU">EMPLOYMENT BUREAU</option>
+                <option value="COURIER SERVICES">COURIER SERVICES</option>
+                <option value="CHEMISTS / DIAGNOSTIC CENTRES">CHEMISTS / DIAGNOSTIC CENTRES</option>
+                <option value="HOTELS AND RESTAURANTS">HOTELS AND RESTAURANTS</option>
+                <option value="BANKS">BANKS</option>
+                <option value="DOCTORS">DOCTORS</option>
+                <option value="TRAVEL AGENTS">TRAVEL AGENTS</option>
+                <option value="GAS SERVICE">GAS SERVICE</option>
+                <option value="STAFF CLUBS">STAFF CLUBS</option>
+                <option value="MISCELLANEOUS">MISCELLANEOUS</option>
+						</select>
+					<br />
+				    </div>
+				</div>
+				<div id="advanced_bottom">
+				    <div id="adv_left">
+				    </div>
+				    <div id="adv_middle" onclick="javascript:advDrop()">
+				    Advanced&nbsp;Search
+				    </div>
+				    <div id="adv_right" onClick="javascript:advDrop()" class="advUp">
+				</div>
+			    </div>
+			    <input type="hidden" name="form_submitted" value="true" />
+			    <input type="hidden" name="role" id="search_category" value="all">
+			    <input type="hidden" name="advanced_search_status" value="off">
+          <input type="hidden" name="groups_list" value="">
+          <input type="hidden" name="counter" value="">
+          <input type="hidden" name="source" value="web">
+			    <br />
+			</form>
+		    </p>
+		</div>
+	    </div>
+	</div>
+    </div>
+</body>
+<script type="text/javascript" src="../../static/js/peoplesearch/scripts_new.js" ></script>
+<!-- <script type="text/javascript" src="/static/js/piwik.js"></script> -->
+</html>
