@@ -9,6 +9,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files.storage import FileSystemStorage
 from django.db.models.signals import post_save
 
+from notifications.models import Notification
+
 fs = FileSystemStorage(location='Uploads')
 
 # Create your models here.
@@ -67,6 +69,13 @@ class UploadFile(BaseUpload):
   privacy=models.BooleanField(default=False)      #false means visible to all
   upload_user=models.ForeignKey(User)
   batch=models.ForeignKey(Batch)
+
+  def save(self, *args, **kwargs):
+    uploadedFile = super(UploadFile , self).save(*args, **kwargs)
+    currentBatch = Batch.objects.get(id = self.batch)
+    students = currentBatch.students.all()
+    notification.save_notification('lectut','The user' +self.upload_user+ 'uploaded a file','lectut/'+self.id+'/upload',students,self)
+    return uploadFile
 
   def __unicode__(self):
     return str(self.upload_file)
