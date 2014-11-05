@@ -152,14 +152,6 @@ class FluentComments(models.Model):
        super(notification, self).save()'''
 
 """
-| lectut_lectutbatch                     |
-| lectut_lectutbatch_lectutuser          |
-| lectut_lectutuser                      |
-| lectut_upload                          |
-| lostfound_founditems                   |
-| lostfound_lostitems
-
-
 class FileUpload(models.Model):
    file_id = models.BigIntegerField(primary_key=True)
    file_location = models.CharField(max_length=450)
