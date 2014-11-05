@@ -44,4 +44,3 @@ class TextForm(forms.Form):
             super(Model, self).save(*args, **kwargs)
 
 #<form enctype="multipart/form-data" method="post" action="/foo/">
-

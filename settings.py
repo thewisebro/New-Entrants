@@ -223,7 +223,6 @@ THIRD_PARTY_APPS = (
 
 CHANNELI_APPS = (
   'nucleus',
-  #'jukebox',
   'api',
   'moderation',
   'notices',
@@ -240,8 +239,8 @@ CHANNELI_APPS = (
   'regol',
   'academics',
   'games',
+  'jukebox',
   'buysell',
-  'lectut',
   'utilities',
 )
 
