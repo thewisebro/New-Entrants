@@ -154,7 +154,7 @@ def index(request):
   groups_list = request.GET.get('groups_list','')
   counter = request.GET.get('counter',0)
   session = request.GET.get('session',0)
-  source = request.GET.get('source','web')
+  source = request.GET.get('source','')
   flag=0
   temp=0
   temp_stu=0
@@ -162,7 +162,7 @@ def index(request):
   temp_ser=0
   temp_gro=0
   i=0
-  result={"role":role,"data":[],"temp":0}
+  result={"role":role.encode('utf-8'),"data":[],"temp":0}
   result["data"] = {"stud":[],"fac":[],"serv":[],"groups":[]}
   c=[]
 #check session
