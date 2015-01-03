@@ -224,6 +224,7 @@ CHANNELI_APPS = (
   'feeds',
   'regol',
   'academics',
+  'yaadein',
   'games',
   'buysell',
 )
