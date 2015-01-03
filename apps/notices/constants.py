@@ -6,14 +6,8 @@ OPTIONS = (
   ('All', 'All'),
   )
 
-notices_per_page = (5)
-
-PLACEMENT = (
-  ('PO' , 'Placement Office'),
-  )
-
 AUTHORITIES = (
-  ('All','All'),
+  ('A_All','All'),
   ('acad','Academics'),
   ('CPO','CPO'),
   ('DOSW','DOSW'),
@@ -34,6 +28,7 @@ AUTHORITIES = (
   )
 
 BHAWANS = (
+  ('B_All','All'),
   ('azd','Azad'),
   ('ctl','Cautley'),
   ('gng','Ganga'),
@@ -49,6 +44,7 @@ BHAWANS = (
   )
 
 DEPARTMENTS = (
+  ('D_All','All'),
   ('ahec','Alternative Hydro Energy Centre'),
   ('arch','Architecture and Planning'),
   ('bt','Biotechnology'),
@@ -70,3 +66,13 @@ DEPARTMENTS = (
   ('icc','Institute Computer Centre'),
   )
 
+AUTHORITIES_LIST = ["All", "Academics", "CPO", "DOSW", "Alumni Affairs", "Construction", "Central Library", "CD", "Deans", "Heads", "Hospital", "Registrar", "Finance", "Ps to Director", "Steno to Deputy Director", "QIP", "Senate", "ISC"]
+DEPARTMENTS_LIST = ["All", "Alternative Hydro Energy Centre", "Architecture and Planning", "Biotechnology", "Chemical", "Civil", "Chemistry", "Earth Science", "Earthquake", "Electrical", "Electronics and Computer Science", "Hydrology", "Humanities", "DPT", "Management Studies", "Mechanical and Indstrial", "Metallurgy", "Physics", "WRDM", "Institute Computer Centre"]
+
+
+MAIN_CATEGORIES = {
+  'All' : [],
+  'Placement' : [],
+  'Authorities' : AUTHORITIES_LIST,
+  'Departments': DEPARTMENTS_LIST
+}

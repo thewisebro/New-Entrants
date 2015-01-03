@@ -1,0 +1,41 @@
+{% extends "dialog_base.html" %}
+
+{% block scripts %}
+  {{ block.super }}
+  {{ form.media.js }}
+{% endblock %}
+
+{% block styles %}
+  <style>
+    body {
+      margin-top: 15px;
+    }
+    label {
+      margin: 10px;
+    }
+    #id_reason label{
+      margin-left: 5px;
+    }
+    ul {
+      list-style: none;
+      list-style-type: none;
+      padding: 0px
+    }
+    li {
+      height: 25px;
+    }
+    input[type=radio]{
+      vertical-align: middle;
+      margin-bottom: 3px;
+    }
+  </style>
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/fonts.css" type="text/css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}sass/nucleus/style.css" type="text/css">
+{% endblock %}
+
+{% block body %}
+   <form action="" method="POST" class="uniForm">{% csrf_token %}
+     {{ form }}
+     <input type="submit" class="input-button" name="submit" style="margin-left:10px; margin-top:0px" value="Submit"/>
+   </form>
+{% endblock body %}

@@ -39,7 +39,7 @@ function update_feeds(action,number){
       }
       else{
         feeds = data.feeds.concat(feeds);
-        if(get_current_app() == 'home')
+        if(nucleus.get_current_app() == 'home')
           display_add_feeds('start',data.feeds);
       }
     }
@@ -52,24 +52,26 @@ function get_app_icon_url(app){
 }
 
 function feed_html(feed){
-  return ""+
+  var $content = $(feed.content);
+  var $feed_bottom = $('.feed-bottom', $content);
+  if($feed_bottom.length > 0){
+    var context = {
+      feed: feed
+    };
+    if(feed.app in channeli_apps)
+      context.app = channeli_apps[feed.app];
+    context.date = prettyDate(feed.datetime);
+    $feed_bottom.html(Handlebars.feeds_templates.bottom(context));
+  }
+  feed.content = $('<div>').append($content).html();
+    return ""+
     "<div class='feed-box'>"+
-      ('username' in feed
-        ?"<img class='feed-propic' src='/photo/"+feed.username+"/'/>"
-        :("<a target='_blank' href="+channeli_apps[feed.app]['url']+">"+
+      ('username' in feed?
+        "<img class='feed-propic' src='/photo/"+feed.username+"/'/>"
+        :("<a target='_blank' href="+channeli_apps[feed.app].url+">"+
           "<img class='feed-propic' src='"+get_app_icon_url(feed.app)+"'/>"+
           "</a>")
       )+
-//      "<div class='feed-heading'>"+
-//        ('username' in feed
-//          ?("<a href='/groups/"+feed.username+"/'>"+ feed.html_name+"</a>")
-//          :("<a target='_blank' href='"+channeli_apps[feed.app]['url']+"'>"+channeli_apps[feed.app]['name']+"</a>")
-//        )+
-//      "</div>"+
-//      "<div class='feed-right'>"+
-//        "<div class='feed-time'>"+prettyDate(feed.datetime)+"</div>"+
-//        (feed.link ? "<a class='feed-external-link' href='"+feed.link+"' target='_blank'></a>" : "")+
-//      "</div>"+
       "<div class='feed-text'>"+feed.content+"</div>"+
     "</div>";
 }

@@ -16,7 +16,7 @@ def photo(request, username=None):
     if username.lower() == 'img':
       filepath = STATIC_PATH + 'images/nucleus/img.png'
     else:
-      user_set = User.objects.get_or_none(username=username)
+      user = User.objects.get_or_none(username=username)
   elif request.user.is_authenticated():
     user = request.user
   if user:
