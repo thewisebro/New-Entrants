@@ -70,12 +70,12 @@ class UploadFile(BaseUpload):
   upload_user=models.ForeignKey(User)
   batch=models.ForeignKey(Batch)
 
-  def save(self, *args, **kwargs):
+  '''def save(self, *args, **kwargs):
     uploadedFile = super(UploadFile , self).save(*args, **kwargs)
     currentBatch = Batch.objects.get(id = self.batch)
     students = currentBatch.students.all()
     notification.save_notification('lectut','The user' +self.upload_user+ 'uploaded a file','lectut/'+self.id+'/upload',students,self)
-    return uploadFile
+    return uploadFile'''
 
   def __unicode__(self):
     return str(self.upload_file)
@@ -167,20 +167,4 @@ class FileUpload(models.Model):
    faculty = models.ForeignKey(Faculty)
    course = models.ForeignKey(Course)
 """
-
-class FileUpload(models.Model):
-   file_id = models.BigIntegerField(primary_key=True)
-   file_location = models.CharField(max_length=450)
-   topic = models.CharField(max_length=450)
-   timestamp = models.DateTimeField()
-   year = models.CharField(max_length=45, blank=True)
-   file_type_list = (
-       ('EP', 'Exampaper'),
-       ('Le', 'Lecture'),
-       ('So', 'Solution'),
-       )
-   file_type = modelsCharField(max_lenght=1, choices=file_type_list)
-   faculty = models.ForeignKey(Faculty)
-   course = models.ForeignKey(Course)
-
 

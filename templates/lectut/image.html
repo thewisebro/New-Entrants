@@ -30,7 +30,7 @@
   <body>
     {% if viewType == 'Coursepage' %}
         <h2>{{ batch.name }} ({{ batch.course.name}})</h2>
-            <form id='uploadFile' action="upload/"  method="post" enctype="multipart/form-data">{% csrf_token %}
+            <form id='uploadFile'  method="post" enctype="multipart/form-data">{% csrf_token %}
                   <p>
                           {{text_form}}
                           {{image_form}}
@@ -122,10 +122,5 @@
                     href : "login.html"
                                   });
             });
-   $(document).ready(function() {
-     $('#uploadFile').ajaxForm(function() { 
-                       alert("is it really done??"); 
-     });
-                  });
 </script>
 </body>

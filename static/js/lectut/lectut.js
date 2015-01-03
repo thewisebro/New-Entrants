@@ -1,9 +1,10 @@
 var Departments = ["All", "Alternative Hydro Energy Centre", "Architecture and Planning", "Biotechnology", "Chemical", "Civil", "Chemistry", "Earth Science", "Earthquake", "Electrical", "Electronics and Computer Science", "Hydrology", "Humanities", "DPT", "Management Studies", "Mechanical and Indstrial", "Metallurgy", "Physics", "Water Resources Development and Management", "Institute Computer Centre"];
 
-var script = document.createElement('script');
+/*var script = document.createElement('script');
 script.src = 'jquery.form.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('script')[0].parentNode.appendChild(script);
+*/
 
 function uploadFile(batch_id)
 {
@@ -32,20 +33,25 @@ function uploadFile(batch_id)
   }
 }
 
-$(document).ready(function() {
+/*$(document).ready(function() {
 $('#uploadFile').ajaxForm(function() {
     alert("Is it really done");
+    console.log('dgvtdgv');
     });
     });
+*/
 
-$("#uploadF").submit(function(event) {
+$("#uploadFile").submit(function(event) {
   var $form = $(this);
   formtext =  $form.serialize();
   formData = new FormData();
+  fdata.append('csrfmiddlewaretoken', csrf_token);
   var batch_id = $('#batch_id').text();
   $.ajax({
+       csrfmiddlewaretoken: csrf_token,
        type: 'POST',
        url: '/lectut/disp/upload/'+batch_id+'/',
+       enctype: "multipart/form-data",
        data:{'formData':formData,
              'formText':formText},
        cache: false,
