@@ -1,0 +1,37 @@
+<html>
+ <head>
+  <title>yaadein</title>
+ </head>  
+ <body>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui.js"></script>
+  <script type = "text/javascript" src = "{{STATIC_URL }}js/csrf.js"></script>
+  <script type = "text/javascript" src = "{{STATIC_URL }}js/yaadein/bootstrap-typeahead.js"></script>
+  <script type = "text/javascript" src = "{{STATIC_URL }}js/yaadein/rangy-core.js"></script>
+  <script type = "text/javascript" src = "{{STATIC_URL }}js/yaadein/caret-position.js"></script>
+  <script type = "text/javascript" src = "{{STATIC_URL }}js/yaadein/bootstrap-tagautocomplete.js"></script>
+ 
+<div id="one" contenteditable="true">My name is //</div>
+   
+  <div id="post" contenteditable="true">
+    <form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %} 
+     <textarea id="text" rows="4" name ="content" cols="50">
+        Enter your post!!! 
+     </textarea>
+     <input type="submit" value="post"/>
+    </form>
+  </div>
+    {% block content %}
+    {% endblock content %}
+ </body>
+ <script type="text/javascript">
+      console.log("hello");
+      $('#one').tagautocomplete({
+                        source: 'yaadein/abc'
+                                    });
+  
+  </script>
+
+
+</html>

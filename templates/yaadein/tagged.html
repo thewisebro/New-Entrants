@@ -1,0 +1,31 @@
+{% extends "yaadein/base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-2">
+       <div class="panel panel-default">
+             <div class="panel-heading">
+                     Categories
+             </div>
+             <div class="panel-body">
+                  <ul>
+                     {% for tag in tags %}
+                     <li><a href="{% url 'tagged' tag.slug %}">{{ tag.name }}</a></li>
+                     {% empty %}
+                     <li>No Tags</li>
+                     {% endfor %}
+                     </ul>
+             </div>
+       </div>
+  </div>
+  <div class="col-sm-10">
+      {% for post in posts %}
+        <div>
+        {{ post.text_content }}
+        </div>
+                                                                                                                                                                                       {% empty %}
+        There are no posts, sorry.
+      {% endfor %}
+  </div>
+</div>
+{% endblock %}
