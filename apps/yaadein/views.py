@@ -10,6 +10,7 @@ from taggit.models import Tag,TaggedItem
 from django.views.generic import DetailView, ListView
 from nucleus.models import Student,User
 
+@login_required
 def index(request):
   if request.method == 'POST':
     p = request.POST['content']
