@@ -12,10 +12,16 @@
   <script type = "text/javascript" src = "{{STATIC_URL }}js/yaadein/bootstrap-tagautocomplete.js"></script>
  
 <div id="one" contenteditable="true">My name is {{ user.username }}</div>
-   
+  <form action="/yaadein/cover/upload/" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    CoverPic: <input type="file" name="cover" accept="image/*"/> 
+    <input type="submit" value="Upload"/>
+  </form>
+  <img width="200"height="200" src="{{ cover_pic }}"/>
+
   <div id="post" contenteditable="true">
     <form method="POST" action="" enctype="multipart/form-data">
-    {% csrf_token %} 
+    {% csrf_token %}
      <textarea id="text" rows="4" name ="content" cols="50">
         Enter your post!!! 
         

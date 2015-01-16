@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from datetime import date, datetime, timedelta
 from django.template import RequestContext
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
-from yaadein.models import Post,PostImage
+from yaadein.models import Post,PostImage,YaadeinUser
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from taggit.models import Tag,TaggedItem
@@ -12,7 +12,9 @@ from nucleus.models import Student,User
 
 @login_required
 def index(request):
-  if request.method == 'POST':
+  y_user = YaadeinUser.objects.filter(user=request.user)
+  if len(y_user) > 0:
+   if request.method == 'POST':
     p = request.POST.get('content')
     hashed = [ word for word in p.split() if word.startswith("#") ]
     user_tagged = [ tag for tag in p.split() if tag.startswith("@") ]
@@ -31,9 +33,25 @@ def index(request):
       student_related = Student.objects.get(user__name=user)
       post.user_tags.add(student_related)
     return  HttpResponse("post added")
+  else:
+    y_user = YaadeinUser(user=request.user)
+    y_user[0].save()
+    return HttpResponse("Yaadein User Does Added!!")
+  return render_to_response('yaadein/base.html', {'cover_pic': y_user[0].coverpic.url}, context_instance=RequestContext(request))
 
-  return render_to_response('yaadein/base.html',{},context_instance=RequestContext(request))
-
+@login_required
+def coverpic_upload(request):
+  if request.method == 'POST': #and request.is_ajax():
+    cover_pic = request.FILES.get('cover')
+    print cover_pic
+    cover_pic_name = cover_pic.name
+    ext = cover_pic.name.split('.')[1]
+    fname = "cp_" + request.user.username + "." + ext
+    yu = YaadeinUser.objects.get(user = request.user)
+    yu.coverpic.save(fname, cover_pic)
+    yu.save()
+  return HttpResponseRedirect('/yaadein/')
+  #return render_to_response('yaadein/base.html',{},context_instance=requestContext(request))
 
 def person_search(request):
    if request.is_ajax():
@@ -54,10 +72,18 @@ def person_search(request):
 class TagIndexView(ListView):
       template_name = 'yaadein/tagged.html'
       model = Post
-      context_object_name = 'posts'
+      context_object_name = 'posts_data'
 
       def get_queryset(self):
-        return Post.objects.filter(tags__slug=self.kwargs.get('slug'))
+        posts_data = []
+        posts = Post.objects.filter(tags__slug=self.kwargs.get('slug'))
+        for post in posts:
+          tmp = {
+            'post': post,
+            'images': PostImage.objects.filter(post=post)
+          }
+          posts_data.append( tmp )
+        return posts_data
 
 class tag_user(ListView):
      template_name='yaadein/usertag.html'

@@ -19,9 +19,12 @@
        </div>
   </div>
   <div class="col-sm-10">
-      {% for post in posts %}
+      {% for data in posts_data %}
         <div>
-        {{ post.text_content }}
+        {{ data.post.text_content }}
+        {% for image in data.images %}
+          <img width="200" height="200" src="{{ image }}" />
+        {% endfor %}
         </div>
                                                                                                                                                                                        {% empty %}
         There are no posts, sorry.
