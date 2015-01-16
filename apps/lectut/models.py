@@ -61,6 +61,34 @@ class BaseUpload(models.Model):
             ('exm' , 'Exam Papers')
             )
 '''
+
+class Post(models.Model):
+  upload_user = models.ForeignKey(User)
+  batch = models.ForeignKey(Batch)
+  content = models.CharField(max_length = '10')
+  privacy = models.BooleanField(max_length = 3 , default = 'tut')
+
+  def __unicode__(self):
+    return str(self.content)
+
+class Uploadedfile(BaseUpload):
+  post = models.ForeignKey(Post)
+  upload_file=models.FileField(upload_to='lectut/images/')
+  name=models.CharField(max_length=100 , null=False)
+  file_type=models.CharField(max_length=10 , null=False)
+  upload_type=models.CharField(max_length=3 , default='tut')
+
+  def __unicode__(self):
+    return str(self.upload_file)
+
+  def save(self, *args, **kwargs):
+    uploadedFile = super(UploadFile , self).save(*args, **kwargs)
+    currentBatch = Batch.objects.get(id = self.batch)
+    students = currentBatch.students.all()
+    notification.save_notification('lectut','The user' +self.upload_user+ 'uploaded a file','lectut/'+self.id+'/upload',students,self)
+    return uploadFile
+
+
 class UploadFile(BaseUpload):
   upload_file=models.FileField(upload_to='lectut/images/')
   name=models.CharField(max_length=100 , null=False)

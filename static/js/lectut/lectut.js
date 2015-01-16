@@ -40,6 +40,22 @@ $('#uploadFile').ajaxForm(function() {
     });
     });
 */
+var selFile="";
+document.addEventListener("DOMContentLoaded", init, false);
+function init() {
+      document.querySelector('#files').addEventListener('change', handleFileSelect, false);
+      selFile = document.querySelector("#selectedFiles");
+            }
+
+function handleFileSelect(e) {
+  if(!e.target.files) return;
+  selFile.innerHTML = "";
+  var files = e.target.files;
+  for(var i=0; i<files.length; i++) {
+    var f = files[i];
+    selFile.innerHTML += f.name + "<input type='text' id='"+f.name+"'placeholder='description'><br/>";
+  }
+}
 
 $("#uploadFile").submit(function(event) {
   var $form = $(this);

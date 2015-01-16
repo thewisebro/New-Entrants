@@ -38,6 +38,11 @@ def dispbatch(request):
   else:
       return HttpResponse("Please log-in to view your courses")
 
+def archives(request):
+  user = request.user  #the professor
+# Get list of previous courses
+  return
+
 @login_required
 def coursepage(request, batch_id):
   user = request.user

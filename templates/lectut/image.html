@@ -31,13 +31,13 @@
     {% if viewType == 'Coursepage' %}
         <h2>{{ batch.name }} ({{ batch.course.name}})</h2>
             <form id='uploadFile'  method="post" enctype="multipart/form-data">{% csrf_token %}
-                  <p>
-                          {{text_form}}
+              <textarea style="width=80; height:50;"></textarea>
+              <input type="file" name ="files" id = "files" multiple>
+              <div id="selectedFiles"></div>
+                         <!-- {{text_form}}
                           {{image_form}}
-                          {{file_form}}
-        <div type='hidden' id="batch_id" value="{{ batch.id }}">{{batch.id}}</div>
+                          {{file_form}}-->
         <div id="errorMsg"></div>
-      </p>
       <!--iframe id="select"></iframe-->
       <input type="Submit" id=" Submit" value="Submit">
     </form>
