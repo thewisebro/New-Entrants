@@ -1,0 +1,46 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+<h3>Placement results for {{ company.name }}({{ session }} )</h3>
+<hr/>
+{% if results %}
+<table class="sortable table table-striped table-bordered table-condensed" id="t1">
+  <thead>
+    <tr>
+      <th>S.No.</th>
+      <th>Enrollment No.</th>
+      <th>Name</th>
+      <th>Discipline</th>
+      <th>Degree</th>
+      {% for group in user.groups.all %}
+      {% if group.name == "Placement Admin"  %}
+      <th>Contact No.</th>
+      <th>Email Id</th>
+      {% endif %}
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for result in results %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ result.person.user.username }}</td>
+      <td>{{ result.person.name }}</td>
+      <td>{{ result.person.branch.name }}</td>
+      <td>{{ result.person.branch.degree }}</td>
+      {% for group in user.groups.all %}
+      {% if group.name == "Placement Admin" %}
+      <td>{{ result.person.personal_contact_no }}</td>
+      <td>{{ result.person.email_id }}</td>
+      {% endif %}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+{% else %}
+Results awaited.
+{% endif %}
+{% endblock %}

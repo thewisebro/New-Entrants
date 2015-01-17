@@ -1,0 +1,87 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+
+<h3>CPT Members({{ session }})</h3>
+<hr/>
+
+{% if years_list %}
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    {% for year,name in years_list %}
+    {% if year == year_displaying %}
+    <li class="active">
+      <a>{{ name }}</a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_admin.cpt year %}">{{ name }}</a>
+    </li>
+    {% endif %}
+    {% endfor %}
+    {% if year_displaying == current_year %}
+    <li class="active">
+      <a>Current Session</a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_admin.cpt %}">Current Session</a>
+    </li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}
+
+<div align="right" style="margin:20px 0 20px 20px;">
+  <a href="{% url placement.views_admin.cpt_add %}"><button><div class="text">Add a member</div></button></a>
+</div>
+
+{% if details %}
+<table class="sortable table table-striped table-bordered table-condensed" id="t1">
+  <thead>
+    <tr>
+      <th>S. No.</th>
+      <th>Name</th>
+      <th>Contact No</th>
+      <th>Email id</th>
+      <th>Currently a member</th>
+      <th>Delete</th>
+      <th>Companies handled</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for member,companies in details %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>
+        {% if members_editable %}
+        <a href="{% url placement.views_admin.cpt_edit member.id %}">
+          {{ member.name }}
+        </a>
+        {% else %}
+        {{ member.name }}
+        {% endif %}
+      </td>
+      <td>{{ member.contact_no }}</td>
+      <td>{{ member.email }}</td>
+      <td>{{ member.currently_a_member|yesno:'Yes,No' }}</td>
+      <td><a href="{% url placement.views_admin.cpt_delete member.id %}">Delete</a></td>
+      <td>
+        {% for company in companies %}
+        <a href="{% url placement.views_company.info company.id %}">
+          {{ company.name }}
+        </a>
+        <br/>
+        {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+{% else %}
+No members for the session {{ session }} !
+{% endif %} {# if members #}
+{% endblock %}
+

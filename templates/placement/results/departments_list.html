@@ -1,0 +1,86 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+
+<h3>Placement results for {{ session }}</h3>
+<hr/>
+
+{% if years_list %}
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    {% for year_display,name in years_list %}
+    {% if year == year_display %}
+    <li class="active">
+      <a>
+        {{ name }}
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_results.department year_display %}">
+        {{ name }}
+      </a>
+    </li>
+    {% endif %}
+    {% endfor %}
+
+    {% if current_year == year %}
+    <li class="active">
+      <a>Current Session</a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_results.department %}">Current Session</a>
+    </li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}
+
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li>
+      <a href="{% url placement.views_results.discipline_list year %}">
+        Branchwise
+      </a>
+    </li>
+    <li>
+      <a href="{% url placement.views_results.company_list year %}">Companywise</a>
+    </li>
+    <li class="active">
+      <a>
+        Department
+      </a>
+    </li>
+  </ul>
+</div>
+
+<table class="sortable table table-striped table-bordered table-condensed" id="t1">
+  <thead>
+    <tr>
+      <th>S.No.</th>
+      <th>Name</th>
+      <th>Overall</th>
+      {% for degree, name in degrees %}
+      <th>{{ degree }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for id, name in departments %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ name }}</td>
+      <td><a href="{% url placement.views_results.department year id %}">Overall</a></td>
+      {% for degree, name in degrees %}
+      <td>
+        <a href="{% url placement.views_results.department year id degree %}">{{ degree }}</a>
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+{% endblock %}

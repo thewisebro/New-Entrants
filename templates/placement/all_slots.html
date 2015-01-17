@@ -1,0 +1,33 @@
+{% extends "placement/base.html" %}
+
+{% block styles %}
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="//trentrichardson.com/examples/timepicker/jquery-ui-timepicker-addon.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <script src="//trentrichardson.com/examples/timepicker/jquery-ui-timepicker-addon.js"></script>
+
+<style>
+  .header_text
+  {
+    font-size:20px;
+  }
+</style>
+
+{% endblock %}
+
+{% block app_content %}
+
+{% if message %}
+  {{message}}
+{% else %}
+
+<h1> Slots </h1>
+<ul>
+  {% for slot in slots %}
+    <li><a href="{% url placement.views_slots.view_slot slot.id %}">{{slot.start_date}} -- {{slot.end_date}}</a></li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

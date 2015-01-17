@@ -1,0 +1,223 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+
+{% if branch %}
+<h3>{{ branch.name }}</h3>
+
+{# menubar #}
+<div class="tabbale">
+  <ul class="nav nav-tabs">
+    {% if task == 'verify' %}
+    <li class="active">
+      <a>
+        Verify
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_verify.verify 'verify' branch.code %}">
+        Verify
+      </a>
+    </li>
+    {% endif %}
+    {% if task == 'unverify' %}
+    <li class="active">
+      <a>
+        Unverify
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_verify.verify 'unverify' branch.code %}">
+        Unverify
+      </a>
+    </li>
+    {% endif %}
+    {% if task == 'unlock' %}
+    <li class="active">
+      <a>
+        Unlock
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_verify.verify 'unlock' branch.code %}">
+        Unlock
+      </a>
+    </li>
+    {% endif %}
+    {% if task == 'reverify' %}
+    <li class="active">
+      <a>
+        Re-Verify
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_verify.verify 'reverify' branch.code %}">
+        Re-Verify
+      </a>
+    </li>
+    {% endif %}
+    {% if task == 'verified' %}
+    <li class="active">
+      <a>
+        Verified Students
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_verify.verify 'verified' branch.code %}">
+        Verified Students
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</div>
+{# endmenubar #}
+{% else %}
+<h3>{{ department }}</h3>
+{# menubar for dept #}
+<div class="tabbale">
+  <ul class="nav nav-tabs">
+    {% if task == 'verify' %}
+    <li class="active">
+      <a>
+        Verify
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_verify.verify_department 'verify' id %}">
+        Verify
+      </a>
+    </li>
+    {% endif %}
+    {% if task == 'unverify' %}
+    <li class="active">
+      <a>
+        Unverify
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_verify.verify_department 'unverify' id %}">
+        Unverify
+      </a>
+    </li>
+    {% endif %}
+    {% if task == 'unlock' %}
+    <li class="active">
+      <a>
+        Unlock
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_verify.verify_department 'unlock' id %}">
+        Unlock
+      </a>
+    </li>
+    {% endif %}
+    {% if task == 'reverify' %}
+    <li class="active">
+      <a>
+        Re-Verify
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_verify.verify_department 'reverify' id %}">
+        Re-Verify
+      </a>
+    </li>
+    {% endif %}
+    {% if task == 'verified' %}
+    <li class="active">
+      <a>
+        Verified Students
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url placement.views_verify.verify_department 'verified' id %}">
+        Verified Students
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</div>
+{# endmenubar #}
+{% endif %}
+
+{% if task != 'verified' %}
+{% if students %}
+<form method="POST">
+  {% csrf_token %}
+  <table class="sortable table table-striped table-bordered table-condensed" id="t1">
+    <tr>
+      <th>S.No.</th>
+      <th>Select</th>
+      <th>Name</th>
+      <th>Enrollment No</th>
+      <th>Resume</th>
+      <th>Scorecard</th>
+    </tr>
+    {% for student in students %}
+    <tr class="{% cycle 'odd' 'even' %} {% if forloop.last %}lastline{% endif %}">
+      <td>{{ forloop.counter }}</td>
+      <td><input type="checkbox" name="selected_students" value="{{ student.pk }}"/></td>
+      <td>{{ student.person.name }}</td>
+      <td>{{ student.person.user.username }}</td>
+      <td>
+        <a href="{% url placement.views_verify.resume student.person.user.username %}">Resume</a>
+      </td>
+      <td>
+        <a href="{% url placement.views_verify.scorecard student.person.user.username %}">Scorecard</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  <div class="submit_button">
+    <input class="btn btn-primary" type="submit" value="{{ task|capfirst }}"/>
+  </div>
+</form>
+{% else %}
+No students to {{ task }}!
+{% endif %} {# {% if students %} #}
+
+{% else %} {# {% if task == 'verified' #}
+
+{% if students %}
+<table class="sortable table table-striped table-bordered table-condensed" id="t2">
+  <tr>
+    <th>S.No.</th>
+    <th>Name</th>
+    <th>Enrollment No</th>
+    <th>Contact No</th>
+    <th>Resume</th>
+    <th>Scorecard</th>
+  </tr>
+  {% for student in students %}
+  <tr>
+    <td>  {{ forloop.counter }}</td>
+    <td>{{ student.person.name }}</td>
+    <td>{{ student.person.user.username }}</td>
+    <td>{{ student.person.personal_contact_no|default:'-' }}</td>
+    <td>
+      <a href="{% url placement.views_verify.resume student.person.user.username %}">Resume</a>
+    </td>
+    <td>
+      <a href="{% url placement.views_verify.scorecard student.person.user.username %}">Scorecard</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+</form>
+{% else %}
+No verified students at present.
+{% endif %} {# {% if students %} #}
+
+{% endif %} {# {% if task == 'verified' #}
+{% endblock %}

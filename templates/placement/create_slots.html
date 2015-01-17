@@ -1,0 +1,106 @@
+{% extends "placement/base.html" %}
+{% load macros %}
+
+{% block scripts %}
+    <script src="{{STATIC_URL}}js/placement/tag-it.js" type="text/javascript" charset="utf-8"></script>
+{% endblock %}
+
+{% block app_content %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+    <link href="{{STATIC_URL}}/css/placement/jquery.tagit.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="//trentrichardson.com/examples/timepicker/jquery-ui-timepicker-addon.css">
+    <link rel="stylesheet" href="{{STATIC_URL}}css/placement/fullcalendar.css" type="text/css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="//trentrichardson.com/examples/timepicker/jquery-ui-timepicker-addon.js"></script>
+    <script src="{{STATIC_URL}}js/placement/moment.min.js"></script>
+    <script src="{{STATIC_URL}}js/placement/fullcalendar.js"></script>
+   <script>
+    $(function() {
+      $( "#id_start_date" ).datetimepicker({ dateFormat: "yy-mm-dd"});
+      $( "#id_end_date" ).datetimepicker({ dateFormat: "yy-mm-dd"});
+      });
+  </script>
+  
+{% if error_msg %}
+{{ error_msg }}
+{% endif %}
+
+{% if title %}
+<h3>{{ title }}</h3>
+<hr/>
+{% endif %}
+
+{% if editable_warning %}
+<p class="editable_warning">{{ editable_warning }}</p>
+{% endif %}
+
+<form class="form" enctype="multipart/form-data" method="post" action="">
+    <h2> Create Slots </h2>
+    {% csrf_token %}
+    {% macro editable_field_div field %}
+        <div class="edit-row">
+          {{field.errors}}
+          <div class="field-label-big">{{field.label}}</div>
+          <div class="field">{{field}}</div>
+        </div>
+    {% endmacro %}
+    {% usemacro editable_field_div slot_form.start_date %}
+    {% usemacro editable_field_div slot_form.end_date %}
+    {% usemacro editable_field_div slot_form.visibility %}
+    {% usemacro editable_field_div slot_form.company %}
+    <input type="hidden" id="company_ids" value="" />
+    <button class="btn btn-primary" onclick="change_value()" type="submit">Create</button>
+</form>
+
+<ul>
+  {% for slot in slots %}
+    {% with start_date=slot.start_date|date %}
+    <li>
+        {% for l in dates %}
+           {% if l == start_date %}
+             {{l}}
+           {% endif %}
+        {% endfor %}
+
+        <a href="{% url placement.views_slots.edit_slot slot.id %}">{{slot.start_date}} -- {{slot.end_date}}</a>
+
+    {% endwith %}
+    </li>
+  {% endfor %}
+</ul>
+  <script type="text/javascript">
+      $(document).ready(function() {
+        var data_map = {};
+        $("#id_company").tagit({
+          autocomplete:{
+            delay: 0,
+            minLength: 2,
+            source: '/placement/company_search/',
+            select: function( event, ui ) {
+              var data = $('#company_ids').val();
+              if(data == ""){
+                $('#company_ids').val(ui.item.id);
+                data_map[ui.item.value] = ui.item.id;
+              }
+              else{
+                data = data+","+ui.item.id
+                $('#company_ids').val(data);
+                data_map[ui.item.value] = ui.item.id;
+              }
+              },
+              },
+            beforeTagRemoved: function(event, ui){
+              var data = $('#company_ids').val().split(",");
+              data = jQuery.grep(data, function(value) {
+                    return value != data_map[ui.tagLabel];
+                    });
+              $('#company_ids').val(data.toString());
+            },
+          });
+        });
+      function change_value(){
+        $('#id_company').val($('#company_ids').val());
+      }
+  </script>
+{% endblock %}

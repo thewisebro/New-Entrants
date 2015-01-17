@@ -1,0 +1,19 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+
+{% if error_msg %}
+{{ error_msg }}
+{% endif %}
+
+
+{% if errors %}
+  The following resumes were not present:<br />
+  {% for person in errors %}
+    {{ person.name }}, {{ person.user.username }}<br />
+  {% endfor %}
+{% else %}
+There were no errors
+{% endif %}
+
+{% endblock %}

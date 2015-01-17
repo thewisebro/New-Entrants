@@ -1,0 +1,207 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+<h3>{{ branch.name }}</h3>
+<hr/>
+{% if details %}
+<p>Total students : {{ details|length }}</p>
+View students :
+<select id="category" onChange="javascript:selectStudents();">
+  <option value="All">All</option>
+  <option value="N">Available for placements</option>
+  <option value="A">Placed in dream A company</option>
+  <option value="B">Placed in dream B company</option>
+  <option value="C">Placed in dream C company</option>
+  <option value="U">Placed in University</option>
+</select>
+<a href="{% url placement.views_admin.branch_details_xls branch.code %}"><button class="btn btn-primary" style="float:right;">Generate XLS sheet</button></a>
+
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <a href="#details" data-toggle="tab">
+        Details
+      </a>
+    </li>
+    <li>
+      <a href="#marks" data-toggle="tab">
+        Marks
+      </a>
+    </li>
+    <li>
+      <a href="#applications" data-toggle="tab">
+        Applications
+      </a>
+    </li>
+    <li>
+      <a href="#all" data-toggle="tab">
+        All Information
+      </a>
+    </li>
+  </ul>
+
+  <div class = "tab-content">
+    <div id="details" class="tab-pane active">
+      <table class="table table-striped table-bordered table-condensed" id="t1">
+        <thead>
+          <tr>
+            <th>S.No.</th>
+            <th>Enroll No.</th>
+            <th>Name</th>
+            <th>Birth Date</th>
+            <th>Category</th>
+            <th>Course</th>
+            <th>Contact No</th>
+            <th>Alternate Email</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for plac_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application in details %}
+          <tr class="person placed_category_{{ plac_person.placed_company_category|default:'N' }}">
+            <td>{{ forloop.counter }}</td>
+            <td>{{ plac_person.person.user.username }}</td>
+            <td>{{ plac_person.person.name }}</td>
+            <td>{{ person_info.birth_date|default:'-' }}</td>
+            <td>{{ person_info.get_category_display|default:'-' }}</td>
+            <td>{{ plac_person.person.get_semester_display }}</td>
+            <td>{{ plac_person.person.personal_contact_no|default:'-' }}</td>
+            <td>{{ plac_person.person.email_id|default:'-' }}</td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+
+    <div id="marks" class="tab-pane">
+      <table class="table table-striped table-bordered table-condensed" id="t1">
+        <thead>
+          <tr>
+            <th>S.No.</th>
+            <th>Enroll No.</th>
+            <th>Name</th>
+            <th>CGPA</th>
+            <th>Tenth Marks</th>
+            <th>Twelfth Marks</th>
+            <th>Graduation</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for plac_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application in details %}
+          <tr class="person placed_category_{{ plac_person.placed_company_category|default:'N' }}">
+            <td>{{ forloop.counter }}</td>
+            <td>{{ plac_person.person.user.username }}</td>
+            <td>{{ plac_person.person.name }}</td>
+            <td>{{ plac_person.person.cgpa|default:'-' }}</td>
+            <td>{{ tenth_marks }}</td>
+            <td>{{ twelfth_marks }}</td>
+            <td>{{ graduation_marks }}</td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+
+    </div>
+
+    <div id="applications" class="tab-pane">
+
+      <table class="table table-striped table-bordered table-condensed" id="t1">
+        <thead>
+          <tr>
+            <th>S.No.</th>
+            <th>Enroll No.</th>
+            <th>Name</th>
+            <th>No. of Applications</th>
+            <th>Last Date of Application</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for plac_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application in details %}
+          <tr class="person placed_category_{{ plac_person.placed_company_category|default:'N' }}">
+            <td>{{ forloop.counter }}</td>
+            <td>{{ plac_person.person.user.username }}</td>
+            <td>{{ plac_person.person.name }}</td>
+            <td>{{ no_of_applications }}</td>
+            <td>{{ last_application }}</td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+
+    </div>
+
+    <div id="all" class="tab-pane">
+      <table class="table table-striped table-bordered table-condensed" id="t1">
+        <thead>
+          <tr>
+            <th>S.No.</th>
+            <th>Enroll No.</th>
+            <th>Name</th>
+            <th>CGPA</th>
+            <th>Tenth Marks</th>
+            <th>Twelfth Marks</th>
+            <th>Graduation</th>
+            <th>Birth Date</th>
+            <th>Category</th>
+            <th>Alternate Email</th>
+            <th>Contact No</th>
+            <th>Course</th>
+            <th>No. of Applications</th>
+            <th>Last Date of Application</th>
+         </tr>
+        </thead>
+        <tbody>
+          {% for plac_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application in details %}
+          <tr class="person placed_category_{{ plac_person.placed_company_category|default:'N' }}">
+            <td>{{ forloop.counter }}</td>
+            <td>{{ plac_person.person.user.username }}</td>
+            <td>{{ plac_person.person.name }}</td>
+            <td>{{ plac_person.person.cgpa|default:'-' }}</td>
+            <td>{{ tenth_marks }}</td>
+            <td>{{ twelfth_marks }}</td>
+            <td>{{ graduation_marks }}</td>
+            <td>{{ person_info.birth_date|default:'-' }}</td>
+            <td>{{ person_info.get_category_display|default:'-' }}</td>
+            <td>{{ plac_person.person.email_id|default:'-' }}</td>
+            <td>{{ plac_person.person.personal_contact_no|default:'-' }}</td>
+            <td>{{ plac_person.person.get_semester_display }}</td>
+            <td>{{ no_of_applications }}</td>
+            <td>{{ last_application }}</td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% else %}
+No student found !
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+  function selectStudents()
+  {
+    value = document.getElementById('category').value;
+    if(value=='All')
+    {
+      $('.person').show();
+    }
+    else
+    {
+      $('.person').hide();
+      $('.placed_category_'+value).show();
+    }
+  }
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap-tab.js"></script>
+{% endblock %}
+

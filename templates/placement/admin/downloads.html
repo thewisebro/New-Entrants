@@ -1,0 +1,29 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+<h3>Download Statistics</h3>
+<hr/>
+
+<a href="{% url placement.media.institute_results %}">
+  XLS list of all results
+</a>
+
+<br/>
+
+<a href="{% url placement.media.institute_results_sectorwise %}">
+  Sectorwise Institute Results as XLS file
+</a>
+
+<br/>
+
+<a href="{% url placement.media.institute_results_companywise %}">
+  Companywise results
+</a>
+
+<br/>
+
+<a href="{% url placement.media.institute_results_branchwise %}">
+  Branchwise results
+</a>
+
+{% endblock %}
