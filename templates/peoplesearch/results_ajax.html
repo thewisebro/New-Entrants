@@ -17,8 +17,7 @@
     </tr>
 {% endfor %}
   </table>
-{% else %}
-  No results found<br>
+
 {% endif %}
 {% endif %}
 
@@ -41,8 +40,7 @@
     </tr>
 {% endfor %}
   </table>
-{% else %}
-  No results found<br>
+
 {% endif %}
 {% endif %}
 
@@ -63,7 +61,8 @@
     </tr>
 {% endfor %}
   </table>
-{% else %}
+{% if count == 0 %}
   No results found<br>
+{% endif %}
 {% endif %}
 {% endif %}

@@ -11,13 +11,13 @@
     	<div id="floating">
 	<div id="div_main" style="padding-left:150px">
 	    <div id="div_left_small_image">
-	    	<a href="http://192.168.121.5:8080/peoplesearch/">
+	    	<a href="http://172.25.55.5:8000/peoplesearch/">
 			<img src="../../static/images/peoplesearch/results_img_02.gif" alt="People search" />
 		</a>
 	    </div>
 	    <div id="div_right">
 		<div id="div_up">
-	    		<a href="http://192.168.121.5:8080/peoplesearch/">
+	    		<a href="http://172.25.55.5:8000/peoplesearch/">
           <img src="../../static/images/peoplesearch/results_text_04.png" alt="People search" />
 			</a>
 		</div>
@@ -308,7 +308,7 @@
 			<input type="hidden" name="form_submitted" value="true" />
 			<!--</p>-->
 			<input type="hidden" name="search_category" id="role" value="all" />
-			<input type="hidden" name="advanced_search_status" value="off" />
+			<input type="hidden" name="advanced_search_status" value="off"/> 
 			<br />
 		    </form>
 		</div>
@@ -319,7 +319,7 @@
 	<center>
 	<div id="results">
 		<!--Search Results-->
-{% block results %} {% endblock %} 
+{% block results %} {% endblock %}
 	</div>
 	<br />
 	<hr />
