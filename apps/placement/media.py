@@ -10,7 +10,7 @@ import logging
 import os, xlwt, datetime
 import mimetypes
 
-from nucleus.models import StudentUser as Person, WebmailAccount as PersonIdEnrollmentNoMap, Branch
+from nucleus.models import Student, WebmailAccount, Branch
 # import models  #from placement
 from placement.utils import handle_exc, get_ctc, sanitise_for_download
 from placement.policy import current_session_year
@@ -19,7 +19,7 @@ from placement.models import *
 from api import model_constants as MC
 from collections import defaultdict
 
-import settings
+from django.conf import settings
 
 # Permission denied page. User will be redirected to this page if he fails the user_passes_test.
 login_url = '/placement/'
@@ -35,7 +35,7 @@ def photo(request) :
   """
   #Not logging this function as it is going to be called in each view.
   try :
-    photo = request.session['plac_person'].photo
+    photo = request.user.placementperson.photo
   except Exception as e :
     photo = None
   if photo and os.path.exists(photo.path) :

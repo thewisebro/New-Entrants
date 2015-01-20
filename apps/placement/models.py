@@ -1,4 +1,4 @@
-import os.path, datetime
+import os.path
 
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator
@@ -206,7 +206,7 @@ class CompanyApplicationMap(models.Model):
   company = models.ForeignKey(Company)
   status = models.CharField(max_length=3, choices=PC.COMPANY_APPLICATION_STATUS) # Status of the application, can be selected, not selected, etc.
   shortlisted = models.BooleanField(default = False)
-  time_of_application = models.DateTimeField(default = datetime.datetime.now())
+  time_of_application = models.DateTimeField(auto_now=True)
   class Meta :
     unique_together = ('plac_person','company')
   def __unicode__(self):

@@ -8,7 +8,7 @@ from django.contrib import messages
 import logging
 import xlwt, datetime
 
-from nucleus.models import StudentUser as Student, Branch
+from nucleus.models import Student, Branch
 from placement import forms
 from placement.policy import current_session_year
 from placement.models import *

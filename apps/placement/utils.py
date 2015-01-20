@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.template.loader import render_to_string
 
-# from xhtml2pdf import pisa
+from xhtml2pdf import pisa
 
 import cStringIO as StringIO
 import logging, os
@@ -13,9 +13,9 @@ from placement.models import *
 from api import model_constants as MC
 from placement.constants import PAY_PACKAGE_CURRENCY_CONVERSION_RATES
 from placement.policy import current_session_year
-from nucleus.models import StudentInfo as PersonInfo, Branch
+from nucleus.models import StudentInfo, Branch
 
-import settings
+from django.conf import settings
 
 l = logging.getLogger('channel-i_logger')
 
@@ -43,9 +43,9 @@ def sanitise_for_download(string):
   """
   return string.replace(' ', '-').replace(',','_').replace(':', '_')
 
-def get_resume_binary(context, person, resume_type, verification_resume = False, is_reduced = False, photo_required = False) :
+def get_resume_binary(context, student, resume_type, verification_resume = False, is_reduced = False, photo_required = False) :
   """
-  Returns dictionary of the resume for the specified person.
+  Returns dictionary of the resume for the specified student.
   Keys of the dictionary are 'err' and 'content'.
   'content' is resume encode in pdf binary format.
   Returned string can be saved in a file as pdf document or can be rendered
@@ -54,31 +54,30 @@ def get_resume_binary(context, person, resume_type, verification_resume = False,
   placement.constants.COMPANY_RESUME_CHOICES
   verification_resume : whether to display all visible and hidden information.
   """
-  from xhtml2pdf import pisa
-  plac_person, created = PlacementPerson.objects.get_or_create(person = person)
+  plac_person, created = PlacementPerson.objects.get_or_create(student = student)
   if created :
-    l.info('Utils : Created default PlacementInformation for ' + person.user.username + ' as his/her resume was requested.')
+    l.info('Utils : Created default PlacementInformation for ' + student.user.username + ' as his/her resume was requested.')
   year = current_session_year()
   if verification_resume :
-    internships = InternshipInformation.objects.filter(person = person).order_by('priority')
-    projects = ProjectInformation.objects.filter(person = person).order_by('priority')
-    publications = ResearchPublications.objects.filter(person = person).order_by('priority')
-    job = JobExperiences.objects.filter(person = person).order_by('priority')
-    extra = ExtraCurriculars.objects.filter(person = person).order_by('priority')
+    internships = InternshipInformation.objects.filter(student = student).order_by('priority')
+    projects = ProjectInformation.objects.filter(student = student).order_by('priority')
+    publications = ResearchPublications.objects.filter(student = student).order_by('priority')
+    job = JobExperiences.objects.filter(student = student).order_by('priority')
+    extra = ExtraCurriculars.objects.filter(student = student).order_by('priority')
   else :
-    internships = InternshipInformation.objects.filter(person = person, visible = True).order_by('priority')
-    projects = ProjectInformation.objects.filter(person = person, visible = True).order_by('priority')
-    publications = ResearchPublications.objects.filter(person = person, visible = True).order_by('priority')
-    job = JobExperiences.objects.filter(person = person, visible = True).order_by('priority')
-    extra = ExtraCurriculars.objects.filter(person = person, visible = True).order_by('priority')
+    internships = InternshipInformation.objects.filter(student = student, visible = True).order_by('priority')
+    projects = ProjectInformation.objects.filter(student = student, visible = True).order_by('priority')
+    publications = ResearchPublications.objects.filter(student = student, visible = True).order_by('priority')
+    job = JobExperiences.objects.filter(student = student, visible = True).order_by('priority')
+    extra = ExtraCurriculars.objects.filter(student = student, visible = True).order_by('priority')
   try:
-    plac_info = PlacementInformation.objects.get(person = person)
+    plac_info = PlacementInformation.objects.get(student = student)
     achievements = plac_info.achievements
   except PlacementInformation.DoesNotExist as e:
     plac_info = None
     achievements = None
   educations = []
-  graduation = person.branch.graduation
+  graduation = student.branch.graduation
   # Run the queries separately to preserve the required order
   if graduation == 'UG' :
     courses = ('DPLM' ,'12TH' ,'10TH')
@@ -89,14 +88,14 @@ def get_resume_binary(context, person, resume_type, verification_resume = False,
   course_name_map = {}
   for (code,name) in MC.SEMESTER_CHOICES :
     course_name_map[code] = name
-  ed_current = EducationalDetails.objects.filter(person = person, course__startswith = graduation).order_by('-course')
+  ed_current = EducationalDetails.objects.filter(student = student, course__startswith = graduation).order_by('-course')
   if ed_current.exists() :
     # For current course, we have to show the degree (B.Tech., M.Tech., MURP etc) and not just UG or PG
     # It will look like - 'B.Tech. 3rd Year'
     if not graduation == 'PHD' :
       # Do not compute course if PHD student
       year = ed_current[0].course[2]
-      course_name = person.branch.degree
+      course_name = student.branch.degree
       if year == '1' :
         course_name += ' 1st '
       elif year == '2' :
@@ -110,10 +109,10 @@ def get_resume_binary(context, person, resume_type, verification_resume = False,
       course_name = course_name_map[ed_current[0].course]
     educations.append((ed_current[0], course_name))
   for course in courses :
-    more_details = EducationalDetails.objects.filter(person = person, course = course)
+    more_details = EducationalDetails.objects.filter(student = student, course = course)
     for detail in more_details :
       educations.append((detail, course_name_map[detail.course]))
-  e = EducationalDetails.objects.filter(person=person, course='UG0')
+  e = EducationalDetails.objects.filter(student=student, course='UG0')
   if e.exists() and e[0].discipline!='NOT' :
     if e[0].discipline == 'NA' :
       ug_name = 'Not Applicable'
@@ -122,18 +121,18 @@ def get_resume_binary(context, person, resume_type, verification_resume = False,
       ug_name = b.name
   else:
     ug_name = ''
-  languages = LanguagesKnown.objects.filter(person = person)
+  languages = LanguagesKnown.objects.filter(student = student)
   try:
-    info = PersonInfo.objects.get(person = person)
-  except PersonInfo.DoesNotExist as e:
+    info = StudentInfo.objects.get(student = student)
+  except StudentInfo.DoesNotExist as e:
     info = None
   template_name = 'placement/resume.html'
   if is_reduced :
     template_name = 'placement/resume_nik.html'
   display = True #whether to display registration no
-  if person.passout_year == None and plac_person.status == 'CLS':
+  if plac_person.status == 'CLS':   #alumni check?
     display = False
-  registration_no  = person.branch.degree + '/' + person.branch.code + '/' + person.user.username + '/'
+  registration_no  = student.branch.degree + '/' + student.branch.code + '/' + student.user.username + '/'
   year = current_session_year() + 1
   registration_no += str(year)
   html  = render_to_string(template_name,
@@ -176,29 +175,28 @@ def get_resume_binary(context, person, resume_type, verification_resume = False,
            }
   return reply
 
-def get_scorecard_binary(context, person) :
+def get_scorecard_binary(context, student) :
   """
-  Returns dictionary of the scorecard for the specified person.
+  Returns dictionary of the scorecard for the specified student.
   Keys of the dictionary are 'err' and 'content'.
   'content' is scorecard encode in pdf binary format.
   Returned string can be saved in a file as pdf document or can be rendered
   in a HttpResponse to the client.
   """
-  from xhtml2pdf import pisa
   try :
-    registration_no = PlacementInformation.objects.get(person = person).registration_no
+    registration_no = PlacementInformation.objects.get(student = student).registration_no
   except PlacementInformation.DoesNotExist :
     registration_no = None
   # order is important, that's the only reason we are firing multiple queries
   if not registration_no:
-    registration_no  = person.branch.degree + '/' + person.branch.code + '/' + person.user.username + '/'
+    registration_no  = student.branch.degree + '/' + student.branch.code + '/' + student.user.username + '/'
     year = current_session_year() + 1
     registration_no += str(year)
   print registration_no
   courses = ('10TH', '12TH', 'UG', 'DPLM', 'PG', 'PHD')
   educational_details = []
   for course in courses :
-    more_details = EducationalDetails.objects.filter(person = person, course__startswith = course).order_by('course')
+    more_details = EducationalDetails.objects.filter(student = student, course__startswith = course).order_by('course')
     educational_details.extend(more_details)
   course_name_map = {}
   for (code,name) in MC.SEMESTER_CHOICES :
@@ -215,7 +213,7 @@ def get_scorecard_binary(context, person) :
     details.append((detail, course_name_map[detail.course], discipline))
   html  = render_to_string('placement/scorecard.html',
                            { 'pagesize' : 'A4',
-                             'person' : person,
+                             'student' : student,
                              'registration_no' : registration_no,
                              'details' : details,
                              }, context_instance = context)

@@ -167,14 +167,14 @@
             <div class="info">
               <p class="top_rows">
               <span class="person_name">
-               {{ plac_person.person.name }}
+               {{ plac_person.student.user.name }}
               </span>
               </p>
               <p class="top_rows">
-              {{ plac_person.person.branch.degree }}&nbsp;{{ plac_person.person.branch.name }}
+              {{ plac_person.student.branch.degree }}&nbsp;{{ plac_person.student.branch.name }}
               </p>
               <p class="top_rows">
-              {{ plac_person.person.get_semester_display }}
+              {{ plac_person.student.get_semester_display }}
               </p>
               {% if display %}
               <p class="top_rows">
@@ -182,7 +182,7 @@
               <p>
               {% endif %}
               <p class="top_rows">
-              Email: {{ plac_person.person.email_id }}
+              Email: {{ plac_person.student.user.email_id }}
               </p>
             </div>  
             <!-- Area of interest and CGPA -->
@@ -205,13 +205,13 @@
       <table id="grades_table" border="1" class="center">
         <tr><th>Educational Qualifications</th><th width="20%">Year</th><th>Board/Institution</th><th width="20%">CGPA* / %</th></tr>
         {% for edu,course_name in education %}
-        {% if plac_person.person.branch.graduation == "PG" and edu.course == "UG0" and edu.discipline == "NOT" %}
+        {% if plac_person.student.branch.graduation == "PG" and edu.course == "UG0" and edu.discipline == "NOT" %}
           <tr><td>UG: {{ edu.discipline_provided }}</td><td>{{ edu.year }}</td><td>{{ edu.institution }}</td><td>{{edu.cgpa}}</td></tr>
         {% else %}
-        {% if plac_person.person.branch.graduation == "PG" and edu.course == "UG0" and edu.discipline == "NA" %}
+        {% if plac_person.student.branch.graduation == "PG" and edu.course == "UG0" and edu.discipline == "NA" %}
           <tr><td>UG Overall</td><td>{{ edu.year }}</td><td>{{ edu.institution }}</td><td>{{edu.cgpa}}</td></tr>
         {% else %}
-        {% if plac_person.person.branch.graduation == "PG" and edu.course == "UG0" and edu.discipline != "NOT" %} 
+        {% if plac_person.student.branch.graduation == "PG" and edu.course == "UG0" and edu.discipline != "NOT" %} 
           <tr><td>UG: {{ ug_name }}</td><td>{{ edu.year }}</td><td>{{ edu.institution }}</td><td>{{edu.cgpa}}</td></tr>
         {% else %}        
           <tr><td>{{ course_name }}</td><td>{{ edu.year }}</td><td>{{ edu.institution }}</td><td>{{edu.cgpa}}</td></tr>
@@ -334,13 +334,13 @@
           <div>
           <b>Father's Name:</b> {{ info.fathers_name }}<br />
           <b>Date of Birth:</b> {{ info.birth_date }}<br />
-          <b>Gender:</b> {{ plac_person.person.get_gender_display }}<br />
-          <b>Contact No:</b> {{ plac_person.person.personal_contact_no }}<br />
+          <b>Gender:</b> {{ plac_person.student.get_gender_display }}<br />
+          <b>Contact No:</b> {{ plac_person.student.personal_contact_no }}<br />
           <b>Category:</b> {{ info.get_category_display }}<br />
         </td>
         <td style="width:50%;">
           <b>Permanent Address:</b> {{ info.permanent_address }}, {{ info.city }} - {{ info.pincode }}<br />
-          <b>Current Address:</b> {{ plac_person.person.room_no }}, {{ plac_person.person.get_bhawan_display }}, IIT Roorkee-247667<br />
+          <b>Current Address:</b> {{ plac_person.student.room_no }}, {{ plac_person.student.get_bhawan_display }}, IIT Roorkee-247667<br />
           </div>
         </td>
       </tr>

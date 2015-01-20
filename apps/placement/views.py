@@ -7,8 +7,9 @@ from django.db import IntegrityError
 from django.conf import settings
 import logging, os
 from django.views.generic.base import TemplateView
+import datetime
 
-from nucleus.models import StudentUser as Student, WebmailAccount as PersonIdEnrollmentNoMap
+from nucleus.models import Student, WebmailAccount
 from placement import policy, forms
 from placement.policy import current_session_year
 from placement.models import *
@@ -35,11 +36,11 @@ login_url = '/placement/'
 @login_required
 def index(request):
   try :
-    student = request.session.get('student')
+    student = request.user.student
     logger.info(request.user.username+": in homepage.")
     if not student :
       if request.user.groups.filter(name = 'Placement Admin').exists() :
-        request.session['user']=request.user
+        # request.session['user']=request.user
         l.info(request.user.username+': Redirected to company.admin_list')
         return HttpResponseRedirect(reverse('placement.views_company.admin_list'))
       elif request.user.groups.filter(name = 'Placement Verify').exists() :
@@ -51,18 +52,18 @@ def index(request):
         return HttpResponseRedirect(reverse('placement.views_results.department', args = [dept_name]))
       elif request.user.groups.filter(name = 'Student').exists() :
         l.info(request.user.username+': Redirected to Student Home')
-        request.session['student'] = Student.objects.get(user = request.user)
+        request.user.student = Student.objects.get(user = request.user)
       elif request.user.groups.filter(name = 'Faculty').exists() :
         l.info(request.user.username+': Redirected to Results Home')
         return HttpResponseRedirect(reverse('placement.views_results.company_list'))
       else :
         messages.error(request, 'You are not alloted any placement group. If you are elligible to visit this portal, contact IMG.')
-        return render_to_response('error.html', context_instance=RequestContext(request))
+        return render_to_response('placement/error.html', context_instance=RequestContext(request))
     # XXX : Do not take student from session, at least home page should reflect the changes.
     student = Student.objects.get(user = request.user)
-    request.session['student'] = student
+    request.user.student = student
     plac_person = PlacementPerson.objects.get_or_create(student = student)[0]
-    request.session['plac_person'] = plac_person
+    request.user.student.plac_person = plac_person
     if plac_person.status == 'VRF' :
       applications = CompanyApplicationMap.objects.filter(plac_person = plac_person, company__year__contains = current_session_year())
     else :
@@ -73,11 +74,12 @@ def index(request):
         'applications' : applications,
         }, context_instance=RequestContext(request))
   except Exception as e :
+    print e
     logger.info(request.user.username+': got an exception.')
     logger.exception(e)
     # Can't use handle_exc here because it redirects here. To avoid infinite loop, redirect to a static page.
     messages.error(request, 'Unknown error has occured. Please try again later. The issue has beeen reported.')
-    return render_to_response('error.html', context_instance=RequestContext(request))
+    return render_to_response('placement/error.html', context_instance=RequestContext(request))
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
@@ -86,14 +88,14 @@ def resume(request) :
   Current resume of the user.
   """
   try :
-    student = request.session['student']
+    student = request.user.student
     l.info (request.user.username+': Generated Resume')
     pdf = get_resume_binary(RequestContext(request), student, 'VER')
     if pdf['err'] :
       l.exception(request.user.username+': Error occured while generating resume')
       messages.error(request, 'An error occured while generating the PDF file.')
       return HttpResponseRedirect(reverse('placement.views.index'))
-    response = HttpResponse(pdf['content'], mimetype='application/pdf')
+    response = HttpResponse(pdf['content'], content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=Resume_' + student.user.username + '_' + sanitise_for_download(datetime.datetime.now().strftime('%b. %d, %Y, %I:%M %p')) + '.pdf'
     response['Content-Length'] = len(pdf['content'])
     return response
@@ -109,14 +111,14 @@ def resume_nik(request) :
   Current resume of the user.
   """
   try :
-    student = request.session['student']
+    student = request.user.student
     l.info (request.user.username+': Generated Resume')
     pdf = get_resume_binary(RequestContext(request), student, 'VER', False, True)
     if pdf['err'] :
       l.exception(request.user.username+': Error occured while generating resume')
       messages.error(request, 'An error occured while generating the PDF file.')
       return HttpResponseRedirect(reverse('placement.views.index'))
-    response = HttpResponse(pdf['content'], mimetype='application/pdf')
+    response = HttpResponse(pdf['content'], content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=Resume_' + student.user.username + '_' + sanitise_for_download(datetime.datetime.now()) + '.pdf'
     response['Content-Length'] = len(pdf['content'])
     return response
@@ -133,13 +135,13 @@ def scorecard(request) :
   """
   try :
     l.info (request.user.username+': Generated Scorecard')
-    student = request.session['student']
+    student = request.user.student
     pdf = get_scorecard_binary(RequestContext(request), student)
     if pdf['err'] :
       l.exception(request.user.username+': Error in generating Scorecard.')
       messages.error(request, 'An error occured while generating the PDF file.')
       return HttpResponseRedirect(reverse('placement.views.index'))
-    response = HttpResponse(pdf['content'], mimetype='application/pdf')
+    response = HttpResponse(pdf['content'], content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=Scorecard.pdf'
     response['Content-Length'] = len(pdf['content'])
     return response
@@ -157,11 +159,11 @@ def apply(request, company_id) :
   """
   try :
     company = get_object_or_404(Company, pk = company_id, year = current_session_year() )
-    student = request.session['student']
+    student = request.user.student
     # Do not pick plac_person from session as the plac_person might get updated
     # from django-admin
     plac_person = PlacementPerson.objects.get(student = student)
-    request.session['plac_person'] = plac_person
+    request.user.student.plac_person = plac_person
     if plac_person.status != 'VRF' :
       return HttpResponse('You are not elligible for placements.')
     msg = policy.can_apply(plac_person, company)
@@ -172,7 +174,7 @@ def apply(request, company_id) :
       company_req = float(company.cgpa_requirement)
     except:
       company_req = 0
-    if company_req > float(plac_person.student.cgpa):
+    if company_req > float(plac_person.student.cgpa):   #########Check "plac_person.student.cgpa". May be taking from nucleus. Change it to Educational details.
       l.info(request.user.username +' applying to company having higher CGPA requirements.')
       return HttpResponse("You can not apply to this company as it has higher CGPA requirements.")
     pdf = get_resume_binary(RequestContext(request), student, company.sector)
@@ -218,8 +220,8 @@ def withdraw(request, company_id) :
   """
   try :
     company = get_object_or_404(Company, pk = company_id, year = current_session_year() )
-    student = request.session['student']
-    plac_person = request.session['plac_person']
+    student = request.user.student
+    plac_person = request.user.student.placmentperson
     try :
       application = CompanyApplicationMap.objects.get(company = company, plac_person = plac_person)
     except CompanyApplicationMap.DoesNotExist:
@@ -263,15 +265,15 @@ def forum(request, forum_type, page_no = None) :
       if request.POST['content']=="":
         messages.error(request, 'An empty reply cannot be posted')
         return HttpResponseRedirect(reverse('placement.views.forum', args=[ forum_type ]))
-      elif request.session.get('student'):
-        student = request.session['student']
+      elif request.user.groups.filter(name='Student').exist():
+        student = request.user.student
         post = ForumPost.objects.get(pk = request.POST['post_id'])
         ForumReply.objects.create(post = post,
                                 enrollment_no = student.user.username,
                                 person_name = student.name,
                                 content = request.POST['content'],
                                 )
-      elif request.session.get('user'):
+      elif request.user:
         post = ForumPost.objects.get(pk = request.POST['post_id'])
         ForumReply.objects.create(post = post,
                                 enrollment_no = '00000000',
@@ -316,8 +318,8 @@ def forum_post(request) :
       messages.error(request, 'Please fill in the Question before submitting.')
       return HttpResponseRedirect(reverse('placement.views.forum', args=[ request.POST['forum_type'] ]))
     elif request.method == 'POST' :
-      if request.session.get('student'):
-        student = request.session['student']
+      if request.user.groups.filter(name='Student').exist():
+        student = request.user.student
         ForumPost.objects.create(enrollment_no = student.user.username,
                                person_name = student.name,
                                discipline_name = student.branch.name,
@@ -326,7 +328,7 @@ def forum_post(request) :
                                content = request.POST['content'],
                                forum_type = request.POST['forum_type']
                                )
-      elif request.session.get('user'):
+      elif request.user:
         ForumPost.objects.create(enrollment_no = '00000000',
                                person_name = 'Placement Admin',
                                discipline_name = 'Admin',
@@ -337,7 +339,7 @@ def forum_post(request) :
                                )
 
       try:
-        student = request.session['student']
+        student = request.user.student
         email_id=PersonIdEnrollmentNoMap.objects.get(enrollment_no=request.user.username).person_id
         forum_type=request.POST['forum_type']
         if(forum_type=="T"):
@@ -374,7 +376,7 @@ def toggle(request):
     Option for PhD Students to toggle their status from Open to Closed and vice versa, until it is verified
   """
   l.info(request.user.username+': tried to change placement status.')
-  student = request.session['student']
+  student = request.user.student
   # Do not pick plac_person from session as the plac_person might get updated
   # from django-admin
   plac_person = PlacementPerson.objects.get(student = student)
