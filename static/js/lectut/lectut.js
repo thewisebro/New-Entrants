@@ -53,7 +53,7 @@ function handleFileSelect(e) {
   var files = e.target.files;
   for(var i=0; i<files.length; i++) {
     var f = files[i];
-    selFile.innerHTML += f.name + "<input type='text' id='"+f.name+"'placeholder='description'><br/>";
+    selFile.innerHTML += f.name + "<input type='text' id='file_"+i+"'placeholder='description'><br/>";
   }
 }
 
@@ -69,7 +69,10 @@ function uploadPost(){
   var i;
   for( i=0;i<len;i++)
   {
-    formData.append("upload", formFiles.files[i]);
+    fileDescription = document.getElementById("file_"+i).value;
+    FileField = {'file':formFiles.files[i] , 'description':fileDescription};
+    //formData.append("upload", formFiles.files[i]);
+    formData.append("upload",FileField);
   }
   formData.append('formText', formText);
   formData.append('csrfmiddlewaretoken', csrf_token);

@@ -71,6 +71,15 @@ class Post(models.Model):
   def __unicode__(self):
     return str(self.content)
 
+  def as_dict(self):
+    postData={
+      'upload_user': str(self.upload_user.name),
+      'batch':str(self.batch),
+      'content':self.content,
+      'privacy':self.privacy,
+    }
+    return postData
+
 class Uploadedfile(BaseUpload):
   post = models.ForeignKey(Post)
   upload_file=models.FileField(upload_to='lectut/images/')
