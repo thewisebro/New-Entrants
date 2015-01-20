@@ -65,7 +65,7 @@ class BaseUpload(models.Model):
 class Post(models.Model):
   upload_user = models.ForeignKey(User)
   batch = models.ForeignKey(Batch)
-  content = models.CharField(max_length = '10')
+  content = models.CharField(max_length = '1000')
   privacy = models.BooleanField(max_length = 3 , default = 'tut')
 
   def __unicode__(self):
@@ -74,19 +74,29 @@ class Post(models.Model):
 class Uploadedfile(BaseUpload):
   post = models.ForeignKey(Post)
   upload_file=models.FileField(upload_to='lectut/images/')
-  name=models.CharField(max_length=100 , null=False)
+  description=models.CharField(max_length=100 , null=False)
   file_type=models.CharField(max_length=10 , null=False)
   upload_type=models.CharField(max_length=3 , default='tut')
 
   def __unicode__(self):
     return str(self.upload_file)
 
-  def save(self, *args, **kwargs):
-    uploadedFile = super(UploadFile , self).save(*args, **kwargs)
+  '''def save(self, *args, **kwargs):
+    uploadedFile = super(UploadedFile , self).save(*args, **kwargs)
     currentBatch = Batch.objects.get(id = self.batch)
     students = currentBatch.students.all()
     notification.save_notification('lectut','The user' +self.upload_user+ 'uploaded a file','lectut/'+self.id+'/upload',students,self)
-    return uploadFile
+    return uploadFile'''
+
+  def as_dict(self):
+        fileData={
+           'post':self.post.id,
+           'upload_file':str(self.upload_file),
+           'description':self.description,
+           'file_type':self.file_type,
+           'upload_type':self.upload_type,
+        }
+        return fileData
 
 
 class UploadFile(BaseUpload):

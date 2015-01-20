@@ -1,4 +1,7 @@
 <!-- Add jQuery library -->
+<script type="text/javascript">
+    csrf_token = "{{ csrf_token }}";
+</script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL}}/js/lectut/lectut.js"></script>
@@ -30,17 +33,12 @@
   <body>
     {% if viewType == 'Coursepage' %}
         <h2>{{ batch.name }} ({{ batch.course.name}})</h2>
-            <form id='uploadFile'  method="post" enctype="multipart/form-data">{% csrf_token %}
-              <textarea style="width=80; height:50;"></textarea>
-              <input type="file" name ="files" id = "files" multiple>
+              <textarea id ="content" name ="content" style="width=80; height:50;"></textarea>
+              <input type="file" name ="files" id = "files" multiple>{% csrf_token %}
               <div id="selectedFiles"></div>
-                         <!-- {{text_form}}
-                          {{image_form}}
-                          {{file_form}}-->
+              <div id="batch_id">{{ batch.id }}</div>
         <div id="errorMsg"></div>
-      <!--iframe id="select"></iframe-->
-      <input type="Submit" id=" Submit" value="Submit">
-    </form>
+      <input type="button" id="post" value="post" onclick="uploadPost()">
     <a href="{% url 'useruploads' batch_id=batch.id %}"><input type="button" value="My uploads"></a>
     <a href="{% url 'userdownloads' batch_id=batch.id %}"><input type="button" value="My downloads"></a>
     <a href="{% url 'batchMembers' batch_id=batch.id %}"><input type="button" value="My downloads"></a>

@@ -43,9 +43,9 @@ $('#uploadFile').ajaxForm(function() {
 var selFile="";
 document.addEventListener("DOMContentLoaded", init, false);
 function init() {
-      document.querySelector('#files').addEventListener('change', handleFileSelect, false);
-      selFile = document.querySelector("#selectedFiles");
-            }
+  document.querySelector('#files').addEventListener('change', handleFileSelect, false);
+  selFile = document.querySelector("#selectedFiles");
+}
 
 function handleFileSelect(e) {
   if(!e.target.files) return;
@@ -57,19 +57,28 @@ function handleFileSelect(e) {
   }
 }
 
-$("#uploadFile").submit(function(event) {
+//$("#uploadFile").submit(function(event) {
+//$("#post").onclick=function(){
+function uploadPost(){
   var $form = $(this);
-  formtext =  $form.serialize();
+  formText =  $form.serialize();
+  formText = document.getElementById("content").value;
   formData = new FormData();
-  fdata.append('csrfmiddlewaretoken', csrf_token);
+  formFiles = document.getElementById("files");
+  var len=(formFiles.files).length;
+  var i;
+  for( i=0;i<len;i++)
+  {
+    formData.append("upload", formFiles.files[i]);
+  }
+  formData.append('formText', formText);
+  formData.append('csrfmiddlewaretoken', csrf_token);
   var batch_id = $('#batch_id').text();
   $.ajax({
-       csrfmiddlewaretoken: csrf_token,
        type: 'POST',
-       url: '/lectut/disp/upload/'+batch_id+'/',
+       url: '/lectut/disp/1/upload/',
        enctype: "multipart/form-data",
-       data:{'formData':formData,
-             'formText':formText},
+       data: formData,
        cache: false,
        contentType: false,
        processData: false,
@@ -85,4 +94,4 @@ $("#uploadFile").submit(function(event) {
          console.log('sdgvzdbdt');
          },
          });
-  });
+  }

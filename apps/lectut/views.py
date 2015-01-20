@@ -109,10 +109,29 @@ def uploadFile(request , batch_id):
     else:
       return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
+def uploadedFile(request , batch_id):
+  user = request.user
+  userBatch = Batch.objects.get(id=batch_id)
+  if request.method == 'POST':
+    import pdb;pdb.set_trace();
+    data = request.POST.get('formText','')
+    documents = request.FILES.getlist('upload')
+    new_post = Post(upload_user = user, batch = userBatch, content = data)
+    new_post.save()
+    for document in documents:
+      file_type = getFileType(document)
+      new_document = Uploadedfile(post =new_post, upload_file = document, description='', file_type=file_type)
+      new_document.save()
+  print
+  return user
+
+
+
 def getFileType(file_name):
 #mime = magic.Magic(mime=True)
 #file_type = mime.from_file(file_name)
-  extension = file_name.name.split(".")[1]
+  file_name = str(file_name)
+  extension = file_name.split(".")[1]
   if extension in ['jpg','png','jpeg','gif']:
     file_type="image"
   elif extension=='pdf':
