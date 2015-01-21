@@ -47,8 +47,8 @@ def index(request, year = None) :
     year_min = Feedback.objects.aggregate(min = Min('company__year'))['min']
     status = None
     if request.user.groups.filter(name = 'Student').exists() :
-      student = request.session['student']
-      status = request.session['plac_person'].status
+      student = request.user.student
+      status = student.placementperson.status
     sessions = []
     if not year_min :
       year_min = current_session
@@ -115,8 +115,8 @@ def fill(request) :
   """
   try :
     l.info(request.user.username + ': Giving Feedback for a company')
-    student = request.session['student']
-    plac_person = request.session['plac_person']
+    student = request.user.student
+    plac_person = student.placmentperson
     if plac_person.status != 'VRF' :
       l.info(request.user.username + ': Giving feedback for a company, but user not Verified')
       return TemplateView(request, template="404.html")

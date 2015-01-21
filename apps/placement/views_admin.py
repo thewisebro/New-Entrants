@@ -23,7 +23,7 @@ from placement.policy import current_session_year
 from placement.models import *
 from placement.utils import *
 
-import settings
+from django.conf import settings
 
 l = logging.getLogger('placement')
 
@@ -150,7 +150,7 @@ def shortlist(request, company_id, task = None) :
         sheet.write(row, 8, student.cgpa, style)
         sheet.write(row, 9, student.personal_contact_no,style)
         sheet.write(row, 10, student.email_id, style)
-      response = HttpResponse(mimetype='application/ms-excel')
+      response = HttpResponse(content_type='application/ms-excel')
       response['Content-Disposition'] = 'attachment; filename=' + sanitise_for_download(company.name) + '_Applications.xls'
       wbk.save(response)
       return response
@@ -232,7 +232,7 @@ def selected_students(request, company_id) :
       l.info(request.user.username + ': no finalised students for xls sheet')
       messages.error(request, 'No student has been finalized for ' + company.name + '.')
       return HttpResponseRedirect(reverse('placement.views.index'))
-    response = HttpResponse(mimetype='application/ms-excel')
+    response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=' + sanitise_for_download(company.name) + '_Applications.xls'
     wbk = xlwt.Workbook()
     heading_xf = xlwt.easyxf('font: bold on; align: vert centre, horiz center')
@@ -644,7 +644,7 @@ def branch_details_xls(request, branch_code) :
     educational_details = EducationalDetails.objects.all()
     person_info_all = StudentInfo.objects.all()
     apps = CompanyApplicationMap.objects.all()
-    for plac_person in plac_persons :
+    for plac_person in plac_persons:
       student = plac_person.student
       try :
         #tenth_marks = EducationalDetails.objects.get(student = student, course = '10TH').cgpa
@@ -695,7 +695,7 @@ def branch_details_xls(request, branch_code) :
       sheet.write(row, 10, detail[0].student.personal_contact_no)
       sheet.write(row, 11, detail[0].student.get_semester_display())
       row += 1
-    response = HttpResponse(mimetype='application/ms-excel')
+    response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=' + sanitise_for_download(branch.name) + '_Verified.xls'
     wbk.save(response)
     return response
@@ -735,7 +735,7 @@ def insert_shortlist(request):
     if not message:
       message = "Saved Successfully"
     json_data = json.dumps({'message':message,'is_success':is_success})
-    return HttpResponse(json_data,mimetype='application/json')
+    return HttpResponse(json_data,content_type='application/json')
   form = forms.AddShortlistForm()
   return render_to_response('placement/admin/shortlist.html',{
                             'form':form,},

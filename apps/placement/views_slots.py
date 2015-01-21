@@ -12,7 +12,6 @@ import xlwt
 import datetime
 from nucleus.models import Student
 from placement import policy, forms
-from placement.policy import current_session_year
 from placement.models import *
 from placement.utils import *
 from placement.forms import *

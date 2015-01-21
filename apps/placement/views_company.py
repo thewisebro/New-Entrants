@@ -38,8 +38,8 @@ def list(request) :
   try :
     l.info(request.user.username + ': viewed list of companies.')
     companies = Company.objects.filter(year = current_session_year() )
-    student = request.session['student']
-    plac_person = request.session['plac_person']
+    student = request.user.student
+    plac_person = student.placementperson
     status = [] # list to store the status of the application in order of the list "companies"
     # Different status possible are
     #   1. NOT - Not applicable

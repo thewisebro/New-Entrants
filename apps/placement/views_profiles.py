@@ -36,15 +36,14 @@ login_url = '/placement/'
 def photo(request):
   try :
     l.info(request.user.username + ': Opened view to add/update photo')
-    student = request.session['student']
-    plac_person = request.session['plac_person']
+    student = request.user.student
+    plac_person = student.placementperson
     if request.method == 'POST' :
       # Form has been submitted.
       form = forms.Place(request.POST, request.FILES, instance = plac_person)
       if form.is_valid() :
         form.save()
         plac_person = PlacementStudent.objects.get(student = student)
-        request.session['plac_person'] = plac_person
         l.info(request.user.username + ': successfully added/updated photo')
         messages.success(request, 'Photo updated successfully.')
         return HttpResponseRedirect(reverse('placement.views.index'))
@@ -75,7 +74,7 @@ def personal_information(request):
   """
   try:
     l.info(request.user.username + ': Opened view to update StudentInfo')
-    student = request.session['student']
+    student = request.user.student
     try:
       info = StudentInfo.objects.get(student = student)
     except StudentInfo.DoesNotExist as e:
@@ -156,8 +155,8 @@ def educational_details(request):
   """
   try :
     l.info(request.user.username + ': Viewing Eduational Details')
-    student = request.session['student']
-    plac_person = request.session['plac_person']
+    student = request.user.student
+    plac_person = student.placementperson
     if plac_person.status in ('LCK', 'VRF') :
       EducationalDetailsFormSet = modelformset_factory(EducationalDetails, form=forms.ModelForm,
                                                        can_delete = False, extra = 0, exclude = ('student', ))
@@ -239,11 +238,11 @@ def placement_information(request) :
   """
   try :
     l.info(request.user.username + ': Update/View Placement Information')
-    student = request.session['student']
+    student = request.user.student
     plac_info, created = PlacementInformation.objects.get_or_create(student = student)
     if created :
       l.info(request.user.username + ': Created default PlacementInformation')
-    plac_person = request.session['plac_person']
+    plac_person = student.placementperson
     if request.method == 'POST' :
       if plac_person.status == 'LCK' :
         # User cannot edit anything
@@ -306,8 +305,8 @@ def editset(request, model_name):
     # Only then the modelname can be passes to this function.
     allowed_models = ['ProjectInformation', 'InternshipInformation', 'JobExperiences',
                       'ExtraCurriculars', 'LanguagesKnown', 'ResearchPublications']
-    student = request.session['student']
-    plac_person = request.session['plac_person']
+    student = request.user.student
+    plac_person = student.placementperson
     action = model_name # the form will be submitted back to this view with this 'action'
     model_name_spaced = re.sub(r'_([a-z])', lambda pat: ' ' + pat.group(1).upper(), model_name.capitalize())
     # Remove underscores, make the first character after underscore capital, also make the first character capital
@@ -397,8 +396,8 @@ def facebook(request) :
   """
   try :
     l.info (request.user.username + ': Opened facebook.')
-    student = request.session['student']
-    plac_person = request.session['plac_person']
+    student = request.user.student
+    plac_person = student.placementperson
     if plac_person.status != 'VRF' :
       return TemplateView(request, template="404.html")
     try :

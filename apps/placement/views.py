@@ -61,9 +61,7 @@ def index(request):
         return render_to_response('placement/error.html', context_instance=RequestContext(request))
     # XXX : Do not take student from session, at least home page should reflect the changes.
     student = Student.objects.get(user = request.user)
-    request.user.student = student
     plac_person = PlacementPerson.objects.get_or_create(student = student)[0]
-    request.user.student.plac_person = plac_person
     if plac_person.status == 'VRF' :
       applications = CompanyApplicationMap.objects.filter(plac_person = plac_person, company__year__contains = current_session_year())
     else :
@@ -253,9 +251,6 @@ def forum(request, forum_type, page_no = None) :
   Show all the posts to the technical/placement forums.
   It saves the reply to a post also.
   """
-
-
-
   try :
     l.info(request.user.username+': Viewed Forum')
     if request.method == 'POST' :
@@ -273,7 +268,7 @@ def forum(request, forum_type, page_no = None) :
                                 person_name = student.name,
                                 content = request.POST['content'],
                                 )
-      elif request.user:
+      elif request.user.groups.filter(name='Placement Admin').exist():
         post = ForumPost.objects.get(pk = request.POST['post_id'])
         ForumReply.objects.create(post = post,
                                 enrollment_no = '00000000',
@@ -328,7 +323,7 @@ def forum_post(request) :
                                content = request.POST['content'],
                                forum_type = request.POST['forum_type']
                                )
-      elif request.user:
+      elif request.user.groups.filter(name='Placement Admin'):
         ForumPost.objects.create(enrollment_no = '00000000',
                                person_name = 'Placement Admin',
                                discipline_name = 'Admin',
