@@ -34,3 +34,6 @@
 [submodule "third_party_apps/django-modeladmin-reorder"]
 	path = third_party_apps/django-modeladmin-reorder
 	url = https://github.com/mishbahr/django-modeladmin-reorder
+[submodule "third_party_apps/django-static-precompile"]
+	path = third_party_apps/django-static-precompile
+	url = http://git.channeli.in/django-static-precompile.git
