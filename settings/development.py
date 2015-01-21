@@ -45,7 +45,7 @@ MANAGERS = ADMINS
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-    'NAME': 'nextone',                   # Or path to database file if using sqlite3.
+    'NAME': 'fish',                   # Or path to database file if using sqlite3.
                                           # The following settings are not used with sqlite3:
     'USER': 'channeli',
     'PASSWORD': 'channeli',
@@ -138,8 +138,8 @@ STATICFILES_FINDERS = (
   'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
   'compressor.finders.CompressorFinder',
-  'api.finders.HandlebarsFinder',
-  'api.finders.SassFinder',
+  'static_precompile.finders.SassFinder',
+  'static_precompile.finders.HandlebarsFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -228,6 +228,7 @@ THIRD_PARTY_APPS = (
   'haystack',
   'filemanager',
   'admin_reorder',
+  'static_precompile',
 )
 
 CHANNELI_APPS = (
@@ -363,15 +364,15 @@ LOGGING = {
       'propagate': True,
     },
     'channel-i_logger': {
-      'handlers':['file_logger', 'console'],
+      'handlers':['console'],
       'level':'INFO'
     },
     'lostfound': {
-      'handlers':['lostfound_file_logger', 'console'],
+      'handlers':['console'],
       'level':'INFO'
     },
     'buysell': {
-      'handlers':['buysell_file_logger', 'console'],
+      'handlers':['console'],
       'level':'INFO'
     },
   }
