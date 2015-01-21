@@ -70,9 +70,10 @@ function uploadPost(){
   for( i=0;i<len;i++)
   {
     fileDescription = document.getElementById("file_"+i).value;
-    FileField = {'file':formFiles.files[i] , 'description':fileDescription};
-    //formData.append("upload", formFiles.files[i]);
-    formData.append("upload",FileField);
+    FileField = JSON.stringify({'description':fileDescription});
+    formData.append("upload", formFiles.files[i]);
+    formData.append("extra",FileField);
+    //formData.append("upload",FileField);
   }
   formData.append('formText', formText);
   formData.append('csrfmiddlewaretoken', csrf_token);

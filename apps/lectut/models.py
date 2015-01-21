@@ -71,6 +71,14 @@ class Post(models.Model):
   def __unicode__(self):
     return str(self.content)
 
+  def save(self, *args, **kwargs):
+    post = super(Post , self).save(*args, **kwargs)
+    currentBatch = Batch.objects.get(id = self.batch.id)
+    students = currentBatch.students.all()
+    users = map(lambda x:x.user, students)
+    Notification.save_notification('lectut','The user ' +str(self.upload_user.name)+ ' uploaded a post','lectut/'+str(currentBatch.id)+'/upload',users,self)
+    return post
+
   def as_dict(self):
     postData={
       'upload_user': str(self.upload_user.name),

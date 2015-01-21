@@ -69,6 +69,24 @@ def coursepage(request, batch_id):
              'viewType':'Coursepage'}
   return render( request, 'lectut/image.html', context)
 
+@login_required
+def coursepage(request, batch_id):
+    user = request.user
+    userBatch = Batch.objects.get(id=batch_id)
+    request.session['batchId'] = batch_id
+    userType=getUserType(user)
+
+    previous_posts = Post.objects.all().filter(batch_id=batch_id).order_by('-datetime_created')
+    for post in previous_posts:
+      post = post.as_dict()
+
+    context = {'previous_posts': previous_posts,
+               'batch':userBatch,
+               'userType':userType,
+               'viewType':'Coursepage'}
+
+    return render( request, 'lectut/image.html', context)
+
 def uploadFile(request , batch_id):
   user = request.user
   userBatch = Batch.objects.get(id=batch_id)
@@ -113,18 +131,28 @@ def uploadedFile(request , batch_id):
   user = request.user
   userBatch = Batch.objects.get(id=batch_id)
   if request.method == 'POST':
-    import pdb;pdb.set_trace();
     data = request.POST.get('formText','')
     documents = request.FILES.getlist('upload')
+    extra = request.POST.getlist('extra','')
+    counter = 0
+    import pdb;pdb.set_trace()
     new_post = Post(upload_user = user, batch = userBatch, content = data)
     new_post.save()
     for document in documents:
       file_type = getFileType(document)
-      new_document = Uploadedfile(post =new_post, upload_file = document, description='', file_type=file_type)
-      new_document.save()
-  print
-  return user
+      fileData = json.loads(extra[counter])
+      counter = counter + 1
+      if file_type!='Video' and  document._size>MAX_FILE_SIZE:
+        msg = "File too large.Must be smaller than 5MB"
+      elif document._size>MAX_VIDEO_SIZE:
+        msg = "Video too large.Must be smaller than 20MB"
+      else:
+        new_document = Uploadedfile(post =new_post, upload_file = document, description = fileData['description'], file_type=file_type)
+        new_document.save()
 
+    if msg:
+      return HttpResponse(json.dumps(msg), content_type='application/json')
+  return user
 
 
 def getFileType(file_name):
