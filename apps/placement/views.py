@@ -161,7 +161,6 @@ def apply(request, company_id) :
     # Do not pick plac_person from session as the plac_person might get updated
     # from django-admin
     plac_person = PlacementPerson.objects.get(student = student)
-    request.user.student.plac_person = plac_person
     if plac_person.status != 'VRF' :
       return HttpResponse('You are not elligible for placements.')
     msg = policy.can_apply(plac_person, company)

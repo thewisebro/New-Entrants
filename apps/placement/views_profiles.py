@@ -15,7 +15,7 @@ import datetime
 from core import forms
 from api import model_constants as MC
 from placement.forms import BaseModelFormFunction
-from placement import forms, policy
+from placement import forms as plac_forms, policy
 from placement.models import *
 from placement.policy import current_session_year
 from placement.utils import *
@@ -41,9 +41,8 @@ def photo(request):
     if request.method == 'POST' :
       # Form has been submitted.
       form = forms.Place(request.POST, request.FILES, instance = plac_person)
-      if form.is_valid() :
+      if form.is_valid():
         form.save()
-        plac_person = PlacementStudent.objects.get(student = student)
         l.info(request.user.username + ': successfully added/updated photo')
         messages.success(request, 'Photo updated successfully.')
         return HttpResponseRedirect(reverse('placement.views.index'))
@@ -52,7 +51,7 @@ def photo(request):
     else:
       # Form has not been submitted.
       form = forms.Place(instance = plac_person)
-      if plac_person.photo :
+      if plac_person.photo:
         # Change the url of photo
         plac_person.photo.name = u'placement/photo/'
     return render_to_response('placement/basic_form.html', {
@@ -98,7 +97,7 @@ def personal_information(request):
       form = forms.Profile(instance = info)
     return render_to_response('placement/basic_form.html', {
         'form': form,
-        'title': 'Studental Information',
+        'title': 'Personal Information',
         'action': reverse('placement.views_profiles.personal_information'),
         'editable_warning': 'Will not be editable once Locked.'
         }, context_instance=RequestContext(request))
@@ -154,6 +153,7 @@ def educational_details(request):
     View/Update Educational Details
   """
   try :
+    import pdb; pdb.set_trace()
     l.info(request.user.username + ': Viewing Eduational Details')
     student = request.user.student
     plac_person = student.placementperson

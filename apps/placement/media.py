@@ -35,7 +35,7 @@ def photo(request) :
   """
   #Not logging this function as it is going to be called in each view.
   try :
-    photo = request.user.placementperson.photo
+    photo = request.user.student.placementperson.photo
   except Exception as e :
     photo = None
   if photo and os.path.exists(photo.path) :
@@ -77,8 +77,8 @@ def submitted_resume(request, company_id) :
   """
   try :
     l.info(request.user.username+': Downloading Resumes for '+str(company_id))
-    person = request.session['person']
-    filename = os.path.join(settings.MEDIA_ROOT, 'placement', 'applications', 'company'+str(company_id), str(person.user.username)+'.pdf')
+    student = request.user.student
+    filename = os.path.join(settings.MEDIA_ROOT, 'placement', 'applications', 'company'+str(company_id), str(student.user.username)+'.pdf')
     if not os.path.exists(filename) : # the user has not applied to the company
       raise Http404
     wrapper = FileWrapper(file(filename))
@@ -169,9 +169,9 @@ def institute_results_sectorwise(request) :
   for result in Results.objects.filter(company__year__exact = current_session).values('company__sector').annotate(count=Count('company__sector')) :
     sheet.write(list_sector.index(result['company__sector'])+3,
                 1, result['count'])
-  for result in Results.objects.filter(company__year__exact = current_session).values('company__sector','person__branch__graduation').annotate(count=Count('company__sector')) :
+  for result in Results.objects.filter(company__year__exact = current_session).values('company__sector','student__branch__graduation').annotate(count=Count('company__sector')) :
     sheet.write(list_sector.index(result['company__sector'])+3,
-                list_graduation.index(result['person__branch__graduation'])+2,
+                list_graduation.index(result['student__branch__graduation'])+2,
                 result['count'])
   sheet_bwise_comp_arrived = wbk.add_sheet('Branchwise - Companies Arrived')
   sheet_bwise_stud_placed = wbk.add_sheet('Branchwise - Students Placed')
@@ -240,20 +240,20 @@ def institute_results_sectorwise(request) :
     sheet.write(2, col+2, title, heading_xf)
   for (row, branch) in enumerate(Branch.objects.all()) :
     sheet.write(row+3, 0, branch.name, heading_xf)
-  for result in Results.objects.filter(company__year__exact = current_session).values('person__branch').annotate(count=Count('person__branch')) :
-    sheet.write(list_branch['overall'].index(result['person__branch'])+3,
+  for result in Results.objects.filter(company__year__exact = current_session).values('student__branch').annotate(count=Count('student__branch')) :
+    sheet.write(list_branch['overall'].index(result['student__branch'])+3,
                 1, result['count'])
-    graduation = branch_graduation_dict[result['person__branch']]
+    graduation = branch_graduation_dict[result['student__branch']]
     sheets_stud_placed[list_graduation.index(graduation)
-                        ].write(list_branch[graduation].index(result['person__branch'])+3,
+                        ].write(list_branch[graduation].index(result['student__branch'])+3,
                                 1, result['count'])
-  for result in Results.objects.filter(company__year__exact = current_session).values('person__branch','company__sector').annotate(count=Count('person__branch')) :
-    sheet.write(list_branch['overall'].index(result['person__branch'])+3,
+  for result in Results.objects.filter(company__year__exact = current_session).values('student__branch','company__sector').annotate(count=Count('student__branch')) :
+    sheet.write(list_branch['overall'].index(result['student__branch'])+3,
                 list_sector.index(result['company__sector'])+2,
                 result['count'])
-    graduation = branch_graduation_dict[result['person__branch']]
+    graduation = branch_graduation_dict[result['student__branch']]
     sheets_stud_placed[list_graduation.index(graduation)
-                        ].write(list_branch[graduation].index(result['person__branch'])+3,
+                        ].write(list_branch[graduation].index(result['student__branch'])+3,
                                 list_sector.index(result['company__sector'])+2,
                                 result['count'])
   wbk.save(response)
@@ -301,15 +301,15 @@ def institute_results_companywise(request) :
 
   total_ctc = defaultdict(int)
   total_selections = defaultdict(int)
-  for result in Results.objects.filter(company__year__exact = current_session).values('company', 'person__branch__graduation').annotate(count = Count('company')) :
-    grad = result['person__branch__graduation']
+  for result in Results.objects.filter(company__year__exact = current_session).values('company', 'student__branch__graduation').annotate(count = Count('company')) :
+    grad = result['student__branch__graduation']
     row = company_row_map[result['company']] + 3
     sheet.write(row, graduation_col_map[grad]+3, result['count'])
     company = Company.objects.get(id = result['company'])
     package = company.__getattribute__('package_' + grad.lower())  # it's a hack
     total_ctc[row] += get_ctc(package)
     total_selections[row] += result['count']
-    last_row[result['person__branch__graduation']] += result['count']
+    last_row[result['student__branch__graduation']] += result['count']
 
   sheet.write(last_row_num+3, 2, last_row.pop('overall'), heading_xf)
   for graduation, count in last_row.items() :
@@ -335,8 +335,8 @@ def institute_results_branchwise(request) :
   wbk = xlwt.Workbook()
   heading_xf = xlwt.easyxf('font: bold on; align: vert centre, horiz center')
 
-  # Branches which have atleast a single person placed
-  branches = Results.objects.filter(company__year__exact = current_session).values_list('person__branch', flat = True).distinct()
+  # Branches which have atleast a single student placed
+  branches = Results.objects.filter(company__year__exact = current_session).values_list('student__branch', flat = True).distinct()
   for branch in branches :
     branch = Branch.objects.get(code = branch)
     sheet = wbk.add_sheet(branch.department + '-' + branch.code)
@@ -353,11 +353,11 @@ def institute_results_branchwise(request) :
     total_ctc = 0
     total_placed = 0
     # students which are placed in at least 1 company
-    students = Results.objects.filter(company__year__exact = current_session, person__branch = branch).order_by('-person__cgpa').values_list('person', flat = True).distinct()
+    students = Results.objects.filter(company__year__exact = current_session, student__branch = branch).order_by('-student__cgpa').values_list('student', flat = True).distinct()
     for row, student in enumerate(students) :
       # The student may get placed in two companies as well
-      placements = Results.objects.filter(company__year__exact = current_session, person = student)
-      student = placements[0].person # convert the id of person into full person
+      placements = Results.objects.filter(company__year__exact = current_session, student = student)
+      student = placements[0].student # convert the id of student into full student
       sheet.write(row+3, 0, student.name, heading_xf)
       sheet.write(row+3, 1, student.cgpa)
       company1 = placements[0].company
@@ -393,26 +393,26 @@ def institute_results(request) :
   # using foreign key reference fires a db query, so don't use them
   current_session = current_session_year()
   results = Results.objects.filter(company__year__exact = current_session
-                                   ).values_list('person', 'company')
+                                   ).values_list('student', 'company')
   results_map = {}
   companies = set()
-  for (person, company) in results :
-    if person in results_map.keys() :
-      results_map[person].append(company)
+  for (student, company) in results :
+    if student in results_map.keys() :
+      results_map[student].append(company)
     else :
-      results_map[person] = [company]
+      results_map[student] = [company]
     companies.add(company)
-  persons_map = {}
+  students_map = {}
   users = []
-  for person in Person.objects.filter(pk__in = results_map.keys()) :
-    persons_map[person.pk] = {'name' : person.name,
-                              'cgpa' : person.cgpa,
-                              'branch' : person.branch_id,
-                              'year' : 1 + current_session - int(person.admission_year),
-                              'email_id' : person.email_id,
-                              'contact_no' : person.personal_contact_no,
+  for student in Student.objects.filter(pk__in = results_map.keys()) :
+    students_map[student.pk] = {'name' : student.name,
+                              'cgpa' : student.cgpa,
+                              'branch' : student.branch.name,
+                              'year' : 1 + current_session - int(student.admission_year),
+                              'email_id' : student.email_id,
+                              'contact_no' : student.personal_contact_no,
                               }
-    users.append(person.user_id)
+    users.append(student.user_id)
   companies_map = {}
   for company in Company.objects.filter(pk__in = companies) :
     companies_map[company.pk] = company.name
@@ -434,23 +434,23 @@ def institute_results(request) :
              'CGPA', 'Company1', 'Company2', 'Contact No', 'Email ID')
   for (col, heading) in enumerate(headers) :
     sheet.write(2, col, heading, heading_xf)
-  for (row, person_id) in enumerate(results_map) :
+  for (row, student_id) in enumerate(results_map) :
     row += 3
-    person_detail = persons_map[person_id]
-    branch_detail = branch_map[person_detail['branch']]
-    result_detail = results_map[person_id]
+    student_detail = students_map[student_id]
+    branch_detail = branch_map[student_detail['branch']]
+    result_detail = results_map[student_id]
     sheet.write(row, 0, row-2)
-    sheet.write(row, 1, users_map[person_id])
-    sheet.write(row, 2, person_detail['name'])
+    sheet.write(row, 1, users_map[student_id])
+    sheet.write(row, 2, student_detail['name'])
     sheet.write(row, 3, branch_detail['name'])
     sheet.write(row, 4, branch_detail['degree'])
-    sheet.write(row, 5, person_detail['cgpa'])
+    sheet.write(row, 5, student_detail['cgpa'])
     sheet.write(row, 6, companies_map[result_detail[0]])
     if len(result_detail) > 1 :
       sheet.write(row, 7, companies_map[result_detail[1]])
-    sheet.write(row, 8, person_detail['contact_no'])
-    sheet.write(row, 9, person_detail['email_id'])
-  response = HttpResponse(mimetype='application/ms-excel')
+    sheet.write(row, 8, student_detail['contact_no'])
+    sheet.write(row, 9, student_detail['email_id'])
+  response = HttpResponse(content_type='application/ms-excel')
   response['Content-Disposition'] = 'attachment; filename=' + sanitise_for_download(company.name) + '_Applications.xls'
   wbk.save(response)
   return response

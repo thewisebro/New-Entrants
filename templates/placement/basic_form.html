@@ -3,8 +3,11 @@
 {% block app_content %}
 
 {% if error_msg %}
+{% block messages %}
 {{ error_msg }}
+{% endblock %}
 {% endif %}
+
 
 {% if title %}
 <h3>{{ title }}</h3>
@@ -15,11 +18,11 @@
 <p class="editable_warning">{{ editable_warning }}</p>
 {% endif %}
 
-{% include "generic_form.html" with action=action form=form name=name %}
+{% include "placement/generic_form.html" with action=action form=form name=name %}
 
 {% endblock %}
 
-{% block scripts %}
+{% block app_scripts %}
 {% if branches_button_required %}
 {# Add Check and uncheck buttons to the company addition form. #}
 <div id="company_add_check_buttons">
@@ -40,7 +43,7 @@ function check_all()
   {
     document.getElementById('id_open_for_disciplines_'+i).checked = true;
     i++;
-  }
+ }
   return false;
 }
 

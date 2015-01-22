@@ -61,12 +61,12 @@
   </div>
   <div id="main_menu">
     <nav id="cen_menu">
-      <li><img src="{{ STATIC_URL }}images/menu1.jpg"></li>
-      <li><img src="{{ STATIC_URL }}images/menu1.jpg"></li>
-      <li><img src="{{ STATIC_URL }}images/menu1.jpg"></li>
-      <li><img src="{{ STATIC_URL }}images/menu1.jpg"></li>
-      <li><img src="{{ STATIC_URL }}images/menu1.jpg"></li>
-      <li class="last_icon"><img src="{{ STATIC_URL }}images/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/placement/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/placement/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/placement/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/placement/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/placement/menu1.jpg"></li>
+      <li class="last_icon"><img src="{{ STATIC_URL }}images/placement/menu1.jpg"></li>
  </nav>
   </div>
   <div id="feeds"></div>
@@ -77,26 +77,26 @@
       <div id="main_content">
         {% block left_sidebar %} {% endblock %}
         <div id="content_middle">
-
-          {% if messages %}
-          {% for message in messages %}
-          {% if message.tags == 'form_error error' %}
-            {# As form errors already have html p tag and class='error_field', we need to do this. #}
-            {% autoescape off %}
-              {{ message|safe }}
-            {% endautoescape %}
-          {% else %}
-            {# For those messages that have a tag, the tag name equals the class name. #}
-            {% if message.tags %}
-              <p class="{{ message.tags }}">{{ message|safe }}</p>
+          {% block messages %}
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'form_error error' %}
+              {# As form errors already have html p tag and class='error_field', we need to do this. #}
+              {% autoescape off %}
+                {{ message|safe }}
+              {% endautoescape %}
             {% else %}
-              {# For those messages that don't have a tag, class name is 'unknown_message'. #}
-              <p class="unknown_message">{{ message|safe }}</p>
+              {# For those messages that have a tag, the tag name equals the class name. #}
+              {% if message.tags %}
+                <p class="{{ message.tags }}">{{ message|safe }}</p>
+              {% else %}
+                {# For those messages that don't have a tag, class name is 'unknown_message'. #}
+                <p class="unknown_message">{{ message|safe }}</p>
+              {% endif %}
             {% endif %}
-          {% endif %}
-          {% endfor %}  {# End message for #}
-          {% endif %}  {# End messages if #}
-
+            {% endfor %}  {# End message for #}
+            {% endif %}  {# End messages if #}
+          {% endblock %} {# End message block #}
           {% block app_content %}{% endblock %}
 
         </div>

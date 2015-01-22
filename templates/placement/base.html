@@ -23,8 +23,7 @@ Placement Online
 {% block header_links %}
 <div id="header_app_links">
   <nav>
-    {% for group in student.user.groups.all %}
-
+    {% for group in user.groups.all %}
       {% if group.name == 'Student' %}
       <a href="{% url 'placement.views.index' %}">Home</a>
       &nbsp;|&nbsp;
@@ -67,7 +66,7 @@ Placement Online
 
 {% block left_sidebar %}
 <div id="content_left">
-  {% for group in student.user.groups.all %}
+  {% for group in user.groups.all %}
   {% if group.name == 'Student' %}
   <nav id="content_left_tabs" class="tabs_nav">
     <ul>
@@ -83,14 +82,14 @@ Placement Online
     <section class="tab" id="tab1">
       <nav id="menus">
         {% block tab_1 %}
-        {% for group in student.user.groups.all %}
+        {% for group in user.groups.all %}
         <ul>
           {% if group.name == 'Student' %}
 
           <a href="{% url 'placement.views.index' %}">
             <li id="home_li">Home</li>
           </a>
-          {% if plac_person.status != 'VRF' and plac_person.status != 'LCK' %}
+          {% if user.student.placementperson.status != 'VRF' and user.student.placementperson.status != 'LCK' %}
           <a href="{% url 'placement.views_profiles.personal_information' %}">
             <li id="personal_information_li">Personal Information</li>
           </a>
@@ -235,7 +234,7 @@ Placement Online
     <section class="tab" id="tab2">
       <nav id="menus">
         {% block tab_2 %}
-        {% for group in student.user.groups.all %}
+        {% for group in user.groups.all %}
         <ul>
           {% if group.name == 'Student' %}
           
@@ -243,7 +242,7 @@ Placement Online
             <li id="company_list_li">Company List</li>
           </a>
 
-          {% if plac_person.status == 'VRF' %}
+          {% if user.student.placementperson.status == 'VRF' %}
 
           <a href="{% url 'placement.views_slots.view_all_slots' %}" >
             <li id="view_slots_li">Company Slot</li>
@@ -259,7 +258,7 @@ Placement Online
             <li id="forms_li">Forms</li>
           </a>
 
-          {% if plac_person.status == 'VRF' %}
+          {% if user.student.placementperson.status == 'VRF' %}
           <a href="{% url 'placement.views_profiles.facebook' %}" >
             <li id="facebook_li">Facebook</li>
           </a>
