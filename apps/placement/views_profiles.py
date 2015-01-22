@@ -153,7 +153,7 @@ def educational_details(request):
     View/Update Educational Details
   """
   try :
-    import pdb; pdb.set_trace()
+#    import pdb; pdb.set_trace()
     l.info(request.user.username + ': Viewing Eduational Details')
     student = request.user.student
     plac_person = student.placementperson
