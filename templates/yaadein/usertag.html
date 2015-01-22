@@ -11,9 +11,12 @@
           </ul>
        </div>
        <div>
-        {% for post in posts %}
+        {% for data in posts_data %}
          <div>
-         {{ post.text_content }}
+         {{ data.post.text_content }}
+         {% for image in data.images %}
+          <img width="200" height="200" src="{{ image }}" />
+         {% endfor %}  
          </div>
         {% endfor %}
        </div>

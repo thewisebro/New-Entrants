@@ -11,7 +11,7 @@ class YaadeinUser(models.Model):
    user = models.OneToOneField(User)
    coverpic = models.FileField(upload_to='yaadein/coverpic/', null=True, blank=True)
    def __unicode__(self):
-     return self.user.username
+     return self.user.name
 
 class Post(models.Model):
   text_content = models.CharField(max_length=200)
