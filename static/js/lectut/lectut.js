@@ -88,9 +88,12 @@ function uploadPost(){
        processData: false,
        success:function(data){
        alert(batch_id+"success reached");
-       if(data.msg)
+       document.getElementById('content').value='';
+       selFile.innerHTML = '';
+       //document.getElementById('errorMsg').innerHTML=data;
+       if(data)
        {
-         document.getElementById('errorMsg').innerHTML=data.msg;
+         document.getElementById('errorMsg').innerHTML=data;
        }
        },
        error:function(data){

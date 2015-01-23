@@ -20,11 +20,12 @@ from django import forms
 def tester(request):
       return HttpResponse("Hello, world. You're at lectut.")
 
-MAX_FILE_SIZE =  524   #5242880
+MAX_FILE_SIZE =  5242880
 MAX_VIDEO_SIZE = 20971520
 
 def dispbatch(request):
-  active = request.user.is_active
+#use is_authrenticted
+  active = request.user.is_authenticated
   if active:
     if request.user.in_group('student'):
       student = request.user.student
@@ -44,7 +45,7 @@ def archives(request):
   return
 
 @login_required
-def coursepage(request, batch_id):
+def coursepage_old(request, batch_id):
   user = request.user
   userBatch = Batch.objects.get(id=batch_id)
   request.session['batchId'] = batch_id
@@ -73,18 +74,27 @@ def coursepage(request, batch_id):
 def coursepage(request, batch_id):
     user = request.user
     userBatch = Batch.objects.get(id=batch_id)
+    posts = []
     request.session['batchId'] = batch_id
     userType=getUserType(user)
 
     previous_posts = Post.objects.all().filter(batch_id=batch_id).order_by('-datetime_created')
     for post in previous_posts:
+      documents =  Uploadedfile.objects.all().filter(post=post)
       post = post.as_dict()
+      files = []
+      for document in documents:
+        document = document.as_dict()
+        files.append(document)
+      complete_post = {'post':post,'files':files}
+      posts.append(complete_post)
 
-    context = {'previous_posts': previous_posts,
-               'batch':userBatch,
+    context = {'posts': posts,
+#'batch':userBatch,
                'userType':userType,
                'viewType':'Coursepage'}
 
+    return HttpResponse(json.dumps(context),content_type='application/json')
     return render( request, 'lectut/image.html', context)
 
 def uploadFile(request , batch_id):
@@ -135,9 +145,12 @@ def uploadedFile(request , batch_id):
     documents = request.FILES.getlist('upload')
     extra = request.POST.getlist('extra','')
     counter = 0
-    import pdb;pdb.set_trace()
-    new_post = Post(upload_user = user, batch = userBatch, content = data)
-    new_post.save()
+    try:
+      new_post = Post(upload_user = user, batch = userBatch, content = data)
+      new_post.save()
+      msg = "post added successfully"
+    except:
+      msg = "Cannot save post"
     for document in documents:
       file_type = getFileType(document)
       fileData = json.loads(extra[counter])

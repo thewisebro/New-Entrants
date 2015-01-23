@@ -14,19 +14,6 @@ from notifications.models import Notification
 fs = FileSystemStorage(location='Uploads')
 
 # Create your models here.
-'''class LectutUser(models.Model):
-  user=models.OneToOneField(User)
-
-  def __unicode__(self):
-      return str(self.user)
-
-class LectutBatch(models.Model):
-  name=models.CharField(max_length=5 , null=True)
-  lectutuser=models.ManyToManyField(LectutUser)
-  course=models.ForeignKey(Course)
-
-  def __unicode__(self):
-     return str(self.name)'''
 
 class TextNotice(models.Model):
   text=models.CharField(max_length=500 , null=False)
@@ -97,13 +84,6 @@ class Uploadedfile(BaseUpload):
 
   def __unicode__(self):
     return str(self.upload_file)
-
-  '''def save(self, *args, **kwargs):
-    uploadedFile = super(UploadedFile , self).save(*args, **kwargs)
-    currentBatch = Batch.objects.get(id = self.batch)
-    students = currentBatch.students.all()
-    notification.save_notification('lectut','The user' +self.upload_user+ 'uploaded a file','lectut/'+self.id+'/upload',students,self)
-    return uploadFile'''
 
   def as_dict(self):
         fileData={
@@ -183,20 +163,8 @@ class Activity(models.Model):
   post_save.connect(create_upload, sender=BaseUpload)
 
 
-   #Creates Activity when Upload model is created
-  def create_activity(sender, instance, *args, **kwargs):
-            if kwargs['created']:
-                      sku = u'%s%s%s' % (instance.log)
-                      s = Activity( log=instance)
-                      s.save()
 
-  post_save.connect(create_activity, sender=Upload)'''
-
-class FluentComments(models.Model):
-  threaded_comments=models.ForeignKey(ThreadedComment)
-  activity=models.ForeignKey(Activity)
-
-'''class Notification(models.Model):
+class Notification(models.Model):
   pub_date = models.DateTimeField('date published')
   ping=models.ForeignKey(prof)
 
