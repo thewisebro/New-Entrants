@@ -36,7 +36,17 @@
       {% endif %}
     {% endif %}
     {% csrf_token %}
-    {{ form.uniform }}
+    {% if isFormSet %}
+      {{ form.management_form }}
+      {% for frm in form %}
+        {{ frm.uniform }}
+        {{ frm.id }}
+          <hr>
+      {% endfor %}
+    {% else %}
+      {{ form.uniform }}
+    {% endif %}
+      
     <div class='submit_button' id='{{ name|default:"generic_form" }}_submit'> 
 	    <input type='submit' value='{{ submit|default:"Submit" }}' class="btn btn-primary"/>
       &nbsp;&nbsp;

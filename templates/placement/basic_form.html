@@ -3,9 +3,7 @@
 {% block app_content %}
 
 {% if error_msg %}
-{% block messages %}
 {{ error_msg }}
-{% endblock %}
 {% endif %}
 
 
@@ -18,7 +16,7 @@
 <p class="editable_warning">{{ editable_warning }}</p>
 {% endif %}
 
-{% include "placement/generic_form.html" with action=action form=form name=name %}
+{% include "placement/generic_form.html" with action=action form=form name=name isFormSet=isFormSet %}
 
 {% endblock %}
 

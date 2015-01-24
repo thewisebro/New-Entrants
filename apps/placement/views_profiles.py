@@ -40,17 +40,17 @@ def photo(request):
     plac_person = student.placementperson
     if request.method == 'POST' :
       # Form has been submitted.
-      form = forms.Place(request.POST, request.FILES, instance = plac_person)
+      form = plac_forms.Place(request.POST, request.FILES, instance = plac_person)
       if form.is_valid():
         form.save()
         l.info(request.user.username + ': successfully added/updated photo')
         messages.success(request, 'Photo updated successfully.')
-        return HttpResponseRedirect(reverse('placement.views.index'))
+        return HttpResponseRedirect(reverse('placement.views_profiles.photo'))
       else:
         messages.error(request, form.errors, extra_tags='form_error')
     else:
       # Form has not been submitted.
-      form = forms.Place(instance = plac_person)
+      form = plac_forms.Place(instance = plac_person)
       if plac_person.photo:
         # Change the url of photo
         plac_person.photo.name = u'placement/photo/'
@@ -83,18 +83,18 @@ def personal_information(request):
       info = StudentInfo.objects.create(student = student, birth_date = b_d, height = 180, weight = 60)
       l.info(request.user.username + ': created a default entry in personinfo.')
     if request.method == 'POST':
-      form = forms.Profile(request.POST, instance = info)
+      form = plac_forms.Profile(request.POST, instance = info)
       form.student = student
       if form.is_valid() :
         form.student = student
         form.save()
         l.info(request.user.username + ': Updated StudentInfo successfully. Redirecting to home.')
         messages.success(request, 'Profile saved successfully')
-        return HttpResponseRedirect(reverse('placement.views.index'))
+        return HttpResponseRedirect(reverse('placement.views_profiles.personal_information'))
       else:
         messages.error(request, form.errors, extra_tags='form_error')
     else :
-      form = forms.Profile(instance = info)
+      form = plac_forms.Profile(instance = info)
     return render_to_response('placement/basic_form.html', {
         'form': form,
         'title': 'Personal Information',
@@ -118,23 +118,25 @@ def contact(request):
     student = Student.objects.get(user = request.user)
     info = StudentInfo.objects.get_or_create(student = student)[0]
     if request.method == 'POST':
-      form = forms.Contact(request.POST, instance = student)
+      form = plac_forms.Contact(request.POST, instance = student)
       l.info(request.user.username + ': submitted student info.')
       # TODO : Use cleaned values from the form
       # this may lead to sql insertion!
-      student.email_id = request.POST['email_id']
+      student.user.email = request.POST['email_id']
       student.personal_contact_no = request.POST['personal_contact_no']
       student.bhawan = request.POST['bhawan']
       student.room_no = request.POST['room_no']
-      student.gender = request.POST['gender']
       info.home_contact_no = request.POST['permanent_contact_no']
       info.save()
       student.save()
       l.info(request.user.username + ': Updated Student successfully. Redirecting to home.')
       messages.success(request, 'Profile saved successfully')
-      return HttpResponseRedirect(reverse('placement.views.index'))
-    form = forms.Contact(instance=student, initial={'permanent_contact_no': info.home_contact_no})
-    editables = ('email_id', 'personal_contact_no', 'bhawan', 'room_no', 'gender', 'permanent_contact_no')
+      return HttpResponseRedirect(reverse('placement.views_profiles.contact'))
+    form = plac_forms.Contact(instance=student, initial={'permanent_contact_no': info.home_contact_no,
+                                                         'email_id': student.user.email,
+                                                         'personal_contact_no': student.user.contact_no,
+                                                         })
+    editables = ('email_id', 'personal_contact_no', 'bhawan', 'room_no', 'permanent_contact_no')
     return render_to_response('placement/generic_locked.html', {
         'form': form,
         'title': 'Contact Information',
@@ -142,7 +144,7 @@ def contact(request):
         'editables' : editables,
         }, context_instance=RequestContext(request))
   except Exception, e :
-    l.info(request.user.username + ': Exception in updating personal information')
+    l.info(request.user.username + ': Exception in updating contact information')
     l.exception(e)
     return handle_exc(e, request)
 
@@ -153,21 +155,21 @@ def educational_details(request):
     View/Update Educational Details
   """
   try :
-#    import pdb; pdb.set_trace()
     l.info(request.user.username + ': Viewing Eduational Details')
     student = request.user.student
     plac_person = student.placementperson
     if plac_person.status in ('LCK', 'VRF') :
-      EducationalDetailsFormSet = modelformset_factory(EducationalDetails, form=forms.ModelForm,
+      EducationalDetailsFormSet = modelformset_factory(EducationalDetails, form=forms.ModelForm, formset=plac_forms.EducationalFormset,
                                                        can_delete = False, extra = 0, exclude = ('student', ))
     else :
-      EducationalDetailsFormSet = modelformset_factory(EducationalDetails, form=forms.ModelForm,
+      EducationalDetailsFormSet = modelformset_factory(EducationalDetails, form=forms.ModelForm, formset=plac_forms.EducationalFormset,
                                                        can_delete = True, exclude = ('student', ))
     if request.method == 'POST' :
       if plac_person.status in ('LCK', 'VRF') :
         # The user cannot update this information if he is locked/verified/opened. He can only edit it if it is closed or open
         return TemplateView(request, template="404.html")
       formset = EducationalDetailsFormSet(request.POST, queryset = EducationalDetails.objects.filter(student = student))
+
       if formset.is_valid() :
         instances = formset.save(commit = False)
         # Make sure that the last element has student attached to it as it may be a newly created instance
@@ -192,7 +194,12 @@ def educational_details(request):
         student.save()
         l.info(request.user.username + ': Updated Educational Details successfully.')
         messages.success(request, 'Updated the Educational Details')
-        return HttpResponseRedirect(reverse('placement.views.index'))
+        return HttpResponseRedirect(reverse('placement.views_profiles.educational_details'))
+      else:
+        l.info(request.user.username +": Validation error in Educational Information")
+        messages.error(request, "Only one entry is allowed for a course.")
+        return HttpResponseRedirect(reverse('placement.views_profiles.educational_details'))
+
     else :
       formset = EducationalDetailsFormSet(queryset = EducationalDetails.objects.filter(student = student))
     # Override the choices for course as per the course of the user.
@@ -219,6 +226,7 @@ def educational_details(request):
     else :
       template = 'placement/basic_form.html'
     return render_to_response(template , {
+        'isFormSet' : True,
         'form' : formset,
         'title' : 'Educational Details',
         'action' : reverse('placement.views_profiles.educational_details'),

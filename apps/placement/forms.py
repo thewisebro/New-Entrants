@@ -1,6 +1,7 @@
 import os
 
 from django.contrib.admin.widgets import AdminDateWidget
+from django.forms.models import BaseModelFormSet
 
 from core import forms
 from api.custom_widgets import CKeditorWidget, CurrencyWidget
@@ -74,11 +75,28 @@ class Profile(forms.ModelForm):
                'category', 'home_contact_no')
   birth_date = forms.DateField(required = True, widget=forms.DateInput(attrs={'class':'iDateField'}))
 
+class EducationalFormset(BaseModelFormSet):
+  def clean(self):
+    super(EducationalFormset, self).clean()
+    courses = []
+    for form in self.forms:
+      if not form.empty_permitted:
+        courseField = form.cleaned_data['course']
+        if not courseField in courses:
+          courses.append(courseField)
+        else:
+          raise forms.ValidationError("Same courses is not allowed")
+    pass
+
 class Contact(forms.ModelForm):
+  email_id = forms.EmailField(required=True)
+  personal_contact_no = forms.CharField(required=True, max_length=12, help_text='must be working')
   permanent_contact_no = forms.CharField(required=False, max_length=12, help_text='must be working')
   class Meta:
     model = Student
-    exclude = ('user', 'photo', 'cgpa', 'passout_year')
+    exclude = ('user', 'cgpa', 'passout_year')
+    read_only_fields = ('semester', 'semester_no', 'branch', 'admission_year')
+    required_fields = ('email_id','personal_contact_no')
 
 class ChangeStatus(forms.Form) :
   enrollment_no = forms.CharField(help_text=' Enter Username / Enrollment No')
