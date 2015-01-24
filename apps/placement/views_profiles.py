@@ -35,6 +35,7 @@ login_url = '/placement/'
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
 def photo(request):
   try :
+    import pdb; pdb.set_trace()
     l.info(request.user.username + ': Opened view to add/update photo')
     student = request.user.student
     plac_person = student.placementperson
@@ -42,6 +43,14 @@ def photo(request):
       # Form has been submitted.
       form = plac_forms.Place(request.POST, request.FILES, instance = plac_person)
       if form.is_valid():
+        name = request.FILES['photo'].name
+        extension = name[-3:]
+        if extension.lower() not in ['jpg','gif','png','bmp']:
+          l.info(request.user.username + ': Invalid image type added')
+          messages.error(request, 'Invalid Image type')
+          return HttpResponseRedirect(reverse('placement.views_profiles.photo'))
+        request.FILES['photo'].name = student.user.username+'.'+extension
+        form = plac_forms.Place(request.POST, request.FILES, instance = plac_person)
         form.save()
         l.info(request.user.username + ': successfully added/updated photo')
         messages.success(request, 'Photo updated successfully.')
@@ -155,6 +164,7 @@ def educational_details(request):
     View/Update Educational Details
   """
   try :
+    import pdb; pdb.set_trace()
     l.info(request.user.username + ': Viewing Eduational Details')
     student = request.user.student
     plac_person = student.placementperson
@@ -167,7 +177,7 @@ def educational_details(request):
     if request.method == 'POST' :
       if plac_person.status in ('LCK', 'VRF') :
         # The user cannot update this information if he is locked/verified/opened. He can only edit it if it is closed or open
-        return TemplateView(request, template="404.html")
+        return TemplateView.as_view(template_name="404.html")
       formset = EducationalDetailsFormSet(request.POST, queryset = EducationalDetails.objects.filter(student = student))
 
       if formset.is_valid() :
@@ -254,7 +264,7 @@ def placement_information(request) :
     if request.method == 'POST' :
       if plac_person.status == 'LCK' :
         # User cannot edit anything
-        return TemplateView(request, template="404.html")
+        return TemplateView.as_view(template_name="404.html")
       if plac_person.status == 'VRF' :
         # The student can update only editable fields
         # TODO : clean the fields
@@ -321,7 +331,7 @@ def editset(request, model_name):
     model_name = re.sub(r'_([a-z])', lambda pat: pat.group(1).upper(), model_name.capitalize())
     if model_name not in allowed_models :
       l.info(request.user.username + ': Tried to edit ' + model_name + ', which is not allowed.')
-      return TemplateView(request, template="404.html")
+      return TemplateView.as_view(template_name="404.html")
     if model_name == 'ProjectInformation':
       editable_warning = '"Description", "Proirity" and "Visible" fields will be editable once Verified'
     elif model_name == 'LanguagesKnown':
