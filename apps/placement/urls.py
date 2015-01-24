@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from django.views.generic.base import TemplateView as direct_to_template
+from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 
 # HC means Hard Coded and hence the url cannot be changed
@@ -13,11 +13,9 @@ urlpatterns = patterns('placement.views',
   (r'^scorecard/$','scorecard'),
   (r'^company/(?P<company_id>\d+)/apply/$','apply'),
   (r'^company/(?P<company_id>\d+)/withdraw/$','withdraw'),
-  (r'^FAQ/$', login_required(direct_to_template), {'template' : 'placement/FAQ.html'}),
-  (r'^mynewsstudio/$',login_required(direct_to_template), {'template' : 'placement/my_news_studio.html'}),
-  (r'^sample/resumes/$',login_required(direct_to_template), {'template' : 'placement/samples.html',
-                          'extra_context' : {'counts' : range(1,11)}
-                          }),
+  (r'^FAQ/$', login_required(TemplateView.as_view(template_name='placement/FAQ.html'))),
+  (r'^mynewsstudio/$',login_required(TemplateView.as_view(template_name='placement/my_news_studio.html'))),
+  (r'^sample/resumes/$',login_required(TemplateView.as_view(template_name='placement/samples.html'))),
 # Forum urls
   (r'^forum/$', 'forum_post'),
   (r'^forum/(?P<forum_type>(T|P))/$', 'forum'),

@@ -13,13 +13,13 @@
   </thead>
   <tbody>
 
-    {% for count in counts %}
+    {% for count in "0123456789" %}
     <tr>
       <td>
-        <a href="{{ STATIC_URL }}placement/sample/resumes/ug_{{ count }}.pdf">Sample {{ count }}</a>
+        <a href="{{ STATIC_URL }}placement/sample/resumes/ug_{{ forloop.counter }}.pdf">Sample {{ forloop.counter }}</a>
       </td>
       <td>
-        <a href="{{ STATIC_URL }}placement/sample/resumes/pg_{{ count }}.pdf">Sample {{ count }}</a>
+        <a href="{{ STATIC_URL }}placement/sample/resumes/pg_{{ forloop.counter }}.pdf">Sample {{ forloop.counter }}</a>
       </td>
     </tr>
     {% endfor %}

@@ -357,7 +357,7 @@ def forum_post(request) :
 
       return HttpResponseRedirect(reverse('placement.views.forum', args=[ request.POST['forum_type'] ]))
     else :
-      return direct_to_template(request, template="404.html")
+      return TemplateView(request, template="404.html")
   except Exception as e :
     logger.info(request.user.username+': got an exception in forums')
     logger.exception(e)

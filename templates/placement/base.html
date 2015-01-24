@@ -14,12 +14,6 @@
 Placement Online
 {% endblock %}
 
-{% block app_scripts %}
-<script type="text/javascript">
-  $("#facebook_form textarea").attr("maxlength", "70");
-</script>
-{% endblock %}
-
 {% block header_links %}
 <div id="header_app_links">
   <nav>
@@ -257,12 +251,6 @@ Placement Online
           <a href="{% url 'placement.views_admin.notices' %}" >
             <li id="forms_li">Forms</li>
           </a>
-
-          {% if user.student.placementperson.status == 'VRF' %}
-          <a href="{% url 'placement.views_profiles.facebook' %}" >
-            <li id="facebook_li">Facebook</li>
-          </a>
-          {% endif %}
 
           <a href="/placement/sample/resumes/" >
             <li id="sample_resume_li">Sample Resumes</li>
