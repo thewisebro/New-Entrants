@@ -588,47 +588,6 @@ def downloads(request) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
-def generate_facebook(request, branch_code = None) :
-  try :
-    l.info(request.user.username + ': opened view to generate facebook')
-    if branch_code == None :
-      persons = PlacementPerson.objects.filter(status = 'VRF')
-      #branches=InternshipPerson.objects.values_list('person__branch__code', 'person__branch__name', 'person__branch__department').distinct()
-      branch_codes = persons.values_list('person__branch__code').distinct()
-      branches = Branch.objects.filter(code__in = branch_codes).order_by('degree')
-      return render_to_response('placement/generate_facebook.html', {
-          'branches' : branches,
-          }, context_instance = RequestContext(request))
-    else :
-      try:
-        branch = Branch.objects.get(pk = branch_code)
-      except Branch.DoesNotExist:
-        messages.error(request, "Branch does not exist with code "+str(branch_code))
-        return HttpResponseRedirect(reverse('placement.views.index'))
-      facebooks = Facebook.objects.filter(person__branch = branch, person__passout_year = None).order_by('person__user__username')
-      html  = render_to_string('placement/facebook.html',
-                           { 'pagesize' : 'A4',
-                             'branch' : branch,
-                             'facebooks' : facebooks,
-                             },
-                           context_instance = RequestContext(request))
-      result = StringIO.StringIO()
-      pdf = pisa.pisaDocument(StringIO.StringIO(html.encode('UTF-8')), result)
-      if pdf.err :
-        return HttpResponse('An error occured while generating the pdf file.')
-        l.info('An eroor occured while generating the pdf file')
-      response = HttpResponse(result.getvalue(), mimetype='application/pdf')
-      filename = sanitise_for_download(branch.code + "_facebooks")
-      response['Content-Disposition'] = 'attachment; filename=' + filename + '.pdf'
-      response['Content-Length'] = len(result.getvalue())
-      return response
-  except Exception as e:
-    l.info(request.user.username + ': encountered exception when generating facebook')
-    l.exception(e)
-    return handle_exc(e, request)
-
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def branch_details_xls(request, branch_code) :
   """
   Display list of students in a branch. If no branch is specified, it displays

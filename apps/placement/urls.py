@@ -77,8 +77,6 @@ urlpatterns += patterns('placement.views_admin',
                         (r'^secondround/$', 'second_round'),
                         (r'^downloads/$', 'downloads'),
                         (r'^test/$', 'test'),
-                        (r'^generate_facebook/$', 'generate_facebook'),
-                        (r'^generate_facebook/(?P<branch_code>\w+)/$', 'generate_facebook'),
                         (r'^insert_shortlist/$', 'insert_shortlist'),
                        )
 
@@ -111,7 +109,6 @@ urlpatterns += patterns('placement.views_profiles',
                         (r'^educational_details/$', 'educational_details'),
                         (r'^placement_information/$', 'placement_information'),
                         (r'^editset/(?P<model_name>\w+)/$', 'editset'),
-                        (r'^facebook/$', 'facebook'),
                         )
 
 # Result urls

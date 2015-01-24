@@ -62,5 +62,3 @@ def current_session_year():
   """
   return (datetime.date.today()-datetime.timedelta(6*365/12-1)).year
 
-# Edit this variable to make the facebook details uneditable or editable
-can_edit_facebook = True

@@ -262,7 +262,7 @@ def placement_information(request) :
         plac_info.course_taken     = request.POST['course_taken']
         plac_info.save()
         messages.success(request, 'Updated Placement Information')
-        return HttpResponseRedirect(reverse('placement.views.index'))
+        return HttpResponseRedirect(reverse('placement.views_profiles.placement_information'))
       form = BaseModelFormFunction(PlacementInformation, exclude_list = ('student', 'registration_no'),
                                    data = request.POST, instance = plac_info)
       if form.is_valid():
@@ -271,7 +271,7 @@ def placement_information(request) :
         instance.save()
         l.info(request.user.username + ': Updated Placement Information. Redirecting to home')
         messages.success(request, 'Updated Placement Information')
-        return HttpResponseRedirect(reverse('placement.views.index'))
+        return HttpResponseRedirect(reverse('placement.views_profiles.placement_information'))
       else:
         messages.error(request, form.errors, extra_tags='form_error')
     else :
@@ -370,7 +370,7 @@ def editset(request, model_name):
           instance.save()
         l.info (request.user.username + ': Update successfully- '+ model_name_spaced + '. Redirecting to home.')
         messages.success(request, 'Updated ' + model_name_spaced + '.')
-        return HttpResponseRedirect(reverse('placement.views.index'))
+        return HttpResponseRedirect(reverse('placement.views_profiles.editset', args=[action]))
       formset = FormSetFactory(request.POST, queryset = model_type.objects.filter(student = student))
       if formset.is_valid() :
         instances = formset.save(commit = False)
@@ -381,7 +381,7 @@ def editset(request, model_name):
           instance.save()
         l.info (request.user.username + ': Update successfully- '+ model_name_spaced + '. Redirecting to home.')
         messages.success(request, 'Updated ' + model_name_spaced + '.')
-        return HttpResponseRedirect(reverse('placement.views.index'))
+        return HttpResponseRedirect(reverse('placement.views_profiles.editset', args=[action]))
     else :
       formset = FormSetFactory(queryset = model_type.objects.filter(student = student))
     return render_to_response(template , {
@@ -389,58 +389,11 @@ def editset(request, model_name):
         'editables' : editables,
         'title' : model_name_spaced,
         'action' : reverse('placement.views_profiles.editset', args=[action]),
-        'editable_warning': editable_warning
+        'editable_warning': editable_warning,
+        'isFormSet': True,
         }, context_instance = RequestContext(request))
   except Exception as e :
     l.info(request.user.username + ': Exception in editing ' + str(model_name))
     l.exception(e)
     return handle_exc(e, request)
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
-def facebook(request) :
-  """
-  Show and edit the facebook details of the user.
-  """
-  try :
-    l.info (request.user.username + ': Opened facebook.')
-    student = request.user.student
-    plac_person = student.placementperson
-    if plac_person.status != 'VRF' :
-      return TemplateView(request, template="404.html")
-    try :
-      facebook_content = Facebook.objects.get(student = student)
-    except Facebook.DoesNotExist :
-      facebook_content = None
-    if request.method == 'POST' and policy.can_edit_facebook :
-      form = BaseModelFormFunction(Facebook, exclude_list = ('student'), data = request.POST, instance = facebook_content)
-      if form.is_valid() :
-        instance = form.save(commit = False)
-        instance.student = student
-        instance.save()
-        l.info (request.user.username + ': Updated facebook.')
-        messages.success(request, 'Facebook details updated.')
-        return HttpResponseRedirect(reverse('placement.views.index'))
-      else:
-        messages.error(request, form.errors, extra_tags='form_error')
-    if student.branch.degree == 'M.Tech.':
-      form = BaseModelFormFunction(Facebook, exclude_list = ('student'), instance = facebook_content)
-    else:
-      form = BaseModelFormFunction(Facebook, exclude_list = ('student', 'b_tech_degree'), instance = facebook_content)
-    if policy.can_edit_facebook :
-      # The details are uneditable
-      template = 'placement/basic_form.html'
-    else :
-      template = 'placement/generic_locked.html'
-    if student.branch.degree == 'M.Tech.':
-      form.fields['internship'].label = 'Internship/Work Experience'
-    return render_to_response(template , {
-        'form' : form,
-        'name' : 'facebook_form',
-        'title': 'Facebook',
-        'action' : reverse('placement.views_profiles.facebook')
-        }, context_instance = RequestContext(request))
-  except Exception as e :
-    l.info(request.user.username + ': Exception in editing facebook.')
-    l.exception(e)
-    return handle_exc(e, request)

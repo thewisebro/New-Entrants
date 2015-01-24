@@ -165,6 +165,9 @@ def BaseModelFormFunction(model_type, exclude_list=None, data=None,**kwargs):
   # Dynamically create class on the fly. So that only one function can create a generic model form for all models.
   class ObjectModelForm(forms.ModelForm):
     # Generic form settings:
+
+    error_css_class = 'control-group error'
+    required_css_class = 'required_field'
     error_css_class = error_css_class
     required_css_class = required_css_class
 

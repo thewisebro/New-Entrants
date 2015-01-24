@@ -49,15 +49,6 @@ class ProjectInformation(models.Model):
   def __unicode__(self):
     return str(self.title) + str(self.student)
 
-class Facebook(models.Model) :
-  student = models.OneToOneField(Student)
-  internship = models.TextField(validators=[MaxLengthValidator(70)])
-  projects = models.TextField(validators=[MaxLengthValidator(70)])
-  extra_curriculars = models.TextField(validators=[MaxLengthValidator(70)])
-  b_tech_degree = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
-  def __unicode__(self):
-    return str(self.student)
-
 class ExtraCurriculars(models.Model):
   # All fields req
   name_of_activity = models.CharField(max_length=MC.TEXT_LENGTH)
