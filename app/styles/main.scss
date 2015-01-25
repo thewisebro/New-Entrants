@@ -16,6 +16,40 @@
 
 /* Space out content a bit */
 body {
-	
+  background:#EEE;	
 }
 
+.header{
+  position:fixed;
+  width:100%;
+  height:50px;
+  background-color:#FFF;
+  z-index:99999;
+}
+
+.leftDiv{
+  position:fixed;
+  width:200px;
+  height:100%;
+  top:50px;
+  bottom:0px;
+  left:0px;
+  background-color:#333;  
+}
+
+.rightDiv{
+  position:fixed;
+  width:220px;
+  top:50px;
+  right:0px;
+  bottom:0px;
+  background-color:#333;  
+}
+
+.centerDiv{
+  position:absolute;
+  left:200px;
+  right:220px;
+  top:50px;
+  height:auto; 
+}
