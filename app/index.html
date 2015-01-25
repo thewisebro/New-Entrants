@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="lectutApp">
+  <body ng-app="lectutApp" ng-controller="MainCtrl">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -29,8 +29,24 @@
  
       <!-- Left Div 180px -->      
       <div class="leftDiv">
-      
-
+         <!-- User block-->
+         <div id="userblock">
+            <div id="userpic">
+              <img src="images/yeoman.png" alt="I'm Yeoman">
+            </div>
+            <div id="username">
+               {{userdetails.username}}<br>
+               {{userdetails.branch}}
+            </div>
+         </div> 
+         
+         <!-- My Courses -->
+         <div class="myCourse">
+            <div class="myCourseHeading">My Courses</div>
+            <ul>
+               <li ng-repeat="course in courses" ><span>{{course.id}} </span>{{course.name}}</li>
+            </ul>
+         </div> 
 
       </div>
 

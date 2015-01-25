@@ -1,55 +1,149 @@
 // bower:scss
 // endbower
 
+// Main colors
+ $primary: #333;
+
+// shades from white to black
+
+ $g0: #FFF;
+ $g1: #FAFBFC;
+ $g2: #FCFCFC;
+ $g3: #FAFAFA;
+ $g4: #F1F1F1;
+ $g5: #EEEEEE;
+ $g6: #EAEAEA;
+ $g7: #E1E2E3;
+ $g8: #E1E1E1;
+ $g9: #DDDDDD;
+ $g10: #CCCCCC;
+ $g11: #AAAAAA;
+ $g12: #929292;
+ $g13: #808080;
+ $g14: #656565;
+ $g15: #5F5F5F;
+ $g16: #555555;
+ $g17: #545454;
+ $g18: #444444;
+ $g19: #333333;
+ $g20: #000000;
+
+
+
+
 .browsehappy {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
+  margin:0.2em 0;
+  background:#ccc;
+  color:#000;
+  padding:0.2em 0;
 }
 
 /* Reset defaults */
 *{
-  margin:0;
+  margin: 0;
   padding:0;
 }
 
-/* Space out content a bit */
 body {
-  background:#EEE;	
+  background:red;	
 }
+
+// Main blocks 
 
 .header{
   position:fixed;
   width:100%;
-  height:50px;
-  background-color:#FFF;
+  height:55px;
+  background-color:$g0;
+  border-bottom:1px solid $g1;
   z-index:99999;
 }
 
 .leftDiv{
   position:fixed;
-  width:200px;
+  width:220px;
   height:100%;
-  top:50px;
+  top:55px;
   bottom:0px;
   left:0px;
-  background-color:#333;  
+  background-color:$g0;    
 }
 
 .rightDiv{
   position:fixed;
   width:220px;
-  top:50px;
+  top:55px;
   right:0px;
   bottom:0px;
-  background-color:#333;  
+  background-color:$g0;  
 }
 
 .centerDiv{
   position:absolute;
-  left:200px;
+  left:220px;
   right:220px;
-  top:50px;
-  height:auto; 
+  top:55px;
+  bottom:0;
+  height:auto;
+  background-color:$g1; 
 }
+// Header Div Css
+
+
+
+// Left Div Css
+
+// UserBlock
+
+#userblock{
+  width:100%;
+  height:auto;
+  background-color:$g8;  
+  text-align:center;
+}
+
+#userpic{
+  padding-top:20px;
+}
+
+#userPicSource{
+  
+}
+#username{
+  padding:20px;
+}
+
+.myCourse{
+   ul{
+    li{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 10px 15px;
+      cursor:pointer;
+      &:hover{
+        background-color:$g6;
+      }
+    }
+   }
+}
+
+.myCourseHeading{
+  border-bottom:1px solid $g8;
+  padding:10px;
+
+}
+
+
+// Right Div Css
+
+
+
+
+
+// Center Div Css
+
+
+
+
+
