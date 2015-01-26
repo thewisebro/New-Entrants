@@ -98,24 +98,25 @@ def open_to(request, company_id) :
   """
   Displays the name of branches for which a company is open.
   """
-  try :
-    l.info(request.user.username + ': viewing company open to for ' + company_id)
-    company = get_object_or_404(Company, id = company_id, year = current_session_year())
-    opento = company.open_for_disciplines.all().order_by('graduation', 'name')
-    return render_to_response('placement/company_opento.html', {
-        'company' : company,
-        'opento' : opento
-        }, context_instance = RequestContext(request))
-  except Exception as e :
-    l.info(request.user.username + ': encountered error in viewing company.open to for ' + company_id)
-    l.exception(e)
-    return handle_exc(e, request)
+#  try :
+  l.info(request.user.username + ': viewing company open to for ' + company_id)
+  company = get_object_or_404(Company, id = company_id, year = current_session_year())
+  opento = company.open_for_disciplines.all().order_by('graduation', 'name')
+  return render_to_response('placement/company_opento.html', {
+      'company' : company,
+      'opento' : opento
+      }, context_instance = RequestContext(request))
+#  except Exception as e :
+#    l.info(request.user.username + ': encountered error in viewing company.open to for ' + company_id)
+#    l.exception(e)
+#    return handle_exc(e, request)
 
 # Placement Admin views start
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def add(request) :
   try :
+    import pdb; pdb.set_trace()
     l.info (request.user.username + ': Trying to add a company')
     if request.method == 'POST' :
       form = forms.CompanyForm(request.POST, request.FILES)
@@ -194,7 +195,7 @@ def edit(request, company_id) :
         'branches_button_required' : True,
         }, context_instance = RequestContext(request))
   except Exception as e :
-    l.info(request.user.username + ': encountered error in addding a company')
+    l.info(request.user.username + ': encountered error in editing a company')
     l.exception(e)
     return handle_exc(e, request)
 
@@ -216,7 +217,7 @@ def delete(request, company_id) :
     messages.success(request, 'The company was deleted successfully.')
     return HttpResponseRedirect(reverse('placement.views_company.admin_list'))
   except Exception as e:
-    l.info(request.user.username + ': encountered error in addding a company')
+    l.info(request.user.username + ': encountered error in deleting a company')
     l.exception(e)
     return handle_exc(e, request)
 

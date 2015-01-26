@@ -8,7 +8,7 @@
 <h3>Admin</h3>
 <hr/>
 <div align="right" style="margin:10px;">
-  <a href="{% url placement.views_company.add %}"><button><div class="text">Add a company</div></button></a>
+  <a href="{% url 'placement.views_company.add' %}"><button><div class="text">Add a company</div></button></a>
 </div>
 <table class="sortable table table-striped table-bordered table-condensed" id="t1">
   <thead>
@@ -26,10 +26,10 @@
     <tr>
       <td>{{ forloop.counter }}</td>
       <td class="company-name">
-        <a href="{% url placement.views_company.edit company.id %}">{{ company.name }}</a>
+        <a href="{% url 'placement.views_company.edit' company.id %}">{{ company.name }}</a>
       </td>
       <td>
-        <a href="{% url placement.views_company.delete company.id %}" class="company-delete-anchor">Delete</a>
+        <a href="{% url 'placement.views_company.delete' company.id %}" class="company-delete-anchor">Delete</a>
       </td>
       <td>
         {{ company.get_status_display }}
@@ -38,25 +38,25 @@
         {{ company.last_date_of_applying|default:'-' }}
       </td>
       <td>
-        <a href="{% url placement.views_admin.finalize company.id %}">Applications</a>
+        <a href="{% url 'placement.views_admin.finalize' company.id %}">Applications</a>
       </td>
       <td>
-        <a href="{% url placement.views_admin.resume_archive company.id %}">Resumes</a>
+        <a href="{% url 'placement.views_admin.resume_archive' company.id %}">Resumes</a>
       </td>
       <td>
-        <a href="{% url placement.views_admin.selected_students company.id %}">XLS list</a>
+        <a href="{% url 'placement.views_admin.selected_students' company.id %}">XLS list</a>
       </td>
       <td>
-        <a href="{% url placement.views_results.declare company.id %}">Declare Result</a>
+        <a href="{% url 'placement.views_results.declare' company.id %}">Declare Result</a>
       </td>
       <td>
-        <a href="{% url placement.views_results.insert company.id %}">Insert Result</a> 
+        <a href="{% url 'placement.views_results.insert' company.id %}">Insert Result</a> 
       </td>
       <td>
-        <a href="{% url placement.views_results.drop company.id %}">Drop Results</a>
+        <a href="{% url 'placement.views_results.drop' company.id %}">Drop Results</a>
       </td>
       <td {% if forloop.last %}class="rightbottomcurve"{% endif %}>
-        <a href="{% url placement.views_results.company company.id %}">View Results</a> 
+        <a href="{% url 'placement.views_results.company' company.id %}">View Results</a> 
       </td>
     </tr>
     {% endfor %}
@@ -69,6 +69,6 @@
 
 {% endblock %}
 
-{% block scripts %}
+{% block app_scripts %}
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/placement/company_delete_confirm.js"></script>
 {% endblock %}

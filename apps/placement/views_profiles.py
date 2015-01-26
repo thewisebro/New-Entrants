@@ -35,7 +35,6 @@ login_url = '/placement/'
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
 def photo(request):
   try :
-    import pdb; pdb.set_trace()
     l.info(request.user.username + ': Opened view to add/update photo')
     student = request.user.student
     plac_person = student.placementperson
@@ -164,7 +163,6 @@ def educational_details(request):
     View/Update Educational Details
   """
   try :
-    import pdb; pdb.set_trace()
     l.info(request.user.username + ': Viewing Eduational Details')
     student = request.user.student
     plac_person = student.placementperson
