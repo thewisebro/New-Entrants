@@ -14,7 +14,7 @@ View students :
   <option value="C">Placed in dream C company</option>
   <option value="U">Placed in University</option>
 </select>
-<a href="{% url placement.views_admin.branch_details_xls branch.code %}"><button class="btn btn-primary" style="float:right;">Generate XLS sheet</button></a>
+<a href="{% url 'placement.views_admin.branch_details_xls' branch.code %}"><button class="btn btn-primary" style="float:right;">Generate XLS sheet</button></a>
 
 <div class="tabbable">
   <ul class="nav nav-tabs">
@@ -60,13 +60,13 @@ View students :
           {% for plac_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application in details %}
           <tr class="person placed_category_{{ plac_person.placed_company_category|default:'N' }}">
             <td>{{ forloop.counter }}</td>
-            <td>{{ plac_person.person.user.username }}</td>
-            <td>{{ plac_person.person.name }}</td>
-            <td>{{ person_info.birth_date|default:'-' }}</td>
+            <td>{{ plac_person.student.user.username }}</td>
+            <td>{{ plac_person.student.user.name }}</td>
+            <td>{{ plac_person.student.user.birth_date|default:'-' }}</td>
             <td>{{ person_info.get_category_display|default:'-' }}</td>
-            <td>{{ plac_person.person.get_semester_display }}</td>
-            <td>{{ plac_person.person.personal_contact_no|default:'-' }}</td>
-            <td>{{ plac_person.person.email_id|default:'-' }}</td>
+            <td>{{ plac_person.student.get_semester_display }}</td>
+            <td>{{ plac_person.student.user.contact_no|default:'-' }}</td>
+            <td>{{ plac_person.student.user.email|default:'-' }}</td>
           </tr>
           {% endfor %}
 
@@ -92,9 +92,9 @@ View students :
           {% for plac_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application in details %}
           <tr class="person placed_category_{{ plac_person.placed_company_category|default:'N' }}">
             <td>{{ forloop.counter }}</td>
-            <td>{{ plac_person.person.user.username }}</td>
-            <td>{{ plac_person.person.name }}</td>
-            <td>{{ plac_person.person.cgpa|default:'-' }}</td>
+            <td>{{ plac_person.student.user.username }}</td>
+            <td>{{ plac_person.student.user.name }}</td>
+            <td>{{ plac_person.student.cgpa|default:'-' }}</td>
             <td>{{ tenth_marks }}</td>
             <td>{{ twelfth_marks }}</td>
             <td>{{ graduation_marks }}</td>
@@ -123,8 +123,8 @@ View students :
           {% for plac_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application in details %}
           <tr class="person placed_category_{{ plac_person.placed_company_category|default:'N' }}">
             <td>{{ forloop.counter }}</td>
-            <td>{{ plac_person.person.user.username }}</td>
-            <td>{{ plac_person.person.name }}</td>
+            <td>{{ plac_person.student.user.username }}</td>
+            <td>{{ plac_person.student.user.name }}</td>
             <td>{{ no_of_applications }}</td>
             <td>{{ last_application }}</td>
           </tr>
@@ -159,17 +159,17 @@ View students :
           {% for plac_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application in details %}
           <tr class="person placed_category_{{ plac_person.placed_company_category|default:'N' }}">
             <td>{{ forloop.counter }}</td>
-            <td>{{ plac_person.person.user.username }}</td>
-            <td>{{ plac_person.person.name }}</td>
-            <td>{{ plac_person.person.cgpa|default:'-' }}</td>
+            <td>{{ plac_person.student.user.username }}</td>
+            <td>{{ plac_person.student.user.name }}</td>
+            <td>{{ plac_person.student.cgpa|default:'-' }}</td>
             <td>{{ tenth_marks }}</td>
             <td>{{ twelfth_marks }}</td>
             <td>{{ graduation_marks }}</td>
-            <td>{{ person_info.birth_date|default:'-' }}</td>
+            <td>{{ plac_person.student.user.birth_date|default:'-' }}</td>
             <td>{{ person_info.get_category_display|default:'-' }}</td>
-            <td>{{ plac_person.person.email_id|default:'-' }}</td>
-            <td>{{ plac_person.person.personal_contact_no|default:'-' }}</td>
-            <td>{{ plac_person.person.get_semester_display }}</td>
+            <td>{{ plac_person.student.user.email|default:'-' }}</td>
+            <td>{{ plac_person.student.contact_no|default:'-' }}</td>
+            <td>{{ plac_person.student.get_semester_display }}</td>
             <td>{{ no_of_applications }}</td>
             <td>{{ last_application }}</td>
           </tr>
@@ -186,14 +186,14 @@ No student found !
 
 {% endblock %}
 
-{% block scripts %}
+{% block app_scripts %}
 <script type="text/javascript">
   function selectStudents()
   {
     value = document.getElementById('category').value;
     if(value=='All')
     {
-      $('.person').show();
+      $('.student').show();
     }
     else
     {
@@ -202,6 +202,6 @@ No student found !
     }
   }
 </script>
-<script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap-tab.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/placement/bootstrap-tab.js"></script>
 {% endblock %}
 

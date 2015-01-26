@@ -17,7 +17,6 @@ from placement.utils import *
 
 from django.contrib import messages
 
-import settings
 
 # XXX : Keep logged after all imports only
 # As other imports might over write the logger
@@ -36,9 +35,10 @@ login_url = '/placement/'
 @login_required
 def index(request):
   try :
-    student = request.user.student
     logger.info(request.user.username+": in homepage.")
-    if not student :
+    try:
+      student = request.user.student
+    except:
       if request.user.groups.filter(name = 'Placement Admin').exists() :
         # request.session['user']=request.user
         l.info(request.user.username+': Redirected to company.admin_list')
@@ -59,18 +59,19 @@ def index(request):
       else :
         messages.error(request, 'You are not alloted any placement group. If you are elligible to visit this portal, contact IMG.')
         return render_to_response('placement/error.html', context_instance=RequestContext(request))
+    else:
     # XXX : Do not take student from session, at least home page should reflect the changes.
-    student = Student.objects.get(user = request.user)
-    plac_person = PlacementPerson.objects.get_or_create(student = student)[0]
-    if plac_person.status == 'VRF' :
-      applications = CompanyApplicationMap.objects.filter(plac_person = plac_person, company__year__contains = current_session_year())
-    else :
-      applications = None
-    return render_to_response('placement/index.html', {
-        'student' : student,
-        'plac_person' : plac_person,
-        'applications' : applications,
-        }, context_instance=RequestContext(request))
+      student = Student.objects.get(user = request.user)
+      plac_person = PlacementPerson.objects.get_or_create(student = student)[0]
+      if plac_person.status == 'VRF' :
+        applications = CompanyApplicationMap.objects.filter(plac_person = plac_person, company__year__contains = current_session_year())
+      else :
+        applications = None
+      return render_to_response('placement/index.html', {
+          'student' : student,
+          'plac_person' : plac_person,
+          'applications' : applications,
+          }, context_instance=RequestContext(request))
   except Exception as e :
     print e
     logger.info(request.user.username+': got an exception.')
@@ -171,7 +172,8 @@ def apply(request, company_id) :
       company_req = float(company.cgpa_requirement)
     except:
       company_req = 0
-    if company_req > float(plac_person.student.cgpa):   #########Check "plac_person.student.cgpa". May be taking from nucleus. Change it to Educational details.
+    student_cgpa = EducationalDetails.objects.filter(student = student, course__startswith = student.branch.graduation).order_by('-course')[0].cgpa
+    if company_req > float(student_cgpa):
       l.info(request.user.username +' applying to company having higher CGPA requirements.')
       return HttpResponse("You can not apply to this company as it has higher CGPA requirements.")
     pdf = get_resume_binary(RequestContext(request), student, company.sector)
@@ -218,7 +220,7 @@ def withdraw(request, company_id) :
   try :
     company = get_object_or_404(Company, pk = company_id, year = current_session_year() )
     student = request.user.student
-    plac_person = request.user.student.placmentperson
+    plac_person = request.user.student.placementperson
     try :
       application = CompanyApplicationMap.objects.get(company = company, plac_person = plac_person)
     except CompanyApplicationMap.DoesNotExist:

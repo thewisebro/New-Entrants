@@ -8,6 +8,7 @@ from django.forms.widgets import Select
 from django.views.generic.base import TemplateView
 
 from django.contrib import messages
+from django.conf import settings
 
 import logging, re
 import datetime
@@ -21,7 +22,6 @@ from placement.policy import current_session_year
 from placement.utils import *
 from nucleus.models import StudentInfo
 
-import settings
 
 l = logging.getLogger('placement')
 

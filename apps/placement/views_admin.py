@@ -50,7 +50,7 @@ def finalize(request, company_id, degree='UG') :
       CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(status='FIN')
       messages.success(request, 'The selected applications are finalized for the placement procedure.')
       l.info(request.user.username + ': Redirecting to company.admin_list after finalizing applications')
-      return HttpResponseRedirect(reverse('placement.views_company.admin_list'))
+      return HttpResponseRedirect(reverse('placement.views_admin.finalize', args=(company_id, degree)))
     else :
       company = get_object_or_404(Company, pk = company_id, year = current_session_year() )
       # Get applications for the company from the specified degree
@@ -59,7 +59,7 @@ def finalize(request, company_id, degree='UG') :
       # The applications are displayed in the order of the categories as specified.
       for category in (None,'C','U','B','A') :
         applications += list(CompanyApplicationMap.objects.filter(company = company,
-                                                                  plac_person__person__semester__startswith = degree,
+                                                                  plac_person__student__semester__startswith = degree,
                                                                   plac_person__placed_company_category = category,
                                                                   status='APP'))
       return render_to_response('placement/applications_to_company.html', {
@@ -70,9 +70,9 @@ def finalize(request, company_id, degree='UG') :
           'task' : 'finalize',
           }, context_instance = RequestContext(request))
   except Exception as e:
-    l.info(request.user.username + ': encountered exception when trying to view applications.')
-    l.exception(e)
-    return handle_exc(e, request)
+   l.info(request.user.username + ': encountered exception when trying to view applications.')
+   l.exception(e)
+   return handle_exc(e, request)
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
@@ -84,7 +84,7 @@ def unfinalize(request, company_id, degree = 'UG') :
       CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(status='APP')
       messages.success(request, 'The selected applications are unfinalized for the placement procedure.')
       l.info(request.user.username + ': Redirecting to company.admin_list after unfinalizing applications')
-      return HttpResponseRedirect(reverse('placement.views_company.admin_list'))
+      return HttpResponseRedirect(reverse('placement.views_admin.unfinalize', args=(company_id, degree)))
   else :
     company = get_object_or_404(Company, pk = company_id, year = current_session_year() )
     # Get applications for the company from the specified degree
@@ -93,7 +93,7 @@ def unfinalize(request, company_id, degree = 'UG') :
     # The applications are displayed in the order of the categories as specified.
     for category in (None,'C','U','B','A') :
       applications += list(CompanyApplicationMap.objects.filter(company = company,
-                                                                plac_person__person__semester__startswith = degree,
+                                                                plac_person__student__semester__startswith = degree,
                                                                 plac_person__placed_company_category = category,
                                                                 status='FIN'))
     return render_to_response('placement/applications_to_company.html', {
@@ -144,8 +144,8 @@ def shortlist(request, company_id, task = None) :
         sheet.write(row, 2, student.name, style)
         sheet.write(row, 3, student.branch.degree, style)
         sheet.write(row, 4, student.branch.name, style)
-        sheet.write(row, 5, student.get_gender_display(), style)
-        sheet.write(row, 6, info.birth_date.strftime('%b. %d, %Y'), style)
+        sheet.write(row, 5, student.user.get_gender_display(), style)
+        sheet.write(row, 6, student.user.birth_date.strftime('%b. %d, %Y'), style)
         sheet.write(row, 7, info.get_category_display(), style)
         sheet.write(row, 8, student.cgpa, style)
         sheet.write(row, 9, student.personal_contact_no,style)
@@ -166,10 +166,10 @@ def shortlist(request, company_id, task = None) :
       if not applications : # no application has been finalized
         l.info (request.user.username + ': no applications shortlisted.')
         messages.error(request, 'No student has been finalized for ' + company.name + '.')
-        return HttpResponseRedirect(reverse('placement.views.index'))
+        return HttpResponseRedirect(reverse('placement.views_admin.shortlist', args=(company_id,)))
       zip.close()
       in_memory.seek(0)
-      response = HttpResponse(in_memory.read(), mimetype="application/x-zip-compressed")
+      response = HttpResponse(in_memory.read(), content_type="application/x-zip-compressed")
       response['Content-Disposition'] = 'attachment; filename=' + sanitise_for_download(company.name) + '_Resumes.zip'
       response['Content-Length'] = in_memory.tell()
       return response
@@ -209,7 +209,7 @@ def resume_archive(request, company_id) :
       return HttpResponseRedirect(reverse('placement.views.index'))
     zip.close()
     in_memory.seek(0)
-    response = HttpResponse(in_memory.read(), mimetype="application/x-zip-compressed")
+    response = HttpResponse(in_memory.read(), content_type="application/x-zip-compressed")
     response['Content-Disposition'] = 'attachment; filename=' + sanitise_for_download(company.name) + '_Resumes.zip'
     response['Content-Length'] = in_memory.tell()
     return response
@@ -257,11 +257,11 @@ def selected_students(request, company_id) :
       sheet.write(row, 3, student.branch.degree, style)
       sheet.write(row, 4, student.semester[-2:][0:1], style)
       sheet.write(row, 5, student.branch.name, style)
-      sheet.write(row, 6, student.get_gender_display(), style)
+      sheet.write(row, 6, student.user.get_gender_display(), style)
       try :
         info = StudentInfo.objects.get(student = student)
         try:
-          sheet.write(row, 7, info.birth_date.strftime('%b. %d, %Y'), style)
+          sheet.write(row, 7, student.user.birth_date.strftime('%b. %d, %Y'), style)
         except Exception as e:
           sheet.write(row, 7, '-', style)
         sheet.write(row, 8, info.get_category_display(), style)
@@ -300,8 +300,8 @@ def selected_students(request, company_id) :
         sheet.write(row, 12, '-', style)
         sheet.write(row, 13, '-', style)
         sheet.write(row, 14, '-', style)
-      sheet.write(row, 15, student.personal_contact_no,style)
-      sheet.write(row, 16, student.email_id, style)
+      sheet.write(row, 15, student.user.contact_no,style)
+      sheet.write(row, 16, student.user.email, style)
     wbk.save(response)
     return response
   except Exception as e:
@@ -498,7 +498,11 @@ def branch_details(request, branch_code = None) :
     # Display list of students in the specified branch
     branch = get_object_or_404(Branch, code = branch_code)
     l.info(request.user.username + ': Viewing Students of ' + branch.name)
-    plac_persons = PlacementPerson.objects.filter(person__branch = branch, status = 'VRF', person__passout_year = None).order_by('person__name')
+    plac_persons = PlacementPerson.objects.filter(student__branch = branch, status = 'VRF', student__passout_year = None).order_by('student__user__name')
+    if len(plac_persons) == 0:
+      l.info(request.user.username + ': Viewing empty branch details')
+      messages.error(request, 'No application from '+branch.name+' branch')
+      return HttpResponseRedirect(reverse('placement.views_admin.branch_details'))
     details = []
     # TODO : Put all these queries into one per model
     educational_details = EducationalDetails.objects.all()
@@ -564,7 +568,7 @@ def second_round(request) :
                                     )
       l.info(request.user.username + ': Updated the Second Round information.')
       messages.success(request, 'Updated the Second Round information.')
-      return HttpResponseRedirect(reverse('placement.views.index'))
+      return HttpResponseRedirect(reverse('placement.views_admin.second_round'))
     else :
       return render_to_response('placement/second_round.html', {
           'branches' : Branch.objects.all(),
@@ -597,7 +601,11 @@ def branch_details_xls(request, branch_code) :
     # Display xls list of students in the specified branch
     branch = get_object_or_404(Branch, code = branch_code)
     l.info(request.user.username + ': Viewing xls list of Students of ' + branch.name)
-    plac_persons = PlacementPerson.objects.filter(person__branch = branch, status = 'VRF', person__passout_year = None).order_by('person__name')
+    plac_persons = PlacementPerson.objects.filter(student__branch = branch, status = 'VRF', student__passout_year = None).order_by('student__user__name')
+    if len(plac_persons) == 0:
+      l.info(request.user.username + ': Viewing empty branch details')
+      messages.error(request, 'No application from '+branch.name+' branch')
+      return HttpResponseRedirect(reverse('placement.views_admin.branch_details'))
     details = []
     # TODO : Put all these queries into one per model
     educational_details = EducationalDetails.objects.all()
@@ -643,15 +651,15 @@ def branch_details_xls(request, branch_code) :
     for detail in details:
       sheet.write(row, 0, row - 2)
       sheet.write(row, 1, detail[0].student.user.username)
-      sheet.write(row, 2, detail[0].student.name)
+      sheet.write(row, 2, detail[0].student.user.name)
       sheet.write(row, 3, detail[0].student.cgpa)
-      sheet.write(row, 4, detail[4].birth_date.strftime('%b. %d, %Y'))
+      sheet.write(row, 4, detail[4].student.user.birth_date.strftime('%b. %d, %Y'))
       sheet.write(row, 5, detail[1])
       sheet.write(row, 6, detail[2])
       sheet.write(row, 7, detail[3])
       sheet.write(row, 8, detail[4].get_category_display())
-      sheet.write(row, 9, detail[0].student.email_id)
-      sheet.write(row, 10, detail[0].student.personal_contact_no)
+      sheet.write(row, 9, detail[0].student.user.email)
+      sheet.write(row, 10, detail[0].student.user.contact_no)
       sheet.write(row, 11, detail[0].student.get_semester_display())
       row += 1
     response = HttpResponse(content_type='application/ms-excel')

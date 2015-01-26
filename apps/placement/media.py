@@ -110,7 +110,7 @@ def institute_results_sectorwise(request) :
   """
   l.info(request.user.username+': viewing institute resuts sectorwise')
   current_session = current_session_year()
-  response = HttpResponse(mimetype='application/ms-excel')
+  response = HttpResponse(content_type='application/ms-excel')
   time = datetime.datetime.now().strftime('%b. %d, %Y, %I:%M %p')
   response['Content-Disposition'] = 'attachment; filename=institute_results_sectorwise_' + sanitise_for_download(time) + '.xls'
   wbk = xlwt.Workbook()
@@ -269,7 +269,7 @@ def institute_results_companywise(request) :
   """
   l.info(request.user.username+': getting institute results companywise')
   current_session = current_session_year()
-  response = HttpResponse(mimetype='application/ms-excel')
+  response = HttpResponse(content_type='application/ms-excel')
   time = datetime.datetime.now().strftime('%b. %d, %Y, %I:%M %p')
   response['Content-Disposition'] = 'attachment; filename=institute_results_companywise_' + sanitise_for_download(time) + '.xls'
   wbk = xlwt.Workbook()
@@ -329,7 +329,7 @@ def institute_results_branchwise(request) :
   """
   l.info(request.user.username+': getting institute results branchwise')
   current_session = current_session_year()
-  response = HttpResponse(mimetype='application/ms-excel')
+  response = HttpResponse(content_type='application/ms-excel')
   time = datetime.datetime.now().strftime('%b. %d, %Y, %I:%M %p')
   response['Content-Disposition'] = 'attachment; filename=institute_results_branchwise_' + sanitise_for_download(time) + '.xls'
   wbk = xlwt.Workbook()

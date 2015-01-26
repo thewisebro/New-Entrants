@@ -19,7 +19,7 @@
       <td>{{ forloop.counter }}</td>
       <td>{{ branch.get_department_display }}</td>
       <td>
-        <a href="{% url placement.views_admin.branch_details branch.code %}">
+        <a href="{% url 'placement.views_admin.branch_details' branch_code=branch.code %}">
           {{ branch.code }} - {{ branch.name }}
         </a>
       </td>

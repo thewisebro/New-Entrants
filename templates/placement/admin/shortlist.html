@@ -1,5 +1,5 @@
 {% extends "placement/base.html" %}
-{% load macros %}
+{% load kwacros %}
 
 {% block app_content %}
     <style> 
@@ -26,15 +26,15 @@
 <form class="form" enctype="multipart/form-data" method="post" action="">
   <h2 style="margin-bottom: 25px;"> Shortlist students</h2>
     {% csrf_token %}
-    {% macro editable_field_div field %}
+    {% kwacro editable_field_div field %}
         <div class="edit-row">
           {{field.errors}}
           <div class="field-label-big">{{field.label}}</div>
           <div class="field">{{field}}</div>
         </div>
-    {% endmacro %}
-    {% usemacro editable_field_div form.student %}
-    {% usemacro editable_field_div form.company %}
+    {% endkwacro %}
+    {% usekwacro editable_field_div form.student %}
+    {% usekwacro editable_field_div form.company %}
     </br><div class="edit-row" style="float: none;margin-top: 30px;margin-left:
     165px;">
       <input class="field input-button" id="submit" value="Submit">

@@ -20,13 +20,13 @@
       </a>
     </li>
     <li>
-      <a href="{% url placement.views_admin.unfinalize company.id %}">
+      <a href="{% url 'placement.views_admin.unfinalize' company.id %}">
         Unfinalize
       </a>
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_admin.finalize company.id %}">
+      <a href="{% url 'placement.views_admin.finalize' company.id %}">
         Finalize
       </a>
     </li>
@@ -37,7 +37,7 @@
     </li>
     {% endif %}
     <li>
-      <a href="{% url placement.views_admin.shortlist company.id %}">
+      <a href="{% url 'placement.views_admin.shortlist' company.id %}">
         Shortlist
       </a>
     </li>
@@ -57,11 +57,11 @@
     {% else %}
     <li>
       {% if task == "finalize" %}
-      <a href="{% url placement.views_admin.finalize company.id degree_name %}">
+      <a href="{% url 'placement.views_admin.finalize' company.id degree_name %}">
         {{ degree_name }}
       </a>
       {% else %}
-      <a href="{% url placement.views_admin.unfinalize company.id degree_name %}">
+      <a href="{% url 'placement.views_admin.unfinalize' company.id degree_name %}">
         {{ degree_name }}
       </a>
       {% endif %}
@@ -111,14 +111,14 @@
       <tr class="category{{ application.plac_person.placed_company_category|default:'' }}">
         <td>{{ forloop.counter }}</td>
         <td><input type="checkbox" name="selected_applications" value="{{ application.id }}"/></td>
-        <td>{{ application.plac_person.person.user.username }}</td>
-        <td>{{ application.plac_person.person.name }}</td>
-        <td>{{ application.plac_person.person.branch.name }}</td>
-        <td>{{ application.plac_person.person.get_semester_display }}</td>
-        <td>{{ application.plac_person.person.cgpa }}</td>
-        <td>{{ application.plac_person.person.info.birth_date|default:'-' }}</td>
-        <td>{{ application.plac_person.person.get_gender_display }}</td>
-        <td>{{ application.plac_person.person.info.get_category_display|default:'-' }}</td>
+        <td>{{ application.plac_person.student.user.username }}</td>
+        <td>{{ application.plac_person.student.name }}</td>
+        <td>{{ application.plac_person.student.branch.name }}</td>
+        <td>{{ application.plac_person.student.get_semester_display }}</td>
+        <td>{{ application.plac_person.student.cgpa }}</td>
+        <td>{{ application.plac_person.student.user.birth_date|default:'-' }}</td>
+        <td>{{ application.plac_person.student.user.get_gender_display }}</td>
+        <td>{{ application.plac_person.student.studentinfo.get_category_display|default:'-' }}</td>
       </tr>
       {% endfor %}
 
@@ -133,7 +133,7 @@ No applications yet!
 {% endif %}
 {% endblock %}
 
-{% block scripts %}
+{% block app_scripts %}
 <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/placement/check_all.js"></script>
 {% endblock %}

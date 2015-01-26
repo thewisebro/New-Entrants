@@ -12,13 +12,13 @@ def can_apply(plac_person, company_applying) :
     return 'You have already applied to '+str(company_applying.name)
   if not company_applying.status == 'OPN' :
     return company_applying + ' is not open for applications.'
-  if plac_person.person.branch not in company_applying.open_for_disciplines.all() :
+  if plac_person.student.branch not in company_applying.open_for_disciplines.all() :
     return company_applying.name + ' is not open for your branch.'
   if plac_person.no_of_companies_placed == 2 :
     return 'You have been placed in two companies.'
   if plac_person.no_of_companies_placed == 0 :
     return True
-  #if not SecondRound.objects.filter(branch = plac_person.person.branch,
+  #if not SecondRound.objects.filter(branch = plac_person.student.branch,
   #                                  year = current_session_year() ).exists() :
     #return 'You have been placed and second Round is not open for your branch.'
   placed_company_category = plac_person.placed_company_category
@@ -27,7 +27,7 @@ def can_apply(plac_person, company_applying) :
   if placed_company_category == 'B' and company_applying.category in ('C', 'U') :
     return 'You have already been placed in "B" category company.'
   if placed_company_category == 'B' and company_applying.category in ('A', 'B') :
-    if SecondRound.objects.filter(branch = plac_person.person.branch, year = current_session_year()).exists() :
+    if SecondRound.objects.filter(branch = plac_person.student.branch, year = current_session_year()).exists() :
       return True
     else :
       'You have already been placed in "B" category company and Second round is not open for your branch.'
