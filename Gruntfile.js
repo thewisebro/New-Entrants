@@ -8,6 +8,8 @@
 // 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
+  // 
+  var modRewrite = require('connect-modrewrite');
 
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
@@ -76,6 +78,7 @@ module.exports = function (grunt) {
           open: true,
           middleware: function (connect) {
             return [
+              modRewrite(['^[^\\.]*$ /index.html [L]']),
               connect.static('.tmp'),
               connect().use(
                 '/bower_components',

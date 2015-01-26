@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of the lectutApp
  */
-angular.module('lectutApp')
+lectutApp
   .controller('MainCtrl', function ($scope) {
 
     //current user details
@@ -21,24 +21,38 @@ angular.module('lectutApp')
     $scope.courses = [
     {
       name:"Electronics and Communication",
-      id:"EC-101"
+      id:"EC-101",
+      notifications:5
     },
     {
       name:"Physics",
-      id:"CC-301"
+      id:"CC-301",
+      notifications:3
     }, 
     {
       name:"Business Managemnet",
-      id:"ME-401"
+      id:"ME-401",
+      notifications:2
     }, 
     {
       name:"Fine arts and music",
-      id:"REC-101"
+      id:"REC-101",
+      notifications:1
     },
     {
       name:"Hardware Lab",
-      id:"WE-161"
+      id:"WE-161",
+      notifications:5
     }
     ];
   });
+
+lectutApp.controller('CourseHomeCtrl', ['$routeParams', function($routeParams) {
+  this.params = $routeParams;
+}]);
+
+lectutApp.controller('CourseDetailCtrl', ['$routeParams','$scope', function($routeParams,$scope) {
+  this.params = $routeParams;
+  $scope.coursename = this.params.courseId;
+}]);
 

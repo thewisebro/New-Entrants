@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <base href="/" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -44,14 +45,20 @@
          <div class="myCourse">
             <div class="myCourseHeading">My Courses</div>
             <ul>
-               <li ng-repeat="course in courses" ><span>{{course.id}} </span>{{course.name}}</li>
+               <a ng-href="/course/{{crs.id}}" ng-repeat="crs in courses">
+                  <li >
+                   <span>{{crs.id}} </span><br>
+                   {{crs.name}}<br>
+                   <span>{{crs.notifications}}</span> 
+                 </li>
+               </a>
             </ul>
          </div> 
 
       </div>
 
       <!-- Center view -->
-      <div class="centerDiv" ng-include="'views/main.html'" ng-controller="MainCtrl">
+      <div class="centerDiv" ng-view>
         
       </div>
       
@@ -84,6 +91,8 @@
     <!-- bower:js -->
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
