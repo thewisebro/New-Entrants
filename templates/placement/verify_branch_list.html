@@ -5,7 +5,7 @@
 <hr/>
 <p>
   List of all unverified students is available
-  <a href="{% url placement.views_verify.unverified_list %}">
+  <a href="{% url 'placement.views_verify.unverified_list' %}">
     here
   </a>
 </p>
@@ -14,7 +14,7 @@
   <li class="active">
     <a href="#">Branchwise</a>
   </li>
-  <li><a href={% url placement.views_verify.department_list %}>Departmentwise</a></li>
+  <li><a href={% url 'placement.views_verify.department_list' %}>Departmentwise</a></li>
 </ul>
 
 <table class="sortable table table-striped table-bordered table-condensed" id="t1">
@@ -39,11 +39,11 @@
       <td>{{ branch.get_department_display }}</td>
       <td>{{ branch.name }}</td>
       <td>{{ branch.degree }}</td>
-      <td><a href="{% url placement.views_verify.verify 'verify' branch.code %}">Verify</a></td>
-      <td><a href="{% url placement.views_verify.verify 'unverify' branch.code %}">Unverify</a></td>
-      <td><a href="{% url placement.views_verify.verify 'unlock' branch.code %}">Unlock</a></td>
-      <td><a href="{% url placement.views_verify.verify 'reverify' branch.code %}">Re-Verify</a></td>
-      <td><a href="{% url placement.views_verify.verify 'verified' branch.code %}">Verified Students</a></td>
+      <td><a href="{% url 'placement.views_verify.verify' task='verify' branch_code=branch.code %}">Verify</a></td>
+      <td><a href="{% url 'placement.views_verify.verify' task='unverify' branch_code=branch.code %}">Unverify</a></td>
+      <td><a href="{% url 'placement.views_verify.verify' task='unlock'  branch_code=branch.code %}">Unlock</a></td>
+      <td><a href="{% url 'placement.views_verify.verify' task='reverify' branch_code=branch.code %}">Re-Verify</a></td>
+      <td><a href="{% url 'placement.views_verify.verify' task='verified' branch_code=branch.code %}">Verified Students</a></td>
     </tr>
     {% endfor %}
 

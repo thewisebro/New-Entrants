@@ -5,14 +5,14 @@
 <hr/>
 <p>
   List of all unverified students is available
-  <a href="{% url placement.views_verify.unverified_list %}">
+  <a href="{% url 'placement.views_verify.unverified_list' %}">
     here
   </a>
 </p>
 
 <ul class="nav nav-tabs">
   <li>
-    <a href={% url placement.views_verify.branch_list %}>Branchwise</a>
+    <a href={% url 'placement.views_verify.branch_list' %}>Branchwise</a>
   </li>
   <li class="active">
     <a href="#">Departmentwise</a>
@@ -37,11 +37,11 @@
     <tr>
       <td>{{ forloop.counter }}</td>
       <td>{{ name }}</td>
-      <td><a href="{% url placement.views_verify.verify_department 'verify' id %}">Verify</a></td>
-      <td><a href="{% url placement.views_verify.verify_department 'unverify' id %}">Unverify</a></td>
-      <td><a href="{% url placement.views_verify.verify_department 'unlock' id %}">Unlock</a></td>
-      <td><a href="{% url placement.views_verify.verify_department 'reverify' id %}">Re-Verify</a></td>
-      <td><a href="{% url placement.views_verify.verify_department 'verified' id %}">Verified Students</a></td>
+      <td><a href="{% url 'placement.views_verify.verify_department' 'verify' id %}">Verify</a></td>
+      <td><a href="{% url 'placement.views_verify.verify_department' 'unverify' id %}">Unverify</a></td>
+      <td><a href="{% url 'placement.views_verify.verify_department' 'unlock' id %}">Unlock</a></td>
+      <td><a href="{% url 'placement.views_verify.verify_department' 'reverify' id %}">Re-Verify</a></td>
+      <td><a href="{% url 'placement.views_verify.verify_department' 'verified' id %}">Verified Students</a></td>
     </tr>
     {% endfor %}
 

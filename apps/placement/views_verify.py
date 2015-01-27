@@ -31,21 +31,21 @@ def index(request) :
   Index page for Placement Verification.
   """
   l.info(request.user.username + ': In index page for verification')
-  try :
+  try:
     results = None
     if request.method == 'POST' :
       # Show search results
       form = forms.VerifySearch(request.POST)
       if form.is_valid() :
         search_string = form.cleaned_data['search_string']
-        results = PlacementPerson.objects.filter(person__passout_year = None).only('student')
+        results = PlacementPerson.objects.filter(student__passout_year = None).only('student')
         if search_string.isdigit() :
-          results = results.filter(person__user__username__icontains = search_string).order_by('person__user__username')
+          results = results.filter(student__user__username__icontains = search_string).order_by('student__user__username')
         else :
-          results = results.filter(person__name__icontains = search_string, status__in = ('VRF', 'OPN', 'LCK')).order_by('person__name')
+          results = results.filter(student__user__name__icontains = search_string, status__in = ('VRF', 'OPN', 'LCK')).order_by('student__user__name')
     elif request.GET.has_key('debar') :
       form = forms.VerifySearch()
-      results = PlacementPerson.objects.filter(person__passout_year=None, is_debarred=True).only('student').order_by('person__user__username')
+      results = PlacementPerson.objects.filter(student__passout_year=None, is_debarred=True).only('student').order_by('student__user__username')
     else :
       form = forms.VerifySearch()
     return render_to_response('placement/verify_index.html', {
@@ -83,9 +83,10 @@ def unverified_list(request) :
   Returns a XLS file containing the list of unverified students.
   """
   try :
+    import pdb;pdb.set_trace()
     l.info(request.user.username + ': downloading xls list for unverified students')
-    students = PlacementPerson.objects.filter(status__in = ('LCK', ))
-    response = HttpResponse(mimetype='application/ms-excel')
+    plac_persons = PlacementPerson.objects.filter(status__in = ('LCK', ))
+    response = HttpResponse(content_type='application/ms-excel')
     # TODO : Format the date and time properly and set the file size in the response
     response['Content-Disposition'] = ('attachment; filename=UnverifiedStudents_' +
                                        sanitise_for_download(datetime.datetime.now().strftime('%b. %d, %Y, %I:%M %p')) + '.xls')
@@ -99,14 +100,14 @@ def unverified_list(request) :
     headers = ('S.No.', 'Enrollment No.', 'Name', 'Discipline', 'Course')
     for (col, heading) in enumerate(headers) :
       sheet.write(2, col, heading, heading_xf)
-    for (row, student) in enumerate(students) :
-      person = student.person
+    for (row, plac_person) in enumerate(plac_persons) :
+      student = plac_person.student
       row += 3
       sheet.write(row, 0, row-2)
-      sheet.write(row, 1, person.user.username)
-      sheet.write(row, 2, person.name)
-      sheet.write(row, 3, person.branch.name)
-      sheet.write(row, 4, person.get_semester_display())
+      sheet.write(row, 1, student.user.username)
+      sheet.write(row, 2, student.user.name)
+      sheet.write(row, 3, student.branch.name)
+      sheet.write(row, 4, student.get_semester_display())
     wbk.save(response)
     return response
   except Exception as e :
@@ -140,20 +141,20 @@ def verify(request, task, branch_code) :
     if request.method == 'POST' :
       selected_students = request.POST.getlist('selected_students')
       PlacementPerson.objects.filter(pk__in = selected_students).update(status = to_status)
-      logging_list = PlacementPerson.objects.filter(pk__in = selected_students).values_list('person__user__username')
+      logging_list = PlacementPerson.objects.filter(pk__in = selected_students).values_list('student__user__username')
       l.info(request.user.username + ': updated the status of the following from '+str(from_status)+' to '+str(to_status)+'-- '+str(logging_list))
       messages.success(request, 'Your action was completed successfully.')
-      return HttpResponseRedirect(reverse('placement.views_verify.branch_list'))
+      return HttpResponseRedirect(reverse('placement.views_verify.verify',kwargs={'task': task, 'branch_code': branch_code}))
     else :
       # TOVERIFY : Is it required to display birth date and userid in this view?
       # TODO : If yes, display them as well
       branch = Branch.objects.get(code = branch_code)
-      students = PlacementPerson.objects.filter(status = from_status,
-                                                person__branch = branch,
-                                                person__passout_year = None
-                                                ).only('student', 'id').order_by('person__name')
+      plac_persons = PlacementPerson.objects.filter(status = from_status,
+                                                student__branch = branch,
+                                                student__passout_year = None
+                                                ).only('student', 'id').order_by('student__user__name')
       return render_to_response('placement/verify_list.html', {
-          'students' : students,
+          'plac_persons' : plac_persons,
           'branch' : branch,
           'task' : task
           }, context_instance = RequestContext(request))
@@ -176,7 +177,7 @@ def resume(request, enrollment_no) :
     if pdf['err'] :
       messages.error(request, 'An error occured while generating the PDF file.')
       return HttpResponseRedirect(reverse('placement.views.index'))
-    response = HttpResponse(pdf['content'], mimetype='application/pdf')
+    response = HttpResponse(pdf['content'], content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=Resume_' + enrollment_no + '.pdf'
     response['Content-Length'] = len(pdf['content'])
     return response
@@ -198,7 +199,7 @@ def scorecard(request, enrollment_no) :
     if pdf['err'] :
       messages.error(request, 'An error occured while generating the PDF file.')
       return HttpResponseRedirect(reverse('placement.views.index'))
-    response = HttpResponse(pdf['content'], mimetype='application/pdf')
+    response = HttpResponse(pdf['content'], content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=Scorecard_' + enrollment_no + '.pdf'
     response['Content-Length'] = len(pdf['content'])
     return response
@@ -250,24 +251,24 @@ def verify_department(request, task, department_code) :
     if request.method == 'POST' :
       PlacementPerson.objects.filter(pk__in = request.POST.getlist('selected_students')).update(status = to_status)
       messages.success(request, 'Your action was completed successfully.')
-      return HttpResponseRedirect(reverse('placement.views_verify.department_list'))
+      return HttpResponseRedirect(reverse('placement.views_verify.verify_department',kwargs={'task': task, 'department_code': department_code}))
     else :
       # TOVERIFY : Is it required to display birth date and userid in this view?
       # TODO : If yes, display them as well
       #branch = Branch.objects.get(department = department_code)
       dept_name = [ name for id, name in MC.DEPARTMENT_CHOICES if id == department_code ][0]
-      students = PlacementPerson.objects.filter(status = from_status,
-                                                person__branch__department = department_code,
-                                                person__passout_year = None,
-                                                ).only('student', 'id').order_by('person__name')
+      plac_persons = PlacementPerson.objects.filter(status = from_status,
+                                                student__branch__department = dept_name,
+                                                student__passout_year = None,
+                                                ).only('student', 'id').order_by('student__user__name')
       return render_to_response('placement/verify_list.html', {
-          'students' : students,
+          'plac_persons' : plac_persons,
           'department' : dept_name,
           'id' : department_code,
           'task' : task
           }, context_instance = RequestContext(request))
   except Exception as e :
-    l.info(request.user.username + ': Encountered Exception while (re/un)verifying/unlocking ' + branch_code + " " + task)
+    l.info(request.user.username + ': Encountered Exception while (re/un)verifying/unlocking ' + department_code + " " + task)
     l.exception(e)
     return handle_exc(e, request)
 
@@ -286,7 +287,7 @@ def change_status(request, enrollment_no, status = False) :
   else :
     next_status = {'OPN':'LCK', 'LCK':'VRF', 'VRF':'OPN'}
   try :
-    plac_person = PlacementPerson.objects.get(person__user__username = enrollment_no)
+    plac_person = PlacementPerson.objects.get(student__user__username = enrollment_no)
   except PlacementPerson.DoesNotExist :
     l.info(request.user.username + ': could not find ' + enrollment_no + ' to cycle the placement status.')
     return HttpResponse ('ERROR : Student not found with this enrollment no.')
@@ -318,7 +319,7 @@ def change_debar_status(request, enrollment_no, status) :
     else :
       return HttpResponse ('ERROR: Debar status not defined')
     try:
-      plac_person = PlacementPerson.objects.get(person__user__username=enrollment_no)
+      plac_person = PlacementPerson.objects.get(student__user__username=enrollment_no)
       plac_person.is_debarred = is_debarred
       plac_person.save()
       return HttpResponse()

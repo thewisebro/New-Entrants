@@ -16,7 +16,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_verify.verify 'verify' branch.code %}">
+      <a href="{% url 'placement.views_verify.verify' 'verify' branch.code %}">
         Verify
       </a>
     </li>
@@ -29,7 +29,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_verify.verify 'unverify' branch.code %}">
+      <a href="{% url 'placement.views_verify.verify' 'unverify' branch.code %}">
         Unverify
       </a>
     </li>
@@ -42,7 +42,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_verify.verify 'unlock' branch.code %}">
+      <a href="{% url 'placement.views_verify.verify' 'unlock' branch.code %}">
         Unlock
       </a>
     </li>
@@ -55,7 +55,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_verify.verify 'reverify' branch.code %}">
+      <a href="{% url 'placement.views_verify.verify' 'reverify' branch.code %}">
         Re-Verify
       </a>
     </li>
@@ -68,7 +68,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_verify.verify 'verified' branch.code %}">
+      <a href="{% url 'placement.views_verify.verify' 'verified' branch.code %}">
         Verified Students
       </a>
     </li>
@@ -89,7 +89,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_verify.verify_department 'verify' id %}">
+      <a href="{% url 'placement.views_verify.verify_department' 'verify' id %}">
         Verify
       </a>
     </li>
@@ -102,7 +102,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_verify.verify_department 'unverify' id %}">
+      <a href="{% url 'placement.views_verify.verify_department' 'unverify' id %}">
         Unverify
       </a>
     </li>
@@ -115,7 +115,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_verify.verify_department 'unlock' id %}">
+      <a href="{% url 'placement.views_verify.verify_department' 'unlock' id %}">
         Unlock
       </a>
     </li>
@@ -128,7 +128,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_verify.verify_department 'reverify' id %}">
+      <a href="{% url 'placement.views_verify.verify_department' 'reverify' id %}">
         Re-Verify
       </a>
     </li>
@@ -141,7 +141,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_verify.verify_department 'verified' id %}">
+      <a href="{% url 'placement.views_verify.verify_department' 'verified' id %}">
         Verified Students
       </a>
     </li>
@@ -152,7 +152,7 @@
 {% endif %}
 
 {% if task != 'verified' %}
-{% if students %}
+{% if plac_persons %}
 <form method="POST">
   {% csrf_token %}
   <table class="sortable table table-striped table-bordered table-condensed" id="t1">
@@ -164,19 +164,21 @@
       <th>Resume</th>
       <th>Scorecard</th>
     </tr>
-    {% for student in students %}
+    {% for plac_person in plac_persons %}
+    {% with student=plac_person.student %}
     <tr class="{% cycle 'odd' 'even' %} {% if forloop.last %}lastline{% endif %}">
       <td>{{ forloop.counter }}</td>
-      <td><input type="checkbox" name="selected_students" value="{{ student.pk }}"/></td>
-      <td>{{ student.person.name }}</td>
-      <td>{{ student.person.user.username }}</td>
+      <td><input type="checkbox" name="selected_students" value="{{ plac_person.pk }}"/></td>
+      <td>{{ student.user.name }}</td>
+      <td>{{ student.user.username }}</td>
       <td>
-        <a href="{% url placement.views_verify.resume student.person.user.username %}">Resume</a>
+        <a href="{% url 'placement.views_verify.resume' student.user.username %}">Resume</a>
       </td>
       <td>
-        <a href="{% url placement.views_verify.scorecard student.person.user.username %}">Scorecard</a>
+        <a href="{% url 'placement.views_verify.scorecard' student.user.username %}">Scorecard</a>
       </td>
     </tr>
+    {% endwith %}
     {% endfor %}
   </table>
   <div class="submit_button">
@@ -189,7 +191,7 @@ No students to {{ task }}!
 
 {% else %} {# {% if task == 'verified' #}
 
-{% if students %}
+{% if plac_persons %}
 <table class="sortable table table-striped table-bordered table-condensed" id="t2">
   <tr>
     <th>S.No.</th>
@@ -199,19 +201,21 @@ No students to {{ task }}!
     <th>Resume</th>
     <th>Scorecard</th>
   </tr>
-  {% for student in students %}
+  {% for plac_person in plac_persons %}
+  {% with student=plac_person.student %}
   <tr>
     <td>  {{ forloop.counter }}</td>
-    <td>{{ student.person.name }}</td>
-    <td>{{ student.person.user.username }}</td>
-    <td>{{ student.person.personal_contact_no|default:'-' }}</td>
+    <td>{{ student.user.name }}</td>
+    <td>{{ student.user.username }}</td>
+    <td>{{ student.user.contact_no|default:'-' }}</td>
     <td>
-      <a href="{% url placement.views_verify.resume student.person.user.username %}">Resume</a>
+      <a href="{% url 'placement.views_verify.resume' student.user.username %}">Resume</a>
     </td>
     <td>
-      <a href="{% url placement.views_verify.scorecard student.person.user.username %}">Scorecard</a>
+      <a href="{% url 'placement.views_verify.scorecard' student.user.username %}">Scorecard</a>
     </td>
   </tr>
+  {% endwith %}
   {% endfor %}
 </table>
 </form>
