@@ -45,7 +45,8 @@
 }
 
 body {
-  background:red;	
+  background:red;
+  font-family:arial;	
 }
 
 // Main blocks 
@@ -61,12 +62,14 @@ body {
 
 .leftDiv{
   position:fixed;
-  width:220px;
+  width:280px;
   height:100%;
   top:55px;
   bottom:0px;
   left:0px;
-  background-color:$g0;    
+  background-color:$g0;  
+  border-right: 1px solid rgba(0,0,0,.15);
+  z-index: 1;  
 }
 
 .rightDiv{
@@ -80,7 +83,7 @@ body {
 
 .centerDiv{
   position:absolute;
-  left:220px;
+  left:280px;
   right:220px;
   top:55px;
   bottom:0;
@@ -89,28 +92,40 @@ body {
 }
 // Header Div Css
 
-
+.header{
+  border-bottom: 1px solid $g5;  
+}
 
 // Left Div Css
 
 // UserBlock
 
 #userblock{
-  width:100%;
   height:auto;
-  background-color:$g8;  
-  text-align:center;
+  background-color:$g0;  
+  padding: 10px 5px;
+  border-bottom: 1px solid $g5;
+  >div{
+    display: inline-table;  
+  }
 }
 
 #userpic{
-  padding-top:20px;
+  border-radius: 100px;
+  overflow: hidden;
+  width: 80px;
+  height: 80px;
+  border: 1px solid #888;
+  margin-left: 10px;
+  margin-right: 10px;
 }
+
 
 #userPicSource{
   
 }
-#username{
-  padding:20px;
+
+#userdata{
 }
 
 .myCourse{
@@ -119,7 +134,6 @@ body {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      padding: 10px 15px;
       cursor:pointer;
       &:hover{
         background-color:$g6;
@@ -130,10 +144,66 @@ body {
 
 .myCourseHeading{
   border-bottom:1px solid $g8;
-  padding:10px;
-
+  color: #919da8;
+  font-size: 13px;
+  letter-spacing: .035em;
+  padding:7px 0px 7px 20px;
+  cursor: default;
+  a{
+    
+  }
 }
 
+.myCourseUl{
+   
+
+  .crsA{
+
+   }
+  .crsLi{
+        padding: 10px 15px;
+        color: #515253;
+        letter-spacing: .025em;
+        font-weight: 400;
+        font-size:14px;
+        border-left: 4px solid;
+        border-left-color: $g0;
+        &:hover{
+          border-left-color: $g13; 
+        }
+        > div{
+          display:inline-block;
+        } 
+       .crsIdName{
+         div{
+         
+         } 
+         .crsId{
+           font-weight:bold;
+           font-size:16px; 
+         }
+         .crsName{
+           overflow: hidden;
+           text-overflow: ellipsis;
+           white-space: nowrap;
+           width: 200px;
+         }
+       }
+       .crsNotification{
+          float: right;
+          width: 20px;
+          height: 20px;
+          text-align: center;
+          //background: rgb(29, 170, 197);
+          background-image: linear-gradient(120deg, #910385, #FF2424);
+          font-weight: bold;
+          color: white;
+          line-height: 20px;
+          font-size: 13px;
+          margin-top: 6px;	
+       }
+      }
+}
 
 // Right Div Css
 

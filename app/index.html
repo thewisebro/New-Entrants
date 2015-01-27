@@ -33,23 +33,28 @@
          <!-- User block-->
          <div id="userblock">
             <div id="userpic">
-              <img src="images/yeoman.png" alt="I'm Yeoman">
+              <img src="" alt="">
             </div>
-            <div id="username">
-               {{userdetails.username}}<br>
-               {{userdetails.branch}}
+            <div id="userdata">
+ 	      <div>
+                <div>{{userdetails.username}}</div>
+ 	        <div>{{userdetails.branch}}</div>
+	      </div>
+             
             </div>
          </div> 
          
          <!-- My Courses -->
          <div class="myCourse">
             <div class="myCourseHeading">My Courses</div>
-            <ul>
-               <a ng-href="/course/{{crs.id}}" ng-repeat="crs in courses">
-                  <li >
-                   <span>{{crs.id}} </span><br>
-                   {{crs.name}}<br>
-                   <span>{{crs.notifications}}</span> 
+            <ul class="myCourseUl">
+               <a class="crsA"  ng-href="/course/{{crs.id}}" ng-repeat="crs in courses">
+                 <li class="crsLi">
+                   <div class="crsIdName"> 
+                    <div class="crsId">{{crs.id}} </div>
+                    <div class="crsName">{{crs.name}}</div>
+                   </div>
+                   <div class="crsNotification">{{crs.notifications}}</div> 
                  </li>
                </a>
             </ul>
