@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from nucleus.models import User,Student
 from api import model_constants as MC
+from yaadein import constants as YC
 
 from taggit_autocomplete.managers import TaggableManager
 
