@@ -193,7 +193,7 @@ select[class=iCurrencyField] {
 /*****************************************************/
 #forum_header{
   color: #434343;
-  background-image:url('/static/images/Placement_Forums_logo.png');
+  background-image:url('/static/images/placement/Placement_Forums_logo.png');
   background-repeat:no-repeat;
   height: 65px;
   font-weight:bold;
@@ -229,7 +229,7 @@ select[class=iCurrencyField] {
 
 .forum_question
 {
-  background-image:url('/static/images/Placement_Forums_Question.png');
+  background-image:url('/static/images/placement/Placement_Forums_Question.png');
   background-repeat:no-repeat;
   padding: 5px 0 15px 50px;
   color:#3f3f3f;
@@ -286,7 +286,7 @@ select[class=iCurrencyField] {
 
 #faq_header{
   color: #434343;
-  background-image:url('/static/images/Placement_Forums_logo.png');
+  background-image:url('/static/images/placement/Placement_Forums_logo.png');
   background-repeat:no-repeat;
   height: 65px;
   font-weight:bold;
@@ -324,7 +324,7 @@ padding: 10px 10px 15px 10px;
 
 .faq_question
 {
-  background-image:url('/static/images/Placement_Forums_Question.png');
+  background-image:url('/static/images/placement/Placement_Forums_Question.png');
   background-repeat:no-repeat;
   padding: 5px 0 0 50px;
   color:#3f3f3f;

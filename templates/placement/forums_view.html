@@ -54,9 +54,8 @@ function Blank_TextField_Validator_new()
 
 
 <!-- New ForumPost form -->
-{% if request.session.person or request.session.user %}
 <div id='forum_ask'>
-<form name="newforumpost" method="POST" action="{% url placement.views.forum_post %}" onsubmit="return Blank_TextField_Validator()">
+<form name="newforumpost" method="POST" action="{% url 'placement.views.forum_post' %}" onsubmit="return Blank_TextField_Validator()">
   {% csrf_token %}
   
 {# <textarea id="id_forum_title" name="title" placeholder="Question." rows="2"></textarea> #}
@@ -69,56 +68,60 @@ function Blank_TextField_Validator_new()
   <input id='forum_submit_button' type="submit" value="Post Question" class="btn btn-primary"/>
 </form>
 </div>
+{% if request.user %}
 {% endif %}
 
-{% for post,replies in posts %}
-<div class='forum_unit'>
-  <div class='forum_question'>
-    {{ post.title }}
-  </div >
-  
-  <div class='forum_question_content'>
-  {% if post.content %}
-    {{ post.content }}
-  <hr /> 
-  {% endif %} 
-  <span class='forum_light'>{{ post.person_name }} | {{ post.date }}</span>
-  </div>
+{% if posts %}
+  {% for post,replies in posts %}
+  <div class='forum_unit'>
+    <div class='forum_question'>
+      {{ post.title }}
+    </div >
+    
+    <div class='forum_question_content'>
+    {% if post.content %}
+      {{ post.content }}
+    <hr /> 
+    {% endif %} 
+    <span class='forum_light'>{{ post.person_name }} | {{ post.date }}</span>
+    </div>
 
-{% if replies %}
-  {% for reply in replies %}
-  <div class='forum_reply'>
-    {{ reply.content }}
-    <hr />
-    <span class='forum_light'>{{ reply.person_name }} | {{ reply.date }}</span>
+  {% if replies %}
+    {% for reply in replies %}
+    <div class='forum_reply'>
+      {{ reply.content }}
+      <hr />
+      <span class='forum_light'>{{ reply.person_name }} | {{ reply.date }}</span>
+    </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- ForumReply form -->
+  {% if request.user %}
+  <a href="javascript:void();" onclick="javascript:switchReplyStatus({{ post.id }});"><button id="forum_reply_post_button" class="btn btn-primary"><span id="ReplyLink{{ post.id }}">Reply</span></button></a>
+  <form method="POST" id="ForumReply{{ post.id }}" style="display:none;" name="forumreply" onsubmit="return Blank_TextField_Validator_new()">
+    {% csrf_token %}
+    <textarea class="forum_input" name="content" id="content"></textarea>
+    <input type="hidden" name="post_id" value="{{ post.id }}"/>
+    <br/>
+    <input type="submit" value="Reply" class="btn btn-primary"/>
+  </form>
+  {% endif %}
   </div>
   {% endfor %}
 {% endif %}
-
-<!-- ForumReply form -->
-{% if request.session.person or request.session.user %}
-<a href="javascript:void();" onclick="javascript:switchReplyStatus({{ post.id }});"><button id="forum_reply_post_button" class="btn btn-primary"><span id="ReplyLink{{ post.id }}">Reply</span></button></a>
-<form method="POST" id="ForumReply{{ post.id }}" style="display:none;" name="forumreply" onsubmit="return Blank_TextField_Validator_new()">
-  {% csrf_token %}
-  <textarea class="forum_input" name="content" id="content"></textarea>
-  <input type="hidden" name="post_id" value="{{ post.id }}"/>
-  <br/>
-  <input type="submit" value="Reply" class="btn btn-primary"/>
-</form>
-{% endif %}
-</div>
-{% endfor %}
-
 <!-- Paging -->
-<div class="pagination">
-{% for page in pages %}
 
+<div class="pagination">
+<ul>
+{% for page in pages %}
 {% if page_no == page %}
-<li class="disabled"><a href="{% url placement.views.forum forum_type page %}">{{ page }}</a></li>
+<li class="disabled"><a href="{% url 'placement.views.forum' forum_type page %}">{{ page }}</a></li>
 {% else %}
-<li><a href="{% url placement.views.forum forum_type page %}">{{ page }}</a></li>
+<li><a href="{% url 'placement.views.forum' forum_type page %}">{{ page }}</a></li>
 {% endif %}
 {% endfor %}
+</ul>
 </div>
 <script type="text/javascript">
   function switchReplyStatus(id) {

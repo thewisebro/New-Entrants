@@ -118,7 +118,7 @@ def resume_nik(request) :
       messages.error(request, 'An error occured while generating the PDF file.')
       return HttpResponseRedirect(reverse('placement.views.index'))
     response = HttpResponse(pdf['content'], content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=Resume_' + student.user.username + '_' + sanitise_for_download(datetime.datetime.now()) + '.pdf'
+    response['Content-Disposition'] = 'attachment; filename=Resume_' + student.user.username + '_' + sanitise_for_download(datetime.datetime.now().strftime('%b. %d, %Y, %I:%M %p')) + '.pdf'
     response['Content-Length'] = len(pdf['content'])
     return response
   except Exception as e :
@@ -314,10 +314,10 @@ def forum_post(request) :
       messages.error(request, 'Please fill in the Question before submitting.')
       return HttpResponseRedirect(reverse('placement.views.forum', args=[ request.POST['forum_type'] ]))
     elif request.method == 'POST' :
-      if request.user.groups.filter(name='Student').exist():
+      if not request.user.groups.filter(name='Student'):
         student = request.user.student
         ForumPost.objects.create(enrollment_no = student.user.username,
-                               person_name = student.name,
+                               person_name = student.user.name,
                                discipline_name = student.branch.name,
                                department_name = student.branch.get_department_display(),
                                title = request.POST['title'],
@@ -336,20 +336,19 @@ def forum_post(request) :
 
       try:
         student = request.user.student
-        email_id=PersonIdEnrollmentNoMap.objects.get(enrollment_no=request.user.username).person_id
         forum_type=request.POST['forum_type']
         if(forum_type=="T"):
-          subject_mail="New forum post on technical forum by "+ student.name
+          subject_mail="New forum post on technical forum by "+ student.user.name
         elif(forum_type=="P"):
-          subject_mail="New forum post on placement forum by "+ student.name
+          subject_mail="New forum post on placement forum by "+ student.user.name
         content_mail="Post Title: "+request.POST['title']+'\n'+"Post Content: "+request.POST['content']
 
         from django.core.mail import send_mail
         forum_type=request.POST['forum_type']
         if(forum_type=="T"):
-          send_mail(subject_mail, content_mail, 'img@iitr.ernet.in' , ['img.placement@gmail.com'])
+          send_mail(subject_mail, content_mail, 'img@iitr.ernet.in' , ['img.placement@gmail.com'], fail_silently=True)
         elif(forum_type=="P"):
-          send_mail(request.POST['title'], request.POST['content'], 'img@iitr.ernet.in' , ['placement.iitr@gmail.com'])
+          send_mail(request.POST['title'], request.POST['content'], 'img@iitr.ernet.in' , ['placement.iitr@gmail.com'], fail_silently=True)
         messages.success(request, 'You posted successfully on the forum')
 
       except Exception as e:
