@@ -90,7 +90,7 @@ def coursepage(request, batch_id):
       posts.append(complete_post)
 
     context = {'posts': posts,
-#'batch':userBatch,
+#               'batch':userBatch,
                'userType':userType,
                'viewType':'Coursepage'}
 

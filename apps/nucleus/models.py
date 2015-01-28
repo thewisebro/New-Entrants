@@ -240,7 +240,7 @@ class User(AbstractUser, models.Model):
     )
 
 class WebmailAccount(models.Model):
-  webmail_id = models.CharField(max_length=15, primary_key=True)
+  webmail_id = models.CharField(max_length=20, primary_key=True)
   user = models.ForeignKey(User)
 
 
