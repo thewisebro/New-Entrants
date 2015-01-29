@@ -88,7 +88,8 @@ body {
   top:55px;
   bottom:0;
   height:auto;
-  background-color:$g1; 
+  background-color:$g0;
+  padding: 20px; 
 }
 // Header Div Css
 
@@ -213,6 +214,40 @@ body {
 
 // Center Div Css
 
+.courseFullDiv{
+  background-color:$g0;
+  .courseHeading{
+    height: 50px;
+    background: $g4;
+    font-size: 19px;
+    line-height: 50px;
+    padding: 0px 20px;
+    border-bottom:1px solid $g9; 
+    > div{
+      display:inline-block;  
+    } 
+    .courseHeadingNameId{
+      
+    }
+    .courseSearch{
+      float: right;  
+    }
+  }
+  .courseFilters{
+    
+    ul{
+      list-style:none;
+      a{
+        text-decoration:none;
+        display:inline-block;
+        li{
+          
+        }  
+      }  
+    }
+      
+  }   
+}
 
 
 

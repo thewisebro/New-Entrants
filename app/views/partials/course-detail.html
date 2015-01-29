@@ -1,3 +1,32 @@
-<div>
-  {{coursename}}
+<div ng-click="getPostData()" class="courseFullDiv">
+    <div class="courseHeading">
+      <div class="courseHeadingNameId">
+        {{courseName}}({{courseId}})
+      </div>
+      <div class="courseSearch">
+        Search
+      </div>
+    </div>
+    <div class="courseFilters">
+       <ul>
+          <a ui-sref="course.feeds">
+            <li>
+                Posts
+            </li>
+          </a>
+          <a ui-sref="course.files">
+            <li>
+                Files
+            </li>
+          </a>
+          <a ui-sref="course.members">
+            <li>
+                Members
+            </li>
+          </a>
+       </ul>
+    </div>
+    <div class="filteredContent" ui-view>
+     
+    <div>
 </div>

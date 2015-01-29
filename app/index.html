@@ -37,7 +37,7 @@
             </div>
             <div id="userdata">
  	      <div>
-                <div>{{userdetails.username}}</div>
+          <div>{{userdetails.username}}</div>
  	        <div>{{userdetails.branch}}</div>
 	      </div>
              
@@ -48,7 +48,7 @@
          <div class="myCourse">
             <div class="myCourseHeading">My Courses</div>
             <ul class="myCourseUl">
-               <a class="crsA"  ng-href="/course/{{crs.id}}" ng-repeat="crs in courses">
+               <a class="crsA" ng-repeat="crs in courses" ui-sref="course({courseId:crs.id})">
                  <li class="crsLi">
                    <div class="crsIdName"> 
                     <div class="crsId">{{crs.id}} </div>
@@ -63,8 +63,8 @@
       </div>
 
       <!-- Center view -->
-      <div class="centerDiv" ng-view>
-        
+      <div class="centerDiv" ui-view>
+                           
       </div>
       
       <!-- Right Div -->
@@ -98,12 +98,16 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/main.services.js"></script>
+        <script src="scripts/controllers/main.directives.js"></script>
         <script src="scripts/controllers/main.js"></script>
+
         <!-- endbuild -->
 </body>
 </html>
