@@ -9,8 +9,8 @@
 
 {% if errors %}
   The following resumes were not present:<br />
-  {% for person in errors %}
-    {{ person.name }}, {{ person.user.username }}<br />
+  {% for student in errors %}
+    {{ student.user.name }}, {{ student.user.username }}<br />
   {% endfor %}
 {% else %}
 There were no errors

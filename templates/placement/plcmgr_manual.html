@@ -1,15 +1,15 @@
 <!DOCTYPE HTML>
-{% load macros %}
+{% load kwacros %}
 <html>
   <head>
     <title>
       Contact manager
     </title>
-    <link rel="stylesheet" href="{{ STATIC_URL}}css/placement/placement.manager.css" type="text/css">
-    <link rel="stylesheet" href="{{ STATIC_URL}}css/nucleus/style.css" type="text/css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/nucleus/style.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/jquery-ui.min.css">
+    <script src="{{ STATIC_URL }}jquery/jquery-1.10.2.js"></script>
+    <script src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>
     <script>
     $(function() {
       $( "#id_when_to_contact" ).datepicker({ dateFormat: "dd-mm-yy" }).val();
@@ -39,7 +39,7 @@
       </div>
       <div class="manual-form">
         <form method="post" action="">{% csrf_token %}
-          {% macro editable_field_div field %}
+          {% kwacro editable_field_div field %}
             <div class="edit-row">
               <div class="dabba">
                 {{field.errors}}
@@ -54,21 +54,21 @@
                 <div class="field">{{field}}</div>
               </div>
             </div>
-          {% endmacro %}
-          {% usemacro editable_field_div companyform.company_name %}
-          {% usemacro editable_field_div contactpersonform.contact_person %}
-          {% usemacro editable_field_div contactpersonform.designation %}
-          {% usemacro editable_field_div contactpersonform.phone_no %}
-          {% usemacro editable_field_div contactpersonform.email %}
-          {% usemacro editable_field_div companyform.last_contact %}
-          {% usemacro editable_field_div companyform.cluster %}
-          {% usemacro editable_field_div companyform.status %}
-          {% usemacro editable_field_div companyform.person_in_contact %}
-          {% usemacro editable_field_div companyform.comments %}
-          {% usemacro editable_field_div companyform.when_to_contact %}
+          {% endkwacro %}
+          {% usekwacro editable_field_div companyform.company_name %}
+          {% usekwacro editable_field_div contactpersonform.contact_person %}
+          {% usekwacro editable_field_div contactpersonform.designation %}
+          {% usekwacro editable_field_div contactpersonform.phone_no %}
+          {% usekwacro editable_field_div contactpersonform.email %}
+          {% usekwacro editable_field_div companyform.last_contact %}
+          {% usekwacro editable_field_div companyform.cluster %}
+          {% usekwacro editable_field_div companyform.status %}
+          {% usekwacro editable_field_div companyform.person_in_contact %}
+          {% usekwacro editable_field_div companyform.comments %}
+          {% usekwacro editable_field_div companyform.when_to_contact %}
           {% for  group in user.groups.all %}
             {% if group.name == 'Placement Manager' %}
-                {% usemacro editable_field_div assignform.company_coordinator %}
+                {% usekwacro editable_field_div assignform.company_coordinator %}
             {% endif %}
           {% endfor %}
 
@@ -80,8 +80,10 @@
                 </div>
             </div>
           </div>
-          <div class="dabba">
-            <input class="input-button" type="submit" value="Submit" />
+          <div class="edit-row">
+            <div class="dabba">
+              <input class="input-button" type="submit" value="Submit" />
+            </div>
           </div>
         </form>
       </div>

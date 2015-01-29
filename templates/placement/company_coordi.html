@@ -1,17 +1,17 @@
 <!DOCTYPE HTML>
-{% load macros %}
+{% load kwacros %}
 <html>
   <head>
     <title>
       Company Coordinator
     </title>
-    <link rel="stylesheet" href="{{ STATIC_URL}}css/placement/jquery.dataTables.css" type="text/css">
-    <link rel="stylesheet" href="{{STATIC_URL}}css/placement/dataTables.bootstrap.css" type="text/css">
-    <link rel="stylesheet" href="{{ STATIC_URL}}placement/bootstrap/css/bootstrap.css" type="text/css">
-    <link rel="stylesheet" href="{{STATIC_URL}}css/placement/placement.manager.css" type="text/css">
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL}}js/placement/jquery.dataTables.js"></script>
-    <script type="text/javascript" src="{{STATIC_URL}}js/placement/dataTables.bootstrap.js"></script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/jquery.dataTables.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/dataTables.bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/placement/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/placement/dataTables.bootstrap.js"></script>
   </head>
   <body>
     <div class="content">
@@ -33,7 +33,7 @@
       </div>
       <div class="right-div">
                 <h4>
-                  <a href="{% url placement.views_img.company_coordinator_today_view %}"
+                  <a href="{% url 'placement.views_img.company_coordinator_today_view' %}"
                     target="_blank">Contact(s) due today</a>
                 </h4>
       </div>
@@ -56,19 +56,14 @@
               <th>Remove</th>
             </tr>
           </thead>
-          <tbody>
-          </tbody>
         </table>
       </div>
     </div>
   </body>
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL}}js/placement/jquery.dataTables.js"></script>
-  <script type="text/javascript" src="{{STATIC_URL}}js/placement/dataTables.bootstrap.js"></script>
-  <script type="text/javascript"
-    src="//cdn.datatables.net/plug-ins/725b2a2115b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/placement/jquery.dataTables.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/placement/dataTables.bootstrap.js"></script>
   <script type="text/javascript">
-
     if (!String.prototype.format) {
       String.prototype.format = function() {
             var args = arguments;

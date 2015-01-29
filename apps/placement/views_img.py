@@ -20,8 +20,8 @@ from nucleus.models import Student, WebmailAccount
 from placement import policy, forms
 from placement.policy import current_session_year
 from placement.models import *
-from placement.utils import *
 from placement.forms import *
+from placement.utils import *
 from django.views.generic import FormView
 
 # XXX : Keep logged after all imports only
@@ -67,10 +67,10 @@ def update_status(request):
     if check_status_form.is_valid():
       username=check_status_form.cleaned_data['enrollment_no']
       try:
-        plac_person = PlacementPerson.objects.get(person__user__username = username)
+        plac_person = PlacementPerson.objects.get(student__user__username = username)
       except PlacementPerson.DoesNotExist as e :
         webmail = WebmailAccount.objects.get(webmail_id = username)
-        plac_person = PlacementPerson.objects.get(person__user = webmail.user)
+        plac_person = PlacementPerson.objects.get(student__user = webmail.user)
       l.info(request.user.username+': viewed status of ' + plac_person.student.user.username + ' ('+plac_person.student.name+')')
       old_status= plac_person.status
       form = ChangeStatus()
@@ -94,15 +94,15 @@ def generate_registration_no(request):
   """
   l.info(request.user.username+': opened view to generate registration no, which open only to IMG members')
   if request.method == 'POST' :
-    form = forms.GenerateRegistrationNo(request.POST)
+    form = GenerateRegistrationNo(request.POST)
     if form.is_valid() :
       username = form.cleaned_data['enrollment_no']
       try:
         try:
-          plac_person = PlacementPerson.objects.get(person__user__username = username)
+          plac_person = PlacementPerson.objects.get(student__user__username = username)
         except PlacementPerson.DoesNotExist as e :
           webmail = WebmailAccount.objects.get(webmail_id = username)
-          plac_person = PlacementPerson.objects.get(person__user = webmail.user)
+          plac_person = PlacementPerson.objects.get(student__user = webmail.user)
         student = plac_person.student
         info = PlacementInformation.objects.get_or_create(student = student)[0]
         info.registration_no  = student.branch.degree + '/' + student.branch.code + '/' + student.user.username + '/'
@@ -118,7 +118,7 @@ def generate_registration_no(request):
     else:
       messages.error(request, form.errors, extra_tags='form_error')
   else :
-    form = forms.GenerateRegistrationNo()
+    form = GenerateRegistrationNo()
   return render_to_response('placement/generate_registration_no.html', {
       'form' : form,
       'submit' : 'Submit',
@@ -268,7 +268,7 @@ def contactmanager_edit(request, company_id=None):
       'designation':contactperson.designation}
     contactpersonform = ContactpersonForm(initial = contactpersondata)
     try:
-      companycoordi = CompanyCoordi.objects.get(person__name=company.person_in_contact)
+      companycoordi = CompanyCoordi.objects.get(student__user__name=company.person_in_contact)
     except ObjectDoesNotExist:
       companycoordi = None
     company_coordidata = {'company_coordinator': companycoordi}
@@ -306,9 +306,9 @@ def contactmanager_edit(request, company_id=None):
        company.when_to_contact=companyform.cleaned_data['when_to_contact']
        try:
         if request.user.groups.filter(name="Company Coordinator"):
-          companycoordi = CompanyCoordi.objects.get(person__name=company.person_in_contact)
+          companycoordi = CompanyCoordi.objects.get(student__user__name=company.person_in_contact)
         else:
-          companycoordi = CompanyCoordi.objects.get(person__name=assignform.cleaned_data['company_coordinator'])
+          companycoordi = CompanyCoordi.objects.get(student__user__name=assignform.cleaned_data['company_coordinator'])
         company.person_in_contact = companycoordi.student.name
        except ObjectDoesNotExist:
         company.person_in_contact = None
@@ -356,7 +356,7 @@ def contactmanager_delete(request, company_id):
 def company_coordinator_view(request):
   user =  request.user
   student = user.student
-  companycontact_data = CompanyContact.objects.filter(person_in_contact=student.name)
+  companycontact_data = CompanyContact.objects.filter(person_in_contact=student.user.name)
 
   lst = companycontact_data.values_list('company_name', 'cluster',
               'contactperson__contact_person', 'contactperson__designation', 'contactperson__phone_no',
@@ -444,17 +444,17 @@ def generate_company_contact_xls(request):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('sheet 1')
 
-#    ws.write(0, 0, 'Company Name' )
-#    ws.write(0, 0, 'Cluster' )
-#    ws.write(0, 0, 'Contact Student' )
-#    ws.write(0, 0, 'Designation' )
-#    ws.write(0, 0, 'Phone Number' )
-#    ws.write(0, 0, 'Email' )
-#    ws.write(0, 0, 'Status' )
-#    ws.write(0, 0, 'Last Contact' )
-#    ws.write(0, 0, 'Student in Contact' )
-#    ws.write(0, 0, 'Comments')
-#    ws.write(0, 0, 'When to contact')
+    ws.write(0, 0, 'Company Name' )
+    ws.write(0, 1, 'Cluster' )
+    ws.write(0, 2, 'Contact Student' )
+    ws.write(0, 3, 'Designation' )
+    ws.write(0, 4, 'Phone Number' )
+    ws.write(0, 5, 'Email' )
+    ws.write(0, 6, 'Status' )
+    ws.write(0, 7, 'Last Contact' )
+    ws.write(0, 8, 'Student in Contact' )
+    ws.write(0, 9, 'Comments')
+    ws.write(0, 10, 'When to contact')
 
     lst = company.values_list('company_name', 'cluster',
               'contactperson__contact_person', 'contactperson__designation', 'contactperson__phone_no',
@@ -463,9 +463,9 @@ def generate_company_contact_xls(request):
 
     for row, rowdata in enumerate(lst):
        for col, val in enumerate(rowdata):
-         ws.write(row, col, val)
+         ws.write(row+1, col, val)
 
-    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=placement_data.xls'
     wb.save(response)
     return response
@@ -474,7 +474,7 @@ def generate_company_contact_xls(request):
 def person_search(request):
   if request.is_ajax():
     q = request.GET.get('term','')
-    persons = Student.objects.filter(Q(name__icontains = q)|Q(user__username__icontains = q),passout_year=None).order_by('-user__username')[:50]
+    persons = Student.objects.filter(Q(user__name__icontains = q)|Q(user__username__icontains = q),passout_year=None).order_by('-user__username')[:50]
     if not persons:
       obj = [{
         'id':'00000000',
@@ -486,8 +486,8 @@ def person_search(request):
     def person_dict(student):
       return {
         'id':str(student),
-        'label':str(student.name)+" ( "+str(student.user.info)+" )",
-        'value':str(student.name),
+        'label':str(student.user.name)+" ( "+str(student.user.info)+" )",
+        'value':str(student.user.name),
       }
     data = simplejson.dumps(map(person_dict,persons))
   else:

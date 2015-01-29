@@ -4,9 +4,9 @@
     <title>
       Add Coordinator
     </title>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="/static/js/valentino/enscroll-0.5.5.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/valentino/custom-ui.js"></script>
+    <script src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}js/placement/enscroll-0.5.5.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/placement/custom-ui.js"></script>
 
 <script>
 
@@ -29,9 +29,9 @@ $('body').ready(function(){
   },
   minLength:3
 });
-    });
+});
 </script>
-  <link rel="stylesheet" href="{{ STATIC_URL}}placement/bootstrap/css/bootstrap.css" type="text/css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" type="text/css">
  
   </head>
 
@@ -41,7 +41,7 @@ $('body').ready(function(){
      {% csrf_token %}
        <div id="searchbox" align="center">
        Person Search:
-        {{ form.person }}
+        {{ form.student }}
         {{ form.enroll }}
         <input type="submit" value="Add"/>
         </div>
