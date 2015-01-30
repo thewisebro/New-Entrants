@@ -7,18 +7,22 @@
           <div class="postUserName">
             {{post.post.username.first}} {{post.post.username.last}} 
           </div>
-          <div class="postContent" ng-repeat="file in post.files">
-            <div class="fileImage">
-           
-            </div>
-            <div class="fileData">
-               <div class="filename">
-                  {{file.upload_file}}
-               </div>
-               <div class="fileDesc">
-                  {{file.description}}
-               </div>
-            </div>
+          <div class="postContentAll">
+              <div class="postText">
+                {{post.post.content}}   
+              </div>
+              <div class="filesDisplay">
+                  <div class="postContent" ng-repeat="file in post.files">
+                    <div class="fileImage">
+                   
+                    </div>
+                    <div class="fileData">
+                       <div class="filename">
+                          {{file.upload_file}}
+                       </div>
+                    </div>
+                  </div>   
+              </div> 
           </div>
           <div class="postComments">
             

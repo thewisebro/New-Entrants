@@ -86,9 +86,8 @@ body {
   left:280px;
   right:220px;
   top:55px;
-  bottom:0;
   height:auto;
-  background-color:$g0;
+  background-color:$g9;
   padding: 20px; 
 }
 // Header Div Css
@@ -216,13 +215,14 @@ body {
 
 .courseFullDiv{
   background-color:$g0;
+  padding:20px;
   .courseHeading{
     height: 50px;
-    background: $g4;
+    background: $g0;
     font-size: 19px;
     line-height: 50px;
     padding: 0px 20px;
-    border-bottom:1px solid $g9; 
+    border-bottom:1px solid $g6; 
     > div{
       display:inline-block;  
     } 
@@ -234,14 +234,21 @@ body {
     }
   }
   .courseFilters{
-    
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid $g6; 
     ul{
       list-style:none;
+      text-align:center;
       a{
         text-decoration:none;
         display:inline-block;
         li{
-          
+          width: 100px;
+          text-transform: uppercase;
+          font-size: 15px;
+          font-weight: bold;
+          color: $g16;
         }  
       }  
     }
@@ -249,6 +256,59 @@ body {
   }   
 }
 
-
+.filteredContent{
+    
+     .courseFeeds{
+           margin-top:20px;
+           margin-bottom:20px;
+          .postDiv{
+              padding:20px;
+              margin-bottom:20px;
+              background:$g0;
+              overflow: hidden;
+              position: relative;
+              .postUserPic{
+                  width: 3.75rem;
+                  height: 3.75rem;
+                  border-radius: 3.75rem;
+                  background:$g14;
+                  float:left;  
+              }
+              .postData{
+                  margin-left:80px;
+                  .postUserName{
+                      padding: 10px 0px 10px 0px;
+                      border-bottom: 1px solid #E4E4E4;
+                      margin-bottom: 15px;  
+                  }  
+              }
+              .postContentAll{
+                .postText{
+                  margin-bottom:20px; 
+                 }
+                .filesDisplay{
+                  >div{
+                    float:left;
+                    padding-right: 10px;  
+                  } 
+                  .postContent{
+                      .fileImage{
+                          width:60px;
+                          height:60px;
+                          background: $g8; 
+                      }
+                      .fileData{
+                          margin-top:10px;
+                      } 
+                  } 
+                }
+              }
+           }
+             
+     }
+     
+       
+  
+}
 
 
