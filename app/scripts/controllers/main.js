@@ -14,34 +14,45 @@ lectutApp
     $scope.userdetails = {
      username:'Himanshu Jariyal',
      enrollmentNo:"12114030",
-     branch:"CSE"  
+     branch:"B.Tech CSE 3rd Year"  
     };
    
+    $scope.users =[
+    {
+      url:"https://avatars2.githubusercontent.com/u/552817?v=3&s=80"
+    },
+    {
+      url:"https://avatars0.githubusercontent.com/u/2171796?v=3&s=80"
+    },
+    {
+      url:"https://avatars3.githubusercontent.com/u/810438?v=3&s=80"
+    }
+    ];
     //course name of current user
     $scope.courses = [
     {
       name:"Electronics and Communication",
-      id:"1",
+      id:"EC-131",
       notifications:5
     },
     {
       name:"Physics",
-      id:"2",
+      id:"PH-101",
       notifications:3
     }, 
     {
       name:"Business Managemnet",
-      id:"3",
+      id:"BM-002",
       notifications:2
     }, 
     {
       name:"Fine arts and music",
-      id:"4",
+      id:"FA-102",
       notifications:1
     },
     {
       name:"Hardware Lab",
-      id:"5",
+      id:"EC-332",
       notifications:5
     }
     ];

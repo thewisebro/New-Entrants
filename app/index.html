@@ -31,10 +31,13 @@
  
       <!-- Left Div 180px -->      
       <div class="leftDiv">
+         <!-- Appname-->
+         <div class="appName">Lectut</div>
+          
          <!-- User block-->
          <div id="userblock">
             <div id="userpic">
-              <img src="" alt="">
+              <img src="images/user_pic.jpg" alt="">
             </div>
             <div id="userdata">
  	      <div>
@@ -52,7 +55,7 @@
                <a class="crsA" ng-repeat="crs in courses" ui-sref="course({courseId:crs.id})">
                  <li class="crsLi">
                    <div class="crsIdName"> 
-                    <div class="crsId">{{crs.id}} </div>
+                    <div class="crsId"><span>{{crs.id}}</span> </div>
                     <div class="crsName">{{crs.name}}</div>
                    </div>
                    <div class="crsNotification">{{crs.notifications}}</div> 
@@ -64,7 +67,7 @@
       </div>
 
       <!-- Center view -->
-      <div class="centerDiv" ui-view>
+      <div class="centerDiv" ui-view class="ng-fadeInUp">
                            
       </div>
       
