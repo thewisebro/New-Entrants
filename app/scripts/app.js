@@ -11,7 +11,8 @@
 var lectutApp = angular.module('lectutApp', [
     'ngAnimate',
     'ngRoute',
-    'ui.router'
+    'ui.router',
+    'ui.bootstrap'
   ]);
 
 

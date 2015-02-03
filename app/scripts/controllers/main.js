@@ -58,6 +58,7 @@ lectutApp
     ];
   });
 
+
 lectutApp.controller('CourseHomeCtrl', ['$routeParams', function($routeParams) {
   this.params = $routeParams;
 }]);

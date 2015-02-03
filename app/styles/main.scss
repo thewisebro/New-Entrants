@@ -56,8 +56,8 @@
 }
 
 body {
-  background:red;
-  font-family: $osR;	
+  font-family: $osR;
+  background: $g4;	
 }
 
 ::selection {
@@ -71,8 +71,8 @@ body {
   width:100%;
   background-color:$g0;
   border-bottom:1px solid $g1;
-  z-index:99999;
-  height:0px;
+  z-index: 101;
+  height:50px;
 }
 
 .leftDiv{
@@ -84,25 +84,28 @@ body {
   left:0px;
   background-color:$g0;  
   border-right: 1px solid rgba(0,0,0,.15);
-  z-index: 1;  
+  z-index: 102;  
 }
 
 .rightDiv{
   position:fixed;
   width:220px;
-  top:0px;
+  top:50px;
   right:0px;
   bottom:0px;
-  background-color:$g0;  
+  background-color:$g0;
+  z-index:3;  
 }
 
 .centerDiv{
   position:absolute;
   left:280px;
   right:220px;
-  top:0px;
+  top:50px;
   height:auto;
-  background-color:$g4;
+  margin:20px;
+  border:1px solid $g9;
+  background-color: #F7F9FA;
 }
 // Header Div Css
 
@@ -259,8 +262,6 @@ body {
 
 .courseFullDiv{
   z-index: 2;
-  position: fixed;
-  width: calc(100% - 500px);
   box-shadow: 0 1px 0px rgba(0,0,0,.15);
   background-color:$g0;
   .courseHeading{
@@ -277,13 +278,16 @@ body {
       
     }
     .courseSearch{
-      float: right;  
+      float: right; 
+      font-size: 14px;
+      color: $g16;
+      cursor: pointer;
+      font-weight: bold; 
     }
   }
   .courseFilters{
     height: 50px;
     line-height: 50px;
-    border-bottom: 1px solid $g6; 
     ul{
       list-style:none;
       text-align:center;
@@ -303,13 +307,13 @@ body {
 }
 
 .filteredContent{
-     margin-top:80px;
-     padding:20px;   
      .courseFeeds{
-           margin-top:20px;
            margin-bottom:20px;
+           padding:20px;
           .postDiv{
-              padding:20px;
+              .mainPost{
+                padding:20px;  
+              } 
               margin-bottom:20px;
               background:$g0;
               overflow: hidden;
@@ -364,27 +368,74 @@ body {
                   color: $g16; 
                  }
                 .filesDisplay{
+                  padding-top: 20px;
+                  border-top: 1px solid $g3;
                   >div{
-                    float:left;
-                    padding-right: 10px;  
+                    display:inline-block;
+                    margin-right: 10px; 
+                    width: 250px;
+                    border: 1px solid $g6;
+                    padding: 5px; 
                   } 
                   .postContent{
+                      >div{
+                         
+                       }
                       .fileImage{
                           width:60px;
                           height:60px;
-                          background: $g5; 
+                          background: $g5;
+                          float:left; 
                       }
                       .fileData{
-                          margin-top:10px;
+                          margin-left: 70px;
+                          font-size: 14px;
+                          font-family: $osSB;
+                          color: $g17;
+                          width: calc(100% - 80px);
+                          .fileType{
+                            font-family: $osR;
+                            color: $g13;
+                            font-size: 12px;
+                            padding-top: 5px;  
+                          }
                       } 
                   } 
                 }
               }
            }
-             
+
+       .postComments{
+          background: $g3;
+          .commentTextDiv{
+              margin-left: 80px;
+              padding: 10px 20px;
+              color: $g16;
+              font-size: 13px; 
+              .commentText{
+                  cursor:pointer;
+                  &:hover{
+                    text-decoration:underline;
+                  }
+               }
+              .totalComments{
+                  padding: 0px 5px;
+                  border-radius: 100px;
+                  color: rgb(145, 145, 145);
+                  margin-left: 6px;
+                  border: 1px solid #DADADA;  
+              } 
+          }
+          .allComments{
+              padding: 10px 40px;
+              font-size: 13px;
+              color: #444;
+          }
+        } 
+      
      }
-     
-       
+      
+      
   
 }
 

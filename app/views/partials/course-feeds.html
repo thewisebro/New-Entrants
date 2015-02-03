@@ -1,5 +1,7 @@
 <div class="courseFeeds">
    <div class="postDiv" ng-repeat="post in posts">
+
+    <div class="mainPost">
       <div class="postUserPic">
           <img ng-src={{post.file_url}}></img> 
       </div> 
@@ -23,16 +25,30 @@
                     </div>
                     <div class="fileData">
                        <div class="filename">
-                         <!-- {{file.upload_file}} -->
+                          {{file.upload_file}}
+                       </div>
+                       <div class="fileType">
+                           {{file.upload_type}}
                        </div>
                     </div>
                   </div>   
               </div> 
           </div>
-          <div class="postComments">
-            
-          </div>
-      </div>
-   </div>
-
+        </div>
 </div>
+
+            <div class="postComments">
+              <div class="commentTextDiv">
+                  <div class="commentText">
+                    Comments
+                  </div>
+                  <div class="totalComments">
+                    3
+                  </div>
+              </div>
+              <div class="allComments">
+                This is it. 
+              </div>           
+            </div>
+
+
