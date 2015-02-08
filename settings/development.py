@@ -49,7 +49,7 @@ DATABASES = {
                                           # The following settings are not used with sqlite3:
     'USER': 'channeli',
     'PASSWORD': 'channeli',
-    'HOST': '172.25.55.5',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+    'HOST': '172.25.55.156',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
     'PORT': '',                           # Set to empty string for default.
   }
 }
@@ -263,6 +263,8 @@ FEED_APPS = (
 
 FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
 COMMENTS_APP = 'fluent_comments'
+
+STATIC_PRECOMPILE_USE_COMPASS = False
 
 AUTH_USER_MODEL = 'nucleus.User'
 
