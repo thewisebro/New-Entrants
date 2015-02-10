@@ -8,6 +8,8 @@ from django.utils.html import escape
 
 from nucleus.constants import channeli_apps,external_links
 
+from nucleus.constants import channeli_apps,external_links
+
 register = Library()
 
 @register.tag

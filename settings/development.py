@@ -249,6 +249,7 @@ CHANNELI_APPS = (
   'feeds',
   'regol',
   'academics',
+  'lectut',
   'games',
   'buysell',
   'utilities',
