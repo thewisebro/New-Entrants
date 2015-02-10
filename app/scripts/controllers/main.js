@@ -80,25 +80,55 @@ lectutApp.controller('CourseFeedsCtrl', ['$stateParams','$scope', function($stat
 
 }]);
 
-lectutApp.controller('CourseFilesCtrl', ['$stateParams', 'DataTables', 'DTOptionsBuilder' , 'DTColumnBuilder', '$scope',  function($stateParams, DataTables, DTOptionsBuilder, DTColumnBuilder,$scope) {
+lectutApp.controller('CourseFilesCtrl', ['$stateParams', 'DataTables', 'DTOptionsBuilder' , 'DTColumnBuilder','DTInstances', '$scope', '$compile', function($stateParams, DataTables, DTOptionsBuilder, DTColumnBuilder, DTInstances,$scope, $compile) {
   this.params = $stateParams;
   var promiseCourseData = DataTables.getTable();
-   
+    
+     var vm = this;
+     vm.selected = {};
+     vm.toggleAll = toggleAll;
    $scope.dtOptions = DTOptionsBuilder.fromFnPromise(promiseCourseData.then(
       function(d){
         return d;  
       }
    )  
-   ).withPaginationType('full_numbers');
+   ).withOption('createdRow', function(row, data, dataIndex) {
+                 // Recompiling so we can bind Angular directive to the DT
+                             $compile(angular.element(row).contents())($scope);
+                                     })
+                          .withPaginationType('full_numbers');
 
      $scope.dtColumns = [
+             DTColumnBuilder.newColumn(null).withTitle('').notSortable()
+                        .renderWith(function(data, type, full, meta) {
+                                      return '<input type="checkbox" ng-model="showCase.selected[' + data.id + ']">';
+                        }),
              DTColumnBuilder.newColumn('id').withTitle('ID'),
              DTColumnBuilder.newColumn('fileName').withTitle('Name'),
              DTColumnBuilder.newColumn('postedBy').withTitle('Posted By'), 
              DTColumnBuilder.newColumn('fileType').withTitle('Type'),
              DTColumnBuilder.newColumn('postedOn').withTitle('Date'),
      ];
- 
+      
+      
+     DTInstances.getLast().then(function (dtInstance) {
+               dtInstance.DataTable.data().each(function(data) {
+                     vm.selected[data.id] = false;
+               });
+      });
+     
+         var _toggle = true;
+         function toggleAll() {
+           console.log("s");
+            for (var prop in vm.selected) {
+              console.log("as");
+               if (vm.selected.hasOwnProperty(prop)) {
+                     vm.selected[prop] = _toggle;
+               }
+            }
+            _toggle = !_toggle;
+          }                        
+
 }]);
 
 
