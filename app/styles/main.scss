@@ -57,7 +57,8 @@
 
 body {
   font-family: $osR;
-  background: $g4;	
+  background: $g4;
+  overflow-y:scroll;	
 }
 
 ::selection {
@@ -69,7 +70,7 @@ body {
 .header{
   position:fixed;
   width:100%;
-  background-color:$g0;
+  background-color:$th1;
   border-bottom:1px solid $g1;
   z-index: 101;
   height:50px;
@@ -83,7 +84,6 @@ body {
   bottom:0px;
   left:0px;
   background-color:$g0;  
-  border-right: 1px solid rgba(0,0,0,.15);
   z-index: 102;  
 }
 
@@ -140,7 +140,7 @@ body {
 }
 
 #userpic{
-  border-radius: 100px;
+  border-radius: 10px;
   overflow: hidden;
   width: 70px;
   height: 70px;
@@ -272,7 +272,10 @@ body {
     padding: 0px 20px;
     border-bottom:1px solid $g6; 
     > div{
-      display:inline-block;  
+      display: inline-block;
+      font-family: $osB;
+      color: $g14;
+      font-size: 18px;  
     } 
     .courseHeadingNameId{
       
@@ -281,13 +284,32 @@ body {
       float: right; 
       font-size: 14px;
       color: $g16;
-      cursor: pointer;
-      font-weight: bold; 
+      font-weight: bold;
+      .searchWithinCourse{
+        width:200px;
+        height:25px;
+        background-color: $g3;
+        padding-right:5px;
+        border-radius:20px;
+        border:1px solid $g9; 
+        text-indent: 15px;
+        outline:0;
+        color:$g13; 
+      }
+      >i{
+        position: absolute;
+        right: 30px;
+        background: $g3;
+        top: 18px;
+        color:$g13;
+        cursor:pointer;
+      } 
     }
   }
   .courseFilters{
     height: 50px;
     line-height: 50px;
+    border-bottom:1px solid $g9;
     ul{
       list-style:none;
       text-align:center;
@@ -309,19 +331,17 @@ body {
 .filteredContent{
      .courseFeeds{
            margin-bottom:20px;
-           padding:20px;
           .postDiv{
               .mainPost{
-                padding:20px;  
+                padding: 30px 20px;  
               } 
-              margin-bottom:20px;
               background:$g0;
               overflow: hidden;
               position: relative;
-              border: 1px solid $g8;
+              border-bottom: 1px solid $g9;
               .postUserPic{
                 float: left;
-                border-radius: 100px;
+                border-radius: 10px;
                 overflow: hidden;
                 width: 60px;
                 height: 60px;
@@ -335,7 +355,7 @@ body {
                   margin-left:80px;
                   .postUserName{
                       padding: 10px 0px 10px 0px;
-                      border-bottom: 1px solid #E4E4E4;
+                      border-bottom: 1px solid $g6;
                       margin-bottom: 15px; 
                       
                       .postUser{
@@ -384,8 +404,11 @@ body {
                       .fileImage{
                           width:60px;
                           height:60px;
-                          background: $g5;
-                          float:left; 
+                          color:$g5;
+                          float:left;
+                          >i{
+                            font-size:60px;
+                          } 
                       }
                       .fileData{
                           margin-left: 70px;

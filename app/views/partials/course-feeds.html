@@ -3,7 +3,7 @@
 
     <div class="mainPost">
       <div class="postUserPic">
-          <img ng-src={{post.file_url}}></img> 
+          <img ng-src={{post.post.file_url}}></img> 
       </div> 
       <div class="postData">
           <div class="postUserName">
@@ -21,7 +21,7 @@
               <div class="filesDisplay">
                   <div class="postContent" ng-repeat="file in post.files">
                     <div class="fileImage">
-                   
+                       <i class="fa fa-file-{{file.file_type}}-o"></i> 
                     </div>
                     <div class="fileData">
                        <div class="filename">
@@ -36,7 +36,7 @@
           </div>
         </div>
 </div>
-
+<!--
             <div class="postComments">
               <div class="commentTextDiv">
                   <div class="commentText">
@@ -51,4 +51,4 @@
               </div>           
             </div>
 
-
+-->

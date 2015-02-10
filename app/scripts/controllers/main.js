@@ -70,8 +70,9 @@ lectutApp.controller('CourseDetailCtrl', ['$stateParams','$route','$scope','Cour
   
   var promiseCourseData = CourseDetails.getCourseDetailsData();
   promiseCourseData.then(function (d) {
-     $scope.posts = d.data[0].posts;
-     console.log($scope.posts);  
+     //console.log(d);
+     $scope.posts = d[0].posts;
+     //console.log($scope.posts);  
   });
 }]);
 
@@ -79,9 +80,28 @@ lectutApp.controller('CourseFeedsCtrl', ['$stateParams','$scope', function($stat
 
 }]);
 
-lectutApp.controller('CourseFilesCtrl', ['$stateParams', function($stateParams) {
+lectutApp.controller('CourseFilesCtrl', ['$stateParams', 'DataTables', 'DTOptionsBuilder' , 'DTColumnBuilder', '$scope',  function($stateParams, DataTables, DTOptionsBuilder, DTColumnBuilder,$scope) {
   this.params = $stateParams;
+  var promiseCourseData = DataTables.getTable();
+   
+   $scope.dtOptions = DTOptionsBuilder.fromFnPromise(promiseCourseData.then(
+      function(d){
+        return d;  
+      }
+   )  
+   ).withPaginationType('full_numbers');
+
+     $scope.dtColumns = [
+             DTColumnBuilder.newColumn('id').withTitle('ID'),
+             DTColumnBuilder.newColumn('fileName').withTitle('Name'),
+             DTColumnBuilder.newColumn('postedBy').withTitle('Posted By'), 
+             DTColumnBuilder.newColumn('fileType').withTitle('Type'),
+             DTColumnBuilder.newColumn('postedOn').withTitle('Date'),
+     ];
+ 
 }]);
+
+
 lectutApp.controller('CourseMembersCtrl', ['$stateParams', function($stateParams) {
   this.params = $stateParams;
 }]);

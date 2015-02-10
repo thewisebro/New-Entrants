@@ -12,7 +12,8 @@ var lectutApp = angular.module('lectutApp', [
     'ngAnimate',
     'ngRoute',
     'ui.router',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'datatables'
   ]);
 
 
