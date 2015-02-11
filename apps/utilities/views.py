@@ -211,14 +211,19 @@ def email_verify(request):
         print confirmation_key
         messages.success(request,"A verification link has been sent to your email address.")
   if 'confirm_key' in request.GET:
+    print "abcd"
     confirmation_key = request.GET['confirm_key']
-    email_profile = get_object_or_404(UserEmail, confirmation_key=confirmation_key)
-    if email_profile.last_datetime_created + datetime.timedelta(2) < timezone.now():
-      return render(request,'utilities/pagelets/confirm_expiry.html')
+#    email_profile = get_object_or_404(UserEmail, confirmation_key=confirmation_key)
+    email_profile = UserEmail.objects.filter(user=request.user).filter(confirmation_key=confirmation_key)
+    if not email_profile.count():
+      if email_profile.last_datetime_created + datetime.timedelta(2) < timezone.now():
+        messages.error(request,"The verification-key expired.")
+      else:
+        email_profile.verified = True
+        email_profile.save()
+        messages.success(request,"Your email has been verified for this account.")
     else:
-      email_profile.verified = True
-      email_profile.save()
-      return render(request,'utilities/pagelets/email_verified.html')
+        messages.error(request,"This link is no longer active.A new link has been sent to your Email address.")
 
   useremailform = UserEmailForm()
   if UserEmail.objects.filter(user=request.user).count()==0 :
@@ -231,19 +236,13 @@ def email_verify(request):
       useremail.save()
   emails_for_user = UserEmail.objects.filter(user=request.user)
   primary_email = request.user.email
-  return render(request,'utilities/pagelets/email_auth.html',{'useremailform': useremailform, 'emails_for_user': emails_for_user,'primary_email':primary_email})
+  count = emails_for_user.count()
+  return render(request,'utilities/pagelets/email_auth.html',{
+      'useremailform': useremailform, 
+      'emails_for_user': emails_for_user,
+      'primary_email':primary_email,
+      'count':count,
+      })
 
-#@pagelet_login_required
-def email_confirm(request,confirmation_key):
-  email_profile = get_object_or_404(UserEmail, confirmation_key=confirmation_key)
-  if request.method == 'POST':
-    if 'ok'in request.POST:
-      return HttpResponseRedirect('/email_auth/')
-  if email_profile.last_datetime_created + datetime.timedelta(2) < timezone.now():
-    return render(request,'utilities/pagelets/confirm_expiry.html')
-  else:
-    email_profile.verified = True
-    email_profile.save()
-    return render(request,'utilities/pagelets/email_verified.html')
 
 

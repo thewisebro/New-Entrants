@@ -8,26 +8,53 @@
   <div class="form-div">
     {% for emails in emails_for_user %}
       <div>
-        <form action="" method="POST">
-          <input type="text" name="email" value="{{ emails.email }}">
-          <input type="hidden" name="id" value="{{ emails.pk}}">
-          {% if not emails.verified %}
-            <input type="submit" name="verify" value="Verify">
-          {% endif %}
-          {% if not emails.email == primary_email %}
-            <input type="submit" name="primary" value="Make it Primary">
-          {% endif %}
-          <input type="submit" name="delete" value="Delete">
-          <br>
-          <br>
-        </form>
+        {% if emails.email == primary_email %}
+          <form action="" method="POST">
+            {{ emails.email }}
+            <input type="hidden" name="email" value="{{ emails.email }}">
+            <input type="hidden" name="id" value="{{ emails.pk}}">
+            {% if not emails.verified %}
+              <input type="submit" name="verify" value="Verify">
+            {% endif %}
+            {% if emails.verified %}
+              <input type="submit" name="verify" value="Verified" disabled="disabled">
+            {% endif %}
+            <input type="submit" name="primary" value="Primary" disabled="disabled">
+            <input type="submit" name="delete" value="Delete" disabled="disabled">
+            <br>
+            <br>
+          </form>
+        {% endif %}
       </div>
     {% endfor %}
-    <form id="email-form" class="uniForm" action="" method="POST">
-      {% csrf_token %}
-      {{useremailform.uniform }}
-      <input style='margin-left:10px' class='input-button' type="submit" name="submission" value="Submit" />
-    </form>
+    {% for emails in emails_for_user %}
+      <div>
+        {% if not emails.email == primary_email %}
+          <form action="" method="POST">
+            {{ emails.email }}
+            <input type="hidden" name="email" value="{{ emails.email }}">
+            <input type="hidden" name="id" value="{{ emails.pk}}">
+            {% if not emails.verified %}
+              <input type="submit" name="verify" value="Verify">
+            {% endif %}
+            {% if emails.verified %}
+              <input type="submit" name="verify" value="Verified" disabled="disabled">
+            {% endif %}
+            <input type="submit" name="primary" value="Make it Primary">
+            <input type="submit" name="delete" value="Delete">
+            <br>
+            <br>
+          </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+    {% if count < 5 %}
+      <form id="email-form" class="uniForm" action="" method="POST">
+        {% csrf_token %}
+        {{useremailform.uniform }}
+        <input style='margin-left:10px' class='input-button' type="submit" name="submission" value="Submit" />
+      </form>
+    {% endif %}
   </div>
 {% endblock %}
 
