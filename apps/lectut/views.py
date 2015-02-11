@@ -24,18 +24,20 @@ MAX_FILE_SIZE =  5242880
 MAX_VIDEO_SIZE = 20971520
 
 def dispbatch(request):
-#use is_authrenticted
+  import pdb;pdb.set_trace()
   active = request.user.is_authenticated
   if active:
-    if request.user.in_group('student'):
+    if request.user.in_group('Student'):
       student = request.user.student
       batches = student.batch_set.all()
       courses = map(lambda x: x.course, batches)
       context = {'courses': courses,
                  'batches': batches}
       return render(request, 'lectut/courses.html', context)
-    elif request.user.in_group('faculty'):
+    elif request.user.in_group('Faculty'):
       return HttpResponse("You are a faculty")
+    else:
+      return HttpResponse("You are not enrolled.Please visit IMG")
   else:
       return HttpResponse("Please log-in to view your courses")
 
@@ -144,11 +146,11 @@ def uploadedFile(request , batch_id):
     data = request.POST.get('formText','')
     documents = request.FILES.getlist('upload')
     extra = request.POST.getlist('extra','')
+    files = []
     counter = 0
     try:
       new_post = Post(upload_user = user, batch = userBatch, content = data)
       new_post.save()
-      msg = "post added successfully"
     except:
       msg = "Cannot save post"
     for document in documents:
@@ -162,9 +164,12 @@ def uploadedFile(request , batch_id):
       else:
         new_document = Uploadedfile(post =new_post, upload_file = document, description = fileData['description'], file_type=file_type)
         new_document.save()
-
+        files.append(new_document)
     if msg:
       return HttpResponse(json.dumps(msg), content_type='application/json')
+    else:
+      complete_post = {'post':new_post,'files':files}
+      return HttpResponse(json.dumps(complete_post), content_type='application/json')
   return user
 
 
@@ -253,8 +258,14 @@ def userdownloads(request , batch_id):
 def batchMembers(request , batch_id):
   currentBatch = Batch.objects.get(id = batch_id)
   students = currentBatch.students.all()
+  users = map(lambda x:x.user, students)
+  members =[]
+  for user in users:
+    user = user.serialize()
+    members.append(user)
+
 #  return currentBatch.students
-  return HttpResponse(json.dumps(students), content_type="application/json")
+  return HttpResponse(json.dumps(members), content_type="application/json")
 
 def createReminder(request):
   if request.method == 'POST':

@@ -173,5 +173,3 @@ class Notification(models.Model):
        top = notification.objects.order_by('-serial_num')[0]
        self.serial_num = serial_num + 1
        super(notification, self).save()'''
-
-"""
