@@ -1,0 +1,36 @@
+{% extends "pagelet_base.html" %}
+
+{% block styles %}
+  {{ form.media.css }}
+{% endblock %}
+
+{% block content %}
+  <div class="form-div">
+    {% for emails in emails_for_user %}
+      <div>
+        <form action="" method="POST">
+          <input type="text" name="email" value="{{ emails.email }}">
+          <input type="hidden" name="id" value="{{ emails.pk}}">
+          {% if not emails.verified %}
+            <input type="submit" name="verify" value="Verify">
+          {% endif %}
+          {% if not emails.email == primary_email %}
+            <input type="submit" name="primary" value="Make it Primary">
+          {% endif %}
+          <input type="submit" name="delete" value="Delete">
+          <br>
+          <br>
+        </form>
+      </div>
+    {% endfor %}
+    <form id="email-form" class="uniForm" action="" method="POST">
+      {% csrf_token %}
+      {{useremailform.uniform }}
+      <input style='margin-left:10px' class='input-button' type="submit" name="submission" value="Submit" />
+    </form>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ form.media.js }}
+{% endblock %}

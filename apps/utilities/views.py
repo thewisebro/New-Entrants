@@ -1,22 +1,26 @@
 import datetime
 import json
+import hashlib
+import random
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.forms.util import ErrorList
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from django.utils import timezone
+from django.core.mail import send_mail
 
 from nucleus.models import StudentUserInfo, StudentInfo, WebmailAccount
 from nucleus.session import SessionStore
 from events.models import EventsUser
 from api.utils import pagelet_login_required, dialog_login_required
-from utilities.models import UserSession
+from utilities.models import UserSession, UserEmail
 from utilities.forms import ProfileFormPrimary, ProfileFormGuardian,\
                             ProfileFormExtra, ChangePasswordForm,\
                             ChangePasswordFirstYearForm, EmailForm,\
-                            EventsSubscribeFormGen, GenProfileForm
+                            EventsSubscribeFormGen, GenProfileForm, UserEmailForm
 
 @pagelet_login_required
 def edit_profile(request):
@@ -154,3 +158,92 @@ def email(request):
       'emailform': emailform,
       'email_subscribed': events_user.email_subscribed,
   })
+
+@pagelet_login_required
+def email_verify(request):
+  if request.method == 'POST':
+    if 'primary' in request.POST:
+      entry = UserEmail.objects.get(pk= request.POST['id'])
+      if entry.verified:
+        request.user.email = entry.email
+        request.user.save()
+      else:
+        messages.error(request,"Email need to be verified first")
+
+    if 'delete' in request.POST:
+      entry = UserEmail.objects.get(pk= request.POST['id'])
+      if entry.email== request.user.email:
+        messages.error(request,"Primary Email addresses can't be deleted")
+      else:
+        entry.delete()
+
+    if 'verify' in request.POST:
+      entry= UserEmail.objects.get(pk= request.POST['id'])
+      salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+      confirmation_key = hashlib.sha1(salt+entry.email).hexdigest()
+      if entry.last_datetime_created.date() == datetime.date.today():
+        entry.verify_num= entry.verify_num + 1
+      else:
+        entry.verify_num = 1
+      if entry.verify_num < 4 :
+        entry.confirmation_key= confirmation_key
+        entry.last_datetime_created = datetime.datetime.today()
+        entry.save()
+        email_subject = 'Account confirmation'
+        email_body = " To verify your email address, click this link within 48hours http://127.0.0.1:8000/settings/confirm/%s" % (confirmation_key)
+#        send_mail(email_subject, email_body, 'myemail@example.com',[email], fail_silently=False)
+        print confirmation_key
+        messages.success(request,"A verification link has been sent to your email address.")
+      else:
+        messages.error(request,"Max limit of verification for this email has been reached for today")
+
+    if 'submission' in request.POST:
+      useremailform = UserEmailForm(request.POST)
+      if useremailform.is_valid():
+        email = useremailform.cleaned_data['email']
+        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+        confirmation_key = hashlib.sha1(salt+email).hexdigest()
+        new_entry = UserEmail(user=request.user,email=email, confirmation_key=confirmation_key, last_datetime_created=datetime.datetime.today(),verify_num=1)
+        new_entry.save()
+        email_subject = 'Account confirmation'
+        email_body = " To verify your email address, click this link within 48hours http://127.0.0.1:8000/settings/confirm/%s" % (confirmation_key)
+#        send_mail(email_subject, email_body, 'myemail@example.com',[email], fail_silently=False)
+        print confirmation_key
+        messages.success(request,"A verification link has been sent to your email address.")
+  if 'confirm_key' in request.GET:
+    confirmation_key = request.GET['confirm_key']
+    email_profile = get_object_or_404(UserEmail, confirmation_key=confirmation_key)
+    if email_profile.last_datetime_created + datetime.timedelta(2) < timezone.now():
+      return render(request,'utilities/pagelets/confirm_expiry.html')
+    else:
+      email_profile.verified = True
+      email_profile.save()
+      return render(request,'utilities/pagelets/email_verified.html')
+
+  useremailform = UserEmailForm()
+  if UserEmail.objects.filter(user=request.user).count()==0 :
+    if request.user.email:
+      useremail = UserEmail()
+      useremail.user = request.user
+      useremail.email = request.user.email
+      useremail.verified= False
+      useremail.last_datetime_created = datetime.datetime.today()
+      useremail.save()
+  emails_for_user = UserEmail.objects.filter(user=request.user)
+  primary_email = request.user.email
+  return render(request,'utilities/pagelets/email_auth.html',{'useremailform': useremailform, 'emails_for_user': emails_for_user,'primary_email':primary_email})
+
+#@pagelet_login_required
+def email_confirm(request,confirmation_key):
+  email_profile = get_object_or_404(UserEmail, confirmation_key=confirmation_key)
+  if request.method == 'POST':
+    if 'ok'in request.POST:
+      return HttpResponseRedirect('/email_auth/')
+  if email_profile.last_datetime_created + datetime.timedelta(2) < timezone.now():
+    return render(request,'utilities/pagelets/confirm_expiry.html')
+  else:
+    email_profile.verified = True
+    email_profile.save()
+    return render(request,'utilities/pagelets/email_verified.html')
+
+

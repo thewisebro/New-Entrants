@@ -2,7 +2,8 @@ var settings_tabs = [
   {name: 'profile', show: 'Edit profile'},
   {name: 'password', show: 'Change password'},
   {name: 'email', show: 'Email notifications'},
-  {name: 'sessions', show: 'Manage sessions'}
+  {name: 'sessions', show: 'Manage sessions'},
+  {name: 'email_auth', show: 'Email verification'}
 ];
 
 $(document).on("load_app_settings", function(e, hash1){

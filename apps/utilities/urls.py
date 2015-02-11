@@ -6,4 +6,6 @@ urlpatterns = patterns('utilities.views',
     (r'^password/$','change_password'),
     (r'^password_firstyear/$','change_password_firstyear'),
     (r'^sessions/$','person_sessions'),
+    (r'^email_auth/$','email_verify'),
+    (r'^confirm/(?P<confirmation_key>\w+)/$','email_confirm'),
 )
