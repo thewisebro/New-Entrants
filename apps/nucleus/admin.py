@@ -15,6 +15,7 @@ def getUserCreationForm(usermodel):
 
     class Meta:
       model = usermodel
+      fields = ("username",)
 
     def clean_password2(self):
       # Check that the two password entries match
@@ -46,6 +47,7 @@ def getUserChangeForm(usermodel):
 
     class Meta:
       model = usermodel
+      fields = '__all__'
 
     def clean_password(self):
       # Regardless of what the user provides, return the initial value.
@@ -98,12 +100,8 @@ admin.site.register(StudentInfo)
 admin.site.register(StudentUser, StudentUserAdmin)
 admin.site.register(StudentUserInfo, StudentUserAdmin)
 admin.site.register(Course, CourseAdmin)
-admin.site.register(RegisteredBranchCourse)
-admin.site.register(RegisteredCourseChange)
+admin.site.register(RegisteredCourse)
 admin.site.register(Batch)
 admin.site.register(Faculty)
 admin.site.register(GlobalVar)
 admin.site.register(Alumni)
-admin.site.register(StudentAlumni, StudentAdmin)
-admin.site.register(StudentInfoAlumni)
-admin.site.register(RegisteredCourseChangeAlumni)
