@@ -264,7 +264,6 @@ def batchMembers(request , batch_id):
     user = user.serialize()
     members.append(user)
 
-#  return currentBatch.students
   return HttpResponse(json.dumps(members), content_type="application/json")
 
 def createReminder(request):
@@ -273,19 +272,23 @@ def createReminder(request):
       user = request.user
       batch = request.Session['batch_id']
       text = request.POST['text']
-      ReminderToAdd = Reminders(text = text , batch = batch , user = user)
+      time = datetime.now()
+      ReminderToAdd = Reminders(text = text , batch = batch , user = user, event_date = time)
       ReminderToAdd.save()
-      return HttpResponse(json.dumps(ReminderToAdd), content_type="application/json")
+      msg = "Event has been added"
     else:
       msg = "Invalid entry"
-      return HttpResponse(json.dumps(msg), content_type="application/json")
+    return HttpResponse(json.dumps(msg), content_type="application/json")
 
 def getReminder(request):
   student = request.user.student
   batches = student.batch_set.all()
-  reminders = Reminders.objects.all().filter(batch__in=batches).filter(datetime_created >=timezone.now()).order_by('datetime_created')
-  context = {'reminders':reminders}
-  return HttpRsponse(request, 'lectut/reminders.html',context)
+  reminders = Reminders.objects.all().filter(batch__in=batches).filter(datetime_created >=timezone.now()).order_by('event_date')
+
+  events=[]
+  for reminder in reminders:
+    events.append(reminder.as_dict())
+  return HttpRsponse(json.dumps(events), content_type="application/json")
 
 #def upload(request):
 #   user = request.user

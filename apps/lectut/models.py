@@ -8,6 +8,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.core.files.storage import FileSystemStorage
 from django.db.models.signals import post_save
+from datetime import datetime, timedelta
 
 from notifications.models import Notification
 
@@ -129,11 +130,21 @@ class UploadFile(BaseUpload):
 
 class Reminders(models.Model):
   text = models.CharField(max_length=50 , null=False)
+  event_date = models.DateTimeField(default = datetime.now()+timedelta(days=7))
   batch = models.ForeignKey(Batch)
   user = models.ForeignKey(User)
 
   def __unicode__(self):
     return str(self.text)
+
+  def as_dict():
+    reminder={
+      'text':self.text,
+      'event_date':str(self.event_date),
+      'batch':str(self.batch),
+      'user':str(self.user)
+    }
+    return reminder
 
 class DownloadLog(models.Model):
   uploadfile = models.ForeignKey(UploadFile)

@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import datetime
+import core.models.fields
 from django.conf import settings
 
 
@@ -11,7 +13,6 @@ class Migration(migrations.Migration):
         ('nucleus', '__first__'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('contenttypes', '0001_initial'),
-        ('threadedcomments', '__first__'),
     ]
 
     operations = [
@@ -40,19 +41,6 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='FluentComments',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('datetime_created', models.DateTimeField(auto_now_add=True)),
-                ('activity', models.ForeignKey(to='lectut.Activity')),
-                ('threaded_comments', models.ForeignKey(to='threadedcomments.ThreadedComment')),
-            ],
-            options={
-                'abstract': False,
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
             name='Post',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -73,6 +61,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
                 ('text', models.CharField(max_length=50)),
+                ('event_date', core.models.fields.DateTimeField(default=datetime.datetime(2015, 2, 19, 2, 1, 52, 777984))),
                 ('batch', models.ForeignKey(to='nucleus.Batch')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
