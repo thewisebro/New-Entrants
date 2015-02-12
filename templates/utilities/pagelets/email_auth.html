@@ -43,6 +43,9 @@
             <input type="submit" name="primary" value="Make it Primary">
             <input type="submit" name="delete" value="Delete">
             <br>
+            {% if emails in verifiable_emails %}
+              <p>A verification link has been send to your email address</p>
+            {% endif %}
             <br>
           </form>
         {% endif %}

@@ -37,9 +37,10 @@ function settings_links_html(current_tab){
 }
 
 function load_settings_tab(tab){
+  var pagelet_url = nucleus.get_app_hashtags().join('/');
   $('#content').html("<div class='app-heading'>Settings: "+
       settings_tabs.filter(function(a){return a.name==tab;})[0].show + "</div><div "+
-      "id='content-pagelet' class='pagelet' pagelet-url='/settings/"+tab+"/'></div>");
+      "id='content-pagelet' class='pagelet' pagelet-url='/settings/"+pagelet_url+"'></div>");
   $('#right-column .content').html(settings_links_html(tab));
   $('.settings-label').removeClass('active-label');
   $('#settings-label-'+tab).addClass('active-label');

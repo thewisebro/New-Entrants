@@ -214,7 +214,7 @@ def email_verify(request):
     print "abcd"
     confirmation_key = request.GET['confirm_key']
 #    email_profile = get_object_or_404(UserEmail, confirmation_key=confirmation_key)
-    email_profile = UserEmail.objects.filter(user=request.user).filter(confirmation_key=confirmation_key)
+    email_profile = UserEmail.objects.filter(user=request.user).get(confirmation_key=confirmation_key)
     if not email_profile.count():
       if email_profile.last_datetime_created + datetime.timedelta(2) < timezone.now():
         messages.error(request,"The verification-key expired.")
@@ -235,6 +235,15 @@ def email_verify(request):
       useremail.last_datetime_created = datetime.datetime.today()
       useremail.save()
   emails_for_user = UserEmail.objects.filter(user=request.user)
+#  for emails in emails_for_user:
+#   if emails.last_datetime_created + datetime.timedelta(2) < timezone.now():
+#     if not emails["verified"]:
+#       emails["verifiable"]=True
+#   else:
+#     emails["verifiable"]=False
+#   print emails
+  lastdate = timezone.now() - datetime.timedelta(2)
+  verifiable_emails = emails_for_user.filter(last_datetime_created__gte=lastdate).filter(verified=False)
   primary_email = request.user.email
   count = emails_for_user.count()
   return render(request,'utilities/pagelets/email_auth.html',{
@@ -242,6 +251,7 @@ def email_verify(request):
       'emails_for_user': emails_for_user,
       'primary_email':primary_email,
       'count':count,
+      'verifiable_emails':verifiable_emails,
       })
 
 
