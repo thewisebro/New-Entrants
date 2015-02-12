@@ -3,7 +3,7 @@
 
 // Main colors
  $primary: #333;
-
+ $blue: #407CC1;
 // shades from white to black
 
  $g0: #FFF;
@@ -69,11 +69,34 @@ body {
 
 .header{
   position:fixed;
-  width:100%;
-  background-color:$th1;
+  left:280px;
+  right:220px;
+  background-color: #FFF;
   border-bottom:1px solid $g1;
   z-index: 101;
   height:50px;
+  .mainSearch{
+    height: 50px;
+    width:100%;
+    outline: 0px;
+    background-color: rgba(58, 115, 181, 0.58);
+    border: 0px;
+    text-indent: 14px;
+    color: #FFF;
+    font-size: 15px;
+    font-family: opensans_semibold;
+    &:hover{
+    }
+   
+    &:focus{
+        background-color:#FFF;
+        outline:0px;
+        border:0px;
+        color: $g13;
+    }
+   
+  }
+ 
 }
 
 .leftDiv{
@@ -90,7 +113,7 @@ body {
 .rightDiv{
   position:fixed;
   width:220px;
-  top:50px;
+  top:0px;
   right:0px;
   bottom:0px;
   background-color:$g0;
@@ -105,7 +128,7 @@ body {
   height:auto;
   margin:20px;
   border:1px solid $g9;
-  background-color: #F7F9FA;
+  background-color: $g0;
 }
 // Header Div Css
 
@@ -119,12 +142,11 @@ body {
 .appName{
   height:50px;
   line-height:50px;
-  background: red;
   color:$g0;  
   font-family:$osEB;
   font-size:20px;
   text-align:center;
-  background-color:#3498db;
+  background-color: $blue;
 }
 // UserBlock
 
@@ -262,7 +284,6 @@ body {
 
 .courseFullDiv{
   z-index: 2;
-  box-shadow: 0 1px 0px rgba(0,0,0,.15);
   background-color:$g0;
   .courseHeading{
     height: 50px;
@@ -273,7 +294,7 @@ body {
     border-bottom:1px solid $g6; 
     > div{
       display: inline-block;
-      font-family: $osB;
+      font-family: $osR;
       color: $g14;
       font-size: 18px;  
     } 
@@ -320,7 +341,7 @@ body {
          width: 100px;
          font-size: 14px;
          color: #555555;
-         font-family: $osB; 
+         font-family: $osSB; 
         }  
       }  
     }
@@ -462,4 +483,177 @@ body {
   
 }
 
+// Over writes all DataTables Files
+
+table.dataTable {
+  color: $g15;
+  font-size:14px;  
+  margin-top:40px;
+  border-top: 1px solid $g9; 
+}
+
+table.dataTable thead th,
+table.dataTable tfoot th {
+    font-weight: normal;
+}
+
+table.dataTable thead th, table.dataTable thead td {
+  border-bottom: 1px solid $g9;
+}
+
+table.dataTable.no-footer {
+  border-bottom: 1px solid $g9;
+}
+
+table.dataTable thead th,
+table.dataTable thead td,
+table.dataTable tfoot th,
+table.dataTable tfoot td {
+    text-align: left;
+    font-family: $osSB;
+}
+
+.dataTables_filter{
+   input{
+    width: 200px;
+    height: 25px;
+    background-color: #FAFAFA;
+    padding-right: 5px;
+    border-radius: 20px;
+    border: 1px solid #DDDDDD;
+    text-indent: 15px;
+    outline: 0;
+    color: #808080;
+    margin-right:20px;
+   }
+   label{
+    color: $g13;
+    font-size:14px;  
+   }
+}
+
+.dataTables_wrapper{
+    padding-top:20px;  
+}
+
+.dataTables_length{
+  >label{
+    font-size:14px;
+    color: $g13;
+    margin-left:20px; 
+    select{
+      border-radius: 13px;
+      height: 25px;
+      width: 55px;
+      outline: 0px;
+      border: 1px solid #DDDDDD;
+      text-indent: 6px;
+      color: #808080;
+      background-color: #FAFAFA;
+    } 
+  }  
+
+}
+
+.dataTables_wrapper .dataTables_info{
+  font-size:14px;
+  color:$g13;  
+  margin-left:20px;
+  
+}
+
+
+
+
+// members display
+
+.membersDisplay{
+  padding: 20px;  
+  .prof{
+     height: 110px;
+     color: $g16;
+     .profHeading{
+       font-family: $osSB;
+       font-size: 14px;  
+       display:block;
+       margin-bottom:10px;
+       color: $g17; 
+     }
+     margin-bottom:20px;
+     padding-bottom:10px; 
+     border-bottom: 1px solid $g6;
+     >div{
+      display:inline-block;  
+     }
+     .mPic{
+        float:left;
+        margin-right:10px;
+        width:70px;
+        height:70px;
+        overflow:hidden;
+        border-radius:10px; 
+        margin-bottom: 10px; 
+        >img{
+          width:inherit;
+          height:inherit;
+        }
+      }
+      .mDesc{
+        float:left;
+        .mName{
+          padding-right:20px;
+          color: $g17;
+        }
+        .mData{
+          font-size: 12px;  
+          color: $g16;
+        }
+      }
+ 
+  }
+  .studentList{
+    >div{
+      display:inline-table;  
+    }
+    .studHeading{
+       font-family: $osSB;
+       font-size: 14px;  
+       display:block;
+       margin-bottom:10px;    
+       color: $g17;
+     }
+    .stud{
+      width: 230px;
+      margin-bottom: 20px;
+      color: $g16;
+      >div{
+        float:left;
+        font-size:14px;
+      } 
+      .mPic{
+        margin-right:10px;
+        width:60px;
+        height:60px;
+        overflow:hidden;
+        border-radius:10px;  
+        >img{
+          width:inherit;
+          height:inherit;
+        }
+      }
+      .mDesc{
+        .mName{
+          padding-right:20px;
+          color: $g17;
+        }
+        .mData{
+          font-size: 12px;
+          color: $g16;  
+        }
+      }
+      
+  }
+  }
+
+}
 
