@@ -1,7 +1,7 @@
 <div ng-click="getPostData()" class="courseFullDiv">
     <div class="courseHeading">
       <div class="courseHeadingNameId">
-        {{courseId}}{{courseName}}
+        {[courseId]}{[courseName]}
       </div>
       <!--
       <div class="courseSearch">
@@ -9,26 +9,29 @@
         <i class="fa fa-search"></i>
       </div>
       -->
-    </div>
-    <div class="courseFilters">
-       <ul>
-          <a ui-sref="course.feeds">
+     <div class="courseFilters" >
+       <ul ng-init="selectedTab = 'feeds'">
+          <a ui-sref="course.feeds" ng-class="{'active':selectedTab === 'feeds'}" ng-click="selectedTab = 'feeds'">
             <li>
                 Posts
             </li>
           </a>
-          <a ui-sref="course.files">
+          <a ui-sref="course.files" ng-class="{'active':selectedTab === 'files'}" ng-click="selectedTab = 'files'">
             <li>
                 Files
             </li>
           </a>
-          <a ui-sref="course.members">
+          <a ui-sref="course.members" ng-class="{'active':selectedTab === 'members'}" ng-click="selectedTab = 'members'">
             <li>
                 Members
             </li>
           </a>
        </ul>
     </div>
+
+    </div>
+
+    
 </div>
 
 <div class="filteredContent" ui-view>

@@ -67,7 +67,12 @@ lectutApp.controller('CourseDetailCtrl', ['$stateParams','$route','$scope','Cour
   this.params = $stateParams;
   $scope.courseId = this.params.courseId;
   $scope.courseName = "Physics and Chemistry";
+ 
+  $scope.className = "red"; 
+  $scope.changeClass = function(){
   
+  }
+   
   var promiseCourseData = CourseDetails.getCourseDetailsData();
   promiseCourseData.then(function (d) {
      //console.log(d);

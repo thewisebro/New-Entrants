@@ -44,8 +44,8 @@
             </div>
             <div id="userdata">
  	      <div>
-          <div>{{userdetails.username}}</div>
- 	        <div>{{userdetails.branch}}</div>
+          <div>{[userdetails.username]}</div>
+ 	        <div>{[userdetails.branch]}</div>
 	      </div>
              
             </div>
@@ -58,10 +58,10 @@
                <a class="crsA" ng-repeat="crs in courses" ui-sref="course({courseId:crs.id})">
                  <li class="crsLi">
                    <div class="crsIdName"> 
-                    <div class="crsId"><span>{{crs.id}}</span> </div>
-                    <div class="crsName">{{crs.name}}</div>
+                    <div class="crsId"><span>{[crs.id]}</span> </div>
+                    <div class="crsName">{[crs.name]}</div>
                    </div>
-                   <div class="crsNotification">{{crs.notifications}}</div> 
+                   <div class="crsNotification">{[crs.notifications]}</div> 
                  </li>
                </a>
             </ul>

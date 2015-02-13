@@ -21,6 +21,12 @@ var lectutApp = angular.module('lectutApp', [
  * /course : common course page to be viewed
  * /course/:course-id : A particular course page with all details
  */
+// Django integration. 
+lectutApp.config( ['$interpolateProvider',function($interpolateProvider){
+    console.log("daddy starts");
+    $interpolateProvider.startSymbol("{[").endSymbol("]}");
+    console.log("daddy ends");
+  }]);
 
 lectutApp.config(['$stateProvider', '$urlRouterProvider','$locationProvider',
   function($stateProvider, $urlRouterProvider, $locationProvider) {

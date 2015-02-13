@@ -3,32 +3,32 @@
 
     <div class="mainPost">
       <div class="postUserPic">
-          <img ng-src={{post.post.file_url}}></img> 
+          <img ng-src={[post.post.file_url]}></img> 
       </div> 
       <div class="postData">
           <div class="postUserName">
             <div class="postUser">
-              <span>{{post.post.username.first}} {{post.post.username.last}}</span>
+              <span>{[post.post.username.first]} {[post.post.username.last]}</span>
             </div>
             <div class="postTime">
-              <span>{{post.post.datetime_created}}</span>
+              <span>{[post.post.datetime_created]}</span>
             </div>
           </div>
           <div class="postContentAll">
               <div class="postText">
-                {{post.post.content}}   
+                {[post.post.content]}   
               </div>
               <div class="filesDisplay">
                   <div class="postContent" ng-repeat="file in post.files">
                     <div class="fileImage">
-                       <i class="fa fa-file-{{file.file_type}}-o"></i> 
+                       <i class="fa fa-file-{[file.file_type]}-o"></i> 
                     </div>
                     <div class="fileData">
                        <div class="filename">
-                          {{file.upload_file}}
+                          {[file.upload_file]}
                        </div>
                        <div class="fileType">
-                           {{file.upload_type}}
+                           {[file.upload_type]}
                        </div>
                     </div>
                   </div>   
