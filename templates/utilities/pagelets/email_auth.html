@@ -9,7 +9,7 @@
     {% for emails in emails_for_user %}
       <div>
         {% if emails.email == primary_email %}
-          <form action="" method="POST">
+          <form action="/settings/email_auth/" method="POST">
             {{ emails.email }}
             <input type="hidden" name="email" value="{{ emails.email }}">
             <input type="hidden" name="id" value="{{ emails.pk}}">
@@ -30,7 +30,7 @@
     {% for emails in emails_for_user %}
       <div>
         {% if not emails.email == primary_email %}
-          <form action="" method="POST">
+          <form action="/settings/email_auth/" method="POST">
             {{ emails.email }}
             <input type="hidden" name="email" value="{{ emails.email }}">
             <input type="hidden" name="id" value="{{ emails.pk}}">
@@ -52,7 +52,7 @@
       </div>
     {% endfor %}
     {% if count < 5 %}
-      <form id="email-form" class="uniForm" action="" method="POST">
+      <form id="email-form" class="uniForm" action="/settings/email_auth/" method="POST">
         {% csrf_token %}
         {{useremailform.uniform }}
         <input style='margin-left:10px' class='input-button' type="submit" name="submission" value="Submit" />

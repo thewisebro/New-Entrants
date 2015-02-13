@@ -190,12 +190,18 @@ def email_verify(request):
         entry.last_datetime_created = datetime.datetime.today()
         entry.save()
         email_subject = 'Account confirmation'
-        email_body = " To verify your email address, click this link within 48hours http://127.0.0.1:8000/settings/confirm/%s" % (confirmation_key)
-#        send_mail(email_subject, email_body, 'myemail@example.com',[email], fail_silently=False)
+        email_body = " To verify your email address, click this link within" + \
+                     " 48hours http://channeli.in/#settings/email_auth/?confirm_key=%s" % (confirmation_key)
+#        send_mail(email_subject, email_body, 'myemail@example.com',[entry.email], fail_silently=False)
+        email1_subject = 'New Email address added for your channeli account.'
+        email1_body = "A new Email address %s has been added to your channeli account." % (entry.email)
+#        send_mail(email1_subject, email1_body, 'myemail@example.com',[request.user.email], fail_silently=False)
+
         print confirmation_key
         messages.success(request,"A verification link has been sent to your email address.")
       else:
-        messages.error(request,"Max limit of verification for this email has been reached for today")
+        messages.error(request,"Max limit of verification for this email" +\
+            " has been reached for today")
 
     if 'submission' in request.POST:
       useremailform = UserEmailForm(request.POST)
@@ -203,15 +209,19 @@ def email_verify(request):
         email = useremailform.cleaned_data['email']
         salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
         confirmation_key = hashlib.sha1(salt+email).hexdigest()
-        new_entry = UserEmail(user=request.user,email=email, confirmation_key=confirmation_key, last_datetime_created=datetime.datetime.today(),verify_num=1)
+        new_entry = UserEmail(user=request.user,email=email, confirmation_key=confirmation_key,\
+            last_datetime_created=datetime.datetime.today(),verify_num=1)
         new_entry.save()
         email_subject = 'Account confirmation'
-        email_body = " To verify your email address, click this link within 48hours http://127.0.0.1:8000/settings/confirm/%s" % (confirmation_key)
-#        send_mail(email_subject, email_body, 'myemail@example.com',[email], fail_silently=False)
+        email_body = " To verify your email address, click this link within" +\
+                      " 48hours http://channeli.in/#settings/email_auth/?confirm_key=%s" % (confirmation_key)
+#       send_mail(email_subject, email_body, 'myemail@example.com',[email], fail_silently=False)
+        email1_subject = 'New Email address added for your channeli account.'
+        email1_body = "A new Email address %s has been added to your channeli account." % (email)
+#       send_mail(email1_subject, email1_body, 'myemail@example.com',[request.user.email], fail_silently=False)
         print confirmation_key
         messages.success(request,"A verification link has been sent to your email address.")
   if 'confirm_key' in request.GET:
-    print "abcd"
     confirmation_key = request.GET['confirm_key']
     try:
       email_profile = UserEmail.objects.filter(user=request.user).get(confirmation_key=confirmation_key)
@@ -222,7 +232,6 @@ def email_verify(request):
         email_profile.save()
         messages.success(request,"Your email has been verified for this account.")
     except UserEmail.DoesNotExist:
-      print "xyz"
       messages.error(request,"This link is no longer active for verification.")
 
   useremailform = UserEmailForm()
@@ -240,12 +249,12 @@ def email_verify(request):
   primary_email = request.user.email
   count = emails_for_user.count()
   return render(request,'utilities/pagelets/email_auth.html',{
-      'useremailform': useremailform, 
+      'useremailform': useremailform,
       'emails_for_user': emails_for_user,
       'primary_email':primary_email,
       'count':count,
       'verifiable_emails':verifiable_emails,
-      })
+  })
 
 
 
