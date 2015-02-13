@@ -266,6 +266,10 @@ def batchMembers(request , batch_id):
 
   return HttpResponse(json.dumps(members), content_type="application/json")
 
+def get_files(request, batch_id):
+  currentBatch = Batch.objects.get(id = batch_id)
+  files = UploadedFiles.objects.all().filter(
+
 def createReminder(request):
   if request.method == 'POST':
     if ReminderForm.is_valid():
