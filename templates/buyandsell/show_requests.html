@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>See requests</title>
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+ <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+</head>
+<body>
+<div id="sell_form" onclick="sell_form()">Sell form</div>
+<div id="request_form" onclick="request_form()">Request form</div>
+{% if  error_msg %}
+{{ error_msg }}
+{% endif %}
+
+{% if table_data %}
+{% for row in table_data %}
+<p>Name: {{ row.item_name }}</p>
+<p>Price upper: {{ row.price_upper }}</p>
+<p>Expires after: {{ row.expiry_date|timeuntil }}</p>
+{% endfor %}
+{% endif %}
+
+<script src="{{ STATIC_URL }}js/common.js"></script>
+<script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>
+</body>
+</html>
+
