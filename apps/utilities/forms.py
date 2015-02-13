@@ -94,6 +94,8 @@ class ChangePasswordFirstYearForm(forms.Form):
   password1 = forms.CharField(label='Enter New Password', widget=forms.PasswordInput, required=True, min_length=4)
   password2 = forms.CharField(label='Enter Again', widget=forms.PasswordInput, required=True, min_length=4)
 
+class PasswordCheckForm(forms.Form):
+  password = forms.CharField(label='Enter Password', widget=forms.PasswordInput, required=True)
 
 class EmailForm(forms.Form):
   email = forms.EmailField()

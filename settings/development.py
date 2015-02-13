@@ -89,7 +89,7 @@ USE_I18N = True
 USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = True
+USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -286,7 +286,7 @@ COMPRESS_PRECOMPILERS = (
 
 SHELL_PLUS = "ipython"
 
-SESSION_COOKIE_NAME = 'PHPSESSID'
+SESSION_COOKIE_NAME = 'CHANNELI_SESSID'
 SESSION_ENGINE = 'nucleus.session'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
