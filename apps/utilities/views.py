@@ -213,17 +213,17 @@ def email_verify(request):
   if 'confirm_key' in request.GET:
     print "abcd"
     confirmation_key = request.GET['confirm_key']
-#    email_profile = get_object_or_404(UserEmail, confirmation_key=confirmation_key)
-    email_profile = UserEmail.objects.filter(user=request.user).get(confirmation_key=confirmation_key)
-    if not email_profile.count():
+    try:
+      email_profile = UserEmail.objects.filter(user=request.user).get(confirmation_key=confirmation_key)
       if email_profile.last_datetime_created + datetime.timedelta(2) < timezone.now():
         messages.error(request,"The verification-key expired.")
       else:
         email_profile.verified = True
         email_profile.save()
         messages.success(request,"Your email has been verified for this account.")
-    else:
-        messages.error(request,"This link is no longer active.A new link has been sent to your Email address.")
+    except UserEmail.DoesNotExist:
+      print "xyz"
+      messages.error(request,"This link is no longer active for verification.")
 
   useremailform = UserEmailForm()
   if UserEmail.objects.filter(user=request.user).count()==0 :
@@ -235,13 +235,6 @@ def email_verify(request):
       useremail.last_datetime_created = datetime.datetime.today()
       useremail.save()
   emails_for_user = UserEmail.objects.filter(user=request.user)
-#  for emails in emails_for_user:
-#   if emails.last_datetime_created + datetime.timedelta(2) < timezone.now():
-#     if not emails["verified"]:
-#       emails["verifiable"]=True
-#   else:
-#     emails["verifiable"]=False
-#   print emails
   lastdate = timezone.now() - datetime.timedelta(2)
   verifiable_emails = emails_for_user.filter(last_datetime_created__gte=lastdate).filter(verified=False)
   primary_email = request.user.email
