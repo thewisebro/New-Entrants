@@ -1,12 +1,16 @@
 <html>
 <head>
 <title>See requests</title>
- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
- <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script></head>
+
 </head>
 <body>
 <div id="sell_form" onclick="sell_form()">Sell form</div>
 <div id="request_form" onclick="request_form()">Request form</div>
+<p><a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{%endif%}">View sell items</a></p>
 {% if  error_msg %}
 {{ error_msg }}
 {% endif %}

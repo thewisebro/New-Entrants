@@ -10,4 +10,6 @@ urlpatterns = patterns('',
     url(r'^viewrequests/(?P<mc>\w+)/(?P<c>\w+)/?$', viewrequests, name='requests sub category'),
     url(r'^sell/$', sell,name='sell form'),
     url(r'^requestitem/$', requestitem,name='request form'),
+    url(r'^watch/(?P<mc>\w+)/?$', watch, name='watch main category'),
+    url(r'^watch/(?P<mc>\w+)/(?P<c>\w+)/?$', watch, name='watch sub category'),
 )

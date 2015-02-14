@@ -7,7 +7,7 @@ class ItemsForSaleAdmin(admin.ModelAdmin):
   search_fields = ['item__name']
 
 class ItemsRequestedAdmin(admin.ModelAdmin):
-  list_display = ('id','item_name','user','condition','price_upper','price_lower','category')
+  list_display = ('id','item_name','user','condition','price_upper','category')
   search_fields = ['item_name']
 
 class BuySellCategoryAdmin(admin.ModelAdmin):

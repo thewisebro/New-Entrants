@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail
 from django.contrib import messages
 from datetime import date, timedelta, datetime
+import simplejson
 
 from buyandsell.models import *
 from buyandsell.constants import *
@@ -61,7 +62,9 @@ def buy(request,mc=None,c=None):
 
   context={
     'error_msg':error_msg,
-    'table_data':table_data
+    'table_data':table_data,
+    'mc':mc,
+    'c':c
           }    
   return render(request,'buyandsell/buy.html',context)
 
@@ -72,6 +75,7 @@ def viewrequests(request,mc=None,c=None):
   price_valid=0
   maincategory=''
   category=''
+  error_msg=''
 
   if request.GET.get('ll') and request.GET.get('ul'):
 
@@ -106,7 +110,7 @@ def viewrequests(request,mc=None,c=None):
     qdata=RequestedItems.objects.filter(category__main_category=mc,is_active=True).order_by('-pk')
 
   elif  price_valid:
-    qdata=RequestedItems.objects.filter(cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
+    qdata=RequestedItems.objects.filter(price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
 
   else:
     qdata=RequestedItems.objects.filter(is_active=True).order_by('-pk')
@@ -118,7 +122,9 @@ def viewrequests(request,mc=None,c=None):
 
   context={
     'error_msg':error_msg,
-    'table_data':table_data
+    'table_data':table_data,
+    'mc':mc,
+    'c':c
           }    
   return render(request,'buyandsell/show_requests.html',context)
 
@@ -207,14 +213,20 @@ def requestitem(request):
   return render(request,'buyandsell/form.html',{'form':form})
      
 def watch(request,mc=None,c=None):
+
   user=request.user
   if mc and not c:
     cat_list=BuySellCategory.objects.filter(main_category=mc)
     for cat in cat_list:
       cat.watch_users.add(user)
+      cat.save()
 
   if mc and c:
     catg=BuySellCategory.objects.get(code=c)
     catg.watch_users.add(user)
+    catg.save()
 
+  success = {'success' : 'true'}
+  success = simplejson.dumps(success)
+  return HttpResponse(success, content_type="application/json")
 
