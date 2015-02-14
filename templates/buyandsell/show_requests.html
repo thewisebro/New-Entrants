@@ -17,9 +17,11 @@
 
 {% if table_data %}
 {% for row in table_data %}
+<div id="{{ row.pk }}" onclick="request_details({{ row.pk }})">
 <p>Name: {{ row.item_name }}</p>
 <p>Price upper: {{ row.price_upper }}</p>
 <p>Expires after: {{ row.expiry_date|timeuntil }}</p>
+</div>
 {% endfor %}
 {% endif %}
 

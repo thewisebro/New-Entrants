@@ -15,10 +15,12 @@
 
 {% if table_data %}
 {% for row in table_data %}
+<div id="{{ row.pk }}" onclick="sell_details({{ row.pk }})">
 <p>Name: {{ row.item_name }}</p>
 <P> <img src="/media/{{row.item_image }}"></p>
 <p>Cost: {{ row.cost }}</p>
 <p>Expires after: {{ row.expiry_date|timeuntil }}</p>
+</div>
 {% endfor %}
 {% endif %}
 <script src="{{ STATIC_URL }}js/common.js"></script>

@@ -306,6 +306,33 @@ if(typeof dialog_options != "undefined")
     src:'/buyandsell/requestitem/'
   });
 }
+function sell_details(pk){
+if(typeof dialog_options != "undefined")
+  {
+    dialog_options.close();
+  }
+ dialog_iframe({
+    name:'sell_detail_dialog',
+    title:'SellItemDetails',
+    width:600,
+    height:360,
+    src:'/buyandsell/sell_details/'+pk+'/'
+  });
+}
+
+function request_details(pk){
+if(typeof dialog_options != "undefined")
+  {
+    dialog_options.close();
+  }
+ dialog_iframe({
+    name:'request_detail_dialog',
+    title:'RequestItemDetails',
+    width:600,
+    height:360,
+    src:'/buyandsell/request_details/'+pk+'/'
+  });
+}
 function submit_report(object_pk, content_type_pk){
   $.get('/moderation/report_info/',{
     content_type_pk: content_type_pk,

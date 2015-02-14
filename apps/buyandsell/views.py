@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from datetime import date, timedelta, datetime
 import simplejson
-
+from django.template.response import TemplateResponse
 from buyandsell.models import *
 from buyandsell.constants import *
 from notifications.models import Notification
@@ -159,6 +159,7 @@ def sell(request):
         new_item.expiry_date=expiry_date
         new_item.user=user
         new_item.save()
+        return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/buy/'})
       else:
         print "form filled wrongly"
     else:
@@ -201,6 +202,7 @@ def requestitem(request):
         new_item.expiry_date=expiry_date
         new_item.user=user
         new_item.save()
+        return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/viewrequests/'})
       else:
         print "form filled wrongly"
     else:
@@ -229,4 +231,118 @@ def watch(request,mc=None,c=None):
   success = {'success' : 'true'}
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
+
+def selldetails(request,pk):
+  item=SaleItems.objects.get(pk=pk)
+  self_flag=0
+  user=request.user
+  username=request.user.username
+  item_user=item.user.username
+  if username == item_user:
+    self_flag=1
+  if request.method=='POST':
+    password=request.POST.get('password')
+    if user.check_password(password):
+      sendmail(request,'buy',pk)
+    elif password=='':
+      messages.error(request, 'Password cant be empty' )
+    
+    elif not user.check_password(password):
+      messages.error(request, 'Incorrect password' )
+  context={
+    'item':item,
+    'self_flag':self_flag
+          }
+  return render(request,'buyandsell/selldetails.html',context)
+
+def requestdetails(request,pk):
+  item=RequestedItems.objects.get(pk=pk)
+  self_flag=0
+  user=request.user
+  username=request.user.username
+  item_user=item.user.username
+  if username == item_user:
+    self_flag=1
+  if request.method=='POST':
+    password=request.POST.get('password')
+    if user.check_password(password):
+      sendmail(request,'request',pk)
+    elif password=='':
+      messages.error(request, 'Password cant be empty' )
+
+    elif not user.check_password(password):
+      messages.error(request, 'Incorrect password' )
+
+  context={
+    'item':item,
+    'self_flag':self_flag
+          }
+  return render(request,'buyandsell/requestdetails.html',context)
+
+def sendmail(request, type_of_mail, id_pk):
+  user = request.user
+  username = request.user.username
+  sex=request.user.gender
+  already_sent=0
+  pronoun = "him"
+  if sex=="F":
+    pronoun="her"
+  contact = request.user.contact_no
+  app='buyandsell'
+  if type_of_mail == 'buy':
+    buy_mail_list=BuyMails.objects.filter(by_user__username=username,item__pk=id_pk)
+    qryst = SaleItems.objects.filter(pk = id_pk)
+    if buy_mail_list:
+      messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
+      already_sent=1
+    new_mail_sent=BuyMails(by_user=user,item=qryst[0])
+    new_mail_sent.save()
+    subject = 'Your item ' + qryst[0].item_name + ' has a buyer on Buy and Sell!'
+    msg = 'Your item ' + qryst[0].item_name + ' added by you on ' + str(qryst[0].post_date) + ' has a prospective buyer! '
+    msg += user.first_name + ' wants to buy your item. You can contact '+pronoun+' at this number ' + contact
+    msg += ' or email '+pronoun+' at ' + str(user.email) + '\nNote: if there is no phone number or email id, that means that ' + user.first_name
+    msg += ' has not filled in his contact information in the channel-i database.'
+    notif_text = user.first_name + ' wants to buy ' + qryst[0].item_name + ' added by you. '
+    if contact:
+      notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
+    if qryst[0].email:
+      notif_text += 'Email at ' + str(user.email) + '.'
+    url = '/buyandsell/sell_details/' + str(id_pk)
+    users = [qryst[0].user]
+    Notification.save_notification(app, notif_text, url, users, qryst[0])
+
+
+  if type_of_mail == 'request':
+    qryst = RequestedItems.objects.filter(pk = id_pk)
+    buy_mail_list=RequestMails.objects.filter(by_user__username=username,item__pk=id_pk)
+    if buy_mail_list:
+      messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
+      already_sent=1
+    new_mail_sent=RequestMails(by_user=user,item=qryst[0])
+    new_mail_sent.save()
+    subject = 'Your request for ' + qryst[0].item_name + ' has been answered!'
+    msg = 'Your request ' + qryst[0].item_name + ' added by you on ' + str(qryst[0].post_date) + ' has a prospective seller! \n'
+    msg += user.first_name + ' has the item that you requested for. You can contact '+pronoun+' at this number ' + contact
+    msg += ' or email '+pronoun+' at ' + str(user.email) + '\n\n Note: if there is no phone number or email id, that means that ' + user.first_name
+    msg += ' has not filled in his contact information in the channel-i database.'
+    notif_text = user.first_name + ' has an item(' + qryst[0].item_name + ') you requested for. '
+    if contact:
+      notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
+    if qryst[0].email:
+      notif_text += 'Email at ' + str(user.email) + '.'
+    url = '/buyandsell/request_details/' + str(id_pk)
+    users = [qryst[0].user]
+    Notification.save_notification(app, notif_text, url, users, qryst[0])
+
+
+  if not already_sent:
+    receiver = [str(qryst[0].email),]
+    try:
+      from django.core.mail import send_mail
+      send_mail(subject, msg, 'buysell@iitr.ernet.in', receiver, fail_silently = False)
+      email_sent_msg = qryst[0].user.first_name + ' has been sent a mail with your contact information. He may contact you shortly. If not, go ahead and contact '+pronoun+' youself!'
+      messages.success(request, email_sent_msg)
+    except Exception as e:
+      messages.error(request, 'Email has not been sent to ' + qryst[0].user.first_name + '. Error occured and reported.' )
+      
 
