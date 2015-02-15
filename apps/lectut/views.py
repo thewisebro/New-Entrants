@@ -24,7 +24,6 @@ MAX_FILE_SIZE =  5242880
 MAX_VIDEO_SIZE = 20971520
 
 def dispbatch(request):
-  import pdb;pdb.set_trace()
   active = request.user.is_authenticated
   if active:
     if request.user.in_group('Student'):
@@ -33,7 +32,7 @@ def dispbatch(request):
       courses = map(lambda x: x.course, batches)
       context = {'courses': courses,
                  'batches': batches}
-      return render(request, 'lectut/courses.html', context)
+      return render(request, 'lectut/index.html', context)
     elif request.user.in_group('Faculty'):
       return HttpResponse("You are a faculty")
     else:
@@ -255,6 +254,7 @@ def userdownloads(request , batch_id):
 #return render(request,'lectut/image.html',context)
   return HttpResponse(json.dumps(context), content_type="application/json")
 
+#Gives all the members of a Batch
 def batchMembers(request , batch_id):
   currentBatch = Batch.objects.get(id = batch_id)
   students = currentBatch.students.all()
@@ -268,8 +268,10 @@ def batchMembers(request , batch_id):
 
 def get_files(request, batch_id):
   currentBatch = Batch.objects.get(id = batch_id)
-  files = UploadedFiles.objects.all().filter(
+  files = UploadedFiles.objects.all().filter(batch_id = batch_id)
+  return 0
 
+# Creates a event
 def createReminder(request):
   if request.method == 'POST':
     if ReminderForm.is_valid():
@@ -284,11 +286,13 @@ def createReminder(request):
       msg = "Invalid entry"
     return HttpResponse(json.dumps(msg), content_type="application/json")
 
+# Gives all events expiring after current time
 def getReminder(request):
   student = request.user.student
   batches = student.batch_set.all()
   reminders = Reminders.objects.all().filter(batch__in=batches).filter(datetime_created >=timezone.now()).order_by('event_date')
 
+  # Adds dictionary of each reminder in events
   events=[]
   for reminder in reminders:
     events.append(reminder.as_dict())
