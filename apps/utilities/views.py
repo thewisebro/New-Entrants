@@ -2,6 +2,7 @@ import datetime
 import json
 
 from django.shortcuts import render
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.forms.util import ErrorList
@@ -12,11 +13,10 @@ from nucleus.models import StudentUserInfo, StudentInfo, WebmailAccount
 from nucleus.session import SessionStore
 from events.models import EventsUser
 from api.utils import pagelet_login_required, dialog_login_required
-from utilities.models import UserSession
+from utilities.models import UserSession, PasswordCheck
 from utilities.forms import ProfileFormPrimary, ProfileFormGuardian,\
-                            ProfileFormExtra, ChangePasswordForm,\
-                            ChangePasswordFirstYearForm, EmailForm,\
-                            EventsSubscribeFormGen, GenProfileForm
+    ProfileFormExtra, ChangePasswordForm, ChangePasswordFirstYearForm,\
+    EmailForm, EventsSubscribeFormGen, GenProfileForm, PasswordCheckForm
 
 @pagelet_login_required
 def edit_profile(request):
@@ -153,4 +153,27 @@ def email(request):
       'events_subscribe_form': events_subscribe_form,
       'emailform': emailform,
       'email_subscribed': events_user.email_subscribed,
+  })
+
+@dialog_login_required
+def password_check(request):
+  user = request.user
+  if request.method == 'POST':
+    service = request.GET['service']
+    seconds = int(request.GET['seconds'])
+    form = PasswordCheckForm(request.POST)
+    if form.is_valid():
+      password = request.POST['password']
+      if user.check_password(password):
+        PasswordCheck.objects.create(user=user, service=service,
+                        seconds=seconds)
+        return HttpResponseRedirect(reverse('close_dialog', kwargs={
+              'dialog_name': 'pass_check'
+        }))
+      else:
+        messages.error(request,'Password didn\'t match.')
+  else:
+    form = PasswordCheckForm()
+  return render(request, 'utilities/dialogs/password_check.html', {
+      'form': form,
   })

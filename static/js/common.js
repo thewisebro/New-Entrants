@@ -279,6 +279,19 @@ function take_feedback(){
   });
 }
 
+function check_password(service, seconds, close_callback){
+  if(!close_callback)
+    close_callback = function(){};
+  dialog_iframe({
+    name:'pass_check',
+    title:'Password authentication',
+    width:500,
+    height:180,
+    close: close_callback,
+    src:'/settings/password_check/?service='+service+'&seconds='+seconds
+  });
+}
+
 function submit_report(object_pk, content_type_pk){
   $.get('/moderation/report_info/',{
     content_type_pk: content_type_pk,
