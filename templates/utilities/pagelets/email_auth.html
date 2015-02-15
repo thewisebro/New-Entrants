@@ -41,6 +41,7 @@
               <input type="submit" name="verify" value="Verified" disabled="disabled">
             {% endif %}
             <input type="submit" name="primary" value="Make it Primary">
+            <input type="submit" style="display:none" name="primary_2" id="{{emails.pk}}_primary_2">
             <input type="submit" name="delete" value="Delete">
             <br>
             {% if emails in verifiable_emails %}
@@ -63,4 +64,10 @@
 
 {% block scripts %}
   {{ form.media.js }}
+  <script type="text/javascript" src="/static/js/common.js"></script>
+  {% if primary_entry %}
+    <script>
+      check_password('email_auth', 60,function(){document.getElementById('{{ primary_entry.pk }}_primary_2').click();});
+    </script>
+  {% endif %}
 {% endblock %}

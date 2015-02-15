@@ -163,14 +163,20 @@ def email(request):
 
 @pagelet_login_required
 def email_verify(request):
+  primary_entry = None
   if request.method == 'POST':
-    if 'primary' in request.POST:
+    if 'primary' in request.POST or 'primary_2' in request.POST:
       entry = UserEmail.objects.get(pk= request.POST['id'])
-      if entry.verified:
-        request.user.email = entry.email
-        request.user.save()
+      authenticated = PasswordCheck.exists_for(user=entry.user, service='email_auth')
+      if authenticated:
+        if entry.verified:
+          request.user.email = entry.email
+          request.user.save()
+        else:
+          messages.error(request,"Email need to be verified first")
       else:
-        messages.error(request,"Email need to be verified first")
+        if 'primary' in request.POST:
+          primary_entry = entry
 
     if 'delete' in request.POST:
       entry = UserEmail.objects.get(pk= request.POST['id'])
@@ -194,12 +200,12 @@ def email_verify(request):
         email_subject = 'Account confirmation'
         email_body = " To verify your email address, click this link within" + \
                      " 48hours http://channeli.in/#settings/email_auth/?confirm_key=%s" % (confirmation_key)
-#        send_mail(email_subject, email_body, 'myemail@example.com',[entry.email], fail_silently=False)
+        send_mail(email_subject, email_body,'channeli@iitr.ac.in',[entry.email], fail_silently=False)
         email1_subject = 'New Email address added for your channeli account.'
         email1_body = "A new Email address %s has been added to your channeli account." % (entry.email)
-#        send_mail(email1_subject, email1_body, 'myemail@example.com',[request.user.email], fail_silently=False)
+        send_mail(email1_subject, email1_body, 'channeli@iitr.ac.in',\
+            [request.user.email], fail_silently=False)
 
-        print confirmation_key
         messages.success(request,"A verification link has been sent to your email address.")
       else:
         messages.error(request,"Max limit of verification for this email" +\
@@ -209,20 +215,23 @@ def email_verify(request):
       useremailform = UserEmailForm(request.POST)
       if useremailform.is_valid():
         email = useremailform.cleaned_data['email']
-        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
-        confirmation_key = hashlib.sha1(salt+email).hexdigest()
-        new_entry = UserEmail(user=request.user,email=email, confirmation_key=confirmation_key,\
+        if UserEmail.objects.filter(user=request.user).filter(email=email).count():
+          messages.error(request,'This email has already been submitted.')
+        else:
+          salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+          confirmation_key = hashlib.sha1(salt+email).hexdigest()
+          new_entry = UserEmail(user=request.user,email=email, confirmation_key=confirmation_key,\
             last_datetime_created=datetime.datetime.today(),verify_num=1)
-        new_entry.save()
-        email_subject = 'Account confirmation'
-        email_body = " To verify your email address, click this link within" +\
-                      " 48hours http://channeli.in/#settings/email_auth/?confirm_key=%s" % (confirmation_key)
-#       send_mail(email_subject, email_body, 'myemail@example.com',[email], fail_silently=False)
-        email1_subject = 'New Email address added for your channeli account.'
-        email1_body = "A new Email address %s has been added to your channeli account." % (email)
-#       send_mail(email1_subject, email1_body, 'myemail@example.com',[request.user.email], fail_silently=False)
-        print confirmation_key
-        messages.success(request,"A verification link has been sent to your email address.")
+          new_entry.save()
+          email_subject = 'Account confirmation'
+          email_body = " To verify your email address, click this link within" +\
+                        " 48hours http://channeli.in/#settings/email_auth/?confirm_key=%s" % (confirmation_key)
+          send_mail(email_subject, email_body, 'channeli@iitr.ac.in',[email], fail_silently=False)
+          email1_subject = 'New Email address added for your channeli account.'
+          email1_body = "A new Email address %s has been added to your channeli account." % (email)
+          send_mail(email1_subject, email1_body, 'channeli@iitr.ac.in',[request.user.email], fail_silently=False)
+          messages.success(request,"A verification link has been sent to your email address.")
+
   if 'confirm_key' in request.GET:
     confirmation_key = request.GET['confirm_key']
     try:
@@ -256,6 +265,7 @@ def email_verify(request):
       'primary_email':primary_email,
       'count':count,
       'verifiable_emails':verifiable_emails,
+      'primary_entry': primary_entry,
   })
 
 
