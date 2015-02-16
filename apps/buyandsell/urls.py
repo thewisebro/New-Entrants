@@ -14,4 +14,6 @@ urlpatterns = patterns('',
     url(r'^watch/(?P<mc>\w+)/(?P<c>\w+)/?$', watch, name='watch sub category'),
     url(r'^request_details/(?P<pk>\w+)/?$',requestdetails),
     url(r'^sell_details/(?P<pk>\w+)/?$',selldetails),
-    ) 
+    url(r'^sellformsearch/$',sellformsearch), #the search url will be intergrated later
+    url(r'^requestformsearch/$',requestformsearch),   
+ ) 

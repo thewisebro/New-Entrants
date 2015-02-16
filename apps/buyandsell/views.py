@@ -22,7 +22,7 @@ def buy(request,mc=None,c=None):
   if request.GET.get('ll') and request.GET.get('ul'):
     pl=int(request.GET.get('ll'))
     pu=int(request.GET.get('ul'))
-    if pu>0 and pl >0 and pu>pl:
+    if pu>=0 and pl >=0 and pu>pl:
       price_valid=1
     else:
       error_msg= "invalid price range"
@@ -81,7 +81,7 @@ def viewrequests(request,mc=None,c=None):
 
     pl=int(request.GET.get('ll'))
     pu=int(request.GET.get('ul'))
-    if pu>0 and pl >0 and pu>pl:
+    if pu>=0 and pl >=0 and pu>pl:
       price_valid=1
     else:
       error_msg= "invalid price range"
@@ -339,10 +339,31 @@ def sendmail(request, type_of_mail, id_pk):
     receiver = [str(qryst[0].email),]
     try:
       from django.core.mail import send_mail
-      send_mail(subject, msg, 'buysell@iitr.ernet.in', receiver, fail_silently = False)
+      send_mail(subject, msg, 'buysell@iitr.ernet.in', receiver, fail_silently = True)
       email_sent_msg = qryst[0].user.first_name + ' has been sent a mail with your contact information. He may contact you shortly. If not, go ahead and contact '+pronoun+' youself!'
       messages.success(request, email_sent_msg)
     except Exception as e:
       messages.error(request, 'Email has not been sent to ' + qryst[0].user.first_name + '. Error occured and reported.' )
       
+def sellformsearch(request):
+  srch_string=request.GET.get('keyword')
+  query_set=RequestedItems.objects.filter(item_name__icontains=srch_string)
+  object_list=[]
+  for item in query_set:
+    item_dict={}
+    item_dict.update({'id':item.pk,'name':item.item_name,'price_upper':item.price_upper})
+    object_list.append(item_dict)
+  items = simplejson.dumps(object_list)
+  return HttpResponse(items, content_type="application/json")
+
+def requestformsearch(request):
+  srch_string=request.GET.get('keyword')
+  query_set=SaleItems.objects.filter(item_name__icontains=srch_string)
+  object_list=[]
+  for item in query_set:
+    item_dict={}
+    item_dict.update({'id':item.pk,'name':item.item_name,'cost':item.cost})
+    object_list.append(item_dict)
+  items = simplejson.dumps(object_list)
+  return HttpResponse(items, content_type="application/json")
 

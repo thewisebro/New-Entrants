@@ -24,3 +24,34 @@ function watch_cat(url)
           }
           });
 }
+
+
+function formsearch() {
+      var timer;
+      alert("hi");
+        $("#id_item_name").keyup(function() {
+        clearTimeout(timer);
+         var ms = 200; 
+         var val = this.value;
+         timer = setTimeout(function() { lookup(val);}, ms);
+         });
+        }
+
+function lookup(val)
+{
+    $.ajax({
+     type:"GET",    
+     url:"/buyandsell/sellformsearch/",
+     data:{
+     'keyword':val
+     },
+     success:function(data){
+         alert(data);
+         }
+         });
+}
+
+formsearch();
+
+
+
