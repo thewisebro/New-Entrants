@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			Facapp
+		</title>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/bootstrap.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/main.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/jquery-sortable-min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/jquery-ui-1.10.4.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor.js"></script>
+		<!-- <link rel="stylesheet" type="text/css" href="ckeditor/contents.css"> -->
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/facapp/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/facapp/style.css">
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/facapp/bootstrap-override.css">
+
+	</head>
+	<body>
+		<!--//////////////////////////////////////////  container div starts  ///////////////////////////////////////////////-->
+		<div id="container">
+			<header>
+			    <div id="header_parent">
+			       	<div id="header_app_links">
+			       		<nav>
+						    <a href="/facapp/">Home</a>
+						    &nbsp;|&nbsp;
+						    <a href="/">Channel i</a>
+						    &nbsp;|&nbsp;
+						    <a href="/logout/">Logout</a>
+						</nav>
+					</div>
+					<div id="heading">    
+						<h1>Faculty Profile</h1>
+			        </div>
+			    </div>  
+			    <div id="header_shadow">
+			    </div>
+			</header>
+			<!--//////////////////////////////////////  middle div starts  //////////////////////////////////////////-->
+			<div id="middle">
+				<div id="tabs" >
+					<ul class="nav nav-tabs nav-justified">
+		  				<li class="active"><a><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+						<li><a><span class="glyphicon glyphicon-list"></span> Priority</a></li>
+		  				<li><a><span class="glyphicon glyphicon-plus-sign"></span> Add Section</a></li>
+						<!-- <li><a>Messages</a></li> -->
+					</ul>
+				</div>
+				<div id="content">
+					<!--///////////////////////////////  Profile div starts  ///////////////////////////////////-->
+					<div id="profile">
+						<div id="info" class="row">
+							<div class="col-md-8">
+								<p id="name">Gupta S.P.</p><!-- <br /> -->
+								<p class="details">Head Of Department</p>
+								<p class="details">spseefee[at]iitr.ac.in</p>
+								<p class="details">Ph No: 01332-285827</p>
+								<p class="details">resume</p>
+							</div>
+							<div class="col-md-4">
+								<img class="faculty_image" src="http://people.iitr.ernet.in/facultyphoto/default.jpg">
+							</div>
+						</div>
+
+						<div id="editable">
+	    					{% if sections %}
+							<!---////////////// load the already saved sections ///////////////////////-->
+	      						<!-- {% for section in sections %}
+	        						<div contentEditable="true" id="{{ section.title }}" class="section">
+	          							{{ section.content|safe }}
+	        						</div>
+	        						<button type="submit" ht="{{ section.title }}" onclick="return updateSection(this);" class="btn btn-primary" name="submit" >save</button>
+	      						{% endfor %} -->
+							<!---/////////////// already saved sections loaded /////////////////////////-->
+							{% endif %}
+							<div class="section"><p class="title"></p><p class="matter"></p></div>
+						</div>
+					</div>
+					<!--/////////////////////////////////  Profile div ends  ////////////////////////////////////-->
+					<!--///////////////////////////////  Priority div starts  ///////////////////////////////////-->
+					<div id="priority" class="hidden">
+						<div id="section_list">
+							<ul id="sortable" class="list-group list-unstyled">
+								{% if sections %}
+									<!-- {% for section in sections %}
+										<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>{{ section.title }}</li>
+									{% endfor %} -->
+								{% endif %}
+							</ul>
+						</div>
+					</div>
+					<!--////////////////////////////////  Priority div ends  /////////////////////////////////////-->
+					<!--//////////////////////////////  Add Section div starts  //////////////////////////////////-->
+					<div id="add_section" class="hidden">
+						this is the add section div
+					</div>
+					<!--///////////////////////////////  Add Section div ends  ///////////////////////////////////-->
+				</div>
+			</div>
+			<!--////////////////////////////////////////  middle div ends  ////////////////////////////////////////////-->
+		</div>
+		<!--//////////////////////////////////////////  container div ends  /////////////////////////////////////////////////-->
+		<footer>
+			<div id="footer" >
+			    <!-- <div id="footer">© 2014 Information Management Group</div> -->
+			    <div class="span12 left">Copyright 2014 &nbsp;<a id="link_img" href="http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html" target="_blank">Information Management Group <img id="img-logo" class="" src="{{ STATIC_URL }}images/facapp/img-logo.png"></a>
+	 			</div>
+	 		</div>
+		</footer>
+	</body>
+</html>
