@@ -5,7 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.utils.encoding import smart_str
 from django.core.exceptions import ValidationError
 from django.contrib import messages
-from settings import *
+from django.conf import settings
+
+from settings.development import PRODUCTION
+from django.views.decorators.csrf import csrf_exempt
 
 #import mimetypes, magic
 import mimetypes, os
@@ -16,6 +19,18 @@ from forms import *
 from models import *
 from django import forms
 
+def CORS_allow(view):
+  def wrapped_view(request, *args, **kwargs):
+    response = view(request, *args, **kwargs)
+    if PRODUCTION == False:
+      response["Access-Control-Allow-Origin"] = "*"
+      response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+      response["Access-Control-Allow-Credentials"] = True
+#      response["Access-Control-Max-Age"] = "1000"
+      response["Access-Control-Allow-Headers"] = "*"
+    return response
+  return wrapped_view
+
 # Create your views here.
 def tester(request):
       return HttpResponse("Hello, world. You're at lectut.")
@@ -23,6 +38,7 @@ def tester(request):
 MAX_FILE_SIZE =  5242880
 MAX_VIDEO_SIZE = 20971520
 
+@CORS_allow
 def dispbatch(request):
   active = request.user.is_authenticated
   if active:
@@ -32,11 +48,15 @@ def dispbatch(request):
       courses = map(lambda x: x.course, batches)
       context = {'courses': courses,
                  'batches': batches}
-      return render(request, 'lectut/index.html', context)
-    elif request.user.in_group('Faculty'):
-      return HttpResponse("You are a faculty")
-    else:
-      return HttpResponse("You are not enrolled.Please visit IMG")
+      index = settings.PROJECT_ROOT + '/apps/lectut/static/lectut-front/app/index.html'
+      with open(index,'r') as f:
+       response =  HttpResponse(f.read())
+       return response
+#return render(request, 'dist/index.html', context)
+#    elif request.user.in_group('Faculty'):
+#      return HttpResponse("You are a faculty")
+#    else:
+#      return HttpResponse("You are not enrolled.Please visit IMG")
   else:
       return HttpResponse("Please log-in to view your courses")
 
@@ -45,9 +65,10 @@ def archives(request):
 # Get list of previous courses
   return
 
-@login_required
+#@login_required
 def coursepage_old(request, batch_id):
-  user = request.user
+#  user = request.user
+  user = User.objects.get(username=request.META['HTTP_USER'])
   userBatch = Batch.objects.get(id=batch_id)
   request.session['batchId'] = batch_id
   userType=getUserType(user)
@@ -71,15 +92,20 @@ def coursepage_old(request, batch_id):
              'viewType':'Coursepage'}
   return render( request, 'lectut/image.html', context)
 
-@login_required
+@csrf_exempt
+@CORS_allow
+#@login_required
 def coursepage(request, batch_id):
-    user = request.user
+    if request.user:
+      user = request.user
+    else:
+      user = User.objects.get(username=request.POST['user'])
     userBatch = Batch.objects.get(id=batch_id)
     posts = []
     request.session['batchId'] = batch_id
-    userType=getUserType(user)
+#    userType=getUserType(user)
 
-    previous_posts = Post.objects.all().filter(batch_id=batch_id).order_by('-datetime_created')
+    previous_posts = Post.objects.all().filter(batch_id = batch_id).order_by('-datetime_created')
     for post in previous_posts:
       documents =  Uploadedfile.objects.all().filter(post=post)
       post = post.as_dict()
@@ -92,11 +118,11 @@ def coursepage(request, batch_id):
 
     context = {'posts': posts,
 #               'batch':userBatch,
-               'userType':userType,
+#               'userType':userType,
                'viewType':'Coursepage'}
 
     return HttpResponse(json.dumps(context),content_type='application/json')
-    return render( request, 'lectut/image.html', context)
+#    return render( request, 'disp/index.html', context)
 
 def uploadFile(request , batch_id):
   user = request.user
@@ -136,16 +162,21 @@ def uploadFile(request , batch_id):
     if msg:
       return HttpResponse(json.dumps(msg), content_type='application/json')
     else:
-      return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
+      return 0
+#return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
+@csrf_exempt
+@CORS_allow
 def uploadedFile(request , batch_id):
-  user = request.user
+#  user = request.user
+  user = User.objects.get(username=request.POST['user'])
   userBatch = Batch.objects.get(id=batch_id)
   if request.method == 'POST':
     data = request.POST.get('formText','')
     documents = request.FILES.getlist('upload')
     extra = request.POST.getlist('extra','')
     files = []
+    msg = ''
     counter = 0
     try:
       new_post = Post(upload_user = user, batch = userBatch, content = data)
@@ -161,12 +192,14 @@ def uploadedFile(request , batch_id):
       elif document._size>MAX_VIDEO_SIZE:
         msg = "Video too large.Must be smaller than 20MB"
       else:
+        import pdb;pdb.set_trace()
         new_document = Uploadedfile(post =new_post, upload_file = document, description = fileData['description'], file_type=file_type)
         new_document.save()
         files.append(new_document)
-    if msg:
+    if msg !='':
       return HttpResponse(json.dumps(msg), content_type='application/json')
     else:
+      new_post = new_post.as_dict()
       complete_post = {'post':new_post,'files':files}
       return HttpResponse(json.dumps(complete_post), content_type='application/json')
   return user
@@ -189,6 +222,7 @@ def getFileType(file_name):
     file_type="unknown"
   return file_type
 
+@csrf_exempt
 def download_file(request, file_id):
   download_file = UploadFile.objects.get(id = file_id)
   path_to_file = os.path.join(MEDIA_URL, str(download_file.upload_file))
@@ -214,7 +248,9 @@ def getUserType(user):
   else:
     return "0"
 
-@login_required
+@csrf_exempt
+@CORS_allow
+#@login_required
 def delete(request , file_id):
   user = request.user
   batch_id = request.session['batchId']
@@ -254,6 +290,8 @@ def userdownloads(request , batch_id):
 #return render(request,'lectut/image.html',context)
   return HttpResponse(json.dumps(context), content_type="application/json")
 
+@csrf_exempt  
+@CORS_allow
 #Gives all the members of a Batch
 def batchMembers(request , batch_id):
   currentBatch = Batch.objects.get(id = batch_id)
@@ -268,9 +306,16 @@ def batchMembers(request , batch_id):
 
 def get_files(request, batch_id):
   currentBatch = Batch.objects.get(id = batch_id)
-  files = UploadedFiles.objects.all().filter(batch_id = batch_id)
-  return 0
+  AllFiles = {'lec':[],'tut':[],'exm':[],'sol':[],'que':[]}
+  files = Uploadedfile.objects.all().filter(post__batch_id = batch_id)
+  for File in files:
+    import pdb;pdb.set_trace()
+    AllFiles[File.upload_type].append(File.as_dict())
 
+  return HttpResponse(json.dumps(AllFiles), content_type="application/json")
+
+@csrf_exempt
+@CORS_allow
 # Creates a event
 def createReminder(request):
   if request.method == 'POST':
@@ -286,6 +331,8 @@ def createReminder(request):
       msg = "Invalid entry"
     return HttpResponse(json.dumps(msg), content_type="application/json")
 
+@csrf_exempt
+@CORS_allow
 # Gives all events expiring after current time
 def getReminder(request):
   student = request.user.student

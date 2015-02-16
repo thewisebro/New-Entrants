@@ -9,7 +9,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files.storage import FileSystemStorage
 from django.db.models.signals import post_save
 from datetime import datetime, timedelta
+import os
 
+#from lectut.views import getFileType
 from notifications.models import Notification
 
 fs = FileSystemStorage(location='Uploads')
@@ -76,9 +78,12 @@ class Post(models.Model):
     }
     return postData
 
+def upload_path(instance , filename ):
+  return os.path.join('lectut/',instance.file_typ)
+
 class Uploadedfile(BaseUpload):
   post = models.ForeignKey(Post)
-  upload_file=models.FileField(upload_to='lectut/images/')
+  upload_file=models.FileField(upload_to= 'lectut/images/')
   description=models.CharField(max_length=100 , null=False)
   file_type=models.CharField(max_length=10 , null=False)
   upload_type=models.CharField(max_length=3 , default='tut')
