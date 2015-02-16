@@ -17,7 +17,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_results.discipline_list year_display %}">
+      <a href="{% url 'placement.views_results.discipline_list' year=year_display %}">
         {{ name }}
       </a>
     </li>
@@ -30,7 +30,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_results.discipline_list %}">Current Session</a>
+      <a href="{% url 'placement.views_results.discipline_list' %}">Current Session</a>
     </li>
     {% endif %}
 
@@ -47,10 +47,10 @@
       </a>
     </li>
     <li>
-      <a href="{% url placement.views_results.company_list year %}">Companywise</a>
+      <a href="{% url 'placement.views_results.company_list' year=year %}">Companywise</a>
     </li>
     <li>
-      <a href="{% url placement.views_results.department year %}">Departmentwise</a>
+      <a href="{% url 'placement.views_results.department' year=year %}">Departmentwise</a>
     </li>
   </ul>
 </div>
@@ -77,8 +77,8 @@ Total placements : {{ total_placements }}
       <td>{{ degree }}</td>
       <td>{{ name }}</td>
       <td>{{ count }}</td>
-      <td><a href="{% url placement.views_results.branch year code %}">View</a></td>
-      <td><a href="{% url placement.views_results.branch_company year code %}">View</a></td>
+      <td><a href="{% url 'placement.views_results.branch' year=year branch_code=code %}">View</a></td>
+      <td><a href="{% url 'placement.views_results.branch_company' year=year branch_code=code %}">View</a></td>
     </tr>
     {% endfor %}
 

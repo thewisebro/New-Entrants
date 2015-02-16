@@ -4,7 +4,7 @@ from django.contrib.admin.widgets import AdminDateWidget
 from django.forms.models import BaseModelFormSet
 
 from core import forms
-from api.custom_widgets import CKeditorWidget, CurrencyWidget
+from core.forms import CKEditorWidget, CurrencyWidget
 from nucleus.models import Branch, StudentInfo, Student
 from placement import models
 from placement import constants as PC
@@ -55,14 +55,14 @@ class VerifySearch(forms.Form) :
 
 class Feedback(forms.Form) :
   company = forms.ModelChoiceField(queryset = models.Company.objects.filter(year = current_session_year()).order_by('name'))
-  feedback1 = forms.CharField(required = False, widget=CKeditorWidget(toolbar='Basic'))
-  feedback2 = forms.CharField(required = False, widget=CKeditorWidget(toolbar='Basic'))
-  feedback3 = forms.CharField(required = False, widget=CKeditorWidget(toolbar='Basic'))
-  feedback4 = forms.CharField(required = False, widget=CKeditorWidget(toolbar='Basic'))
-  feedback5 = forms.CharField(required = False, widget=CKeditorWidget(toolbar='Basic'))
-  feedback6 = forms.CharField(required = False, widget=CKeditorWidget(toolbar='Basic'))
-#  feedback7 = forms.CharField(required = False, widget=CKeditorWidget(toolbar='Basic'))
-#  feedback8 = forms.CharField(required = False, widget=CKeditorWidget(toolbar='Basic'))
+  feedback1 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
+  feedback2 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
+  feedback3 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
+  feedback4 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
+  feedback5 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
+  feedback6 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
+#  feedback7 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
+#  feedback8 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
 
 class Profile(forms.ModelForm):
   class Meta:

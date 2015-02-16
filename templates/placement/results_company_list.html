@@ -17,7 +17,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_results.company_list year_display %}">
+      <a href="{% url 'placement.views_results.company_list' year_display %}">
         {{ name }}
       </a>
     </li>
@@ -30,7 +30,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_results.company_list %}">Current Session</a>
+      <a href="{% url 'placement.views_results.company_list' %}">Current Session</a>
     </li>
     {% endif %}
 
@@ -42,7 +42,7 @@
 <div class="tabbable">
   <ul class="nav nav-tabs">
     <li>
-      <a href="{% url placement.views_results.discipline_list year %}">
+      <a href="{% url 'placement.views_results.discipline_list' year=year %}">
         Branchwise
       </a>
     </li>
@@ -52,7 +52,7 @@
       </a>
     </li>
     <li>
-      <a href="{% url placement.views_results.department year %}">Departmentwise</a>
+      <a href="{% url 'placement.views_results.department' year=year %}">Departmentwise</a>
     </li>
   </ul>
 </div>
@@ -77,7 +77,7 @@ Total placements : {{ total_placements }}
       <td>{{ forloop.counter }}</td>
       <td>{{ name }}</td>
       <td>{{ count }}</td>
-      <td><a href="{% url placement.views_results.company year id %}">View</a></td>
+      <td><a href="{% url 'placement.views_results.company' year=year company_id=id %}">View</a></td>
     </tr>
     {% endfor %}
 

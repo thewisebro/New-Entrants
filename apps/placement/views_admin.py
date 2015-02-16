@@ -148,8 +148,8 @@ def shortlist(request, company_id, task = None) :
         sheet.write(row, 6, student.user.birth_date.strftime('%b. %d, %Y'), style)
         sheet.write(row, 7, info.get_category_display(), style)
         sheet.write(row, 8, student.cgpa, style)
-        sheet.write(row, 9, student.personal_contact_no,style)
-        sheet.write(row, 10, student.email_id, style)
+        sheet.write(row, 9, student.user.contact_no,style)
+        sheet.write(row, 10, student.user.email, style)
       response = HttpResponse(content_type='application/ms-excel')
       response['Content-Disposition'] = 'attachment; filename=' + sanitise_for_download(company.name) + '_Applications.xls'
       wbk.save(response)

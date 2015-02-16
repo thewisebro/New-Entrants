@@ -116,7 +116,6 @@ def open_to(request, company_id) :
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def add(request) :
   try :
-    import pdb; pdb.set_trace()
     l.info (request.user.username + ': Trying to add a company')
     if request.method == 'POST' :
       form = forms.CompanyForm(request.POST, request.FILES)

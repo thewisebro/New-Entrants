@@ -22,9 +22,9 @@
       <tr>
         <td>{{ forloop.counter }}</td>
         <td><input type="checkbox" name="selected_applications" value="{{ application.id }}"/></td>
-        <td>{{ application.plac_person.person.name }}</td>
-        <td>{{ application.plac_person.person.branch.name }}</td>
-        <td>{{ application.plac_person.person.get_semester_display }}</td>
+        <td>{{ application.plac_person.student.user.name }}</td>
+        <td>{{ application.plac_person.student.branch.name }}</td>
+        <td>{{ application.plac_person.student.get_semester_display }}</td>
       </tr>
       {% endfor %}
 

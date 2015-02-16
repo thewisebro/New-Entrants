@@ -18,8 +18,8 @@
     {% for result in results %}
     <tr>
       <td>{{ forloop.counter }}</td>
-      <td>{{ result.person.user.username }}</td>
-      <td>{{ result.person.name }}</td>
+      <td>{{ result.student.user.username }}</td>
+      <td>{{ result.student.user.name }}</td>
       <td>{{ result.company.name }}</td>
     </tr>
     {% endfor %}

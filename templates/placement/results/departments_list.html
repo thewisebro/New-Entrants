@@ -17,7 +17,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_results.department year_display %}">
+      <a href="{% url 'placement.views_results.department' year_display %}">
         {{ name }}
       </a>
     </li>
@@ -30,7 +30,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_results.department %}">Current Session</a>
+      <a href="{% url 'placement.views_results.department' %}">Current Session</a>
     </li>
     {% endif %}
   </ul>
@@ -40,12 +40,12 @@
 <div class="tabbable">
   <ul class="nav nav-tabs">
     <li>
-      <a href="{% url placement.views_results.discipline_list year %}">
+      <a href="{% url 'placement.views_results.discipline_list' year=year %}">
         Branchwise
       </a>
     </li>
     <li>
-      <a href="{% url placement.views_results.company_list year %}">Companywise</a>
+      <a href="{% url 'placement.views_results.company_list' year=year %}">Companywise</a>
     </li>
     <li class="active">
       <a>
@@ -72,10 +72,10 @@
     <tr>
       <td>{{ forloop.counter }}</td>
       <td>{{ name }}</td>
-      <td><a href="{% url placement.views_results.department year id %}">Overall</a></td>
+      <td><a href="{% url 'placement.views_results.department' year=year department_id=id %}">Overall</a></td>
       {% for degree, name in degrees %}
       <td>
-        <a href="{% url placement.views_results.department year id degree %}">{{ degree }}</a>
+        <a href="{% url 'placement.views_results.department' year=year department_id=id degree=degree %}">{{ degree }}</a>
       </td>
       {% endfor %}
     </tr>

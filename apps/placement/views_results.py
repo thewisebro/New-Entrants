@@ -89,9 +89,9 @@ def discipline_list(request, year = None) :
     # For the time being, display all the Branch rows.
     results = Results.objects.filter(company__year__exact = year)
     total_placements = results.count()
-    branches = results.values_list('person__branch', flat = True).order_by('person__branch').distinct()
+    branches = results.values_list('student__branch', flat = True).order_by('student__branch').distinct()
     degrees = Branch.objects.filter(pk__in = branches).order_by('name', 'code').values_list('degree')
-    results = results.values_list('person__branch__name', 'person__branch').annotate(placed_count = Count('person__branch')).order_by('person__branch__name', 'person__branch__code')
+    results = results.values_list('student__branch__name', 'student__branch').annotate(placed_count = Count('student__branch')).order_by('student__branch__name', 'student__branch__code')
     results = [ (a[0],a[1],a[2],b[0]) for a,b in zip(results,degrees) ]
     # get the year of the oldest company
     year_min = Company.objects.aggregate(min = Min('year'))['min']
@@ -155,7 +155,7 @@ def branch(request, branch_code, year = None) :
       year = int(year) # link gives year in unicode
     l.info(request.user.username + ': Viewing company results for year = ' + str(year) + ', and branch ' + str(branch_code))
     branch = get_object_or_404(Branch, code = branch_code)
-    results = Results.objects.filter(company__year__exact = year, person__branch = branch).order_by('person__name')
+    results = Results.objects.filter(company__year__exact = year, student__branch = branch).order_by('student__user__name')
     degrees = []
     session = str(year) + '-' + str(year+1)[2:4]
     return render_to_response('placement/results_view_branch.html', {
@@ -182,7 +182,7 @@ def branch_company(request, branch_code, year = None) :
     l.info(request.user.username + ': Viewing results grouped by company results for year = ' + str(year) + ', and branch ' + str(branch_code))
     branch = get_object_or_404(Branch, code = branch_code)
     # TODO : Add an order by
-    results = Results.objects.filter(company__year__exact = year, person__branch = branch)\
+    results = Results.objects.filter(company__year__exact = year, student__branch = branch)\
         .values('company', 'company__name').annotate(placed = Count('company'))
     session = str(year) + '-' + str(year+1)[2:4]
     total_placed = []
@@ -253,7 +253,7 @@ def drop(request, company_id) :
       # persons' list for whom the results are to be dropped
       persons = results.values_list('student', flat = True)
       # Update the application to show that the student is not selected in this company
-      CompanyApplicationMap.objects.filter(company = company, plac_person__person__in = persons).update(status = 'FIN')
+      CompanyApplicationMap.objects.filter(company = company, plac_person__student__in = persons).update(status = 'FIN')
       # Update PlacementPerson of the student.
       for result in results :
         plac_person = PlacementPerson.objects.get(student = result.student)
@@ -339,28 +339,28 @@ def department(request, year = None, department_id = None, degree = None) :
         # Display results for a particular degree
         if degree not in zip(*MC.GRADUATION_CHOICES)[0] :
           return TemplateView(request, template="404.html")
-        pp_degree = PlacementPerson.objects.filter(person__branch__graduation = degree)
+        pp_degree = PlacementPerson.objects.filter(student__branch__graduation = degree)
         pp_degree = pp_degree.exclude(status='CLS')
-        results_degree = Results.objects.filter(person__branch__graduation = degree)
+        results_degree = Results.objects.filter(student__branch__graduation = degree)
       if year <> current_session:
         passout_year = year + 1
-        total_students = pp_degree.filter(person__branch__department = department_id,
-                                          person__passout_year = passout_year,
+        total_students = pp_degree.filter(student__branch__department = department_id,
+                                          student__passout_year = passout_year,
                                           ).count()
       else:
         passout_year = None
-        total_students = pp_degree.filter(person__branch__department = department_id,
-                                          person__passout_year = passout_year,
+        total_students = pp_degree.filter(student__branch__department = department_id,
+                                          student__passout_year = passout_year,
                                           status__in = ['OPN', 'LCK', 'VRF'],
                                           ).count()
-      registered_students = pp_degree.filter(person__branch__department = department_id,
+      registered_students = pp_degree.filter(student__branch__department = department_id,
                                              status = 'VRF',
-                                             person__passout_year = passout_year
+                                             student__passout_year = passout_year
                                              ).count()
       # TODO : rectify this query as a student may get selected in two companies
-      placed_students = results_degree.filter(person__branch__department = department_id,
+      placed_students = results_degree.filter(student__branch__department = department_id,
                                               company__year__exact = year,
-                                              person__passout_year = passout_year
+                                              student__passout_year = passout_year
                                               ).values('student').distinct().count()
       if registered_students :
         divide_by = registered_students
@@ -374,7 +374,7 @@ def department(request, year = None, department_id = None, degree = None) :
       #    2.  The ctc is stored in the format : 'amount denomitaion' e.g. '1000 USD'
       total_ctc = 0
       total_count = 0
-      for result in results_degree.filter(person__branch__department = department_id,
+      for result in results_degree.filter(student__branch__department = department_id,
                                           company__year__exact = year) :
         graduation = result.student.branch.graduation
         package = '' # In the format '1000 USD'
@@ -397,11 +397,11 @@ def department(request, year = None, department_id = None, degree = None) :
       for cat_id, cat_name in PC.COMPANY_CATEGORY_CHOICES :
         cat_dict[cat_id] = cat_name
       for result in results_degree.filter(company__year__exact = year,
-                                          person__branch__department = department_id
+                                          student__branch__department = department_id
                                           ).values('company__sector').annotate(count=Count('company__sector')) :
         pie_sector.append([sector_dict[result['company__sector']], result['count']])
       for result in results_degree.filter(company__year__exact = year,
-                                                  person__branch__department = department_id
+                                                  student__branch__department = department_id
                                                   ).values('company__category').annotate(count=Count('company__category')) :
         pie_cat.append([cat_dict[result['company__category']], result['count']])
       pie_sector = json.dumps(pie_sector)
@@ -449,6 +449,8 @@ def insert(request, company_id, branch_code = None) :
       # create entry in Results
       students = PlacementPerson.objects.filter(pk__in = request.POST.getlist('selected_students'))
       for plac_person in students :
+        if len(Results.objects.filter(student = plac_person.student, company = company)) != 0:
+          continue
         Results.objects.create(student = plac_person.student, company = company)
         # Update PlacementPerson of the persons just placed.
         if plac_person.no_of_companies_placed == 0 :
@@ -459,11 +461,11 @@ def insert(request, company_id, branch_code = None) :
            plac_person.placed_company_category = policy.get_higher_category(plac_person.placed_company_category, company.category)
         plac_person.save()
         l.info(request.user.username + ': Successfully inserted results for ' + str(company_id))
-        messages.success(request, 'The marked students are selected for placement in ' + company.name + '.')
+      messages.success(request, 'The marked students are selected for placement in ' + company.name + '.')
       return HttpResponseRedirect(reverse('placement.views_company.admin_list'))
     elif branch_code <> None :
       branch = Branch.objects.get(pk = branch_code)
-      student_list = PlacementPerson.objects.filter(person__branch = branch, status = 'VRF', person__passout_year = None).order_by('person__name')
+      student_list = PlacementPerson.objects.filter(student__branch = branch, status = 'VRF', student__passout_year = None).order_by('student__user__name')
       return render_to_response('placement/insert_results.html', {
           'company' : company,
           'student_list' : student_list,

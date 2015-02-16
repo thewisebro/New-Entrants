@@ -3,13 +3,13 @@
 {% block app_content %}
 {% for year,name in years_list %}
 <div style="width:100px;float:left;">
-  <a href="{% url placement.views_results.department year dept_code degree %}">{{ name }}</a>
+  <a href="{% url 'placement.views_results.department' year=year department_id=dept_code degree=degree %}">{{ name }}</a>
 </div>
 {% endfor %}
 
 {% if years_list %}
 <div style="width:150px;float:left;">
-  <a href="{% url placement.views_results.department dept_code degree %}">Current Session</a>
+  <a href="{% url 'placement.views_results.department' department_id=dept_code degree=degree %}">Current Session</a>
 </div>
 <div style="clear:both;"></div>
 {% endif %}
@@ -28,7 +28,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_results.department year dept_code %}">
+      <a href="{% url 'placement.views_results.department' year=year department_id=dept_code %}">
         Overall
       </a>
     </li>
@@ -43,7 +43,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_results.department year dept_code id%}">
+      <a href="{% url 'placement.views_results.department' year=year department_id=dept_code degree=id%}">
         {{ id }}
       </a>
     </li>

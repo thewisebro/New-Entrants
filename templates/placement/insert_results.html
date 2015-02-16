@@ -7,21 +7,21 @@
 <form method="POST">
   {% csrf_token %}
   <table class="sortable table table-striped table-bordered table-condensed" id="t1">
-    <tr class="header">
-      <td class="lefttopcurve">S.No.</td>
-      <td>Select</td>
-      <td>Name</td>
-      <td>Discipline</td>
-      <td class="righttopcurve">Course</td>
+    <tr class="even">
+      <th class="lefttopcurve">S.No.</th>
+      <th>Select</th>
+      <th>Name</th>
+      <th>Discipline</th>
+      <th class="righttopcurve">Course</th>
     </tr>
-    {% for student in student_list %}
+    {% for plac_person in student_list %}
     <tr class="{% cycle 'odd' 'even' %} {% if forloop.last %}lastline{% endif %}">
       <td {% if forloop.last %}class="leftbottomcurve"{% endif %}>{{ forloop.counter }}</td>
-      <td><input type="checkbox" name="selected_students" value="{{ student.id }}"/></td>
-      <td>{{ student.person.name }}</td>
-      <td>{{ student.person.branch.name }}</td>
+      <td><input type="checkbox" name="selected_students" value="{{ plac_person.id }}"/></td>
+      <td>{{ plac_person.student.user.name }}</td>
+      <td>{{ plac_person.student.branch.name }}</td>
       <td {% if forloop.last %}class="rightbottomcurve"{% endif %}>
-        {{ student.person.get_semester_display }}
+        {{ plac_person.student.get_semester_display }}
       </td>
     </tr>
     {% endfor %}
@@ -32,16 +32,16 @@
 </form>
 {% else  %}{% if branches %}
 <table class="sortable table table-striped table-bordered table-condensed" id="t1">
-  <tr class="header">
-    <td class="lefttopcurve">S.No.</td>
-    <td>Name</td>
-    <td>Insert</td>
+  <tr class="even">
+    <th class="lefttopcurve">S.No.</th>
+    <th>Name</th>
+    <th>Insert</th>
   </tr>
   {% for branch in branches %}
   <tr class="{% cycle 'odd' 'even' %} {% if forloop.last %}lastline{% endif %}">
     <td {% if forloop.last %}class="leftbottomcurve"{% endif %}>{{ forloop.counter }}</td>
     <td class="leftalign">{{ branch.name }}</td>
-    <td><a href="{% url placement.views_results.insert company.id branch.code %}">Insert</a></td>
+    <td><a href="{% url 'placement.views_results.insert' company_id=company.id branch_code=branch.code %}">Insert</a></td>
   </tr>
   {% endfor %}
 </table>
