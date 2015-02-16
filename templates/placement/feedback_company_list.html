@@ -16,7 +16,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_feedback.index year_display %}">
+      <a href="{% url 'placement.views_feedback.index' year_display %}">
         {{ name }}
       </a>
     </li>
@@ -29,7 +29,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url placement.views_feedback.index %}">Current Session</a>
+      <a href="{% url 'placement.views_feedback.index' %}">Current Session</a>
     </li>
     {% endif %}
 
@@ -44,7 +44,7 @@
 
 {% if status == 'VRF' %}
 <div style="float:left;margin-left:550px;margin-top:-10px;margin-bottom:10px;">
-  <a href="{% url placement.views_feedback.fill %}">
+  <a href="{% url 'placement.views_feedback.fill' %}">
     <button class="btn btn-info">
       <div style="width:100px;">
         Give Feedback
@@ -68,7 +68,7 @@
     <tr>
       <td>{{ forloop.counter }}</td>
       <td>
-        <a href="{% url placement.views_feedback.company feedback.company %}">
+        <a href="{% url 'placement.views_feedback.company' feedback.company %}">
           {{ feedback.company__name }}
         </a>
       </td>

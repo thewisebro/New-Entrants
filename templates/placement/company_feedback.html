@@ -22,8 +22,8 @@
     {% for feedback,placed_companies in feedbacks %}
     <tr>
       <td>{{ forloop.counter }}</td>
-      <td>{{ feedback.person.name }}</td>
-      <td>{{ feedback.person.branch.name }}</td>
+      <td>{{ feedback.student.user.name }}</td>
+      <td>{{ feedback.student.branch.name }}</td>
       <td>{{ placed_companies }}</td>
       <td>{{ feedback.date }}</td>
       <td>
@@ -32,7 +32,7 @@
         </a>
       </td>
       <td>
-        <a href="{% url placement.views_feedback.as_pdf feedback.id %}">
+        <a href="{% url 'placement.views_feedback.as_pdf' feedback.id %}">
           <button style="width:66px;">
             <div class="text">
               PDF

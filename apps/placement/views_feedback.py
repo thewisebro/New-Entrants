@@ -116,7 +116,7 @@ def fill(request) :
   try :
     l.info(request.user.username + ': Giving Feedback for a company')
     student = request.user.student
-    plac_person = student.placmentperson
+    plac_person = student.placementperson
     if plac_person.status != 'VRF' :
       l.info(request.user.username + ': Giving feedback for a company, but user not Verified')
       return TemplateView(request, template="404.html")
@@ -177,7 +177,7 @@ def as_pdf(request, feedback_id) :
       l.info(request.user.username + ': Error in downloading feedback as PDF')
       messages.error(request, 'An error occured while generating the PDF file.')
       return HttpResponseRedirect(reverse('placement.views.index'))
-    response = HttpResponse(result.getvalue(), mimetype='application/pdf')
+    response = HttpResponse(result.getvalue(), content_type='application/pdf')
     filename = feedback.company.name + '_' + feedback.student.name + '_PlacementFeedback_' + session
     # sanitise filename
     filename = sanitise_for_download(filename)
