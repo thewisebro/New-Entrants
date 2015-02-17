@@ -13,6 +13,7 @@ tabs = [
 ]
 
 channeli_apps = {
+  'forum': {'name': 'Forum', 'url': '/#forum/'},
   'events': {'name': 'Events', 'url':'/#events'},
   'lectut' : {'name':'Lectures & Tutorials', 'url':'/lectut/'},
   'placement' : {'name':'Placement Online', 'url':'/placement/'},
@@ -41,7 +42,7 @@ channeli_apps = {
   'acad' : {'name':'Response Forms', 'url':'/acad/responses/'},
 }
 
-student_apps = ['events', 'grades','lectut','notices','placement','buysell','vle','thinktank',
+student_apps = ['events', 'grades', 'forum', 'lectut','notices','placement','buysell','vle','thinktank',
                 'lostfound','softwares','peoplesearch','messmenu','research']
 faculty_apps = ['facapp','events','lectut','notices','placement',
                 'thinktank','lostfound','softwares','peoplesearch']
