@@ -1,30 +1,17 @@
 {% extends "placement/base.html" %}
-{% load macros %}
+{% load kwacros %}
 
-{% block scripts %}
-    <script src="{{STATIC_URL}}js/placement/tag-it.js" type="text/javascript" charset="utf-8"></script>
+{% block app_styles %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/styles.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/jquery-timepicker.css">
+    <link rel="stylesheet" href="{{STATIC_URL}}css/placement/fullcalendar.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+    <link href="{{ STATIC_URL }}css/placement/jquery.tagit.css" rel="stylesheet" type="text/css">
+{% comment %}   {{ slot_form.media.css }} {% endcomment %}
 {% endblock %}
 
 {% block app_content %}
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-    <link href="{{STATIC_URL}}/css/placement/jquery.tagit.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="//trentrichardson.com/examples/timepicker/jquery-ui-timepicker-addon.css">
-    <link rel="stylesheet" href="{{STATIC_URL}}css/placement/fullcalendar.css" type="text/css">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="//trentrichardson.com/examples/timepicker/jquery-ui-timepicker-addon.js"></script>
-    <script src="{{STATIC_URL}}js/placement/moment.min.js"></script>
-    <script src="{{STATIC_URL}}js/placement/fullcalendar.js"></script>
-   <script>
-    $(function() {
-      $( "#id_start_date" ).datetimepicker({ dateFormat: "yy-mm-dd"});
-      $( "#id_end_date" ).datetimepicker({ dateFormat: "yy-mm-dd"});
-      });
-  </script>
-  
-{% if error_msg %}
-{{ error_msg }}
-{% endif %}
 
 {% if title %}
 <h3>{{ title }}</h3>
@@ -38,17 +25,17 @@
 <form class="form" enctype="multipart/form-data" method="post" action="">
     <h2> Create Slots </h2>
     {% csrf_token %}
-    {% macro editable_field_div field %}
+    {% kwacro editable_field_div field %}
         <div class="edit-row">
           {{field.errors}}
           <div class="field-label-big">{{field.label}}</div>
           <div class="field">{{field}}</div>
         </div>
-    {% endmacro %}
-    {% usemacro editable_field_div slot_form.start_date %}
-    {% usemacro editable_field_div slot_form.end_date %}
-    {% usemacro editable_field_div slot_form.visibility %}
-    {% usemacro editable_field_div slot_form.company %}
+    {% endkwacro %}
+    {% usekwacro editable_field_div slot_form.start_date %}
+    {% usekwacro editable_field_div slot_form.end_date %}
+    {% usekwacro editable_field_div slot_form.visibility %}
+    {% usekwacro editable_field_div slot_form.company %}
     <input type="hidden" id="company_ids" value="" />
     <button class="btn btn-primary" onclick="change_value()" type="submit">Create</button>
 </form>
@@ -63,12 +50,19 @@
            {% endif %}
         {% endfor %}
 
-        <a href="{% url placement.views_slots.edit_slot slot.id %}">{{slot.start_date}} -- {{slot.end_date}}</a>
+        <a href="{% url 'placement.views_slots.edit_slot' slot.id %}">{{slot.start_date}} -- {{slot.end_date}}</a>
 
     {% endwith %}
     </li>
   {% endfor %}
 </ul>
+{% endblock %}
+
+{% block app_scripts %}
+    <script src="{{ STATIC_URL }}js/placement/tag-it.js" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ STATIC_URL }}jquery/jquery-datetimepicker.js"></script>
+    <script src="{{STATIC_URL}}js/placement/moment.min.js"></script>
+    <script src="{{STATIC_URL}}js/placement/fullcalendar.js"></script>
   <script type="text/javascript">
       $(document).ready(function() {
         var data_map = {};
@@ -102,5 +96,11 @@
       function change_value(){
         $('#id_company').val($('#company_ids').val());
       }
+  </script>
+   <script>
+    $(function() {
+      $( "#id_start_date" ).datetimepicker({ dateFormat: "yy-mm-dd"});
+      $( "#id_end_date" ).datetimepicker({ dateFormat: "yy-mm-dd"});
+      });
   </script>
 {% endblock %}

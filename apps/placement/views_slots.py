@@ -7,11 +7,12 @@ from django.template import RequestContext
 from django.conf import settings
 from django.contrib.auth.models import User
 
-import json
+import simplejson as json
 import xlwt
 import datetime
-from nucleus.models import Student
+from nucleus.models import Student, WebmailAccount
 from placement import policy, forms
+from placement.policy import current_session_year
 from placement.models import *
 from placement.utils import *
 from placement.forms import *
@@ -42,14 +43,18 @@ def create_slot(request):
       slot.start_date = slot_form.data['start_date']
       slot.end_date = slot_form.data['end_date']
       slot.save()
-      companies = slot_form.data['company'].split(",")
-      for company in companies:
-        obj = Company.objects.get(pk=int(company))
-        slot.company.add(obj)
-      slot.save()
-      message = "Slot created successfully"
+      try:
+        companies = slot_form.data['company'].split(",")
+        for company in companies:
+          obj = Company.objects.get(pk=int(company))
+          slot.company.add(obj)
+        slot.save()
+        messages.success(request, "Slot created successfully")
+      except:
+        messages.error(request, "Some error occured. Please try again")
+        slot.delete()
     except Exception as e:
-      message = "Some error occured. Please try again"
+      messages.error(request, "Some error occured. Please try again")
   slot_form = CreateSlotForm()
   existing_slots = CompanySlot.objects.all()
   dates = list(set([slot.start_date.date() for slot in existing_slots]))
@@ -57,7 +62,7 @@ def create_slot(request):
       'slot_form': slot_form,
       'slots': existing_slots,
       'dates': dates,
-      'error_msg':message,
+#   'error_msg':message,
       },context_instance = RequestContext(request))
 
 
@@ -80,6 +85,7 @@ def company_search(request):
 
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def edit_slot(request, slot_id):
+  import ipdb; ipdb.set_trace()
   message = ''
   if slot_id:
     try:
@@ -126,16 +132,16 @@ def edit_slot(request, slot_id):
         obj = Company.objects.get(pk=int(company))
         slot.company.add(obj)
       slot.save()
-      message = "Slot updated successfully"
-      return HttpResponseRedirect('/placement/slot/create/')
+      messages.success(request, "Slot updated successfully")
+      return HttpResponseRedirect(reverse('placement.views_slots.create_slot'))
     except Exception as e:
-      message = "Some error occured. Please try again"
+      messages.error(request, "Some error occured. Please try again")
 
   return render_to_response('placement/edit_slots.html',{
        'form': edit_form,
        'data_id':data_id,
        'data_dict':data_dict,
-       'error_msg':message,
+#       'error_msg':message
        'slot': slot},context_instance=RequestContext(request))
 
 @csrf_exempt
@@ -147,7 +153,7 @@ def view_slot(request, slot_id):
   student = user.student
   placement_person = PlacementPerson.objects.get_or_create(student=student)[0]
   if not placement_person.status=='VRF':
-    message = "Your Placement status is not verified. If you are in final year, please contact Placement office immediately."
+    messages.error("Your Placement status is not verified. If you are in final year, please contact Placement office immediately.")
     return render_to_response('placement/slots.html',{
       'message': message
       }, context_instance=RequestContext(request))
@@ -189,7 +195,7 @@ def view_slot(request, slot_id):
       message = "This incident has been reported. In case of any discrepancy, please contact Placement office."
       is_success = False
       json_data = json.dumps({'message': message, 'is_success': is_success})
-      return HttpResponse(json_data, mimetype='application/json')
+      return HttpResponse(json_data, content_type='application/json')
     data = json.loads(request.POST.items()[0][0])
     message = ""
     is_success = True
@@ -207,14 +213,14 @@ def view_slot(request, slot_id):
     if not message:
       message = "Saved Successfully"
     json_data = json.dumps({'message': message, 'is_success': is_success})
-    return HttpResponse(json_data, mimetype='application/json')
+    return HttpResponse(json_data, content_type='application/json')
   no_data_msg = ""
   if not company_data:
     no_data_msg = "You are not required to fill preferences for this slot. In case of any discrepancy, please contact Placement office immediately. "
   return render_to_response('placement/slots.html',{
       'data': company_data,
       'info': company_info,
-      'message': message,
+      'messages': message,
       'slot':slot,
       'no_data_msg':no_data_msg,
       }, context_instance=RequestContext(request))
@@ -246,8 +252,8 @@ def view_all_slots(request):
 def import_slot_data(request, slot_id):
   if request.method == 'POST':
     company_priority = CompanyPlacementPriority.objects.filter(slots__id=slot_id)
-    person_list = [l.student for l in company_priority]
-    person_list = list(set(person_list))
+    student_list = [l.student for l in company_priority]
+    student_list = list(set(student_list))
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('sheet 1')
@@ -259,13 +265,13 @@ def import_slot_data(request, slot_id):
     for count in range(companies_count):
         headers.append("Priority "+str(count+1))
     new_lst = []
-    for people in person_list:
+    for people in student_list:
       try:
         priority = CompanyPlacementPriority.objects.filter(slots__id=slot_id,student=people).order_by('priority')
         company_pri = [x.company.name for x in priority]
         while len(company_pri) < companies_count:
           company_pri.append('-')
-        a = [people.user.username, people.name, people.cgpa, people.email_id]
+        a = [people.user.username, people.user.name, people.cgpa, people.user.email]
         a.extend(company_pri)
         new_lst.append(a)
       except Exception as e:
@@ -285,7 +291,7 @@ def import_slot_data(request, slot_id):
      row +=1
 
     file_name = str(str(slot.start_date)+'--'+str(slot.end_date))
-    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=%s.xls'%file_name
     wb.save(response)
     return response
@@ -298,7 +304,6 @@ def export_final_slot_result(request, slot_id):
     company_priority = CompanyPlacementPriority.objects.filter(slots__id=slot_id)
     students = []
     for priority in company_priority:
-      student = priority.student
       students.append(priority.student)
     students = [l for l in students if not l]
     selected_applications = []
