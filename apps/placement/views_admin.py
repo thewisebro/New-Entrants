@@ -16,7 +16,7 @@ import datetime
 import json
 from django.contrib import messages
 
-from nucleus.models import StudentInfo, Branch
+from nucleus.models import StudentInfo, Branch, Student
 from placement.forms import BaseModelFormFunction
 from placement import forms
 from placement.policy import current_session_year
@@ -675,35 +675,47 @@ def branch_details_xls(request, branch_code) :
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def insert_shortlist(request):
-  if request.method == 'POST':
-    students = request.POST['students'].strip().split(",")
-    company_id = request.POST['company'].strip()
-    message = ""
-    is_success = True
-    try:
-      company = Company.objects.get(pk = int(company_id))
-      for student in students:
-        student = Student.objects.get(user__username=int(student))
-        plac_person = PlacementPerson.objects.get_or_create(student=student)[0]
-        c_map,created = CompanyApplicationMap.objects.get_or_create(plac_person=plac_person,company=company)
-        if created:
-          c_map.status = 'FIN'
-        c_map.shortlisted = True
-        c_map.save()
-    except Company.DoesNotExist:
-      message = "Given Company does not exist. Please try again."
-      is_success = False
-    except Student.DoesNotExist:
-      message= "Given enrollment Number/Numbers are not correct. Please try again"
-      is_success = False
-    except Exception as e:
-        message = "Some error occured. Please contact IMG"
-        is_success = False
-    if not message:
-      message = "Saved Successfully"
-    json_data = json.dumps({'message':message,'is_success':is_success})
-    return HttpResponse(json_data,content_type='application/json')
-  form = forms.AddShortlistForm()
-  return render_to_response('placement/admin/shortlist.html',{
-                            'form':form,},
-                            context_instance = RequestContext(request))
+    if request.method == 'POST':
+        students = request.POST['students'].strip().split(",")
+        company_id = request.POST['company'].strip()
+        message = ""
+        is_success = True
+        try:
+          company = Company.objects.get(pk = int(company_id))
+          for student in students:
+            person = Student.objects.get(user__username=int(student))
+            plac_person = PlacementPerson.objects.get_or_create(student=person)[0]
+            c_map,created = CompanyApplicationMap.objects.get_or_create(plac_person=plac_person,company=company)
+            pdf = get_resume_binary(RequestContext(request), person, company.sector)
+            if pdf['err'] :
+              return HttpResponse('Resume for %s cannot be generated. Please contact IMG immediately.'%str(person.user.username))
+            filepath = os.path.join(settings.MEDIA_ROOT, 'placement', 'applications', 'company'+str(company_id), str(person.user.username)+'.pdf')
+            # Make sure that the parent directory of filepath exists
+            parent = os.path.split(filepath)[0]
+            if not os.path.exists(parent) :
+              os.makedirs(parent)
+              resume = open(filepath, 'w')
+              resume.write(pdf['content'])
+              resume.close()
+            if created:
+              c_map.status = 'FIN'
+              c_map.shortlisted = True
+              c_map.save()
+        except Company.DoesNotExist:
+          message = "Given Company does not exist. Please try again."
+          is_success = False
+        except Student.DoesNotExist:
+          message= "Given enrollment Number/Numbers are not correct. Please try again"
+          is_success = False
+        except Exception as e:
+          message = "Some error occured. Please contact IMG"
+          is_success = False
+        if not message:
+          message = "Saved Successfully"
+          json_data = json.dumps({'message':message,'is_success':is_success})
+          return HttpResponse(json_data,content_type='application/json')
+    form = forms.AddShortlistForm()
+    return render_to_response('placement/admin/shortlist.html',{
+                              'form':form,},
+                              context_instance = RequestContext(request))
+

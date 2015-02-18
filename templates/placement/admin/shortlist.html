@@ -1,7 +1,7 @@
 {% extends "placement/base.html" %}
 {% load kwacros %}
 
-{% block app_content %}
+{% block app_styles %}
     <style> 
       #id_company{
       width:300px;
@@ -11,9 +11,9 @@
     }
   </style>
 
-    <script src="{{ STATIC_URL }}jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="{{ STATIC_URL }}jquery/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" href="{{ STATIC_URL }}/css/nucleus/style.css" type="text/css">
+{% endblock %}
+{% block app_content %}
 <div id="content_success">
   <p class="success" style="display:none;margin-bottom:15px;"></p>
   <p class="error" style="display:none;margin-bottom:15px;"></p>
@@ -41,6 +41,8 @@
     </div>
     <input type="hidden" id="company_ids" value="" />
 </form>
+{% endblock %}
+{% block app_scripts %}
   <script type="text/javascript">
       $(document).ready(function() {
         var data_map = {};
