@@ -20,7 +20,7 @@ UPDATE nci.nucleus_user c INNER JOIN (SELECT a.user_id,b.email,b.photo,b.phone_n
 
 INSERT INTO nci.nucleus_branch (code,name,degree,department,graduation,no_of_semesters) SELECT code,name,degree,department,graduation,duration FROM channeli_dump.nucleus_branch;
 
-INSERT INTO nci.nucleus_student (user_id,branch_id,admission_year,cgpa,bhawan,room_no,passout_year) SELECT user_id,branch_id,admission_year,cgpa,bhawan,room_no,passout_year FROM channeli_dump.nucleus_person;
+INSERT INTO nci.nucleus_student (user_id,semester,branch_id,admission_year,cgpa,bhawan,room_no,passout_year) SELECT user_id,semester,branch_id,admission_year,cgpa,bhawan,room_no,passout_year FROM channeli_dump.nucleus_person;
 
 INSERT INTO nci.nucleus_studentinfo (student_id,fathers_name,fathers_occupation,fathers_office_address,fathers_office_phone_no,mothers_name,permanent_address,home_contact_no,state,city,pincode,bank_account_no,passport_no,nearest_station,local_guardian_name,local_guardian_address,local_guardian_contact_no,category,nationality,marital_status,blood_group,physically_disabled,fulltime,resident,license_no) SELECT person_id,fathers_name,fathers_occupation,fathers_office_address,fathers_office_phone_no,mothers_name,permanent_address,home_contact_no,state,city,pincode,bank_account_no,passport_no,nearest_station,local_guardian_name,local_guardian_address,local_guardian_contact_no,category,nationality,marital_status,blood_group,physically_handicapped,fulltime,resident,license_no FROM channeli_dump.nucleus_personinfo;
 
