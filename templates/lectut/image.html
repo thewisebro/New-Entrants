@@ -4,7 +4,7 @@
 </script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL}}/js/lectut/lectut.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL}}js/lectut/lectut.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL}}/js/lectut/jquery.form.js"></script> 
 
 <!-- Add bootstrap files-->
@@ -39,9 +39,9 @@
               <div id="batch_id">{{ batch.id }}</div>
         <div id="errorMsg"></div>
       <input type="button" id="post" value="post" onclick="uploadPost()">
-    <a href="{% url 'useruploads' batch_id=batch.id %}"><input type="button" value="My uploads"></a>
-    <a href="{% url 'userdownloads' batch_id=batch.id %}"><input type="button" value="My downloads"></a>
-    <a href="{% url 'batchMembers' batch_id=batch.id %}"><input type="button" value="My downloads"></a>
+    <!--a href=""><input type="button" value="My uploads"></a>
+    <a href=""><input type="button" value="My downloads"></a>
+    <a href=""><input type="button" value="My downloads"></aa-->
     <br>
     <div class="feeds">
       <ul class="nav nav-tabs" id="myTab">

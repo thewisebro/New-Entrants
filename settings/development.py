@@ -260,6 +260,7 @@ INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
 FEED_APPS = (
   'events',
   'lostfound',
+  'lectut',
 )
 
 FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')

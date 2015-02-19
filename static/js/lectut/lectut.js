@@ -80,7 +80,7 @@ function uploadPost(){
   var batch_id = $('#batch_id').text();
   $.ajax({
        type: 'POST',
-       url: '/lectut/disp/1/upload/',
+       url: '/lectut/ajax/1/upload/',
        enctype: "multipart/form-data",
        data: formData,
        cache: false,
