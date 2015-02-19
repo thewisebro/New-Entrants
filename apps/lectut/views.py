@@ -92,7 +92,7 @@ def coursepage_old(request, batch_id):
              'viewType':'Coursepage'}
   return render( request, 'lectut/image.html', context)
 
-@csrf_exempt
+#@csrf_exempt
 @CORS_allow
 #@login_required
 def coursepage(request, batch_id):
@@ -122,7 +122,7 @@ def coursepage(request, batch_id):
                'viewType':'Coursepage'}
 
     return HttpResponse(json.dumps(context),content_type='application/json')
-#    return render( request, 'disp/index.html', context)
+#    return render( request, 'lectut/image.html', context)
 
 def uploadFile(request , batch_id):
   user = request.user
@@ -165,15 +165,16 @@ def uploadFile(request , batch_id):
       return 0
 #return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
-@csrf_exempt
+#@csrf_exempt
 @CORS_allow
 def uploadedFile(request , batch_id):
-#  user = request.user
-  user = User.objects.get(username=request.POST['user'])
+#    user = request.user
+  usrname = request.POST.get('user','harshithere')
+  user = User.objects.get(username=usrname)
   userBatch = Batch.objects.get(id=batch_id)
   if request.method == 'POST':
     data = request.POST.get('formText','')
-    documents = request.FILES.getlist('upload')
+    documents = request.FILES.getlist('file')
     extra = request.POST.getlist('extra','')
     files = []
     msg = ''
@@ -185,24 +186,25 @@ def uploadedFile(request , batch_id):
       msg = "Cannot save post"
     for document in documents:
       file_type = getFileType(document)
-      fileData = json.loads(extra[counter])
+#      fileData = json.loads(extra[counter])
       counter = counter + 1
       if file_type!='Video' and  document._size>MAX_FILE_SIZE:
         msg = "File too large.Must be smaller than 5MB"
       elif document._size>MAX_VIDEO_SIZE:
         msg = "Video too large.Must be smaller than 20MB"
       else:
-        import pdb;pdb.set_trace()
-        new_document = Uploadedfile(post =new_post, upload_file = document, description = fileData['description'], file_type=file_type)
+        new_document = Uploadedfile(post =new_post, upload_file = document, description = str(document), file_type=file_type)
         new_document.save()
-        files.append(new_document)
+        files.append(new_document.as_dict())
     if msg !='':
-      return HttpResponse(json.dumps(msg), content_type='application/json')
+      response =  HttpResponse(json.dumps(msg), content_type='application/json')
     else:
       new_post = new_post.as_dict()
       complete_post = {'post':new_post,'files':files}
-      return HttpResponse(json.dumps(complete_post), content_type='application/json')
-  return user
+      response =  HttpResponse(json.dumps(complete_post), content_type='application/json')
+  else:
+    response = HttpResponse('It is not a post request')
+  return response
 
 
 def getFileType(file_name):
@@ -290,6 +292,7 @@ def userdownloads(request , batch_id):
 #return render(request,'lectut/image.html',context)
   return HttpResponse(json.dumps(context), content_type="application/json")
 
+
 @csrf_exempt  
 @CORS_allow
 #Gives all the members of a Batch
@@ -309,7 +312,6 @@ def get_files(request, batch_id):
   AllFiles = {'lec':[],'tut':[],'exm':[],'sol':[],'que':[]}
   files = Uploadedfile.objects.all().filter(post__batch_id = batch_id)
   for File in files:
-    import pdb;pdb.set_trace()
     AllFiles[File.upload_type].append(File.as_dict())
 
   return HttpResponse(json.dumps(AllFiles), content_type="application/json")

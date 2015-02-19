@@ -7,3 +7,4 @@ from lectut.models import *
 #admin.site.register(LectutBatch)
 admin.site.register(TextNotice)
 admin.site.register(Reminders)
+admin.site.register(Post)

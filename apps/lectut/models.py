@@ -79,11 +79,12 @@ class Post(models.Model):
     return postData
 
 def upload_path(instance , filename ):
-  return os.path.join('lectut/',instance.file_typ)
+  return ('lectut/'+instance.file_type+'/'+filename)
+#  return os.path.join('lectut/',instance.file_type,'/')
 
 class Uploadedfile(BaseUpload):
   post = models.ForeignKey(Post)
-  upload_file=models.FileField(upload_to= 'lectut/images/')
+  upload_file=models.FileField(upload_to= upload_path)
   description=models.CharField(max_length=100 , null=False)
   file_type=models.CharField(max_length=10 , null=False)
   upload_type=models.CharField(max_length=3 , default='tut')
@@ -92,9 +93,11 @@ class Uploadedfile(BaseUpload):
     return str(self.upload_file)
 
   def as_dict(self):
+        filename = str(self.upload_file)
+        filename = filename.split("/")[2]
         fileData={
            'post':self.post.id,
-           'upload_file':str(self.upload_file),
+           'upload_file':filename,
            'description':self.description,
            'file_type':self.file_type,
            'upload_type':self.upload_type,
