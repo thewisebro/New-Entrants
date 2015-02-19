@@ -1,0 +1,246 @@
+{% extends "internship/base.html" %}
+
+{% block app_content %}
+		{% if error_msg %}
+		  {{ error_msg }}
+		{% endif %}
+
+
+<h3>Companies</h3>
+<hr/>
+
+<div class="tabbable" id="company_list_switch">
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <a href="#apply_for_placement" data-toggle="tab">
+        Apply for Internship
+      </a>
+    </li>
+    <li>
+      <a href="#all_companies" data-toggle="tab">
+        All Companies
+      </a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div id="apply_for_placement" class="tab-pane active">
+      {% if avl_company_status_map %}
+       <table class="sortable table table-striped table-bordered table-condensed" id="t1">
+        <thead>
+          <tr>
+            <th>S. No.</th>
+            <th>Company</th>
+            <th>Last Date for Applying</th>
+            <th>Company Open to</th>
+            <th>Application</th>
+            <th>Resume</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for company,status in avl_company_status_map %} 
+          <tr class="{{ status|lower }}">
+            <td>{{ forloop.counter }}</td>
+            <td>
+              <a href="{% url internship.views.company_info company.id %}">{{ company.name_of_company }}</a>
+            </td>
+            <td>{{ company.last_date_of_applying|default:'-' }}</td>
+            <td>
+              <a href="{% url internship.views.company_open_to company.id %}">View</a>
+            </td>
+            <td>
+              {% if status == 'NAP' %}
+              <a href="javascript:void();" onclick="javascript:switchApplicationStatus({{ company.id }}, this);">Apply</a>
+              {% endif %}
+              {% if status == 'APP' %}
+              <a href="javascript:void();" onclick="javascript:switchApplicationStatus({{ company.id }}, this);">Withdraw</a>
+              {% endif %}
+              {% if status == 'FIN' %}
+              Finalised 
+              {% endif %}
+              {% if status == 'SEL' %}
+              Selected
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url internship.views_student.submitted_resume company.id %}" id="resumelink{{ company.id }}"
+                 {%  if status == 'NOT' or status == 'NAP' or status == 'NA' or status == 'CLS' or status == 'DEC' or status == 'FIN' %} style="visibility:hidden;" {% endif %}>
+                <button>
+                  <div class="text">
+                    Resume
+                  </div>
+                  <div class="image"><img src="{{ STATIC_URL }}images/arrow_down.png" /></div>
+                </button>
+              </a>
+            </td>
+          </tr>
+
+        {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        There are no companies available for application.
+      {% endif %}
+    </div>
+
+    <div id="all_companies" class="tab-pane">
+   <table class="sortable table table-striped table-bordered table-condensed" id="t3">
+    <thead>
+    <tr>
+      <th>S. No.</th>
+      <th>Company</th>
+      <th>Last Date for Applying</th>
+      <th>Open to</th>
+      <th>Company Status</th>
+      <th>Resume</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for company,status in company_status_map %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>
+        <a href="{% url internship.views.company_info company.id %}">{{ company.name_of_company }}</a>
+      </td>
+      <td>{{ company.last_date_of_applying|default:'-' }}</td>
+      <td>
+        <a href="{% url internship.views.company_open_to company.id %}">View</a>
+      </td>
+      <td>
+        {% if status == 'NAP' %}
+        Not Applied
+        {% endif %}
+        {% if status == 'APP' %}
+        Applied
+        {% endif %}
+        {% if status == 'FIN' %}
+        Finalised
+        {% endif %}
+        {% if status == 'SEL' %}
+        Selected
+        {% endif %}
+        {% if status == 'NOT' %}
+        Not Applicable
+        {% endif %}
+        {% if status == 'NA' %}
+        n/a
+        {% endif %}
+        {% if status == 'CLS' %}
+        Closed
+        {% endif %}
+        {% if status == 'DEC' %}
+        Declared
+        {% endif %}
+     
+      </td>
+      <td>
+       <a href="{% url internship.views_student.submitted_resume company.id %}" id="resumelink{{ company.id }}"
+           {% if status == 'NOT' or status == 'NAP' or status == 'NA' or status == 'CLS' or status == 'DEC' or status == 'FIN' %} style="visibility:hidden;" {% endif %}>
+          <button>
+            <div class="text">
+              Resume
+            </div>
+            <div class="image"><img src="{{ STATIC_URL }}images/arrow_down.png" /></div>
+          </button>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+   </div>
+{% if internship_person.status == 'VRF' %}
+  </div>
+</div>
+{% endif %}
+<div class="popup" id="application_status_change_alert" title="Application status update" style="display:none;">
+  <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+  <span id="application_status_message"></span>
+</div>
+
+
+{% block scripts %}
+<script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap-tab.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/internship/application_switch.js"></script>
+{% endblock %}
+
+
+
+
+<!--
+{% if company_status_map %}
+<div id="applications_table">
+<h3>List of Companies</h3>
+  <table class="sortable table table-striped table-bordered table-condensed" id="t2">
+    <thead>
+    <tr>
+      <th>S. No.</th>
+      <th>Company</th>
+      <th>Last Date for Applying</th>
+      <th>Open to</th>
+      <th>Company Status</th>
+      <th>Resume</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for company,status in company_status_map %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>
+        <a href="{% url internship.views.company_info company.id %}">{{ company.name_of_company }}</a>
+      </td>
+      <td>{{ company.last_date_of_applying|default:'-' }}</td>
+      <td>
+        <a href="{% url internship.views.company_open_to company.id %}">View</a>
+      </td>
+      <td>
+        {% if status == 'NAP' %}
+        <a href="javascript:void();" onclick="javascript:switchApplicationStatus({{ company.id }}, this);">Apply</a>
+        {% endif %}
+        {% if status == 'APP' %}
+        <a href="javascript:void();" onclick="javascript:switchApplicationStatus({{ company.id }}, this);">Withdraw</a>
+        {% endif %}
+        {% if status == 'FIN' %}
+        Finalised
+        {% endif %}
+        {% if status == 'SEL' %}
+        Selected
+        {% endif %}
+        {% if status == 'NOT' %}
+        Not Applicable
+        {% endif %}
+        {% if status == 'NA' %}
+        n/a
+        {% endif %}
+        {% if status == 'CLS' %}
+        Closed
+        {% endif %}
+        {% if status == 'DEC' %}
+        Declared
+        {% endif %}
+     
+      </td>
+      <td>
+       <a href="{% url internship.views_student.submitted_resume company.id %}" id="resumelink{{ company.id }}"
+           {% if status == 'NOT' or status == 'NAP' or status == 'NA' or status == 'CLS' or status == 'DEC' or status == 'FIN' %} style="visibility:hidden;" {% endif %}>
+          <button>
+            <div class="text">
+              Resume
+            </div>
+            <div class="image"><img src="{{ STATIC_URL }}images/arrow_down.png" /></div>
+          </button>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div> {# div applications_table #}
+{% else %}
+  No Company Added !
+{% endif %}
+
+<!-- can use the js/internship/application_switch.js file -->
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/internship/application_switch.js"></script>
+
+{% endblock app_content %}-->

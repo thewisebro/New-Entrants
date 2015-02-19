@@ -182,11 +182,11 @@ Your data has been verified. In case of any discrepany, contact Placement Office
   <span id="application_status_message"></span>
 </div>
 <div style="margin: 20px 0;">
-<!--  Check out <a href="/placement/mynewsstudio/">MyNewsStudio</a>.  -->
+{% comment %}<!--  Check out <a href="/placement/mynewsstudio/">MyNewsStudio</a>.  --> {% endcomment %}
 </div>
 {% endblock %}
 
-{% block scripts %}
+{% block app_scripts %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/placement/application_switch.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/placement/toggle.js"></script>
 {% endblock %}

@@ -22,7 +22,8 @@ from internship import forms
 from nucleus.models import Student, Branch, StudentInfo
 from placement.models import InternshipInformation, ProjectInformation, EducationalDetails
 from placement.policy import current_session_year
-from placement.utils import get_resume_binary, handle_exc
+from placement.utils import get_resume_binary
+from internship.utils import handle_exc
 
 from django.conf import settings
 
@@ -34,7 +35,6 @@ def index(request):
   """
   Home Page
   """
-  import ipdb; ipdb.set_trace()
   try:
     l.info(request.user.username +': tried to view Home page')
     student = request.user.student
@@ -85,13 +85,13 @@ def company_open_to(request, company_id) :
   Displays the name of branches for which a company is open.
   """
   try:
+    import ipdb; ipdb.set_trace()
     try:
       company = Company.objects.get(id = company_id, year = current_session_year())
     except Company.DoesNotExist as e:
       l.info(request.user.username +': Company did not exist while viewing company open to')
-      return render_to_response('internship/company_opento.html', {
-          'error_msg' : 'Company does NOT exist.',
-          }, context_instance = RequestContext(request))
+      messages.error(request, "Company does not exist")
+      return HttpResponseRedirect(reverse('internship.views_student.company_list')) 
     l.info(request.user.username +': tried to view the company_open_to view '+str(company_id))
     opento = company.open_for_disciplines.all().order_by('graduation', 'name')
     return render_to_response('internship/company_opento.html', {
@@ -116,7 +116,7 @@ def company_info(request, company_id) :
     except Company.DoesNotExist as e:
       l.info(request.user.username +': The company did not exist with id '+str(company_id))
       return render_to_response('internship/generic_locked.html', {
-        'error_msg' : 'Company does NOT exist.',
+        'error_msg' : 'Company does not exist.',
         }, context_instance = RequestContext(request))
     form = forms.BaseModelFormFunction(Company, exclude_list = ('open_for_disciplines', 'year', 'dream'), instance = company)
     return render_to_response('internship/generic_locked.html', {
@@ -133,14 +133,15 @@ def resume(request) :
   """
   Current resume of the user.
   """
+  import ipdb; ipdb.set_trace()
   try:
     l.info(request.user.username +': Tried to view his resume')
-    person = request.session.get('person')
-    pdf = get_resume_binary(RequestContext(request), person, 'VER', False, photo_required = True)
+    student = request.user.student 
+    pdf = get_resume_binary(RequestContext(request), student, 'VER', photo_required = True)
     if pdf['err'] :
       l.info(request.user.username +': Tried to view his resume')
       return HttpResponse('Error in pdf generation')
-    response = HttpResponse(pdf['content'], mimetype='application/pdf')
+    response = HttpResponse(pdf['content'], content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=Resume.pdf'
     response['Content-Length'] = len(pdf['content'])
     return response
@@ -149,57 +150,21 @@ def resume(request) :
     l.exception(e)
     return handle_exc(e, request)
 
-"""
-def get_resume_binary(context, person, resume_type) :
-  
-  Returns dictionary of the resume for the specified person.
-  Keys of the dictionary are 'err' and 'content'.
-  'content' is resume encode in pdf binary format.
-  Returned string can be saved in a file as pdf document or can be rendered
-  in a HttpResponse to the client.
-  resume_type can be either 'VER' (for full resume) or any value from
-  placement.constants.COMPANY_RESUME_CHOICES
-  
-  internship_person = InternshipPerson.objects.get(person = person)
-  internships = InternshipInformation.objects.filter(person = person)
-  projects = ProjectInformation.objects.filter(person = person)
-  # TODO : Edit templates to make the resumes usable.
-  template_name = 'internship/resume.html'
-  html  = render_to_string(template_name,
-                           { 'pagesize' : 'A4',
-                             'internship_person' : internship_person,
-                             'internships' : internships,
-                             'projects' : projects},
-                           context_instance = context)
-  result = StringIO.StringIO()
-  # The link of photo is placement/photo/, so we need to convert it to /home/.../photo/file.jpg
-  # so that the pisa library can embed it in the pdf file.
-  # TODO : The IITR logo on resume is a problem for this substitution as all the links will be modified by this function.
-  def fetch_resources(uri, rel):
-    return os.path.join(settings.MEDIA_ROOT,
-                        uri.replace(settings.MEDIA_URL, ""),
-                        #plac_person.photo.path
-                        )
-  pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, link_callback=fetch_resources )
-  reply = {'err' : pdf.err,
-           'content' : result.getvalue()
-           }
-  return reply
-"""
 
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Verify').count() != 0, login_url='/nucleus/login/')
 def resume_to_verify(request, enrollment_no) :
   """
   Shows the resume of a student to the user Verify.
   """
   try:
     l.info(request.user.username +': tried viewing resume for verifying')
-    person = Person.objects.get(user__username=enrollment_no)
-    pdf = get_resume_binary(RequestContext(request), person, 'VER', False)
+    student = Student.objects.get(user__username=enrollment_no)
+    pdf = get_resume_binary(RequestContext(request), student, 'VER', False)
     if pdf['err'] :
       l.info(request.user.username +': error in pdf generation')
       return HttpResponse('Error in pdf generation')
-    response = HttpResponse(pdf['content'], mimetype='application/pdf')
+    response = HttpResponse(pdf['content'], content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=Resume_' + enrollment_no + '.pdf'
     response['Content-Length'] = len(pdf['content'])
     return response
