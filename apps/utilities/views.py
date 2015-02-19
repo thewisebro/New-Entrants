@@ -22,7 +22,7 @@ from utilities.forms import ProfileFormPrimary, ProfileFormGuardian,\
     ProfileFormExtra, ChangePasswordForm, ChangePasswordFirstYearForm,\
     EmailForm, EventsSubscribeFormGen, GenProfileForm, PasswordCheckForm,\
     UserEmailForm
-
+from utilities.utils import *
 
 @pagelet_login_required
 def edit_profile(request):
@@ -198,18 +198,8 @@ def email_verify(request):
         entry.confirmation_key= confirmation_key
         entry.last_datetime_created = datetime.datetime.today()
         entry.save()
-        email_subject = 'Account confirmation'
-        email_body = " To verify your email address, click this link within" + \
-                     " 48hours http://channeli.in/#settings/email_auth/"+\
-                     "?confirm_key=%s" % (confirmation_key)
-        send_mail(email_subject, email_body,'channeli@iitr.ac.in',[entry.email],\
-             fail_silently=False)
-        email1_subject = 'New Email address added for your channeli account.'
-        email1_body = "A new Email address %s has been added to your"+\
-                       " channeli account." % (entry.email)
-        send_mail(email1_subject, email1_body, 'channeli@iitr.ac.in',\
-            [request.user.email], fail_silently=False)
-
+        send_verification_mail(confirmation_key,entry.email)
+        mail_to_primary(entry.email,request.user.email)
         messages.success(request,"A verification link has been sent"+\
             " to your email address.")
       else:
@@ -230,17 +220,8 @@ def email_verify(request):
               =confirmation_key, last_datetime_created=datetime.datetime.today(),\
               verify_num=1)
           new_entry.save()
-          email_subject = 'Account confirmation'
-          email_body = " To verify your email address, click this link within" +\
-                        " 48hours http://channeli.in/#settings/email_auth/"+\
-                        "?confirm_key=%s" % (confirmation_key)
-          send_mail(email_subject, email_body, 'channeli@iitr.ac.in',[email],\
-              fail_silently=False)
-          email1_subject = 'New Email address added for your channeli account.'
-          email1_body = "A new Email address %s has been added to your"+\
-                         " channeli account." % (email)
-          send_mail(email1_subject, email1_body, 'channeli@iitr.ac.in',\
-              [request.user.email], fail_silently=False)
+          send_verification_mail(confirmation_key,email)
+          mail_to_primary(email,request.user.email)
           messages.success(request,"A verification link has been sent"+\
               " to your email address.")
 
