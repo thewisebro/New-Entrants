@@ -9,11 +9,11 @@ class postFeed(ModelFeed):
     app = 'lectut'
 
   def save(self, instance, created):
-    instance.link = '/lostfound/view-item/lost/' + str(instance.pk)
+    instance.link = '/lectut/ajax/1/'
     return {
-             'content': render_to_string('lostfound/lost_feed.html',{
+             'content': render_to_string('lectut/post_feed.html',{
              'instance': instance,
              }),
-             'user': instance.user,
+             'user': instance.upload_user,
              'link': instance.link,
            }
