@@ -419,6 +419,7 @@ def company_coordinator_today_view(request):
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
 def add_company_coordinator(request):
+  import ipdb; ipdb.set_trace()
   if request.method == 'POST':
     form = AddCoordinatorForm(request.POST)
     if form.is_valid():
@@ -474,6 +475,7 @@ def generate_company_contact_xls(request):
 def person_search(request):
   if request.is_ajax():
     q = request.GET.get('term','')
+    print q
     persons = Student.objects.filter(Q(user__name__icontains = q)|Q(user__username__icontains = q),passout_year=None).order_by('-user__username')[:50]
     if not persons:
       obj = [{
@@ -485,7 +487,7 @@ def person_search(request):
       return HttpResponse(data,'application/json')
     def person_dict(student):
       return {
-        'id':str(student),
+        'id':str(student.user.username),
         'label':str(student.user.name)+" ( "+str(student.user.info)+" )",
         'value':str(student.user.name),
       }

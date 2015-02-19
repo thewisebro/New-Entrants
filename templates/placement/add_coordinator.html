@@ -4,12 +4,14 @@
     <title>
       Add Coordinator
     </title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css"/>
     <script src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>
     <script src="{{ STATIC_URL }}js/placement/enscroll-0.5.5.min.js"></script>
+
     <script type="text/javascript" src="{{ STATIC_URL }}js/placement/custom-ui.js"></script>
 
 <script>
-
 (function($) {
  $(window).load(function() {
    $('.ui-autocomplete').enscroll({
@@ -22,7 +24,7 @@
  })(jQuery);
 
 $('body').ready(function(){
-    $('#id_person').autocomplete({
+  $('#id_student').autocomplete({
   source:'/placement/contact_manager/person_search/',
   select: function( event, ui ) {
   $('#enroll').val(ui.item.id);
