@@ -65,8 +65,7 @@ def index(request,enrno=None):
              'post_owner_pic':post.owner.user.photo_url,
              'post_owner_enrol':post.owner.user.username,
              'image_url': image_url,
-             'time':str(datetime.now()),
-
+             'time':str(post.post_date)
              }
       posts_data.append( tmp )
   data ={'name':logged_user.name, 'coverPic': y_user.coverpic.url, 'enrolmentNo':enrno, 'posts_data':posts_data, 'label':logged_user.info, 'profilePic':logged_user.photo_url}
@@ -92,41 +91,41 @@ def coverpic_upload(request):
 @csrf_exempt
 @CORS_allow
 def post(request,wall_user):
-  import ipdb;ipdb.set_trace()
+# import ipdb;ipdb.set_trace()
   if request:
-      print 'vaibhavraj'
-      if request.method == 'POST':
-        p = request.POST.get('post_text')
-        hashed = [ word for word in p.split() if word.startswith("#") ]
-        user_tagged = [ tag for tag in p.split() if tag.startswith("@") ]
-        imgs = request.FILES.getlist('files')
-        print len(imgs)
-        print wall_user
-        if wall_user:
-          s = Student.objects.get(user__username=wall_user)
-        else:
-          s = Student.objects.get(user= request.user)
-        print s
-        student = Student.objects.get(user=request.user)
-        post = Post(text_content=p, post_date=timezone.now(), owner=student, wall_user=s)
-        post.save()
-        print post.wall_user
-        if len(imgs)>0:
-          for key in imgs:
-            PI = PostImage(image = key,post = post)
-            PI.save()
-        for hash in hashed:
-          print hash
-          post.tags.add(hash)
-        for user in user_tagged:
-          user = user[1:]
-          student_related = Student.objects.get(user__name=user)
-          post.user_tags.add(student_related)
-        data = {'temp':1}
-# return  HttpResponse("post added")
-        return HttpResponseRedirect(simplejson.dumps(data),'application/json')
+    print 'vaibhavraj'
+    if request.method == 'POST':
+      post_data = str(simplejson.loads(request.POST['data'])['post_text'])
+      hashed = [ word for word in post_data.split() if word.startswith("#") ]
+      user_tagged = [ tag for tag in post_data.split() if tag.startswith("@") ]
+      imgs = request.FILES.getlist('file')
+      print len(imgs)
+      print wall_user
+      if wall_user:
+        s = Student.objects.get(user__username=wall_user)
       else:
-        return HttpResponse('Hello')
+        s = Student.objects.get(user__username="13114068")
+      print s
+      student = Student.objects.get(user__username="13114068")
+      post = Post(text_content=post_data, post_date=timezone.now(), owner=student, wall_user=s)
+      post.save()
+      print post.wall_user
+      if len(imgs)>0:
+        for key in imgs:
+          PI = PostImage(image = key,post = post)
+          PI.save()
+      for hash in hashed:
+        print hash
+        post.tags.add(hash)
+      for user in user_tagged:
+        user = user[1:]
+        student_related = Student.objects.get(user__name=user)
+        post.user_tags.add(student_related)
+      data = {'temp':"a"}
+# return  HttpResponse("post added")
+      return HttpResponse(simplejson.dumps(data),'application/json')
+    else:
+      return HttpResponse('Hello')
 
 
 @CORS_allow
