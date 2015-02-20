@@ -77,6 +77,7 @@ pip install mutagen
 pip install reportlab
 pip install python-dateutil
 pip install simplejson
+pip install pytz
 
 # fuzzy wuzzy
 pip install -e git+https://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy
@@ -92,8 +93,12 @@ pip install django-haystack
 pip install pyyaml ua-parser user-agents
 pip install django-user-agents
 
-#Install redis
+# Install redis
 apt-get install -y redis-server
 pip install redis
 
 pip install elasticsearch
+
+# Image optimizing tools
+apt-get install -y optipng
+apt-get install -y libjpeg-progs

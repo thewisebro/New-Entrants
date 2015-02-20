@@ -223,7 +223,7 @@ def make_user_logged_in(user, request, next_page, dialog,
   """
   if not (request.META.has_key('HTTP_X_FORWARDED_HOST') and\
         request.META['HTTP_X_FORWARDED_HOST'] == 'people.iitr.ernet.in')\
-        and user.in_group('Student') and user.student.semester_no == 0:
+        and user.in_group('Student') and user.student.passout_year != None:
     logger.info("Nucleus Login : User(username='"+user.username+"')"+\
                 " couldn't login as passout_year is not NULL.")
     messages.error(request, "You have graduated from IIT Roorkee So you"+\
