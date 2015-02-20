@@ -25,13 +25,13 @@
           <td><a href="javascript:void()" onclick="confirm_delete({{ company.id }})">Delete</a></td>
           <td>{{ company.get_status_display }}</td>
           <td>{{ company.last_date_of_applying|default:'-' }}</td>
-          <td><a href="{% url internship.views_admin.applications_to_company company.id %}">Applications</a></td>
-          <td><a target="_blank" href="{% url internship.views_admin.selected_students company.id %}">XLS list</a></td>
-          <td><a target="_blank" href="{% url internship.views_admin.resume_archive company.id %}">Resume Archive</a></td>
-          <td><a href="{% url internship.views_results.declare_result company.id %}">Declare Result</a></td>
-          <td><a href="{% url internship.views_results.insert_result company.id %}">Insert Results</a></td>
-          <td><a href="{% url internship.views_results.drop_results company.id %}">Drop Results</a></td>
-          <td><a href="{% url internship.views_results.company_results company.id %}">View Results</a></td>
+          <td><a href="{% url 'internship.views_admin.applications_to_company' company.id %}">Applications</a></td>
+          <td><a target="_blank" href="{% url 'internship.views_admin.selected_students' company.id %}">XLS list</a></td>
+          <td><a target="_blank" href="{% url 'internship.views_admin.resume_archive' company.id %}">Resume Archive</a></td>
+          <td><a href="{% url 'internship.views_results.declare_result' company.id %}">Declare Result</a></td>
+          <td><a href="{% url 'internship.views_results.insert_result' company.id %}">Insert Results</a></td>
+          <td><a href="{% url 'internship.views_results.drop_results' company.id %}">Drop Results</a></td>
+          <td><a href="{% url 'internship.views_results.company_results' company.id %}">View Results</a></td>
           </tr>
     {% endfor %}
        </tbody>

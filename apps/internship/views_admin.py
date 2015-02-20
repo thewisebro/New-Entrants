@@ -20,12 +20,13 @@ import cStringIO as StringIO
 from internship.models import *
 from internship import forms 
 from internship.views import resume, resume_to_verify
-from placement.utils import get_resume_binary, handle_exc
+from placement.utils import get_resume_binary
+from internship.utils import handle_exc
 from nucleus.models import Student, Branch, StudentInfo
 from placement.models import InternshipInformation, ProjectInformation, EducationalDetails
 from placement.policy import current_session_year
 
-import settings
+from django.conf import settings
 
 # Permission denied page. User will be redirected to this page if he fails the user_passes_test.
 login_url = '/internship/'
@@ -39,6 +40,7 @@ def company_add(request) :
   Add a company (for Admin)
   """
   try:
+    import ipdb; ipdb.set_trace()
     if request.method == 'POST' :
       form = forms.CompanyForm(request.POST, request.FILES)
       if form.is_valid() :
@@ -56,7 +58,7 @@ def company_add(request) :
       else:
         l.info(request.user.username +': form error while trying to add company')
         messages.error(request, form.errors, extra_tags='form_error')
-    else :
+    else:
       form = forms.CompanyForm()
     form.fields['open_for_disciplines'].help_text = None 
     return render_to_response('internship/basic_form.html', {
@@ -354,47 +356,42 @@ def branch_details(request, branch_code = None) :
   try :
     if branch_code == None :
       l.info(request.user.username + ': Viewing Branch Details')
-      #internship_persons = InternshipPerson.objects.filter(person__branch = branch, status = 'OPN', person__passout_year = None).order_by('person__name')
       # Display a list of branches
-      persons = InternshipPerson.objects.filter(status = 'OPN')
-      #branches=InternshipPerson.objects.values_list('person__branch__code', 'person__branch__name', 'person__branch__department').distinct()
-      branch_codes = persons.values_list('person__branch__code').distinct()
+      internship_persons = InternshipPerson.objects.filter(status = 'OPN')
+      branch_codes = internship_persons.values_list('student__branch__code').distinct()
       branches = Branch.objects.filter(code__in = branch_codes).order_by('degree')
       return render_to_response('internship/branch_details_list.html', {
           'branches' : branches,
           }, context_instance = RequestContext(request))
     # Display list of students in the specified branch
+    import ipdb; ipdb.set_trace()
     branch = get_object_or_404(Branch, code = branch_code)
     l.info(request.user.username + ': Viewing Students of ' + branch.name)
-    internship_persons = InternshipPerson.objects.filter(person__branch = branch, status = 'OPN', person__passout_year = None).order_by('person__name')
+    internship_persons = InternshipPerson.objects.filter(student__branch = branch, status = 'OPN', student__passout_year = None).order_by('student__user__name')
     details = []
     # TODO : Put all these queries into one per model
     educational_details = EducationalDetails.objects.all()
     person_info_all = StudentInfo.objects.all()
     apps = CompanyApplicationMap.objects.all()
-    for internship_person in internship_persons :
-      person = internship_person.person
+    for internship_person in internship_persons:
+      student = internship_person.student
       try :
-        #tenth_marks = EducationalDetails.objects.get(person = person, course = '10TH').cgpa
-        tenth_marks = educational_details.get(person = person, course = '10TH').cgpa
+        tenth_marks = educational_details.get(student = student, course = '10TH').cgpa
       except EducationalDetails.DoesNotExist :
         tenth_marks = '-'
       try :
-        #twelfth_marks = EducationalDetails.objects.get(person = person, course = '12TH').cgpa
-        twelfth_marks = educational_details.get(person = person, course = '12TH').cgpa
+        twelfth_marks = educational_details.get(student = student, course = '12TH').cgpa
       except EducationalDetails.DoesNotExist :
         twelfth_marks = '-'
-      #graduation_marks = EducationalDetails.objects.get(person = person, course = 'UG0').cgpa
-      graduation_marks = educational_details.filter(person = person, course = 'UG0')
+      graduation_marks = educational_details.filter(student = student, course = 'UG0')
       if graduation_marks:
         graduation_marks = graduation_marks[0].cgpa
       else:
         graduation_marks = '-'
       try :
-        #person_info = StudentInfo.objects.get(person = person)
-        person_info = person_info_all.get(person =person)
+        student_info = person_info_all.get(student = student)
       except StudentInfo.DoesNotExist :
-        person_info = None
+        student_info = None
       applications = apps.filter(person = internship_person)
       if applications:
         no_of_applications = applications.count()
@@ -402,7 +399,7 @@ def branch_details(request, branch_code = None) :
       else :
         no_of_applications = 0
         last_application = "-"
-      details.append((internship_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application))
+      details.append((internship_person,tenth_marks,twelfth_marks,graduation_marks, student_info, no_of_applications, last_application))
     return render_to_response('internship/branch_details.html', {
           'branch' : branch,
           'details' : details

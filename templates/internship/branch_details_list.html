@@ -18,7 +18,7 @@
     <tr>
       <td>{{ forloop.counter }}</td>
       <td>
-        <a href="{% url internship.views_admin.branch_details branch.code %}">
+        <a href="{% url 'internship.views_admin.branch_details' branch_code=branch.code %}">
           {{ branch.name }}
         </a>
       </td>

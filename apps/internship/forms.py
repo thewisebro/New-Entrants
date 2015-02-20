@@ -1,9 +1,8 @@
 from core import forms
 from core.forms import CKEditorWidget, CurrencyWidget
-from core.forms import BaseForm, BaseModelForm#, MyModelMultipleChoiceField
+from core.forms import BaseForm, BaseModelForm
 from internship import models, constants as IC
 from nucleus.models import Branch
-from django.contrib.admin import widgets                                       
 
 class CompanyForm(BaseModelForm) :
   latest_date_of_joining = forms.CharField(required= False, widget = forms.DateInput(attrs={'class':'iDateTimeField'}))

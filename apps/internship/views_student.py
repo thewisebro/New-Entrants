@@ -26,7 +26,8 @@ import cStringIO as StringIO
 from internship.models import *
 from internship import forms 
 from nucleus.models import Student, Branch, StudentInfo
-from placement.utils import get_resume_binary, handle_exc
+from placement.utils import get_resume_binary
+from internship.utils import handle_exc
 from placement.models import InternshipInformation, ProjectInformation
 from placement.policy import current_session_year
 
@@ -47,50 +48,49 @@ def company_list(request):
   try:
     l.info(request.user.username + ": viewing company list.")
     companies = Company.objects.filter( year = current_session_year() )
-    person = request.session.get('person')
+    student = request.user.student
     try:
-      internship_person = InternshipPerson.objects.get(person = person)
+      internship_person = InternshipPerson.objects.get(student = student)
     except InternshipPerson.DoesNotExist as e:
       l.info(request.user.username + ": viewing company list but internship_person doesnt exist.")
       return render_to_response('internship/company_list.html',{
           'error_msg': '',
           }, context_instance = RequestContext(request))
     try:
-      pi = StudentInfo.objects.get(person = person)
-      if not pi.birth_date:
+      if not student.user.birth_date:
         messages.error(request, 'Please enter your date of birth')
         return HttpResponseRedirect(reverse('placement.views_profiles.personal_information'))
     except Exception as e:
-      l.info(str(person)+str(e))
+      l.info(str(student)+str(e))
     status = [] # list to store the status of the application in order of the list "companies"
     # Different status possible are
     #   1. NOT - Not applicable
     #   2. NAP - Not Applied
     #       + other status from internship.constants.COMPANY_APPLICATION_STATUS
     opencompanies = []
-    avlstatus = [] #status of companies which are availabe for application by the person
+    avlstatus = [] #status of companies which are availabe for application by the student
     for company in companies :
         branches = company.open_for_disciplines.all()
-        if company.status == 'OPN' and person.branch in company.open_for_disciplines.all(): 
+        if company.status == 'OPN' and student.branch in company.open_for_disciplines.all(): 
           opencompanies.append(company)
           try:
-            application = CompanyApplicationMap.objects.get(company = company, person = internship_person, company__year__contains = current_session_year())
+            application = CompanyApplicationMap.objects.get(company = company, student = internship_person, company__year__contains = current_session_year())
             avlstatus.append(application.status)
           except:
             avlstatus.append('NAP')
         if company.status=='CLS':
           status.append('CLS')
-        elif CompanyApplicationMap.objects.filter(person = internship_person, status = 'SEL', company__year__contains = current_session_year()).exists():
+        elif CompanyApplicationMap.objects.filter(student = internship_person, status = 'SEL', company__year__contains = current_session_year()).exists():
           status.append('SEL')
-        elif person.branch in branches and internship_person.status == 'OPN' and company.status == 'OPN':  
+        elif student.branch in branches and internship_person.status == 'OPN' and company.status == 'OPN':  
           try:
-            application = CompanyApplicationMap.objects.get(company = company, person = internship_person, company__year__contains = current_session_year())
+            application = CompanyApplicationMap.objects.get(company = company, student = internship_person, company__year__contains = current_session_year())
             status.append(application.status)
           except CompanyApplicationMap.DoesNotExist as e:
             status.append('NAP')
-        elif person.branch in branches and internship_person.status != 'CLS':  
+        elif student.branch in branches and internship_person.status != 'CLS':  
           status.append(company.status)
-        elif person.branch not in branches:  
+        elif student.branch not in branches:  
           status.append('CLS')
         elif company.status=='DEC':
           status.append('DEC')
@@ -100,7 +100,6 @@ def company_list(request):
           status.append('NOT')
     company_status_map = zip(companies, status)
     avl_company_status_map = zip(opencompanies, avlstatus)
-    print avl_company_status_map
     return render_to_response('internship/company_list.html', {
         'company_status_map' : company_status_map,
         'avl_company_status_map': avl_company_status_map,
@@ -124,16 +123,16 @@ def apply(request, company_id) :
       company = Company.objects.get(id = company_id, year = year)
     except Company.DoesNotExist as e:
       return HttpResponse('Company does NOT exist.')
-    person = request.session.get('person')
+    student = request.user.student
     try:
-      internship_person = InternshipPerson.objects.get (person = person, status = 'OPN')
+      internship_person = InternshipPerson.objects.get (student = student, status = 'OPN')
     except InternshipPerson.DoesNotExist as e:
       l.info ('internship person with enrollment no '+ request.user.username +' is not open.')
       return HttpResponse('You canot apply to this company')
-    if CompanyApplicationMap.objects.filter(company = company, person = internship_person, company__year__contains = current_session_year()).exists():
+    if CompanyApplicationMap.objects.filter(company = company, student = internship_person, company__year__contains = current_session_year()).exists():
       l.info (request.user.username +' can not apply again as he/she has already applied to company.')
       return HttpResponse("Multiple applications to the same company not allowed. This shall be reported.")
-    elif InternshipPerson.objects.filter(person = person, is_placed = 'True').exists():
+    elif InternshipPerson.objects.filter(student = student, is_placed = 'True').exists():
       l.info (request.user.username +' can not apply as he/she is already placed.')
       return HttpResponse("You can not apply to a company after getting the internship. This shall be reported.")
     elif company.status != 'OPN':
@@ -143,16 +142,16 @@ def apply(request, company_id) :
       cgpa_req = float(company.cgpa_requirements)
     except:
       cgpa_req = 0
-    if cgpa_req > float(internship_person.person.cgpa):
+    if cgpa_req > float(internship_person.student.cgpa):
       l.info (request.user.username +' applying to company having higher CGPA requirements.')
       return HttpResponse("You can not apply to this company as it has higher CGPA requirements.")
     else:
       branches = company.open_for_disciplines.all()
-      if person.branch in branches:
-        pdf = get_resume_binary(RequestContext(request), person, 'VER', False, photo_required = True)
+      if student.branch in branches:
+        pdf = get_resume_binary(RequestContext(request), student, 'VER', False, photo_required = True)
         if pdf['err'] :
           return HttpResponse('Your resume cannot be generated. Please contact IMG immediately.')
-        filepath = os.path.join(settings.MEDIA_ROOT, 'internship', 'applications', 'company'+str(company_id), str(person.user.username)+'.pdf')
+        filepath = os.path.join(settings.MEDIA_ROOT, 'internship', 'applications', 'company'+str(company_id), str(student.user.username)+'.pdf')
         # Make sure that the parent directory of filepath exists
         parent = os.path.split(filepath)[0]
         if not os.path.exists(parent) :
@@ -161,7 +160,7 @@ def apply(request, company_id) :
         resume.write(pdf['content'])
         resume.close()
         application = CompanyApplicationMap()
-        application.person = internship_person
+        application.student = internship_person
         application.company = company
         application.status = 'APP'
         application.save()
@@ -189,14 +188,14 @@ def withdraw(request, company_id) :
     except Company.DoesNotExist as e:
       l.info (request.user.username +': tried to withdraw from company which doesnt exist')
       return HttpResponse('Company does NOT exist')
-    person = request.session.get('person')
+    student = request.user.student
     try:
-      internship_person = InternshipPerson.objects.get(person = person, status = 'OPN')
+      internship_person = InternshipPerson.objects.get(student = student, status = 'OPN')
     except InternshipPerson.DoesNotExist as e:
       l.info (request.user.username +': internship person does not exist while withdrawing company '+str(company.name_of_company))
       return HttpResponse('You cannot withdraw from this company (Error 1)')
     try:
-      application = CompanyApplicationMap.objects.get (company = company, person = internship_person, company__year__contains = current_session_year())
+      application = CompanyApplicationMap.objects.get (company = company, student = internship_person, company__year__contains = current_session_year())
     except CompanyApplicationMap.DoesNotExist as e:
       l.info (request.user.username +': application does not exist while withdrawing company '+str(company.name_of_company))
       return HttpResponse('You can not withdraw your application from this company')
@@ -204,13 +203,13 @@ def withdraw(request, company_id) :
       # The application has been forwarded to the company.
       l.info (request.user.username +': application already finalized while withdrawing company '+str(company.name_of_company))
       return HttpResponse('You cannot withdraw your application from '+ company.name_of_company)
-    elif CompanyApplicationMap.objects.filter(person = internship_person, status = 'SEL', company__year__contains = current_session_year()).exists():
-      l.info (request.user.username +': person already placed while withdrawing company '+str(company.name_of_company))
+    elif CompanyApplicationMap.objects.filter(student = internship_person, status = 'SEL', company__year__contains = current_session_year()).exists():
+      l.info (request.user.username +': student already placed while withdrawing company '+str(company.name_of_company))
       return HttpResponse('You cannot perform this action as you have already been selected in a company.')
     elif application.company.status != 'OPN':
-      l.info (request.user.username +': person tried to withdraw application from Closed Company')
+      l.info (request.user.username +': student tried to withdraw application from Closed Company')
       return HttpResponse('You cannot perform this action as '+ company.name_of_company +' application is closed')
-    filepath = os.path.join(settings.MEDIA_ROOT, 'internship', 'applications', 'company'+str(company_id), str(person.user.username)+'.pdf')
+    filepath = os.path.join(settings.MEDIA_ROOT, 'internship', 'applications', 'company'+str(company_id), str(student.user.username)+'.pdf')
     if os.path.exists(filepath) :
       os.remove(filepath)
     application.delete()
@@ -227,9 +226,9 @@ def submitted_resume(request, company_id) :
   Returns the resume submitted by the user to specific company.
   """
   try:
-    person = request.session['person']
+    student = request.user.student
     l.info(request.user.username + ":trying to get resume submitted to a particular company.")
-    filename = os.path.join(settings.MEDIA_ROOT, 'internship', 'applications', 'company'+str(company_id), str(person.user.username)+'.pdf')
+    filename = os.path.join(settings.MEDIA_ROOT, 'internship', 'applications', 'company'+str(company_id), str(student.user.username)+'.pdf')
     if not os.path.exists(filename) : # the user has not applied to the company
       return direct_to_template(request, template="404.html")
     wrapper = FileWrapper(file(filename))
@@ -245,24 +244,24 @@ def submitted_resume(request, company_id) :
 @csrf_exempt
 @login_required
 def set_priority(request):
-  person = request.user.person
-  internship_person = InternshipPerson.objects.get_or_create(person=person)[0]
+  student = request.user.student
+  internship_person = InternshipPerson.objects.get_or_create(student=student)[0]
   companies_applied = CompanyApplicationMap.objects.filter(person=internship_person, company__pk__in = [229,230,231,233,234])
   message=""
   for company in companies_applied:
-    company_priority = CompanyPriority.objects.get_or_create(person=person,company=company.company)
-  company_data = CompanyPriority.objects.filter(person=person)
+    company_priority = CompanyPriority.objects.get_or_create(student=student,company=company.company)
+  company_data = CompanyPriority.objects.filter(student=student)
   if not companies_applied:
     message = "You have not applied for any of the companies for which priority is required. In case of any discrepancy, contact IMG."
   if request.method == "POST":
-    company_priority = CompanyPriority.objects.filter(person=person).delete()
+    company_priority = CompanyPriority.objects.filter(student=student).delete()
     data = json.loads(request.POST.items()[0][0])
     message = ""
     is_success = True
     for priority in data:
       try:
         company = Company.objects.get(pk=priority["id"])
-        company_priority = CompanyPriority.objects.get_or_create(person=person,company=company)[0]
+        company_priority = CompanyPriority.objects.get_or_create(student=student,company=company)[0]
         company_priority.priority = int(priority["priority"])+1
         company_priority.save()
       except Exception as e:

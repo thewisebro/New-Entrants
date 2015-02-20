@@ -53,15 +53,15 @@ View students :
         </thead>
         <tbody>
 
-          {% for internship_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application in details %}
-          <tr class="person placed_category_{% if internship_person.is_placed %}{{ 'Y' }}{% else %}{{ 'N' }}{% endif %}">
+          {% for internship_person,tenth_marks,twelfth_marks,graduation_marks, student_info, no_of_applications, last_application in details %}
+          <tr class="student placed_category_{% if internship_person.is_placed %}{{ 'Y' }}{% else %}{{ 'N' }}{% endif %}">
             <td>{{ forloop.counter }}</td>
-            <td>{{ internship_person.person.name }}</td>
-            <td>{{ person_info.birth_date|default:'-' }}</td>
-            <td>{{ person_info.get_category_display|default:'-' }}</td>
-            <td>{{ internship_person.person.get_semester_display }}</td>
-            <td>{{ internship_person.person.personal_contact_no|default:'-' }}</td>
-            <td>{{ internship_person.person.email_id|default:'-' }}</td>
+            <td>{{ internship_person.student.user.name }}</td>
+            <td>{{ student_info.birth_date|default:'-' }}</td>
+            <td>{{ student_info.get_category_display|default:'-' }}</td>
+            <td>{{ internship_person.student.get_semester_display }}</td>
+            <td>{{ internship_person.student.user.contact_no|default:'-' }}</td>
+            <td>{{ internship_person.student.user.email|default:'-' }}</td>
           </tr>
           {% endfor %}
 
@@ -83,11 +83,11 @@ View students :
         </thead>
         <tbody>
 
-          {% for internship_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application in details %}
-          <tr class="person placed_category_{% if internship_person.is_placed %}{{ 'Y' }}{% else %}{{ 'N' }}{% endif %}">
+          {% for internship_person,tenth_marks,twelfth_marks,graduation_marks, student_info, no_of_applications, last_application in details %}
+          <tr class="student placed_category_{% if internship_person.is_placed %}{{ 'Y' }}{% else %}{{ 'N' }}{% endif %}">
             <td>{{ forloop.counter }}</td>
-            <td>{{ internship_person.person.name }}</td>
-            <td>{{ internship_person.person.cgpa|default:'-' }}</td>
+            <td>{{ internship_person.student.user.name }}</td>
+            <td>{{ internship_person.student.cgpa|default:'-' }}</td>
             <td>{{ tenth_marks }}</td>
             <td>{{ twelfth_marks }}</td>
             <td>{{ graduation_marks }}</td>
@@ -112,10 +112,10 @@ View students :
         </thead>
         <tbody>
 
-          {% for internship_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application in details %}
-          <tr class="person placed_category_{% if internship_person.is_placed %}{{ 'Y' }}{% else %}{{ 'N' }}{% endif %}">
+          {% for internship_person,tenth_marks,twelfth_marks,graduation_marks, student_info, no_of_applications, last_application in details %}
+          <tr class="student placed_category_{% if internship_person.is_placed %}{{ 'Y' }}{% else %}{{ 'N' }}{% endif %}">
             <td>{{ forloop.counter }}</td>
-            <td>{{ internship_person.person.name }}</td>
+            <td>{{ internship_person.student.user.name }}</td>
             <td>{{ no_of_applications }}</td>
             
           </tr>
@@ -146,19 +146,19 @@ View students :
          </tr>
         </thead>
         <tbody>
-          {% for internship_person,tenth_marks,twelfth_marks,graduation_marks, person_info, no_of_applications, last_application in details %}
-          <tr class="person placed_category_{% if internship_person.is_placed %}{{ 'Y' }}{% else %}{{ 'N' }}{% endif %}">
+          {% for internship_person,tenth_marks,twelfth_marks,graduation_marks, student_info, no_of_applications, last_application in details %}
+          <tr class="student placed_category_{% if internship_person.is_placed %}{{ 'Y' }}{% else %}{{ 'N' }}{% endif %}">
             <td>{{ forloop.counter }}</td>
-            <td>{{ internship_person.person.name }}</td>
-            <td>{{ internship_person.person.cgpa|default:'-' }}</td>
+            <td>{{ internship_person.student.user.name }}</td>
+            <td>{{ internship_person.student.cgpa|default:'-' }}</td>
             <td>{{ tenth_marks }}</td>
             <td>{{ twelfth_marks }}</td>
             <td>{{ graduation_marks }}</td>
-            <td>{{ person_info.birth_date|default:'-' }}</td>
-            <td>{{ person_info.get_category_display|default:'-' }}</td>
-            <td>{{ internship_person.person.email_id|default:'-' }}</td>
-            <td>{{ internship_person.person.personal_contact_no|default:'-' }}</td>
-            <td>{{ internship_person.person.get_semester_display }}</td>
+            <td>{{ student_info.birth_date|default:'-' }}</td>
+            <td>{{ student_info.get_category_display|default:'-' }}</td>
+            <td>{{ internship_person.student.user.email|default:'-' }}</td>
+            <td>{{ internship_person.student.user.contact_no|default:'-' }}</td>
+            <td>{{ internship_person.student.get_semester_display }}</td>
             <td>{{ no_of_applications }}</td>
             <td>{{ last_application }}</td>
           </tr>
@@ -175,18 +175,18 @@ No student found !
 
 {% endblock %}
 
-{% block scripts %}
+{% block app_scripts %}
 <script type="text/javascript">
   function selectStudents()
   {
     value = document.getElementById('category').value;
     if(value=='All')
     {
-      $('.person').show();
+      $('.student').show();
     }
     else
     {
-      $('.person').hide();
+      $('.student').hide();
       $('.placed_category_'+value).show();
     }
   }

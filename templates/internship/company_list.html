@@ -41,11 +41,11 @@
           <tr class="{{ status|lower }}">
             <td>{{ forloop.counter }}</td>
             <td>
-              <a href="{% url internship.views.company_info company.id %}">{{ company.name_of_company }}</a>
+              <a href="{% url 'internship.views.company_info' company.id %}">{{ company.name_of_company }}</a>
             </td>
             <td>{{ company.last_date_of_applying|default:'-' }}</td>
             <td>
-              <a href="{% url internship.views.company_open_to company.id %}">View</a>
+              <a href="{% url 'internship.views.company_open_to' company.id %}">View</a>
             </td>
             <td>
               {% if status == 'NAP' %}
@@ -62,13 +62,13 @@
               {% endif %}
             </td>
             <td>
-              <a href="{% url internship.views_student.submitted_resume company.id %}" id="resumelink{{ company.id }}"
+              <a href="{% url 'internship.views_student.submitted_resume' company.id %}" id="resumelink{{ company.id }}"
                  {%  if status == 'NOT' or status == 'NAP' or status == 'NA' or status == 'CLS' or status == 'DEC' or status == 'FIN' %} style="visibility:hidden;" {% endif %}>
                 <button>
                   <div class="text">
                     Resume
                   </div>
-                  <div class="image"><img src="{{ STATIC_URL }}images/arrow_down.png" /></div>
+                  <div class="image"><img src="{{ STATIC_URL }}images/placement/arrow_down.png" /></div>
                 </button>
               </a>
             </td>
@@ -99,11 +99,11 @@
     <tr>
       <td>{{ forloop.counter }}</td>
       <td>
-        <a href="{% url internship.views.company_info company.id %}">{{ company.name_of_company }}</a>
+        <a href="{% url 'internship.views.company_info' company.id %}">{{ company.name_of_company }}</a>
       </td>
       <td>{{ company.last_date_of_applying|default:'-' }}</td>
       <td>
-        <a href="{% url internship.views.company_open_to company.id %}">View</a>
+        <a href="{% url 'internship.views.company_open_to' company.id %}">View</a>
       </td>
       <td>
         {% if status == 'NAP' %}
@@ -133,7 +133,7 @@
      
       </td>
       <td>
-       <a href="{% url internship.views_student.submitted_resume company.id %}" id="resumelink{{ company.id }}"
+       <a href="{% url 'internship.views_student.submitted_resume' company.id %}" id="resumelink{{ company.id }}"
            {% if status == 'NOT' or status == 'NAP' or status == 'NA' or status == 'CLS' or status == 'DEC' or status == 'FIN' %} style="visibility:hidden;" {% endif %}>
           <button>
             <div class="text">
@@ -186,11 +186,11 @@
     <tr>
       <td>{{ forloop.counter }}</td>
       <td>
-        <a href="{% url internship.views.company_info company.id %}">{{ company.name_of_company }}</a>
+        <a href="{% url 'internship.views.company_info' company.id %}">{{ company.name_of_company }}</a>
       </td>
       <td>{{ company.last_date_of_applying|default:'-' }}</td>
       <td>
-        <a href="{% url internship.views.company_open_to company.id %}">View</a>
+        <a href="{% url 'internship.views.company_open_to' company.id %}">View</a>
       </td>
       <td>
         {% if status == 'NAP' %}
@@ -220,7 +220,7 @@
      
       </td>
       <td>
-       <a href="{% url internship.views_student.submitted_resume company.id %}" id="resumelink{{ company.id }}"
+       <a href="{% url 'internship.views_student.submitted_resume' company.id %}" id="resumelink{{ company.id }}"
            {% if status == 'NOT' or status == 'NAP' or status == 'NA' or status == 'CLS' or status == 'DEC' or status == 'FIN' %} style="visibility:hidden;" {% endif %}>
           <button>
             <div class="text">

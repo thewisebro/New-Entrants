@@ -12,7 +12,7 @@ urlpatterns = patterns ('internship.views',
 )
 
 
-urlpatterns += patterns ('internship.views_student',
+urlpatterns += patterns ('internship.views_student',     ### 3 url solved
   (r'^company/list/$', 'company_list'),
   (r'^company/(?P<company_id>\w+)/apply/$', 'apply'),
   (r'^company/(?P<company_id>\w+)/withdraw/$', 'withdraw'),
@@ -50,7 +50,7 @@ urlpatterns += patterns ('internship.views_results',
   (r'^results/company/(?P<company_id>\d+)/insert/$', 'insert_result'),
 )
 
-urlpatterns += patterns('internship.views_admin',
+urlpatterns += patterns('internship.views_admin',  #### First URL solved
   #Admin URLS
   (r'^company/$', 'company_list_admin'),
   (r'^company/add/$', 'company_add'),
