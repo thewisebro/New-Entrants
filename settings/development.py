@@ -27,6 +27,8 @@ NEWS_IMAGES_ROOT = NEWS_MEDIA_ROOT + 'images/'
 NEWS_XML_ROOT = NEWS_MEDIA_ROOT + 'xml_files/'
 NEWS_MEDIA_URL = '/newsmedia/'
 
+CHAT_SYSTEM_DEBUG = False
+
 JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
 JUKEBOX_MEDIA_URL = '/songsmedia/'
 JUKEBOX_SONGS_BASEURL = '/songs/'
@@ -43,11 +45,11 @@ MANAGERS = ADMINS
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-    'NAME': 'nextone',                   # Or path to database file if using sqlite3.
+    'NAME': 'fish',                   # Or path to database file if using sqlite3.
                                           # The following settings are not used with sqlite3:
     'USER': 'channeli',
     'PASSWORD': 'channeli',
-    'HOST': '192.168.121.5',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+    'HOST': '172.25.55.156',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
     'PORT': '',                           # Set to empty string for default.
   }
 }
@@ -136,8 +138,8 @@ STATICFILES_FINDERS = (
   'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
   'compressor.finders.CompressorFinder',
-  'api.finders.HandlebarsFinder',
-  'api.finders.SassFinder',
+  'static_precompile.finders.SassFinder',
+  'static_precompile.finders.HandlebarsFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -226,6 +228,7 @@ THIRD_PARTY_APPS = (
   'haystack',
   'filemanager',
   'admin_reorder',
+  'static_precompile',
 )
 
 CHANNELI_APPS = (
@@ -255,10 +258,13 @@ INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
 
 FEED_APPS = (
   'events',
+  'lostfound',
 )
 
 FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
 COMMENTS_APP = 'fluent_comments'
+
+STATIC_PRECOMPILE_USE_COMPASS = False
 
 AUTH_USER_MODEL = 'nucleus.User'
 
@@ -280,7 +286,7 @@ COMPRESS_PRECOMPILERS = (
 
 SHELL_PLUS = "ipython"
 
-SESSION_COOKIE_NAME = 'PHPSESSID'
+SESSION_COOKIE_NAME = 'CHANNELI_SESSID'
 SESSION_ENGINE = 'nucleus.session'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
@@ -359,15 +365,15 @@ LOGGING = {
       'propagate': True,
     },
     'channel-i_logger': {
-      'handlers':['file_logger', 'console'],
+      'handlers':['console'],
       'level':'INFO'
     },
     'lostfound': {
-      'handlers':['lostfound_file_logger', 'console'],
+      'handlers':['console'],
       'level':'INFO'
     },
     'buysell': {
-      'handlers':['buysell_file_logger', 'console'],
+      'handlers':['console'],
       'level':'INFO'
     },
   }
@@ -375,20 +381,24 @@ LOGGING = {
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-      'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-      'URL': 'http://192.168.121.5:8983/solr/',
+      'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+      'URL': 'http://192.168.121.5:9200/',
+      'INDEX_NAME': 'channeli',
       'INCLUDE_SPELLING': True,
       # ...or for multicore...
       # 'URL': 'http://127.0.0.1:8983/solr/mysite',
     },
     'autocomplete': {
-      'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-      'URL': 'http://192.168.121.5:8983/solr/',
+      'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+      'URL': 'http://192.168.121.5:9200/',
+      'INDEX_NAME': 'channeli',
       'INCLUDE_SPELLING': True,
       # ...or for multicore...
       # 'URL': 'http://127.0.0.1:8983/solr/mysite',
     }
 }
+
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 from admin_settings import *
 

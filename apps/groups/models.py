@@ -21,7 +21,7 @@ class Group(Role('Student Group')):
     if created:
       post = Post.objects.create(post_name = 'Member')
       if self.admin:
-        Membership.objects.create(student = self.admin, post=post, groupinfo=groupinfo)
+        Membership.objects.create(student=self.admin, post=post, groupinfo=groupinfo)
     return return_value
 
 
@@ -35,7 +35,7 @@ class GroupInfo(models.Model):
   """
     Information of a Group
   """
-  group = models.OneToOneField('Group')
+  group = models.OneToOneField('Group', primary_key=True)
   mission = models.TextField(blank=True, null=True)
   founding_year = models.CharField(max_length=MC.TEXT_LENGTH, null=True, blank=True)
   members = models.ManyToManyField(Student, related_name="groupinfos", through="Membership")

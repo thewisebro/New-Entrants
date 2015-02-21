@@ -196,9 +196,9 @@ class User(AbstractUser, models.Model):
       to_user = user,
       status = 1
     )
-    to_user__user_info = {'name': user.name, 'enr': user.username, 'status': 0, 'is_chat_on': 0}
-    client.hmset('user:'+user.username, to_user__user_info)
-    client.sadd('friends:'+self.username, user.username)
+    to_user__user_info = {'user_id': user.pk,'name': user.name, 'username': user.username, 'status': 0, 'is_chat_on': 0, 'photo': user.photo_url}
+    client.hmset('user:'+str(user.pk), to_user__user_info)
+    client.sadd('friends:'+str(self.pk), user.pk)
     if symmetric:
       user.add_connection(self, False)
     return connection
@@ -209,9 +209,9 @@ class User(AbstractUser, models.Model):
       connection.status = status
       connection.save()
       if status is 1:
-        client.sadd('friends:'+self.username, user.username)
+        client.sadd('friends:'+str(self.pk), user.pk)
       elif status is 3:
-        client.srem('friends:'+self.username, user.username)
+        client.srem('friends:'+str(self.pk), user.pk)
       if symmetric:
         user.update_connection(self, status, False)
       return connection
@@ -221,7 +221,7 @@ class User(AbstractUser, models.Model):
   def remove_connection(self, user, symmetric=True):
     connection = Connection.objects.filter(from_user=self, to_user=user)
     connection.delete()
-    client.srem('friends:'+self.username, user.username)
+    client.srem('friends:'+str(self.pk), user.pk)
     if symmetric:
       user.remove_connection(self, False)
     return
@@ -310,6 +310,7 @@ class AbstractStudentBase(django_models.Model):
             choices=MC.BHAWAN_CHOICES, null=True, blank=True, default=None)
   room_no = models.CharField(max_length=MC.CODE_LENGTH, blank=True,
                               verbose_name='Room No')
+  passout_year = models.IntegerField(null=True, blank=True)
 
   class Meta:
     ordering = ['semester','branch']
@@ -337,11 +338,6 @@ class Student(StudentBase):
     instance = kwargs['instance']
     if kwargs['created']:
       StudentInfo.objects.get_or_create(student=instance)
-
-class StudentAlumni(StudentBase):
-  @property
-  def role(self):
-    return 'Alumni'
 
 class StudentUser(User, AbstractStudentBase):
   user = models.OneToOneField(User, primary_key=True, parent_link=True)
@@ -421,13 +417,6 @@ class StudentUserInfo(StudentUser, AbstractStudentInfo):
     db_table = 'nucleus_studentinfo'
     managed = False
 
-class StudentInfoAlumni(models.Model, AbstractStudentInfo):
-  studentalumni = models.OneToOneField(StudentAlumni, primary_key=True)
-
-  class Meta:
-    verbose_name = 'Student Information (Alumni)'
-    verbose_name_plural = 'Students Information (Alumni)'
-
 
 class Course(models.Model):
   id = models.CharField(primary_key=True, max_length=15)
@@ -449,42 +438,19 @@ class Course(models.Model):
     super(Course, self).save(*args, **kwargs)
 
 
-class RegisteredBranchCourse(models.Model):
-  branch = models.ForeignKey(Branch)
+class RegisteredCourse(models.Model):
+  student = models.ForeignKey(Student)
   course = models.ForeignKey(Course)
   semester_no = models.IntegerField()
   subject_area = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
   credits = models.IntegerField(null=True, blank=True)
+  cleared_status = models.CharField(max_length=MC.CODE_LENGTH)
+  backlog_registeredcourse = models.ForeignKey('RegisteredCourse',
+      related_name='next_registeredcourse', blank=True, null=True)
+  grade = models.CharField(max_length=2, choices=MC.GRADE_CHOICES, default='-')
 
   def __unicode__(self):
-    return unicode(self.branch) + ',' + unicode(self.semester_no) + ':' +\
-           unicode(self.course)
-
-
-class RegisteredCourseChangeBase(models.Model):
-  course = models.ForeignKey(Course)
-  subject_area = models.CharField(max_length=MC.CODE_LENGTH, blank=True)
-  credits = models.IntegerField(null=True, blank=True)
-  change = models.CharField(max_length=3, choices=MC.COURSE_CHANGE_CHOICES)
-  class Meta:
-    abstract = True
-
-class RegisteredCourseChange(RegisteredCourseChangeBase):
-  student = models.ForeignKey(Student)
-  backlog_registeredcoursechange = models.ForeignKey('RegisteredCourseChange',
-      related_name='next_registeredcoursechange', blank=True, null=True)
-
-  def __unicode__(self):
-    return unicode(self.student) + ':' + unicode(self.course) +\
-           ':' + self.change
-
-class RegisteredCourseChangeAlumni(RegisteredCourseChangeBase):
-  studentalumni = models.ForeignKey(StudentAlumni)
-  backlog_registeredcoursechangealumni = models.ForeignKey('RegisteredCourseChangeAlumni',
-      related_name='next_registeredcoursechangealumni', blank=True, null=True)
-
-  def __unicode__(self):
-    return unicode(self.studentalumni) + ':' + unicode(self.course)
+    return unicode(self.student) + ':' + unicode(self.course)
 
 
 class Batch(models.Model):

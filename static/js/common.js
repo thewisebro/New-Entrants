@@ -129,16 +129,28 @@ function close_dialog(dialog_name){
 }
 
 function check_user_data(is_authenticated, username){
+  if(!(is_authenticated === true || is_authenticated === false))
+    return;
   if(user.is_authenticated != is_authenticated ||
       (user.is_authenticated && user.username != username)){
-    user.is_authenticated = is_authenticated;
-    if(user.is_authenticated)
-      user.username = username;
+    if(is_authenticated){
+      user = {
+        is_authenticated: true,
+        username: username
+      };
+    }
+    else{
+      user = {
+        is_authenticated: false
+      };
+    }
     if(current_dialog){
       try{
         current_dialog.dialog('close');
       } catch(e){}
     }
+    console.log('is_authenticated: '+is_authenticated);
+    console.log('username: '+username);
     if(is_authenticated)
       $(document).trigger('login');
     else
@@ -264,6 +276,37 @@ function take_feedback(){
     width:600,
     height:360,
     src:'/helpcenter/feedback/'
+  });
+}
+
+function check_password(service, seconds, close_callback){
+  if(!close_callback)
+    close_callback = function(){};
+  dialog_iframe({
+    name:'pass_check',
+    title:'Password authentication',
+    width:500,
+    height:180,
+    close: close_callback,
+    src:'/settings/password_check/?service='+service+'&seconds='+seconds
+  });
+}
+
+function submit_report(object_pk, content_type_pk){
+  $.get('/moderation/report_info/',{
+    content_type_pk: content_type_pk,
+    object_pk: object_pk
+  },function(data){
+    if(data.open_dialog){
+      dialog_iframe({
+        name:'report_dialog',
+        title:'Report Item',
+        width:280,
+        height:280,
+        src:'/moderation/submit_report/?content_type_pk='+
+            content_type_pk+'&object_pk='+object_pk
+      });
+    }
   });
 }
 
