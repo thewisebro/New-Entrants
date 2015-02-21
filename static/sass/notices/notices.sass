@@ -28,7 +28,6 @@ li
   border-bottom: 0px
 
 .notice_info
-  padding: 10px
   background: #FFF
   border-bottom: 1px solid #D0D0D0
   cursor: pointer
@@ -52,28 +51,41 @@ li
   color: #333
   margin-right: 10px
 
-.notice_date,.notice_source
+.notice_date,.notice_source, #date_source_subject_wrap
   float: left
 
-.notice_source
+.nsdjhadsiotice_source
   width: 120px
 
+#date_source_subject_wrap
+  padding: 10px 5px
+
+.star_check_present
+  max-width: calc(100% - 85px)
+
+.star_check_absent
+  max-width: calc(100% - 20px)
+
 .notice_date
+  width: 78px
   margin-right: 20px
 
 .notice_subject
   white-space: nowrap
   overflow: hidden
   text-overflow: ellipsis
-  max-width: 600px
 
 .subject_wrap
   margin-left: 270px
 
 .check,.starred
   float: left
-  margin-right: 10px
   cursor: pointer
+  padding: 10px 5px
+  height: 17px
+
+.check
+  padding-left: 10px
 
 .button4:hover
   text-decoration: none
@@ -105,6 +117,9 @@ li
   float: left
   &:hover
     color: #DD4B39
+
+.select_bars_clicked
+  color: #DD4B39
 
 .categories
   font-size: 14px
@@ -148,16 +163,22 @@ li
   border: 1px solid #D0D0D0
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.25)
   border-radius: 3px
-  min-height: 180px
-  margin-top: 26px
+  margin-top: 30px
   position: absolute
 
+#category_details
+  min-height: 180px
+
 .actions
-  background-color: #FFF
+  padding: 1px
+  cursor: pointer
+  &:hover
+    background: #DDD
+
+//  background-color: #FFF
   border: 1px solid #D0D0D0
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.25)
   border-radius: 3px
-  position: absolute
 
 #category_list
   float: left
@@ -237,8 +258,96 @@ li
   border: 1px solid #D0D0D0
   border-radius: 2px
 
-#_subject
+._details
+  float: left
+  padding: 10px
+
+._details_heading
+  float: left
+  padding: 10px
+  padding-right: 0px
+
+#_ref_wrap, #_date_wrap, #_source_wrap
   float: left
 
+#_content
+  margin: 10px
+
+#_subject_wrap
+  border-bottom: solid 1px #e0e0e0
+  font-weight: bold
+
+#_source_date_ref_wrap
+  border-bottom: solid 1px #e0e0e0
+  font-weight: bold
+
 #_subject_value
+  max-width: calc(100% - 85px)
+
+#_source_value
+  max-width: calc(100% - 101px)
+
+#_date_value
+  max-width: calc(100% - 103px)
+
+#_reference_value
+  max-width: calc(100% - 124px)
+
+img
+  max-width: 100%
+
+.ref_yes
+  width: 33.33%
+
+.ref_no
+  width: 50%
+
+#menu
+  padding: 4px
+  width: 120px
+  position: absolute
+  background-color: white
+  margin-top: 30px
+  margin-left: 42px
+  border: 1px solid #d0d0d0
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.25)
+  border-radius: 3px
+
+#more
+  background-color: #333
   float: left
+  &:hover
+    background: #F8F8F8
+
+.actions
+  padding: 3px
+  border-radius: 2px
+  &:hover
+    color: #333
+    background: #F8F8F8
+
+.no_border
+  border: 0px !important
+
+.bottom .ui-tooltip-content::after
+  top: -10px
+  left: 72px
+  border-color: #666 transparent
+  border-width: 0 10px 10px
+
+.no_sub_categories
+  margin: auto
+  color: silver
+  font-size: 27px
+  width: 225px
+  margin-top: 75px
+
+#_content img
+  margin-bottom: 10px
+
+#edit_delete
+  padding: 10px
+  float: right
+
+.star_check_present_with_edit
+  max-width: calc(100% - 155px)
