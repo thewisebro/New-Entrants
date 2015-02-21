@@ -12,7 +12,7 @@ urlpatterns = patterns ('internship.views',
 )
 
 
-urlpatterns += patterns ('internship.views_student',     ### 3 url solved
+urlpatterns += patterns ('internship.views_student', 
   (r'^company/list/$', 'company_list'),
   (r'^company/(?P<company_id>\w+)/apply/$', 'apply'),
   (r'^company/(?P<company_id>\w+)/withdraw/$', 'withdraw'),

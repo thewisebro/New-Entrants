@@ -1,10 +1,10 @@
 {% extends "internship/base.html" %}
 
-{% block styles %}
-<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+{% block app_styles %}
+<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+<script src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>
 <style>
   #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
   #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em;
@@ -17,7 +17,7 @@
 </style>
 {% endblock %}
 
-{% block scripts %}
+{% block app_scripts %}
   <script>
     $(function() {
       $( "#sortable" ).sortable();
