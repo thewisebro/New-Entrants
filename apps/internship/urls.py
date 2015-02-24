@@ -50,7 +50,7 @@ urlpatterns += patterns ('internship.views_results',
   (r'^results/company/(?P<company_id>\d+)/insert/$', 'insert_result'),
 )
 
-urlpatterns += patterns('internship.views_admin',  #### First URL solved
+urlpatterns += patterns('internship.views_admin',
   #Admin URLS
   (r'^company/$', 'company_list_admin'),
   (r'^company/add/$', 'company_add'),

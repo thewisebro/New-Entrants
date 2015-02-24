@@ -67,6 +67,8 @@ class CompanyApplicationMap(models.Model):
   """
   #all fields required
   #### Student is mapped to InternshipPerson. This may be confusing.
+  #### To get properties of student, u'll need 
+  ########         application.student.student.cgpa
   student = models.ForeignKey(InternshipPerson)
   company = models.ForeignKey(Company)
   #name of the choices list to be changed

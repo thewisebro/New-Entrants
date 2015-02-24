@@ -77,7 +77,8 @@ def index(request):
   except Exception as e:
     l.info(request.user.username +': encountered exception while viewing home page')
     l.exception(e)
-    return handle_exc(e, request)  
+    messages.error(request, 'Unknown error has occured. Please try again later. The issue has been reported.')
+    return render_to_response('internship/error.html', context_instance=RequestContext(request))
 
 @login_required
 def company_open_to(request, company_id) :

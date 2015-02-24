@@ -1,27 +1,27 @@
 from core import forms
 from core.forms import CKEditorWidget, CurrencyWidget
-from core.forms import BaseForm, BaseModelForm
+from core.forms import Form, ModelForm
 from internship import models, constants as IC
 from nucleus.models import Branch
 
-class CompanyForm(BaseModelForm) :
+class CompanyForm(ModelForm):
   latest_date_of_joining = forms.CharField(required= False, widget = forms.DateInput(attrs={'class':'iDateTimeField'}))
   last_date_of_applying = forms.CharField(required= False, widget = forms.DateInput(attrs={'class':'iDateTimeField'}))
   probable_date_of_arrival = forms.CharField(required= False, widget = forms.DateInput(attrs={'class':'iDateTimeField'}))
   open_for_disciplines = forms.ModelMultipleChoiceField(queryset=Branch.objects.filter(graduation__in=('UG','PG')).order_by('degree', 'department'), widget=forms.CheckboxSelectMultiple)
-  class Meta :
+  class Meta:
     model   = models.Company
-    exclude = ('year')
+    exclude = ('year',)
     widgets = { #'open_for_disciplines' : forms.CheckboxSelectMultiple,
                 'stipend' : CurrencyWidget(choices_whole = IC.PAY_WHOLE_CHOICES, choices_currency = IC.PAY_PACKAGE_CURRENCY_CHOICES, attrs={'class':'iCurrencyField'}),
               }
 
-class NoticeForm(BaseModelForm) :
+class NoticeForm(ModelForm) :
   class Meta :
     model = models.Notices
-    exclude = ('date_of_upload')
+    exclude = ('date_of_upload',)
 
-class Feedback(BaseForm) :
+class Feedback(Form) :
   company_name = forms.ChoiceField(widget=forms.Select)
   feedback1 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
   feedback2 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
@@ -51,5 +51,3 @@ def BaseModelFormFunction(model_type, exclude_list=None, data=None,**kwargs):
       exclude = exclude_list
 
   return ObjectModelForm(data,**kwargs)
-
-

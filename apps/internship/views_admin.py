@@ -40,7 +40,6 @@ def company_add(request) :
   Add a company (for Admin)
   """
   try:
-    import ipdb; ipdb.set_trace()
     if request.method == 'POST' :
       form = forms.CompanyForm(request.POST, request.FILES)
       if form.is_valid() :
@@ -166,7 +165,7 @@ def applications_to_company(request, company_id) :
       CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(status='FIN')
       l.info(request.user.username + ": Finalising Applications.")
       messages.success(request, "Selected applications finalised")
-      return HttpResponseRedirect('/internship/company/')
+      return HttpResponseRedirect(reverse('internship.views_admin.applications_to_company', args=(company_id)))
     else:
       try:
         company = Company.objects.get(id = company_id, year = current_session_year())
@@ -176,15 +175,15 @@ def applications_to_company(request, company_id) :
             'error_msg' : 'Company does NOT exist.',
             }, context_instance = RequestContext(request))
       applications = CompanyApplicationMap.objects.filter(company = company, status = 'APP')
-      PersonInfo_list = []
+      StudentInfo_list = []
       for application in applications :
-        internship_person = application.person
-        person = internship_person.person
+        internship_person = application.student
+        student = internship_person.student
         try:
-          PersonInfo_list.append(StudentInfo.objects.get(person = person))
+          StudentInfo_list.append(StudentInfo.objects.get(student = student))
         except StudentInfo.DoesNotExist :
-          PersonInfo_list.append(None)
-      details = zip (applications, PersonInfo_list) 
+          StudentInfo_list.append(None)
+      details = zip (applications, StudentInfo_list) 
       return render_to_response('internship/applications_to_company.html', {
           'details' : details,
           'company' : company,
@@ -206,7 +205,7 @@ def unfinalize(request, company_id, degree = 'UG') :
       CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(status='APP')
       l.info(request.user.username + ": Unfinalising Applications.")
       messages.success(request, "Selected applications unfinalised")
-      return HttpResponseRedirect('/internship/company/')
+      return HttpResponseRedirect(reverse('internship.views_admin.unfinalize', args=(company_id, degree)))
     else:
       try:
         company = Company.objects.get(id = company_id, year = current_session_year())
@@ -216,15 +215,15 @@ def unfinalize(request, company_id, degree = 'UG') :
             'error_msg' : 'Company does NOT exist.',
             }, context_instance = RequestContext(request))
       applications = CompanyApplicationMap.objects.filter(company = company, status = 'FIN')
-      PersonInfo_list = []
+      StudentInfo_list = []
       for application in applications :
-        internship_person = application.person
-        person = internship_person.person
+        internship_person = application.student
+        student = internship_person.student
         try:
-          PersonInfo_list.append(StudentInfo.objects.get(person = person))
+          StudentInfo_list.append(StudentInfo.objects.get(student = student))
         except StudentInfo.DoesNotExist :
-          PersonInfo_list.append(None)
-      details = zip (applications, PersonInfo_list) 
+          StudentInfo_list.append(None)
+      details = zip (applications, StudentInfo_list) 
       return render_to_response('internship/applications_to_company.html', {
           'details' : details,
           'company' : company,
@@ -253,7 +252,7 @@ def selected_students(request, company_id) :
     applications = CompanyApplicationMap.objects.filter(company = company, status = 'FIN')
     if not applications : # no application has been finalized
       return HttpResponse('No student has been finalized for '+company.name_of_company)
-    response = HttpResponse(mimetype='application/ms-excel')
+    response = HttpResponse(content_type='application/ms-excel')
     # TODO : Format the date and time properly and set the file size in the response
     response['Content-Disposition'] = 'attachment; filename=' + company.name_of_company.replace(' ','-').replace(',','') + '_Applications.xls'
     wbk = xlwt.Workbook()
@@ -268,36 +267,36 @@ def selected_students(request, company_id) :
       sheet.write(2, col, heading, heading_xf)
     for (row, application) in enumerate(applications) :
       row += 3
-      person = application.person.person
+      student = application.student.student
       sheet.write(row, 0, row-2)
-      sheet.write(row, 1, person.user.username)
-      sheet.write(row, 2, person.name)
-      sheet.write(row, 3, person.branch.degree)
-      sheet.write(row, 4, person.semester[-2:][0:1])
-      sheet.write(row, 5, person.branch.name)
-      sheet.write(row, 6, person.get_gender_display())
+      sheet.write(row, 1, student.user.username)
+      sheet.write(row, 2, student.user.name)
+      sheet.write(row, 3, student.branch.degree)
+      sheet.write(row, 4, student.semester[-2:][0:1])
+      sheet.write(row, 5, student.branch.name)
+      sheet.write(row, 6, student.user.get_gender_display())
       try :
-        info = StudentInfo.objects.get(person = person)
-        sheet.write(row, 7, info.birth_date.strftime('%b. %d, %Y'))
+        info = StudentInfo.objects.get(student = student)
+        sheet.write(row, 7, student.user.birth_date.strftime('%b. %d, %Y'))
         sheet.write(row, 8, info.get_category_display())
         sheet.write(row, 14, info.permanent_address)
       except StudentInfo.DoesNotExist :
         sheet.write(row, 7, '-')
         sheet.write(row, 8, '-')
         sheet.write(row, 14, '-')
-      sheet.write(row, 9, person.cgpa)
+      sheet.write(row, 9, student.cgpa)
       try :
-        tenth_marks = EducationalDetails.objects.get(person = person, course = '10TH')
+        tenth_marks = EducationalDetails.objects.get(student = student, course = '10TH')
         sheet.write(row, 10, tenth_marks.cgpa)
       except EducationalDetails.DoesNotExist :
         sheet.write(row, 10, '-')
       try :
-        twelfth_marks = EducationalDetails.objects.get(person = person, course = '12TH')
+        twelfth_marks = EducationalDetails.objects.get(student = student, course = '12TH')
         sheet.write(row, 11, twelfth_marks.cgpa)
       except EducationalDetails.DoesNotExist :
         sheet.write(row, 11, '-')
-      sheet.write(row, 12, person.personal_contact_no)
-      sheet.write(row, 13, person.email_id)
+      sheet.write(row, 12, student.user.contact_no)
+      sheet.write(row, 13, student.user.email)
     wbk.save(response)
     return response
   except Exception as e:
@@ -324,16 +323,16 @@ def resume_archive(request, company_id) :
     in_memory = StringIO.StringIO()
     zip = ZipFile(in_memory, 'a')
     for application in applications :
-      person = application.person.person
+      student = application.student.student
       filepath = os.path.join(settings.MEDIA_ROOT, 'internship', 'applications',
-                              'company'+str(company_id), str(person.user.username)+'.pdf')
-      arcname = person.branch.code + person.branch.degree + person.name + '.pdf'
+                              'company'+str(company_id), str(student.user.username)+'.pdf')
+      arcname = student.branch.code + student.branch.degree + student.user.name + '.pdf'
       zip.write(filepath, arcname)
     if not applications : # no application has been finalized
       return HttpResponse('No student has been finalized for '+company.name_of_company)
     zip.close()
     in_memory.seek(0)
-    response = HttpResponse(in_memory.read(), mimetype="application/x-zip-compressed")
+    response = HttpResponse(in_memory.read(), content_type="application/x-zip-compressed")
     # TODO : Sanitize the name of company as it may cause error due to presence of certain characters
     response['Content-Disposition'] = 'attachment; filename=' + company.name_of_company + '_Resumes.zip'
     response['Content-Length'] = in_memory.tell()
@@ -342,8 +341,6 @@ def resume_archive(request, company_id) :
     l.info(request.user.username + ": error while downloading resumes of students who has been fianlised for the company in zip.")
     l.exception(e)
     return handle_exc(e, request)
-
-
 
 
 @login_required
@@ -364,7 +361,6 @@ def branch_details(request, branch_code = None) :
           'branches' : branches,
           }, context_instance = RequestContext(request))
     # Display list of students in the specified branch
-    import ipdb; ipdb.set_trace()
     branch = get_object_or_404(Branch, code = branch_code)
     l.info(request.user.username + ': Viewing Students of ' + branch.name)
     internship_persons = InternshipPerson.objects.filter(student__branch = branch, status = 'OPN', student__passout_year = None).order_by('student__user__name')
@@ -392,7 +388,7 @@ def branch_details(request, branch_code = None) :
         student_info = person_info_all.get(student = student)
       except StudentInfo.DoesNotExist :
         student_info = None
-      applications = apps.filter(person = internship_person)
+      applications = apps.filter(student = internship_person)
       if applications:
         no_of_applications = applications.count()
         last_application = applications[0]

@@ -12,13 +12,13 @@
       </a>
     </li>
     <li>
-      <a href="{% url internship.views_admin.unfinalize company.id %}">
+      <a href="{% url 'internship.views_admin.unfinalize' company.id %}">
         Unfinalize
       </a>
     </li>
     {% else %}
     <li>
-      <a href="{% url internship.views_admin.applications_to_company company.id %}">
+      <a href="{% url 'internship.views_admin.applications_to_company' company.id %}">
         Finalize
       </a>
     </li>
@@ -57,15 +57,15 @@
     <tr>
       <td>{{ forloop.counter }}</td>
       <td><input type="checkbox" name="selected_applications" value="{{ application.id }}"/></td>
-      <td>{{ application.person.person.user.username }}</td>
-      <td>{{ application.person.person.name }}</td>
-      <td>{{ application.person.person.branch.name }}</td>
-      <td>{{ application.person.person.cgpa }}</td>
-      <td>{{ application.person.person.get_semester_display }}</td>
-      <td>{% firstof PersonInfo.birth_date '-' %}</td>
-      <td>{{ application.person.person.gender }}</td>
+      <td>{{ application.student.student.user.username }}</td>
+      <td>{{ application.student.student.user.name }}</td>
+      <td>{{ application.student.student.branch.name }}</td>
+      <td>{{ application.student.student.cgpa }}</td>
+      <td>{{ application.student.student.get_semester_display }}</td>
+      <td>{% firstof application.student.student.user.birth_date '-' %}</td>
+      <td>{{ application.student.student.user.gender }}</td>
       <td>{% firstof PersonInfo.category '-' %}</td>
-      <td><a href="{% url internship.views.resume_to_verify application.person.person.user.username %}">Get Resume</a></td>
+      <td><a href="{% url 'internship.views.resume_to_verify' application.student.student.user.username %}">Get Resume</a></td>
     </tr>
     {% endfor %}
     </tbody>
@@ -77,6 +77,6 @@ No applications yet!
 {% endif %}
 {% endblock app_content %}
 
-{% block scripts %}
+{% block app_scripts %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/placement/check_all.js"></script>
 {% endblock %}
