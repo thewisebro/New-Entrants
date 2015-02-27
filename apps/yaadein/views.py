@@ -47,11 +47,13 @@ def CORS_allow(view):
 #@login_required
 def index(request,enrno=None):
 # import ipdb;ipdb.set_trace()
-  y_user = YaadeinUser.objects.get_or_create(user__username='13114068')[0]#user=request.user
+  y_user = YaadeinUser.objects.get_or_create(user__username='13117060')[0]#user=request.user
   logged_user = y_user.user
 #user = User.objects.get(username ='13114068')
-  s = Student.objects.get(user__username='13114068')#=enrno
-  posts = s.post_wall_user.all()
+# if y_user.coverpic == None :
+  y_user.coverpic = "yaadein/coverpic/image4.jpg"
+  s = Student.objects.get(user__username='13117060')#=enrno
+  posts = s.post_wall_user.order_by('post_date').reverse()
   posts_data = []
   for post in posts:
       images = PostImage.objects.filter(post=post)
@@ -146,26 +148,67 @@ def person_search(request):
      data = 'fail'
    return HttpResponse(data,'application/json')
 
-#@csrf_exempt
-#@CORS_allow
-class TagIndexView(ListView):
-      template_name = 'yaadein/tagged.html'
-      model = Post
-      context_object_name = 'posts_data'
-
-      def get_queryset(self):
-        posts_data = []
-        posts = Post.objects.filter(tags__slug=self.kwargs.get('slug'))
-        for post in posts:
+@csrf_exempt
+@CORS_allow
+def hashtag(request,slug):
+  if request:
+    posts_data = []
+    posts = Post.objects.filter(tags__slug=slug)  
+    for post in posts:
+          images = PostImage.objects.filter(post=post)
+          image_url=[]
+          for image in images:
+            image_url.append(image.image.url)
           tmp = {
-            'post': post,
-            'images': PostImage.objects.filter(post=post)
-          }
+             'post_text': post.text_content,
+             'post_owner':post.owner.user.name,
+             'post_owner_branch':post.owner.user.info,
+             'post_owner_pic':post.owner.user.photo_url,
+             'post_owner_enrol':post.owner.user.username,
+             'image_url': image_url,
+             'time':str(post.post_date)
+             }
           posts_data.append( tmp )
-        print "i"
-        data = simplejson.dumps(posts_data)
-        return HttpResponse(data, 'application/json')
+    data ={'posts_data':posts_data}
+    return HttpResponse(simplejson.dumps(data),'application/json')
+  return HttpResponse('1')
 
+  
+  """
+class TagIndexView(ListView):
+# template_name = 'yaadein/tagged.html'
+# model = Post
+#      context_object_name = 'posts_data'
+
+      @CORS_allow
+      @csrf_exempt
+#     def get_queryset(self):
+      def get_context_data(self, **kwargs):
+#   import ipdb;ipdb.set_trace()
+        context = super(TagIndexView, self).get_context_data(**kwargs)
+        posts_data = []
+        posts = Post.objects.filter(tags__slug=self.kwargs.get('slug')).reverse()
+        for post in posts:
+          images = PostImage.objects.filter(post=post)
+          image_url=[]
+          for image in images:
+            image_url.append(image.image.url)
+          tmp = {
+             'post_text': post.text_content,
+             'post_owner':post.owner.user.name,
+             'post_owner_branch':post.owner.user.info,
+             'post_owner_pic':post.owner.user.photo_url,
+             'post_owner_enrol':post.owner.user.username,
+             'image_url': image_url,
+             'time':str(post.post_date)
+             }
+          posts_data.append( tmp )
+#  data ={'posts_data':posts_data}
+          context['posts_data'] = posts_data
+        return context
+# return HttpResponse(simplejson.dumps(context['posts_data']),'application/json')
+
+"""
 """
 class tag_user(ListView):
      template_name='yaadein/usertag.html'
