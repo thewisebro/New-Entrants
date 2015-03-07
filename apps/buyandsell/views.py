@@ -295,21 +295,22 @@ def sendmail(request, type_of_mail, id_pk):
     if buy_mail_list:
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       already_sent=1
-    new_mail_sent=BuyMails(by_user=user,item=qryst[0])
-    new_mail_sent.save()
-    subject = 'Your item ' + qryst[0].item_name + ' has a buyer on Buy and Sell!'
-    msg = 'Your item ' + qryst[0].item_name + ' added by you on ' + str(qryst[0].post_date) + ' has a prospective buyer! '
-    msg += user.first_name + ' wants to buy your item. You can contact '+pronoun+' at this number ' + contact
-    msg += ' or email '+pronoun+' at ' + str(user.email) + '\nNote: if there is no phone number or email id, that means that ' + user.first_name
-    msg += ' has not filled in his contact information in the channel-i database.'
-    notif_text = user.first_name + ' wants to buy ' + qryst[0].item_name + ' added by you. '
-    if contact:
-      notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
-    if qryst[0].email:
-      notif_text += 'Email at ' + str(user.email) + '.'
-    url = '/buyandsell/sell_details/' + str(id_pk)
-    users = [qryst[0].user]
-    Notification.save_notification(app, notif_text, url, users, qryst[0])
+    if not already_sent:  
+      new_mail_sent=BuyMails(by_user=user,item=qryst[0])
+      new_mail_sent.save()
+      subject = 'Your item ' + qryst[0].item_name + ' has a buyer on Buy and Sell!'
+      msg = 'Your item ' + qryst[0].item_name + ' added by you on ' + str(qryst[0].post_date) + ' has a prospective buyer! '
+      msg += user.first_name + ' wants to buy your item. You can contact '+pronoun+' at this number ' + contact
+      msg += ' or email '+pronoun+' at ' + str(user.email) + '\nNote: if there is no phone number or email id, that means that ' + user.first_name
+      msg += ' has not filled in his contact information in the channel-i database.'
+      notif_text = user.first_name + ' wants to buy ' + qryst[0].item_name + ' added by you. '
+      if contact:
+        notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
+      if qryst[0].email:
+        notif_text += 'Email at ' + str(user.email) + '.'
+      url = '/buyandsell/sell_details/' + str(id_pk)
+      users = [qryst[0].user]
+      Notification.save_notification(app, notif_text, url, users, qryst[0])
 
 
   if type_of_mail == 'request':
@@ -318,23 +319,22 @@ def sendmail(request, type_of_mail, id_pk):
     if buy_mail_list:
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       already_sent=1
-    new_mail_sent=RequestMails(by_user=user,item=qryst[0])
-    new_mail_sent.save()
-    subject = 'Your request for ' + qryst[0].item_name + ' has been answered!'
-    msg = 'Your request ' + qryst[0].item_name + ' added by you on ' + str(qryst[0].post_date) + ' has a prospective seller! \n'
-    msg += user.first_name + ' has the item that you requested for. You can contact '+pronoun+' at this number ' + contact
-    msg += ' or email '+pronoun+' at ' + str(user.email) + '\n\n Note: if there is no phone number or email id, that means that ' + user.first_name
-    msg += ' has not filled in his contact information in the channel-i database.'
-    notif_text = user.first_name + ' has an item(' + qryst[0].item_name + ') you requested for. '
-    if contact:
-      notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
-    if qryst[0].email:
-      notif_text += 'Email at ' + str(user.email) + '.'
-    url = '/buyandsell/request_details/' + str(id_pk)
-    users = [qryst[0].user]
-    Notification.save_notification(app, notif_text, url, users, qryst[0])
-
-
+    if not already_sent:  
+      new_mail_sent=RequestMails(by_user=user,item=qryst[0])
+      new_mail_sent.save()
+      subject = 'Your request for ' + qryst[0].item_name + ' has been answered!'
+      msg = 'Your request ' + qryst[0].item_name + ' added by you on ' + str(qryst[0].post_date) + ' has a prospective seller! \n'
+      msg += user.first_name + ' has the item that you requested for. You can contact '+pronoun+' at this number ' + contact
+      msg += ' or email '+pronoun+' at ' + str(user.email) + '\n\n Note: if there is no phone number or email id, that means that ' + user.first_name
+      msg += ' has not filled in his contact information in the channel-i database.'
+      notif_text = user.first_name + ' has an item(' + qryst[0].item_name + ') you requested for. '
+      if contact:
+        notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
+      if qryst[0].email:
+        notif_text += 'Email at ' + str(user.email) + '.'
+      url = '/buyandsell/request_details/' + str(id_pk)
+      users = [qryst[0].user]
+      Notification.save_notification(app, notif_text, url, users, qryst[0])
   if not already_sent:
     receiver = [str(qryst[0].email),]
     try:
@@ -345,25 +345,119 @@ def sendmail(request, type_of_mail, id_pk):
     except Exception as e:
       messages.error(request, 'Email has not been sent to ' + qryst[0].user.first_name + '. Error occured and reported.' )
       
-def sellformsearch(request):
-  srch_string=request.GET.get('keyword')
-  query_set=RequestedItems.objects.filter(item_name__icontains=srch_string)
-  object_list=[]
-  for item in query_set:
-    item_dict={}
-    item_dict.update({'id':item.pk,'name':item.item_name,'price_upper':item.price_upper})
-    object_list.append(item_dict)
-  items = simplejson.dumps(object_list)
-  return HttpResponse(items, content_type="application/json")
+def search(request,search_type):
+  queryset=[]
+  main_dict={}
+  srch_string=request.GET.get('keyword','')
+  if search_type=="sell" or search_type="main" :
+    words = srch_string.split(' ')
+    un_queryset = {}			
+    count = {}
+    print words
+    for word in words:
+      result = RequestedItems.objects.filter(item_name__icontains=word)
+      for temp in result:
+        print word
+        if temp.id in un_queryset:
+          count[temp.id] = count[temp.id]+1
+        else:
+          un_queryset[temp.id] = temp
+          count[temp.id] = 1
+    date_sorted_queryset=sorted(un_queryset, key= lambda l : un_queryset[l].expiry_date, reverse=True)
+    count_date_sorted_queryset=sorted(date_sorted_queryset, key= lambda l: count[l], reverse=True)
+    for item_id in count_date_sorted_queryset:
+      queryset.append(un_queryset[item_id])
+    object_list=[]
+    for item in queryset:
+      item_dict={}
+      item_dict.update({'id':item.pk,'name':item.item_name,'price_upper':item.price_upper})
+      object_list.append(item_dict)
+    items = simplejson.dumps(object_list)
+    if search_type=="main":
+      main_dict['requests']=object_list
+    
+  elif search_type=="request" or search_type="main":
+    words = srch_string.split(' ')
+    un_queryset = {}			
+    count = {}
+    print words
+    for word in words:
+      result = SaleItems.objects.filter(item_name__icontains=word)
+      for temp in result:
+        print word
+        if temp.id in un_queryset:
+          count[temp.id] = count[temp.id]+1
+        else:
+          un_queryset[temp.id] = temp
+          count[temp.id] = 1
+    date_sorted_queryset=sorted(un_queryset, key= lambda l : un_queryset[l].expiry_date, reverse=True)
+    count_date_sorted_queryset=sorted(date_sorted_queryset, key= lambda l: count[l], reverse=True)
+    for item_id in count_date_sorted_queryset:
+      queryset.append(un_queryset[item_id])
+    object_list=[]
+    for item in queryset:
+      item_dict={}
+      item_dict.update({'id':item.pk,'name':item.item_name,'cost':item.cost})
+      object_list.append(item_dict)
+    items = simplejson.dumps(object_list)
+     if search_type=="main":
+       main_dict['sell_items']=object_list
+   
 
-def requestformsearch(request):
-  srch_string=request.GET.get('keyword')
-  query_set=SaleItems.objects.filter(item_name__icontains=srch_string)
-  object_list=[]
-  for item in query_set:
-    item_dict={}
-    item_dict.update({'id':item.pk,'name':item.item_name,'cost':item.cost})
-    object_list.append(item_dict)
-  items = simplejson.dumps(object_list)
-  return HttpResponse(items, content_type="application/json")
+  elif search_type=="main":
+#sub-category matched items  
+    words = srch_string.split(' ')
+    un_queryset = {}			
+    count = {}
+    print words
+    for word in words:
+      result = BuySellCategory.objects.filter(name__icontains=word)
+      for temp in result:
+        print word
+        if temp.id in un_queryset:
+          count[temp.id] = count[temp.id]+1
+        else:
+          un_queryset[temp.id] = temp
+          count[temp.id] = 1
+    count_sorted_queryset=sorted(un_queryset, key= lambda l: count[l], reverse=True)
+    for item_id in count_sorted_queryset:
+      queryset.append(un_queryset[item_id])
+    object_list=[]
+    for item in queryset:
+      item_dict={}
+      item_dict.update({'id':item.pk,'main_category':item.main_category,'code':item.code,'name':item.name})
+      object_list.append(item_dict)
+    main_dict['sub_cat']=object_list
+
+# main_category matched items
+    queryset=[]
+    un_queryset = {}			
+    count = {}
+    print words
+    for word in words:
+      result = BuySellCategory.objects.filter(main_category__icontains=word)
+      for temp in result:
+        print word
+        if temp.id in un_queryset:
+          count[temp.id] = count[temp.id]+1
+        else:
+          un_queryset[temp.id] = temp
+          count[temp.id] = 1
+    count_sorted_queryset=sorted(un_queryset, key= lambda l: count[l], reverse=True)
+    for item_id in count_sorted_queryset:
+      queryset.append(un_queryset[item_id])
+    object_list=[]
+    for item in queryset:
+      item_dict={}
+      item_dict.update({'id':item.pk,'main_category':item.main_category,'code':item.code,'name':item.name})
+      object_list.append(item_dict)
+    main_dict['main_cat']=object_list
+ 
+  if search_type=="main":
+    return HttpResponse(simplejson.dumps(main_dict), content_type="application/json")
+  else:
+    return HttpResponse(items, content_type="application/json")
+
+
+
 

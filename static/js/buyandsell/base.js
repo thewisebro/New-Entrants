@@ -24,34 +24,62 @@ function watch_cat(url)
           }
           });
 }
-
-
 function formsearch() {
       var timer;
-      alert("hi");
         $("#id_item_name").keyup(function() {
         clearTimeout(timer);
          var ms = 200; 
          var val = this.value;
-         timer = setTimeout(function() { lookup(val);}, ms);
+         console.log(val);
+        var type= window.location.href.split("/")[4];
+         timer = setTimeout(function() { lookup(val,type);}, ms);
          });
         }
-
-function lookup(val)
+function lookup(val,type)
 {
+      search_url=bring_search_url(val);
+     if(type=="sell")
+     { 
+       search_type="sell";
+       url="/buyandsell/search/"+search_type+"/?keyword="+search_url;
+     }
+     else
+     {
+       search_type="request";
+       url="/buyandsell/search/"+search_type+"/?keyword="+search_url;
+     }  
     $.ajax({
      type:"GET",    
-     url:"/buyandsell/sellformsearch/",
-     data:{
-     'keyword':val
-     },
+     url:url,
      success:function(data){
-         alert(data);
+         alert(data[0].name);
          }
          });
 }
-
+function bring_search_url(val)
+    {    var url="";
+          query=val.split(" ");
+          t=0;
+          k=query.length;
+          for(var i=0; i<k;i++)
+          {
+            if(query[t]=="")
+              query.splice(t,1);
+            else
+              t++;
+          }
+         console.log(query+"query");
+          for(var i=0; i<query.length; i++)
+          { if(i!=query.length-1)
+            {
+            url+=query[i]+"+";
+            }
+            if(i==query.length-1)
+            {
+              url+=query[i];
+            }
+          }
+     console.log(url);
+      return url;
+}
 formsearch();
-
-
-
