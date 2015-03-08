@@ -13,7 +13,9 @@ function watch(main_category,category)
      watch_cat(url);
    }
 }
-
+function create_div(){
+  $("<div id = \"insert\">").insertAfter("#id_item_name");
+}
 function watch_cat(url)
 {
   		  $.ajax({
@@ -24,7 +26,7 @@ function watch_cat(url)
           }
           });
 }
-function formsearch() {
+function search() {
       var timer;
         $("#id_item_name").keyup(function() {
         clearTimeout(timer);
@@ -34,27 +36,73 @@ function formsearch() {
         var type= window.location.href.split("/")[4];
          timer = setTimeout(function() { lookup(val,type);}, ms);
          });
+        $("#search_main").keyup(function() {
+        clearTimeout(timer);
+         var ms = 200; 
+         var val = this.value;
+         console.log(val);
+        var type= "main";
+         timer = setTimeout(function() { lookup(val,type);}, ms);
+         });
         }
 function lookup(val,type)
 {
-      search_url=bring_search_url(val);
+     search_url=bring_search_url(val);
+
+     if(search_url=="")
+       return;
+
      if(type=="sell")
      { 
-       search_type="sell";
-       url="/buyandsell/search/"+search_type+"/?keyword="+search_url;
+       $.ajax({
+       type:"GET",    
+       url:"/buyandsell/search/sell/?keyword="+search_url,
+       success:function(data){
+             html="";
+             var html="<ul>"; 
+             for(var i=0;i<data.length;i++)
+             {
+               html+="<li>"+data[i].name+"</li>";
+              }
+             html+="</ul>";
+             console.log(html);
+          $("#insert").html(html); 
+          }
+            });
+            
      }
+     else if(type=="main")
+     {
+         $.ajax({
+         type:"GET",    
+         url:"/buyandsell/search/main/?keyword="+search_url,
+         success:function(data){
+
+         }
+            });
+             
+     }
+
      else
      {
-       search_type="request";
-       url="/buyandsell/search/"+search_type+"/?keyword="+search_url;
-     }  
-    $.ajax({
-     type:"GET",    
-     url:url,
-     success:function(data){
-         alert(data[0].name);
-         }
-         });
+       $.ajax({
+       type:"GET",    
+       url:"/buyandsell/search/request/?keyword="+search_url,
+       success:function(data){
+             html="";
+             var html="<ul>"; 
+             for(var i=0;i<data.length;i++)
+             {
+               html+="<li>"+data[i].name+"</li>";
+              }
+             html+="</ul>";
+             console.log(html);
+          $("#insert").html(html); 
+       }
+            });
+
+           }  
+    
 }
 function bring_search_url(val)
     {    var url="";
@@ -82,4 +130,5 @@ function bring_search_url(val)
      console.log(url);
       return url;
 }
-formsearch();
+search();
+create_div();

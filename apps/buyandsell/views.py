@@ -346,11 +346,12 @@ def sendmail(request, type_of_mail, id_pk):
       messages.error(request, 'Email has not been sent to ' + qryst[0].user.first_name + '. Error occured and reported.' )
       
 def search(request,search_type):
-  queryset=[]
   main_dict={}
   srch_string=request.GET.get('keyword','')
-  if search_type=="sell" or search_type="main" :
-    words = srch_string.split(' ')
+  words=srch_string.split(' ')
+
+  if search_type=="sell" or search_type=="main" :
+    queryset=[]
     un_queryset = {}			
     count = {}
     print words
@@ -376,8 +377,8 @@ def search(request,search_type):
     if search_type=="main":
       main_dict['requests']=object_list
     
-  elif search_type=="request" or search_type="main":
-    words = srch_string.split(' ')
+  if search_type=="request" or search_type=="main":
+    queryset=[]
     un_queryset = {}			
     count = {}
     print words
@@ -400,13 +401,13 @@ def search(request,search_type):
       item_dict.update({'id':item.pk,'name':item.item_name,'cost':item.cost})
       object_list.append(item_dict)
     items = simplejson.dumps(object_list)
-     if search_type=="main":
-       main_dict['sell_items']=object_list
+    if search_type=="main":
+      main_dict['sell_items']=object_list
    
 
-  elif search_type=="main":
-#sub-category matched items  
-    words = srch_string.split(' ')
+  if search_type=="main":
+#sub-category matched items
+    queryset=[]  
     un_queryset = {}			
     count = {}
     print words
@@ -438,21 +439,23 @@ def search(request,search_type):
       result = BuySellCategory.objects.filter(main_category__icontains=word)
       for temp in result:
         print word
-        if temp.id in un_queryset:
-          count[temp.id] = count[temp.id]+1
+        if temp.main_category in un_queryset:
+          count[temp.main_category] = count[temp.main_category]+1            #done this way because many category objects can have the same main category
         else:
-          un_queryset[temp.id] = temp
-          count[temp.id] = 1
+          un_queryset[temp.main_category] = temp
+          count[temp.main_category] = 1
     count_sorted_queryset=sorted(un_queryset, key= lambda l: count[l], reverse=True)
-    for item_id in count_sorted_queryset:
-      queryset.append(un_queryset[item_id])
+    for main_category in count_sorted_queryset:
+      queryset.append(un_queryset[main_category])
     object_list=[]
     for item in queryset:
       item_dict={}
       item_dict.update({'id':item.pk,'main_category':item.main_category,'code':item.code,'name':item.name})
       object_list.append(item_dict)
     main_dict['main_cat']=object_list
- 
+  
+  print items
+  print main_dict 
   if search_type=="main":
     return HttpResponse(simplejson.dumps(main_dict), content_type="application/json")
   else:
