@@ -23,7 +23,7 @@ from internship import forms
 from nucleus.models import Student, Branch, StudentInfo
 from placement.models import InternshipInformation, ProjectInformation
 from placement.policy import current_session_year
-from placement.utils import handle_exc
+from internship.utils import handle_exc
 from django.conf import settings
 
 # Permission denied page. User will be redirected to this page if he fails the user_passes_test.
@@ -83,7 +83,7 @@ def company_results(request, company_id, year = None) :
     try:
       company = Company.objects.get(pk = company_id)
     except Exception as e:
-      return direct_to_template(request, template="404.html")
+      return TemplateView.as_view(template_name='404.html')
     results = ResultsNew.objects.filter(company = company)
 #    degrees = []
 #    for result in results :
@@ -124,7 +124,7 @@ def results_discipline_list(request, year = None) :
     # For the time being, display all the Branch rows.
     results = ResultsNew.objects.filter(company__year__exact = year)
     total_placements = results.count()
-    results = results.values_list('person__branch__code', 'person__branch__name').annotate(placed_count = Count('person__branch')).order_by('person__branch__name')
+    results = results.values_list('student__branch__code', 'student__branch__name').annotate(placed_count = Count('student__branch')).order_by('student__branch__name')
     # get the year of the oldest result
     year_min = ResultsNew.objects.aggregate(min = Min('company__year'))['min']
     if not year_min :
@@ -164,8 +164,8 @@ def branch_results(request, discipline_name, year = None) :
       branch = Branch.objects.get(code = discipline_name)
     except Exception as e:
       l.info(request.user.username+' : Exception while viewing results of '+str(discipline_name))
-      return direct_to_template(request, template="404.html")
-    results = ResultsNew.objects.filter(person__branch = branch, company__year__exact = year).order_by('person__name')
+      return TemplateView.as_view(template_name='404.html')
+    results = ResultsNew.objects.filter(student__branch = branch, company__year__exact = year).order_by('student__user__name')
 #    degrees = []
 #    for result in results :
 #      # Try to get the degree of the person. Do not care if the data is missing.
@@ -203,8 +203,8 @@ def branch_results_company(request, discipline_name, year = None) :
       branch = Branch.objects.get(code = discipline_name)
     except Exception as e:
       l.info(request.user.username +': encountered an exception while getting the branch name')
-      return direct_to_template(request, template="404.html")
-    results = results.filter(person__branch = branch).values('company', 'company__name_of_company').order_by('company__name_of_company').annotate(placed = Count('company__name_of_company'))
+      return TemplateView.as_view(template_name='404.html')
+    results = results.filter(student__branch = branch).values('company', 'company__name_of_company').order_by('company__name_of_company').annotate(placed = Count('company__name_of_company'))
     session = str(year) + '-' + str(year+1)[2:4]
     total_placed = []
     for result in results :
@@ -243,16 +243,16 @@ def declare_result(request, company_id) :
       errors = []
       # create entry in Results
       for application in CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')) :
-        internship_person = application.person
+        internship_person = application.student
         if internship_person.is_placed == False :
           internship_person.is_placed = True
-          person = application.person.person
-          ResultsNew(person = person,
+          student = application.student.student
+          ResultsNew(student = student,
               company = company
               ).save()
         else :
-          errors.append(internship_person.person.name)
-          CompanyApplicationMap.objects.filter(person = internship_person).update(status='FIN')
+          errors.append(internship_person.student.name)
+          CompanyApplicationMap.objects.filter(student = internship_person).update(status='FIN')
         # Update InternshipPerson of the person just placed.
         internship_person.save()
       if len(errors)>0:
@@ -293,13 +293,13 @@ def drop_results(request, company_id) :
     errors = []
     if request.method == 'POST':
       # results which are to be dropped
-      results = ResultsNew.objects.filter(person__user__username__in = request.POST.getlist('selected_results'))
+      results = ResultsNew.objects.filter(student__user__username__in = request.POST.getlist('selected_results'))
       # enrollment_no of students whose results are being dropped
-      enrollment_nos = results.values_list('person__user__username', flat = True)
+      enrollment_nos = results.values_list('student__user__username', flat = True)
       # Revert back the status of selected applications from SELECTED to FINALIZED
-      CompanyApplicationMap.objects.filter(person__person__user__username__in = enrollment_nos).update(status='FIN')
+      CompanyApplicationMap.objects.filter(student__student__user__username__in = enrollment_nos).update(status='FIN')
       # Set the internship persons of these students as not placed
-      InternshipPerson.objects.filter(person__user__username__in = enrollment_nos).update(is_placed = False)
+      InternshipPerson.objects.filter(student__user__username__in = enrollment_nos).update(is_placed = False)
       # Remove the corresponding entries form Results
       results.delete()
       messages.success(request, 'Results dropped successfully.')
@@ -331,18 +331,15 @@ def insert_result(request, company_id, branch_code = None) :
       for internship_person in students :
         if internship_person.is_placed == False :
           internship_person.is_placed = True
-          person = internship_person.person
-          CompanyApplicationMap(person = internship_person,
-                company = company,
-                status = 'SEL'
-                ).save()
-          ResultsNew(person = person,
+          student = internship_person.student
+          CompanyApplicationMap.objects.filter(student = internship_person, company = company).update(status = 'SEL')
+          ResultsNew(student = student,
                 company = company
                 ).save()
-          # Update InternshipPerson of the person just placed.
+          # Update InternshipPerson of the student just placed.
           internship_person.save()
         else :
-          errors.append(internship_person.person.name)
+          errors.append(internship_person.student.user.name)
       if len(errors)>0:
         l.info(request.user.username +' : Error while inserting results as the results have already been declared')
         error_msg = "The results of the following were not declared as they have already been selected: "
@@ -354,7 +351,7 @@ def insert_result(request, company_id, branch_code = None) :
       return HttpResponseRedirect(reverse('internship.views_admin.company_list_admin'))
     elif branch_code <> None :
       branch = Branch.objects.get(pk = branch_code)
-      student_list = InternshipPerson.objects.filter(person__branch = branch, status = 'OPN')
+      student_list = InternshipPerson.objects.filter(student__branch = branch, status = 'OPN')
       return render_to_response('internship/insert_results.html', {
           'company' : company,
           'student_list' : student_list,

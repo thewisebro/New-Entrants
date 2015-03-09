@@ -23,14 +23,14 @@
   {% for result in results %}
   <tr>
     <td>{{ forloop.counter }}</td>
-    <td>{{ result.person.user.username }}</td>
-    <td>{{ result.person.name }}</td>
+    <td>{{ result.student.user.username }}</td>
+    <td>{{ result.student.user.name }}</td>
     <td>{{ result.company.name_of_company }}</td>
-    <td>{{ result.person.branch.degree|default:'-' }}</td>
+    <td>{{ result.student.branch.degree|default:'-' }}</td>
     {% for group in user.groups.all %}
     {% if group.name == "Placement Admin" %}
-    <td>{{ result.person.personal_contact_no }}</td>
-    <td>{{ result.person.email_id }}</td>
+    <td>{{ result.student.user.contact_no }}</td>
+    <td>{{ result.student.user.email }}</td>
     {% endif %}
     {% endfor %}
   </tr>

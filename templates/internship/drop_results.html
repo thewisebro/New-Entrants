@@ -23,11 +23,11 @@
     {% for result in results %}
     <tr>
       <td>{{ forloop.counter }}</td>
-      <td><input type="checkbox" name="selected_results" value="{{ result.person.user.username }}"/></td>
-      <td>{{ result.person.name }}</td>
-      <td>{{ result.person.branch.name}}</td>
-      <td>{{ result.person.user.username }}</td>
-      <td><a href="{% url internship.views.resume_to_verify result.person.user.username %}">Get Resume</a></td>
+      <td><input type="checkbox" name="selected_results" value="{{ result.student.user.username }}"/></td>
+      <td>{{ result.student.user.name }}</td>
+      <td>{{ result.student.branch.name}}</td>
+      <td>{{ result.student.user.username }}</td>
+      <td><a href="{% url 'internship.views.resume_to_verify' result.student.user.username %}">Get Resume</a></td>
     </tr>
     {% endfor %}
     </tbody>

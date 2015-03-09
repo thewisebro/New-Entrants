@@ -24,10 +24,10 @@
     <tr>
       <td>{{ forloop.counter }}</td>
       <td><input type="checkbox" name="selected_applications" value="{{ application.id }}"/></td>
-      <td>{{ application.person.person.name }}</td>
-      <td>{{ application.person.person.branch.name }}</td>
-      <td>{{ application.person.person.get_semester_display }}</td>
-      <td><a href="{% url internship.views.resume_to_verify application.person.person.user.username %}">Get Resume</a></td>
+      <td>{{ application.student.student.user.name }}</td>
+      <td>{{ application.student.student.branch.name }}</td>
+      <td>{{ application.student.student.get_semester_display }}</td>
+      <td><a href="{% url 'internship.views.resume_to_verify' application.student.student.user.username %}">Get Resume</a></td>
     </tr>
     {% endfor %}
     </tbody>

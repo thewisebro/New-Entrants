@@ -13,7 +13,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url internship.views_results.results_discipline_list year_display %}">
+      <a href="{% url 'internship.views_results.results_discipline_list' year_display %}">
         {{ name }}
       </a>
     </li>
@@ -26,7 +26,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url internship.views_results.results_discipline_list %}">Current Session</a>
+      <a href="{% url 'internship.views_results.results_discipline_list' %}">Current Session</a>
     </li>
     {% endif %}
 
@@ -40,7 +40,7 @@
 
 {% if list_of = "Branch" %}
     <li>
-      <a href="{% url internship.views_results.results_company_list year %}">Companywise</a>
+      <a href="{% url 'internship.views_results.results_company_list' year=year %}">Companywise</a>
     </li>
     <li class="active">
       <a>
@@ -54,7 +54,7 @@
       </a>
     </li>
     <li>
-      <a href="{% url internship.views_results.results_discipline_list year %}">Branchwise</a>
+      <a href="{% url 'internship.views_results.results_discipline_list' year=year %}">Branchwise</a>
     </li>
 {% endif %}
   </ul>
@@ -110,6 +110,6 @@ No student was selected !
 {% endif %}
 {% endblock app_content %}
 
-{% block scripts %}
+{% block app_scripts %}
 <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap-tab.js"></script>
-{% endblock scripts %}
+{% endblock %}
