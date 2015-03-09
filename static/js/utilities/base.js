@@ -4,6 +4,7 @@ var settings_tabs = [
   {name: 'email', show: 'Email notifications'},
   {name: 'sessions', show: 'Manage sessions'},
   {name: 'email_auth', show: 'Email verification'}
+//  {name: 'forgot_password', show: 'Forgot Password'}
 ];
 
 $(document).on("load_app_settings", function(e, hash1){
@@ -18,6 +19,18 @@ $(document).on("load_app_settings", function(e, hash1){
   if(settings_tabs.some(function(tab){return tab.name==hash1;}))
     load_settings_tab(hash1);
 });
+
+/*$(document).on("load_app_settings", function(e, hash1){
+  if(hash1 === password_reset)
+    dialog_iframe({
+      name:'pass_reset',
+      title:'Reset Password',
+      width:450,
+      height:180,
+      close: nucleus.redirect_to_home(),
+      src:'/settings/password_reset/' });
+});
+*/
 
 $(document).on("unload_app_settings", function(e){
   $('#container').removeClass('large-width-content');

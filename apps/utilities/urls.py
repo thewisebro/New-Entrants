@@ -8,4 +8,6 @@ urlpatterns = patterns('utilities.views',
     (r'^sessions/$','person_sessions'),
     (r'^email_auth/$','email_verify'),
     (r'^password_check/$', 'password_check'),
+    (r'^forgot_password/$', 'password_reset_request'),
+    (r'^password_reset/$', 'password_reset'),
 )

@@ -37,3 +37,11 @@ class PasswordCheck(models.Model):
       if span.total_seconds() < instance.seconds:
         return True
     return False
+
+class PasswordReset(models.Model):
+  user = models.ForeignKey(User)
+#reset_done = models.BooleanField(default = False)
+  reset_key = models.CharField(max_length = 40, blank= True)
+  last_datetime_created = models.DateTimeField(null = True, blank=True)
+  verify_num = models.IntegerField(default=0)
+

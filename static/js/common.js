@@ -292,6 +292,17 @@ function check_password(service, seconds, close_callback){
   });
 }
 
+function forgot_password(){
+  dialog_iframe({
+    name:'forgot_pass',
+    title:'Your Details',
+    width:450,
+    height:180,
+    close: nucleus.redirect_to_home(),
+    src:'/settings/forgot_password/'
+  });
+}
+
 function submit_report(object_pk, content_type_pk){
   $.get('/moderation/report_info/',{
     content_type_pk: content_type_pk,

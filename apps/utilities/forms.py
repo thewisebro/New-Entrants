@@ -116,3 +116,10 @@ def EventsSubscribeFormGen(user):
 
 class UserEmailForm(forms.Form):
   email = forms.EmailField(label='Email', required = True)
+
+class PasswordResetForm(forms.Form):
+  password1 = forms.CharField(label='Enter New Password', widget=forms.PasswordInput, required=True, min_length=4)
+  password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput, required=True, min_length=4)
+
+class PasswordResetRequestForm(forms.Form):
+  email = forms.EmailField(label="Email", required=True)
