@@ -13,8 +13,11 @@ function watch(main_category,category)
      watch_cat(url);
    }
 }
-function create_div(){
+function create_div()
+{
   $("<div id = \"insert\">").insertAfter("#id_item_name");
+  $("<div id = \"insert_main\">").insertAfter("#search_main");
+
 }
 function watch_cat(url)
 {
@@ -49,8 +52,17 @@ function lookup(val,type)
 {
      search_url=bring_search_url(val);
 
-     if(search_url=="")
+     if(search_url=="" && type!="main")
+     { 
+       $("#insert").html("");
        return;
+     }
+
+     if(search_url=="" && type=="main")
+     { 
+       $("#insert_main").html("");
+       return;
+     } 
 
      if(type=="sell")
      { 
@@ -62,7 +74,7 @@ function lookup(val,type)
              var html="<ul>"; 
              for(var i=0;i<data.length;i++)
              {
-               html+="<li>"+data[i].name+"</li>";
+               html+="<li onclick=\"request_details("+data[i].id+")\">"+data[i].name+"</li>";
               }
              html+="</ul>";
              console.log(html);
@@ -77,7 +89,35 @@ function lookup(val,type)
          type:"GET",    
          url:"/buyandsell/search/main/?keyword="+search_url,
          success:function(data){
-
+             html="";
+             var html="<ul>"; 
+             for(var i=0;i<data['main_cat'].length;i++)
+             {
+               html+="<a href=\"/buyandsell/buy/"+data['main_cat'][i].main_category+"\">"+data['main_cat'][i].main_category+"</a><br>";
+              }
+             html+="</ul>";
+             html+="<ul>";
+             for(var i=0;i<data['sub_cat'].length;i++)
+             {
+                 html+="<a href=\"/buyandsell/buy/"+data['sub_cat'][i].main_category+"/"+data['sub_cat'][i].code+"\">"+data['sub_cat'][i].name+"</a><br>";
+              }
+             html+="</ul>";
+              html+="<ul>";
+             for(var i=0;i<data['requests'].length;i++)
+             {
+                 html+="<li onclick=\"request_details("+data['requests'][i].id+")\">"+data['requests'][i].name+"</li>";
+              }
+             html+="</ul>";
+             html+="<div id=\"see_all_req\">See all requests</div>";
+               html+="<ul>";
+             for(var i=0;i<data['sell_items'].length;i++)
+             {
+                 html+="<li onclick=\"sell_details("+data['sell_items'][i].id+")\">"+data['sell_items'][i].name+"</li>";
+              }
+             html+="</ul>";
+             html+="<div id=\"see_all_sell\">See all sale items</div>";
+             console.log(html);
+          $("#insert_main").html(html); 
          }
             });
              
@@ -93,7 +133,7 @@ function lookup(val,type)
              var html="<ul>"; 
              for(var i=0;i<data.length;i++)
              {
-               html+="<li>"+data[i].name+"</li>";
+               html+="<li onclick=\"sell_details("+data[i].id+")\">"+data[i].name+"</li>";
               }
              html+="</ul>";
              console.log(html);
@@ -130,5 +170,23 @@ function bring_search_url(val)
      console.log(url);
       return url;
 }
+function search_form()
+ {    console.log("yo");
+     var form=$("#search_form");
+     console.log(form.attr("action"));
+
+     $("body").on("click","#see_all_req",
+         function(){
+         form.attr("action","/buyandsell/see_all/requests/");
+         form.submit();
+         });
+
+     $("body").on("click","#see_all_sell",
+         function(){
+         form.attr("action","/buyandsell/see_all/sell/");
+         form.submit();
+         } );
+}
+search_form();
 search();
 create_div();

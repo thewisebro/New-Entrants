@@ -289,12 +289,15 @@ def sendmail(request, type_of_mail, id_pk):
     pronoun="her"
   contact = request.user.contact_no
   app='buyandsell'
+
   if type_of_mail == 'buy':
     buy_mail_list=BuyMails.objects.filter(by_user__username=username,item__pk=id_pk)
     qryst = SaleItems.objects.filter(pk = id_pk)
+
     if buy_mail_list:
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       already_sent=1
+
     if not already_sent:  
       new_mail_sent=BuyMails(by_user=user,item=qryst[0])
       new_mail_sent.save()
@@ -319,6 +322,7 @@ def sendmail(request, type_of_mail, id_pk):
     if buy_mail_list:
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       already_sent=1
+
     if not already_sent:  
       new_mail_sent=RequestMails(by_user=user,item=qryst[0])
       new_mail_sent.save()
@@ -375,7 +379,7 @@ def search(request,search_type):
       object_list.append(item_dict)
     items = simplejson.dumps(object_list)
     if search_type=="main":
-      main_dict['requests']=object_list
+      main_dict['requests']=object_list[0:5]
     
   if search_type=="request" or search_type=="main":
     queryset=[]
@@ -402,7 +406,7 @@ def search(request,search_type):
       object_list.append(item_dict)
     items = simplejson.dumps(object_list)
     if search_type=="main":
-      main_dict['sell_items']=object_list
+      main_dict['sell_items']=object_list[0:5]
    
 
   if search_type=="main":
@@ -462,5 +466,55 @@ def search(request,search_type):
     return HttpResponse(items, content_type="application/json")
 
 
+def seeall(request,search_type):
+  main_dict={}
+  srch_string=request.GET.get('keyword','')
+  word_list=srch_string.split(' ')
+  words=[]
+  for word in word_list:
+    if word !='':
+      words.append(word)
 
+  if search_type=="requests" :
+    queryset=[]
+    un_queryset = {}			
+    count = {}
+    print words
+    for word in words:
+      result = RequestedItems.objects.filter(item_name__icontains=word)
+      for temp in result:
+        print word
+        if temp.id in un_queryset:
+          count[temp.id] = count[temp.id]+1
+        else:
+          un_queryset[temp.id] = temp
+          count[temp.id] = 1
+    date_sorted_queryset=sorted(un_queryset, key= lambda l : un_queryset[l].expiry_date, reverse=True)
+    count_date_sorted_queryset=sorted(date_sorted_queryset, key= lambda l: count[l], reverse=True)
+    for item_id in count_date_sorted_queryset:
+      queryset.append(un_queryset[item_id])
+    return render(request,'buyandsell/show_requests.html',{'table_data':queryset})
+
+    
+  if search_type=="sell":
+    queryset=[]
+    un_queryset = {}			
+    count = {}
+    print words
+    for word in words:
+      result = SaleItems.objects.filter(item_name__icontains=word)
+      for temp in result:
+        print word
+        if temp.id in un_queryset:
+          count[temp.id] = count[temp.id]+1
+        else:
+          un_queryset[temp.id] = temp
+          count[temp.id] = 1
+    date_sorted_queryset=sorted(un_queryset, key= lambda l : un_queryset[l].expiry_date, reverse=True)
+    count_date_sorted_queryset=sorted(date_sorted_queryset, key= lambda l: count[l], reverse=True)
+    for item_id in count_date_sorted_queryset:
+      queryset.append(un_queryset[item_id])
+    return render(request,'buyandsell/buy.html',{'table_data':queryset})
+ 
+    
 
