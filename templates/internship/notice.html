@@ -11,10 +11,10 @@ Date of Upload: {{ notice.date_of_upload }}
 <br />
 Date of Expiry: {{ notice.date_of_expiry }}
 <br /><br />
-{{ notice.notice|safe }}
+<a href="{{ notice.notice.url }}">{{ notice.notice|safe }}</a>
 
 <br /><br />
 
-<a href="{% url internship.views_notice.notice_list %}">Back to Notice List</a>
+<a href="{% url 'internship.views_notice.notice_list' %}">Back to Notice List</a>
 </div>
 {% endblock app_content %}

@@ -2,7 +2,6 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.template import RequestContext 
-from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.forms.models import modelformset_factory
 from django.db.models import Min, Count, F
@@ -22,7 +21,7 @@ from internship import forms
 from nucleus.models import Student, Branch, StudentInfo
 from placement.models import InternshipInformation, ProjectInformation
 from placement.policy import current_session_year
-from placement.utils import handle_exc
+from internship.utils import handle_exc
 
 from django.conf import settings
 
@@ -43,7 +42,7 @@ def notice_add(request) :
         form.save()
         messages.success(request, "Notice added successfully")
         l.info(request.user.username+' :added a notice successfully')
-        return HttpResponseRedirect('/internship/notices/admin/')
+        return HttpResponseRedirect(reverse('internship.views_notice.notice_list_admin'))
       else:
         messages.error(request, form.errors, extra_tags='form_error')
         l.info(request.user.username+' : falied to add a notice')
@@ -79,7 +78,7 @@ def notice_edit(request, notice_id) :
         form.save()
         messages.success(request, "Notice edited successfully.")
         l.info(request.user.username +': Edited notice successfully')
-        return HttpResponseRedirect('/internship/notices/admin/')
+        return HttpResponseRedirect(reverse('internship.views_notice.notice_list_admin'))
       else:
         messages.error(request, form.errors, extra_tags='form_error')
         l.info(request.user.username +': Form error while adding notice')
@@ -129,7 +128,7 @@ def notice_list(request) :
     paginator = Paginator(notice_list, 10)
     page = request.GET.get('page')
     if not page:
-      page = 1 
+      page = 1
     try:
       notices = paginator.page(page)
     except PageNotAnInteger:

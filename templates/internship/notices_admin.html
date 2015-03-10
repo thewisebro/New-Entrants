@@ -8,6 +8,7 @@
   <tr>
     <th>Uploaded</th>
     <th>Download</th>
+{% comment %}   <th>Edit</th> {% endcomment %}
     <th>Delete</th>
   </tr>
   </thead>
@@ -18,6 +19,7 @@
     <td>
       <a href="{{ notice.notice.url }}">{{ notice.filename }}</a>
     </td>
+{% comment %}   <td> <a href="{% url 'internship.views_notice.notice_edit' notice.id %}">Edit</a></td> {% endcomment %}
    <td> <a href="javascript:null()" onclick="delete_notice({{ notice.id }})">Delete</a> </td>
   </tr>
   {% endfor %}
@@ -43,7 +45,7 @@
 No notices added yet. <br />
 {% endif %}
 
-<a href="{% url internship.views_notice.notice_add %}"><button class="btn">Add a Form</button></a><br /><br />
+<a href="{% url 'internship.views_notice.notice_add' %}"><button class="btn">Add a Form</button></a><br /><br />
   
 <script type="text/javascript">
   function delete_notice(notice_id)
