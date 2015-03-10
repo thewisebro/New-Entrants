@@ -24,6 +24,10 @@ from utilities.forms import ProfileFormPrimary, ProfileFormGuardian,\
     UserEmailForm, PasswordResetRequestForm, PasswordResetForm
 from utilities.utils import *
 
+import logging
+logger = logging.getLogger('email_verify_logger')
+
+
 @pagelet_login_required
 def edit_profile(request):
   if request.user.in_group('Student'):
@@ -165,46 +169,53 @@ def email(request):
 def email_verify(request):
   primary_entry = None
   if request.method == 'POST':
-    if 'primary' in request.POST or 'primary_2' in request.POST:
-      entry = UserEmail.objects.get(pk= request.POST['id'])
-      authenticated = PasswordCheck.exists_for(user=entry.user,\
-          service='email_auth')
-      if authenticated:
-        if entry.verified:
-          request.user.email = entry.email
-          request.user.save()
+    try:
+      if 'primary' in request.POST or 'primary_2' in request.POST:
+        entry = UserEmail.objects.get(pk= request.POST['id'])
+        authenticated = PasswordCheck.exists_for(user=entry.user,\
+            service='email_auth')
+        if authenticated:
+          if entry.verified:
+            request.user.email = entry.email
+            request.user.save()
+          else:
+            messages.error(request,"Email need to be verified first")
         else:
-          messages.error(request,"Email need to be verified first")
-      else:
-        if 'primary' in request.POST:
-          primary_entry = entry
+          if 'primary' in request.POST:
+            primary_entry = entry
 
-    if 'delete' in request.POST:
-      entry = UserEmail.objects.get(pk= request.POST['id'])
-      if entry.email== request.user.email:
-        messages.error(request,"Primary Email addresses can't be deleted")
-      else:
-        entry.delete()
+      if 'delete' in request.POST:
+        entry = UserEmail.objects.get(pk= request.POST['id'])
+#        logger.info("Email id deleted.")
+        if entry.user==request.user:
+          if entry.email== request.user.email:
+            messages.error(request,"Primary Email addresses can't be deleted")
+          else:
+            entry.delete()
+        else:
+          messages.error(request, "This email entry can't be deleted.")
 
-    if 'verify' in request.POST:
-      entry= UserEmail.objects.get(pk= request.POST['id'])
-      salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
-      confirmation_key = hashlib.sha1(salt+entry.email).hexdigest()
-      if entry.last_datetime_created.date() == datetime.date.today():
-        entry.verify_num= entry.verify_num + 1
-      else:
-        entry.verify_num = 1
-      if entry.verify_num < 4 :
-        entry.confirmation_key= confirmation_key
-        entry.last_datetime_created = datetime.datetime.today()
-        entry.save()
-        send_verification_mail(confirmation_key,entry.email)
-        mail_to_primary(entry.email,request.user.email)
-        messages.success(request,"A verification link has been sent"+\
+      if 'verify' in request.POST:
+        entry= UserEmail.objects.get(pk= request.POST['id'])
+        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+        confirmation_key = hashlib.sha1(salt+entry.email).hexdigest()
+        if entry.last_datetime_created.date() == datetime.date.today():
+          entry.verify_num= entry.verify_num + 1
+        else:
+          entry.verify_num = 1
+        if entry.verify_num < 4 :
+          entry.confirmation_key= confirmation_key
+          entry.last_datetime_created = datetime.datetime.today()
+          entry.save()
+          send_verification_mail(confirmation_key,entry.email)
+          mail_to_primary(entry.email,request.user.email)
+          messages.success(request,"A verification link has been sent"+\
             " to your email address.")
-      else:
-        messages.error(request,"Max limit of verification for this email" +\
-            " has been reached for today")
+        else:
+          messages.error(request,"Max limit of verification for this email" +\
+              " has been reached for today")
+    except Exception as e:
+      logger.error(str(e))
 
     if 'submission' in request.POST:
       useremailform = UserEmailForm(request.POST)
@@ -333,7 +344,6 @@ def password_reset(request):
   reset_key = request.GET['reset_key']
   if request.method == 'POST':
     entry = PasswordReset.objects.get(reset_key=reset_key)
-#    user = User.objects.get(user=entry.user)
     form = PasswordResetForm(request.POST)
     if form.is_valid():
       password1 = request.POST['password1']
@@ -348,21 +358,21 @@ def password_reset(request):
       else:
         messages.error(request,'New passwords do not match.')
   else:
+    message = ''
     try:
       entry = PasswordReset.objects.get(reset_key=reset_key)
       if entry.last_datetime_created + datetime.timedelta(1) < timezone.now():
-        messages.error(request,"The key expired.")
+        message = "The key expired."
       else:
         form = PasswordResetForm()
         return render(request, 'utilities/dialogs/password_reset.html', {
             'form': form,
         })
     except PasswordReset.DoesNotExist:
-      messages.error(request,"This link is no longer active for modification.")
-    form = PasswordResetRequestForm()
-    return HttpResponseRedirect(reverse('close_dialog', kwargs={
-          'dialog_name': 'pass_reset'
-    }))
+      message = "This link is no longer active for modification."
+    return render(request, 'utilities/dialogs/pass_message.html',{
+        'message':message,
+    })
   form = PasswordResetForm()
   return render(request, 'utilities/dialogs/password_reset.html', {
       'form': form,

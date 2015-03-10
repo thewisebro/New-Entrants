@@ -14,8 +14,8 @@ $(document).on("load_app_settings", function(e, hash1, hash2){
     dialog_iframe({
       name:'pass_reset',
       title:'Reset Password',
-      width:450,
-      height:180,
+      width:500,
+      height:200,
       close: nucleus.redirect_to_home(),
       src:'/settings/password_reset/'+hash2
     });
