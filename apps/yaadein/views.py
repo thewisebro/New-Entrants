@@ -12,6 +12,7 @@ from nucleus.models import Student,User
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from notifications.models import Notification
 #from nucleus import get_info, html_name
 import json as simplejson
 """
@@ -46,14 +47,93 @@ def CORS_allow(view):
 @CORS_allow
 #@login_required
 def index(request,enrno=None):
-# import ipdb;ipdb.set_trace()
+#  import ipdb;ipdb.set_trace()
+  if request.method == 'GET':
+    y_user = YaadeinUser.objects.get_or_create(user__username='13117060')[0]#user=request.user
+    logged_user = y_user.user
+#user = User.objects.get(username ='13114068')
+#  if y_user.coverpic.field.blank :
+#    y_user.coverpic = "yaadein/coverpic/image4.jpg"
+    s = Student.objects.get(user__username=enrno)#=enrno
+    posts = s.post_wall_user.order_by('post_date').reverse()
+#  posts = Post.objects.filter(user_tags=s)#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
+# posts_owned = Post.objects.filter(owner=s)
+#  posts = list(set(list(posts_taggedin)+list(posts_owned)))#.order_by('post_date').reverse()
+    posts_data = []
+    for post in posts:
+        images = PostImage.objects.filter(post=post)
+        image_url=[]
+        for image in images:
+          image_url.append(image.image.url)
+        tmp = {
+               'post_text': post.text_content,
+               'post_owner':post.owner.user.name,
+               'post_owner_branch':post.owner.user.info,
+               'post_owner_pic':post.owner.user.photo_url,
+               'post_owner_enrol':post.owner.user.username,
+               'image_url': image_url,
+               'time':str(post.post_date)
+               }
+        posts_data.append( tmp )
+    data ={'name':logged_user.name, 'coverPic': y_user.coverpic.url, 'enrolmentNo':enrno, 'posts_data':posts_data, 'label':logged_user.info, 'profilePic':logged_user.photo_url}
+    return HttpResponse(simplejson.dumps(data),'application/json') 
+#  return render_to_response('yaadein/usertag.html', {'cover_pic': y_user.coverpic.url,'enrno':enrno,'posts_data':posts_data}, context_instance=RequestContext(request))
+  else:
+    print 'vaibhavraj'
+    if request.method == 'POST':
+      post_data = str(simplejson.loads(request.POST['data'])['post_text'])
+      hashed = [ word for word in post_data.split() if word.startswith("#") ]
+      hash_tag = []
+      for word in hashed:
+# temp =[ word.split('#') ]
+        temp =  filter(None, word.replace(' ','').split("#"))
+        hash_tag.extend(temp)
+      hash_tag = list(set(hash_tag))
+      for i in range(0,len(hash_tag)):
+        hash_tag[i] = '#'+hash_tag[i] 
+      user_tagged = [ tag for tag in post_data.split() if tag.startswith("@") ]
+      imgs = request.FILES.getlist('file')
+      print len(imgs)
+      print enrno #wall_user
+      if enrno:#wall_user:
+        s = Student.objects.get(user__username=enrno)#wall_user)
+      else:
+        s = Student.objects.get(user__username="13117060")
+      print s
+      student = Student.objects.get(user__username="13117060")
+      post = Post(text_content=post_data, post_date=timezone.now(), owner=student, wall_user=s)
+      post.save()
+# notif_msg = 'You were tagged in a post by '+student.user.name+'.'
+#     app = 'Yaadein'
+#     pk = post.pk
+#     url = '/yaadein/post_disp/'+pk+'/'  
+#     Notification.save_notification(app,notif_msg,url,user_tagged,post)
+      print post.wall_user
+      if len(imgs)>0:
+        for key in imgs:
+          PI = PostImage(image = key,post = post)
+          PI.save()
+      for hash in hash_tag:
+        print hash
+        post.tags.add(hash)
+      for user in user_tagged:
+        user = user[1:]
+        student_related = Student.objects.get(user__name=user)
+        post.user_tags.add(student_related)
+      data = {'temp':"a"}
+# return  HttpResponse("post added")
+      return HttpResponse(simplejson.dumps(data),'application/json')
+    else:
+      return HttpResponse('Hello')
+  
+@csrf_exempt
+@CORS_allow
+def homePage(request):
+#  import ipdb;ipdb.set_trace()
   y_user = YaadeinUser.objects.get_or_create(user__username='13117060')[0]#user=request.user
   logged_user = y_user.user
-#user = User.objects.get(username ='13114068')
-# if y_user.coverpic == None :
-  y_user.coverpic = "yaadein/coverpic/image4.jpg"
   s = Student.objects.get(user__username='13117060')#=enrno
-  posts = s.post_wall_user.order_by('post_date').reverse()
+  posts = Post.objects.order_by('post_date').reverse()
   posts_data = []
   for post in posts:
       images = PostImage.objects.filter(post=post)
@@ -70,24 +150,27 @@ def index(request,enrno=None):
              'time':str(post.post_date)
              }
       posts_data.append( tmp )
-  data ={'name':logged_user.name, 'coverPic': y_user.coverpic.url, 'enrolmentNo':enrno, 'posts_data':posts_data, 'label':logged_user.info, 'profilePic':logged_user.photo_url}
+  data ={'name':logged_user.name, 'coverPic': y_user.coverpic.url, 'enrolmentNo':logged_user.username, 'posts_data':posts_data, 'label':logged_user.info, 'profilePic':logged_user.photo_url}
   return HttpResponse(simplejson.dumps(data),'application/json') 
-#  return render_to_response('yaadein/usertag.html', {'cover_pic': y_user.coverpic.url,'enrno':enrno,'posts_data':posts_data}, context_instance=RequestContext(request))
+
 
 @csrf_exempt
 @CORS_allow
 #@login_required
 def coverpic_upload(request):
+# import ipdb;ipdb.set_trace()
   if request.method == 'POST': #and request.is_ajax():
-    cover_pic = request.FILES.get('cover')
+    cover_pic = request.FILES.get('file')
     print cover_pic
     cover_pic_name = cover_pic.name
     ext = cover_pic.name.split('.')[1]
     fname = "cp_" + request.user.username + "." + ext
-    yu = YaadeinUser.objects.get(user = request.user)
+    yu = YaadeinUser.objects.get(user__username = '13117060')#request.user)
     yu.coverpic.save(fname, cover_pic)
     yu.save()
-  return HttpResponseRedirect('/yaadein/')
+    return HttpResponse('Uploaded')#/yaadein/user/13117060')
+  else:
+    return HttpResponse('hello')
 #  return render_to_response('yaadein/base.html',{},context_instance=requestContext(request))
 
 @csrf_exempt
@@ -99,6 +182,14 @@ def post(request,wall_user):
     if request.method == 'POST':
       post_data = str(simplejson.loads(request.POST['data'])['post_text'])
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
+      hash_tag = []
+      for word in hashed:
+# temp =[ word.split('#') ]
+        temp =  filter(None, word.replace(' ','').split("#"))
+        hash_tag.extend(temp)
+      hash_tag = list(set(hash_tag))
+      for i in range(0,len(hash_tag)):
+        hash_tag[i] = '#'+hash_tag[i] 
       user_tagged = [ tag for tag in post_data.split() if tag.startswith("@") ]
       imgs = request.FILES.getlist('file')
       print len(imgs)
@@ -106,17 +197,22 @@ def post(request,wall_user):
       if wall_user:
         s = Student.objects.get(user__username=wall_user)
       else:
-        s = Student.objects.get(user__username="13114068")
+        s = Student.objects.get(user__username="13117060")
       print s
-      student = Student.objects.get(user__username="13114068")
+      student = Student.objects.get(user__username="13117060")
       post = Post(text_content=post_data, post_date=timezone.now(), owner=student, wall_user=s)
       post.save()
+# notif_msg = 'You were tagged in a post by '+student.user.name+'.'
+#     app = 'Yaadein'
+#     pk = post.pk
+#     url = '/yaadein/post_disp/'+pk+'/'  
+#     Notification.save_notification(app,notif_msg,url,user_tagged,post)
       print post.wall_user
       if len(imgs)>0:
         for key in imgs:
           PI = PostImage(image = key,post = post)
           PI.save()
-      for hash in hashed:
+      for hash in hash_tag:
         print hash
         post.tags.add(hash)
       for user in user_tagged:
@@ -130,30 +226,54 @@ def post(request,wall_user):
       return HttpResponse('Hello')
 
 
+#view to display a single post
+@csrf_exempt
+@CORS_allow
+def post_display(request,pk):
+  if request:
+    post = Post.objects.get(pk=pk)
+    images = PostImage.objects.filter(post=post)
+    image_url=[]
+    for image in images:
+      image_url.append(image.image.url)
+    data = {
+             'post_text': post.text_content,
+             'post_owner':post.owner.user.name,
+             'post_owner_branch':post.owner.user.info,
+             'post_owner_pic':post.owner.user.photo_url,
+             'post_owner_enrol':post.owner.user.username,
+             'image_url': image_url,
+             'time':str(post.post_date)
+             }
+    return HttpResponse(simplejson.dumps(data),'application/json')
+  else:
+    return HttpResponse('Hello')
+
 @CORS_allow
 def person_search(request):
    if request: #.is_ajax():
-     q = request.GET.get('term','')
-     print q
+     query = request.GET.get('q','')
 # import ipdb;ipdb.set_trace()
-     students = Student.objects.filter(Q(user__name__icontains = q)).order_by('-user__name')[:10]
+     students = Student.objects.filter(Q(user__name__icontains = query)).order_by('-user__name')[:10]
      def person_dict(student):
        return {
          'id':student.user.username,
-         'label':str(student.user.name),
-         'value':student.user.name
+         'label':student.user.info,
+         'value':student.user.name,
+         'profile_pic':student.user.photo_url
         }
-     data = simplejson.dumps(map(person_dict,students))
+     data = map(person_dict,students)
+     search_data = {'results':data}
    else:
      data = 'fail'
-   return HttpResponse(data,'application/json')
+   return HttpResponse(simplejson.dumps(search_data),'application/json')
 
 @csrf_exempt
 @CORS_allow
 def hashtag(request,slug):
   if request:
     posts_data = []
-    posts = Post.objects.filter(tags__slug=slug)  
+    posts = Post.objects.filter(tags__slug=slug).order_by('post_date').reverse()  
     for post in posts:
           images = PostImage.objects.filter(post=post)
           image_url=[]
