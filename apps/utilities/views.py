@@ -309,7 +309,7 @@ def password_reset_request(request):
             entry.save()
             print reset_key
             send_passwordreset_mail(reset_key,email)
-            messages.success(request,"A verification link has been sent to your email address.")
+            messages.success(request,"A password reset link has been sent to your email address.")
           else:
             messages.error(request,"Max limit of password reset for this account has been reached for today")
         else:
@@ -317,7 +317,7 @@ def password_reset_request(request):
           new_entry.save()
           print reset_key
           send_passwordreset_mail(reset_key,email)
-          messages.success(request,"A verification link has been sent to your email address.")
+          messages.success(request,"A password reset link has been sent to your email address.")
       except User.DoesNotExist:
         messages.error(request,"The email address filled isnot your primary email.")
     return HttpResponseRedirect(reverse('close_dialog', kwargs={
@@ -332,14 +332,15 @@ def password_reset_request(request):
 def password_reset(request):
   reset_key = request.GET['reset_key']
   if request.method == 'POST':
-    user = User.objects.get(reset_key=reset_key)
+    entry = PasswordReset.objects.get(reset_key=reset_key)
+#    user = User.objects.get(user=entry.user)
     form = PasswordResetForm(request.POST)
     if form.is_valid():
       password1 = request.POST['password1']
       password2 = request.POST['password2']
       if password1 == password2:
-        user.set_password(password1)
-        user.save()
+        entry.user.set_password(password1)
+        entry.user.save()
         messages.success(request,'Password changed successfully')
         return HttpResponseRedirect(reverse('close_dialog', kwargs={
               'dialog_name': 'pass_reset'
@@ -351,6 +352,11 @@ def password_reset(request):
       entry = PasswordReset.objects.get(reset_key=reset_key)
       if entry.last_datetime_created + datetime.timedelta(1) < timezone.now():
         messages.error(request,"The key expired.")
+      else:
+        form = PasswordResetForm()
+        return render(request, 'utilities/dialogs/password_reset.html', {
+            'form': form,
+        })
     except PasswordReset.DoesNotExist:
       messages.error(request,"This link is no longer active for modification.")
     form = PasswordResetRequestForm()
