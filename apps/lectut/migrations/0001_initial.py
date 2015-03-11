@@ -5,6 +5,7 @@ from django.db import models, migrations
 import datetime
 import core.models.fields
 from django.conf import settings
+import lectut.models
 
 
 class Migration(migrations.Migration):
@@ -61,7 +62,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
                 ('text', models.CharField(max_length=50)),
-                ('event_date', core.models.fields.DateTimeField(default=datetime.datetime(2015, 2, 19, 2, 1, 52, 777984))),
+                ('event_date', core.models.fields.DateTimeField(default=datetime.datetime(2015, 3, 19, 0, 53, 30, 968711))),
                 ('batch', models.ForeignKey(to='nucleus.Batch')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
@@ -89,7 +90,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
-                ('upload_file', models.FileField(upload_to=b'lectut/images/')),
+                ('upload_file', models.FileField(upload_to=lectut.models.upload_path)),
                 ('description', models.CharField(max_length=100)),
                 ('file_type', models.CharField(max_length=10)),
                 ('upload_type', models.CharField(default=b'tut', max_length=3)),
@@ -121,7 +122,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='downloadlog',
             name='uploadfile',
-            field=models.ForeignKey(to='lectut.UploadFile'),
+            field=models.ForeignKey(to='lectut.Uploadedfile'),
             preserve_default=True,
         ),
         migrations.AddField(

@@ -52,6 +52,7 @@ class BaseUpload(models.Model):
             )
 '''
 
+# Each post attributes
 class Post(models.Model):
   upload_user = models.ForeignKey(User)
   batch = models.ForeignKey(Batch)
@@ -61,6 +62,7 @@ class Post(models.Model):
   def __unicode__(self):
     return str(self.content)
 
+# Over-ridden to create notification
   def save(self, *args, **kwargs):
     post = super(Post , self).save(*args, **kwargs)
     currentBatch = Batch.objects.get(id = self.batch.id)
@@ -71,17 +73,22 @@ class Post(models.Model):
 
   def as_dict(self):
     postData={
+      'id':self.id,
       'upload_user': str(self.upload_user.name),
+      'datetime_created':str(self.datetime_created),
       'batch':str(self.batch),
       'content':self.content,
       'privacy':self.privacy,
     }
     return postData
 
+# Get path where uploaded file is saved
 def upload_path(instance , filename ):
   return ('lectut/'+instance.file_type+'/'+filename)
 #  return os.path.join('lectut/',instance.file_type,'/')
 
+
+# Each file attributes
 class Uploadedfile(BaseUpload):
   post = models.ForeignKey(Post)
   upload_file=models.FileField(upload_to= upload_path)
@@ -96,8 +103,11 @@ class Uploadedfile(BaseUpload):
         filename = str(self.upload_file)
         filename = filename.split("/")[2]
         fileData={
+           'id':self.id,
            'post':self.post.id,
            'upload_file':filename,
+           'username':str(self.post.upload_user.name),
+           'datetime_created':str(self.datetime_created),
            'description':self.description,
            'file_type':self.file_type,
            'upload_type':self.upload_type,

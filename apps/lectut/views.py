@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.conf import settings
 
-from settings.development import PRODUCTION
+from settings.development import PRODUCTION, MEDIA_URL , GLOBAL_MEDIA_ROOT
 from django.views.decorators.csrf import csrf_exempt
 
 #import mimetypes, magic
@@ -31,13 +31,10 @@ def CORS_allow(view):
     return response
   return wrapped_view
 
-# Create your views here.
-def tester(request):
-      return HttpResponse("Hello, world. You're at lectut.")
+MAX_FILE_SIZE =  5242880       # 5 MB
+MAX_VIDEO_SIZE = 20971520      # 20 MB
 
-MAX_FILE_SIZE =  5242880
-MAX_VIDEO_SIZE = 20971520
-
+# VIEWS
 @CORS_allow
 def dispbatch(request):
   active = request.user.is_authenticated
@@ -59,6 +56,7 @@ def dispbatch(request):
 #      return HttpResponse("You are not enrolled.Please visit IMG")
   else:
       return HttpResponse("Please log-in to view your courses")
+
 
 #@login_required
 def coursepage_old(request, batch_id):
@@ -163,15 +161,15 @@ def uploadFile(request , batch_id):
 @csrf_exempt
 @CORS_allow
 def uploadedFile(request , batch_id):
-#    user = request.user
-  import pdb;pdb.set_trace()
   if request.method == 'POST':
     allData = json.loads(request.POST['data'])
+#    user = request.user
     usrname = allData['user']
     user = User.objects.get(username=usrname)
     userBatch = Batch.objects.get(id=batch_id)
 #    data = request.POST.get('formText','')
     data = allData['formText']
+    uploadTypes = allData['typeData']
     documents = request.FILES.getlist('file')
     extra = request.POST.getlist('extra','')
     files = []
@@ -185,15 +183,15 @@ def uploadedFile(request , batch_id):
     for document in documents:
       file_type = getFileType(document)
 #      fileData = json.loads(extra[counter])
-      counter = counter + 1
       if file_type!='Video' and  document._size>MAX_FILE_SIZE:
         msg = "File too large.Must be smaller than 5MB"
       elif document._size>MAX_VIDEO_SIZE:
         msg = "Video too large.Must be smaller than 20MB"
       else:
-        new_document = Uploadedfile(post =new_post, upload_file = document, description = str(document), file_type=file_type)
+        new_document = Uploadedfile(post =new_post, upload_file = document, description = str(document), file_type=file_type, upload_type = uploadTypes[counter])
         new_document.save()
         files.append(new_document.as_dict())
+      counter = counter+1
     if msg !='':
       response =  HttpResponse(json.dumps(msg), content_type='application/json')
     else:
@@ -210,6 +208,7 @@ def getFileType(file_name):
 #file_type = mime.from_file(file_name)
   file_name = str(file_name)
   extension = file_name.split(".")[1]
+  extension = extension.lower()
   if extension in ['jpg','png','jpeg','gif']:
     file_type="image"
   elif extension=='pdf':
@@ -223,6 +222,7 @@ def getFileType(file_name):
   return file_type
 
 @csrf_exempt
+@CORS_allow
 def download_file(request, file_id):
   download_file = Uploadedfile.objects.get(id = file_id)
   path_to_file = os.path.join(MEDIA_URL, str(download_file.upload_file))
@@ -230,8 +230,9 @@ def download_file(request, file_id):
   file_check = open(download_file_open,"r")
 #mimetype = mimetypes.guess_type(filename)[0]
 
-  downloadlog = DownloadLog(uploadfile=download_file , user = request.user)
-  downloadlog.save()
+  user = User.objects.get(username = 'harshithere')
+#  downloadlog = DownloadLog(uploadfile=download_file , user = user)
+#  downloadlog.save()
 
   response = HttpResponse(file_check.read(),content_type='application/force-download')
 #response = HttpResponse(file.read(), mimetype=mimetype)
@@ -242,6 +243,8 @@ def download_file(request, file_id):
 def get_path_to_file(file_name):
   return MEDIA_URL/file_name.upload_file
 
+
+# Function to differentiate between faculty and students
 def getUserType(user):
   if user.in_group('faculty'):
     return "1"
@@ -252,10 +255,11 @@ def getUserType(user):
 @CORS_allow
 #@login_required
 def deleteFile(request , file_id):
-  user = request.user
+# user = request.user
+  user = User.objects.get(username = 'harshithere')
   fileToDelete = Uploadedfile.objects.get(pk=file_id)
-  batch_id = request.session['batchId']
-  if request.user.in_group('faculty') or user == fileToDelete.post.upload_user:
+#  batch_id = request.session['batchId']
+  if user.in_group('faculty') or user == fileToDelete.post.upload_user:
     try:
       fileToDelete.delete()
       msg = 'File has been deleted'
@@ -267,10 +271,25 @@ def deleteFile(request , file_id):
   return response
 #  return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
+
+@csrf_exempt
+@CORS_allow
 def deletePost(request , post_id):
-  user = request.user
+#  user = request.user
+  user = User.objects.get(username = 'harshithere')
   postToDelete = Post.objects.get(pk=post_id)
-  return
+  if user.in_group('faculty') or user == postToDelete.upload_user:
+    try:
+      postToDelete.delete()
+      Uploadedfile.objects.all().filter(post=postToDelete)
+      msg = 'Post has been deleted'
+    except:
+      msg = 'Kuch katta ho gaya'
+  else:
+    msg = 'You are not authorised to delete this post. This shall be reported'
+  response = HttpResponse(json.dumps(msg), content_type='application/json')
+  return response
+
 
 def useruploads(request , batch_id):
   user = request.user
@@ -312,16 +331,29 @@ def batchMembers(request , batch_id):
   currentBatch = Batch.objects.get(id = batch_id)
   students = currentBatch.students.all()
   users = map(lambda x:x.user, students)
-  members =[]
+  students =[]
   for user in users:
     user = user.serialize()
-    members.append(user)
+    students.append(user)
+
+  faculties = currentBatch.faculties.all()
+  users =  map(lambda x:x.user, faculties)
+  faculties = []
+  for user in users:
+    user = user.serialize()
+    faculties.append(user)
+
+  members = {'students':students, 'faculties':faculties}
 
   return HttpResponse(json.dumps(members), content_type="application/json")
 
+
+@csrf_exempt
+@CORS_allow
+# Gives all the files in a particular batch
 def get_files(request, batch_id):
   currentBatch = Batch.objects.get(id = batch_id)
-  AllFiles = {'lec':[],'tut':[],'exm':[],'sol':[],'que':[]}
+  AllFiles = {'lec':[],'tut':[],'exp':[],'sol':[],'que':[]}
   files = Uploadedfile.objects.all().filter(post__batch_id = batch_id)
   for File in files:
     AllFiles[File.upload_type].append(File.as_dict())
