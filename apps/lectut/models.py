@@ -155,7 +155,7 @@ class Reminders(models.Model):
     return reminder
 
 class DownloadLog(models.Model):
-  uploadfile = models.ForeignKey(UploadFile)
+  uploadfile = models.ForeignKey(Uploadedfile)
   user = models.ForeignKey(User)
 
   def __unicode__(self):

@@ -60,11 +60,6 @@ def dispbatch(request):
   else:
       return HttpResponse("Please log-in to view your courses")
 
-def archives(request):
-  user = request.user  #the professor
-# Get list of previous courses
-  return
-
 #@login_required
 def coursepage_old(request, batch_id):
 #  user = request.user
@@ -92,14 +87,14 @@ def coursepage_old(request, batch_id):
              'viewType':'Coursepage'}
   return render( request, 'lectut/image.html', context)
 
-#@csrf_exempt
+@csrf_exempt
 @CORS_allow
 #@login_required
 def coursepage(request, batch_id):
-    if request.user:
-      user = request.user
-    else:
-      user = User.objects.get(username=request.POST['user'])
+#    user = request.user
+    usrname = request.POST.get('user','harshithere')
+    user = User.objects.get(username=usrname)
+#    user = User.objects.get(username=request.POST['user'])
     userBatch = Batch.objects.get(id=batch_id)
     posts = []
     request.session['batchId'] = batch_id
@@ -165,15 +160,18 @@ def uploadFile(request , batch_id):
       return 0
 #return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
-#@csrf_exempt
+@csrf_exempt
 @CORS_allow
 def uploadedFile(request , batch_id):
 #    user = request.user
-  usrname = request.POST.get('user','harshithere')
-  user = User.objects.get(username=usrname)
-  userBatch = Batch.objects.get(id=batch_id)
+  import pdb;pdb.set_trace()
   if request.method == 'POST':
-    data = request.POST.get('formText','')
+    allData = json.loads(request.POST['data'])
+    usrname = allData['user']
+    user = User.objects.get(username=usrname)
+    userBatch = Batch.objects.get(id=batch_id)
+#    data = request.POST.get('formText','')
+    data = allData['formText']
     documents = request.FILES.getlist('file')
     extra = request.POST.getlist('extra','')
     files = []
@@ -226,7 +224,7 @@ def getFileType(file_name):
 
 @csrf_exempt
 def download_file(request, file_id):
-  download_file = UploadFile.objects.get(id = file_id)
+  download_file = Uploadedfile.objects.get(id = file_id)
   path_to_file = os.path.join(MEDIA_URL, str(download_file.upload_file))
   download_file_open = download_file.upload_file.path
   file_check = open(download_file_open,"r")
@@ -253,12 +251,26 @@ def getUserType(user):
 @csrf_exempt
 @CORS_allow
 #@login_required
-def delete(request , file_id):
+def deleteFile(request , file_id):
   user = request.user
+  fileToDelete = Uploadedfile.objects.get(pk=file_id)
   batch_id = request.session['batchId']
-  if request.user.in_group('faculty'):
-    UploadFile.objects.get(pk=file_id).delete()
-  return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
+  if request.user.in_group('faculty') or user == fileToDelete.post.upload_user:
+    try:
+      fileToDelete.delete()
+      msg = 'File has been deleted'
+    except:
+      msg = 'Some error Occured'
+  else:
+    msg = 'You are not authorised to delete this file. This shall be reported'
+  response = HttpResponse(json.dumps(msg), content_type='application/json')
+  return response
+#  return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
+
+def deletePost(request , post_id):
+  user = request.user
+  postToDelete = Post.objects.get(pk=post_id)
+  return
 
 def useruploads(request , batch_id):
   user = request.user
@@ -293,7 +305,7 @@ def userdownloads(request , batch_id):
   return HttpResponse(json.dumps(context), content_type="application/json")
 
 
-@csrf_exempt  
+@csrf_exempt
 @CORS_allow
 #Gives all the members of a Batch
 def batchMembers(request , batch_id):
