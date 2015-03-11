@@ -47,7 +47,7 @@ def CORS_allow(view):
 @CORS_allow
 #@login_required
 def index(request,enrno=None):
-#  import ipdb;ipdb.set_trace()
+# import ipdb;ipdb.set_trace()
   if request.method == 'GET':
     y_user = YaadeinUser.objects.get_or_create(user__username='13117060')[0]#user=request.user
     logged_user = y_user.user
@@ -55,16 +55,23 @@ def index(request,enrno=None):
 #  if y_user.coverpic.field.blank :
 #    y_user.coverpic = "yaadein/coverpic/image4.jpg"
     s = Student.objects.get(user__username=enrno)#=enrno
-    posts = s.post_wall_user.order_by('post_date').reverse()
-#  posts = Post.objects.filter(user_tags=s)#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
-# posts_owned = Post.objects.filter(owner=s)
-#  posts = list(set(list(posts_taggedin)+list(posts_owned)))#.order_by('post_date').reverse()
+#    posts = s.post_wall_user.order_by('post_date').reverse()
+    posts_usertagged = Post.objects.filter(user_tags=s)#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
+    posts_owned = Post.objects.filter(owner=s)
+    posts_onwall = Post.objects.filter(wall_user=s)
+    posts = list(set(list(posts_onwall)+list(posts_owned)+list(posts_usertagged)))#.order_by('post_date').reverse()
+    bubble(posts)
     posts_data = []
     for post in posts:
         images = PostImage.objects.filter(post=post)
         image_url=[]
+        users_tagged_inpost = []
+        users = post.user_tags.all()
         for image in images:
           image_url.append(image.image.url)
+        if len(users)>0:
+          for user in users:
+            users_tagged_inpost.append(user.user.name)
         tmp = {
                'post_text': post.text_content,
                'post_owner':post.owner.user.name,
@@ -72,16 +79,21 @@ def index(request,enrno=None):
                'post_owner_pic':post.owner.user.photo_url,
                'post_owner_enrol':post.owner.user.username,
                'image_url': image_url,
-               'time':str(post.post_date)
+               'time':str(post.post_date),
+               'wall_user':post.wall_user.user.name,
+               'wall_user_enrol':post.wall_user.user.username,
+               'taggedUsers':users_tagged_inpost,
                }
         posts_data.append( tmp )
     data ={'name':logged_user.name, 'coverPic': y_user.coverpic.url, 'enrolmentNo':enrno, 'posts_data':posts_data, 'label':logged_user.info, 'profilePic':logged_user.photo_url}
     return HttpResponse(simplejson.dumps(data),'application/json') 
 #  return render_to_response('yaadein/usertag.html', {'cover_pic': y_user.coverpic.url,'enrno':enrno,'posts_data':posts_data}, context_instance=RequestContext(request))
   else:
+    import ipdb;ipdb.set_trace()
     print 'vaibhavraj'
     if request.method == 'POST':
       post_data = str(simplejson.loads(request.POST['data'])['post_text'])
+      user_tagged = simplejson.loads(request.POST['data'])['user_tags']
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
       hash_tag = []
       for word in hashed:
@@ -90,24 +102,27 @@ def index(request,enrno=None):
         hash_tag.extend(temp)
       hash_tag = list(set(hash_tag))
       for i in range(0,len(hash_tag)):
-        hash_tag[i] = '#'+hash_tag[i] 
-      user_tagged = [ tag for tag in post_data.split() if tag.startswith("@") ]
+        hash_tag[i] = '#'+hash_tag[i]
+#user_tagged = [ tag for tag in post_data.split() if tag.startswith("@") ]
       imgs = request.FILES.getlist('file')
       print len(imgs)
-      print enrno #wall_user
+      student = Student.objects.get(user__username="13117060")
       if enrno:#wall_user:
         s = Student.objects.get(user__username=enrno)#wall_user)
+        post = Post(text_content=post_data, post_date=timezone.now(), owner=student, wall_user=s)
       else:
-        s = Student.objects.get(user__username="13117060")
-      print s
-      student = Student.objects.get(user__username="13117060")
-      post = Post(text_content=post_data, post_date=timezone.now(), owner=student, wall_user=s)
+        post = Post(text_content=post_data, post_date=timezone.now(), owner=student)
       post.save()
-# notif_msg = 'You were tagged in a post by '+student.user.name+'.'
-#     app = 'Yaadein'
-#     pk = post.pk
-#     url = '/yaadein/post_disp/'+pk+'/'  
-#     Notification.save_notification(app,notif_msg,url,user_tagged,post)
+      notif_msg = 'You were tagged in a memory by '+student.user.name+'.'
+      notif_msg1 = ''+student.user.name+' posted a memory on your wall'  
+      app = 'Yaadein'
+      pk = str(post.pk)
+      url = '/yaadein/post_disp/'+pk+'/'
+      notif_users=[]
+      tagged_users = []
+      if enrno!='13114068':
+        notif_users.append(s.user)
+        Notification.save_notification(app,notif_msg1,url,notif_users,post)
       print post.wall_user
       if len(imgs)>0:
         for key in imgs:
@@ -117,15 +132,18 @@ def index(request,enrno=None):
         print hash
         post.tags.add(hash)
       for user in user_tagged:
-        user = user[1:]
-        student_related = Student.objects.get(user__name=user)
+#      user = user[1:]
+        student_related = Student.objects.get(user__username=str(user['id']))
+        tagged_users.append(student_related.user)
         post.user_tags.add(student_related)
+      if len(user_tagged)>0: 
+        Notification.save_notification(app,notif_msg,url,tagged_users,post)  
       data = {'temp':"a"}
 # return  HttpResponse("post added")
       return HttpResponse(simplejson.dumps(data),'application/json')
     else:
       return HttpResponse('Hello')
-  
+
 @csrf_exempt
 @CORS_allow
 def homePage(request):
@@ -293,7 +311,18 @@ def hashtag(request,slug):
     return HttpResponse(simplejson.dumps(data),'application/json')
   return HttpResponse('1')
 
-  
+#utility function bubble sorting
+def bubble(bad_list):
+  length = len(bad_list) - 1
+  sorted = False
+
+  while not sorted:
+    sorted = True
+    for i in range(length):
+      if bad_list[i].post_date < bad_list[i+1].post_date:
+        sorted = False
+        bad_list[i], bad_list[i+1] = bad_list[i+1], bad_list[i]
+  return bad_list    
   """
 class TagIndexView(ListView):
 # template_name = 'yaadein/tagged.html'
