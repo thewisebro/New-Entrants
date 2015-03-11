@@ -251,6 +251,7 @@ CHANNELI_APPS = (
   'academics',
   'games',
   'buysell',
+  'facapp',
   'utilities',
 )
 
