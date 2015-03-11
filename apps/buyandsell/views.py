@@ -10,6 +10,7 @@ from buyandsell.models import *
 from buyandsell.constants import *
 from notifications.models import Notification
 from buyandsell.forms import *
+from django.core.mail import send_mail
 
 def buy(request,mc=None,c=None):
   qdata=''
@@ -19,6 +20,7 @@ def buy(request,mc=None,c=None):
   category=''
   error_msg=''
 
+  cat_dict=get_category_dictionary()
   if request.GET.get('ll') and request.GET.get('ul'):
     pl=int(request.GET.get('ll'))
     pu=int(request.GET.get('ul'))
@@ -35,26 +37,19 @@ def buy(request,mc=None,c=None):
 
   if mc and not c:
     mcatlist=BuySellCategory.objects.filter(main_category=mc)
-    maincategory=mcatlist[0].main_category  
-   
+    maincategory=mcatlist[0].main_category     
   if mc and c and price_valid:
     qdata=SaleItems.objects.filter(category__main_category=mc,category__code=c,cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
-
   elif mc and c and not price_valid: 
     qdata=SaleItems.objects.filter(category__main_category=mc,category__code=c,is_active=True).order_by('-pk')
- 
   elif mc and not c  and  price_valid:
     qdata=SaleItems.objects.filter(category__main_category=mc,cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
-
   elif mc and not c and not price_valid: 
     qdata=SaleItems.objects.filter(category__main_category=mc,is_active=True).order_by('-pk')
-
   elif  price_valid:
     qdata=SaleItems.objects.filter(cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
-
   else:
     qdata=SaleItems.objects.filter(is_active=True).order_by('-pk')
-
   if qdata:
     table_data=qdata
   else:
@@ -64,7 +59,8 @@ def buy(request,mc=None,c=None):
     'error_msg':error_msg,
     'table_data':table_data,
     'mc':mc,
-    'c':c
+    'c':c,
+    'cat_dict':cat_dict,
           }    
   return render(request,'buyandsell/buy.html',context)
 
@@ -76,7 +72,7 @@ def viewrequests(request,mc=None,c=None):
   maincategory=''
   category=''
   error_msg=''
-
+  
   if request.GET.get('ll') and request.GET.get('ul'):
 
     pl=int(request.GET.get('ll'))
@@ -86,35 +82,25 @@ def viewrequests(request,mc=None,c=None):
     else:
       error_msg= "invalid price range"
       return render(request,'buyandsell/buy.html',{'error_msg':error_msg,'table_data':table_data})
-
- 
   if mc and c:
     cat=BuySellCategory.objects.get(code=c)
     category=cat.name
     maincategory=cat.main_category
-
   if mc and not c:
     mcatlist=BuySellCategory.objects.filter(main_category=mc)
-    maincategory=mcatlist[0].main_category  
-   
+    maincategory=mcatlist[0].main_category     
   if mc and c and price_valid:
     qdata=RequestedItems.objects.filter(category__main_category=mc,category__code=c,price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
-
   elif mc and c and not price_valid: 
     qdata=RequestedItems.objects.filter(category__main_category=mc,category__code=c,is_active=True).order_by('-pk')
- 
   elif mc and not c  and  price_valid:
     qdata=RequestedItems.objects.filter(category__main_category=mc,price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
-
   elif mc and not c and not price_valid: 
     qdata=RequestedItems.objects.filter(category__main_category=mc,is_active=True).order_by('-pk')
-
   elif  price_valid:
     qdata=RequestedItems.objects.filter(price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
-
   else:
     qdata=RequestedItems.objects.filter(is_active=True).order_by('-pk')
-
   if qdata:
     table_data=qdata
   else:
@@ -143,22 +129,26 @@ def sell(request):
       cost=form.cleaned_data['cost']
       if phone.isdigit():
         digcheck=1
-
       if  len(phone)==len(str(int(phone))):
         zercheck=1
-
       if len(phone) == 10:
         lencheck=1
-
       if cost>=0:
         negcheck=1
-      if digcheck and negcheck and zercheck and lencheck and zercheck:
+      if digcheck and negcheck and zercheck and lencheck:
         new_item=form.save(commit=False)
         expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
         new_item.post_date=post_date
         new_item.expiry_date=expiry_date
         new_item.user=user
         new_item.save()
+        app='buyandsell'
+        watch_user_list=new_item.category.watch_users.all()
+        print watch_user_list
+        notif_text=str(new_item.item_name)+"has been added to the category"+str(new_item.category.name)
+        notif_text+="that you have watched"
+        url = '/buyandsell/sell_details/' + str(new_item.pk)         
+        Notification.save_notification(app, notif_text, url, watch_user_list, new_item) 
         return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/buy/'})
       else:
         print "form filled wrongly"
@@ -186,22 +176,26 @@ def requestitem(request):
       price_upper=form.cleaned_data['price_upper']
       if phone.isdigit():
         digcheck=1
-
       if  len(phone)==len(str(int(phone))):
         zercheck=1
-
       if len(phone) == 10:
         lencheck=1
-
       if price_upper>=0:
         negcheck=1
-      if digcheck and negcheck and zercheck and lencheck and zercheck:
+      if digcheck and negcheck and zercheck and lencheck:
         new_item=form.save(commit=False)
         expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
         new_item.post_date=post_date
         new_item.expiry_date=expiry_date
         new_item.user=user
         new_item.save()
+        app='buyandsell'
+        watch_user_list=new_item.category.watch_users.all()
+        print watch_user_list
+        notif_text=str(new_item.item_name)+"has been requested in the category"+str(new_item.category.name)
+        notif_text+="that you have watched"
+        url = '/buyandsell/sell_details/' + str(new_item.pk)         
+        Notification.save_notification(app, notif_text, url, watch_user_list, new_item) 
         return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/viewrequests/'})
       else:
         print "form filled wrongly"
@@ -311,7 +305,7 @@ def sendmail(request, type_of_mail, id_pk):
         notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
       if qryst[0].email:
         notif_text += 'Email at ' + str(user.email) + '.'
-      url = '/buyandsell/sell_details/' + str(id_pk)
+      url = '/buyandsell/sell_details/' + str(id_pk)   #this page is to be made
       users = [qryst[0].user]
       Notification.save_notification(app, notif_text, url, users, qryst[0])
 
@@ -339,10 +333,10 @@ def sendmail(request, type_of_mail, id_pk):
       url = '/buyandsell/request_details/' + str(id_pk)
       users = [qryst[0].user]
       Notification.save_notification(app, notif_text, url, users, qryst[0])
+
   if not already_sent:
     receiver = [str(qryst[0].email),]
     try:
-      from django.core.mail import send_mail
       send_mail(subject, msg, 'buysell@iitr.ernet.in', receiver, fail_silently = True)
       email_sent_msg = qryst[0].user.first_name + ' has been sent a mail with your contact information. He may contact you shortly. If not, go ahead and contact '+pronoun+' youself!'
       messages.success(request, email_sent_msg)
@@ -516,5 +510,111 @@ def seeall(request,search_type):
       queryset.append(un_queryset[item_id])
     return render(request,'buyandsell/buy.html',{'table_data':queryset})
  
-    
+def edit(request,form_type,pk):
+  user=request.user
+  post_date=date.today()
+  if form_type=="sell":
+    instance=SaleItems.objects.get(pk=pk)
+    old_category=instance.category
+    if request.method=='POST':
+      form=SellForm(request.POST,request.FILES,instance=instance)
+      digcheck=0
+      negcheck=0
+      lencheck=0
+      zercheck=0
+      if form.is_valid():
+        phone=form.cleaned_data['contact']
+        cost=form.cleaned_data['cost']
+        if phone.isdigit():
+          digcheck=1
+        if  len(phone)==len(str(int(phone))):
+          zercheck=1
+        if len(phone) == 10:
+          lencheck=1
+        if cost>=0:
+          negcheck=1
+        if digcheck and negcheck and zercheck and lencheck and zercheck:
+          edited_item=form.save(commit=False)
+          expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
+          edited_item.post_date=post_date
+          edited_item.expiry_date=expiry_date
+          edited_item.user=user
+          edited_item.save()
+          if edited_item.category !=  old_category:
+            app='buyandsell'
+            watch_user_list=edited_item.category.watch_users.all()
+            print watch_user_list
+            notif_text=str(edited_item.item_name)+"has been added in the category"+str(edited_item.category.name)
+            notif_text+="that you have watched"
+            url = '/buyandsell/sell_details/' + str(edited_item.pk)         
+            Notification.save_notification(app, notif_text, url, watch_user_list, edited_item) 
+          return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
+        else:
+          print "form filled wrongly"
+      else:
+        return render(request,'buyandsell/form.html',{'form':form})
+    form=SellForm(instance=instance)                                                     
+    return render(request,'buyandsell/form.html',{'form':form})
+     
+  if form_type=="request":
+    instance=RequestedItems.objects.get(pk=pk)    #update notifications to be given to watch users
+    old_category=instance.category 
+    if request.method=='POST':
+      form=RequestForm(request.POST,request.FILES,instance=instance)
+      digcheck=0
+      negcheck=0
+      lencheck=0
+      zercheck=0
+      if form.is_valid():
+        phone=form.cleaned_data['contact']
+        price_upper=form.cleaned_data['price_upper']
+        if phone.isdigit():
+          digcheck=1
+        if  len(phone)==len(str(int(phone))):
+          zercheck=1
+        if len(phone) == 10:
+          lencheck=1
+        if price_upper>=0:
+          negcheck=1
+        if digcheck and negcheck and zercheck and lencheck and zercheck:
+          edited_item=form.save(commit=False)
+          expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
+          edited_item.post_date=post_date
+          edited_item.expiry_date=expiry_date
+          edited_item.user=user
+          edited_item.save()
+          if edited_item.category !=  old_category:
+            app='buyandsell'
+            watch_user_list=edited_item.category.watch_users.all()
+            print watch_user_list
+            notif_text=str(edited_item.item_name)+"has been requested in the category"+str(edited_item.category.name)
+            notif_text+="that you have watched"
+            url = '/buyandsell/sell_details/' + str(edited_item.pk)         
+            Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)             
+          return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
+        else:
+          print "form filled wrongly"
+      else:
+        return render(request,'buyandsell/form.html',{'form':form})
+    form=RequestForm(instance=instance)
+    return render(request,'buyandsell/form.html',{'form':form})
+
+def my_account(request):
+  user=request.user
+  sell_items=SaleItems.objects.filter(user=user).order_by('-pk')
+  request_items=RequestedItems.objects.filter(user=user).order_by('-pk')
+  context={'sell_items':sell_items,'request_items':request_items}
+  return render(request,'buyandsell/myaccount.html',context) 
+
+def get_category_dictionary():
+  cat_dict={}
+  main_cat=[]
+  cat_list=BuySellCategory.objects.all()
+  for cat in cat_list:
+    if cat.main_category not in main_cat:
+      main_cat.append(cat.main_category)
+  for mcat in main_cat:
+    sub_cat=BuySellCategory.objects.filter(main_category=mcat)
+    cat_dict[mcat]=sub_cat
+  return cat_dict  
 

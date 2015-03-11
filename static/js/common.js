@@ -333,6 +333,32 @@ if(typeof dialog_options != "undefined")
     src:'/buyandsell/request_details/'+pk+'/'
   });
 }
+function edit_sell(pk){
+if(typeof dialog_options != "undefined")
+  {
+    dialog_options.close();
+  }
+ dialog_iframe({
+    name:'edit_sell_dialog',
+    title:'EditSellItem',
+    width:600,
+    height:360,
+    src:'/buyandsell/edit/sell/'+pk+'/'
+  });
+}
+function edit_request(pk){
+if(typeof dialog_options != "undefined")
+  {
+    dialog_options.close();
+  }
+ dialog_iframe({
+    name:'edit_request_dialog',
+    title:'EditRequestItem',
+    width:600,
+    height:360,
+    src:'/buyandsell/edit/request/'+pk+'/'
+  });
+}
 function submit_report(object_pk, content_type_pk){
   $.get('/moderation/report_info/',{
     content_type_pk: content_type_pk,

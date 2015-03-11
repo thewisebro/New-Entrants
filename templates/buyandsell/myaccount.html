@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>See sell items</title>
+<title>My account</title>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
 <script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
@@ -14,34 +14,39 @@
 </div>
 <div id="sell_form" onclick="sell_form()">Sell form</div>
 <div id="request_form" onclick="request_form()">Request form</div>
-<p><a href="/buyandsell/viewrequests{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}">View request items</a></p>
-{% if  error_msg %}
-{{ error_msg }}
-{% endif %}
-<h3>Sort by Category</h3>
-{% if cat_dict %}
-<li><a href="/buyandsell/buy">No filter</a></li>
-{% for key,value in cat_dict.items %}
-<ul><a href="/buyandsell/buy/{{key}}"><h4>{{key}}</h4></a>
-{% for row in value %}
-<li><a href="/buyandsell/buy/{{row.main_category}}/{{row.code}}">{{ row.name }}</a></li>
-{% endfor %}
-</ul>
-{% endfor %}
-{% endif %}
-
-{% if table_data %}
-{% for row in table_data %}
+<h2>Sell Items</h2>
+<div id="sell_items">
+{% if sell_items %}
+{% for row in sell_items %}
 <div id="{{ row.pk }}" onclick="sell_details({{ row.pk }})">
-<p>Name: {{ row.item_name }}</p>
+  <p>Name: {{ row.item_name }}</p>
+</div>
+<div id="edit_sell" onclick="edit_sell({{ row.pk }})">
+  *Edit
+</div>
 <P> <img src="/media/{{row.item_image }}"></p>
 <p>Cost: {{ row.cost }}</p>
 <p>Expires after: {{ row.expiry_date|timeuntil }}</p>
-</div>
 {% endfor %}
 {% endif %}
+</div>
+
+<h2>Request Items</h2>
+<div id="request_items">
+{% if request_items %}
+{% for row in request_items %}
+<div id="{{ row.pk }}" onclick="request_details({{ row.pk }})">
+  <p>Name: {{ row.item_name }}</p>
+</div>
+<div id="edit_requests" onclick="edit_request({{ row.pk }})">
+  *Edit
+</div>
+<p>Price upper: {{ row.price_upper }}</p>
+<p>Expires after: {{ row.expiry_date|timeuntil }}</p>
+{% endfor %}
+{% endif %}
+</div>
 <script src="{{ STATIC_URL }}js/common.js"></script>
 <script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>
 </body>
 </html>
-

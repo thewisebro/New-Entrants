@@ -16,5 +16,7 @@ urlpatterns = patterns('',
     url(r'^sell_details/(?P<pk>\w+)/?$',selldetails),
     url(r'^search/(?P<search_type>\w+)/?$',search),
     url(r'^see_all/(?P<search_type>\w+)/?$',seeall),
+    url(r'^edit/(?P<form_type>\w+)/(?P<pk>\w+)/?$', edit,name='edit'),
+    url(r'^my-account/$', my_account),
 
  ) 
