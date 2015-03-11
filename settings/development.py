@@ -199,6 +199,7 @@ TEMPLATE_DIRS = (
 )
 
 DJANGO_CONTRIB_APPS = (
+ 
   'django.contrib.auth',
   'django.contrib.contenttypes',
   'django.contrib.sessions',
@@ -252,6 +253,7 @@ CHANNELI_APPS = (
   'games',
   'buysell',
   'utilities',
+  'bunkometer',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
