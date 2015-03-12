@@ -20,7 +20,17 @@
 {% if  error_msg %}
 {{ error_msg }}
 {% endif %}
-
+<h3>Sort by Category</h3>
+{% if cat_dict %}
+<li><a href="/buyandsell/buy">No filter</a></li>
+{% for key,value in cat_dict.items %}
+<ul><a href="/buyandsell/buy/{{key}}"><h4>{{key}}</h4></a>
+{% for row in value %}
+<li><a href="/buyandsell/buy/{{row.main_category}}/{{row.code}}">{{ row.name }}</a></li>
+{% endfor %}
+</ul>
+{% endfor %}
+{% endif %}
 {% if table_data %}
 {% for row in table_data %}
 <div id="{{ row.pk }}" onclick="request_details({{ row.pk }})">

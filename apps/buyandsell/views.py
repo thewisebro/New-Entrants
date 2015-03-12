@@ -72,9 +72,9 @@ def viewrequests(request,mc=None,c=None):
   maincategory=''
   category=''
   error_msg=''
-  
-  if request.GET.get('ll') and request.GET.get('ul'):
+  cat_dict=get_category_dictionary()
 
+  if request.GET.get('ll') and request.GET.get('ul'):
     pl=int(request.GET.get('ll'))
     pu=int(request.GET.get('ul'))
     if pu>=0 and pl >=0 and pu>pl:
@@ -110,7 +110,8 @@ def viewrequests(request,mc=None,c=None):
     'error_msg':error_msg,
     'table_data':table_data,
     'mc':mc,
-    'c':c
+    'c':c,
+    'cat_dict':cat_dict,
           }    
   return render(request,'buyandsell/show_requests.html',context)
 
@@ -354,7 +355,7 @@ def search(request,search_type):
     count = {}
     print words
     for word in words:
-      result = RequestedItems.objects.filter(item_name__icontains=word)
+      result = RequestedItems.objects.filter(item_name__icontains=word,is_active=True)
       for temp in result:
         print word
         if temp.id in un_queryset:
@@ -381,7 +382,7 @@ def search(request,search_type):
     count = {}
     print words
     for word in words:
-      result = SaleItems.objects.filter(item_name__icontains=word)
+      result = SaleItems.objects.filter(item_name__icontains=word,is_active=True)
       for temp in result:
         print word
         if temp.id in un_queryset:
@@ -475,7 +476,7 @@ def seeall(request,search_type):
     count = {}
     print words
     for word in words:
-      result = RequestedItems.objects.filter(item_name__icontains=word)
+      result = RequestedItems.objects.filter(item_name__icontains=word,is_active=True)
       for temp in result:
         print word
         if temp.id in un_queryset:
@@ -496,7 +497,7 @@ def seeall(request,search_type):
     count = {}
     print words
     for word in words:
-      result = SaleItems.objects.filter(item_name__icontains=word)
+      result = SaleItems.objects.filter(item_name__icontains=word,is_active=True)
       for temp in result:
         print word
         if temp.id in un_queryset:
