@@ -78,6 +78,7 @@ def index(request,enrno=None):
                'post_owner_branch':post.owner.user.info,
                'post_owner_pic':post.owner.user.photo_url,
                'post_owner_enrol':post.owner.user.username,
+               'post_id':str(post.pk),
                'image_url': image_url,
                'time':str(post.post_date),
                'wall_user':post.wall_user.user.name,
@@ -164,6 +165,7 @@ def homePage(request):
              'post_owner_branch':post.owner.user.info,
              'post_owner_pic':post.owner.user.photo_url,
              'post_owner_enrol':post.owner.user.username,
+             'post_id':str(post.pk),
              'image_url': image_url,
              'time':str(post.post_date)
              }
@@ -202,7 +204,7 @@ def post(request,wall_user):
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
       hash_tag = []
       for word in hashed:
-# temp =[ word.split('#') ]
+# te mp =[ word.split('#') ]
         temp =  filter(None, word.replace(' ','').split("#"))
         hash_tag.extend(temp)
       hash_tag = list(set(hash_tag))
@@ -310,6 +312,17 @@ def hashtag(request,slug):
     data ={'posts_data':posts_data}
     return HttpResponse(simplejson.dumps(data),'application/json')
   return HttpResponse('1')
+
+def delete(request,id):
+  if request:
+    try:
+      post = Post.objects.get(pk=id)
+    except Post.DoesNotExist:
+      return HttpResponse("Post Doesnot exist")
+    if post.owner.user.username=='13114068' or post.wall_user.user.username=='13117060': #use request.user in place of enrollment number
+      post.delete()
+      return HttpResponse("Post deleted Successfully.")
+    return HttpResponse("you don't have the previleges to delete this post.")
 
 #utility function bubble sorting
 def bubble(bad_list):
