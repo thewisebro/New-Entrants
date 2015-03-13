@@ -9,7 +9,7 @@ from django.utils import timezone
 from taggit.models import Tag,TaggedItem
 from django.views.generic import DetailView, ListView
 from nucleus.models import Student,User
-from django.db.models import Q
+from django.db.models import Q,Count
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from notifications.models import Notification
@@ -90,7 +90,7 @@ def index(request,enrno=None):
     return HttpResponse(simplejson.dumps(data),'application/json') 
 #  return render_to_response('yaadein/usertag.html', {'cover_pic': y_user.coverpic.url,'enrno':enrno,'posts_data':posts_data}, context_instance=RequestContext(request))
   else:
-    import ipdb;ipdb.set_trace()
+# import ipdb;ipdb.set_trace()
     print 'vaibhavraj'
     if request.method == 'POST':
       post_data = str(simplejson.loads(request.POST['data'])['post_text'])
@@ -313,6 +313,8 @@ def hashtag(request,slug):
     return HttpResponse(simplejson.dumps(data),'application/json')
   return HttpResponse('1')
 
+@csrf_exempt
+@CORS_allow
 def delete(request,id):
   if request:
     try:
@@ -324,6 +326,21 @@ def delete(request,id):
       return HttpResponse("Post deleted Successfully.")
     return HttpResponse("you don't have the previleges to delete this post.")
 
+
+
+def trending(request):
+  posts=Post.objects.all()
+  trending_users =  Student.objects.filter(tagged_user__in=posts).annotate(itemCount=Count('tagged_user')).order_by('-itemCount')
+  user_list=[]
+  for tr in trending_users:
+    temp={
+          'name':tr.user.username,
+          'enrno':tr.user.name,
+        }
+    user_list.append(temp)
+  data = {'user_list':user_list}
+  return HttpResponse(simplejson.dumps(data),'application/json')
+  
 #utility function bubble sorting
 def bubble(bad_list):
   length = len(bad_list) - 1
