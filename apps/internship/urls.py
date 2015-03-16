@@ -70,8 +70,8 @@ urlpatterns += patterns('internship.views_forum',
   (r'^forum/$', 'forum_post'),
   (r'^forum/(?P<forum_type>[T|P])/$', 'forum'),
   (r'^forum/(?P<forum_type>[T|P])/(?P<page_no>\d+)/$', 'forum'),
-)  
-  
+)
+
 urlpatterns += patterns('internship.views_feedback',
   # Feedback
   (r'^feedback/$', 'feedback_company_list'),

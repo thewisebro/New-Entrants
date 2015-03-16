@@ -16,11 +16,11 @@
   <tr>
     <td>{{ forloop.counter }}</td>
     <td>
-      <a href="{% url internship.views_feedback.company_feedback year feedback.company_name %}">
+      <a href="{% url 'internship.views_feedback.company_feedback' year feedback.company_name %}">
       {{ feedback.company_name }}
       </a>
     </td>
-    <td>{{ feedback.count }} (<a href=" {% url internship.views_feedback.feedback_company_as_pdf feedback.company_name %} ">View</a>)</td>
+    <td>{{ feedback.count }} (<a href=" {% url 'internship.views_feedback.feedback_company_as_pdf' feedback.company_name %} ">View</a>)</td>
   </tr>
   {% endfor %}
   </tbody>
@@ -28,8 +28,8 @@
 {% else %}
 No companies to show Feedback for this session! <br />
 {% endif %}
-<a href ={% url internship.views_feedback.feedback_company_list year_previous %}><button class="btn">Previous Year</button></a> 
+<a href ={% url 'internship.views_feedback.feedback_company_list' year=year_previous %}><button class="btn">Previous Year</button></a> 
 {% if show_next  %}
-<a href = {% url internship.views_feedback.feedback_company_list year_next %}><button class="btn">Next Year</button></a>
+<a href = {% url 'internship.views_feedback.feedback_company_list' year=year_next %}><button class="btn">Next Year</button></a>
 {% endif %}
 {% endblock app_content %}

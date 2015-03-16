@@ -20,7 +20,7 @@
     <td>{{ feedback.person_name }}</td>
     <td>{{ feedback.discipline_name }}</td>
     <td>{{ feedback.date }}</td>
-    <td><a href="{% url internship.views_feedback.feedback_as_pdf feedback.id %}">PDF</a></td>
+    <td><a href="{% url 'internship.views_feedback.feedback_as_pdf' feedback.id %}">PDF</a></td>
   </tr>
   {% endfor %}
   </tbody>

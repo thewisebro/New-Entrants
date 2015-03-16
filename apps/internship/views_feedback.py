@@ -1,8 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.template import RequestContext 
-from django.db.models import Q
+from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.forms.models import modelformset_factory
 from django.db.models import Min, Count, F
@@ -13,14 +12,15 @@ from zipfile import ZipFile
 from django.contrib import messages
 from django.views.generic.base import TemplateView
 
-from placement.utils import get_resume_binary, handle_exc
+from placement.utils import get_resume_binary
+from internship.utils import handle_exc
 import datetime
 import os, xlwt
 import logging
 
 import cStringIO as StringIO
 from internship.models import *
-from internship import forms 
+from internship import forms
 from nucleus.models import Student, Branch, StudentInfo
 from placement.models import InternshipInformation, ProjectInformation
 from placement.policy import current_session_year
@@ -109,7 +109,7 @@ def feedback(request) :
   """
   try:
     l.info(request.user.username+': Giving feedback for a company.')
-    person = request.session.get('person')
+    student = request.user.student
     if request.method == 'POST' :
       form = forms.Feedback(request.POST)
       companies = []
@@ -123,11 +123,12 @@ def feedback(request) :
             feedback_text = feedback_text + '<p class="feedback_question">' + IC.FEEDBACK_QUESTIONS[i-1] + '</p>'
             feedback_text = feedback_text + '<p class="feedback_answer">' + form.cleaned_data['feedback'+str(i)] + '</p>'
         feedback_text = feedback_text.replace('\n',' ').replace('\r','').replace('\t',' ')
-        feedback = Feedback(enrollment_no = person.user.username,
-                            person_name = person.name,
-                            discipline_name = person.branch.name,
-                            department_name = person.branch.get_department_display(),
-                            company_name = form.cleaned_data['company_name'],
+        company_name = form.cleaned_data['company_name']
+        feedback = Feedback(enrollment_no = student.user.username,
+                            person_name = student.user.name,
+                            discipline_name = student.branch.name,
+                            department_name = student.branch.get_department_display(),
+                            company_name = company_name,
                             feedback = feedback_text,
                             date = datetime.datetime.now(),
                             year = current_session_year(),
@@ -180,7 +181,7 @@ def feedback_as_pdf(request, feedback_id) :
     if pdf.err :
       return HttpResponse('An error occured while generating the pdf file.')
       l.info('An eroor occured while generating the pdf file')
-    response = HttpResponse(result.getvalue(), mimetype='application/pdf')
+    response = HttpResponse(result.getvalue(), content_type='application/pdf')
     filename = feedback.company_name + '_' + feedback.person_name + '_InternshipFeedback_' + session
     response['Content-Disposition'] = 'attachment; filename=' + filename + '.pdf'
     response['Content-Length'] = len(result.getvalue())
@@ -213,7 +214,7 @@ def feedback_company_as_pdf(request, company_name) :
     if pdf.err :
       l.info(request.user.username+' : got pdf error in feedback pdf of '+str(company_name))
       return HttpResponse('An error occured while generating the pdf file.')
-    response = HttpResponse(result.getvalue(), mimetype='application/pdf')
+    response = HttpResponse(result.getvalue(), content_type='application/pdf')
     filename = company_name + '_InternshipFeedback_' + session
     response['Content-Disposition'] = 'attachment; filename=' + filename + '.pdf'
     response['Content-Length'] = len(result.getvalue())

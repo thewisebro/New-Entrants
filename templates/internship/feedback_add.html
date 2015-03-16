@@ -1,11 +1,11 @@
 {% extends "internship/base.html" %}
 
 {% block app_content %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor.js"></script>
 <style type="text/css">
   .form_itself label { float:none; width:auto; }
 </style>
-{% include "generic_form.html" %}
+{% include "internship/generic_form.html" with action=action form=form %}
 
 <script type="text/javascript">
   for(var i=1;i<=8;++i)
