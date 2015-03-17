@@ -10,6 +10,8 @@ ALLOWED_HOSTS = [
   '.iitr.ernet.in',
 ]
 
+SESSION_COOKIE_HTTPONLY = True
+
 # Add file logging to loggers
 LOGGING['loggers']['channel-i_logger']['handlers'].append('file_logger')
 LOGGING['loggers']['lostfound']['handlers'].append('lostfound_file_logger')

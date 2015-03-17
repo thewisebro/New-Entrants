@@ -289,6 +289,7 @@ COMPRESS_PRECOMPILERS = (
 SHELL_PLUS = "ipython"
 
 SESSION_COOKIE_NAME = 'CHANNELI_SESSID'
+SESSION_COOKIE_HTTPONLY = False
 SESSION_ENGINE = 'nucleus.session'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 

@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.conf import settings
 
+from django.contrib.sessions.models import Session
 from settings.development import PRODUCTION, MEDIA_URL , GLOBAL_MEDIA_ROOT
 from django.views.decorators.csrf import csrf_exempt
 
@@ -22,7 +23,13 @@ from django import forms
 def CORS_allow(view):
   def wrapped_view(request, *args, **kwargs):
     response = view(request, *args, **kwargs)
+    import pdb;pdb.set_trace()
     if PRODUCTION == False:
+      session_id = 'Himanshu'
+      session = Session.objects.get(session_key=session_id)
+      uid = session.get_decoded().get('_auth_user_id')
+      user = User.objects.get(pk=uid)
+      request.user = user
       response["Access-Control-Allow-Origin"] = "*"
       response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
       response["Access-Control-Allow-Credentials"] = True
@@ -90,6 +97,7 @@ def coursepage_old(request, batch_id):
 #@login_required
 def coursepage(request, batch_id):
 #    user = request.user
+    import pdb;pdb.set_trace()
     usrname = request.POST.get('user','harshithere')
     user = User.objects.get(username=usrname)
 #    user = User.objects.get(username=request.POST['user'])
