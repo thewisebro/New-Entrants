@@ -15,5 +15,6 @@ urlpatterns = [
     url(r'^delete/(?P<id>[\w]+)/$', delete, name='delete_post'),
     url(r'^private/(?P<id>[\w]+)/$',private_posts, name='private_post'),
     url(r'^trending/$',trending,name='trending_users'),
+    url(r'^spot/(?P<name>[\w]+)/$', spot_page, name='spots'),
     ]
 

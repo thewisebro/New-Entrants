@@ -152,13 +152,22 @@ def homePage(request):
   y_user = YaadeinUser.objects.get_or_create(user__username='13117060')[0]#user=request.user
   logged_user = y_user.user
   s = Student.objects.get(user__username='13117060')#=enrno
-  posts = Post.objects.order_by('post_date').filter(status= 'A').reverse()
+  posts_branch_year = Post.objects.filter(owner__branch_id=s.branch_id).filter(owner__semester_no=s.semester_no).filter(status='A').order_by('post_date').reverse()
+  posts_branch = Post.objects.filter(owner__branch_id=s.branch_id).filter(status='A').order_by('post_date').reverse()
+  posts_year = Post.objects.filter(owner__semester_no=s.semester_no).filter(status='A').order_by('post_date').reverse()
+  posts = list(set(list(posts_branch_year)+list(posts_branch)+list(posts_year)))
+# posts = Post.objects.order_by('post_date').filter(status= 'A').reverse()
   posts_data = []
   for post in posts:
       images = PostImage.objects.filter(post=post)
       image_url=[]
+      users_tagged_inpost = []
+      users = post.user_tags.all()
       for image in images:
         image_url.append(image.image.url)
+      if len(users)>0:
+          for user in users:
+            users_tagged_inpost.append({'name':user.user.name,'username':user.user.username,})
       tmp = {
              'post_text': post.text_content,
              'post_owner':post.owner.user.name,
@@ -167,7 +176,8 @@ def homePage(request):
              'post_owner_enrol':post.owner.user.username,
              'post_id':str(post.pk),
              'image_url': image_url,
-             'time':str(post.post_date)
+             'time':str(post.post_date),
+             'taggedUsers':users_tagged_inpost
              }
       posts_data.append( tmp )
   data ={'name':logged_user.name, 'coverPic': y_user.coverpic.url, 'enrolmentNo':logged_user.username, 'posts_data':posts_data, 'label':logged_user.info, 'profilePic':logged_user.photo_url}
@@ -254,8 +264,13 @@ def post_display(request,pk):
     post = Post.objects.get(pk=pk)
     images = PostImage.objects.filter(post=post)
     image_url=[]
+    users_tagged_inpost = []
+    users = post.user_tags.all()
     for image in images:
       image_url.append(image.image.url)
+    if len(users)>0:
+          for user in users:
+            users_tagged_inpost.append({'name':user.user.name,'username':user.user.username,})
     data = {
              'post_text': post.text_content,
              'post_owner':post.owner.user.name,
@@ -263,7 +278,8 @@ def post_display(request,pk):
              'post_owner_pic':post.owner.user.photo_url,
              'post_owner_enrol':post.owner.user.username,
              'image_url': image_url,
-             'time':str(post.post_date)
+             'time':str(post.post_date),
+             'taggedUsers':users_tagged_inpost
              }
     return HttpResponse(simplejson.dumps(data),'application/json')
   else:
@@ -297,8 +313,13 @@ def hashtag(request,slug):
     for post in posts:
           images = PostImage.objects.filter(post=post)
           image_url=[]
+          users_tagged_inpost = []
+          users = post.user_tags.all()
           for image in images:
             image_url.append(image.image.url)
+          if len(users)>0:
+            for user in users:
+              users_tagged_inpost.append({'name':user.user.name,'username':user.user.username,})
           tmp = {
              'post_text': post.text_content,
              'post_owner':post.owner.user.name,
@@ -306,13 +327,47 @@ def hashtag(request,slug):
              'post_owner_pic':post.owner.user.photo_url,
              'post_owner_enrol':post.owner.user.username,
              'image_url': image_url,
-             'time':str(post.post_date)
+             'time':str(post.post_date),
+             'taggedUsers':users_tagged_inpost,
              }
           posts_data.append( tmp )
     data ={'posts_data':posts_data}
     return HttpResponse(simplejson.dumps(data),'application/json')
   return HttpResponse('1')
 
+
+@csrf_exempt
+@CORS_allow
+def spot_page(request,name):
+  if request:
+    posts_data = []
+    posts = Post.objects.filter(spots__name=name).order_by('post_date').reverse()  
+    for post in posts:
+          images = PostImage.objects.filter(post=post)
+          image_url=[]
+          users_tagged_inpost = []
+          users = post.user_tags.all()
+          for image in images:
+            image_url.append(image.image.url)
+          if len(users)>0:
+            for user in users:
+              users_tagged_inpost.append({'name':user.user.name,'username':user.user.username,})
+          tmp = {
+             'post_text': post.text_content,
+             'post_owner':post.owner.user.name,
+             'post_owner_branch':post.owner.user.info,
+             'post_owner_pic':post.owner.user.photo_url,
+             'post_owner_enrol':post.owner.user.username,
+             'image_url': image_url,
+             'time':str(post.post_date),
+             'taggedUsers':users_tagged_inpost,
+             }
+          posts_data.append( tmp )
+    data ={'posts_data':posts_data}
+    return HttpResponse(simplejson.dumps(data),'application/json')
+  return HttpResponse('1')
+
+ 
 @csrf_exempt
 @CORS_allow
 def delete(request,id):
@@ -341,6 +396,7 @@ def private_posts(request,id):
     return HttpResponse("You don't have the previleges to change the privacy.")
 
 def trending(request):
+  posts = Post.objects.all()
   trending_users =  Student.objects.filter(tagged_user__in=posts).annotate(itemCount=Count('tagged_user')).order_by('-itemCount')
   user_list=[]
   for tr in trending_users:

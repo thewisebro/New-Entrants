@@ -20,10 +20,11 @@ class YaadeinUser(models.Model):
     return self.user.name
 
 class Spot(models.Model):
+  name = models.CharField(max_length = 200, null=True)
   profile_pic = models.FileField(upload_to='yaadein/spot/', null=True, blank=True)
   coverpic = models.FileField(upload_to='yaadein/coverpic/',null =True, blank=True)
   def __unicode__(self):
-    return self.profile_pic.url
+    return self.name
 
 class Post(models.Model):
   text_content = models.CharField(max_length=200)
