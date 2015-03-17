@@ -134,7 +134,7 @@ def person_sessions(request):
 
 @pagelet_login_required
 def email(request):
-  emailform = EmailForm(initial = {'email':request.user.email})
+  emailform = EmailForm(instance=request.user)
   events_user, created = EventsUser.objects.get_or_create(user=request.user)
   if created:
     events_user.subscribe_to_calendars()
