@@ -37,6 +37,9 @@ var apps_scripts = {
   'settings':[
     '/static/handlebars/utilities/templates.js',
     '/static/js/utilities/base.js'
+  ],
+  'groups':[
+    '/static/js/groups/base.js'
   ]
 };
 

@@ -41,6 +41,9 @@ class GroupInfo(models.Model):
   members = models.ManyToManyField(Student, related_name="groupinfos", through="Membership")
   posts = models.ManyToManyField(Post)
   subscribers= models.ManyToManyField(User, blank=True)
+  facebook_url = models.URLField(blank=True)
+  twitter_url = models.URLField(blank=True)
+  gplus_url = models.URLField(blank=True)
   def __unicode__(self):
     return str(self.group)
 

@@ -120,7 +120,9 @@ def group_details(request,username):
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.in_group('Student'):
+    student = user.student
   if group.is_active == True or group.user == user or group.admin == student:
     can_edit = False
     subscribers = get_subscribers_no(group)
