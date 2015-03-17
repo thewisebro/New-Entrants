@@ -13,7 +13,7 @@ from django.views.generic.base import TemplateView
 
 from zipfile import ZipFile
 from django.contrib import messages
-from placement.utils import handle_exc
+from internship.utils import handle_exc
 import datetime
 import os, xlwt
 import logging
@@ -41,26 +41,25 @@ def forum(request, forum_type, page_no = None) :
   """
   #l.info(request.user.username+' :tried to view the forum view')
 
- 
   from django.core.mail import send_mail
   try:
     if request.method == 'POST' :
       if request.POST['content']=="":
         messages.error(request, 'An empty reply cannot be posted')
         return HttpResponseRedirect(reverse('internship.views_forum.forum', args=[ forum_type ]))
-      if request.session.get('person'):
-        person = request.session.get('person')
+      if request.user.student:
+        student = request.user.student
         post = ForumPost.objects.get(pk = request.POST['post_id'])
         reply = ForumReply(post = post,
-                         enrollment_no = person.user.username,
-                         person_name = person.name,
+                         enrollment_no = student.user.username,
+                         person_name = student.user.name,
                          content = request.POST['content'],
                         )
         reply.save()
         l.info(request.user.username+' : tried to post a reply on forum')
         messages.success(request, "Forum Post successful")
-      elif request.session.get('user'):
-        user = request.session.get('user')
+      elif request.user:
+        user = request.user
         #if user.groups.filter(name = 'Placement Admin').exists():
         post = ForumPost.objects.get(pk = request.POST['post_id'])
         reply = ForumReply(post = post,
@@ -89,6 +88,7 @@ def forum(request, forum_type, page_no = None) :
       replies.append(ForumReply.objects.filter(post = post).order_by('date'))
     posts = zip(post_headers, replies)
     return render_to_response('internship/forums_view.html', {
+      'user' : request.user,
       'forum_type' : forum_type,
       'posts' : posts,
       'page_no' : page_no,
@@ -104,19 +104,18 @@ def forum_post(request) :
   """
   Adds a new Post to the forum.
   """
-  
   try:
     if request.method == 'POST' :
       if request.POST['title']=="":
         messages.error(request, 'Please fill in the Question before submitting.')
         return HttpResponseRedirect(reverse('internship.views_forum.forum', args=[ request.POST['forum_type'] ]))
-      elif request.session.get('person'):
-        person = request.session.get('person')
+      elif request.user.student:
+        student = request.user.student
         # DONE?: TODO : You may want to convert department_name to a human readable format.
-        post = ForumPost(enrollment_no = person.user.username,
-                     person_name = person.name,
-                     discipline_name = person.branch.name,
-                     department_name = person.branch.get_department_display(),
+        post = ForumPost(enrollment_no = student.user.username,
+                     person_name = student.user.name,
+                     discipline_name = student.branch.name,
+                     department_name = student.branch.get_department_display(),
                      title = request.POST['title'],
                      content = request.POST['content'],
                      forum_type = request.POST['forum_type']
@@ -124,7 +123,7 @@ def forum_post(request) :
         
         post.save()
         l.info(request.user.username+' :added a new post to the forum ')
-      elif request.session.get('user') :
+      elif request.user :
         post = ForumPost(enrollment_no = '00000000',
                       person_name = 'Placement Admin',
                       discipline_name = 'Admin',
@@ -135,29 +134,27 @@ def forum_post(request) :
                       )
         post.save()
       try:  
-        person = request.session['person']
-        email_id=PersonIdEnrollmentNoMap.objects.get(enrollment_no=request.user.username).person_id
+        student = request.user.student
+        email_id=WebmailAccount.objects.get(user=request.user).webmail_id
         forum_type=request.POST['forum_type']
         if(forum_type=="T"):
-          subject_mail="New post on Internship Technical forum by "+ person.name   
+          subject_mail="New post on Internship Technical forum by "+ student.user.name
         elif(forum_type=="P"):
-          subject_mail="New post on Internship forum by "+ person.name        
+          subject_mail="New post on Internship forum by "+ student.user.name
         content_mail="Post Title: "+request.POST['title']+'\n'+"Post Content: "+request.POST['content']
         from django.core.mail import send_mail
         forum_type=request.POST['forum_type']
         if(forum_type=="T"):
-          send_mail(subject_mail, content_mail,'img@iitr.ernet.in' , ['img.placement@gmail.com'])
+          send_mail(subject_mail, content_mail,'img@iitr.ernet.in' , ['img.placement@gmail.com'], fail_silently=True)
         elif(forum_type=="P"):
-          send_mail(subject_mail, content_mail, 'img@iitr.ernet.in' , ['placement.iitr@gmail.com'])
+          send_mail(subject_mail, content_mail, 'img@iitr.ernet.in' , ['placement.iitr@gmail.com'], fail_silently=True)
         messages.success(request, 'You posted successfully on the forum')
-      
       except Exception as e:
-        logger.info(request.user.username+': got an exception in mailer block during forum post')
-        logger.exception(e)
+        l.info(request.user.username+': got an exception in mailer block during forum post')
+        l.exception(e)
         return handle_exc(e, request)
 
       l.info(request.user.username+' : added a new post to the forum')
-      
       return HttpResponseRedirect('/internship/forum/' + request.POST['forum_type'] + '/')
   except Exception as e:
     l.info(request.user.username +': encountered exception when adding a new post to the forum')

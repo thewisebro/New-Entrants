@@ -41,7 +41,6 @@ function Blank_TextField_Validator_new()
   // Check the value of the element named text_name from the form named text_form
   if (document.getElementById('content').value === "")
   {
-      
     // If null display and alert box
        alert("An empty reply cannot be posted!");
          // Place the cursor on the field for revision
@@ -62,15 +61,15 @@ function Blank_TextField_Validator_new()
 
 
 <!-- New ForumPost form -->
-{% if request.session.person or request.session.user %}
+{% if user %}
 <div id='forum_ask'>
-<form name="newforumpost" method="POST" action="{% url internship.views_forum.forum_post %}" onsubmit="return Blank_TextField_Validator()">
+<form name="newforumpost" method="POST" action="{% url 'internship.views_forum.forum_post' %}" onsubmit="return Blank_TextField_Validator()">
   {% csrf_token %}
-  
+
 {# <textarea id="id_forum_title" name="title" placeholder="Question." rows="2"></textarea> #}
   <input type='text' class='forum_input' id='id_forum_title' name='title' placeholder='Question.' />
   <br/>
-  
+
 {#  <input type="text" id="id_forum_content" name="content" placeholder="Description."> #}
   <textarea class='forum_input' id="id_forum_content" name="content" placeholder="Description." rows="2"></textarea>
   <input type="hidden" name="forum_type" value="{{ forum_type }}"/>
@@ -78,18 +77,17 @@ function Blank_TextField_Validator_new()
 </form>
 </div>
 {% endif %}
-
 {% for post,replies in posts %}
 <div class='forum_unit'>
   <div class='forum_question'>
     {{ post.title }}
   </div >
-  
+
   <div class='forum_question_content'>
   {% if post.content %}
     {{ post.content }}
-  <hr /> 
-  {% endif %} 
+  <hr />
+  {% endif %}
   <span class='forum_light'>{{ post.person_name }} | {{ post.date }}</span>
   </div>
 
@@ -104,7 +102,7 @@ function Blank_TextField_Validator_new()
 {% endif %}
 
 <!-- ForumReply form -->
-{% if request.session.person or request.session.user %}
+{% if request.user %}
 <a href="javascript:void();" onclick="javascript:switchReplyStatus({{ post.id }});"><button id="forum_reply_post_button" class="btn btn-primary"><span id="ReplyLink{{ post.id }}">Reply</span></button></a>
 <form method="POST" id="ForumReply{{ post.id }}" style="display:none;" onsubmit="return Blank_TextField_Validator_new()">
   {% csrf_token %}
@@ -122,9 +120,9 @@ function Blank_TextField_Validator_new()
 {% for page in pages %}
 
 {% if page_no == page %}
-<li class="disabled"><a href="{% url internship.views_forum.forum forum_type page %}">{{ page }}</a></li>
+<li class="disabled"><a href="{% url 'internship.views_forum.forum' forum_type page %}">{{ page }}</a></li>
 {% else %}
-<li><a href="{% url internship.views_forum.forum forum_type page %}">{{ page }}</a></li>
+<li><a href="{% url 'internship.views_forum.forum' forum_type page %}">{{ page }}</a></li>
 {% endif %}
 {% endfor %}
 </div>

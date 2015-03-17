@@ -17,7 +17,7 @@ import logging
 
 import cStringIO as StringIO
 from internship.models import *
-from internship import forms 
+from internship import forms
 from nucleus.models import Student, Branch, StudentInfo
 from placement.models import InternshipInformation, ProjectInformation
 from placement.policy import current_session_year
@@ -28,6 +28,7 @@ from django.conf import settings
 # Permission denied page. User will be redirected to this page if he fails the user_passes_test.
 login_url = '/internship/'
 l=logging.getLogger('internship')
+
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').count() != 0, login_url='/nucleus/login/')
 def notice_add(request) :
@@ -61,7 +62,7 @@ def notice_add(request) :
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').count() != 0, login_url='/nucleus/login/')
 def notice_edit(request, notice_id) :
   """
-  Add a notice (for Admin)
+  Edit a notice (for Admin)
   """
   try:
     l.info(request.user.username +': tried to edit notice '+str(notice_id))
