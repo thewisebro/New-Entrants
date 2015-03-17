@@ -71,7 +71,7 @@ def index(request,enrno=None):
           image_url.append(image.image.url)
         if len(users)>0:
           for user in users:
-            users_tagged_inpost.append(user.user.name)
+            users_tagged_inpost.append({'name':user.user.name,'username':user.user.username,})
         tmp = {
                'post_text': post.text_content,
                'post_owner':post.owner.user.name,
@@ -90,7 +90,7 @@ def index(request,enrno=None):
     return HttpResponse(simplejson.dumps(data),'application/json') 
 #  return render_to_response('yaadein/usertag.html', {'cover_pic': y_user.coverpic.url,'enrno':enrno,'posts_data':posts_data}, context_instance=RequestContext(request))
   else:
-# import ipdb;ipdb.set_trace()
+#  import ipdb;ipdb.set_trace()
     print 'vaibhavraj'
     if request.method == 'POST':
       post_data = str(simplejson.loads(request.POST['data'])['post_text'])
@@ -152,7 +152,7 @@ def homePage(request):
   y_user = YaadeinUser.objects.get_or_create(user__username='13117060')[0]#user=request.user
   logged_user = y_user.user
   s = Student.objects.get(user__username='13117060')#=enrno
-  posts = Post.objects.order_by('post_date').reverse()
+  posts = Post.objects.order_by('post_date').filter(status= 'A').reverse()
   posts_data = []
   for post in posts:
       images = PostImage.objects.filter(post=post)
@@ -326,10 +326,21 @@ def delete(request,id):
       return HttpResponse("Post deleted Successfully.")
     return HttpResponse("you don't have the previleges to delete this post.")
 
-
+@csrf_exempt
+@CORS_allow
+def private_posts(request,id):
+  if request:
+    try:
+      post = Post.objects.get(pk=id)
+    except Post.DoesNotExist:
+      return HttpResponse("Post Doesnot Exist")
+    if post.owner.username=='13114068' or post.wall_user.user.username=='13117060':
+      post.status = 'B'
+      post.save()
+      return HttpResponse("Your Post is now Private.")
+    return HttpResponse("You don't have the previleges to change the privacy.")
 
 def trending(request):
-  posts=Post.objects.all()
   trending_users =  Student.objects.filter(tagged_user__in=posts).annotate(itemCount=Count('tagged_user')).order_by('-itemCount')
   user_list=[]
   for tr in trending_users:
@@ -340,6 +351,7 @@ def trending(request):
     user_list.append(temp)
   data = {'user_list':user_list}
   return HttpResponse(simplejson.dumps(data),'application/json')
+
   
 #utility function bubble sorting
 def bubble(bad_list):

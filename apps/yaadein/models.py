@@ -19,10 +19,18 @@ class YaadeinUser(models.Model):
   def __unicode__(self):
     return self.user.name
 
+class Spot(models.Model):
+  profile_pic = models.FileField(upload_to='yaadein/spot/', null=True, blank=True)
+  coverpic = models.FileField(upload_to='yaadein/coverpic/',null =True, blank=True)
+  def __unicode__(self):
+    return self.profile_pic.url
+
 class Post(models.Model):
   text_content = models.CharField(max_length=200)
   tags = TaggableManager()
   #images=models.ManyToManyField('Image')
+  spots = models.ManyToManyField(Spot)
+  upvote = models.IntegerField(default=0)
   post_date = models.DateTimeField(auto_now=True)
   user_tags = models.ManyToManyField(Student, related_name="tagged_user")
   owner = models.ForeignKey(Student, related_name="post_owner")
@@ -36,6 +44,4 @@ class PostImage(models.Model):
   post = models.ForeignKey(Post)
   def __unicode__(self):
     return self.image.url
-
-
 
