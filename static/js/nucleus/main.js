@@ -77,17 +77,31 @@ function load_events_birthdays(){
   events_birthdays();
 }
 
+function nucleus_on_login_logout(){
+  upcoming_events = Array();
+  birthday_users = Array();
+  todays_menu = null;
+  var $eb_div = $('#events-birthdays');
+  if($eb_div.length != 0)
+    load_events_birthdays();
+}
+
+$(document).on("login", nucleus_on_login_logout);
+$(document).on("logout", nucleus_on_login_logout);
+
 function events_birthdays(){
-  if(birthday_users.length == 0){
-    $.get("/birthday/today",{},function(data){
-        birthday_users = data.birthday_users;
-        if(birthday_users.length)
-          display_birthdays();
-      }
-    );
-  }
-  else{
-    display_birthdays();
+  if(user.is_authenticated){
+    if(birthday_users.length == 0){
+      $.get("/birthday/today",{},function(data){
+          birthday_users = data.birthday_users;
+          if(birthday_users.length)
+            display_birthdays();
+        }
+      );
+    }
+    else{
+      display_birthdays();
+    }
   }
   if(upcoming_events.length == 0){
     $.get("/events/fetch",
