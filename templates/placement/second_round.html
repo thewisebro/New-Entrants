@@ -1,0 +1,40 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+
+<h3>Second Round</h3>
+<hr/>
+
+<form method="POST">
+  {% csrf_token %}
+  <table class="sortable table table-striped table-bordered table-condensed" id="t1">
+    <thead>
+      <tr>
+        <th>S.No.</th>
+        <th>Branch</th>
+        <th>Second Round</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for branch in branches %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td><label for="branch_{{ branch.pk }}">{{ branch.name }}</label></td>
+
+        <td>
+          <input name="branches_for_second_round" id="branch_{{ branch.pk }}" type="checkbox"
+                 {% if branch.pk in second_round_branches %}checked="checked"{% endif %}
+                 value="{{ branch.pk }}" />
+        </td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+  <div class="submit_button">
+    <input type="Submit" value="Update" class="btn btn-primary"/>
+  </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "internship/base.html" %}
+
+{% block app_content %}
+<h3> Insert results for {{ company.name }}</h3>
+<hr>
+{% if student_list %}
+<form class = "well" method="POST">
+  {% csrf_token %}
+  <table class="sortable table table-striped table-bordered table-condensed" id="t1">
+    <thead>
+    <tr>
+      <td class="lefttopcurve">S.No.</td>
+      <td>Select</td>
+      <td>Name</td>
+      <td>Discipline</td>
+      <td class="righttopcurve">Course</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% for student in student_list %}
+    <tr class="{% cycle 'odd' 'even' %} {% if forloop.last %}lastline{% endif %}">
+      <td {% if forloop.last %}class="leftbottomcurve"{% endif %}>{{ forloop.counter }}</td>
+      <td><input type="checkbox" name="selected_students" value="{{ student.id }}"/></td>
+      <td>{{ student.student.name }}</td>
+      <td>{{ student.student.branch.name }}</td>
+      <td {% if forloop.last %}class="rightbottomcurve"{% endif %}>
+        {{ student.student.get_semester_display }}
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <div class="submit_button">
+    <input type="submit" class="btn btn-primary" value="Insert"/>
+  </div>
+</form>
+{% else  %}{% if branches %}
+<table class="sortable table table-striped table-bordered table-condensed" id="t2">
+  <thead>
+  <tr>
+    <td class="lefttopcurve">S.No.</td>
+    <td>Name</td>
+    <td>Insert</td>
+  </tr>
+  </thead>
+  <tbody>
+  {% for branch in branches %}
+  <tr class="{% cycle 'odd' 'even' %} {% if forloop.last %}lastline{% endif %}">
+    <td {% if forloop.last %}class="leftbottomcurve"{% endif %}>{{ forloop.counter }}</td>
+    <td class="leftalign">{{ branch.name }}</td>
+    <td><a href="{% url 'internship.views_results.insert_result' company.id branch.code %}">Insert</a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+No student has an open profile for internship for the selected branch !
+{% endif %} {% endif %}
+{% endblock %}

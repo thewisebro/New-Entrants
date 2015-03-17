@@ -1,0 +1,62 @@
+<style>
+th{
+  background-color:#880000;
+  color: #ffffff;
+  padding:5px 0 0 5px;
+}
+td{
+  padding: 5px 0 0 5px;
+}
+
+table{
+  margin-bottom:10px;
+  text-align:center;
+}
+
+.small{
+  font-size:0.75em;
+}
+
+</style>
+<h1>
+  <b>Indian Institute of Technology, Roorkee
+  <br/>
+  Uttarakhand, INDIA 247667</b>
+</h1>
+<hr/>
+<h1><b>{{ person.name }}</b></h1>
+<h3>
+  {{ person.branch.get_degree_display }}
+  {{ person.branch.name }}
+  {{ person.get_semester_display }}
+  <br/>
+  IIT Roorkee, INDIA
+</h3>
+<hr/>
+Registration No : {{ registration_no }}
+{% if details %}
+<style type="text/css">
+  table, td, th { border:1px solid BLACK; }
+</style>
+<table>
+  <tr>
+    <th>Educational Qualification</th>
+    <th>Discipline</th>
+    <th>Year</th>
+    <th>Board/Institution</th>
+    <th>CGPA*/%</th>
+    <th>SGPA*/%</th>
+  </tr>
+  {% for educational_details,course_name,discipline_name in details %}
+  <tr>
+    <td>{{ course_name }}</td>
+    <td>{{ discipline_name }}</td>
+    <td>{{ educational_details.year }}</td>
+    <td>{{ educational_details.institution }}</td>
+    <td>{{ educational_details.cgpa }}</td>
+    <td>{{ educational_details.sgpa }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<span class="small">*GPA #Cumulative/Semester Grade Point Average (scale of 10)</span>
+{% endif %}

@@ -1,0 +1,55 @@
+{% extends "internship/base.html" %}
+
+{% block app_content %}
+		{% if error_msg %}
+		  {{ error_msg }}
+		{% endif %}
+
+{% if companies %}
+<h3>List of companies</h3>
+<br />
+<table class="sortable table table-striped table-bordered table-condensed" id="t1">
+       <thead>
+         <th>Sno.</th>
+         <th colspan="2">Company</th>
+         <th>Status</th>
+         <th>Last Date of Applying</th>
+         <th colspan="4">Applications</th>
+         <th colspan="3">Results</th>
+       </thead>
+       <tbody>
+    {% for company in companies %}
+          <tr>
+          <td>{{ forloop.counter }}</td>
+          <td><a href="/internship/company/{{ company.id }}/">{{ company.name_of_company }}</a></td>
+          <td><a href="javascript:void()" onclick="confirm_delete({{ company.id }})">Delete</a></td>
+          <td>{{ company.get_status_display }}</td>
+          <td>{{ company.last_date_of_applying|default:'-' }}</td>
+          <td><a href="{% url 'internship.views_admin.applications_to_company' company.id %}">Applications</a></td>
+          <td><a target="_blank" href="{% url 'internship.views_admin.selected_students' company.id %}">XLS list</a></td>
+          <td><a target="_blank" href="{% url 'internship.views_admin.resume_archive' company.id %}">Resume Archive</a></td>
+          <td><a href="{% url 'internship.views_results.declare_result' company.id %}">Declare Result</a></td>
+          <td><a href="{% url 'internship.views_results.insert_result' company.id %}">Insert Results</a></td>
+          <td><a href="{% url 'internship.views_results.drop_results' company.id %}">Drop Results</a></td>
+          <td><a href="{% url 'internship.views_results.company_results' company.id %}">View Results</a></td>
+          </tr>
+    {% endfor %}
+       </tbody>
+</table>
+{% else %}
+No companies added yet.
+{% endif %}
+
+<a href="/internship/company/add/"><button><div class="text">Add a Company</div></button></a>
+
+
+    <script type="text/javascript">
+    function confirm_delete(id)
+    {
+      var x = confirm('Do you want to delete this company')
+      if (x)
+        window.location.href='/internship/company/'+id+'/delete/';
+    }
+    </script>
+{# div applications_table #}
+{% endblock app_content %}

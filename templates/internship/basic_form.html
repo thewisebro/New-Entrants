@@ -1,0 +1,49 @@
+{% extends "internship/base.html" %}
+
+{% block app_content %}
+
+	<body>
+		{% if error_msg %}
+		  {{ error_msg }}
+		{% endif %}
+		{% include "internship/generic_form.html" with action=action form=form %}
+
+<div id="company_add_check_buttons">
+  <button class="btn" id="check_button">Check all branches</button>
+  <button class="btn" id="uncheck_button">Uncheck all branches</button>
+</div>
+
+  </body>
+
+{% endblock app_content %}
+{% block app_scripts %}
+
+<script type="text/javascript">
+
+$("#div_open_for_disciplines > ul").before($("#company_add_check_buttons"));
+$("#check_button").click(check_all);
+$("#uncheck_button").click(uncheck_all);
+
+function check_all()
+{
+  var i = 0;
+  while (document.getElementById('id_open_for_disciplines_'+i))
+  {
+    document.getElementById('id_open_for_disciplines_'+i).checked = true;
+    i++;
+  }
+  return false;
+}
+
+function uncheck_all()
+{
+  var i = 0;
+  while (document.getElementById('id_open_for_disciplines_'+i))
+  {
+    document.getElementById('id_open_for_disciplines_'+i).checked = false;
+    i++;
+  }
+  return false;
+}
+</script>
+{% endblock %}

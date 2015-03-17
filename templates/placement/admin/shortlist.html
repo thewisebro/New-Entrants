@@ -1,0 +1,92 @@
+{% extends "placement/base.html" %}
+{% load kwacros %}
+
+{% block app_styles %}
+    <style> 
+      #id_company{
+      width:300px;
+    }
+    #submit{
+      width:50px;
+    }
+  </style>
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}/css/nucleus/style.css" type="text/css">
+{% endblock %}
+{% block app_content %}
+<div id="content_success">
+  <p class="success" style="display:none;margin-bottom:15px;"></p>
+  <p class="error" style="display:none;margin-bottom:15px;"></p>
+</div>
+
+{% if message %}
+{{ message }}
+{% endif %}
+
+<form class="form" enctype="multipart/form-data" method="post" action="">
+  <h2 style="margin-bottom: 25px;"> Shortlist students</h2>
+    {% csrf_token %}
+    {% kwacro editable_field_div field %}
+        <div class="edit-row">
+          {{field.errors}}
+          <div class="field-label-big">{{field.label}}</div>
+          <div class="field">{{field}}</div>
+        </div>
+    {% endkwacro %}
+    {% usekwacro editable_field_div form.student %}
+    {% usekwacro editable_field_div form.company %}
+    </br><div class="edit-row" style="float: none;margin-top: 30px;margin-left:
+    165px;">
+      <input class="field input-button" id="submit" value="Submit">
+    </div>
+    <input type="hidden" id="company_ids" value="" />
+</form>
+{% endblock %}
+{% block app_scripts %}
+  <script type="text/javascript">
+      $(document).ready(function() {
+        var data_map = {};
+        $("#id_company").autocomplete({
+            minLength: 2,
+            source: '/placement/company_search/',
+            select: function(event,ui){
+            $('#company_ids').val(ui.item.id);
+            },
+          });
+        });
+      function change_value(){
+        $('#id_company').val($('#company_ids').val());
+      }
+    $('#submit').click(function() 
+    {
+      var company = $("#company_ids").val();
+      var students = $("#id_student").val();
+      var data_dict = {'students':students,'company':company};
+      $.ajax
+      ({
+        url: '',
+        data: data_dict,
+        type: 'POST',
+        success: function(data)
+        {
+          if(data["is_success"]){
+            $(".error").css("display","None");
+            $(".success").html(data["message"]);
+            $(".success").css("display","Block");
+            setTimeout(function() {
+              $(".success").css("display", "None")
+            }, 2000);
+          }
+          else{
+            $(".success").css("display","None");
+            $(".error").html(data["message"]);
+            $(".error").css("display","Block");
+            setTimeout(function() {
+              $(".error").css("display", "None")
+            }, 4000);
+          }
+        }
+      });
+    });
+  </script>
+{% endblock %}
