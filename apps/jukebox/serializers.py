@@ -160,14 +160,14 @@ class PlaylistDescSerializer(serializers.ModelSerializer):
 
   def get_owner(self, obj):
     request = self.context.get('request', None)
-    if(request and request.user and request.user.username):                                           # if anonymous user user.username=''
-      user = Jukebox_Person.objects.get_or_create(person=request.user)[0]                             # user logged in
+    if(request and request.jb_user and request.jb_user.username):                                           # if anonymous user user.username=''
+      user = Jukebox_Person.objects.get_or_create(person=request.jb_user)[0]                             # user logged in
       if user==obj.person:
         return True
       elif not obj.private:
-        return obj.person.person.get_full_name()
+        return obj.person.person.html_name()
     elif not obj.private:
-      return obj.person.person.get_full_name()
+      return obj.person.person.html_name()
     return False
 
 

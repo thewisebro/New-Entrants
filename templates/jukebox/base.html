@@ -19,7 +19,8 @@
     <!--<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artistslist.css">-->
    <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css">-->
     <script>
-      var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
+      var user = {% if jb_user.is_authenticated %}{{ jb_user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
+      var user1 = {% if jb_user1.is_authenticated %}{{ jb_user1.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
       var logged_in = user.is_authenticated;
     </script>
 
@@ -131,7 +132,12 @@ right: 276;
 						<a id="trending_link">
 							<div id="trending_icon"><i class="icon-fire"></i></div>
 							<div id="trending_text" >Trending</div>
+              <div id="trending_play_icon"><i class="icon-play"></i></div>
 						</a>
+            <a id="releases_link" >
+              <div id="releases_icon"><i class="icon-bolt"></i></div>
+              <div id="releases_text">New Releases</div>
+            </a>
 						<a id="artists_link" >
 							<div id="artists_icon"><i class="icon-star"></i></div>
 							<div id="artists_text">Artists</div>
@@ -303,6 +309,9 @@ right: 276;
 	<div class="ilArtist artist"></div> - 
 	<div class="ilAlbum album"></div>
 	</div>
+  <div id="download_option">
+    <a href="#">Download</a>
+  </div>
 	<div id="timeRight">
 	<span id="timePlayed">0:00</span> / <span id="totalTime">0:00</span>
 	</div>
@@ -365,7 +374,7 @@ right: 276;
     <script src="{{ STATIC_URL }}js/csrf.js"></script>
     <script src="{{ STATIC_URL }}js/common.js"></script>
     <script src="{{ STATIC_URL }}js/jukebox/fuse.min.js"></script>
-    <!-- // <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/keymap.js"></script>  -->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/keymap.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/keyboard.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}jquery/nanoscroller/jquery.nanoscroller.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/resize.js"></script> 
@@ -415,11 +424,11 @@ $('#centerdata').css('width',$(window).width()-180-240);
  <!-- <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>-->
   
     <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/smoothscroll.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}zeroclipboard/ZeroClipboard.js"></script>
 
   <script src="{{ STATIC_URL }}js/jukebox/base.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/notify.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/intro.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/piwik.js"></script>
   <!-- last fm use to get similar artist tracks -->
 <!--  <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfm.api.cache.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfm.api.js"></script>

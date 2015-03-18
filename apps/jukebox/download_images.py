@@ -27,7 +27,7 @@ from django.core.files.temp import NamedTemporaryFile
 
 def add_error(err,line):
   try:
-    error = open('/home/pankaj/jukebox_scripts/new/images/images_artist_error.txt','a+')
+    error = open('/home/apps/nas/songsmedia/scripts/images/images_artist_error.txt','a+')
     htm = HTMLParser()
     error.write(str(err)+'\t'+str(htm.unescape(line))+'\n')
     error.close()
@@ -45,12 +45,15 @@ def get_album_art(album):
   js = json.loads(url)
   a=js['responseData']['results'][0]['url']
   img_temp = NamedTemporaryFile(delete=True)
-  img_temp.write(urllib2.urlopen(a).read(600000000))
+  img_temp.write(urllib2.urlopen(a).read(60000000))
   img_temp.flush()
 
   name = urlparse(a).path.split('/')[-1]
   album.album_art.save(name, File(img_temp), save=True)
-  print album.album, album.album_art.name
+  try:
+    print album.album, album.album_art.name
+  except:
+    pass
 
 def get_artist_pic(artist):
   if(artist.cover_pic):
@@ -78,14 +81,19 @@ def get_artist_pic(artist):
 
 
 def work_albums():
-  albums = Album.objects.filter(album_art='')
+  albums = Album.objects.filter(album_art='').order_by('-id')
   for album in albums:
     try:
       get_album_art(album)
+    except KeyboardInterrupt:
+      continue
     except Exception as e:
-      print album.album
-      print "\nErr:",e
-      add_error(e,album.album)
+      try:
+        print album.album
+        print "\nErr:",e
+        add_error(e,album.album)
+      except:
+        pass
 
 
 def work_artists():

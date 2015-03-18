@@ -55,6 +55,7 @@ class Album(models.Model):
       ('mal','Malyali')
   )
   language = models.CharField(max_length=10, choices=lang_choices)
+  latest = models.BooleanField(default=False)
   def __unicode__(self):
     return self.album
 
@@ -170,5 +171,13 @@ class Playlist(models.Model):
     self.songs = songs
     self.save()
 
+  def save(self, *args, **kwargs):
+    """
+      To remove songs 'NaN' from playlists
+    """
+    if self.songs:
+      songs = filter(lambda x: x.isnumeric(), self.songs.split('b'))
+      self.songs = 'b'.join(songs)
+    super(Playlist,self).save(*args, **kwargs)              # Save the usual way
 
 

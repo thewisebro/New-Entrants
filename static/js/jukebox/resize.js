@@ -62,7 +62,7 @@
    //  console.log(width+" : "+x+" : "+n);
     $("."+itemwrapper+"").css("margin-right", y);
     $("."+itemwrapper+"").css("margin-top", y);
-console.log(n+"final");
+//console.log(n+"final");
    var k =1;
    var noOfItems = $("."+itemwrapper+"").length;
    for (i=0; i<=noOfItems-1 ; i=i+n){
@@ -329,6 +329,9 @@ if($("#navigation a.selected")[0]==$("#playlists_link")[0]){
 
 }
 if($("#navigation a.selected")[0]==$("#trending_link")[0]){
+resizeit('container','item_wrapper','item');
+}
+else if($("#navigation a.selected")[0]==$("#releases_link")[0]){
 resizeit('container','item_wrapper','item');
 }
 

@@ -1,7 +1,7 @@
 
-
+/* This*/
 .pane{
-	bottom: 73px !important;
+	bottom: 53px !important;
 
 }
 
@@ -39,12 +39,15 @@ box-shadow: inset -1px 0px 5px #222;
 #left_playlist_list{
 position: fixed;
 display: inline-block;
-width: 200px;
-height: 1000px;
+width: 180px;
+/*height: 1000px;*/
+top: 0px;
+bottom: 0px;
 border-right: #E9E9E9 1px solid;
 box-shadow: inset -1px 0px 5px #222;
-
+padding: 10px 10px 10px 10px;
 }
+
 #artist_view{
 	position: absolute;
 	display: inline-block;
@@ -289,13 +292,13 @@ cursor: pointer;
 	margin-bottom: 10px;
 }
 #left_playlist_list{
-	padding:10px 10px 10px 10px;
+	/*padding:10px 10px 10px 10px;*/
 	background-color: #444;
 
 }
 
-#left_playlist_list>div{
-	margin-bottom: 10px;
+#left_playlist_list #contentList{
+	margin-bottom: 53px;
 }
 
 .head_alpha{

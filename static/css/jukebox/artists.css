@@ -9,11 +9,11 @@ position: fixed;
 display: inline-block;
 width: 180px;
 /*height: 100%;*/
-border-right: #E9E9E9 1px solid;
+/*border-right: #E9E9E9 1px solid;*/
 box-shadow: inset -1px 0px 5px #222;
 padding: 10px 10px 10px 10px;
 background-color: #444;
-
+left: 200px;
 }
 
 

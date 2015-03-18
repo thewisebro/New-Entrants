@@ -99,7 +99,7 @@ def login(request):
     else:
       active = False
   active = json.dumps({'active':active})
-  return HttpResponse(active, mimetype='application/json')
+  return HttpResponse(active, content_type='application/json')
 
 
 
@@ -111,9 +111,11 @@ class IndexView(TemplateView):
   """
   template_name='jukebox/base.html'
   def get_context_data(self, **kwargs):
+    print self.request.jb_user
     context = super(IndexView, self).get_context_data(**kwargs)
     context.update({
-        'banned_artists': JC.banned_artists
+        'banned_artists': JC.banned_artists,
+        'jb_user':self.request.jb_user,
         })
     return context
 #url = 'search/'
@@ -123,7 +125,7 @@ class IndexView(TemplateView):
   For JSON Response
 """
 class TrendingJsonView(ListAPIView):
-  queryset = Song.objects.order_by('-count')[:50]
+  queryset = Song.objects.order_by('-score')[:50]
   serializer_class = SongSerializer
 
 
@@ -201,10 +203,11 @@ class PlayJsonView(ListAPIView):
     song_id = self.request.GET['song_id']
     song = Song.objects.get(id=int(song_id))
     song.count += 1
+    song.score += 1
     song.save()
-    active = self.request.user.is_active
+    active = self.request.jb_user.is_authenticated()
     if active :
-      user = self.request.user                             # user logged in
+      user = self.request.jb_user                             # user logged in
       user = Jukebox_Person.objects.get_or_create(person=user)
       user = user[0]
       user.add_songs_listen(song)
@@ -214,13 +217,12 @@ class PlayJsonView(ListAPIView):
 
 class PlaylistAllJsonView(ListCreateAPIView):
   serializer_class = PlaylistSerializer
-  permission_classes = (IsOwnerOrReadOnly,)
   def get(self,request):
     context = {}
     playlists = PlaylistSerializer(many=True)
-    active = self.request.user.is_active
+    active = request.jb_user.is_authenticated()
     if active :
-      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=request.jb_user)[0]                             # user logged in
       playlists = PlaylistSerializer(Playlist.objects.filter(person=user.id).order_by('-id'),many=True)
       context.update({                                    # For multiple models and lists usage in ListView
           'playlists' : playlists.data,
@@ -234,14 +236,17 @@ class PlaylistAllJsonView(ListCreateAPIView):
 
 
   def pre_save(self, obj):
-    obj.person = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]
+    obj.person = Jukebox_Person.objects.get_or_create(person=self.request.jb_user)[0]
     obj.songs = self.request.POST.get('songs','')
     if obj.person.playlist_set.count()>50:
       return Response('Error: User is limited to 50 playlists only')
     if len(obj.songs.split('b'))>100:
       return Response('Error: Length greater than 100')
     obj.name = self.request.POST.get('name','')
-    obj.private = True
+    obj.private = self.request.POST.get('private',True)
+    if obj.private == 'false':
+      obj.private = False
+    print obj.private
 
 
 class AddToPlaylistView(CreateAPIView):
@@ -250,9 +255,9 @@ class AddToPlaylistView(CreateAPIView):
   def post(self,request):
     songs = self.request.POST.get('songs','')
     playlist_id = int(self.request.POST.get('id',''))
-    active = self.request.user.is_active
+    active = self.request.jb_user.is_authenticated()
     if active :
-      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.jb_user)[0]                             # user logged in
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
@@ -281,9 +286,9 @@ class OverwritePlaylistView(CreateAPIView):
   def post(self,request):
     songs = self.request.POST.get('songs','')
     playlist_id = int(self.request.POST.get('id',''))
-    active = self.request.user.is_active
+    active = self.request.jb_user.is_authenticated()
     if active :
-      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.jb_user)[0]                             # user logged in
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
@@ -301,9 +306,9 @@ class DeleteFromPlaylistView(CreateAPIView):
   def post(self,request):
     index = int(self.request.POST.get('index',''))
     playlist_id = int(self.request.POST.get('id',''))
-    active = self.request.user.is_active
+    active = self.request.jb_user.is_authenticated()
     if active :
-      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.jb_user)[0]                             # user logged in
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
@@ -322,9 +327,9 @@ class ChangeIndexPlaylistView(CreateAPIView):
     oindex = int(self.request.POST.get('oindex',''))
     nindex = int(self.request.POST.get('nindex',''))
     playlist_id = int(self.request.POST.get('id',''))
-    active = self.request.user.is_active
+    active = self.request.jb_user.is_authenticated()
     if active :
-      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.jb_user)[0]                             # user logged in
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
@@ -341,9 +346,9 @@ class RenamePlaylistView(CreateAPIView):
   def post(self,request):
     new_name = self.request.POST.get('name','')
     playlist_id = int(self.request.POST.get('id',''))
-    active = self.request.user.is_active
+    active = self.request.jb_user.is_authenticated()
     if active :
-      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.jb_user)[0]                             # user logged in
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
@@ -356,9 +361,9 @@ class DeletePlaylistView(CreateAPIView):
   permission_classes = (IsOwnerOrReadOnly,)
   def post(self,request):
     playlist_id = int(self.request.POST.get('id',''))
-    active = self.request.user.is_active
+    active = self.request.jb_user.is_authenticated()
     if active :
-      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.jb_user)[0]                             # user logged in
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
@@ -371,9 +376,9 @@ class PublicPrivatePlaylistView(CreateAPIView):
   permission_classes = (IsOwnerOrReadOnly,)
   def get(self,request):
     playlist_id = int(self.request.GET.get('id',''))
-    active = self.request.user.is_active
+    active = self.request.jb_user.is_authenticated()
     if active :
-      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+      user = Jukebox_Person.objects.get_or_create(person=self.request.jb_user)[0]                             # user logged in
       playlists = Playlist.objects.filter(person=user.id).filter(pk=playlist_id)
       if len(playlists) == 1 :
         playlist = playlists[0]
@@ -385,12 +390,12 @@ class PublicPrivatePlaylistView(CreateAPIView):
 class PublicPlaylistAllJsonView(ListAPIView):
   serializer_class = PlaylistSerializer
   def get_queryset(self):
-    playlists = Playlist.objects.filter(private=False).order_by('-public_count')
+    playlists = Playlist.objects.filter(private=False).exclude(songs='').order_by('-public_count')
     """
 #Commented as all playlists are shown ( First shared playlists not of user were shown )
 
-    if self.request.user.is_active:
-      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
+    if self.request.user.is_authenticated():
+      user = Jukebox_Person.objects.get_or_create(person=self.request.jb_user)[0]                             # user logged in
       playlists = playlists.exclude(person=user.id)
     """
     return playlists
@@ -399,14 +404,29 @@ class PublicPlaylistAllJsonView(ListAPIView):
 
 class PlaylistDescView(RetrieveAPIView):
 #queryset = Playlist.objects.all()
-  serializer_class = PlaylistDescSerializer
-  def get_queryset(self):
-    playlists = Playlist.objects.filter(private=False)
-    active = self.request.user.is_active
+  def get(self, request, *args, **kwargs):
+    playlist_id = int(kwargs.get('pk',''))
+    active = self.request.jb_user.is_authenticated()
+    playlists = Playlist.objects.filter(id=playlist_id)
+    if playlists.count():
+      playlist = playlists[0]
     if active :
-      user = Jukebox_Person.objects.get_or_create(person=self.request.user)[0]                             # user logged in
-      playlists = Playlist.objects.filter(Q(person=user.id) | Q(private=False))
-    return playlists
+      user = Jukebox_Person.objects.get_or_create(person=self.request.jb_user)[0]                             # user logged in
+      if playlist.person.id==user.id or not playlist.private:
+        data = PlaylistDescSerializer(playlist).data
+        if playlist.person.id==user.id:
+          data['owner'] = True
+        else:
+          playlist.public_count += 1
+          playlist.save()
+        return Response(data)
+    elif not playlist.private:
+      data = PlaylistDescSerializer(playlist).data
+      playlist.public_count += 1
+      playlist.save()
+      return Response(data)
+
+    return Response({'detail':'Not Found'})
 
 
 
@@ -428,7 +448,7 @@ def getQueue(request):
   for key in lsongs.keys():
     lsongs[key]=SongSerializer(lsongs[key]).data
   lsongs = json.dumps({'queue':lsongs})
-  return HttpResponse(lsongs, mimetype='application/json')
+  return HttpResponse(lsongs, content_type='application/json')
 
 
 
@@ -500,3 +520,11 @@ class SearchAllJsonView(ListAPIView):
     songs2 = Song.objects.filter(song__icontains=q)
     songs2 = songs2.exclude(song__istartswith=q)[:100]
     return list(chain(songs1,songs2))[:100]
+
+
+class NewReleasesView(ListAPIView):
+  def get(self,request,*args,**kwargs):
+    albums = Album.objects.filter(latest=True).order_by('-datetime_created')[:50]
+    albums = map(lambda x: x[0],albums.values_list('id'))
+    return Response(albums)
+

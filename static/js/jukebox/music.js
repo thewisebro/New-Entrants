@@ -21,7 +21,11 @@ function getRandomArrayElements(arr, count) {
 
         }
 
+  function lReleases(){
 
+          resizeit('container','item_wrapper','item');
+
+  }
     function lAlbums(){
         setTimeout(function() {
               $(".nano").nanoScroller({ preventPageScrolling: true });
@@ -50,7 +54,7 @@ function getRandomArrayElements(arr, count) {
         setTimeout(function() {
            // nano scroll bar start
       	      $(".nano").nanoScroller({ preventPageScrolling: true });
-              $("#playlist_view").css({left:'220', right:'0'});
+              $("#playlist_view").css({left:'200', right:'0'});
               // $("#playlist_view").animate({left:'220', right:'0'},300);
               // $("#playlist_panel_hide").animate({left:'420', top:'145'},300);
 },10);
@@ -101,9 +105,10 @@ function key_ready(){
 
 function keyDown(e)
 {
+   if(!select && !($("#searchBig").is(":focus"))){ console.log('here'); keyMap(e); }
    if(e.ctrlKey || e.altKey) return;
    if(!select){
- if(jQuery.inArray(e.keyCode,[8,9,13,16,17,18,19,20,32,33,34,35,36,37,38,39,40,45,46,91,92,93,107,109,112,113,114,115,116,117,118,119,120,121,122,123,144,145,224]) !== -1){ return;}
+ if(jQuery.inArray(e.keyCode,[8,9,13,16,17,18,19,20,32,33,34,35,36,37,38,39,40,45,46,91,92,93,107,109,112,113,114,115,116,117,118,119,120,121,122,123,144,145,224]) !== -1){  return;}
    //check for escape key 
    if (e.keyCode == 27) { 
    if(type==1){
@@ -124,7 +129,7 @@ function keyDown(e)
 
  if(type == 0){
     searchView(e);
-    console.log('here');
+    //console.log('here');
    
     }
     else{
@@ -137,6 +142,7 @@ function keyDown(e)
       // $(document).unbind('keydown');
     // var duck=10;
    }
+   
 
 }
     
@@ -260,7 +266,7 @@ var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></d
               if ($(this).hasClass('qselected'))
               {
                 qselect = true;
-                console.log(this);
+                //console.log(this);
                 elm.insertAfter($(this));
                 return;
               }
@@ -349,23 +355,23 @@ function clone_element_song(id)
             id = element.attr('id');
             var idn = id.split('_')[1];
 */
-            if(id in songs_url)
+            if(id in songs_json1)
             {
               //console.log('yo');
-              //console.log(songs_url[idn]);
-              var image = songs_url[id].album.album_art;
+              //console.log(songs_json1[idn]);
+              var image = songs_json1[id].album.album_art;
               if(image=="") image = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
 
-              console.log(image);
+              //console.log(image);
               image = '/songsmedia/'+image;
-              var artist_name = songs_url[id].artists[0].artist;
-              var song_name = songs_url[id].song;
+              var artist_name = songs_json1[id].artists[0].artist;
+              var song_name = songs_json1[id].song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
                  + ' </div>'
                  + '<div class="qinfo" style="padding-right:5px;">'
                  + '<div class="qsong">'+song_name+'</div>';
-              if (banned_artists.indexOf(songs_url[id].artists[0].id) >= 0)
-                html += '<div class="qartist">'+songs_url[id].album.album+'</div></div>';
+              if (banned_artists.indexOf(songs_json1[id].artists[0].id) >= 0)
+                html += '<div class="qartist">'+songs_json1[id].album.album+'</div></div>';
               else
                 html += '<div class="qartist">'+artist_name+'</div></div>';
               return $( "<div class='qitem song' id='"+idn+"'></div>" ).html( html );
@@ -375,19 +381,19 @@ var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></d
             {
               var url = "song/" + id;
               $.ajax(url,contentType= "application/json").done( function(data){
-                  songs_url[id]=data;
-                  var image = songs_url[id].album.album_art;
+                  songs_json1[id]=data;
+                  var image = songs_json1[id].album.album_art;
                   if(image=="") image = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
 
                   image = '/songsmedia/'+image;
-                  var artist_name = songs_url[id].artists[0].artist;
-                  var song_name = songs_url[id].song;
+                  var artist_name = songs_json1[id].artists[0].artist;
+                  var song_name = songs_json1[id].song;
 var html = '<div class="queue_item_remove"><i class="icon-remove-circle"></i></div>'+'<div class="qimage" style="background:url(\''+image+'\'); background-size:cover">'
                      + ' </div>'
                      + '<div class="qinfo" style="padding-right:5px;>'
                      + '<div class="qsong">'+song_name+'</div>';
-              if (banned_artists.indexOf(songs_url[id].artists[0].id) >= 0)
-                html += '<div class="qartist">'+songs_url[id].album.album+'</div></div>';
+              if (banned_artists.indexOf(songs_json1[id].artists[0].id) >= 0)
+                html += '<div class="qartist">'+songs_json1[id].album.album+'</div></div>';
               else
                 html += '<div class="qartist">'+artist_name+'</div></div>';
                   return $( "<div class='qitem song' id='"+idn+"'></div>" ).html( html );
@@ -402,7 +408,7 @@ function add_queue(ui,element)
   if($(element).hasClass('song'))
   {
           var id = element.attr('id');
-          var elm = clone_element_song(id.split('_')[1]);
+          var elm = clone_element_song(String(id.split('_')[1]));
           var i = 0; 
 
           var cnt = 0;
@@ -437,7 +443,18 @@ queue_binder();
   }
   else if($(element).hasClass('album'))
   {
-                 console.log('yo');
+                 //console.log('yo');
+         if(element.hasClass('item'))
+         {
+            var album_id = element.attr('id').split('_')[1];
+            var songs = albums_json1[album_id].song_set;
+            for(var i in songs)
+            {
+              var song_elem = $("<div class='song' id='song_"+songs[i].id+"'></div>");
+              add_queue(ui,song_elem);
+            }
+            return;
+         }
          if(element.hasClass('artist_album_pic')) var lis = element.parents().eq(0).find('li.draggable')
          else var lis = element.parents().eq(1).find('li.draggable')
          for(var i=0;i<lis.length;i++)
@@ -445,7 +462,7 @@ queue_binder();
            var li = lis[i];
   tmp = $(li);
 
-           if($(li).hasClass('song')){ console.log('yo'); add_queue(ui,$(li)); }
+           if($(li).hasClass('song')){  add_queue(ui,$(li)); }
          }
   }
 }
@@ -513,10 +530,22 @@ $("#queue_trash").on("click",function(){
     });
 
 
-$("#queue_dropdown").on("mouseleave",function(){
-    queue_trash_toggle=false;
-    $("#queue_dropdown").css({'display':'none'});
-});
+//$("#queue_dropdown").on("mouseleave",function(){
+//    queue_trash_toggle=false;
+//    $("#queue_dropdown").css({'display':'none'});
+//});
+
+
+$(document).mouseup(function (e)
+    {
+       var container = $("#queue_dropdown");
+
+        if (!container.is(e.target) // if the target of the click isn't the container...
+            && container.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+            container.hide();
+        }
+}); 
 
 var queue_visible_toggle=false;
 $(".open_queue").on("click",function(){
@@ -571,7 +600,7 @@ $("#save_as_playlist").on("click",function(){
         $("#save_playlist_dialog").removeClass().addClass("save_as_playlist_close");
      }
     else{
-      if(!logged_in)
+      if(!user.is_authenticated)
       {
         $('#signin_button').click();
         return;
@@ -593,8 +622,10 @@ $("#save_as_playlist").bind("click",function(){
       if(!playlists_open) get_json('playlists');
       if(playlists_json.playlists && playlists_json.playlists.length > 0){
          $('#select_saved_playlist').append('<option value=0>Save As Existing</option>');
+         var playlist_name_html = '';
          for(var i=0;i<playlists_json.playlists.length;i++){
-         $('#select_saved_playlist').append('<option value='+playlists_json.playlists[i].id+'>'+playlists_json.playlists[i].name+'</option>');
+          playlist_name_html = $('<div/>').text(playlists_json.playlists[i].name).html();                           // For Preventing XSS attacks
+         $('#select_saved_playlist').append('<option value='+playlists_json.playlists[i].id+'>'+playlist_name_html+'</option>');
         }
       }
     });
@@ -619,7 +650,7 @@ $("#add_to_playlist").on("click",function(){
         $("#add_to_playlist_dialog").removeClass().addClass("add_to_playlist_close");
      }
     else{
-      if(!logged_in)
+      if(!user.is_authenticated)
       {
         $('#signin_button').click();
         return;
@@ -641,9 +672,11 @@ $("#add_to_playlist").bind("click",function(){
       if(!playlists_open) get_json('playlists');
       if(playlists_json.playlists && playlists_json.playlists.length > 0){
          $('#add_to_saved_playlist').append('<option selected>Append to existing Playlist</option>');
+         var playlist_name_html = '';
          for(var i=0;i<playlists_json.playlists.length;i++){
           // alert('as');
-         $('#add_to_saved_playlist').append('<option value='+playlists_json.playlists[i].id+'>'+playlists_json.playlists[i].name+'</option>');
+          playlist_name_html = $('<div/>').text(playlists_json.playlists[i].name).html();                           // For Preventing XSS attacks
+         $('#add_to_saved_playlist').append('<option value='+playlists_json.playlists[i].id+'>'+playlist_name_html+'</option>');
         }
       }
     });
