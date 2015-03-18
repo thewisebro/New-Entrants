@@ -3,8 +3,7 @@ var settings_tabs = [
   {name: 'password', show: 'Change password'},
   {name: 'email', show: 'Email notifications'},
   {name: 'sessions', show: 'Manage sessions'},
-  {name: 'email_auth', show: 'Email verification'}
-//  {name: 'forgot_password', show: 'Forgot Password'}
+  {name: 'email_auth', show: 'Email management'}
 ];
 
 $(document).on("load_app_settings", function(e, hash1, hash2){

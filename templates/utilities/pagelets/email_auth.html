@@ -5,59 +5,49 @@
 {% endblock %}
 
 {% block content %}
-  <div class="form-div">
-    {% for emails in emails_for_user %}
-      <div>
-        {% if emails.email == primary_email %}
-          <form action="/settings/email_auth/" method="POST">
-            {{ emails.email }}
-            <input type="hidden" name="email" value="{{ emails.email }}">
-            <input type="hidden" name="id" value="{{ emails.pk}}">
-            {% if not emails.verified %}
-              <input type="submit" name="verify" value="Verify">
-            {% endif %}
-            {% if emails.verified %}
-              <input type="submit" name="verify" value="Verified" disabled="disabled">
-            {% endif %}
-            <input type="submit" name="primary" value="Primary" disabled="disabled">
-            <input type="submit" name="delete" value="Delete" disabled="disabled">
-            <br>
-            <br>
-          </form>
-        {% endif %}
-      </div>
-    {% endfor %}
-    {% for emails in emails_for_user %}
-      <div>
-        {% if not emails.email == primary_email %}
-          <form action="/settings/email_auth/" method="POST">
-            {{ emails.email }}
-            <input type="hidden" name="email" value="{{ emails.email }}">
-            <input type="hidden" name="id" value="{{ emails.pk}}">
-            {% if not emails.verified %}
-              <input type="submit" name="verify" value="Verify">
-            {% endif %}
-            {% if emails.verified %}
-              <input type="submit" name="verify" value="Verified" disabled="disabled">
-            {% endif %}
-            <input type="submit" name="primary" value="Make it Primary">
-            <input type="submit" style="display:none" name="primary_2" id="{{emails.pk}}_primary_2">
-            <input type="submit" name="delete" value="Delete">
-            <br>
-            {% if emails in verifiable_emails %}
-              <p>A verification link has been send to your email address</p>
-            {% endif %}
-            <br>
-          </form>
-        {% endif %}
+  <div class="form-div" id="email-auth-form">
+    {% for useremail in emails_for_user %}
+      <div class="row">
+        <form action="/settings/email_auth/" method="POST">
+          <div class="email">
+            {{ forloop.counter }}) {{ useremail.email }}
+          </div>
+          <input type="hidden" name="email" value="{{ useremail.email }}">
+          <input type="hidden" name="id" value="{{ useremail.pk}}">
+          {% if not useremail.verified %}
+            <input class="button2" type="submit" name="verify" value="Verify">
+          {% else %}
+            <input class="button2" type="submit" name="verify" value="Verified" disabled="disabled">
+          {% endif %}
+          {% if useremail.email == primary_email %}
+            <input class="button2" type="submit" name="primary" value="Primary" disabled="disabled">
+          {% else %}
+            <input class="button2" type="submit" name="primary" value="Make it primary">
+            <input class="button2" type="submit" style="display:none" name="primary_2" id="{{useremail.pk}}_primary_2">
+          {% endif %}
+          <input class="button2" type="submit" name="delete" value="Delete">
+          <br>
+          {% if useremail in verifiable_emails %}
+            <p class="note">*A verification link has been sent to this email address.</p>
+          {% endif %}
+          <br>
+        </form>
+        <div class="clear-both"></div>
       </div>
     {% endfor %}
     {% if count < 5 %}
-      <form id="email-form" class="uniForm" action="/settings/email_auth/" method="POST">
-        {% csrf_token %}
-        {{useremailform.uniform }}
-        <input style='margin-left:10px' class='input-button' type="submit" name="submission" value="Submit" />
-      </form>
+      <div class="row">
+        <form id="email-form" class="uniForm add-email" action="/settings/email_auth/" method="POST">
+          {% csrf_token %}
+          <div id="div_id_email">
+            <label for="id_email" class="requiredField">
+              Add new email
+            </label>
+            <input class="textinput textInput float-left" id="id_email" name="email" type="email">
+            <input class='input-button' type="submit" name="submission" value="Submit" />
+          </div>
+        </form>
+      </div>
     {% endif %}
   </div>
 {% endblock %}

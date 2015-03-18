@@ -21,6 +21,9 @@ class UserEmail(models.Model):
   last_datetime_created = models.DateTimeField(null = True, blank=True)
   verify_num = models.IntegerField(default=0)
 
+  def __unicode__(self):
+    return unicode(self.user)+':'+self.email
+
 class PasswordCheck(models.Model):
   user = models.ForeignKey(User)
   service = models.CharField(max_length=40)
