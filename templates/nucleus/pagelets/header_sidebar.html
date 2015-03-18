@@ -22,9 +22,11 @@
 {% block content %}
   <div id="header">
     <div id="header-title"><a href="/">Channel i</a></div>
+    {% comment %}
     <div id="header-search">
       <input type="search" name="q" id="global_search_bar" autocomplete="off" placeholder="Search here"/>
     </div>
+    {% endcomment %}
     <div id="header-options">
       {% if user.is_authenticated %}
         <div id="user-account">
