@@ -55,10 +55,16 @@ def CORS_allow(view):
 @CORS_allow
 #@login_required
 def index(request,enrno=None):
-# import ipdb;ipdb.set_trace()
+#import ipdb;ipdb.set_trace()
   if request.method == 'GET':
-    y_user = YaadeinUser.objects.get_or_create(user__username=enrno)[0]#user=request.user
-    logged_user = y_user.user
+    print "HEre"
+    print enrno
+    u = User.objects.get(username=enrno)
+    y_user = YaadeinUser.objects.get_or_create(user=u)#user=request.user\
+    print y_user
+    y_user=y_user[0]
+    if not y_user.coverpic or y_user.coverpic.name=='':
+      y_user.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
 #user = User.objects.get(username ='13114068')
     s = Student.objects.get(user__username=enrno)#=enrno
     posts_usertagged = Post.objects.filter(user_tags=s)#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
@@ -97,11 +103,11 @@ def index(request,enrno=None):
                'spot':spotlist,
                }
         posts_data.append( tmp )
-    data ={'name':s.user.name, 'coverPic': y_user.coverpic.url, 'enrolmentNo':enrno, 'posts_data':posts_data, 'label':logged_user.info, 'profilePic':logged_user.photo_url}
+    data ={'name':s.user.name, 'coverPic': y_user.coverpic.url, 'enrolmentNo':enrno, 'posts_data':posts_data, 'label':y_user.user.info, 'profilePic':y_user.user.photo_url}
     return HttpResponse(simplejson.dumps(data),'application/json') 
 #  return render_to_response('yaadein/usertag.html', {'cover_pic': y_user.coverpic.url,'enrno':enrno,'posts_data':posts_data}, context_instance=RequestContext(request))
   else:
-# import ipdb;ipdb.set_trace()
+#    import ipdb;ipdb.set_trace()
     print 'vaibhavraj'
     if request.method == 'POST':
       post_data = str(simplejson.loads(request.POST['data'])['post_text'])
@@ -120,7 +126,7 @@ def index(request,enrno=None):
 #user_tagged = [ tag for tag in post_data.split() if tag.startswith("@") ]
       imgs = request.FILES.getlist('file')
       print len(imgs)
-      student = Student.objects.get(user__username="13117060")
+      student = Student.objects.get(user=request.user)
       if enrno:#wall_user:
         s = Student.objects.get(user__username=enrno)#wall_user)
         post = Post(text_content=post_data, post_date=timezone.now(), owner=student, wall_user=s)
@@ -132,7 +138,7 @@ def index(request,enrno=None):
       notif_msg1 = ''+student.user.name+' posted a memory on your wall'  
       app = 'Yaadein'
       pk = str(post.pk)
-      url = '/yaadein/post_disp/'+pk+'/'
+      url = 'http://172.25.55.156:7000/post/'+pk+'/'
       notif_users=[]
       tagged_users = []
       if enrno!='13114068':
@@ -163,14 +169,19 @@ def index(request,enrno=None):
 @CORS_allow
 def homePage(request):
 # import ipdb;ipdb.set_trace()
-  y_user = YaadeinUser.objects.get_or_create(user__username=request.user.username)[0]#user=request.user
+  if not request.user.is_authenticated():
+    return HttpResponse('Error')
+  y_user = YaadeinUser.objects.get_or_create(user=request.user)[0]#user=request.user
+
   logged_user = y_user.user
+  if not y_user.coverpic or y_user.coverpic.name=='':
+    y_user.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
   s = Student.objects.get(user__username=request.user.username)#=enrno
-  posts_branch_year = Post.objects.filter(owner__branch_id=s.branch_id).filter(owner__semester_no=s.semester_no).filter(status='A').order_by('post_date').reverse()
-  posts_branch = Post.objects.filter(owner__branch_id=s.branch_id).filter(status='A').order_by('post_date').reverse()
-  posts_year = Post.objects.filter(owner__semester_no=s.semester_no).filter(status='A').order_by('post_date').reverse()
-  posts = list(set(list(posts_branch_year)+list(posts_branch)+list(posts_year)))
-# posts = Post.objects.order_by('post_date').filter(status= 'A').reverse()
+# posts_branch_year = Post.objects.filter(owner__branch_id=s.branch_id).filter(owner__semester_no=s.semester_no).filter(status='A').order_by('post_date').reverse()
+# posts_branch = Post.objects.filter(owner__branch_id=s.branch_id).filter(status='A').order_by('post_date').reverse()
+# posts_year = Post.objects.filter(owner__semester_no=s.semester_no).filter(status='A').order_by('post_date').reverse()
+# posts = list(set(list(posts_branch_year)+list(posts_branch)+list(posts_year)))
+  posts = Post.objects.order_by('post_date').filter(status= 'A').reverse()
   posts_data = []
   for post in posts:
       spotlist = []
@@ -215,7 +226,7 @@ def coverpic_upload(request):
     cover_pic_name = cover_pic.name
     ext = cover_pic.name.split('.')[1]
     fname = "cp_" + request.user.username + "." + ext
-    yu = YaadeinUser.objects.get(user__username = '13117060')#request.user)
+    yu = YaadeinUser.objects.get(user = request.user)#request.user)
     yu.coverpic.save(fname, cover_pic)
     yu.save()
     return HttpResponse('Uploaded')#/yaadein/user/13117060')
@@ -247,9 +258,9 @@ def post(request,wall_user):
       if wall_user:
         s = Student.objects.get(user__username=wall_user)
       else:
-        s = Student.objects.get(user__username="13117060")
+        s = Student.objects.get(user=request.user)
       print s
-      student = Student.objects.get(user__username="13117060")
+      student = Student.objects.get(user=request.user)
       post = Post(text_content=post_data, post_date=timezone.now(), owner=student, wall_user=s)
       post.save()
 # notif_msg = 'You were tagged in a post by '+student.user.name+'.'
@@ -302,6 +313,7 @@ def post_display(request,pk):
              'post_owner_branch':post.owner.user.info,
              'post_owner_pic':post.owner.user.photo_url,
              'post_owner_enrol':post.owner.user.username,
+             'post_id':str(post.pk),
              'image_url': image_url,
              'time':str(post.post_date),
              'taggedUsers':users_tagged_inpost,
@@ -351,6 +363,8 @@ def spot_search(request):
     query = request.GET.get('q','')
     spots = Spot.objects.filter(Q(name__icontains = query)).order_by('-name')[:10]
     def spot_dict(spot):
+      if not spot.coverpic or spot.coverpic.name=='':
+        spot.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
       return {
         'id':spot.name,
         'cover_pic':spot.coverpic.url,
@@ -408,6 +422,8 @@ def spot_page(request,name):
 #  import ipdb;ipdb.set_trace()
     posts_data = []
     spot = Spot.objects.get(name=str(name))
+    if not spot.coverpic or spot.coverpic.name=='':
+      spot.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
     spotlist = []
     spotlist.append({'id':spot.name,'name':spot.name,'label':spot.tagline})
     posts = Post.objects.filter(spots__name=name).order_by('post_date').reverse()
@@ -445,11 +461,11 @@ def delete(request,id):
     try:
       post = Post.objects.get(pk=id)
     except Post.DoesNotExist:
-      return HttpResponse("Post Doesnot exist")
-    if post.owner.user.username=='13114068' or post.wall_user.user.username=='13117060': #use request.user in place of enrollment number
+      return HttpResponse("False")
+    if post.owner.user==request.user or post.wall_user.user==request.user: #use request.user in place of enrollment number
       post.delete()
-      return HttpResponse("Post deleted Successfully.")
-    return HttpResponse("you don't have the previleges to delete this post.")
+      return HttpResponse("True")
+    return HttpResponse("False")
 
 @csrf_exempt
 @CORS_allow
@@ -459,7 +475,7 @@ def private_posts(request,id):
       post = Post.objects.get(pk=id)
     except Post.DoesNotExist:
       return HttpResponse("Post Doesnot Exist")
-    if post.owner.username=='13114068' or post.wall_user.user.username=='13117060':
+    if post.owner.user==request.user or post.wall_user.user==request.user:
       post.status = 'B'
       post.save()
       return HttpResponse("Your Post is now Private.")
