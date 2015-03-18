@@ -13,6 +13,7 @@ tabs = [
 ]
 
 channeli_apps = {
+  'forum': {'name': 'Forum', 'url': '/#forum/'},
   'events': {'name': 'Events', 'url':'/#events'},
   'lectut' : {'name':'Lectures & Tutorials', 'url':'/lectut/'},
   'placement' : {'name':'Placement Online', 'url':'/placement/'},
@@ -23,7 +24,7 @@ channeli_apps = {
   'ebooks' : {'name':'E-Books', 'url':'/ebooks/'},
   'vle' : {'name':'VLE', 'url':'/vle/'},
   'games' : {'name':'Games', 'url':'/games/'},
-  'jukebox' : {'name':'JukeBox', 'url':'/#jukebox/'},
+  'jukebox' : {'name':'JukeBox', 'url':'/jukebox/'},
   'notices' : {'name':'Notice-Board', 'url':'/notices/'},
   'grades' : {'name':'Grades Online', 'url':'/grades/'},
   'androidnotices' : {'name':'Notice-Board Android App',
@@ -38,16 +39,22 @@ channeli_apps = {
   },
   'research' : {'name':'Research Assistant', 'url':'/research_assistant/'},
   'facultyfilemanager' : {'name':'File Manager', 'url':'/settings/filemanager/'},
-  'acad' : {'name':'Response Forms', 'url':'/acad/responses/'},
+  'acad' : {'name':'Academics', 'url':'/acad/'},
+  'acad_course_students' : {'name':'Course Students', 'url':'/acad/course_students/'},
+  'responses' : {'name':'Response Forms', 'url':'/acad/responses/'},
+  'iereg' : {'name':'Elective Registration', 'url':'/acad/ie_reg/'},
+  'yaadein' : {'name':'Yaadein', 'url':'/yaadein/'},
+  'dc++' : {'name':'DC++', 'url':'/dc++/'},
 }
 
-student_apps = ['events', 'grades','lectut','notices','placement','buysell','vle','thinktank',
-                'lostfound','softwares','peoplesearch','messmenu','research']
+student_apps = ['events', 'acad','jukebox','dc++','lectut','notices','placement',
+                'buysell','vle','grades', 'thinktank','lostfound','softwares',
+                'peoplesearch','messmenu','research']
+
 faculty_apps = ['facapp','events','lectut','notices','placement',
                 'thinktank','lostfound','softwares','peoplesearch']
 other_apps = ['events', 'lectut','notices','placement','thinktank',
               'lostfound','softwares','peoplesearch']
-
 
 external_links = {
   'imglink' : {'name':'Information Management Group', 'url':'http://img.channeli.in'},
@@ -63,10 +70,10 @@ login_page_links = ['library','webmail','notices','iitr','antivirus']
 
 channeli_links = [
   {'name':'Instruments Search','url':'/equipments/'},
-  {'name':'Campus Lynx',
-    'url':'http://acadinfo2.iitr.ernet.in/CampusLynxIITR/CampusLynxFx/CampusLynxFx.swf'
-  },
-  {'name':'Wifi Registration','url':'/wifi/'},
+  {'name':'Mess Feedback','url':'/messmenu/feedback/'},
+  {'name':'Smart Card Registration','url':'/genforms/'},
+  {'name':'Print Scholarship Form','url':'/scholarships/mcm_print_pdf/'},
+  {'name':'LAN Registration','url':'/wifi/'},
   {'name':'Telephone Directory','url':'/static/pdfs/teldir-oct2013.pdf'},
   {'name':'Meeting Section','url':'/meeting_minutes/'},
   {'name':'Dairy Reports','url':'/meeting_minutes/dairy.php'},
@@ -75,3 +82,14 @@ channeli_links = [
 ]
 
 channeli_links = map(lambda n:external_links[n],['iitr','webmail','library']) + channeli_links
+
+img_tools = [
+  {'name': 'IMG Wiki', 'url': 'http://wiki.channeli.in', 'icon':'wiki.ico'},
+  {'name': 'Producteev', 'url': 'https://www.producteev.com/workspace/', 'icon':'producteev.ico'},
+  {'name': 'GitLab', 'url': 'http://git.channeli.in', 'icon':'gitlab.ico'},
+  {'name': 'Piwik', 'url': 'http://analytics.channeli.in','icon':'piwik.ico'},
+  {'name': 'Slack', 'url': 'https://team-img.slack.com/messages/all-main/','icon':'slack.ico'},
+  {'name': 'Status', 'url': 'http://status.channeli.in','icon':'status.ico'},
+  {'name': 'Sentry', 'url': 'http://sentry.channeli.in/img/channel-i/','icon':'sentry.ico'},
+  {'name': 'IMG Site', 'url': 'http://imgsite.channeli.in/edit/','icon':'img.ico'},
+]

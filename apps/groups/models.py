@@ -6,7 +6,6 @@ class Group(Role('Student Group')):
   '''
     Group Details
   '''
-  name = models.CharField(max_length=MC.TEXT_LENGTH)
   nickname = models.CharField(max_length=MC.TEXT_LENGTH)
   website = models.URLField(blank=True)
   description = models.TextField(blank=True)
@@ -14,7 +13,7 @@ class Group(Role('Student Group')):
   is_active = models.BooleanField(default=False)
 
   def __unicode__(self):
-    return str(self.name)
+    return str(self.user.name)
 
   def save(self,*args,**kwargs):
     return_value = super(Group,self).save(*args, **kwargs)
@@ -22,7 +21,7 @@ class Group(Role('Student Group')):
     if created:
       post = Post.objects.create(post_name = 'Member')
       if self.admin:
-        Membership.objects.create(student = self.admin, post=post, groupinfo=groupinfo)
+        Membership.objects.create(student=self.admin, post=post, groupinfo=groupinfo)
     return return_value
 
 
@@ -36,15 +35,15 @@ class GroupInfo(models.Model):
   """
     Information of a Group
   """
-  group = models.OneToOneField('Group')
+  group = models.OneToOneField('Group', primary_key=True)
   mission = models.TextField(blank=True, null=True)
   founding_year = models.CharField(max_length=MC.TEXT_LENGTH, null=True, blank=True)
-  phone_no = models.CharField(max_length=MC.PHONE_NO_LENGTH, null=True, blank=True)
   members = models.ManyToManyField(Student, related_name="groupinfos", through="Membership")
   posts = models.ManyToManyField(Post)
   subscribers= models.ManyToManyField(User, blank=True)
-  email = models.EmailField(blank=True, null=True)
-  photo = models.ImageField(upload_to='groups/photo/', blank=True)
+  facebook_url = models.URLField(blank=True)
+  twitter_url = models.URLField(blank=True)
+  gplus_url = models.URLField(blank=True)
   def __unicode__(self):
     return str(self.group)
 
@@ -58,7 +57,6 @@ class Membership(models.Model):
 class GroupActivity(models.Model):
   group = models.ForeignKey(Group)
   text = models.TextField()
-  datetime = models.DateTimeField(auto_now_add = True)
 
   class Meta:
     ordering = ['-id']

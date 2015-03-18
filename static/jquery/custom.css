@@ -115,3 +115,8 @@
   top: 2px;
   margin-left: 10px;
 }
+
+.uniForm ul li label {
+  float: none !important;
+  width: auto !important;
+}

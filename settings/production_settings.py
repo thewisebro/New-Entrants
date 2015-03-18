@@ -6,6 +6,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = [
   '172.25.55.5',
+  '172.25.55.156',
   '.channeli.in',
   '.iitr.ernet.in',
 ]
