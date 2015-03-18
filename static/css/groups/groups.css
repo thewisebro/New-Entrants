@@ -4,33 +4,47 @@
 
 #groups-header
 {
-   height:90px;
+   height:150px;
    right:19%;
    max-width:945px;
    background-color:#ffffff;
    border-bottom:1px solid #dddbdb;
+   margin-top:-10px;
 }
 
 .content-tab
 {
-   display:inline-block;
+  float:left;
+  height: 30px;
+  line-height: 30px;
+  box-sizing: border-box;
+  border-left: 1px solid #ddd;
+  width: 25%;
+  text-align: center;
+  cursor:pointer;
 }
 
 #groups-profile-pic
 {
-   height:70px;
-   width:70px;
+   height:110px;
+   width:110px;
    float:left;
-   margin-top:10px;
-   margin-left:10px;
+   margin-top:20px;
+   margin-left:20px;
    border-radius:3px;
 }
 
 #groups-details
 {
   float:left;
-  margin-left:10px;
-  margin-top:5px;
+  margin-left:20px;
+  margin-top:15px;
+}
+
+#groups-description
+{
+  max-width: 450px;
+  margin-top: 5px;
 }
 
 #subscribe-button
@@ -42,10 +56,35 @@
 {
   margin-top:7px;
   padding-bottom:3px;
-  border-bottom:1px solid #dddbdb;
-  font-family:"Tahoma","Myriad Pro";
   color:#0072dc;
-  font-size:15px;
+  font-size:18px;
+  font-weight:700;
+}
+
+#read-more
+{
+  cursor:pointer;
+}
+
+#groups-website
+{
+  margin-top:10px;
+}
+
+#content-top-bar
+{
+  height: 30px;
+  background-color: #ffffff;
+  border: 1px solid #d0d0d0;
+  border-left: 0px;
+  margin-top:10px;
+}
+
+.groups-about-content
+{
+  background: #fff;
+  margin-top: 10px;
+  border:1px solid #d0d0d0;
 }
 
 .groups-people
@@ -58,7 +97,6 @@
 .people-number
 {                                                                                
   float:left;
-  font-family:"Tahoma","Myriad Pro"; 
   color:#606060;
   padding-top:3px;
   padding-bottom:2px;
@@ -70,7 +108,6 @@
 {
   float:left;
   margin-left:5px;
-  font-family:"Tahoma","Myriad Pro";
   color:#606060;
   padding-top:3px;
   padding-bottom:2px;
@@ -102,14 +139,14 @@
 }
 
 .groups-info{
-  margin-bottom:30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
 }
 
 .content-title{
    height:16px;
    background-color:#eeeeee;
    padding:3px 0px 3px 5px;
-   font-family:"Tahoma";
    font-size:13px;
    line-height:16px;
    color:#0072dc;
@@ -117,14 +154,10 @@
 }
 
 .content-information{
-  font-family:"Tahoma","Myriad Pro";
-  font-size:12px;
+  font-size:13px;
   color:#333333;
   line-height:18px;
-  text-align:justify;
   max-width:590px;
-  margin-left:10px;
-  padding-top:10px;
 }
 
 .content-specification{
@@ -136,7 +169,6 @@
 .left-field{
   float:left;
   font-size:12px;
-  font-family:"Tahoma","Myriad Pro";
   color:#606060;
   font-weight:bold;
   line-height:15px;
@@ -148,7 +180,6 @@
   float:left;
   margin-left:16px
   font-size:12px;
-  font-family:"Tahoma","Myriad Pro";
   color:#333333;
   line-height:15px;
   overflow:hidden;
@@ -191,7 +222,6 @@
   background-color:#ffffff;
   border:#dddbdb 1px solid;
   float:left;
-  font-family:"Tahoma","Myriad Pro";
   font-size:13px;
   line-height:25px;
   color:#303030;
@@ -221,7 +251,6 @@
 .gtab-name
 {
   padding-left:15px;
-  font-family:"Tahoma" "Myriad Pro";
   font-size:13px;
   color:#0072dc;
   line-height:35px;                            
@@ -263,7 +292,6 @@
   float:left;
   height:25px;
   width:155px;
-  font-family:"Tahoma","Myriad Pro";
   font-size:13px;
   line-height:25px;
   margin-right:10px;  
@@ -272,7 +300,6 @@
 }
 .body-content
 {
-  font-family: "Tahoma";
   font-size: 13px;
   color: #202020;
   height:353px;
@@ -293,7 +320,6 @@
 .page_info
 {
   padding-left: 20px;
-  font-family: "Tahoma";
   color: #DD4B39;
   font-size: 14px;
 }
@@ -306,7 +332,6 @@
 .subscribers-number
 {
   float: left;
-  font-family: "Tahoma","Myriad Pro";
   color: #606060;
   padding-top: 3px;
   padding-bottom: 2px;
@@ -349,7 +374,9 @@
   margin-bottom:10px;
   overflow:hidden;
   float:left;
-  width:290px;
+  width: 285px;
+  margin-top: 10px;
+  margin-left: 10px;
 }
 .member-tab-person
 {
@@ -370,9 +397,9 @@
 
 .activity-text
 {
-  width:400px !important;
-  height:60px !important;      
-}  
+  width:100% !important;
+  height:60px !important;
+}
 
 #activities
 {
@@ -386,3 +413,21 @@
   color: #DDDBDB;
 }  
 
+.activity-field-box
+{
+  margin-top:10px;
+  background-color:#fff;
+  padding:10px;
+  margin-left:45px;
+  border: 1px solid #d0d0d0;
+}
+
+.activity-submit-button
+{
+  float:right;
+}
+
+.feed-details
+{
+  margin-left:45px;
+}

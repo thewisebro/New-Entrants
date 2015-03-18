@@ -26,40 +26,29 @@
     <img id="groups-profile-pic" src="/photo/{{username}}/"/>
     <div id="groups-details">
       <div id="groups-name">{{group.name}}</div>
-      <div class="groups-people">
-        <div class="subscribers-number">{{subscribers}}</div>
-        <div class="people-type">Subscribers</div>
-      </div>
-      <div class="groups-people">
-        <div class="people-number">{{count}}</div>
-        <div class="people-type">Members</div>
-      </div>
-    </div>
-    <div>
-      {% if group.is_active %}
-        {% if subscribed %}
-          <div id='subscribe-button' class="div-button" onclick="subscribe('{{username}}','{{subscribed}}');">Unsubscribe</div>
-        {% else %}
-          <div id='subscribe-button' class="div-button" onclick="subscribe('{{username}}','{{subscribed}}');">Subscribe</div>
+      <div id="groups-description">
+        {% if group.description %}
+          {{group.description|escape|safe|slice:":130"}}...
+          <a><span id="read-more" onclick="location ='/#groups/{{username}}'">Read more</span></a>
         {% endif %}
-      {% endif %}
+        <div id="groups-website"><a href="{{group.website}}" target="_blank">{{group.website}}</a></div>
+      </div>
+      {% block edit-member %}
+      {% endblock %}
+      {% block add-event %}
+      {% endblock %}
     </div>
-    {% block edit-member %}
-    {% endblock %}
-    {% block add-event %}
-    {% endblock %}
-  </div>
-  <div id="content-top-bar">
-    <div class="content-tab {% block about-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}'">About</div>
-    <div class="content-tab {% block activity-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/activity/'">Activity</div>
-    <div class="content-tab {% block members-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/members/'">Members</div>
-    <div class="content-tab {% block events-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/events/'">Events</div>
-    {% if can_edit %}
-      <div class="content-tab {% block edit-tab-class %}{% endblock %}" onclick="location = '/#groups/{{group.user.username}}/edit'">Edit</div>
-    {% endif %}
   </div>
   <div id="groups-container">
-    <div id="groups-empty-div"></div>
+    <div id="content-top-bar">
+      <div id="activity-tab" class="content-tab {% block activity-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/activity/'">Activity</div>
+      <div class="content-tab {% block about-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}'">About</div>
+      <div class="content-tab {% block members-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/members/'">Members</div>
+      <div class="content-tab {% block events-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/events/'">Events</div>
+      {% if can_edit %}
+        <!--<div class="content-tab {% block edit-tab-class %}{% endblock %}" onclick="location = '/#groups/{{group.user.username}}/edit'">Edit</div>-->
+      {% endif %}
+    </div>
     <div id="groups-content">
      {% block group_content %}
      {% endblock group_content %}

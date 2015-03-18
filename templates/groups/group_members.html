@@ -4,8 +4,7 @@
 
 {% block group_content %}      
     <div class="groups-info">
-      <div class="content-title">Members Info</div>
-      <div class="content-information">
+      <div class="groups-about-content">
         {% for members in membership %}
           <div class="member-tab">
             <div class="member-tab-pic">
@@ -20,7 +19,8 @@
               </div>
             </div>  
           </div>
-        {% endfor %}    
+        {% endfor %}
+        <div class="clear-both"></div>
       </div>
     </div>
 {% endblock group_content %}

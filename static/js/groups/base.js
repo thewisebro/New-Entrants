@@ -3,15 +3,16 @@ $(document).on("load_app_groups", function(e, hash1, hash2){
     nucleus.redirect_to_home();
     return;
   }
-  nucleus.make_tabs_inactive();
-  //$('#right-column .content').html('');
+  //nucleus.make_tabs_inactive();
+  $('#right-column .content').html('');
+  $('#container').addClass('large-width-content');
   if(hash1 === undefined)
     nucleus.redirect_to_home();
   load_settings_tab(hash1, hash2);
 });
 
 $(document).on("unload_app_groups", function(e){
-  //$('#container').removeClass('large-width-content');
+  $('#container').removeClass('large-width-content');
   nucleus.make_tabs_active();
   $('#right-column .content').empty();
 });

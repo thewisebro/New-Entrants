@@ -16,11 +16,15 @@
   {% if can_edit %}
     <div id="activity-form-div">
        <form name="activity-form" action="" method="POST">{% csrf_token %}
-         <div style="margin-left:10px">
+         <div class="field-box">
+           <img class="feed-propic" src="/photo/{{username}}/"/>
+           <div class="activity-field-box">
            <div class="field">
              <textarea name="text" class='activity-text'></textarea>
            </div>
-           <input type="submit" class="input-button" name="submit" value="Post"/>
+           <input type="submit" class="input-button activity-submit-button" name="submit" value="Post"/>
+           <div class="clear-both"></div>
+           </div>
          </div>
        </form>
     </div>

@@ -39,7 +39,7 @@ var apps_scripts = {
     '/static/js/utilities/base.js'
   ],
   'groups':[
-    '/static/js/groups/base.js'
+    '/static/js/groups/base.js',
   ]
 };
 
