@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scholarship Form</title>
+<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+<script type='text/javascript' href="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src = "{{ STATIC_URL }}js/jquery.min.js"></script>
+</head>
+<body>
+<div class='container'>
+<div class="well">
+  <div>
+    <div style="width:500px; font-size:30px; float:left;">Scholarship Form</div>
+    <div style="float:left; padding-left:290px;"><a href='/'>Channel I</a></div>
+    <div style="float:left; padding-left:10px;"><a href='{% url nucleus.views.logout %}'>Logout</a></div>
+</div>
+
+<br/><br/>
+You have succesfully registered for Student-Loan-Aid Scholarship. Click <a href="{% url mcm.views.print_pdf %}">here</a> to print pdf of your application form.
+</div>
+</div>
+
+</body>
+</html>
