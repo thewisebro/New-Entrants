@@ -13,6 +13,8 @@ from django.db.models import Q,Count
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from notifications.models import Notification
+from collections import defaultdict, Counter
+from django.contrib.sessions.models import Session
 #from nucleus import get_info, html_name
 import json as simplejson
 """
@@ -35,9 +37,15 @@ def CORS_allow(view):
   def wrapped_view(request, *args, **kwargs):
     response = view(request, *args, **kwargs)
     if settings.PRODUCTION == False:
-      response["Access-Control-Allow-Origin"] = "*"
+      if request.method == 'POST':
+        session_id = request.COOKIES['CHANNELI_SESSID']
+        session = Session.objects.get(session_key=session_id)
+        uid = session.get_decoded().get('_auth_user_id')
+        user = User.objects.get(pk=uid)
+        request.user = user
+      response["Access-Control-Allow-Origin"] = "http://172.25.55.156:7000"
       response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
-      response["Access-Control-Allow-Credentials"] = True
+      response["Access-Control-Allow-Credentials"] = 'true'
 #     response["Access-Control-Max-Age"] = "1000"
       response["Access-Control-Allow-Headers"] = "*"
     return response
@@ -52,11 +60,7 @@ def index(request,enrno=None):
     y_user = YaadeinUser.objects.get_or_create(user__username=enrno)[0]#user=request.user
     logged_user = y_user.user
 #user = User.objects.get(username ='13114068')
-#  if y_user.coverpic.field.blank :
-#    y_user.coverpic = "yaadein/coverpic/image4.jpg"
     s = Student.objects.get(user__username=enrno)#=enrno
-
-#    posts = s.post_wall_user.order_by('post_date').reverse()
     posts_usertagged = Post.objects.filter(user_tags=s)#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
     posts_owned = Post.objects.filter(owner=s)
     posts_onwall = Post.objects.filter(wall_user=s)
@@ -68,7 +72,7 @@ def index(request,enrno=None):
         spot = post.spots.all()
         if len(spot)>0:
           for sp in spot:
-            spotlist.append({'id':sp.pk,'name':sp.name,})
+            spotlist.append({'id':sp.name,'name':sp.name,})
         images = PostImage.objects.filter(post=post)
         image_url=[]
         users_tagged_inpost = []
@@ -97,11 +101,13 @@ def index(request,enrno=None):
     return HttpResponse(simplejson.dumps(data),'application/json') 
 #  return render_to_response('yaadein/usertag.html', {'cover_pic': y_user.coverpic.url,'enrno':enrno,'posts_data':posts_data}, context_instance=RequestContext(request))
   else:
-#  import ipdb;ipdb.set_trace()
+# import ipdb;ipdb.set_trace()
     print 'vaibhavraj'
     if request.method == 'POST':
       post_data = str(simplejson.loads(request.POST['data'])['post_text'])
       user_tagged = simplejson.loads(request.POST['data'])['user_tags']
+      spots = simplejson.loads(request.POST['data'])['spot']
+      spot = Spot.objects.get(name=str(spots[0]['id']))
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
       hash_tag = []
       for word in hashed:
@@ -121,6 +127,7 @@ def index(request,enrno=None):
       else:
         post = Post(text_content=post_data, post_date=timezone.now(), owner=student)
       post.save()
+      post.spots.add(spot)
       notif_msg = 'You were tagged in a memory by '+student.user.name+'.'
       notif_msg1 = ''+student.user.name+' posted a memory on your wall'  
       app = 'Yaadein'
@@ -155,10 +162,10 @@ def index(request,enrno=None):
 @csrf_exempt
 @CORS_allow
 def homePage(request):
-#  import ipdb;ipdb.set_trace()
-  y_user = YaadeinUser.objects.get_or_create(user__username='13117060')[0]#user=request.user
+# import ipdb;ipdb.set_trace()
+  y_user = YaadeinUser.objects.get_or_create(user__username=request.user.username)[0]#user=request.user
   logged_user = y_user.user
-  s = Student.objects.get(user__username='13117060')#=enrno
+  s = Student.objects.get(user__username=request.user.username)#=enrno
   posts_branch_year = Post.objects.filter(owner__branch_id=s.branch_id).filter(owner__semester_no=s.semester_no).filter(status='A').order_by('post_date').reverse()
   posts_branch = Post.objects.filter(owner__branch_id=s.branch_id).filter(status='A').order_by('post_date').reverse()
   posts_year = Post.objects.filter(owner__semester_no=s.semester_no).filter(status='A').order_by('post_date').reverse()
@@ -166,6 +173,11 @@ def homePage(request):
 # posts = Post.objects.order_by('post_date').filter(status= 'A').reverse()
   posts_data = []
   for post in posts:
+      spotlist = []
+      spot = post.spots.all()
+      if len(spot)>0:
+        for sp in spot:
+          spotlist.append({'id':sp.name,'name':sp.name,'label':sp.tagline})
       images = PostImage.objects.filter(post=post)
       image_url=[]
       users_tagged_inpost = []
@@ -184,7 +196,8 @@ def homePage(request):
              'post_id':str(post.pk),
              'image_url': image_url,
              'time':str(post.post_date),
-             'taggedUsers':users_tagged_inpost
+             'taggedUsers':users_tagged_inpost,
+             'spot':spotlist,
              }
       posts_data.append( tmp )
   data ={'name':logged_user.name, 'coverPic': y_user.coverpic.url, 'enrolmentNo':logged_user.username, 'posts_data':posts_data, 'label':logged_user.info, 'profilePic':logged_user.photo_url}
@@ -269,6 +282,11 @@ def post(request,wall_user):
 def post_display(request,pk):
   if request:
     post = Post.objects.get(pk=pk)
+    spotlist = []
+    spot = post.spots.all()
+    if len(spot)>0:
+      for sp in spot:
+        spotlist.append({'id':sp.name,'name':sp.name,'label':sp.tagline})
     images = PostImage.objects.filter(post=post)
     image_url=[]
     users_tagged_inpost = []
@@ -286,7 +304,8 @@ def post_display(request,pk):
              'post_owner_enrol':post.owner.user.username,
              'image_url': image_url,
              'time':str(post.post_date),
-             'taggedUsers':users_tagged_inpost
+             'taggedUsers':users_tagged_inpost,
+             'spot':spotlist,
              }
     return HttpResponse(simplejson.dumps(data),'application/json')
   else:
@@ -308,7 +327,7 @@ def search(request,id):
      spots = Spot.objects.filter(Q(name__icontains = query)).order_by('-name')[:10]
      def spot_dict(spot):
        return {
-         'id':spot.pk,
+         'id':spot.name,
          'label':spot.name,
          'value':spot.name,
          'profile_pic':spot.profile_pic.url,
@@ -353,6 +372,11 @@ def hashtag(request,slug):
     for post in posts:
           images = PostImage.objects.filter(post=post)
           image_url=[]
+          spotlist = []
+          spot = post.spots.all()
+          if len(spot)>0:
+            for sp in spot:
+              spotlist.append({'id':sp.name,'name':sp.name,'label':sp.tagline})
           users_tagged_inpost = []
           users = post.user_tags.all()
           for image in images:
@@ -369,6 +393,7 @@ def hashtag(request,slug):
              'image_url': image_url,
              'time':str(post.post_date),
              'taggedUsers':users_tagged_inpost,
+             'spot':spotlist
              }
           posts_data.append( tmp )
     data ={'posts_data':posts_data}
@@ -383,6 +408,8 @@ def spot_page(request,name):
 #  import ipdb;ipdb.set_trace()
     posts_data = []
     spot = Spot.objects.get(name=str(name))
+    spotlist = []
+    spotlist.append({'id':spot.name,'name':spot.name,'label':spot.tagline})
     posts = Post.objects.filter(spots__name=name).order_by('post_date').reverse()
     for post in posts:
           images = PostImage.objects.filter(post=post)
@@ -403,9 +430,10 @@ def spot_page(request,name):
              'image_url': image_url,
              'time':str(post.post_date),
              'taggedUsers':users_tagged_inpost,
+             'spot':spotlist
                  }
           posts_data.append( tmp )
-    data ={'posts_data':posts_data,'cover':spot.coverpic.url,'profile':spot.profile_pic.url}
+    data ={'name':spot.name,'label':spot.tagline,'posts_data':posts_data,'coverPic':spot.coverpic.url,'profilePic':spot.profile_pic.url}
     return HttpResponse(simplejson.dumps(data),'application/json')
   return HttpResponse('1')
 
@@ -438,19 +466,18 @@ def private_posts(request,id):
     return HttpResponse("You don't have the previleges to change the privacy.")
 
 def trending(request):
-  posts = Post.objects.all()
-  trending_users =  Student.objects.filter(tagged_user__in=posts).annotate(itemCount=Count('tagged_user')).order_by('-itemCount')
-  user_list=[]
-  for tr in trending_users:
-    temp={
-          'name':tr.user.username,
-          'enrno':tr.user.name,
-        }
-    user_list.append(temp)
-  data = {'user_list':user_list}
+  tag_frequency = defaultdict(int)
+  for item in Post.objects.all():
+    for tag in item.tags.all():
+      tag_frequency[tag.name] += 1
+  count_list = Counter(tag_frequency).most_common()
+  hash_list = []
+  for hash in count_list:
+    hash_list.append(str(hash[0][1:]))
+  data = {'hashed':hash_list}
   return HttpResponse(simplejson.dumps(data),'application/json')
 
-  
+ 
 #utility function bubble sorting
 def bubble(bad_list):
   length = len(bad_list) - 1

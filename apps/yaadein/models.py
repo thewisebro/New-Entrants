@@ -21,6 +21,7 @@ class YaadeinUser(models.Model):
 
 class Spot(models.Model):
   name = models.CharField(max_length = 200, null=True)
+  tagline = models.CharField(max_length = 200, null=True)
   profile_pic = models.FileField(upload_to='yaadein/spot/', null=True, blank=True)
   coverpic = models.FileField(upload_to='yaadein/coverpic/',null =True, blank=True)
   def __unicode__(self):
