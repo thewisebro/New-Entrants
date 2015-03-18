@@ -119,3 +119,13 @@ def EventsSubscribeFormGen(user):
       self.fields['calendars'].queryset = Calendar.objects.exclude(Q(cal_type = 'PRI'),~Q(name = user.username))
       self.fields['email_subscribed'].widget.attrs = {'onchange':'subscription_checkbox_clicked(this)'}
   return EventsSubscribeForm
+
+class UserEmailForm(forms.Form):
+  email = forms.EmailField(label='Email', required = True)
+
+class PasswordResetForm(forms.Form):
+  password1 = forms.CharField(label='Enter New Password', widget=forms.PasswordInput, required=True, min_length=4)
+  password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput, required=True, min_length=4)
+
+class PasswordResetRequestForm(forms.Form):
+  email = forms.EmailField(label="Email", required=True)

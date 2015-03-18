@@ -13,6 +13,13 @@ class UserSession(models.Model):
   browser = models.CharField(max_length=40)
   os = models.CharField(max_length=40)
 
+class UserEmail(models.Model):
+  user = models.ForeignKey(User)
+  email = models.EmailField(max_length = 255)
+  verified = models.BooleanField(default = False)
+  confirmation_key = models.CharField(max_length = 40, blank= True)
+  last_datetime_created = models.DateTimeField(null = True, blank=True)
+  verify_num = models.IntegerField(default=0)
 
 class PasswordCheck(models.Model):
   user = models.ForeignKey(User)
@@ -30,3 +37,11 @@ class PasswordCheck(models.Model):
       if span.total_seconds() < instance.seconds:
         return True
     return False
+
+class PasswordReset(models.Model):
+  user = models.ForeignKey(User)
+#reset_done = models.BooleanField(default = False)
+  reset_key = models.CharField(max_length = 40, blank= True)
+  last_datetime_created = models.DateTimeField(null = True, blank=True)
+  verify_num = models.IntegerField(default=0)
+

@@ -1,5 +1,7 @@
 import datetime
 import json
+import hashlib
+import random
 
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
@@ -7,16 +9,24 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.forms.util import ErrorList
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from django.utils import timezone
+from django.core.mail import send_mail
 
-from nucleus.models import StudentUserInfo, StudentInfo, WebmailAccount
+from nucleus.models import StudentUserInfo, StudentInfo, WebmailAccount, User
 from nucleus.session import SessionStore
 from events.models import EventsUser
 from api.utils import pagelet_login_required, dialog_login_required
-from utilities.models import UserSession, PasswordCheck
+from utilities.models import UserSession, PasswordCheck, UserEmail, PasswordReset
 from utilities.forms import ProfileFormPrimary, ProfileFormGuardian,\
     ProfileFormExtra, ChangePasswordForm, ChangePasswordFirstYearForm,\
-    EmailForm, EventsSubscribeFormGen, GenProfileForm, PasswordCheckForm
+    EmailForm, EventsSubscribeFormGen, GenProfileForm, PasswordCheckForm,\
+    UserEmailForm, PasswordResetRequestForm, PasswordResetForm
+from utilities.utils import *
+
+import logging
+logger = logging.getLogger('email_verify_logger')
+
 
 @pagelet_login_required
 def edit_profile(request):
@@ -155,6 +165,117 @@ def email(request):
       'email_subscribed': events_user.email_subscribed,
   })
 
+@pagelet_login_required
+def email_verify(request):
+  primary_entry = None
+  if request.method == 'POST':
+    try:
+      if 'primary' in request.POST or 'primary_2' in request.POST:
+        entry = UserEmail.objects.get(pk= request.POST['id'])
+        authenticated = PasswordCheck.exists_for(user=entry.user,\
+            service='email_auth')
+        if authenticated:
+          if entry.verified:
+            request.user.email = entry.email
+            request.user.save()
+          else:
+            messages.error(request,"Email need to be verified first")
+        else:
+          if 'primary' in request.POST:
+            primary_entry = entry
+
+      if 'delete' in request.POST:
+        entry = UserEmail.objects.get(pk= request.POST['id'])
+#        logger.info("Email id deleted.")
+        if entry.user==request.user:
+          if entry.email== request.user.email:
+            messages.error(request,"Primary Email addresses can't be deleted")
+          else:
+            entry.delete()
+        else:
+          messages.error(request, "This email entry can't be deleted.")
+
+      if 'verify' in request.POST:
+        entry= UserEmail.objects.get(pk= request.POST['id'])
+        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+        confirmation_key = hashlib.sha1(salt+entry.email).hexdigest()
+        if entry.last_datetime_created.date() == datetime.date.today():
+          entry.verify_num= entry.verify_num + 1
+        else:
+          entry.verify_num = 1
+        if entry.verify_num < 4 :
+          entry.confirmation_key= confirmation_key
+          entry.last_datetime_created = datetime.datetime.today()
+          entry.save()
+          send_verification_mail(confirmation_key,entry.email)
+          mail_to_primary(entry.email,request.user.email)
+          messages.success(request,"A verification link has been sent"+\
+            " to your email address.")
+        else:
+          messages.error(request,"Max limit of verification for this email" +\
+              " has been reached for today")
+    except Exception as e:
+      logger.error(str(e))
+
+    if 'submission' in request.POST:
+      useremailform = UserEmailForm(request.POST)
+      if useremailform.is_valid():
+        email = useremailform.cleaned_data['email']
+        if UserEmail.objects.filter(user=request.user).filter(email\
+            =email).count():
+          messages.error(request,'This email has already been submitted.')
+        else:
+          salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+          confirmation_key = hashlib.sha1(salt+email).hexdigest()
+          new_entry = UserEmail(user=request.user,email=email, confirmation_key\
+              =confirmation_key, last_datetime_created=datetime.datetime.today(),\
+              verify_num=1)
+          new_entry.save()
+          send_verification_mail(confirmation_key,email)
+          mail_to_primary(email,request.user.email)
+          messages.success(request,"A verification link has been sent"+\
+              " to your email address.")
+
+  if 'confirm_key' in request.GET:
+    confirmation_key = request.GET['confirm_key']
+    try:
+      email_profile = UserEmail.objects.filter(user=\
+          request.user).get(confirmation_key=confirmation_key)
+      if email_profile.last_datetime_created + datetime.timedelta(2) < timezone.now():
+        messages.error(request,"The verification-key expired.")
+      else:
+        email_profile.verified = True
+        email_profile.save()
+        messages.success(request,"Your email has been verified for this account.")
+    except UserEmail.DoesNotExist:
+      messages.error(request,"This link is no longer active for verification.")
+
+  useremailform = UserEmailForm()
+  if not UserEmail.objects.filter(user=request.user).exists():
+    if request.user.email:
+      useremail = UserEmail()
+      useremail.user = request.user
+      useremail.email = request.user.email
+      useremail.verified= False
+      useremail.last_datetime_created = datetime.datetime.today()
+      useremail.save()
+  emails_for_user = UserEmail.objects.filter(user=request.user)
+  lastdate = timezone.now() - datetime.timedelta(2)
+  verifiable_emails = emails_for_user.filter(last_datetime_created__gte=\
+      lastdate).filter(verified=False)
+  primary_email = request.user.email
+  count = emails_for_user.count()
+  return render(request,'utilities/pagelets/email_auth.html',{
+      'useremailform': useremailform,
+      'emails_for_user': emails_for_user,
+      'primary_email':primary_email,
+      'count':count,
+      'verifiable_emails':verifiable_emails,
+      'primary_entry': primary_entry,
+  })
+
+
+
 @dialog_login_required
 def password_check(request):
   user = request.user
@@ -177,3 +298,83 @@ def password_check(request):
   return render(request, 'utilities/dialogs/password_check.html', {
       'form': form,
   })
+
+def password_reset_request(request):
+  if request.method == 'POST':
+    form = PasswordResetRequestForm(request.POST)
+    if form.is_valid():
+      email = form.cleaned_data['email']
+      try:
+        user = User.objects.get(email=email)
+        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+        reset_key = hashlib.sha1(salt+email).hexdigest()
+        if PasswordReset.objects.filter(user=user).count():
+          entry = PasswordReset.objects.get(user=user)
+          if entry.last_datetime_created.date() == datetime.date.today():
+            entry.verify_num= entry.verify_num + 1
+          else:
+            entry.verify_num = 1
+          if entry.verify_num < 4 :
+            entry.reset_key= reset_key
+            entry.last_datetime_created = datetime.datetime.today()
+            entry.save()
+            print reset_key
+            send_passwordreset_mail(reset_key,email)
+            messages.success(request,"A password reset link has been sent to your email address.")
+          else:
+            messages.error(request,"Max limit of password reset for this account has been reached for today")
+        else:
+          new_entry = PasswordReset(user=user, reset_key =reset_key, last_datetime_created=datetime.datetime.today(),verify_num=1)
+          new_entry.save()
+          print reset_key
+          send_passwordreset_mail(reset_key,email)
+          messages.success(request,"A password reset link has been sent to your email address.")
+      except User.DoesNotExist:
+        messages.error(request,"The email address filled isnot your primary email.")
+    return HttpResponseRedirect(reverse('close_dialog', kwargs={
+          'dialog_name': 'forgot_pass'
+    }))
+  else:
+    form = PasswordResetRequestForm()
+    return render(request, 'utilities/dialogs/forgot_password.html',{
+        'form':form,
+    })
+
+def password_reset(request):
+  reset_key = request.GET['reset_key']
+  if request.method == 'POST':
+    entry = PasswordReset.objects.get(reset_key=reset_key)
+    form = PasswordResetForm(request.POST)
+    if form.is_valid():
+      password1 = request.POST['password1']
+      password2 = request.POST['password2']
+      if password1 == password2:
+        entry.user.set_password(password1)
+        entry.user.save()
+        messages.success(request,'Password changed successfully')
+        return HttpResponseRedirect(reverse('close_dialog', kwargs={
+              'dialog_name': 'pass_reset'
+        }))
+      else:
+        messages.error(request,'New passwords do not match.')
+  else:
+    message = ''
+    try:
+      entry = PasswordReset.objects.get(reset_key=reset_key)
+      if entry.last_datetime_created + datetime.timedelta(1) < timezone.now():
+        message = "The key expired."
+      else:
+        form = PasswordResetForm()
+        return render(request, 'utilities/dialogs/password_reset.html', {
+            'form': form,
+        })
+    except PasswordReset.DoesNotExist:
+      message = "This link is no longer active for modification."
+    return render(request, 'utilities/dialogs/pass_message.html',{
+        'message':message,
+    })
+  form = PasswordResetForm()
+  return render(request, 'utilities/dialogs/password_reset.html', {
+      'form': form,
+  })
+

@@ -1,0 +1,73 @@
+{% extends "pagelet_base.html" %}
+
+{% block styles %}
+  {{ form.media.css }}
+{% endblock %}
+
+{% block content %}
+  <div class="form-div">
+    {% for emails in emails_for_user %}
+      <div>
+        {% if emails.email == primary_email %}
+          <form action="/settings/email_auth/" method="POST">
+            {{ emails.email }}
+            <input type="hidden" name="email" value="{{ emails.email }}">
+            <input type="hidden" name="id" value="{{ emails.pk}}">
+            {% if not emails.verified %}
+              <input type="submit" name="verify" value="Verify">
+            {% endif %}
+            {% if emails.verified %}
+              <input type="submit" name="verify" value="Verified" disabled="disabled">
+            {% endif %}
+            <input type="submit" name="primary" value="Primary" disabled="disabled">
+            <input type="submit" name="delete" value="Delete" disabled="disabled">
+            <br>
+            <br>
+          </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+    {% for emails in emails_for_user %}
+      <div>
+        {% if not emails.email == primary_email %}
+          <form action="/settings/email_auth/" method="POST">
+            {{ emails.email }}
+            <input type="hidden" name="email" value="{{ emails.email }}">
+            <input type="hidden" name="id" value="{{ emails.pk}}">
+            {% if not emails.verified %}
+              <input type="submit" name="verify" value="Verify">
+            {% endif %}
+            {% if emails.verified %}
+              <input type="submit" name="verify" value="Verified" disabled="disabled">
+            {% endif %}
+            <input type="submit" name="primary" value="Make it Primary">
+            <input type="submit" style="display:none" name="primary_2" id="{{emails.pk}}_primary_2">
+            <input type="submit" name="delete" value="Delete">
+            <br>
+            {% if emails in verifiable_emails %}
+              <p>A verification link has been send to your email address</p>
+            {% endif %}
+            <br>
+          </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+    {% if count < 5 %}
+      <form id="email-form" class="uniForm" action="/settings/email_auth/" method="POST">
+        {% csrf_token %}
+        {{useremailform.uniform }}
+        <input style='margin-left:10px' class='input-button' type="submit" name="submission" value="Submit" />
+      </form>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ form.media.js }}
+  <script type="text/javascript" src="/static/js/common.js"></script>
+  {% if primary_entry %}
+    <script>
+      check_password('email_auth', 60,function(){document.getElementById('{{ primary_entry.pk }}_primary_2').click();});
+    </script>
+  {% endif %}
+{% endblock %}
