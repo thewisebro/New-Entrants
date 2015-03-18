@@ -75,6 +75,7 @@ class Post(models.Model):
     postData={
       'id':self.id,
       'upload_user': str(self.upload_user.name),
+      'user_image': self.upload_user.photo_url(),
       'datetime_created':str(self.datetime_created),
       'batch':str(self.batch),
       'content':self.content,

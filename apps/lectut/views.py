@@ -22,19 +22,21 @@ from django import forms
 
 def CORS_allow(view):
   def wrapped_view(request, *args, **kwargs):
-    response = view(request, *args, **kwargs)
-    import pdb;pdb.set_trace()
     if PRODUCTION == False:
-      session_id = 'Himanshu'
-      session = Session.objects.get(session_key=session_id)
-      uid = session.get_decoded().get('_auth_user_id')
-      user = User.objects.get(pk=uid)
-      request.user = user
-      response["Access-Control-Allow-Origin"] = "*"
-      response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
-      response["Access-Control-Allow-Credentials"] = True
-#      response["Access-Control-Max-Age"] = "1000"
-      response["Access-Control-Allow-Headers"] = "*"
+      if request.method == 'POST':
+        session_id = request.COOKIES['CHANNELI_SESSID']
+        session = Session.objects.get(session_key=session_id)
+        uid = session.get_decoded().get('_auth_user_id')
+        user = User.objects.get(pk=uid)
+        request.user = user
+
+    response = view(request, *args, **kwargs)
+    response["Access-Control-Allow-Origin"] = "http://172.25.55.156:9008"
+    response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+    response["Access-Control-Allow-Credentials"] = 'true'
+#    response["Access-Control-Max-Age"] = "1000"
+    response["Access-Control-Allow-Headers"] = "*"
+
     return response
   return wrapped_view
 
@@ -97,7 +99,7 @@ def coursepage_old(request, batch_id):
 #@login_required
 def coursepage(request, batch_id):
 #    user = request.user
-    import pdb;pdb.set_trace()
+#    import pdb;pdb.set_trace()
     usrname = request.POST.get('user','harshithere')
     user = User.objects.get(username=usrname)
 #    user = User.objects.get(username=request.POST['user'])
@@ -128,7 +130,7 @@ def coursepage(request, batch_id):
 def uploadFile(request , batch_id):
   user = request.user
   userBatch = Batch.objects.get(id=batch_id)
-  import pdb;pdb.set_trace();
+#import pdb;pdb.set_trace();
   if request.method == 'POST':
     text_form = TextForm(request.POST)
     file_form = FileForm(request.POST , request.FILES )
@@ -145,7 +147,7 @@ def uploadFile(request , batch_id):
       file_type = getFileType(upload_file)
       upload_type = request.POST['upload_type']
       file_name=request.POST['upload_name']
-      import pdb;pdb.set_trace();
+#import pdb;pdb.set_trace();
 
       if file_type!='Video' and  upload_file._size>MAX_FILE_SIZE:
         msg = "File too large.Must be smaller than 5MB"
@@ -171,9 +173,9 @@ def uploadFile(request , batch_id):
 def uploadedFile(request , batch_id):
   if request.method == 'POST':
     allData = json.loads(request.POST['data'])
-#    user = request.user
-    usrname = allData['user']
-    user = User.objects.get(username=usrname)
+    user = request.user
+#    usrname = allData['user']
+#    user = User.objects.get(username=usrname)
     userBatch = Batch.objects.get(id=batch_id)
 #    data = request.POST.get('formText','')
     data = allData['formText']
@@ -215,17 +217,20 @@ def getFileType(file_name):
 #mime = magic.Magic(mime=True)
 #file_type = mime.from_file(file_name)
   file_name = str(file_name)
-  extension = file_name.split(".")[1]
-  extension = extension.lower()
-  if extension in ['jpg','png','jpeg','gif']:
-    file_type="image"
-  elif extension=='pdf':
-    file_type="pdf"
-  elif extension=='ppt':
-    file_type="ppt"
-  elif extension in ['dv', 'mov', 'mp4', 'avi', 'wmv']:
-    file_type="video"
-  else:
+  try:
+    extension = file_name.split(".")[1]
+    extension = extension.lower()
+    if extension in ['jpg','png','jpeg','gif']:
+      file_type="image"
+    elif extension=='pdf':
+      file_type="pdf"
+    elif extension=='ppt':
+      file_type="ppt"
+    elif extension in ['dv', 'mov', 'mp4', 'avi', 'wmv']:
+      file_type="video"
+    else:
+      file_type="unknown"
+  except:
     file_type="unknown"
   return file_type
 
@@ -263,18 +268,22 @@ def getUserType(user):
 @CORS_allow
 #@login_required
 def deleteFile(request , file_id):
-# user = request.user
-  user = User.objects.get(username = 'harshithere')
-  fileToDelete = Uploadedfile.objects.get(pk=file_id)
-#  batch_id = request.session['batchId']
-  if user.in_group('faculty') or user == fileToDelete.post.upload_user:
-    try:
-      fileToDelete.delete()
-      msg = 'File has been deleted'
-    except:
-      msg = 'Some error Occured'
+  user = request.user
+#  user = User.objects.get(username = 'harshithere')
+  if Uploadedfile.objects.filter(pk=file_id).exists():
+    fileToDelete = Uploadedfile.objects.get(pk=file_id)
+#    batch_id = request.session['batchId']
+
+    if user.in_group('faculty') or user == fileToDelete.post.upload_user:
+      try:
+        fileToDelete.delete()
+        msg = 'File has been deleted'
+      except:
+        msg = 'Some error Occured'
+    else:
+      msg = 'You are not authorised to delete this file. This shall be reported'
   else:
-    msg = 'You are not authorised to delete this file. This shall be reported'
+    msg='File doesnot exist'
   response = HttpResponse(json.dumps(msg), content_type='application/json')
   return response
 #  return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
@@ -283,18 +292,21 @@ def deleteFile(request , file_id):
 @csrf_exempt
 @CORS_allow
 def deletePost(request , post_id):
-#  user = request.user
-  user = User.objects.get(username = 'harshithere')
-  postToDelete = Post.objects.get(pk=post_id)
-  if user.in_group('faculty') or user == postToDelete.upload_user:
-    try:
-      postToDelete.delete()
-      Uploadedfile.objects.all().filter(post=postToDelete)
-      msg = 'Post has been deleted'
-    except:
-      msg = 'Kuch katta ho gaya'
+  user = request.user
+#  user = User.objects.get(username = 'harshithere')
+  if Post.objects.filter(pk=post_id).exists():
+    postToDelete = Post.objects.get(pk=post_id)
+    if user.in_group('faculty') or user == postToDelete.upload_user:
+      try:
+        postToDelete.delete()
+        Uploadedfile.objects.all().filter(post=postToDelete)
+        msg = 'Post has been deleted'
+      except:
+        msg = 'Kuch katta ho gaya'
+    else:
+      msg = 'You are not authorised to delete this post. This shall be reported'
   else:
-    msg = 'You are not authorised to delete this post. This shall be reported'
+    msg='Post doesnot exist'
   response = HttpResponse(json.dumps(msg), content_type='application/json')
   return response
 
