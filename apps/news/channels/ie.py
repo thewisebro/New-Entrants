@@ -6,6 +6,7 @@ from BeautifulSoup import BeautifulSoup, NavigableString
 # Python Imports
 from xml.etree import ElementTree
 from urllib2 import Request, urlopen, URLError
+from dateutil import parser
 import re
 import subprocess
 import os
@@ -43,8 +44,8 @@ def Ie(path, channel):
         if len(archive) is 0:
           link = item.find('link').text
           des_content = item.find('description').text
-          dt = datetime.datetime.now()
-          published_date = datetime.datetime(dt.year,dt.month,dt.day)
+          pub_date_string = item.findtext('pubDate')
+          published_date = parser.parse(pub_date_string)
 
           # Extracting unwanted tags from the item's description
           des_soup = BeautifulSoup(des_content)

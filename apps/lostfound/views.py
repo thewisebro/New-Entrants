@@ -14,7 +14,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.html import escape
 from django.conf import settings
 
-from settings import MEDIA_ROOT, MEDIA_URL
 from lostfound.models import *
 from lostfound.forms import BaseModelFormFunction
 # from api.forms import *
@@ -28,12 +27,12 @@ def index(request):
   logger.info(request.user.username+": in homepage.")
   user = request.user
 
-  data_lost = LostItems.objects.order_by('-pk').all()[:3]
-  data_found = FoundItems.objects.order_by('-pk').all()[:3]
+  data_lost = LostItems.items.order_by('-pk').all()[:3]
+  data_found = FoundItems.items.order_by('-pk').all()[:3]
 
-  qryst_lost = LostItems.objects.filter(user__username = user.username)
+  qryst_lost = LostItems.items.filter(user__username=user.username)
   lost_count = qryst_lost.filter(status = 'Item not found').count()
-  qryst_found = FoundItems.objects.filter(user__username = user.username)
+  qryst_found = FoundItems.items.filter(user__username = user.username)
   found_count = qryst_found.filter(status = 'Owner not found').count()
 
   dictionary = {
@@ -141,7 +140,7 @@ def viewItem(request, category, pk_id):
   logger.info(request.user.username+": entered viewItem with category " + category + " and pk " + pk_id)
   if category == 'lost':
     try:
-      result = LostItems.objects.get(pk = pk_id)           #query from searchbar
+      result = LostItems.items.get(pk = pk_id)           #query from searchbar
     except LostItems.DoesNotExist:
       logger.info(request.user.username+": allItems/" + category + " pk = " + pk_id + ": Item not found")
       raise Http404
@@ -156,7 +155,7 @@ def viewItem(request, category, pk_id):
     return render_to_response(template, { 'mail_flag':mail_flag, 'query': result}, context_instance=RequestContext(request))
   if category == 'found':
     try:
-      result = FoundItems.objects.get(pk = pk_id)           #query from searchbar
+      result = FoundItems.items.get(pk = pk_id)           #query from searchbar
     except FoundItems.DoesNotExist:
       logger.info(request.user.username+": allItems/" + category + " pk = " + pk_id + ": Item not found")
       raise Http404
@@ -175,12 +174,12 @@ def viewItem(request, category, pk_id):
 def allItems(request, category, pk=None):
   logger.info(request.user.username+": entered allItems with category " + category)
   if category == 'lost':
-    table_data = LostItems.objects.all().order_by('-pk')
+    table_data = LostItems.items.order_by('-pk')
     title = 'Item Lost'
     found_flag = 0
     template='lostfound/all_lost_items.html'
   if category == 'found':
-    table_data = FoundItems.objects.all().order_by('-pk')
+    table_data = FoundItems.items.order_by('-pk')
     title = 'Item Found'
     found_flag =1
     template='lostfound/all_found_items.html'
@@ -202,19 +201,19 @@ def allItems(request, category, pk=None):
     pk = int(pk)
     if category == 'lost':
       try:
-        obj = LostItems.objects.get(pk=pk)
+        obj = LostItems.items.get(pk=pk)
       except LostItems.DoesNotExist:
         logger.info(request.user.username+": allItems/" + category + " pk = " + str(pk) + ": Item not found")
         raise Http404
 
     elif category == 'found':
       try:
-        obj = FoundItems.objects.get(pk=pk)
+        obj = FoundItems.items.get(pk=pk)
       except FoundItems.DoesNotExist:
         logger.info(request.user.username+": allItems/" + category + " pk = " + str(pk) + ": Item not found")
         raise Http404
 
-        obj = FoundItems.objects.get(pk=pk)
+        obj = FoundItems.items.get(pk=pk)
     else:
       # Shouldn't happen
       raise Http404
@@ -233,9 +232,9 @@ def allItems(request, category, pk=None):
 def account(request, category):
   logger.info(request.user.username+": entered account")
   username = request.user.username
-  qryst_lost = LostItems.objects.filter(user__username = username)
+  qryst_lost = LostItems.items.filter(user__username = username)
   qryst_lost_notfound = qryst_lost.filter(status = 'Item not found')
-  qryst_found = FoundItems.objects.filter(user__username = username)
+  qryst_found = FoundItems.items.filter(user__username = username)
   qryst_found_notfound = qryst_found.filter(status = 'Owner not found')
   lost_count = qryst_lost_notfound.count()
   found_count = qryst_found_notfound.count()
@@ -249,9 +248,9 @@ def account(request, category):
 def edit(request, category, pk_id):
   logger.info(request.user.username+": entered edit with category " + category + 'and pk ' + pk_id)
   if category == 'lost':
-    item = LostItems.objects.get(pk = pk_id)
+    item = LostItems.items.get(pk = pk_id)
   if category == 'found':
-    item = FoundItems.objects.get(pk = pk_id)
+    item = FoundItems.items.get(pk = pk_id)
 
   user = request.user
   contact = user.contact_no
@@ -322,7 +321,7 @@ def sendmail(request, type_of_mail, pk_id):
   app = 'lostfound'
 
   if type_of_mail == 'lost':
-    qryst = LostItems.objects.filter(pk = pk_id)
+    qryst = LostItems.items.filter(pk = pk_id)
     subject = 'Your reported lost item ' + qryst[0].item_lost + ' has been reported as found!'
     msg = 'Your reported lost item ' + qryst[0].item_lost + ' has been reported as found by '
     msg += user.get_name()
@@ -345,7 +344,7 @@ def sendmail(request, type_of_mail, pk_id):
     Notification.save_notification(app, notif_text, url, users, qryst[0])
 
   if type_of_mail == 'found':
-    qryst = FoundItems.objects.filter(pk = pk_id)
+    qryst = FoundItems.items.filter(pk = pk_id)
     subject = 'Your reported found item ' + qryst[0].item_found + ' has a prospective owner! '
     msg = 'Your reported found item ' + qryst[0].item_found + ' has claimed by '
     msg += user.get_name()
@@ -387,7 +386,7 @@ def deleteEntry(request, category, pk_id):
   logger.info(request.user.username + ': entered deleteEntry with category ' + category + '.')
   app = 'lostfound'
   if category == "lost":
-    item = LostItems.objects.get(pk = pk_id)
+    item = LostItems.items.get(pk = pk_id)
     Notification.delete_notification(app, item)
     if item.user.username == request.user.username:
       try:
@@ -403,7 +402,7 @@ def deleteEntry(request, category, pk_id):
       messages.error(request, 'You can not delete items added by others.')
     return HttpResponseRedirect('/lostfound/')
   elif category == "found":
-    item = FoundItems.objects.get(pk = pk_id)
+    item = FoundItems.items.get(pk = pk_id)
     Notification.delete_notification(app, item)
     if item.user.username == request.user.username:
       try:
@@ -423,11 +422,11 @@ def deleteEntry(request, category, pk_id):
 def search(request, category, st):
   logger.info(request.user.username + ': entered deleteEntry with category ' + category + ' and str ' + st)
   if category == 'lost':
-    table_data = LostItems.objects.filter(item_lost__icontains = st)
+    table_data = LostItems.items.filter(item_lost__icontains = st)
     title = 'Item Lost'
     template = 'lostfound/all_lost_items.html'
   if category == 'found':
-    table_data = FoundItems.objects.filter(item_found__icontains = st)
+    table_data = FoundItems.items.filter(item_found__icontains = st)
     title = 'Item Found'
     template = 'lostfound/all_found_items.html'
   if not table_data:
@@ -448,9 +447,9 @@ def search(request, category, st):
 def status(request, category, pk_id):
   logger.info(request.user.username + ': entered status with category ' + category + ' and pk ' + pk_id)
   if category == 'lost':
-    item = LostItems.objects.get(pk = pk_id)
+    item = LostItems.items.get(pk = pk_id)
   if category == 'found':
-    item = FoundItems.objects.get(pk = pk_id)
+    item = FoundItems.items.get(pk = pk_id)
 
   if item.user.username == request.user.username:
     if category == 'lost':

@@ -51,7 +51,7 @@
   {% if event.description %}
     <div class='event-short-description'>
       <div class='event-left'><div title='Description' class='event-detail-icon'></div></div>
-      <div class='event-right'>{{ event.description }}</div>
+      <div class='event-right'>{{ event.description|safe }}</div>
       <div style='clear:both'></div>
     </div>
   {% endif %}

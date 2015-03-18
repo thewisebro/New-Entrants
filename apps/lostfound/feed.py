@@ -1,34 +1,39 @@
-from feeds.helper import ModelFeed,Feeds
-from lostfound.models import LostItems, FoundItems 
-from django.utils.html import escape
+from feeds.helper import ModelFeed
+from lostfound.models import LostItems, FoundItems
+from django.template.loader import render_to_string
 
 class LostFeed(ModelFeed):
-  def content (self, instance, created):
-    if not instance.status == 'Item found':
-      html = instance.user.html_name() + ' lost ' + escape(instance.item_lost) + ' at ' + escape(instance.place) + '.'
-      link = '/lostfound/view-item/lost/' + str(instance.pk)
-      tags = {'link': link}
-      return html, tags
-    else:
-      return None
-
   class Meta:
     model = LostItems
     app = 'lostfound'
 
-class FoundFeed(ModelFeed):
-  def content (self, instance, created):
-    if not instance.status == 'Owner found':
-      html = instance.user.html_name() + ' found ' + escape(instance.item_found) + ' at ' + escape(instance.place) + '.'
-      link = '/lostfound/view-item/found/' + str(instance.pk)
-      tags = {'link': link }
-      return html, tags
+  def save(self, instance, created):
+    if not instance.status == 'Item found':
+      instance.link = '/lostfound/view-item/lost/' + str(instance.pk)
+      return {
+        'content': render_to_string('lostfound/lost_feed.html',{
+          'instance': instance,
+        }),
+        'user': instance.user,
+        'link': instance.link,
+      }
     else:
       return None
 
+class FoundFeed(ModelFeed):
   class Meta:
     model = FoundItems
     app = 'lostfound'
 
-# Feeds.register(FoundFeed)
-# Feeds.register(LostFeed)
+  def save(self, instance, created):
+    if not instance.status == 'Owner found':
+      instance.link = '/lostfound/view-item/found/' + str(instance.pk)
+      return {
+        'content': render_to_string('lostfound/found_feed.html',{
+          'instance': instance,
+        }),
+        'user': instance.user,
+        'link': instance.link,
+      }
+    else:
+      return None

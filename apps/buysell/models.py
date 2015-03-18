@@ -2,9 +2,11 @@ from core import models
 from nucleus.models import User
 from api import model_constants as MC
 from buysell.constants import *
-from settings import MEDIA_ROOT
+from moderation.models import Reportable
+from django.conf import settings
+MEDIA_ROOT = settings.MEDIA_ROOT
 
-class ItemsForSale(models.Model):
+class ItemsForSale(Reportable, models.Model):
   user = models.ForeignKey(User)
   item_name = models.CharField(max_length = MC.TEXT_LENGTH)
   cost = models.IntegerField(max_length = MC.CODE_LENGTH)
@@ -21,7 +23,7 @@ class ItemsForSale(models.Model):
   def __unicode__ (self):
     return str(self.item_name)
 
-class ItemsRequested(models.Model):
+class ItemsRequested(Reportable, models.Model):
   user = models.ForeignKey(User)
   item_name = models.CharField(max_length = MC.TEXT_LENGTH)
   condition = models.CharField(max_length = MC.TEXT_LENGTH, choices=STATUS)

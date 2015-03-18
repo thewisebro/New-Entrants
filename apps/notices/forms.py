@@ -1,18 +1,16 @@
-from core.forms import ModelForm, ModelChoiceField
+from core.forms import Form, ModelForm, ModelChoiceField
 from notices.models import Notice
 from core import forms
+from django.contrib.admin import widgets
 
-def GenerateNoticeForm(user):
-  filemanager_url = str('/events/browse/'+calendar.name+'/')
-  categories = user.category_set.all()
+def GenerateNoticeForm(category):
+  filemanager_url = str('/notices/browse/'+category.name+'/')
   class NoticeForm(ModelForm):
-    category = forms.ModelChoiceField(queryset=categories, empty_label = None)
     class Meta:
       model = Notice
       fields = ['subject','expire_date','reference', 'content']
       widgets = {
-        'description': forms.CKEditorWidget(config={
-        'toolbar': 'BasicWithImage',
+        'content': forms.CKEditorWidget(config={
         'width': 800,
         'height': 250,
         'forcePasteAsPlainText': 'true'
@@ -24,3 +22,6 @@ class EditForm(ModelForm):
     class Meta:
       model = Notice
       fields = ['subject','expire_date','reference', 'content']
+
+class DummyForm(Form):
+     pass

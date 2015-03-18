@@ -1,0 +1,9 @@
+<div class="app-heading">Games </div>
+{{#each games }}
+  <div class="appbox">
+    <img class="app-pic" data-app="{{ game }}" src="/static/images/games/icons/{{ game }}.png"/>
+    <a target="_blank" href="{{ game_data.url }}">
+      <div class="app-name">{{ game_data.name }}</div>
+    </a>
+  </div>
+{{/each}}

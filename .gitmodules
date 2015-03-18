@@ -24,10 +24,16 @@
 	url = https://github.com/alex/django-taggit.git
 [submodule "third_party_apps/django-threadedcomments"]
 	path = third_party_apps/django-threadedcomments
-	url = https://github.com/HonzaKral/django-threadedcomments.git
+	url = http://git.channeli.in/django-threadedcomments.git
 [submodule "third_party_apps/django-fluent-comments"]
 	path = third_party_apps/django-fluent-comments
 	url = https://github.com/edoburu/django-fluent-comments.git
 [submodule "third_party_apps/django-filemanager"]
 	path = third_party_apps/django-filemanager
 	url = https://github.com/IMGIITRoorkee/django-filemanager.git
+[submodule "third_party_apps/django-modeladmin-reorder"]
+	path = third_party_apps/django-modeladmin-reorder
+	url = https://github.com/mishbahr/django-modeladmin-reorder
+[submodule "third_party_apps/django-static-precompile"]
+	path = third_party_apps/django-static-precompile
+	url = http://git.channeli.in/django-static-precompile.git

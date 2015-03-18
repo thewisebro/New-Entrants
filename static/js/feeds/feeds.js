@@ -9,18 +9,22 @@ $(document).on("load_app_home", function(e){
 
 function load_feeds_page(){
   $('#content').html("<div id='feeds'></div>");
-  if(feeds.length == 0){
+  if(feeds.length === 0){
     update_feeds('first');
     setInterval(function(){update_feeds('previous');},feeds_pulling_interval);
   }
   else{
     display_add_feeds('end',feeds);
   }
-  //load_events_birthdays();
+  show_default_right_column();
 }
 
 function update_feeds(action,number){
-  if(action == 'previous')showLoading = false;
+  if(action == 'previous'){
+    if(feeds.length === 0)
+      return;
+    showLoading = false;
+  }
   $.get("/feeds/fetch",
     {'action' : action,
      'id' : action == 'previous' ? feeds[0].id : (feeds.length ? feeds[feeds.length-1].id : null),
@@ -30,12 +34,12 @@ function update_feeds(action,number){
       if(action != 'previous'){
         feeds = feeds.concat(data.feeds);
         more_feeds = data.more?true:false;
-        if(get_current_app() == 'home')
+        if(nucleus.get_current_app() == 'home')
           display_add_feeds('end',data.feeds);
       }
       else{
         feeds = data.feeds.concat(feeds);
-        if(get_current_app() == 'home')
+        if(nucleus.get_current_app() == 'home')
           display_add_feeds('start',data.feeds);
       }
     }
@@ -48,26 +52,28 @@ function get_app_icon_url(app){
 }
 
 function feed_html(feed){
-  return ""+
+  var $content = $(feed.content);
+  var $feed_bottom = $('.feed-bottom', $content);
+  if($feed_bottom.length > 0){
+    var context = {
+      feed: feed
+    };
+    if(feed.app in channeli_apps)
+      context.app = channeli_apps[feed.app];
+    context.date = prettyDate(feed.datetime);
+    $feed_bottom.html(Handlebars.feeds_templates.bottom(context));
+  }
+  feed.content = $('<div>').append($content).html();
+    return ""+
     "<div class='feed-box'>"+
-      ('username' in feed
-        ?"<img class='feed-propic' src='/photo/"+feed.username+"/'/>"
-        :("<a target='_blank' href="+channeli_apps[feed.app]['url']+">"+
+      ('username' in feed?
+        "<img class='feed-propic' src='/photo/"+feed.username+"/'/>"
+        :("<a target='_blank' href="+channeli_apps[feed.app].url+">"+
           "<img class='feed-propic' src='"+get_app_icon_url(feed.app)+"'/>"+
           "</a>")
       )+
-//      "<div class='feed-heading'>"+
-//        ('username' in feed
-//          ?("<a href='/groups/"+feed.username+"/'>"+ feed.html_name+"</a>")
-//          :("<a target='_blank' href='"+channeli_apps[feed.app]['url']+"'>"+channeli_apps[feed.app]['name']+"</a>")
-//        )+
-//      "</div>"+
-//      "<div class='feed-right'>"+
-//        "<div class='feed-time'>"+prettyDate(feed.datetime)+"</div>"+
-//        (feed.link ? "<a class='feed-external-link' href='"+feed.link+"' target='_blank'></a>" : "")+
-//      "</div>"+
       "<div class='feed-text'>"+feed.content+"</div>"+
-    "</div>"
+    "</div>";
 }
 
 function display_add_feeds(position,feeds){
@@ -83,7 +89,7 @@ function display_add_feeds(position,feeds){
 //   }
  }
  $('#feeds').pickify_users();
- if(more_feeds && $('#see-more-feeds').length==0){
+ if(more_feeds && $('#see-more-feeds').length === 0){
    $('#content').append("<div id='see-more-feeds' class='see-more'><span class='button2' onclick='see_more_feeds();'>See More</span></div>");
  }
  if(!more_feeds && $('#see-more-feeds').length==1){

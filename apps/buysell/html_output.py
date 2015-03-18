@@ -8,7 +8,7 @@ from django.forms.util import flatatt, ErrorDict, ErrorList
 from django.forms.widgets import Media, media_property, TextInput, Textarea
 from django.utils.datastructures import SortedDict
 from django.utils.html import conditional_escape
-from django.utils.encoding import StrAndUnicode, smart_unicode, force_unicode
+from django.utils.encoding import smart_unicode, force_unicode
 from django.utils.safestring import mark_safe
 
 
@@ -49,7 +49,7 @@ def _html_output(self, normal_row, error_row, row_ender, help_text_html, errors_
                 help_text = help_text_html % force_unicode(field.help_text)
             else:
                 help_text = u''
-                
+
             html_id_attr = ' id="div_%s"' % name
             output.append(normal_row % {
                     'errors': force_unicode(bf_errors),
@@ -62,7 +62,7 @@ def _html_output(self, normal_row, error_row, row_ender, help_text_html, errors_
 
     if top_errors:
         output.insert(0, error_row % force_unicode(top_errors))
-                
+
     if hidden_fields: # Insert any hidden fields in the last row.
         str_hidden = u''.join(hidden_fields)
         if output:
@@ -86,4 +86,4 @@ def _html_output(self, normal_row, error_row, row_ender, help_text_html, errors_
             output.append(str_hidden)
     return mark_safe(u'\n'.join(output))
 
-                    
+

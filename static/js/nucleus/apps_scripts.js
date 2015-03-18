@@ -3,12 +3,20 @@ var loaded_scripts_apps = [];
 var apps_scripts = {
   'home':[
     '/static/js/prettydate.js',
+    '/static/handlebars/feeds/templates.js',
     '/static/js/feeds/feeds.js'
+  ],
+  'notifications':[
+    '/static/js/prettydate.js',
+    '/static/js/notifications/base.js'
   ],
   'forum':[
     '/static/js/forum/base.js'
   ],
   'notices':[
+    '/static/handlebars/notices/templates.js',
+    '/static/js/notices/constants.js',
+    '/static/js/notices/jquery.simplePagination.js',
     '/static/js/notices/base.js'
   ],
   'events':[
@@ -22,11 +30,15 @@ var apps_scripts = {
     '/static/js/news/news.js'
   ],
   'helpcenter':[
+    '/static/handlebars/helpcenter/templates.js',
     '/static/js/prettydate.js',
     '/static/js/helpcenter/helpcenter.js'
+  ],
+  'settings':[
+    '/static/handlebars/utilities/templates.js',
+    '/static/js/utilities/base.js'
   ]
-
-}
+};
 
 function load_app(app, callback){
   if(!(app in apps_scripts) || $.inArray(app,loaded_scripts_apps)>-1){
@@ -34,21 +46,11 @@ function load_app(app, callback){
     return;
   }
   var scripts = apps_scripts[app];
-  var deferred = new $.Deferred(), pipe = deferred;
 
-  $.each(scripts , function(i, val){
-    pipe = pipe.pipe(function(){
-      return  $.cachedScript(val);
-    });
-  });
-
-  pipe = pipe.pipe(function(){
+  var wrapped_callback = function(){
     loaded_scripts_apps.push(app);
-  });
+    if(callback)callback();
+  };
 
-  if(callback)
-    pipe = pipe.pipe(callback);
-  deferred.resolve();
+  load_scripts_in_pipe(scripts, wrapped_callback);
 }
-
-

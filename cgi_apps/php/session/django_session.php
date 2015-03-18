@@ -1,6 +1,7 @@
 <?php
 error_reporting('E_ALL');
 include("connection.php");
+session_name('CHANNELI_SESSID');
 class Session {
   private $db_conn;
   private $table;

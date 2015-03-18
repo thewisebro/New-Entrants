@@ -14,13 +14,13 @@ class Notification(models.Model):
   content = generic.GenericForeignKey('content_type', 'object_id')
   text = models.CharField(max_length=1000)
   url = models.URLField(blank=True, null=True)
-  users = models.ManyToManyField(User, through='NotificationUser')
+  users = models.ManyToManyField(User, through='UserNotification')
 
   class Meta:
     ordering = ['-id']
 
   def __unicode__(self):
-    return self.text
+    return self.text[:200]
 
   @staticmethod
   def filter(app, instance):
@@ -35,7 +35,7 @@ class Notification(models.Model):
     notification = Notification(app=app, text=text, url=url, object_id=instance.pk, content_type=content_type)
     notification.save()
     for user in users:
-      NotificationUser.objects.get_or_create(user=user, notification=notification)
+      UserNotification.objects.get_or_create(user=user, notification=notification)
     return notification
 
   @staticmethod
@@ -45,10 +45,13 @@ class Notification(models.Model):
     if notification:
       notification.delete()
 
-class NotificationUser(models.Model):
+class UserNotification(models.Model):
   user = models.ForeignKey(User)
   notification = models.ForeignKey(Notification)
   viewed = models.BooleanField(default=False)
 
+  class Meta:
+    ordering = ['-id']
+
   def __unicode__(self):
-    return unicode(self.user)
+    return unicode(self.user) + unicode(self.notification)

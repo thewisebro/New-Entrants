@@ -1,0 +1,15 @@
+<div id="_notices-header">
+  <div id="_home" class="button4 button-div" onclick="location.hash = '#notices/'">Home</div>
+  <div id="_back" class="button4 button-div" onclick="back_clicked()">Back</div>
+  <div style="clear:both"></div>
+</div>
+<div id="_info">
+  <div id="_subject_wrap">
+  <div id="_subject">Subject : </div>
+  <div id="_subject_value">{{ data.subject }} </div>
+  <div style="clear:both"></div>
+  </div>
+  <div id="_reference">Reference : {{ data.reference }}</div>
+  <div id="_source">Category : {{ data.category }}</div>
+  <div id="_content">Content : {{{ data.content }}}</div>
+</div>

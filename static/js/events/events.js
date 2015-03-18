@@ -26,8 +26,8 @@ function on_login_and_logout(){
   calendars = null;
   calendar_div_shown = false;
   virtual_calendar = null;
-  if(get_current_app() == 'events'){
-    load_events_page(get_app_hashtags());
+  if(nucleus.get_current_app() == 'events'){
+    load_events_page(nucleus.get_app_hashtags());
   }
 }
 

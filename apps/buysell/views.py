@@ -11,14 +11,16 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.files.base import ContentFile
 from django.core.files import File
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
 
 from buysell.forms import *
 from datetime import date, timedelta, datetime
 from buysell.models import *
 from buysell.constants import *
-from settings import MEDIA_ROOT
-from settings import MEDIA_URL
 from notifications.models import Notification
+
+MEDIA_ROOT = settings.MEDIA_ROOT
+MEDIA_URL = settings.MEDIA_URL
 
 import os, logging
 import re
@@ -27,7 +29,6 @@ from PIL import Image
 import StringIO
 from urlparse import urlparse
 import urllib2
-import settings
 import collections
 
 logger = logging.getLogger('buysell')
@@ -219,7 +220,7 @@ def request_item(request):
 @login_required
 def viewrequests(request):
   logger.info(request.user.username+": viewed item requests")
-  qryst_req = ItemsRequested.objects.all().order_by('-pk')
+  qryst_req = ItemsRequested.items.all().order_by('-pk')
   paginator = Paginator(qryst_req, 10)
   page = request.GET.get('page', 1)
   try:
@@ -273,13 +274,13 @@ def buy(request, mc=None, sc=None):
     scn=''
 
   if not mc and not sc:
-    qryst= ItemsForSale.objects.all().order_by('-pk')
+    qryst= ItemsForSale.items.all().order_by('-pk')
   if mc and not sc:
     logger.info(request.user.username + ': entered buy with category ' + mc)
-    qryst = ItemsForSale.objects.filter(category = mc).order_by('-pk')
+    qryst = ItemsForSale.items.filter(category = mc).order_by('-pk')
   if mc and sc:
     logger.info(request.user.username + ': entered buy with category ' + mc + ' and subcat ' + sc)
-    qryst = ItemsForSale.objects.filter(category = mc, sub_category = sc).order_by('-pk')
+    qryst = ItemsForSale.items.filter(category = mc, sub_category = sc).order_by('-pk')
   if not qryst:
     logger.info(request.user.username + ': no item found in buy for the categoty and/or subcat selected.')
   if qryst:
@@ -315,10 +316,10 @@ def search(request):
   user=request.user
   srchflag=1
   if searchIn == 'buy':
-    qryst = ItemsForSale.objects.filter(item_name__icontains = query)
+    qryst = ItemsForSale.items.filter(item_name__icontains = query)
     qt_flag=0
   elif searchIn == 'request':
-    qryst = ItemsRequested.objects.filter(item_name__icontains = query)
+    qryst = ItemsRequested.items.filter(item_name__icontains = query)
     qt_flag=1
   number_rows=qryst.count()
   paginator = Paginator(qryst, 10)
@@ -353,8 +354,8 @@ def sendmail(request, type_of_mail, id_pk):
   contact = request.user.contact_no
   app='buysell'
   if type_of_mail == 'buy':
-    buy_mail_list=BuyMailsSent.objects.filter(by_user__username=user,item__pk=id_pk)
-    qryst = ItemsForSale.objects.filter(pk = id_pk)
+    buy_mail_list=BuyMailsSent.items.filter(by_user__username=user,item__pk=id_pk)
+    qryst = ItemsForSale.items.filter(pk = id_pk)
     if buy_mail_list:
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       return HttpResponseRedirect('/buysell/buy_item_details/'+id_pk+'/')
@@ -376,8 +377,8 @@ def sendmail(request, type_of_mail, id_pk):
 
 
   if type_of_mail == 'request':
-    qryst = ItemsRequested.objects.filter(pk = id_pk)
-    buy_mail_list=RequestMailsSent.objects.filter(by_user__username=user,item__pk=id_pk)
+    qryst = ItemsRequested.items.filter(pk = id_pk)
+    buy_mail_list=RequestMailsSent.items.filter(by_user__username=user,item__pk=id_pk)
     if buy_mail_list:
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       return HttpResponseRedirect('/buysell/requested_item_details/'+id_pk+'/')
@@ -417,8 +418,8 @@ def sendmail(request, type_of_mail, id_pk):
 def my_account(request):
   logger.info(request.user.username + ': entered my_account.')
   user = request.user.username
-  qryst_requested = ItemsRequested.objects.filter(user__username = user).order_by('-pk')
-  qryst_added = ItemsForSale.objects.filter(user__username = user).order_by('-pk')
+  qryst_requested = ItemsRequested.items.filter(user__username = user).order_by('-pk')
+  qryst_added = ItemsForSale.items.filter(user__username = user).order_by('-pk')
   dictionary = {'items_added':qryst_added, 'requests':qryst_requested}
   return render_to_response('buysell/my-account.html', dictionary, context_instance=RequestContext(request) )
 
@@ -441,7 +442,7 @@ def edit(request, category, itemReqId):
     logger.info(request.user.username + ': entered edit with category item.')
     user = request.user.username
     try:
-      formData = ItemsForSale.objects.get(pk = itemReqId, user__username = user)
+      formData = ItemsForSale.items.get(pk = itemReqId, user__username = user)
     except:
       logger.info(request.user.username + ': edit - "item" not found with pk '+ pk + '.')
       messages.error(request, 'Item not Found. Item has either been deleted or the item was added by someone else.')
@@ -459,7 +460,7 @@ def edit(request, category, itemReqId):
     logger.info(request.user.username + ': entered edit with category request.')
     user = request.user.username
     try:
-      formData = ItemsRequested.objects.get(pk = itemReqId, user__username = user)
+      formData = ItemsRequested.items.get(pk = itemReqId, user__username = user)
     except:
       logger.info(request.user.username + ': edit - "request" not found with pk '+ pk + '.')
       messages.error(request, 'Item not Found. Item has either been deleted or the item was palced by someone else')
@@ -494,7 +495,7 @@ def editsave(request, category, itemReqId):
         else:
           image_file = ''
         #For update, we will open the actual item and change its properties
-        oldItem = ItemsForSale.objects.get(pk = itemReqId)
+        oldItem = ItemsForSale.items.get(pk = itemReqId)
         expiry_date = post_date + timedelta(days=form.cleaned_data['days_till_expiry'])
         newEditedForm = form.save(commit=False)
         newEditedForm.post_date = oldItem.post_date
@@ -535,7 +536,7 @@ def editsave(request, category, itemReqId):
       if form.is_valid():
         upper_price=form.cleaned_data['price_upper']
         itemReqId = int(itemReqId)
-        oldItem = ItemsRequested.objects.get(pk = itemReqId)
+        oldItem = ItemsRequested.items.get(pk = itemReqId)
         expiry_date = post_date + timedelta(days=30)
         newEditedForm = form.save(commit=False)
         newEditedForm.item_name = str(newEditedForm.item_name).capitalize()
@@ -567,7 +568,7 @@ def editsave(request, category, itemReqId):
 def deleteEntry(request, category, pk_id):
   logger.info(request.user.username + ': entered deleteEntry with category ' + category + '.')
   if category == "item":
-    item = ItemsForSale.objects.get(pk = pk_id)
+    item = ItemsForSale.items.get(pk = pk_id)
     imgPath = MEDIA_ROOT + str(item.item_image)
     if request.user.username == item.user.username:
       try:
@@ -588,7 +589,7 @@ def deleteEntry(request, category, pk_id):
       return HttpResponseRedirect('/buysell/my-account/')
 
   elif category == "request":
-    req = ItemsRequested.objects.get(pk = pk_id)
+    req = ItemsRequested.items.get(pk = pk_id)
     if request.user.username == req.user.username:
       try:
         Notification.delete_notification('buysell', req)
@@ -611,8 +612,8 @@ def dump(obj):
     print "obj.%s = %s" % (attr, getattr(obj, attr))
 
 def clean(request):
-  items = ItemsForSale.objects.all()
-  req = ItemsRequested.objects.all()
+  items = ItemsForSale.items.all()
+  req = ItemsRequested.items.all()
   tmdlta = date.timedelta(5)
   for item in items:
     if date.today() == item.expiry_date:
@@ -643,7 +644,7 @@ def clean(request):
 
 def requested_item_details(request,item_id):
   try:
-    item=ItemsRequested.objects.get(pk=item_id)
+    item=ItemsRequested.items.get(pk=item_id)
   except:
     messages.error(request,'The request has been deleted/does not exist.')
     return HttpResponseRedirect('/buysell/')
@@ -656,7 +657,7 @@ def requested_item_details(request,item_id):
 
 def buy_item_details(request,item_id):
   try:
-    item=ItemsForSale.objects.get(pk=item_id)
+    item=ItemsForSale.items.get(pk=item_id)
   except:
     messages.error(request , 'The item has been deleted/does not exist.')
     return HttpResponseRedirect('/buysell/')
