@@ -75,7 +75,7 @@ class Post(models.Model):
     postData={
       'id':self.id,
       'upload_user': str(self.upload_user.name),
-      'user_image': self.upload_user.photo_url(),
+      'user_image': str(self.upload_user.photo_url),
       'datetime_created':str(self.datetime_created),
       'batch':str(self.batch),
       'content':self.content,
@@ -101,12 +101,13 @@ class Uploadedfile(BaseUpload):
     return str(self.upload_file)
 
   def as_dict(self):
-        filename = str(self.upload_file)
-        filename = filename.split("/")[2]
+        filepath = str(self.upload_file)
+        filename = filepath.split("/")[2]
         fileData={
            'id':self.id,
            'post':self.post.id,
            'upload_file':filename,
+           'filepath':'media/'+filepath,
            'username':str(self.post.upload_user.name),
            'datetime_created':str(self.datetime_created),
            'description':self.description,
