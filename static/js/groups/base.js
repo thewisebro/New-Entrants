@@ -24,12 +24,12 @@ $(document).on("logout", function(){
 function load_settings_tab(hash1, hash2){
   if(hash2 === undefined)
   {
-    $('#content').html("<div class='app-heading'>Group: "+ hash1 + "</div><div "+
+    $('#content').html("<div "+
       "id='content-pagelet' class='pagelet' pagelet-url='/groups/"+hash1+"'></div>");
   }
   else
   {
-    $('#content').html("<div class='app-heading'>Group: "+ hash1 + "</div><div "+
+    $('#content').html("<div "+
       "id='content-pagelet' class='pagelet' pagelet-url='/groups/"+hash1+"/" + hash2 + "/'></div>");
   }
   //$('#right-column .content').html(settings_links_html(tab));
