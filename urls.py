@@ -27,6 +27,8 @@ actual_urlpatterns = patterns('',
   url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
   url(r'^newsmedia/(.*)$', 'django.views.static.serve', {'document_root': settings.NEWS_MEDIA_ROOT}),
   url(r'^songsmedia/(.*)$', 'django.views.static.serve', {'document_root': settings.JUKEBOX_MEDIA_ROOT}),
+  url(r'^static_jb/(.*)$', 'django.views.static.serve', {'document_root': settings.STATICFILES_DIRS[0]}),
+  url(r'^songs/(.*)$', 'django.views.static.serve', {'document_root': settings.JUKEBOX_MEDIA_ROOT+'songs/'}),
 )
 
 urlpatterns = patterns('',
