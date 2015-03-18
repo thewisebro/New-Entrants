@@ -19,6 +19,7 @@ class GenProfileForm(forms.ModelForm, FormMixin):
     ]
     read_only_fields = ['username']
     required_fields = ('first_name', 'gender', 'birth_date')
+    one_time_editable_fields = ('first_name', 'gender', 'birth_date', 'email')
 
 
 class ProfileFormPrimary(forms.ModelForm, FormMixin):
@@ -43,7 +44,8 @@ class ProfileFormPrimary(forms.ModelForm, FormMixin):
     read_only_fields = ('username', 'semester_no',
                         'admission_year', 'admission_semtype')
     required_fields = ('first_name', 'category', 'gender', 'birth_date')
-    one_time_editable_fields = ('first_name', 'category', 'gender', 'birth_date')
+    one_time_editable_fields = ('first_name', 'category', 'gender', 'birth_date',
+                        'email')
     labels = {
       'username': 'Enrollment No',
       'semester_no': 'Semester',
@@ -97,8 +99,12 @@ class ChangePasswordFirstYearForm(forms.Form):
 class PasswordCheckForm(forms.Form):
   password = forms.CharField(label='Enter Password', widget=forms.PasswordInput, required=True)
 
-class EmailForm(forms.Form):
-  email = forms.EmailField()
+class EmailForm(forms.ModelForm, FormMixin):
+  class Meta:
+    model = User
+    fields = ('email',)
+    required_fields = ('email',)
+    one_time_editable_fields = ('email',)
 
 def EventsSubscribeFormGen(user):
   class EventsSubscribeForm(forms.ModelForm):
