@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+    <!-- InstanceBeginEditable name="doctitle" -->
+    <title>{{ title }}</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<meta http-equiv=”X-UA-Compatible” content=”ie=edge,chrome=1″> 
+	<link rev="made" href="mailto:img.thinktank@gmail.com">
+	<meta name="author" content="IMG, IIT Roorkee">
+	<meta name="copyright" content="2012">
+
+    <link rel="shortcut icon" href="{{ images_url }}/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="{{ styles_url }}/main.css"/>
+
+</head>
+
+<body>
+    <div id="container">
+        {% include "messmenu/header.html" %}
+
+        {# temporary fix #}
+        <script src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+        <script src="{{ STATIC_URL }}js/commons/inheritance.js"></script>
+
+        <div id="middle">
+            {% include content %}
+        </div>
+        {% include "messmenu/footer.html" %}
+
+        <!-- Piwik -->
+        <script type="text/javascript">
+        var pkBaseURL = (("https:" == document.location.protocol) ? "https://192.168.121.144/php/piwik/" : "http://192.168.121.144/php/piwik/");
+        document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+        </script><script type="text/javascript">
+        try {
+        var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 16);
+        piwikTracker.trackPageView();
+        piwikTracker.enableLinkTracking();
+        } catch( err ) {}
+        </script><noscript><p><img src="http://192.168.121.144/php/piwik/piwik.php?idsite=16" style="border:0" alt="" /></p></noscript>
+        <!-- End Piwik Tracking Code -->
+            
+    </div>
+</body>
+</html>          
