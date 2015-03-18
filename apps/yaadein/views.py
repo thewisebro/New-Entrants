@@ -3,7 +3,7 @@ from datetime import date, datetime, timedelta
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
-from yaadein.models import Post,PostImage,YaadeinUser
+from yaadein.models import Post,PostImage,YaadeinUser,Spot
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from taggit.models import Tag,TaggedItem
@@ -49,12 +49,13 @@ def CORS_allow(view):
 def index(request,enrno=None):
 # import ipdb;ipdb.set_trace()
   if request.method == 'GET':
-    y_user = YaadeinUser.objects.get_or_create(user__username='13117060')[0]#user=request.user
+    y_user = YaadeinUser.objects.get_or_create(user__username=enrno)[0]#user=request.user
     logged_user = y_user.user
 #user = User.objects.get(username ='13114068')
 #  if y_user.coverpic.field.blank :
 #    y_user.coverpic = "yaadein/coverpic/image4.jpg"
     s = Student.objects.get(user__username=enrno)#=enrno
+
 #    posts = s.post_wall_user.order_by('post_date').reverse()
     posts_usertagged = Post.objects.filter(user_tags=s)#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
     posts_owned = Post.objects.filter(owner=s)
@@ -63,6 +64,11 @@ def index(request,enrno=None):
     bubble(posts)
     posts_data = []
     for post in posts:
+        spotlist = []
+        spot = post.spots.all()
+        if len(spot)>0:
+          for sp in spot:
+            spotlist.append({'id':sp.pk,'name':sp.name,})
         images = PostImage.objects.filter(post=post)
         image_url=[]
         users_tagged_inpost = []
@@ -84,9 +90,10 @@ def index(request,enrno=None):
                'wall_user':post.wall_user.user.name,
                'wall_user_enrol':post.wall_user.user.username,
                'taggedUsers':users_tagged_inpost,
+               'spot':spotlist,
                }
         posts_data.append( tmp )
-    data ={'name':logged_user.name, 'coverPic': y_user.coverpic.url, 'enrolmentNo':enrno, 'posts_data':posts_data, 'label':logged_user.info, 'profilePic':logged_user.photo_url}
+    data ={'name':s.user.name, 'coverPic': y_user.coverpic.url, 'enrolmentNo':enrno, 'posts_data':posts_data, 'label':logged_user.info, 'profilePic':logged_user.photo_url}
     return HttpResponse(simplejson.dumps(data),'application/json') 
 #  return render_to_response('yaadein/usertag.html', {'cover_pic': y_user.coverpic.url,'enrno':enrno,'posts_data':posts_data}, context_instance=RequestContext(request))
   else:
@@ -286,10 +293,10 @@ def post_display(request,pk):
     return HttpResponse('Hello')
 
 @CORS_allow
-def person_search(request):
+def search(request,id):
    if request: #.is_ajax():
      query = request.GET.get('q','')
-# import ipdb;ipdb.set_trace()
+#   import ipdb;ipdb.set_trace()
      students = Student.objects.filter(Q(user__name__icontains = query)).order_by('-user__name')[:10]
      def person_dict(student):
        return {
@@ -298,18 +305,51 @@ def person_search(request):
          'value':student.user.name,
          'profile_pic':student.user.photo_url
         }
-     data = map(person_dict,students)
+     spots = Spot.objects.filter(Q(name__icontains = query)).order_by('-name')[:10]
+     def spot_dict(spot):
+       return {
+         'id':spot.pk,
+         'label':spot.name,
+         'value':spot.name,
+         'profile_pic':spot.profile_pic.url,
+       }
+     if id=='1':
+       data = map(person_dict,students)
+     elif id=='2':
+       data = map(spot_dict,spots)
+     else :
+       data = map(person_dict,students)+map(spot_dict,spots)
      search_data = {'results':data}
    else:
      data = 'fail'
    return HttpResponse(simplejson.dumps(search_data),'application/json')
+
+
+@csrf_exempt
+@CORS_allow
+def spot_search(request):
+  if request:
+    query = request.GET.get('q','')
+    spots = Spot.objects.filter(Q(name__icontains = query)).order_by('-name')[:10]
+    def spot_dict(spot):
+      return {
+        'id':spot.name,
+        'cover_pic':spot.coverpic.url,
+        'profile_pic':spot.profile_pic.url,
+      }
+    data = map(spot_dict,spots)
+    search_data = {'results':data}
+  else:
+    data='fail'
+  return HttpResponse(simplejson.dumps(search_data),'application/json')
+
 
 @csrf_exempt
 @CORS_allow
 def hashtag(request,slug):
   if request:
     posts_data = []
-    posts = Post.objects.filter(tags__slug=slug).order_by('post_date').reverse()  
+    posts = Post.objects.filter(tags__slug=slug).order_by('post_date').reverse()
     for post in posts:
           images = PostImage.objects.filter(post=post)
           image_url=[]
@@ -340,8 +380,10 @@ def hashtag(request,slug):
 @CORS_allow
 def spot_page(request,name):
   if request:
+#  import ipdb;ipdb.set_trace()
     posts_data = []
-    posts = Post.objects.filter(spots__name=name).order_by('post_date').reverse()  
+    spot = Spot.objects.get(name=str(name))
+    posts = Post.objects.filter(spots__name=name).order_by('post_date').reverse()
     for post in posts:
           images = PostImage.objects.filter(post=post)
           image_url=[]
@@ -361,13 +403,13 @@ def spot_page(request,name):
              'image_url': image_url,
              'time':str(post.post_date),
              'taggedUsers':users_tagged_inpost,
-             }
+                 }
           posts_data.append( tmp )
-    data ={'posts_data':posts_data}
+    data ={'posts_data':posts_data,'cover':spot.coverpic.url,'profile':spot.profile_pic.url}
     return HttpResponse(simplejson.dumps(data),'application/json')
   return HttpResponse('1')
 
- 
+
 @csrf_exempt
 @CORS_allow
 def delete(request,id):
