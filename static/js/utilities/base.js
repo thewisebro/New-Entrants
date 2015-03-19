@@ -51,6 +51,8 @@ function settings_links_html(current_tab){
 
 function load_settings_tab(tab){
   var pagelet_url = nucleus.get_app_hashtags().join('/');
+  if(pagelet_url.indexOf('?') == -1)
+    pagelet_url += '/';
   $('#content').html("<div class='app-heading'>Settings: "+
       settings_tabs.filter(function(a){return a.name==tab;})[0].show + "</div><div "+
       "id='content-pagelet' class='pagelet' pagelet-url='/settings/"+pagelet_url+"'></div>");

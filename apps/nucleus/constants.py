@@ -8,8 +8,8 @@ tabs = [
   ('games', True, ['Student'], 'fa fa-gamepad', '#EBEB3D'),
   ('groups', False, [], 'fa fa-group', '#ACE93E'),
   ('links', False, [], 'fa fa-list-ul', '#D1D1D1'),
-  ('news', False, [], 'typcn typcn-flash', '#69E6F7'),
-  ('forum', True, ['Student'], 'fa fa-comments', '#C55DF0'),
+  #('news', False, [], 'typcn typcn-flash', '#69E6F7'),
+  #('forum', True, ['Student'], 'fa fa-comments', '#C55DF0'),
 ]
 
 channeli_apps = {
