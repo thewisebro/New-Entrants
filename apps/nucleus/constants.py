@@ -10,6 +10,7 @@ tabs = [
   ('links', False, [], 'fa fa-list-ul', '#D1D1D1'),
   #('news', False, [], 'typcn typcn-flash', '#69E6F7'),
   #('forum', True, ['Student'], 'fa fa-comments', '#C55DF0'),
+  ('tools', True, ['IMG Member'], 'fa fa-cube', '#6A56E5'),
 ]
 
 channeli_apps = {

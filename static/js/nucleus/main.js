@@ -1,6 +1,10 @@
 var links = null;
 
 function load_handler(e){
+  if(!user.is_authenticated && ['games','tools'].some(function(a){
+        return a==nucleus.get_current_app();})) {
+    nucleus.redirect_to_home();
+  }
   var tab = nucleus.get_current_app();
   if(!links){
     $.get("/get_links/", function(data){
@@ -20,10 +24,13 @@ function unload_handler(e){
 $(document).on("load_app_apps", load_handler);
 $(document).on("load_app_games", load_handler);
 $(document).on("load_app_links", load_handler);
+$(document).on("load_app_tools", load_handler);
 
 $(document).on("unload_app_apps", unload_handler);
 $(document).on("unload_app_games", unload_handler);
 $(document).on("unload_app_links", unload_handler);
+$(document).on("unload_app_tools", unload_handler);
+
 
 function pre_process_links(){
   for(var i=0; i<links.apps.length;i++){
@@ -50,6 +57,8 @@ function show_links(tab){
     $('#content').html(Handlebars.nucleus_templates.games(links));
   else if(tab == 'links')
     $('#content').html(Handlebars.nucleus_templates.links(links));
+  else if(tab == 'tools')
+    $('#content').html(Handlebars.nucleus_templates.tools(links));
 }
 
 function show_default_right_column(){
@@ -91,6 +100,11 @@ function nucleus_on_login_logout(){
 
 $(document).on("login", nucleus_on_login_logout);
 $(document).on("logout", nucleus_on_login_logout);
+$(document).on("logout", function(){
+  if(nucleus.get_current_app() in ['games', 'tools']){
+    nucleus.redirect_to_home();
+  }
+});
 
 function events_birthdays(){
   if(user.is_authenticated){
