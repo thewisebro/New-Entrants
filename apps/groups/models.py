@@ -12,6 +12,13 @@ class Group(Role('Student Group')):
   admin = models.ForeignKey(Student, related_name="student_group_set", blank=True, null=True)
   is_active = models.BooleanField(default=False)
 
+  @property  
+  def short_name(self):
+    if len(self.user.name) > 16:
+      return self.nickname
+    else:
+      return self.user.name
+
   def __unicode__(self):
     return str(self.user.name)
 

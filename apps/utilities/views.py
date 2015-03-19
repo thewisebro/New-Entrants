@@ -189,7 +189,7 @@ def email_verify(request):
         entry = UserEmail.objects.get(pk= request.POST['id'])
         if entry.user==request.user:
           if entry.email== request.user.email:
-            messages.error(request,"Primary email id can't be deleted.")
+            messages.error(request,"Primary email address can't be deleted.")
           else:
             messages.success(request, "Email deleted successfuly.")
             entry.delete()
@@ -210,7 +210,7 @@ def email_verify(request):
           entry.save()
           send_verification_mail(confirmation_key,entry.email)
           messages.success(request,"A verification link has been sent"+\
-            " to your email id.")
+            " to your email address.")
         else:
           messages.error(request,"Max limit of verification for this email" +\
               " has been reached for today")
@@ -234,7 +234,7 @@ def email_verify(request):
           send_verification_mail(confirmation_key,email)
           mail_to_primary(email,request.user.email)
           messages.success(request,"A verification link has been sent"+\
-              " to your email id.")
+              " to your email address.")
 
   if 'confirm_key' in request.GET:
     confirmation_key = request.GET['confirm_key']
@@ -326,7 +326,7 @@ def password_reset_request(request):
             entry.save()
             send_passwordreset_mail(reset_key,email)
             messages.success(request,"A password reset link has been sent"+\
-                " to your email id.")
+                " to your email address.")
           else:
             messages.error(request,"Max limit of password reset for this"+\
                 " account has been reached for today")
@@ -336,12 +336,12 @@ def password_reset_request(request):
           new_entry.save()
           send_passwordreset_mail(reset_key,email)
           messages.success(request,"A password reset link has been sent"+\
-              " to your email id.")
+              " to your email address.")
       return HttpResponseRedirect(reverse('close_dialog', kwargs={
             'dialog_name': 'forgot_pass'
       }))
     else:
-      messages.error(request, "Invalid email id.")
+      messages.error(request, "Invalid email address.")
   form = PasswordResetRequestForm()
   return render(request, 'utilities/dialogs/forgot_password.html',{
       'form':form,

@@ -32,6 +32,7 @@ function pre_process_links(){
       'app': d[0],
       'app_data': d[1]
     };
+    links.apps[i]['target_blank'] = links.apps[i]['app_data'].url.indexOf('#')==-1;
   }
   for(var i=0; i<links.games.length;i++){
     var d = links.games[i];
@@ -81,6 +82,8 @@ function nucleus_on_login_logout(){
   upcoming_events = Array();
   birthday_users = Array();
   todays_menu = null;
+  links = null;
+  load_handler();
   var $eb_div = $('#events-birthdays');
   if($eb_div.length != 0)
     load_events_birthdays();
