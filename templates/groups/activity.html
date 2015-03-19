@@ -9,7 +9,6 @@
     var group_name = '{{ group.user.name }}';
   </script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/prettydate.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/groups/activity.js"></script>
 {% endblock %}
 
 {% block group_content %}
@@ -30,4 +29,7 @@
     </div>
   {% endif %}
   <div id="activities"></div>
+  <script type="text/javascript">
+    update_activities('first');
+  </script>
 {% endblock group_content %}

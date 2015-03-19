@@ -34,6 +34,7 @@ function activity_html(activity){
 function display_add_activities(position,activities){
  for(var i=0;i<activities.length;i++){
 //   try{
+     console.log("xyz");
      if(position == 'end')
        $('#activities').append(activity_html(activities[i]));
      else
@@ -57,10 +58,11 @@ function display_add_activities(position,activities){
 function see_more_activities(){
   update_activities('next');
 }
-
+/*
 $('body').ready(function(){
-  update_activities('first');
-  $('#activity-tab').on('click',function(){
-    update_activities('first');
-  });
-});
+    console.log("abc");
+    //update_activities('first');
+    $('#activity-tab').click(function(){
+      update_activities('first');
+    });
+});*/

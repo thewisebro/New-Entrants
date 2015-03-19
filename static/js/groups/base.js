@@ -5,10 +5,10 @@ $(document).on("load_app_groups", function(e, hash1, hash2){
   }
   //nucleus.make_tabs_inactive();
   $('#right-column .content').html('');
-  $('#container').addClass('large-width-content');
+  //$('#container').addClass('large-width-content');
   if(hash1 === undefined)
     nucleus.redirect_to_home();
-  load_settings_tab(hash1, hash2);
+  load_groups_tab(hash1, hash2);
 });
 
 $(document).on("unload_app_groups", function(e){
@@ -22,7 +22,7 @@ $(document).on("logout", function(){
     nucleus.redirect_to_home();
 });
 
-function load_settings_tab(hash1, hash2){
+function load_groups_tab(hash1, hash2){
   if(hash2 === undefined)
   {
     $('#content').html("<div "+

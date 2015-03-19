@@ -40,6 +40,7 @@ var apps_scripts = {
   ],
   'groups':[
     '/static/js/groups/base.js',
+    '/static/js/groups/activity.js',
   ]
 };
 

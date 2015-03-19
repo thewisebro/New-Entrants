@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "dialog_base.html" %}
 {% load tags %}
 {% load macros %}
 {% block styles %}
@@ -33,37 +33,37 @@
 
   <div class="gtabbox">
     <div class="gtab-name">
-      <a href='/#groups/{{group.user.username}}/add_member/'>Add a Member</a>
+      <a href='/groups/{{group.user.username}}/add_member/'>Add a Member</a>
     </div>
   </div>
   <div class="gtabbox">
     <div class="gtab-name">
-      <a href='JavaScript:void(0);' onclick="iframe('/#groups/{{group.user.username}}/add_multiple_member/');">Add Multiple Members</a>
+      <a href='JavaScript:void(0);' onclick="iframe('/groups/{{group.user.username}}/add_multiple_member/');">Add Multiple Members</a>
     </div>
   </div>
   <div class="gtabbox">
     <div class="gtab-name">
-      <a href='JavaScript:void(0);' onclick="iframe('/#groups/{{group.user.username}}/delete_member/');">Delete Members</a>
+      <a href='JavaScript:void(0);' onclick="iframe('/groups/{{group.user.username}}/delete_member/');">Delete Members</a>
     </div>
   </div>
   <div class="gtabbox">
     <div class="gtab-name">
-      <a href='JavaScript:void(0);' onclick="iframe('/#groups/{{group.user.username}}/add_post/');">Add a Post</a>
+      <a href='JavaScript:void(0);' onclick="iframe('/groups/{{group.user.username}}/add_post/');">Add a Post</a>
     </div>
   </div>
   <div class="gtabbox">
     <div class="gtab-name">
-      <a href='JavaScript:void(0);' onclick="iframe('/#groups/{{group.user.username}}/delete_post/');">Delete Posts</a>
+      <a href='JavaScript:void(0);' onclick="iframe('/groups/{{group.user.username}}/delete_post/');">Delete Posts</a>
     </div>
   </div>
   <div class="gtabbox">
     <div class="gtab-name">
-      <a href='JavaScript:void(0);' onclick="iframe('/#groups/{{group.user.username}}/change_posts/');">Change Post</a>
+      <a href='JavaScript:void(0);' onclick="iframe('/groups/{{group.user.username}}/change_posts/');">Change Post</a>
     </div>
   </div>
   <div class="gtabbox">
     <div class="gtab-name">
-      <a href='JavaScript:void(0);' onclick="iframe('/#groups/{{group.user.username}}/admin_change/');">Change Admin</a>
+      <a href='JavaScript:void(0);' onclick="iframe('/groups/{{group.user.username}}/admin_change/');">Change Admin</a>
     </div>
   </div>
   

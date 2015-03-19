@@ -41,10 +41,10 @@
   </div>
   <div id="groups-container">
     <div id="content-top-bar">
-      <div id="activity-tab" class="content-tab {% block activity-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/activity/'">Activity</div>
+      <div id="activity-tab" class="content-tab {% block activity-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/activity'">Activity</div>
       <div class="content-tab {% block about-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}'">About</div>
-      <div class="content-tab {% block members-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/members/'">Members</div>
-      <div class="content-tab {% block events-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/events/'">Events</div>
+      <div class="content-tab {% block members-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/members'">Members</div>
+      <div class="content-tab {% block events-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/events'">Events</div>
       {% if can_edit %}
         <!--<div class="content-tab {% block edit-tab-class %}{% endblock %}" onclick="location = '/#groups/{{group.user.username}}/edit'">Edit</div>-->
       {% endif %}
@@ -52,6 +52,13 @@
     <div id="groups-content">
      {% block group_content %}
      {% endblock group_content %}
+  <script type="text/javascript">
+    var group_username = '{{ username }}';
+    var group_name = '{{ group.user.name }}';
+  </script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/prettydate.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/groups/activity.js"></script>
+
     </div>
   </div>
   <div style="clear:both"></div>
