@@ -189,7 +189,7 @@ def email_verify(request):
         entry = UserEmail.objects.get(pk= request.POST['id'])
         if entry.user==request.user:
           if entry.email== request.user.email:
-            messages.error(request,"Primary Email addresses can't be deleted.")
+            messages.error(request,"Primary email id can't be deleted.")
           else:
             messages.success(request, "Email deleted successfuly.")
             entry.delete()
@@ -210,7 +210,7 @@ def email_verify(request):
           entry.save()
           send_verification_mail(confirmation_key,entry.email)
           messages.success(request,"A verification link has been sent"+\
-            " to your email address.")
+            " to your email id.")
         else:
           messages.error(request,"Max limit of verification for this email" +\
               " has been reached for today")
@@ -234,7 +234,7 @@ def email_verify(request):
           send_verification_mail(confirmation_key,email)
           mail_to_primary(email,request.user.email)
           messages.success(request,"A verification link has been sent"+\
-              " to your email address.")
+              " to your email id.")
 
   if 'confirm_key' in request.GET:
     confirmation_key = request.GET['confirm_key']
@@ -305,11 +305,12 @@ def password_reset_request(request):
     form = PasswordResetRequestForm(request.POST)
     if form.is_valid():
       email = form.cleaned_data['email']
-      if not UserEmail.objects.filter(email=email, verified=True).exists():
-        if User.objects.filter(email=email).exists():
-          messages.error(request, "Password can not be reset as your primary"+\
+      if not User.objects.filter(email=email).exists():
+        messages.error(request, "No such email exists.")
+      elif not UserEmail.objects.filter(email=email, verified=True).exists():
+        messages.error(request, "Password can not be reset as your primary"+\
               " email is not verified. Please verify it first.")
-      try:
+      else:
         user = User.objects.get(email=email)
         salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
         reset_key = hashlib.sha1(salt+email).hexdigest()
@@ -325,7 +326,7 @@ def password_reset_request(request):
             entry.save()
             send_passwordreset_mail(reset_key,email)
             messages.success(request,"A password reset link has been sent"+\
-                " to your email address.")
+                " to your email id.")
           else:
             messages.error(request,"Max limit of password reset for this"+\
                 " account has been reached for today")
@@ -335,17 +336,16 @@ def password_reset_request(request):
           new_entry.save()
           send_passwordreset_mail(reset_key,email)
           messages.success(request,"A password reset link has been sent"+\
-              " to your email address.")
-      except User.DoesNotExist:
-        messages.error(request,"The email address filled is not your primary email.")
-    return HttpResponseRedirect(reverse('close_dialog', kwargs={
-          'dialog_name': 'forgot_pass'
-    }))
-  else:
-    form = PasswordResetRequestForm()
-    return render(request, 'utilities/dialogs/forgot_password.html',{
-        'form':form,
-    })
+              " to your email id.")
+      return HttpResponseRedirect(reverse('close_dialog', kwargs={
+            'dialog_name': 'forgot_pass'
+      }))
+    else:
+      messages.error(request, "Invalid email id.")
+  form = PasswordResetRequestForm()
+  return render(request, 'utilities/dialogs/forgot_password.html',{
+      'form':form,
+  })
 
 
 def password_reset(request):
@@ -360,6 +360,7 @@ def password_reset(request):
         entry.user.set_password(password1)
         entry.user.save()
         messages.success(request,'Password changed successfully')
+        entry.delete()
         return HttpResponseRedirect(reverse('close_dialog', kwargs={
               'dialog_name': 'pass_reset'
         }))
@@ -377,7 +378,10 @@ def password_reset(request):
             'form': form,
         })
     except PasswordReset.DoesNotExist:
-      message = "This link is no longer active for modification."
+      messages.error(request, "Invalid request to reset password.")
+      return HttpResponseRedirect(reverse('close_dialog', kwargs={
+            'dialog_name': 'pass_reset'
+      }))
     return render(request, 'utilities/dialogs/pass_message.html',{
         'message':message,
     })

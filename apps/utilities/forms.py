@@ -128,4 +128,4 @@ class PasswordResetForm(forms.Form):
   password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput, required=True, min_length=4)
 
 class PasswordResetRequestForm(forms.Form):
-  email = forms.EmailField(label="Email", required=True)
+  email = forms.EmailField(label="Primary email", required=True)
