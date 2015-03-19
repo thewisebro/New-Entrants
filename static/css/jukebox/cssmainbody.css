@@ -23,6 +23,9 @@
 	/*width: 190px;*/
 	/*height: 224px;*/
 	float: left;
+	/*padding: 5px;
+background: red;
+border: 1px solid #DDD;*/
 }
 .item {
   position:relative; 
