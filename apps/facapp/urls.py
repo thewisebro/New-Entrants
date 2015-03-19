@@ -5,7 +5,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('facapp.views',
     (r'^$', 'index'),
-    # (r'^add/(?P<model_name>\w+)/$', 'add'),
+    (r'^add/(?P<model_name>\w+)/$', 'add'),
     # (r'^update/(?P<model_name>\w+)/(?P<instance_id>\d+)/$', 'update'),
     # (r'^delete/(?P<model_name>\w+)/(?P<instance_id>\d+)/$', 'delete'),
     # (r'^publish/$','publish'),

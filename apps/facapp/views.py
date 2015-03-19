@@ -9,11 +9,14 @@ from django.contrib import messages
 from django.template import RequestContext 
 from django.db.models import Q
 
+from core.forms import BaseForm, BaseModelForm
+
 from nucleus.models import Branch
+
 from facapp.models import *
-# from facapp.utils import handle_exc
-# from facapp.forms import BooksAuthoredForm, RefereedJournalPapersForm, PhotoUploadForm, ResumeUploadForm
-# from api.forms import BaseForm, BaseModelForm, BaseModelFormFunction, ConfirmDeleteForm
+from facapp.utils import handle_exc
+from facapp.forms import BooksAuthoredForm, RefereedJournalPapersForm, PhotoUploadForm, ResumeUploadForm, BaseModelFormFunction, ConfirmDeleteForm
+
 # import pika
 # from django.utils import simplejson
 import json
@@ -56,28 +59,28 @@ def index(request):
     invitations = Invitations.objects.filter(faculty = faculty, visibility = True).order_by('priority')
     print '5'
     return render(request,'facapp/index.html') # , {
-        # 'interests': interests,
-        # 'professional_background' : professional_background,
-        # 'honors' : honors,
-        # 'education' : education,
-        # 'administrative_background' : administrative_background,
-        # 'research_projects' : research_projects,
-        # 'seminars' : seminars,
-        # 'membership' : membership,
-        # 'teaching' : teaching,
-        # 'project_supervision' : project_supervision,
-        # 'rs_group' : rs_group,
-        # 'phd_supervised' : phd_supervised,
-        # 'visits' : visits,
-        # 'invitations' : invitations,
-        # 'short_term_courses' : short_term_courses,
-        # 'organised_conferences' : organised_conferences,
-        # 'special_lectures' : special_lectures,
-        # 'misc' : misc,
-        # 'collaboration' : collaboration,
-        # 'books' : books,
-        # 'refereed_papers' : refereed_papers,
-        # })
+      # 'interests': interests,
+      # 'professional_background' : professional_background,
+      # 'honors' : honors,
+      # 'education' : education,
+      # 'administrative_background' : administrative_background,
+      # 'research_projects' : research_projects,
+      # 'seminars' : seminars,
+      # 'membership' : membership,
+      # 'teaching' : teaching,
+      # 'project_supervision' : project_supervision,
+      # 'rs_group' : rs_group,
+      # 'phd_supervised' : phd_supervised,
+      # 'visits' : visits,
+      # 'invitations' : invitations,
+      # 'short_term_courses' : short_term_courses,
+      # 'organised_conferences' : organised_conferences,
+      # 'special_lectures' : special_lectures,
+      # 'misc' : misc,
+      # 'collaboration' : collaboration,
+      # 'books' : books,
+      # 'refereed_papers' : refereed_papers,
+      # })
   except Exception as e:
     # Can't use handle_exc here because it redirects here. To avoid infinite loop, redirect to a static page.
     print 'Exception: ' + str(e)
@@ -85,45 +88,60 @@ def index(request):
     return render_to_response('error.html', {
         }, context_instance=RequestContext(request))
 
-# @login_required
-# @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
-# def add(request, model_name):
-#   try:
-#     faculty = request.session['faculty']
-#     model_type = globals()[model_name]
-#     if(model_name == 'Faculty'):
-#       messages.error(request, 'Faculty can\'t be added.')
-#       return HttpResponseRedirect(reverse('facapp.views.index'))
-#     exclude_list = ['faculty',]
-#     model_name_space_separated = re.sub(r"(?<=\w)([A-Z])", r" \1", model_name)
-#     template_name = model_name_space_separated.lower().replace(' ', '_').strip() + '.html'
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
+def add(request, model_name):
+  try:
+    faculty = 'padamkk' # request.session['faculty']
+    model_type = globals()[model_name]
+    print 'ok'
+    if(model_name == 'Faculty'):
+      print 'okk'
+      messages.error(request, 'Faculty can\'t be added.')
+      return HttpResponseRedirect(reverse('facapp.views.index'))
+    exclude_list = ['faculty',]
+    print 'ok1'
+    model_name_space_separated = re.sub(r"(?<=\w)([A-Z])", r" \1", model_name)
+    print 'ok2'
+    template_name = model_name_space_separated.lower().replace(' ', '_').strip() + '.html'
+    print 'ok3'
   
-#     # If the form was submitted.
-#     if request.method == 'POST':
-#       form = BaseModelFormFunction(model_type, exclude_list, request.POST)
-#       if form.is_valid():
-#         # Get a model instance without committing the form.
-#         new_entry = form.save(commit=False)
-#         # Now fill the empty faculty field.
-#         new_entry.faculty = faculty
-#         # Now commit the model.
-#         new_entry.save()
-#         messages.success(request, model_name_space_separated + ' were successfully saved.')
-#       else:
-#         messages.error(request, form.errors, extra_tags='form_error')
+    # If the form was submitted.
+    if request.method == 'POST':
+      print 'ok4'
+      form = BaseModelFormFunction(model_type, exclude_list, request.POST)
+      print 'ok5'
+      if form.is_valid():
+        print 'ok6'
+        # Get a model instance without committing the form.
+        new_entry = form.save(commit=False)
+        # Now fill the empty faculty field.
+        new_entry.faculty = faculty
+        # Now commit the model.
+        new_entry.save()
+        messages.success(request, model_name_space_separated + ' were successfully saved.')
+      else:
+        messages.error(request, form.errors, extra_tags='form_error')
 
-#     # Direct to the details page.
-#     form = BaseModelFormFunction(model_type, exclude_list)
-#     new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
-#     return render_to_response('facapp/' + template_name, {
-#         'form': form,
-#         'action': '/facapp/add/' + model_name + '/',
-#         'list': new_list,
-#         'model_name': model_name,
-#         'model_name_space_separated': model_name_space_separated,
-#         }, context_instance=RequestContext(request))
-#   except Exception as e:
-#     return handle_exc(e, request)
+    print 'ok7'
+    # Direct to the details page.
+    form = BaseModelFormFunction(model_type, exclude_list)
+    print 'ok8'
+    # new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
+    new_list = list({})
+    print 'ok9'
+    print template_name
+    print model_name
+    print model_name_space_separated
+    return render(request, 'facapp/' + template_name, {
+        'form': form,
+        'action': '/facapp/add/' + model_name + '/',
+        'list': new_list,
+        'model_name': model_name,
+        'model_name_space_separated': model_name_space_separated,
+        }) # , context_instance=RequestContext(request))
+  except Exception as e:
+    return handle_exc(e, request)
 
 # @login_required
 # @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
