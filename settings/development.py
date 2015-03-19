@@ -386,7 +386,7 @@ LOGGING = {
 HAYSTACK_CONNECTIONS = {
     'default': {
       'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-      'URL': 'http://192.168.121.5:9200/',
+      'URL': 'http://172.25.55.156:9200/',
       'INDEX_NAME': 'channeli',
       'INCLUDE_SPELLING': True,
       # ...or for multicore...
@@ -394,7 +394,7 @@ HAYSTACK_CONNECTIONS = {
     },
     'autocomplete': {
       'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-      'URL': 'http://192.168.121.5:9200/',
+      'URL': 'http://172.25.55.156:9200/',
       'INDEX_NAME': 'channeli',
       'INCLUDE_SPELLING': True,
       # ...or for multicore...

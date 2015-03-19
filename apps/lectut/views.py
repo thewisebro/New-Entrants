@@ -6,6 +6,7 @@ from django.utils.encoding import smart_str
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.conf import settings
+from haystack.query import SearchQuerySet
 
 from django.contrib.sessions.models import Session
 from settings.development import PRODUCTION, MEDIA_URL , GLOBAL_MEDIA_ROOT
@@ -86,7 +87,7 @@ def coursepage_old(request, batch_id):
     notice = notice.as_dict()
 
   context = {'image_form': image_form,
-             'text_form' : text_form,
+            'text_form' : text_form,
              'previous_uploads': previous_uploads,
              'previous_notices':previous_notices,
              'batch':userBatch,
@@ -99,16 +100,19 @@ def coursepage_old(request, batch_id):
 #@login_required
 def coursepage(request, batch_id):
 #    user = request.user
-#    import pdb;pdb.set_trace()
     usrname = request.POST.get('user','harshithere')
     user = User.objects.get(username=usrname)
 #    user = User.objects.get(username=request.POST['user'])
     userBatch = Batch.objects.get(id=batch_id)
     posts = []
     request.session['batchId'] = batch_id
+
+    post_count = 2
+    number = 0
 #    userType=getUserType(user)
 
     previous_posts = Post.objects.all().filter(batch_id = batch_id).order_by('-datetime_created')
+#    [number:(number+post_count)]
     for post in previous_posts:
       documents =  Uploadedfile.objects.all().filter(post=post)
       post = post.as_dict()
@@ -266,6 +270,24 @@ def getUserType(user):
 
 @csrf_exempt
 @CORS_allow
+def get_post(request , batch_id , post_id):
+  import pdb;pdb.set_trace()
+  user = request.user
+  post = Post.objects.get(id = post_id)
+  documents =  Uploadedfile.objects.all().filter(post=post)
+  post = post.as_dict()
+  files = []
+  for document in documents:
+    document = document.as_dict()
+    files.append(document)
+    complete_post = {'post':post,'files':files}
+
+  response = HttpResponse(json.dumps(complete_post), content_type='application/json')
+  return response
+
+
+@csrf_exempt
+@CORS_allow
 #@login_required
 def deleteFile(request , file_id):
   user = request.user
@@ -410,6 +432,23 @@ def getReminder(request):
   for reminder in reminders:
     events.append(reminder.as_dict())
   return HttpRsponse(json.dumps(events), content_type="application/json")
+
+
+def search(request):
+  value = request.GET.get('q')
+  filter_model = request.GET.get('model')
+  if filter_model == None:
+    query_post = SearchQuerySet().all().autocomplete(content_auto = value).models(Post)
+    query_uploadfile = SearchQuerySet().all().autocomplete(filename_auto = value).models(Uploadedfile)
+    query_courses =  SearchQuerySet().all().autocomplete(name_auto = value).models(Course)
+  else:
+    query = SearchQuerySet().autocomplete(content_auto = value).models(filter_model)
+  posts = map(lambda result:{'post':result.content},query_post)
+  upload_files = map(lambda result:{'filename':result.upload_file},query_uploadfile)
+  courses = map(lambda result:{'name':result.name,'code':result.code},query_courses)
+
+  results = {'posts':posts , 'files':upload_files , 'courses':courses}
+  return HttpResponse(json.dumps(results), content_type="application/json")
 
 #def upload(request):
 #   user = request.user

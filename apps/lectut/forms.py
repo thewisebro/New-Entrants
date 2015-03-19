@@ -1,6 +1,7 @@
 from core import forms
 from django.forms import ModelForm, Textarea
 from models import *
+from haystack.forms import SearchForm
 
 MAX_FILE_SIZE = 524
 
@@ -42,5 +43,11 @@ class TextForm(forms.Form):
          if self.featured:
             self.__class__.objects.all().update(featured = False)
             super(Model, self).save(*args, **kwargs)
+
+
+class PostSearchForm(SearchForm):
+
+  def no_query_found(self):
+    return self.searchqueryset.all()
 
 #<form enctype="multipart/form-data" method="post" action="/foo/">
