@@ -1,0 +1,51 @@
+{% extends "nucleus/home_student.html" %}
+
+{% block app_content %}
+{% include "generic_form.html" with form=send_friend_request_form action=send_friend_request_action on_submit="return confirm('are you sure');" %}
+
+{% if requests_received %}
+  <p>You received {{ requests_received|length }} friend requests from the following:</p>
+  <ol>
+    {% for fr in requests_received %}
+      <li>
+          <a href="/profile/{{ fr.user.username }}/">{{ fr.name }}</a> - 
+          <a href="/confirm_friend_request/{{ fr.user.username }}/">Confirm</a> 
+          <a href="/reject_friend_request/{{ fr.user.username }}/">Reject</a>
+      </li>
+    {% endfor %}
+  </ol>
+{% else %}
+  <p>You have no friend requests.</p>
+{% endif %} {# End requests_received if #}
+
+{% if requests_made %}
+  <p>You have made {{ requests_made|length }} friend requests to the following:</p>
+  <ol>
+    {% for fr in requests_made %}
+      <li><a href="/profile/{{ fr.user.username }}/">{{ fr.name }}</a></li>
+    {% endfor %}
+  </ol>
+{% else %}
+  <p>You have no friend requests pending.</p>
+{% endif %} {# End requests_made if #}
+
+{% if friends %}
+  <p>You have {{ friends|length }} friends.</p>
+  <ol>
+    {% for fr in friends %}
+      <li>
+          <a href="/profile/{{ fr.user.username }}/">{{ fr.name }}</a> - 
+          <a href="/remove_friend/{{ fr.user.username }}/" onclick="return verify_remove('{{ fr.name }}');">Remove</a>
+      </li>
+    {% endfor %}
+  </ol>
+  <script type="text/javascript">
+  function verify_remove(name){
+    return confirm('Are you sure you want to unfriend ' + name + '?');
+  }
+  </script>
+{% else %}
+  <p>You haven't added any friends till now.</p>
+{% endif %} {# End friends if #}
+
+{% endblock %}

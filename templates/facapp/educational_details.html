@@ -1,0 +1,10 @@
+{% extends "facapp/base.html" %}
+
+
+{% block model_details %}
+    <li>{{ l.degree }} in {{ l.subject }} from {{ l.university }}, {{ l.year }}. Priority: {{ l.priority }}</li>
+{% endblock %}
+
+{% block model_details_to_delete %}
+	    {{ model_to_delete.subject }}, {{ model_to_delete.priority }}
+{% endblock %}

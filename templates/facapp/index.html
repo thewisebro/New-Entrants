@@ -1,112 +1,314 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>
-			Facapp
-		</title>
-		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/jquery-1.10.2.min.js"></script>
-		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/bootstrap.min.js"></script>
-		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/main.js"></script>
-		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/jquery-sortable-min.js"></script>
-		<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/jquery-ui-1.10.4.js"></script>
-		<script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor.js"></script>
-		<!-- <link rel="stylesheet" type="text/css" href="ckeditor/contents.css"> -->
-		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/facapp/bootstrap.css">
-		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/facapp/style.css">
-		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/facapp/bootstrap-override.css">
+{% extends "facapp/base.html" %}
 
-	</head>
-	<body>
-		<!--//////////////////////////////////////////  container div starts  ///////////////////////////////////////////////-->
-		<div id="container">
-			<header>
-			    <div id="header_parent">
-			       	<div id="header_app_links">
-			       		<nav>
-						    <a href="/facapp/">Home</a>
-						    &nbsp;|&nbsp;
-						    <a href="/">Channel i</a>
-						    &nbsp;|&nbsp;
-						    <a href="/logout/">Logout</a>
-						</nav>
-					</div>
-					<div id="heading">    
-						<h1>Faculty Profile</h1>
-			        </div>
-			    </div>  
-			    <div id="header_shadow">
-			    </div>
-			</header>
-			<!--//////////////////////////////////////  middle div starts  //////////////////////////////////////////-->
-			<div id="middle">
-				<div id="tabs" >
-					<ul class="nav nav-tabs nav-justified">
-		  				<li class="active"><a><span class="glyphicon glyphicon-user"></span> Profile</a></li>
-						<li><a><span class="glyphicon glyphicon-list"></span> Priority</a></li>
-		  				<li><a><span class="glyphicon glyphicon-plus-sign"></span> Add Section</a></li>
-						<!-- <li><a>Messages</a></li> -->
-					</ul>
-				</div>
-				<div id="content">
-					<!--///////////////////////////////  Profile div starts  ///////////////////////////////////-->
-					<div id="profile">
-						<div id="info" class="row">
-							<div class="col-md-8">
-								<p id="name">Gupta S.P.</p><!-- <br /> -->
-								<p class="details">Head Of Department</p>
-								<p class="details">spseefee[at]iitr.ac.in</p>
-								<p class="details">Ph No: 01332-285827</p>
-								<p class="details">resume</p>
-							</div>
-							<div class="col-md-4">
-								<img class="faculty_image" src="http://people.iitr.ernet.in/facultyphoto/default.jpg">
-							</div>
-						</div>
+{% block app_content %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/main.js"></script>
+<script type="text/javascript">
+</script>
 
-						<div id="editable">
-	    					{% if sections %}
-							<!---////////////// load the already saved sections ///////////////////////-->
-	      						<!-- {% for section in sections %}
-	        						<div contentEditable="true" id="{{ section.title }}" class="section">
-	          							{{ section.content|safe }}
-	        						</div>
-	        						<button type="submit" ht="{{ section.title }}" onclick="return updateSection(this);" class="btn btn-primary" name="submit" >save</button>
-	      						{% endfor %} -->
-							<!---/////////////// already saved sections loaded /////////////////////////-->
-							{% endif %}
-							<div class="section"><p class="title"></p><p class="matter"></p></div>
-						</div>
-					</div>
-					<!--/////////////////////////////////  Profile div ends  ////////////////////////////////////-->
-					<!--///////////////////////////////  Priority div starts  ///////////////////////////////////-->
-					<div id="priority" class="hidden">
-						<div id="section_list">
-							<ul id="sortable" class="list-group list-unstyled">
-								{% if sections %}
-									<!-- {% for section in sections %}
-										<li class="section_list_member"><span class="glyphicon glyphicon-move"></span>{{ section.title }}</li>
-									{% endfor %} -->
-								{% endif %}
-							</ul>
-						</div>
-					</div>
-					<!--////////////////////////////////  Priority div ends  /////////////////////////////////////-->
-					<!--//////////////////////////////  Add Section div starts  //////////////////////////////////-->
-					<div id="add_section" class="hidden">
-						this is the add section div
-					</div>
-					<!--///////////////////////////////  Add Section div ends  ///////////////////////////////////-->
-				</div>
-			</div>
-			<!--////////////////////////////////////////  middle div ends  ////////////////////////////////////////////-->
-		</div>
-		<!--//////////////////////////////////////////  container div ends  /////////////////////////////////////////////////-->
-		<footer>
-			<div id="footer" >
-			    <!-- <div id="footer">© 2014 Information Management Group</div> -->
-			    <div class="span12 left">Copyright 2014 &nbsp;<a id="link_img" href="http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html" target="_blank">Information Management Group <img id="img-logo" class="" src="{{ STATIC_URL }}images/facapp/img-logo.png"></a>
-	 			</div>
-	 		</div>
-		</footer>
-	</body>
-</html>
+{% comment %}
+{# Photo Upload form code #}
+<div id="photo_form_div" style="display:none;">
+  <div onclick="element_display('photo_form_div', 'photo_form_button');">X</div>
+  {% include "generic_form.html" with form=photo_form action=photo_action name="photo_form" submit="Upload" %}
+</div>
+<div id="photo_form_button" onclick="element_display('photo_form_div', 'photo_form_button');">Upload Photo</div>
+{#  Photo Upload form done #}
+
+{# Resume Upload form code #}
+<div id="resume_form_div" style="display:none;">
+  <div onclick="element_display('resume_form_div', 'resume_form_button');">X</div>
+  {% include "generic_form.html" with form=resume_form action=resume_action name="resume_form" submit="Upload" %}
+</div>
+<div id="resume_form_button" onclick="element_display('resume_form_div', 'resume_form_button');">Upload Resume</div>
+{#  Resume Upload form done #}
+{% endcomment %}
+
+{% with faculty=request.user.faculty %}
+<table class="table table-striped table-bordered">
+<tr>
+<td>
+<h3>{{ faculty.name }}</h3>
+<h4>
+{{ faculty.get_designation_display }}
+</h4>
+
+<br />
+
+Email: {{ request.user.username }}@iitr.ernet.in<br />
+Phone No: {{ faculty.phone }}
+</td>
+</tr>
+{% endwith %}
+{% if interests %}
+<tr>
+<td>
+<h4>Areas of Interests:</h4>
+<ul style="none">
+  {% for i in interests %}
+  <b> {{ i.general_topic }}: </b> {{ i.research_work_topic }}<br />
+  {% endfor %}
+</ul>
+</td>
+</tr>
+{% endif %}
+
+{% if professional_background %}
+<tr>
+<td>
+<h4>Professional Background:</h4>
+<ul style="none">
+  {% for p in professional_background %}
+  <b> {{ p.designation }}, {{ p.organisation }}: </b> {{ p.from_year }} - {{ p.to_year }}<br />
+  {% endfor %}
+</ul>
+</td>
+</tr>
+{% endif %}
+
+{% if honors %}
+<tr>
+<td>
+<h4>Honors:</h4>
+<ul style="none">
+  {% for h in honors %}
+  <b> {{ h.award }} </b> ({{ h.institute }}, {{ h.year }})<br />
+  {% endfor %}
+</ul>
+</td>
+</tr>
+{% endif %}
+
+{% if education %}
+<tr>
+<td>
+<h4>Educational Details:</h4>
+<ul style="none">
+  {% for e in education %}
+  <b> {{ e.university }} </b> {{ e.degree }} in {{ e.subject }} ({{ e.year }}) <br />
+  {% endfor %}
+</ul>
+</td>
+</tr>
+{% endif %}
+
+{% if administrative_background %}
+<tr>
+<td>
+<h4>Administrative Background:</h4>
+<ul style="none">
+  {% for p in administrative_background %}
+  <b> {{ p.designation }}, {{ p.organisation }}: </b> {{ p.from_year }} - {{ p.to_year }}<br />
+  {% endfor %}
+</ul>
+</td>
+</tr>
+{% endif %}
+
+{% if research_projects %}
+<tr>
+<td>
+<h4>Sponsored Research Projects:</h4>
+<ul style="none">
+  {% for r in research_projects %}
+  <b> {{ r.topic }} ({{ r.year }}): </b> {{ r.get_type_of_project_display }}, {{ r.get_status_of_project_display }}<br />
+  {% endfor %}
+</ul>
+</td>
+</tr>
+{% endif %}
+
+{% if seminars %}
+<tr>
+<td>
+<h4>Seminars:</h4>
+<ul style="none">
+  {% for s in seminars %}
+  <b> {{ s.name }} ({{ s.date }}), </b> {{ s.place }}<br />
+  {% endfor %}
+</ul>
+</td>
+</tr>
+{% endif %}
+
+{% if membership %}
+<tr>
+<td>
+<h4>Memberships:</h4>
+<ul style="none">
+  {% for s in membership %}
+  <b> {{ s.position }}: </b> {{ s.organisation }}<br />
+  {% endfor %}
+</ul>
+</td>
+</tr>
+{% endif %}
+
+{% if teaching %}
+<tr>
+<td>
+<h4>Teaching Engagements:</h4>
+<ul style="none">
+  {% for s in teaching %}
+  <b> {{ s.class_name }} </b>: {{ s.get_semester_display }} , {{ s.course_code }} , {{ s.title }}<br/>
+  {% endfor %}
+</ul>  
+</td>
+</tr>
+{% endif %}
+
+{% if project_supervision %}
+<tr>
+<td>
+<h4>Project Supervision:</h4>
+<ul style="none">
+  {% for s in project_supervision %}
+  <b> {{ s.title_of_project }} :</b> {{ s.description }}<br/>
+  {% endfor %}
+</ul>
+</td>
+</tr>
+{% endif %}
+
+{% if rs_group %}
+<tr>
+<td>
+<h4>Research scholar Group:</h4>
+<ul style="none">
+  {% for s in rs_group %}
+  <b> {{ s.scholar_name }} </b> {{ s.interest }}<br/>
+  {% endfor %}
+</ul>  
+</td>
+</tr>
+{% endif %}
+
+{% if phd_supervised %}
+<tr>
+<td>
+<h4>Phd Supervised:</h4>
+<ul style ="none">  
+  {% for s in phd_supervised %}
+  <b> {{ s.scholar_name }} </b> {{s.topic }} <br/>
+  {% endfor %}
+</ul>  
+</td>
+</tr>
+{% endif %}
+
+{% if visits %}
+<tr>
+<td>
+<h4>Visits:</h4>
+<ul style="none">
+  {% for s in visits %}
+  {{ s.institute_visited }} for {{ s.purpose_of_visit }} on {{s.date}}<br/>
+  {% endfor %}
+</ul>
+</td>
+</tr>
+{% endif %}
+
+{% if invitations %}
+<tr>
+<td>
+<h4>Invitations:</h4>
+<ul style ="none">
+  {% for s in invitations %}
+  By {{ s.organisation }} for {{ s.get_category_display }} in {{ s.get_year_display }}<br/>
+  {% endfor %}
+</ul>  
+</td>
+</tr>
+{% endif %}
+
+{% if short_term_courses %}
+<tr>
+<td>
+<h4>Participation in Short term Courses:</h4>
+<ul style="none">
+  {% for s in short_term_courses %}
+  <b> {{ s.course_name }} </b>sponsored by {{ s.sponsored_by }} on {{ s.date}}<br/>
+  {% endfor %}
+</ul>  
+</td>
+</tr>
+{% endif %}
+
+{% if organised_conferences %}
+<tr>
+<td>
+<h4>Conference Organised:</h4>
+<ul style="none">
+  {% for s in organised_conferences %}
+  <b> {{ s.conference_name }} </b>sponsored by {{ s.sponsored_by }} on {{ s.date}}<br/>
+  {% endfor %}
+</ul> 
+</td>
+</tr>
+{% endif %}
+
+{% if special_lectures %}
+<tr>
+<td>
+<h4>Special Lectures Delivered: </h4>
+<ul style="none">
+  {% for s in special_lectures %}
+  <b> {{ s.title }} </b>at {{ s.place }} on {{ s.date }}<br/>
+  {% endfor %}
+</ul>  
+</td>
+</tr>
+{% endif %}
+
+{% if collaboration %}
+<tr>
+<td>
+<h4>Collaboration:</h4>
+<ul style="none">
+  {% for s in collaboration %}
+  <b> {{ s.organisation }} </b>  {{ s.topic }}<br/>
+  {% endfor %}    
+</ul>  
+</td>
+</tr>
+{% endif %}
+
+{% if books %}
+<tr>
+<td>
+<h4>Books Authored</h4>
+<ul style="none">
+  {% for s in books %}
+    {{ s.books|safe }}
+  {% endfor %}
+</ul>  
+</td>
+</tr>
+{% endif %}
+
+{% if refereed_papers %}
+<tr>
+<td>
+<h4>Refereed Journal Papers</h4>
+<ul style="none">
+  {% for s in refereed_papers %}
+    {{ s.papers|safe }} 
+  {% endfor %}
+</ul>  
+</td>
+</tr>
+{% endif %}
+
+</table>
+{% comment %}{
+{% if misc %}
+<h4>Miscellaneous:</h4>
+<ul style="none">
+  {% for s in misc %}
+  <p>Innovation in Teaching : {{ s.innovation_in_teaching }}</p><br/>
+  <p>Process Development : {{ s.process_development }}</p><br/>
+  <p>Instructional Tasks : {{ s.instructional_tasks }}</p><br/> 
+{% endif %}
+{% endcomment %}
+
+{% endblock %}

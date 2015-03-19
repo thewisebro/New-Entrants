@@ -1,0 +1,49 @@
+{% extends "facapp/base_old.html" %}
+
+{% block main_header %}
+  <ul id="main_header_ul">
+    <li class="content"><a href="/">Home</a></li>
+    <li class="gap">|</li>
+    <li class="content"><a href="/facapp/">Facapp</a></li>
+    <li class="gap">|</li>
+    <li class="content"><a href="/jukebox/">Jukebox</a></li>
+    <li class="gap">|</li>
+    <li class="content"><a href="/logout/">Logout</a></li>
+  </ul>
+{% endblock %}  {# End main_header block #}
+
+{% block header %}
+<div id="common-content">
+  <div id="profile_pic">
+    {% block profile_pic %}
+    <img src="{{ STATIC_URL }}images/default_profile_pic.jpg">
+    {% endblock %}
+    <map name="profile_update">
+      <area shape="rect" coords="22,136,111,150" href="/profile/" />
+    </map>
+  </div>
+  {% block contents %}{%endblock %}
+
+<!--  <div id="main_menu">
+    <nav id="cen_menu">
+      <li><img src="{{ STATIC_URL }}images/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/menu1.jpg"></li>
+      <li class="last_icon"><img src="{{ STATIC_URL }}images/menu1.jpg"></li>
+    </nav>
+  </div>-->
+  <div id="feeds"></div>
+</div>
+{% endblock %}
+
+{% block left_sidebar %}
+Put something here.
+{% endblock %}  {# End left_sidebar block #}
+
+{% block app_content %}
+Faculty here!!
+{% endblock %}  {# End app_content block #}
+
+

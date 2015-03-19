@@ -1,0 +1,13 @@
+{% extends "facapp/base.html" %}
+
+{% block model_details %}
+	    <li>Title of project: {{ l.title_of_project }}</li>
+      <li>Names of students: {{ l.names_of_students }}</li>
+      <li>Description: {{ l.description }}</li>
+      <li>Course: {{ l.course }}</li>
+      {% if name_of_other_supervisor %}<li>Name of other supervisor: {{ l.name_of_other_supervisor }}</li>{% endif %}
+{% endblock %}
+
+{% block model_details_to_delete %}
+	    {{ model_to_delete.title_of_project }}
+{% endblock %}
