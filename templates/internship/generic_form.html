@@ -18,21 +18,21 @@
 {% endcomment %}
 
 {% if form %}
-{% comment %}<link rel='stylesheet' href='{{ STATIC_URL }}css/placement/generic_form.css' type='text/css'/>
-<script type="text/javascript" src="{{ STATIC_URL }}js/placement/generic_form.js"></script>{% endcomment %}
-  {{ form.media }}
-  <div class='generic_form'>
+{{ form.media }}
+<link rel='stylesheet' href='{{ STATIC_URL }}css/placement/generic_form.css' type='text/css'/>
+<script type="text/javascript" src="{{ STATIC_URL }}js/placement/generic_form.js"></script>
+<div class='generic_form'>
     {% if on_submit %}
       {% if form.is_multipart %}
-        <form action='{{ action }}' method='POST' class="form_itself uniForm" id='{{ name|default:"generic_form" }}' name='{{ name|default:"generic_form" }}' enctype='multipart/form-data' onsubmit='{{ on_submit }}'>
+        <form action='{{ action }}' method='POST' class="form_itself" id='{{ name|default:"generic_form" }}' name='{{ name|default:"generic_form" }}' enctype='multipart/form-data' onsubmit='{{ on_submit }}'>
       {% else %}
-        <form action='{{ action }}' method='POST' class="form_itself uniForm" id='{{ name|default:"generic_form" }}' name='{{ name|default:"generic_form" }}' onsubmit="{{ on_submit }}">
+        <form action='{{ action }}' method='POST' class="form_itself" id='{{ name|default:"generic_form" }}' name='{{ name|default:"generic_form" }}' onsubmit="{{ on_submit }}">
       {% endif %}
     {% else %}
       {% if form.is_multipart %}
-        <form action='{{ action }}' method='POST' class="form_itself uniForm" id='{{ name|default:"generic_form" }}' name='{{ name|default:"generic_form" }}' enctype='multipart/form-data'>
+        <form action='{{ action }}' method='POST' class="form_itself" id='{{ name|default:"generic_form" }}' name='{{ name|default:"generic_form" }}' enctype='multipart/form-data'>
       {% else %}
-        <form action='{{ action }}' method='POST' class="form_itself uniForm" id='{{ name|default:"generic_form" }}' name='{{ name|default:"generic_form" }}'>
+        <form action='{{ action }}' method='POST' class="form_itself" id='{{ name|default:"generic_form" }}' name='{{ name|default:"generic_form" }}'>
       {% endif %}
     {% endif %}
     {% csrf_token %}
@@ -46,7 +46,7 @@
     {% else %}
       {{ form.uniform }}
     {% endif %}
-      
+
     <div class='submit_button' id='{{ name|default:"generic_form" }}_submit'> 
 	    <input type='submit' value='{{ submit|default:"Submit" }}' class="btn btn-primary"/>
       &nbsp;&nbsp;

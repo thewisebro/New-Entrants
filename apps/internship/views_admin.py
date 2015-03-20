@@ -58,7 +58,7 @@ def company_add(request) :
         l.info(request.user.username +': form error while trying to add company')
         messages.error(request, form.errors, extra_tags='form_error')
     else:
-      form = forms.CompanyForm()
+      form = forms.CompanyForm(auto_id='%s')
     form.fields['open_for_disciplines'].help_text = None 
     return render_to_response('internship/basic_form.html', {
         'form' : form,
