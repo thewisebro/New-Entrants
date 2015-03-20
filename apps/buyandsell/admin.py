@@ -14,8 +14,13 @@ class BuySellCategoryAdmin(admin.ModelAdmin):
   list_display=('main_category','name','code')
   search_fields=['name']  
 
+class SuccessfulTransactionAdmin(admin.ModelAdmin):
+  list_display=('seller','buyer','sell_item','request_item','is_requested','trasaction_date','feedback')
+    
+
 #class PersonAdmin(admin.ModelAdmin):
 # list_display=('person_id','name')
 admin.site.register(SaleItems, ItemsForSaleAdmin)
 admin.site.register(RequestedItems, ItemsRequestedAdmin)
 admin.site.register(BuySellCategory,BuySellCategoryAdmin)  
+admin.site.register(SuccessfulTransaction,SuccessfulTransactionAdmin)  

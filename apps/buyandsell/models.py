@@ -62,10 +62,10 @@ class RequestMails(models.Model):
     return str(self.item)
 
 class SuccessfulTransaction(models.Model):
-  seller=models.ForeignKey(User,related_name='suc_trans_seller')
-  buyer=models.ForeignKey(User,related_name='suc_trans_buyer')
-  sell_item=models.OneToOneField(SaleItems,blank=True)
-  request_item=models.OneToOneField(RequestedItems,blank=True)
+  seller=models.ForeignKey(User,related_name='suc_trans_seller',blank=True,null=True)
+  buyer=models.ForeignKey(User,related_name='suc_trans_buyer',blank=True,null=True)
+  sell_item=models.OneToOneField(SaleItems,blank=True,null=True)
+  request_item=models.OneToOneField(RequestedItems,blank=True,null=True)
   is_requested=models.BooleanField(default=False) #this is to determine whose object is to be made SuccessfulTransaction for sell or request
   trasaction_date=models.DateField()
   feedback=models.TextField()

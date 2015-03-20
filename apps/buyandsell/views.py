@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail
 from django.contrib import messages
 from datetime import date, timedelta, datetime
+from django.utils import timezone
 import simplejson
 from django.template.response import TemplateResponse
 from buyandsell.models import *
@@ -29,7 +30,7 @@ def buy(request,mc=None,c=None):
     else:
       error_msg= "invalid price range"
       return render(request,'buyandsell/buy.html',{'error_msg':error_msg,'table_data':table_data})
- 
+
   if mc and c:
     cat=BuySellCategory.objects.get(code=c)
     category=cat.name
@@ -37,19 +38,19 @@ def buy(request,mc=None,c=None):
 
   if mc and not c:
     mcatlist=BuySellCategory.objects.filter(main_category=mc)
-    maincategory=mcatlist[0].main_category     
+    maincategory=mcatlist[0].main_category
   if mc and c and price_valid:
-    qdata=SaleItems.objects.filter(category__main_category=mc,category__code=c,cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
-  elif mc and c and not price_valid: 
-    qdata=SaleItems.objects.filter(category__main_category=mc,category__code=c,is_active=True).order_by('-pk')
+    qdata=SaleItems.items.filter(category__main_category=mc,category__code=c,cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
+  elif mc and c and not price_valid:
+    qdata=SaleItems.items.filter(category__main_category=mc,category__code=c,is_active=True).order_by('-pk')
   elif mc and not c  and  price_valid:
-    qdata=SaleItems.objects.filter(category__main_category=mc,cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
-  elif mc and not c and not price_valid: 
-    qdata=SaleItems.objects.filter(category__main_category=mc,is_active=True).order_by('-pk')
+    qdata=SaleItems.items.filter(category__main_category=mc,cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
+  elif mc and not c and not price_valid:
+    qdata=SaleItems.items.filter(category__main_category=mc,is_active=True).order_by('-pk')
   elif  price_valid:
-    qdata=SaleItems.objects.filter(cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
+    qdata=SaleItems.items.filter(cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
   else:
-    qdata=SaleItems.objects.filter(is_active=True).order_by('-pk')
+    qdata=SaleItems.items.filter(is_active=True).order_by('-pk')
   if qdata:
     table_data=qdata
   else:
@@ -61,7 +62,7 @@ def buy(request,mc=None,c=None):
     'mc':mc,
     'c':c,
     'cat_dict':cat_dict,
-          }    
+          }
   return render(request,'buyandsell/buy.html',context)
 
 
@@ -88,19 +89,19 @@ def viewrequests(request,mc=None,c=None):
     maincategory=cat.main_category
   if mc and not c:
     mcatlist=BuySellCategory.objects.filter(main_category=mc)
-    maincategory=mcatlist[0].main_category     
+    maincategory=mcatlist[0].main_category
   if mc and c and price_valid:
-    qdata=RequestedItems.objects.filter(category__main_category=mc,category__code=c,price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
-  elif mc and c and not price_valid: 
-    qdata=RequestedItems.objects.filter(category__main_category=mc,category__code=c,is_active=True).order_by('-pk')
+    qdata=RequestedItems.items.filter(category__main_category=mc,category__code=c,price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
+  elif mc and c and not price_valid:
+    qdata=RequestedItems.items.filter(category__main_category=mc,category__code=c,is_active=True).order_by('-pk')
   elif mc and not c  and  price_valid:
-    qdata=RequestedItems.objects.filter(category__main_category=mc,price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
-  elif mc and not c and not price_valid: 
-    qdata=RequestedItems.objects.filter(category__main_category=mc,is_active=True).order_by('-pk')
+    qdata=RequestedItems.items.filter(category__main_category=mc,price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
+  elif mc and not c and not price_valid:
+    qdata=RequestedItems.items.filter(category__main_category=mc,is_active=True).order_by('-pk')
   elif  price_valid:
-    qdata=RequestedItems.objects.filter(price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
+    qdata=RequestedItems.items.filter(price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
   else:
-    qdata=RequestedItems.objects.filter(is_active=True).order_by('-pk')
+    qdata=RequestedItems.items.filter(is_active=True).order_by('-pk')
   if qdata:
     table_data=qdata
   else:
@@ -112,11 +113,11 @@ def viewrequests(request,mc=None,c=None):
     'mc':mc,
     'c':c,
     'cat_dict':cat_dict,
-          }    
+          }
   return render(request,'buyandsell/show_requests.html',context)
 
 def sell(request):
-  post_date=date.today()
+  post_date=timezone.now()
   user=request.user
   contact=request.user.contact_no
   if request.method=='POST':
@@ -148,8 +149,8 @@ def sell(request):
         print watch_user_list
         notif_text=str(new_item.item_name)+"has been added to the category"+str(new_item.category.name)
         notif_text+="that you have watched"
-        url = '/buyandsell/sell_details/' + str(new_item.pk)         
-        Notification.save_notification(app, notif_text, url, watch_user_list, new_item) 
+        url = '/buyandsell/sell_details/' + str(new_item.pk)
+        Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
         return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/buy/'})
       else:
         print "form filled wrongly"
@@ -163,7 +164,7 @@ def sell(request):
   return render(request,'buyandsell/form.html',{'form':form})
 
 def requestitem(request):
-  post_date=date.today()
+  post_date=timezone.now()
   user=request.user
   contact=request.user.contact_no
   if request.method=='POST':
@@ -195,8 +196,8 @@ def requestitem(request):
         print watch_user_list
         notif_text=str(new_item.item_name)+"has been requested in the category"+str(new_item.category.name)
         notif_text+="that you have watched"
-        url = '/buyandsell/sell_details/' + str(new_item.pk)         
-        Notification.save_notification(app, notif_text, url, watch_user_list, new_item) 
+        url = '/buyandsell/sell_details/' + str(new_item.pk)
+        Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
         return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/viewrequests/'})
       else:
         print "form filled wrongly"
@@ -208,7 +209,7 @@ def requestitem(request):
             }
   form=RequestForm(initial=init_dict)
   return render(request,'buyandsell/form.html',{'form':form})
-     
+
 def watch(request,mc=None,c=None):
 
   user=request.user
@@ -241,7 +242,7 @@ def selldetails(request,pk):
       sendmail(request,'buy',pk)
     elif password=='':
       messages.error(request, 'Password cant be empty' )
-    
+
     elif not user.check_password(password):
       messages.error(request, 'Incorrect password' )
   context={
@@ -293,7 +294,7 @@ def sendmail(request, type_of_mail, id_pk):
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       already_sent=1
 
-    if not already_sent:  
+    if not already_sent:
       new_mail_sent=BuyMails(by_user=user,item=qryst[0])
       new_mail_sent.save()
       subject = 'Your item ' + qryst[0].item_name + ' has a buyer on Buy and Sell!'
@@ -318,7 +319,7 @@ def sendmail(request, type_of_mail, id_pk):
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       already_sent=1
 
-    if not already_sent:  
+    if not already_sent:
       new_mail_sent=RequestMails(by_user=user,item=qryst[0])
       new_mail_sent.save()
       subject = 'Your request for ' + qryst[0].item_name + ' has been answered!'
@@ -343,7 +344,7 @@ def sendmail(request, type_of_mail, id_pk):
       messages.success(request, email_sent_msg)
     except Exception as e:
       messages.error(request, 'Email has not been sent to ' + qryst[0].user.first_name + '. Error occured and reported.' )
-      
+
 def search(request,search_type):
   main_dict={}
   srch_string=request.GET.get('keyword','')
@@ -351,11 +352,11 @@ def search(request,search_type):
 
   if search_type=="sell" or search_type=="main" :
     queryset=[]
-    un_queryset = {}			
+    un_queryset = {}
     count = {}
     print words
     for word in words:
-      result = RequestedItems.objects.filter(item_name__icontains=word,is_active=True)
+      result = RequestedItems.items.filter(item_name__icontains=word,is_active=True)
       for temp in result:
         print word
         if temp.id in un_queryset:
@@ -375,14 +376,14 @@ def search(request,search_type):
     items = simplejson.dumps(object_list)
     if search_type=="main":
       main_dict['requests']=object_list[0:5]
-    
+
   if search_type=="request" or search_type=="main":
     queryset=[]
-    un_queryset = {}			
+    un_queryset = {}
     count = {}
     print words
     for word in words:
-      result = SaleItems.objects.filter(item_name__icontains=word,is_active=True)
+      result = SaleItems.items.filter(item_name__icontains=word,is_active=True)
       for temp in result:
         print word
         if temp.id in un_queryset:
@@ -402,12 +403,12 @@ def search(request,search_type):
     items = simplejson.dumps(object_list)
     if search_type=="main":
       main_dict['sell_items']=object_list[0:5]
-   
+
 
   if search_type=="main":
 #sub-category matched items
-    queryset=[]  
-    un_queryset = {}			
+    queryset=[]
+    un_queryset = {}
     count = {}
     print words
     for word in words:
@@ -431,7 +432,7 @@ def search(request,search_type):
 
 # main_category matched items
     queryset=[]
-    un_queryset = {}			
+    un_queryset = {}
     count = {}
     print words
     for word in words:
@@ -452,9 +453,9 @@ def search(request,search_type):
       item_dict.update({'id':item.pk,'main_category':item.main_category,'code':item.code,'name':item.name})
       object_list.append(item_dict)
     main_dict['main_cat']=object_list
-  
+
   print items
-  print main_dict 
+  print main_dict
   if search_type=="main":
     return HttpResponse(simplejson.dumps(main_dict), content_type="application/json")
   else:
@@ -472,11 +473,11 @@ def seeall(request,search_type):
 
   if search_type=="requests" :
     queryset=[]
-    un_queryset = {}			
+    un_queryset = {}
     count = {}
     print words
     for word in words:
-      result = RequestedItems.objects.filter(item_name__icontains=word,is_active=True)
+      result = RequestedItems.items.filter(item_name__icontains=word,is_active=True)
       for temp in result:
         print word
         if temp.id in un_queryset:
@@ -490,14 +491,13 @@ def seeall(request,search_type):
       queryset.append(un_queryset[item_id])
     return render(request,'buyandsell/show_requests.html',{'table_data':queryset})
 
-    
   if search_type=="sell":
     queryset=[]
-    un_queryset = {}			
+    un_queryset = {}
     count = {}
     print words
     for word in words:
-      result = SaleItems.objects.filter(item_name__icontains=word,is_active=True)
+      result = SaleItems.items.filter(item_name__icontains=word,is_active=True)
       for temp in result:
         print word
         if temp.id in un_queryset:
@@ -510,7 +510,7 @@ def seeall(request,search_type):
     for item_id in count_date_sorted_queryset:
       queryset.append(un_queryset[item_id])
     return render(request,'buyandsell/buy.html',{'table_data':queryset})
- 
+
 def edit(request,form_type,pk):
   user=request.user
   post_date=date.today()
@@ -547,19 +547,19 @@ def edit(request,form_type,pk):
             print watch_user_list
             notif_text=str(edited_item.item_name)+"has been added in the category"+str(edited_item.category.name)
             notif_text+="that you have watched"
-            url = '/buyandsell/sell_details/' + str(edited_item.pk)         
-            Notification.save_notification(app, notif_text, url, watch_user_list, edited_item) 
+            url = '/buyandsell/sell_details/' + str(edited_item.pk)
+            Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)
           return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
         else:
           print "form filled wrongly"
       else:
         return render(request,'buyandsell/form.html',{'form':form})
-    form=SellForm(instance=instance)                                                     
+    form=SellForm(instance=instance)
     return render(request,'buyandsell/form.html',{'form':form})
-     
+
   if form_type=="request":
     instance=RequestedItems.objects.get(pk=pk)    #update notifications to be given to watch users
-    old_category=instance.category 
+    old_category=instance.category
     if request.method=='POST':
       form=RequestForm(request.POST,request.FILES,instance=instance)
       digcheck=0
@@ -590,8 +590,8 @@ def edit(request,form_type,pk):
             print watch_user_list
             notif_text=str(edited_item.item_name)+"has been requested in the category"+str(edited_item.category.name)
             notif_text+="that you have watched"
-            url = '/buyandsell/sell_details/' + str(edited_item.pk)         
-            Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)             
+            url = '/buyandsell/sell_details/' + str(edited_item.pk)
+            Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)
           return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
         else:
           print "form filled wrongly"
@@ -602,8 +602,8 @@ def edit(request,form_type,pk):
 
 def my_account(request):
   user=request.user
-  sell_items=SaleItems.objects.filter(user=user).order_by('-pk')
-  request_items=RequestedItems.objects.filter(user=user).order_by('-pk')
+  sell_items=SaleItems.items.filter(user=user).order_by('-pk')
+  request_items=RequestedItems.items.filter(user=user).order_by('-pk')
   context={'sell_items':sell_items,'request_items':request_items}
   return render(request,'buyandsell/myaccount.html',context) 
 
@@ -618,4 +618,76 @@ def get_category_dictionary():
     sub_cat=BuySellCategory.objects.filter(main_category=mcat)
     cat_dict[mcat]=sub_cat
   return cat_dict  
+
+def trash_item(request,item_type,pk):
+  if item_type=="request":
+    item=RequestedItems.items.get(pk=pk)
+    item.trash()
+
+  else:
+    item=SaleItems.items.get(pk=pk)
+    item.trash()
+
+  success = {'success' : 'true'}
+  success = simplejson.dumps(success)
+  return HttpResponse(success, content_type="application/json")
+
+def transaction(request,item_type,pk):
+  user=request.user
+  if item_type=="sell":
+    if request.method=="POST":
+      form=TransactionForm()
+      buyer_username=request.POST.get('buyer_username')
+      print buyer_username
+      if buyer_username != "":
+        buyer=User.objects.get(username=buyer_username)
+      else:
+        buyer=None
+      new_item=form.save(commit=False)
+      if  not  request.POST.get('feedback').isspace() and  request.POST.get('feedback')!="":
+        new_item.feedback=request.POST.get('feedback')
+      else:
+        messages.error(request,"Feedback cant be empty")
+        return HttpResponseRedirect('/buyandsell/succ_trans/sell/'+pk+'/')
+      new_item.seller=user
+      new_item.buyer=buyer
+      sell_item=SaleItems.objects.get(pk=pk)
+      new_item.sell_item=sell_item
+      new_item.trasaction_date=timezone.now()
+      new_item.save()      
+    sell_item=SaleItems.objects.get(pk=pk)
+    mail_list=BuyMails.objects.filter(item=sell_item)  
+    return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list,'type':item_type})
+
+  if item_type=="request":
+    if request.method=="POST":
+      form=TransactionForm()
+      seller_username=request.POST.get('seller_username')
+      if seller_username !="":
+        seller=User.objects.get(username=seller_username)
+      else:
+        seller=None
+      new_item=form.save(commit=False)
+      if  not  request.POST.get('feedback').isspace() and  request.POST.get('feedback')!="":
+        new_item.feedback=request.POST.get('feedback')
+      else:
+        messages.error(request,"Feedback cant be empty")
+        return HttpResponseRedirect('/buyandsell/succ_trans/request/'+pk+'/')
+      new_item.seller=seller
+      new_item.buyer=user
+      request_item=RequestedItems.objects.get(pk=pk)
+      new_item.request_item=request_item
+      new_item.is_requested=True
+      new_item.trasaction_date=timezone.now()
+      new_item.save()      
+    request_item=RequestedItems.objects.get(pk=pk)
+    mail_list=RequestMails.objects.filter(item=request_item)
+    return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list})
+  
+
+
+        
+        
+
+
 

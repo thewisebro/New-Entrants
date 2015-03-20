@@ -187,6 +187,31 @@ function search_form()
          form.submit();
          } );
 }
+function trash(type,id)
+{
+     if(type=="request")
+     {
+       type="request";
+       trash_item(type,id);
+     }
+     else if (type=="sell")
+     {
+      type="sell";
+      trash_item(type,id);
+     }
+}
+function trash_item(type,id)
+{
+
+  		  $.ajax({
+    		  url : "/buyandsell/trash/"+type+"/"+id+"/",
+    		  success: function (data)
+    		  {
+                $("#"+type+id).remove();  
+          }
+          });
+}
+//trash("sell",6);
 search_form();
 search();
 create_div();

@@ -11,3 +11,11 @@ class RequestForm(ModelForm):
     model =RequestedItems
     fields=['item_name','price_upper','condition','contact','days_till_expiry','email','category','show_contact']
 
+class TransactionForm(ModelForm):
+  class Meta:
+    model=SuccessfulTransaction
+    
+
+   
+
+

@@ -22,11 +22,11 @@
 {% endif %}
 <h3>Sort by Category</h3>
 {% if cat_dict %}
-<li><a href="/buyandsell/buy">No filter</a></li>
+<li><a href="/buyandsell/viewrequests">No filter</a></li>
 {% for key,value in cat_dict.items %}
-<ul><a href="/buyandsell/buy/{{key}}"><h4>{{key}}</h4></a>
+<ul><a href="/buyandsell/viewrequests/{{key}}"><h4>{{key}}</h4></a>
 {% for row in value %}
-<li><a href="/buyandsell/buy/{{row.main_category}}/{{row.code}}">{{ row.name }}</a></li>
+<li><a href="/buyandsell/viewrequests/{{row.main_category}}/{{row.code}}">{{ row.name }}</a></li>
 {% endfor %}
 </ul>
 {% endfor %}

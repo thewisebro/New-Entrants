@@ -17,6 +17,8 @@ urlpatterns = patterns('',
     url(r'^search/(?P<search_type>\w+)/?$',search),
     url(r'^see_all/(?P<search_type>\w+)/?$',seeall),
     url(r'^edit/(?P<form_type>\w+)/(?P<pk>\w+)/?$', edit,name='edit'),
+    url(r'^trash/(?P<item_type>\w+)/(?P<pk>\w+)/?$', trash_item,name='trash'),
+    url(r'^succ_trans/(?P<item_type>\w+)/(?P<pk>\w+)/?$', transaction,name='transaction'),
     url(r'^my-account/$', my_account),
 
  ) 

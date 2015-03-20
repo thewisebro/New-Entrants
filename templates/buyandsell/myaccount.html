@@ -18,6 +18,7 @@
 <div id="sell_items">
 {% if sell_items %}
 {% for row in sell_items %}
+<div id="sell{{ row.pk }}">
 <div id="{{ row.pk }}" onclick="sell_details({{ row.pk }})">
   <p>Name: {{ row.item_name }}</p>
 </div>
@@ -27,6 +28,7 @@
 <P> <img src="/media/{{row.item_image }}"></p>
 <p>Cost: {{ row.cost }}</p>
 <p>Expires after: {{ row.expiry_date|timeuntil }}</p>
+</div>
 {% endfor %}
 {% endif %}
 </div>
@@ -35,6 +37,7 @@
 <div id="request_items">
 {% if request_items %}
 {% for row in request_items %}
+<div id="request{{ row.pk }}">
 <div id="{{ row.pk }}" onclick="request_details({{ row.pk }})">
   <p>Name: {{ row.item_name }}</p>
 </div>
@@ -43,6 +46,7 @@
 </div>
 <p>Price upper: {{ row.price_upper }}</p>
 <p>Expires after: {{ row.expiry_date|timeuntil }}</p>
+</div>
 {% endfor %}
 {% endif %}
 </div>
