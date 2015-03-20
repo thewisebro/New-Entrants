@@ -44,7 +44,7 @@ def feedback_company_list(request, year = None) :
     else :
       year = int(year)
     if year > current_session :
-      return direct_to_template(request, template="404.html")
+      return HttpResponse('Wrong year') 
     l.info(request.user.username+" :tried to view list of companies for feedback for the year "+ str(year))
     #companies = Company.objects.filter(year = year)
     #counts = []

@@ -230,7 +230,7 @@ def submitted_resume(request, company_id) :
     l.info(request.user.username + ":trying to get resume submitted to a particular company.")
     filename = os.path.join(settings.MEDIA_ROOT, 'internship', 'applications', 'company'+str(company_id), str(student.user.username)+'.pdf')
     if not os.path.exists(filename) : # the user has not applied to the company
-      return direct_to_template(request, template="404.html")
+      return Http404 
     wrapper = FileWrapper(file(filename))
     response = HttpResponse(wrapper, content_type=mimetypes.guess_type(filename)[0])
     response['Content-Length'] = os.path.getsize(filename)
