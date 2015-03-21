@@ -1,0 +1,30 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+<h3>Sample Resumes</h3>
+<hr/>
+
+<table class="sortable table table-striped table-bordered table-condensed" id="t1">
+  <thead>
+    <tr>
+      <th>Under Graduate</th>
+      <th>Post Graduate</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for count in "0123456789" %}
+    <tr>
+      <td>
+        <a href="{{ STATIC_URL }}placement/sample/resumes/ug_{{ forloop.counter }}.pdf">Sample {{ forloop.counter }}</a>
+      </td>
+      <td>
+        <a href="{{ STATIC_URL }}placement/sample/resumes/pg_{{ forloop.counter }}.pdf">Sample {{ forloop.counter }}</a>
+      </td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
+{% endblock %}
