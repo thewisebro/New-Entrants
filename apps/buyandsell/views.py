@@ -14,6 +14,7 @@ from buyandsell.forms import *
 from django.core.mail import send_mail
 
 def buy(request,mc=None,c=None):
+  
   qdata=''
   table_data=''
   price_valid=0
@@ -601,10 +602,23 @@ def edit(request,form_type,pk):
     return render(request,'buyandsell/form.html',{'form':form})
 
 def my_account(request):
+  show_contact=1
   user=request.user
   sell_items=SaleItems.items.filter(user=user).order_by('-pk')
   request_items=RequestedItems.items.filter(user=user).order_by('-pk')
-  context={'sell_items':sell_items,'request_items':request_items}
+  main_watched_cat,sub_watched_cat=get_watched_categories(request)
+  
+  if len(ShowContact.objects.filter(user=user))==1:
+    if ShowContact.objects.filter(user=user)[0].contact_shown==0:
+      show_contact=0
+  
+  context={'sell_items':sell_items,
+           'request_items':request_items,
+           'main_watched_cat':main_watched_cat,
+           'sub_watched_cat':sub_watched_cat,
+           'show_contact':show_contact
+          }
+ 
   return render(request,'buyandsell/myaccount.html',context) 
 
 def get_category_dictionary():
@@ -676,7 +690,7 @@ def transaction(request,item_type,pk):
       new_item.seller=seller
       new_item.buyer=user
       request_item=RequestedItems.objects.get(pk=pk)
-      new_item.request_item=request_item
+      new_item.request_item=request_item        #need to redirect if already existing request item or sell item is present
       new_item.is_requested=True
       new_item.trasaction_date=timezone.now()
       new_item.save()      
@@ -684,10 +698,49 @@ def transaction(request,item_type,pk):
     mail_list=RequestMails.objects.filter(item=request_item)
     return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list})
   
+def  get_watched_categories(request):
+  user=request.user
+  cat_dict=get_category_dictionary()
+  main_watched_cat=[]
+  sub_watched_cat=[]
+  for main_cat,cat_list in cat_dict.iteritems():
+    count=0
+    cat_len=len(cat_list)
+    for cat in cat_list:
+      if user in cat.watch_users.all():
+        sub_watched_cat.append(cat)
+        count=count+1
+    if count==cat_len:
+      main_watched_cat.append(main_cat)
+  print main_watched_cat
+  print sub_watched_cat
+  return main_watched_cat,sub_watched_cat
+
+def show_contact(request,response):
+  user=request.user
+  if response=="yes":
+    if len(ShowContact.objects.filter(user=user))==0:
+      item=ShowContact(user=user)
+      item.save()
+    else:
+      item=ShowContact.objects.get(user=user)
+      item.contact_shown=True
+      item.save()
+
+  else:
+    if len(ShowContact.objects.filter(user=user))==0:
+      item=ShowContact(user=user,contact_shown=False)
+      item.save()
+    else:
+      item=ShowContact.objects.get(user=user)
+      item.contact_shown=False
+      item.save()
+
+  success = {'success' : 'true'}
+  success = simplejson.dumps(success)
+  return HttpResponse(success, content_type="application/json")
 
 
-        
-        
 
 
 

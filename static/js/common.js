@@ -70,7 +70,7 @@ function dialog_iframe(data){
       height = $(window).height()-2*margin;
     }
     $('body').append("<div id='"+data.name+"-div'></div>");
-    dialog_options = {
+    var dialog_options = {
       autoOpen: false,
       dialogClass: 'dialog-class',
       title: data.title,
@@ -124,6 +124,7 @@ function open_login_dialog(){
 }
 
 function close_dialog(dialog_name){
+  console.log("close called");
   eval(dialog_name).dialog('close');
   current_dialog = null;
 }
@@ -279,86 +280,6 @@ function take_feedback(){
   });
 }
 
-function sell_form(){
- if(typeof dialog_options != "undefined")
-  {
-    dialog_options.close();
-  }
- dialog_iframe({
-    name:'sell_form_dialog',
-    title:'SellForm',
-    width:600,
-    height:360,
-    src:'/buyandsell/sell/'
-  });
-}
-
-function request_form(){
-if(typeof dialog_options != "undefined")
-  {
-    dialog_options.close();
-  }
- dialog_iframe({
-    name:'request_form_dialog',
-    title:'RequestForm',
-    width:600,
-    height:360,
-    src:'/buyandsell/requestitem/'
-  });
-}
-function sell_details(pk){
-if(typeof dialog_options != "undefined")
-  {
-    dialog_options.close();
-  }
- dialog_iframe({
-    name:'sell_detail_dialog',
-    title:'SellItemDetails',
-    width:600,
-    height:360,
-    src:'/buyandsell/sell_details/'+pk+'/'
-  });
-}
-
-function request_details(pk){
-if(typeof dialog_options != "undefined")
-  {
-    dialog_options.close();
-  }
- dialog_iframe({
-    name:'request_detail_dialog',
-    title:'RequestItemDetails',
-    width:600,
-    height:360,
-    src:'/buyandsell/request_details/'+pk+'/'
-  });
-}
-function edit_sell(pk){
-if(typeof dialog_options != "undefined")
-  {
-    dialog_options.close();
-  }
- dialog_iframe({
-    name:'edit_sell_dialog',
-    title:'EditSellItem',
-    width:600,
-    height:360,
-    src:'/buyandsell/edit/sell/'+pk+'/'
-  });
-}
-function edit_request(pk){
-if(typeof dialog_options != "undefined")
-  {
-    dialog_options.close();
-  }
- dialog_iframe({
-    name:'edit_request_dialog',
-    title:'EditRequestItem',
-    width:600,
-    height:360,
-    src:'/buyandsell/edit/request/'+pk+'/'
-  });
-}
 function submit_report(object_pk, content_type_pk){
   $.get('/moderation/report_info/',{
     content_type_pk: content_type_pk,
