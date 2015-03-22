@@ -30,7 +30,7 @@ def buy(request,mc=None,c=None):
       price_valid=1
     else:
       error_msg= "invalid price range"
-      return render(request,'buyandsell/buy.html',{'error_msg':error_msg,'table_data':table_data})
+      return render(request,'buyandsell/buy.html',{'error_msg':error_msg,'table_data':table_data,'cat_dict':cat_dict})
 
   if mc and c:
     cat=BuySellCategory.objects.get(code=c)
@@ -83,7 +83,7 @@ def viewrequests(request,mc=None,c=None):
       price_valid=1
     else:
       error_msg= "invalid price range"
-      return render(request,'buyandsell/buy.html',{'error_msg':error_msg,'table_data':table_data})
+      return render(request,'buyandsell/buy.html',{'error_msg':error_msg,'table_data':table_data,'cat_dict':cat_dict})
   if mc and c:
     cat=BuySellCategory.objects.get(code=c)
     category=cat.name
@@ -712,7 +712,9 @@ def  get_watched_categories(request):
         count=count+1
     if count==cat_len:
       main_watched_cat.append(main_cat)
+  print "main"
   print main_watched_cat
+  print "sub"
   print sub_watched_cat
   return main_watched_cat,sub_watched_cat
 
@@ -740,6 +742,31 @@ def show_contact(request,response):
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
 
+def manage(request):
+  user=request.user
+  cat_dict=get_category_dictionary()
+  main_watched_cat,sub_watched_cat=get_watched_categories(request)
+  old_watched_list=[]
+
+  for cat in sub_watched_cat:
+    old_watched_list.append(cat.id)
+
+  if request.method=='POST':
+    new_watched_list=request.POST.getlist('watched_category')
+    new_watched_list=[int(i) for i in new_watched_list]
+    for cat_id in new_watched_list:
+      if cat_id not in old_watched_list:
+        cat=BuySellCategory.objects.get(pk=cat_id)
+        cat.watch_users.add(user)
+        cat.save()
+    for cat_id in old_watched_list:
+      if cat_id not in new_watched_list:
+        cat=BuySellCategory.objects.get(pk=cat_id)
+        cat.watch_users.remove(user)
+        cat.save()
+    main_watched_cat,sub_watched_cat=get_watched_categories(request)
+    return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
+  return render(request,'buyandsell/manage.html',{'cat_dict':cat_dict,'main_watched_cat':main_watched_cat,'sub_watched_cat':sub_watched_cat})
 
 
 

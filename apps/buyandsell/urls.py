@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^trash/(?P<item_type>\w+)/(?P<pk>\w+)/?$', trash_item,name='trash'),
     url(r'^succ_trans/(?P<item_type>\w+)/(?P<pk>\w+)/?$', transaction,name='transaction'),
     url(r'^show_contact/(?P<response>\w+)/?$',show_contact,name='show_contact'),
+    url(r'^manage/$', manage,name='manage_form'),
     url(r'^my-account/$', my_account),
 
  ) 

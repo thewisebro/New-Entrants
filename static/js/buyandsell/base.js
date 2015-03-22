@@ -1,5 +1,5 @@
 //watch("ELECTRONICS");
-var opened_dialog="";
+var opened_dialog="";  //variable to keep check of the opened dialog
 function watch(main_category,category)
 {
    if (typeof category != "undefined")
@@ -222,7 +222,7 @@ function trash_item(type,id)
     		  url : "/buyandsell/show_contact/yes/",
     		  success: function (data)
     		  {
-               console.log("ho gaya");
+               console.log("show contact");
 
           }
               });
@@ -233,15 +233,36 @@ function trash_item(type,id)
     		  url : "/buyandsell/show_contact/no/",
     		  success: function (data)
     		  {
-               console.log("ho gaya firse")
+               console.log("dont show contact")
           }
                });
      }
       });
 }
+function watch_subs(id,len_sub)
+ {
+  var elem=$("#"+id);
+  var chk=elem.prop("checked");
+    for(var i=1;i<=len_sub;i++)
+    {
+      $("#"+id+"_"+i).prop("checked",chk)
+    }
+}
+function main_check(id_parent,id)
+ {
+   console.log("this is it");
+  var elem= $("#"+id);
+  if(elem.prop("checked")==false)
+  {
+    if ($("#"+id_parent).prop("checked")==true)
+    {
+        $("#"+id_parent).prop("checked",false);
+    }
+  }
+ }
 
-show_contact();   
-//trash("sell",6);
+show_contact();
+//trash("sell",4);
 search_form();
 search();
 create_div();
@@ -255,7 +276,7 @@ function sell_form(){
     name:'sell_form_dialog',
     title:'SellForm',
     width:600,
-    height:360,
+    height:650,
     src:'/buyandsell/sell/',
     close:function(){opened_dialog=""}
   });
@@ -270,7 +291,7 @@ function request_form(){
     name:'request_form_dialog',
     title:'RequestForm',
     width:600,
-    height:360,
+    height:600,
     src:'/buyandsell/requestitem/',
     close:function(){opened_dialog=""}
   });
@@ -315,7 +336,7 @@ function edit_sell(pk){
     name:'edit_sell_dialog',
     title:'EditSellItem',
     width:600,
-    height:360,
+    height:650,
     src:'/buyandsell/edit/sell/'+pk+'/',
     close:function(){opened_dialog=""}
   });
@@ -330,9 +351,23 @@ function edit_request(pk){
     name:'edit_request_dialog',
     title:'EditRequestItem',
     width:600,
-    height:360,
+    height:600,
     src:'/buyandsell/edit/request/'+pk+'/',
     close:function(){opened_dialog=""}
   });
  opened_dialog='edit_request_dialog';
+}
+function manage(){
+ if(opened_dialog !=""){
+  close_dialog(opened_dialog);
+  }
+ dialog_iframe({
+    name:'manage_watched_categories',
+    title:'manage',
+    width:600,
+    height:600,
+    src:'/buyandsell/manage/',
+    close:function(){opened_dialog=""}
+  });
+ opened_dialog='manage_watched_categories';
 }
