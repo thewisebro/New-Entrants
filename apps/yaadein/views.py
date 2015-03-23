@@ -145,7 +145,7 @@ def index(request,enrno=None):
       tagged_users = []
       if s.user!=request.user:
         notif_users.append(s.user)
-        Notification.save_notification(app,notif_msg1,url,notif_users,post)
+      Notification.save_notification(app,notif_msg1,url,notif_users,post)
       print post.wall_user
       if len(imgs)>0:
         for key in imgs:
