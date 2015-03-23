@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^trending/$',trending,name='trending_users'),
     url(r'^spot/(?P<name>[\w]+)/$', spot_page, name='spots'),
     url(r'^search_spot/$',spot_search,name='spots'),
+    url(r'^users/$',all_users,name='users'),
     ]
 

@@ -161,8 +161,9 @@ def index(request,enrno=None):
           tagged_users.append(student_related.user)
           post.user_tags.add(student_related)
       if len(user_tagged)>0: 
-        Notification.save_notification(app,notif_msg,url,tagged_users,post)  
-      data = {'temp':"a"}
+        Notification.save_notification(app,notif_msg,url,tagged_users,post)
+      posts_data=[{'post_id':str(post.pk)}]  
+      data = {'posts_data':posts_data}
 # return  HttpResponse("post added")
       return HttpResponse(simplejson.dumps(data),'application/json')
     else:
@@ -357,6 +358,39 @@ def search(request,id):
    else:
      data = 'fail'
    return HttpResponse(simplejson.dumps(search_data),'application/json')
+
+@csrf_exempt
+@CORS_allow
+def all_users(request):
+  if request:
+    query = request.GET.get('q','')
+#   import ipdb;ipdb.set_trace()
+    students = Student.objects.all()
+    def person_dict(student):
+      return {
+        'id':student.user.username,
+        'label':student.user.info,
+        'value':student.user.name,
+        'profile_pic':student.user.photo_url
+       }
+    spots = Spot.objects.all()
+    def spot_dict(spot):
+      return {
+        'id':spot.name,
+        'label':spot.name,
+        'value':spot.name,
+        'profile_pic':spot.profile_pic.url,
+      }
+    if id=='1':
+      data = map(person_dict,students)
+    elif id=='2':
+      data = map(spot_dict,spots)
+    else :
+      data = map(person_dict,students)+map(spot_dict,spots)
+    search_data = {'results':data}
+  else:
+    data = 'fail'
+  return HttpResponse(simplejson.dumps(search_data),'application/json')
 
 
 @csrf_exempt
