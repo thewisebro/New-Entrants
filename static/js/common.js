@@ -124,7 +124,6 @@ function open_login_dialog(){
 }
 
 function close_dialog(dialog_name){
-  console.log("close called");
   eval(dialog_name).dialog('close');
   current_dialog = null;
 }

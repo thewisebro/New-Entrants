@@ -248,9 +248,9 @@ function watch_subs(id,len_sub)
       $("#"+id+"_"+i).prop("checked",chk)
     }
 }
-function main_check(id_parent,id)
+function main_check(id_parent,id,len_sub)
  {
-   console.log("this is it");
+   var flag=1;
   var elem= $("#"+id);
   if(elem.prop("checked")==false)
   {
@@ -259,6 +259,22 @@ function main_check(id_parent,id)
         $("#"+id_parent).prop("checked",false);
     }
   }
+  else  if(elem.prop("checked")==true)
+  {
+    for(var i=1;i<=len_sub;i++)
+    {
+         if( $("#"+id_parent+"_"+i).prop("checked")==false)
+         {
+           flag=0;
+         }
+    }
+  if(flag==1)
+  {
+     $("#"+id_parent).prop("checked",true);
+  }
+  }
+
+
  }
 
 show_contact();

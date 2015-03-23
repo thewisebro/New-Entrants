@@ -39,6 +39,47 @@
 </div>
 {% endfor %}
 {% endif %}
+ {% if table_data %}
+      <div id="pagination_bar">
+        <div >
+          {% if table_data.number !=  1 %}
+            <span class="first_page_link">
+              <a href="?page=1">First</a>
+            </span>
+          {% endif %}
+
+          {% if table_data.has_previous %}
+            <span class="previous_page_link">
+              <a href="?page={{ table_data.previous_page_number }}">Previous</a>
+            </span>
+          {% endif %}
+
+          {% for page in page_list %}
+            {% if table_data.number == page %}
+              <span class="active_page">
+                <a href="?page={{ table_data.number }}">{{table_data.number}}</a>
+              </span>
+            {% else %}
+              <span class="pageno">
+                <a href="?page={{ page }}">{{ page }}</a>
+              </span>
+            {% endif %}
+          {% endfor %}
+
+          {% if table_data.has_next %}
+            <span class="next_page_link">
+              <a href="?page={{ table_data.next_page_number }}">Next</a>
+            </span>
+          {% endif %}
+
+          {% if table_data.number !=  table_data.paginator.num_pages  %}
+            <span class="last_page_link">
+              <a href="?page={{ paginator.num_pages }}">Last</a>
+            </span>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
 <script src="{{ STATIC_URL }}js/common.js"></script>
 <script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>
 </body>

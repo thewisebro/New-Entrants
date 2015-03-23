@@ -12,6 +12,7 @@ from buyandsell.constants import *
 from notifications.models import Notification
 from buyandsell.forms import *
 from django.core.mail import send_mail
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def buy(request,mc=None,c=None):
   
@@ -57,12 +58,26 @@ def buy(request,mc=None,c=None):
   else:
     error_msg='No items in database'
 
+  paginator = Paginator(table_data, 10)
+  page = request.GET.get('page', 1)
+  page_list = _get_page_list(page, paginator.num_pages, 10)
+  try:
+    table_data = paginator.page(page)
+  except PageNotAnInteger:
+    logger.info(request.user.username+": pagination error PageNotAnInteger")
+    table_data = paginator.page(1)
+  except EmptyPage:
+    logger.info(request.user.username+": pagination error EmptyPage")
+    table_data = paginator.page(paginator.num_pages)
+
   context={
     'error_msg':error_msg,
     'table_data':table_data,
     'mc':mc,
     'c':c,
     'cat_dict':cat_dict,
+    'paginator':paginator,
+    'page_list':page_list
           }
   return render(request,'buyandsell/buy.html',context)
 
@@ -108,12 +123,27 @@ def viewrequests(request,mc=None,c=None):
   else:
     error_msg='No items in database'
 
+  paginator = Paginator(table_data, 10)
+  page = request.GET.get('page', 1)
+  page_list = _get_page_list(page, paginator.num_pages, 10)
+  try:
+    table_data = paginator.page(page)
+  except PageNotAnInteger:
+    logger.info(request.user.username+": pagination error PageNotAnInteger")
+    table_data = paginator.page(1)
+  except EmptyPage:
+    logger.info(request.user.username+": pagination error EmptyPage")
+    table_data = paginator.page(paginator.num_pages)
+
+
   context={
     'error_msg':error_msg,
     'table_data':table_data,
     'mc':mc,
     'c':c,
     'cat_dict':cat_dict,
+    'paginator':paginator,
+    'page_list':page_list
           }
   return render(request,'buyandsell/show_requests.html',context)
 
@@ -768,6 +798,18 @@ def manage(request):
     return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
   return render(request,'buyandsell/manage.html',{'cat_dict':cat_dict,'main_watched_cat':main_watched_cat,'sub_watched_cat':sub_watched_cat})
 
+def _get_page_list(page_no, pages, items_per_page):
+  l = range(1, pages+1)
+  page_no = int(page_no)
 
+  items_per_page /= 2
+  if page_no in l[0:items_per_page]:
+    return l[0:2*items_per_page]
+
+  elif page_no in l[-items_per_page:]:
+    return l[-2*items_per_page:]
+
+  else:
+    return l[page_no - items_per_page + 1: page_no + items_per_page - 1]
 
 

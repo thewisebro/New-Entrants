@@ -10,7 +10,7 @@
 {% for key,value in cat_dict.items %}
 <input type="checkbox" id="{{ key }}" onchange="watch_subs('{{ key }}',{{value|length}})" {% if key in main_watched_cat %} checked{% endif %}>{{ key }}</input><br>
 {% for row in value %}
-<input type="checkbox" value="{{ row.id }}" id="{{key}}_{{forloop.counter}}" onchange="main_check('{{ key }}','{{key}}_{{forloop.counter}}')" name="watched_category" {% if row in sub_watched_cat %} checked{% endif %}>{{ row.name }}</input>
+<input type="checkbox" value="{{ row.id }}" id="{{key}}_{{forloop.counter}}" onchange="main_check('{{ key }}','{{key}}_{{forloop.counter}}',{{value|length}})" name="watched_category" {% if row in sub_watched_cat %} checked{% endif %}>{{ row.name }}</input>
 {% endfor %}
 <br>
 {% endfor %}
