@@ -113,7 +113,8 @@ def index(request,enrno=None):
       post_data = str(simplejson.loads(request.POST['data'])['post_text'])
       user_tagged = simplejson.loads(request.POST['data'])['user_tags']
       spots = simplejson.loads(request.POST['data'])['spot']
-      spot = Spot.objects.get(name=str(spots[0]['id']))
+      if spots:
+        spot = Spot.objects.get(name=str(spots[0]['id']))
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
       hash_tag = []
       for word in hashed:
@@ -133,7 +134,8 @@ def index(request,enrno=None):
       else:
         post = Post(text_content=post_data, post_date=timezone.now(), owner=student)
       post.save()
-      post.spots.add(spot)
+      if spots:
+        post.spots.add(spot)
       notif_msg = 'You were tagged in a memory by '+student.user.name+'.'
       notif_msg1 = ''+student.user.name+' posted a memory on your wall'  
       app = 'Yaadein'
@@ -141,7 +143,7 @@ def index(request,enrno=None):
       url = 'http://172.25.55.156:7000/post/'+pk+'/'
       notif_users=[]
       tagged_users = []
-      if enrno!='13114068':
+      if s.user!=request.user:
         notif_users.append(s.user)
         Notification.save_notification(app,notif_msg1,url,notif_users,post)
       print post.wall_user
@@ -155,8 +157,9 @@ def index(request,enrno=None):
       for user in user_tagged:
 #      user = user[1:]
         student_related = Student.objects.get(user__username=str(user['id']))
-        tagged_users.append(student_related.user)
-        post.user_tags.add(student_related)
+        if student_related.user!=request.user:
+          tagged_users.append(student_related.user)
+          post.user_tags.add(student_related)
       if len(user_tagged)>0: 
         Notification.save_notification(app,notif_msg,url,tagged_users,post)  
       data = {'temp':"a"}
@@ -401,6 +404,7 @@ def hashtag(request,slug):
           tmp = {
              'post_text': post.text_content,
              'post_owner':post.owner.user.name,
+             'post_id':str(post.pk),
              'post_owner_branch':post.owner.user.info,
              'post_owner_pic':post.owner.user.photo_url,
              'post_owner_enrol':post.owner.user.username,
@@ -440,6 +444,7 @@ def spot_page(request,name):
           tmp = {
              'post_text': post.text_content,
              'post_owner':post.owner.user.name,
+             'post_id':str(post.pk),
              'post_owner_branch':post.owner.user.info,
              'post_owner_pic':post.owner.user.photo_url,
              'post_owner_enrol':post.owner.user.username,
