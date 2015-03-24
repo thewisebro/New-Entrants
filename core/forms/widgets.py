@@ -132,3 +132,35 @@ class ChosenSelect(forms.Select, ChosenSelectBase):
 class ChosenSelectMultiple(forms.SelectMultiple, ChosenSelectBase):
   def render(self, *args, **kwargs):
     return self._render(*args, **kwargs)
+
+
+class CurrencyWidget(forms.MultiWidget):
+  """
+    Renders a complex currency fiels. It renders one text field to get the amount
+    and a drop downs to get currency and lacs/thousands.
+  """
+  def __init__(self, choices_whole=None, choices_currency=None, attrs=None):
+    widgets = (forms.TextInput(attrs=attrs),
+               forms.Select(choices=choices_whole),
+               forms.Select(choices=choices_currency))
+    super(CurrencyWidget, self).__init__(widgets, attrs)
+  def decompress(self, value):
+    if value:
+      chunks = filter(lambda s: not s == ' ', value.split(' '))
+      return [chunks[0],chunks[-2],chunks[-1]]
+    return [None, None, None]
+  def value_from_datadict(self, data, files, name):
+    values = [widget.value_from_datadict(data, files, name + '_%s' % i) \
+                for i, widget in enumerate(self.widgets)]
+    try:
+      if values[0] :
+        amount = values[0].replace(' ','')
+        try:
+          amount = float(amount)
+        except Exception as e:
+          amount = 0
+        return str(amount) + ' ' + str(values[1]) + ' ' + str(values[2])
+      else :
+        return ''
+    except ValueError:
+      return ''

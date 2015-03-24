@@ -7,13 +7,13 @@ body{
 #left_album_list{
 position: fixed;
 display: inline-block;
-width: 200px;
-height: 100%;
-border-right: #E9E9E9 1px solid;
+width: 180px;
+/*height: 100%;*/
+/*border-right: #E9E9E9 1px solid;*/
 box-shadow: inset -1px 0px 5px #222;
 padding: 10px 10px 10px 10px;
 background-color: #444;
-
+left: 200px;
 }
 
 
@@ -31,10 +31,10 @@ background-color: #444;
 }
 #oaoWrapper{
 	width: 100%;
-	min-height: 100%;
-	border-right: 1px solid #DDD;
-	box-shadow: 1px 1px 1px #eee;
-	background-color: #fff;
+	/*min-height: 100%;*/
+	/*border-right: 1px solid #DDD;
+	box-shadow: 1px 1px 1px #eee*/;
+	/*background-color: #fff;*/
 }
 
 #oaoWrapper>div{
@@ -45,8 +45,8 @@ background-color: #444;
 
 #oaoLeft{
 position: relative;
-min-height: 100%;
-width: 300px;
+/*min-height: 100%;*/
+width: 460px;
 padding: 30px 20px 0px 30px;
 
 }
@@ -64,13 +64,15 @@ color: #444;
 font-size: 24px;
 font-family:"helvetica_neue_light";
 color: #757575;
+cursor: pointer;
 }
+
 #oaoRight{
 margin-left: 20px;
 right: 30px;
 left: 330px;
 position: absolute;
-max-width: 600px;
+
 margin-top: 30px;
 }
 
@@ -116,3 +118,83 @@ margin-top: 30px;
 #album_panel_hide:hover{
 	color: #D8511D;
 }
+
+
+@media all and (max-width: 1400px) and (min-width:500px){
+
+	#oaoLeft {
+		padding: 30px 30px 0px 30px;
+		width: auto;
+		float: none;
+		height: 200px;
+	}
+	#oaoLInfo{
+		/*w idth: 200px;*/
+		float: left;
+		margin-left: 20px;
+		margin-top: 0px;
+	}
+	#oaoWrapper>div{
+		float: none;
+	}
+	#oaoRight{
+		right: 30px;
+		left: 30px;
+		position: absolute;
+		max-width: 600px;
+		margin-top: 35px;
+		top: 140px;
+		margin-left: 0px;
+	}
+}
+
+
+
+@media all and (max-width: 1400px) and (min-width:1200px){
+
+	#oaoLInfo{
+		width: 70%;
+		float: left;
+		margin-left: 10px;
+		margin-top: 0px;
+	}
+	#oaoLinfo div:nth-child(1){
+		font-size: 22px;
+	}
+	#oaoLinfo div:nth-child(2){
+		font-size: 20px;
+	}
+}
+
+@media all and (max-width: 1200px) and (min-width:1100px){
+
+	#oaoLInfo{
+		width: 60%;
+		float: left;
+		margin-left: 10px;
+		margin-top: 0px;
+	}
+	#oaoLinfo div:nth-child(1){
+		font-size: 22px;
+	}
+	#oaoLinfo div:nth-child(2){
+		font-size: 20px;
+	}
+}
+
+@media all and (max-width: 1100px) and (min-width:1000px){
+
+	#oaoLInfo{
+		width: 50%;
+		float: left;
+		margin-left: 10px;
+		margin-top: 0px;
+	}
+	#oaoLinfo div:nth-child(1){
+		font-size: 20px;
+	}
+	#oaoLinfo div:nth-child(2){
+		font-size: 18px;
+	}
+}
+
