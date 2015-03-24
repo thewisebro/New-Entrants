@@ -5,6 +5,7 @@ from nucleus.models import Faculty, Course
 
 class PostIndex(indexes.SearchIndex, indexes.Indexable):
   text = indexes.CharField(document = True,use_template = True)
+  post_id = indexes.CharField(model_attr='id')
   content = indexes.CharField(model_attr='content')
   content_auto = indexes.EdgeNgramField(model_attr='content')
 #  user = indexes.CharField(model_attr='upload_user')
@@ -18,6 +19,7 @@ class PostIndex(indexes.SearchIndex, indexes.Indexable):
 
 class FileIndex(indexes.SearchIndex, indexes.Indexable):
   text = indexes.CharField(document = True,use_template = True)
+  image_id = indexes.CharField(model_attr='id')
   upload_file = indexes.CharField(model_attr='upload_file')
   description = indexes.CharField(model_attr='description')
   filename_auto = indexes.EdgeNgramField(model_attr='upload_file')

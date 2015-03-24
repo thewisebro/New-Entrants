@@ -293,7 +293,7 @@ def get_post(request , batch_id , post_id):
 def deleteFile(request , file_id):
   user = request.user
 #  user = User.objects.get(username = 'harshithere')
-  if Uploadedfile.objects.filter(pk=file_id).exists():
+  if Uploadedfile.file_objects.filter(pk=file_id).exists():
     fileToDelete = Uploadedfile.objects.get(pk=file_id)
 #    batch_id = request.session['batchId']
 
@@ -317,12 +317,14 @@ def deleteFile(request , file_id):
 def deletePost(request , post_id):
   user = request.user
 #  user = User.objects.get(username = 'harshithere')
-  if Post.objects.filter(pk=post_id).exists():
+  if Post.post_objects.filter(pk=post_id).exists():
     postToDelete = Post.objects.get(pk=post_id)
     if user.in_group('faculty') or user == postToDelete.upload_user:
       try:
         postToDelete.delete()
-        Uploadedfile.objects.all().filter(post=postToDelete)
+        files = Uploadedfile.file_objects.all().filter(post=postToDelete)
+        for afile in files:
+          afile.delete()
         msg = 'Post has been deleted'
       except:
         msg = 'Kuch katta ho gaya'
@@ -397,7 +399,7 @@ def batchMembers(request , batch_id):
 def get_files(request, batch_id):
   currentBatch = Batch.objects.get(id = batch_id)
   AllFiles = {'lec':[],'tut':[],'exp':[],'sol':[],'que':[]}
-  files = Uploadedfile.objects.all().filter(post__batch_id = batch_id)
+  files = Uploadedfile.file_objects.all().filter(post__batch_id = batch_id)
   for File in files:
     AllFiles[File.upload_type].append(File.as_dict())
 
@@ -435,6 +437,8 @@ def getReminder(request):
   return HttpRsponse(json.dumps(events), content_type="application/json")
 
 
+@csrf_exempt
+@CORS_allow
 def search(request):
   value = request.GET.get('q')
   filter_model = request.GET.get('model')
@@ -445,11 +449,12 @@ def search(request):
   else:
     query = SearchQuerySet().autocomplete(content_auto = value).models(filter_model)
 
-  posts = map(lambda result:{'post':result.content},query_post)
-  upload_files = map(lambda result:{'filename':result.upload_file},query_uploadfile)
+#  import pdb;pdb.set_trace()
+  posts = map(lambda result:{'post':result.content , 'id':result.pk},query_post)
+  upload_files = map(lambda result:{'filename':result.upload_file , 'id':result.pk},query_uploadfile)
   courses = map(lambda result:{'name':result.name,'code':result.code},query_courses)
 
-  results = {'posts':posts , 'files':upload_files , 'courses':courses}
+  results = {'posts':posts , 'files':upload_files , 'courses':courses }
   return HttpResponse(json.dumps(results), content_type="application/json")
 
 #def upload(request):
