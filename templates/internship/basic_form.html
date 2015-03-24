@@ -27,9 +27,9 @@ $("#uncheck_button").click(uncheck_all);
 function check_all()
 {
   var i = 0;
-  while (document.getElementById('id_open_for_disciplines_'+i))
+  while (document.getElementById('open_for_disciplines_'+i))
   {
-    document.getElementById('id_open_for_disciplines_'+i).checked = true;
+    document.getElementById('open_for_disciplines_'+i).checked = true;
     i++;
   }
   return false;
@@ -38,9 +38,9 @@ function check_all()
 function uncheck_all()
 {
   var i = 0;
-  while (document.getElementById('id_open_for_disciplines_'+i))
+  while (document.getElementById('open_for_disciplines_'+i))
   {
-    document.getElementById('id_open_for_disciplines_'+i).checked = false;
+    document.getElementById('open_for_disciplines_'+i).checked = false;
     i++;
   }
   return false;

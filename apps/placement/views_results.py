@@ -328,7 +328,8 @@ def department(request, year = None, department_id = None, degree = None) :
           }, context_instance = RequestContext(request))
     else :
       if department_id not in zip(*MC.DEPARTMENT_CHOICES)[0] :
-        return TemplateView(request, template="404.html")
+        messages.error(request, "Department does not exist")
+        return HttpResponseRedirect(reverse('placement.views_results.department'))
       dept_name = [ name for id, name in MC.DEPARTMENT_CHOICES if id == department_id ][0]
       if degree == None :
         # Display overall results of the department
@@ -338,7 +339,7 @@ def department(request, year = None, department_id = None, degree = None) :
       else :
         # Display results for a particular degree
         if degree not in zip(*MC.GRADUATION_CHOICES)[0] :
-          return TemplateView(request, template="404.html")
+          raise Http404
         pp_degree = PlacementPerson.objects.filter(student__branch__graduation = degree)
         pp_degree = pp_degree.exclude(status='CLS')
         results_degree = Results.objects.filter(student__branch__graduation = degree)

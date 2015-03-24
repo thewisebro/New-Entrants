@@ -1,0 +1,200 @@
+SELECT * from elective_not_allowed ;
+SELECT * from elective_details where course_code ='IEQ-04';
+SELECT * from elective_details where course_code ='IEQ-04x';
+SELECT * from elective_structure where group_code ='3005';
+\d
+\d course_details
+SELECT * from course_details where course_code ='MBA';
+SELECT * from course_details where course_code ='MA';
+SELECT * from course_details where course_code ='321';
+SELECT * from course_details;
+\d
+SELECT * from codes_used ;
+\d
+SELECT * from phd_programme ;
+\d
+SELECT * from phd_information ;
+\d
+SELECT * from registered_courses;
+\d
+SELECT * from course_details;
+SELECT * from course_details where course_code ilike 'MBA';;
+SELECT * from course_details where course_code ilike 'DM';;
+SELECT * from course_details where course_code ilike 'BM';;
+SELECT * from course_details where course_code ilike 'Ma';;
+SELECT * from course_details where course_code ilike 'MA';;
+\d
+SELECT * from codes_used where 
+;
+\d codes_used 
+SELECT * from codes_used where code ='MBA';
+\d
+\d curricular_structure 
+SELECT * from curricular_structure where discipline ilike '%M%'
+;
+SELECT * from curricular_structure where degree ilike '%MBA%'
+SELECT * from curricular_structure where degree ='PhD';
+\d
+SELECT * from person where course >300;
+\d person
+SELECT * from person where course >300 and person_id ilike '%ddm%';
+SELECT * from institute_electives where person_id ='v1406uec';
+SELECT * from elective_structure where course ='131' and discipline='CSI' and subject_area=
+;
+SELECT * from elective_structure where course ='131' and discipline='CSI' and subject_area='IE';
+SELECT * from elective_structure where course ='131' and discipline='CSI' and group_code > 3000;
+SELECT * from elective_structure where subject_area ='15';
+SELECT * from codes_used where code ='BM';
+SELECT * from codes_used where code ='MBA';
+SELECT * from person where discipline ='MBA';
+SELECT * from person where discipline ='BM';
+SELECT count(*) from person where discipline ='MBA';
+SELECT * from mtech_specialisation where specialisation ='BM';
+SELECT * from mtech_specialisation where specialisation ='MBA';
+SELECT count(*) from person where discipline ='MBA';
+SELECT count(*) from person where discipline ='MBA' and course >300;
+SELECT count(*) from person where discipline ='BM' and course >300;
+SELECT * from person where name ilike '%prerna vaid%';
+\d mtech_specialisation
+SELECT * from mtech_specialisation where enrollment_no ='09711010';
+SELECT * from mtech_specialisation where specialisation ='AGT';
+SELECT * from mtech_specialisation where specialisation ='TES';
+SELECT * from mtech_specialisation where specialisation ='AGMT';
+SELECT * from person where enrollment_no ='08710007';
+SELECT * from mtech_specialisation where enrollment_no ='09711010';
+SELECT * from person where personid='mohitumt';
+SELECT * from person where person_id='mohitumt';
+SELECT * from person where person_id='tanviuec';
+SELECT distinct(gender) from person;
+\d online_poll
+\d online_poll_admin
+pg_dump -t online_poll
+\d online_poll_admin_admin
+pg_dump -t online_poll_admin
+;
+pg_dump -t online_poll_admin
+;
+SELECT * from codes_used ;
+GRANT SELECT on codes_used to kriti ;
+select * from online_poll;
+\d elective_not_allowed
+SELECT * from elective_not_allowed ;
+\q
+select * from kriti_codes;
+select * from kriti_subcodes;
+delete all from kriti_subcodes;
+delete  from kriti_subcodes;
+insert into kriti_subcodes(code,subcode) values('101','101|102|103|104|105|106');
+insert into kriti_subcodes(code,subcode) values('301','301|302|303|304');
+select * from kriti_subcodes;
+select * from kriti_codes;
+begin;
+\q
+begin;
+delete from kriti_codes;
+insert into kriti_codes(code,title) values('100','Articles');
+insert into kriti_codes(code,title) values('101','Fantasy');
+insert into kriti_codes(code,title) values('101','Fantasy');
+insert into kriti_codes(code,title) values('102','Fiction');
+insert into kriti_codes(code,title) values('103','Humor');
+insert into kriti_codes(code,title) values('104','Memoir');
+insert into kriti_codes(code,title) values('105','Poem');
+insert into kriti_codes(code,title) values('106','Saga');
+insert into kriti_codes(code,title) values('301','Graphic');
+select * from kriti_codes;
+begin
+;
+delete from kriti_items;
+rollback;
+begin;
+delete from kriti_codes;
+insert into kriti_codes(code,title) values('100','Articles');
+insert into kriti_codes(code,title) values('101','Fantasy');
+insert into kriti_codes(code,title) values('102','Fiction');
+insert into kriti_codes(code,title) values('103','Humor');
+insert into kriti_codes(code,title) values('104','Memoir');
+insert into kriti_codes(code,title) values('105','Poem');
+insert into kriti_codes(code,title) values('106','Saga');
+commit;
+begin;
+insert into kriti_codes(code,title) values('300','Designs')
+;
+insert into kriti_codes(code,title) values('301','Graphic');
+insert into kriti_codes(code,title) values('302','Painting');
+insert into kriti_codes(code,title) values('303','Photo');
+insert into kriti_codes(code,title) values('304','Sketch');
+commit;
+select * from kriti_codes;
+\q
+select * from kriti_subcodes;
+begin;
+update kriti_subcodes set code = '100' where code = '101';
+update kriti_subcodes set code = '300' where code = '301';
+commit
+;
+\q
+SELECT * from curricular_structure where course in ('150','151');
+SELECT * from curricular_structure where course <200 and course not in ('150','151');
+SELECT * from curricular_structure where course <200 and course not in ('150','151','110','111');q
+SELECT * from registered_courses where person_id ='csenvume';
+SELECT * from registered_courses where person_id ='ambujume';
+\d
+\d curricular_structure 
+create table curricular_structure_bk_24thfeb2010 SELECT * from curricular_structure;
+create table curricular_structure_bk_24thfeb2010 as SELECT * from curricular_structure;
+create table course_details_bk_24thfeb2010 as SELECT * from course_details;
+SELECT * from curricular_structure where course<200;
+SELECT * from curricular_structure where course<200 and course not in ('111','110','150','151');
+SELECT count(*) from curricular_structure where course<200 and course not in ('111','110','150','151');
+SELECT count(*) from curricular_structure where course<200 and course in ('111','110','150','151');
+SELECT * from curricular_structure where course<200 and course in ('111','110','150','151');
+SELECT * from curricular_structure where course<200 and course not in ('111','110','150','151');
+SELECT * from curricular_structure where course<200 and course not in ('111','110','150','151') order by course;
+SELECT * from curricular_structure where course<200 and course not in ('111','110','150','151') order by course;
+SELECT * from curricular_structure where course<200 and course in ('140','141') order by course;
+SELECT count(*) from curricular_structure where course<200 and course in ('140','141') order by course;
+SELECT count(*) from curricular_structure where course in ('140','141');
+begin;
+create table csv_dump_140/141curricular as SELECT * from curricular_structure where course<200 and course in ('140','141') order by course;
+create table csv_dump_140&141curricular as SELECT * from curricular_structure where course<200 and course in ('140','141') order by course;
+create table csv_dump_140_141curricular as SELECT * from curricular_structure where course<200 and course in ('140','141') order by course;
+rollback;
+create table csv_dump_140_141curricular as SELECT * from curricular_structure where course<200 and course in ('140','141') order by course;
+SELECT * from csv_dump_140_141curricular;
+begin;
+delete from curricular_structure where course<200 and course in ('140','141');
+SELECT course_name curricular_structure where course in ('120','121','130','131');
+SELECT course_name from curricular_structure where course in ('120','121','130','131');
+rollback;
+begin;
+delete from curricular_structure where course<200 and course in ('140','141');
+SELECT course_code,course_name from course_details where course_code in(SELECT course_name from curricular_structure where course in ('120','121','130','131'));
+SELECT course_code,course_name from course_details where course_code in(SELECT course_code from curricular_structure where course in ('120','121','130','131'));
+SELECT * from person where person_id ='csenvume';
+rollback;
+rollback;
+rollback;
+delete from curricular_structure where course<200 and course in ('140','141');
+ls
+;
+\q
+\d kriti_subcodes
+select * from kriti_subcodes;
+\d kriti_users;
+select username from kriti_users;
+select user_name from kriti_users;
+begin;
+select * from kriti_users;
+select * from kriti_users;
+select uploads from kriti_users;
+rollback;
+begin;
+SELECT uploads FROM kriti_users FETCH ALL;
+select uploads from kriti_users;
+UPDATE kriti_users SET uploads=replace((SELECT uploads FROM kriti_users),'||','|');
+select uploads,user_id from kriti_users;
+select uploads,user_id from kriti_users where user_id='essenuce';
+select uploads,user_id from kriti_users where user_id='saketuec';
+select uploads,user_id from kriti_users where user_id='ajainume';
+\d
+\s wifimac

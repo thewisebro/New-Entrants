@@ -1,0 +1,8 @@
+alumni varchar(15)
+student varchar(15)
+timst timestamp	 
+al_sts WL="Wait List" O='Open' C='Closed'
+status 'F'='Finalized' 'A+'='Approved' 'A'='Waiting Approval'
+
+
+

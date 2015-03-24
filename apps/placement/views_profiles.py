@@ -175,7 +175,8 @@ def educational_details(request):
     if request.method == 'POST' :
       if plac_person.status in ('LCK', 'VRF') :
         # The user cannot update this information if he is locked/verified/opened. He can only edit it if it is closed or open
-        return TemplateView.as_view(template_name="404.html")
+        messages.error(request, "You cannot edit educational details because your status is lock/verified")
+        return HttpResponseRedirect(reverse('placement.views_profiles.educational_details')) 
       formset = EducationalDetailsFormSet(request.POST, queryset = EducationalDetails.objects.filter(student = student))
 
       if formset.is_valid() :
@@ -262,7 +263,8 @@ def placement_information(request) :
     if request.method == 'POST' :
       if plac_person.status == 'LCK' :
         # User cannot edit anything
-        return TemplateView.as_view(template_name="404.html")
+        messages.error(request, "You can not edit details because your status is closed")
+        return HttpResponseRedirect(reverse('placement.views_profiles.placement_information')) 
       if plac_person.status == 'VRF' :
         # The student can update only editable fields
         # TODO : clean the fields

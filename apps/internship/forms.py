@@ -5,13 +5,43 @@ from internship import models, constants as IC
 from nucleus.models import Branch
 
 class CompanyForm(ModelForm):
-  latest_date_of_joining = forms.CharField(required= False, widget = forms.DateInput(attrs={'class':'iDateTimeField'}))
+  latest_date_of_joining = forms.CharField(required= False, widget = forms.DateInput(attrs={'class':'iDateField'}))
   last_date_of_applying = forms.CharField(required= False, widget = forms.DateInput(attrs={'class':'iDateTimeField'}))
-  probable_date_of_arrival = forms.CharField(required= False, widget = forms.DateInput(attrs={'class':'iDateTimeField'}))
+  probable_date_of_arrival = forms.CharField(required= False, widget = forms.DateInput(attrs={'class':'iDateField'}))
   open_for_disciplines = forms.ModelMultipleChoiceField(queryset=Branch.objects.filter(graduation__in=('UG','PG')).order_by('degree', 'department'), widget=forms.CheckboxSelectMultiple)
   class Meta:
     model   = models.Company
     exclude = ('year',)
+    fields = ['name_of_company',
+              'status',
+              'address',
+              'latest_date_of_joining',
+              'stipend', 'stipend_remark',
+              'cgpa_requirements',
+              'description',
+              'designation_of_contact_person',
+              'email', 'fax',
+              'last_date_of_applying',
+              'name_of_contact_person',
+              'nature_of_duties', 'name_of_post',
+              'no_of_employees',
+              'other_requirements',
+              'telephone',
+              'pre_internship_talk',
+              'shortlist_from_resumes',
+              'group_discussion',
+              'online_test',
+              'written_test',
+              'paper_based_test',
+              'interview_1', 'interview_2', 'interview_3',
+              'probable_date_of_arrival',
+              'total_vacancies',
+              'training_period',
+              'turnover',
+              'website',
+              'brochure',
+              'sector',
+              'open_for_disciplines']   # Manual listing to change order
     widgets = { #'open_for_disciplines' : forms.CheckboxSelectMultiple,
                 'stipend' : CurrencyWidget(choices_whole = IC.PAY_WHOLE_CHOICES, choices_currency = IC.PAY_PACKAGE_CURRENCY_CHOICES, attrs={'class':'iCurrencyField'}),
               }

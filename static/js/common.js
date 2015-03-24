@@ -108,7 +108,7 @@ function open_login_dialog(){
     name: 'login_dialog',
     title: 'Sign In',
     width: 410,
-    height: 260,
+    height: 300,
     src: '/login_dialog/?next=/close_dialog/login_dialog/',
     close: function(){
       if(typeof user === "undefined") {
@@ -242,7 +242,7 @@ jQuery.cachedScript = function(url, options){
 };
 
 function display_messages(messages){
-  if(!messages)return;
+  if(!messages || messages.length==0)return;
   if(messages.length > 0){
     var message = messages.shift(1);
     $('#messages-div').html("<span class='"+message.extra_tags+" message-span'>"+message.message+"</span>");
@@ -252,7 +252,7 @@ function display_messages(messages){
             display_messages(messages);
           },500
         );
-      },4000
+      },5000
     );
   }
   else
@@ -289,6 +289,16 @@ function check_password(service, seconds, close_callback){
     height:180,
     close: close_callback,
     src:'/settings/password_check/?service='+service+'&seconds='+seconds
+  });
+}
+
+function forgot_password(){
+  dialog_iframe({
+    name:'forgot_pass',
+    title:'Forgot password',
+    width:450,
+    height:170,
+    src:'/settings/forgot_password/'
   });
 }
 

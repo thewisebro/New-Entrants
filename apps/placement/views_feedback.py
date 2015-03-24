@@ -119,7 +119,7 @@ def fill(request) :
     plac_person = student.placementperson
     if plac_person.status != 'VRF' :
       l.info(request.user.username + ': Giving feedback for a company, but user not Verified')
-      return TemplateView(request, template="404.html")
+      raise Http404
     if request.method == 'POST' :
       form = forms.Feedback(request.POST)
       if form.is_valid() :
