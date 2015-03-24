@@ -169,23 +169,18 @@ def index(request):
 #student search
   if role == "stud":
     students = Student.objects.all()
-#    import pdb;pdb.set_trace();
     a=2*int('0'+year)
     b=2*int('0'+year)-1
     if srch_str != "":
-#      flag = 10  #some random no
       students = students.filter(user__name__icontains=srch_str)
     if branch != "":
-#      flag = flag+1
       students = students.filter(branch__code__icontains=branch)
     if year != "":
-#      flag = flag+1
       students = students.filter(Q(semester_no=a)|Q(semester_no=b))
     count = students.count()
     result["count"] = count
     if source == "android":
       students = students[counter:counter+10]
-#    if source == "web" or source == "ajax":
     for student in students:
       if student.bhawan is None:
         student.bhawan = ""
@@ -202,45 +197,20 @@ def index(request):
       return render(request, 'peoplesearch/results_ajax.html', result)
     elif source == "web":
       return render(request, 'peoplesearch/results_extension.html', result)
-#if flag == 1 or flag == 0:
     c.append(result)
     return HttpResponse(c)
-#    else:
-#      temp = students.count()
-#      result["temp"] = temp
-#      for student in students:
-#        result["data"]["stud"].append(
-#              {
-#             'name':student.user.name.encode('utf-8') ,
-#             'enrollment_no':student.user.username.encode('utf-8') ,
-#             'branch':student.branch.code.encode('utf-8'),
-#             'year':int((student.semester_no+1)/2),
-#             'bhawan':student.bhawan.encode('utf-8'),
-#             'room':student.room_no.encode('utf-8'),
-#             })
-#        i = i+1
-#        if i == 20*counter or i == temp/20*20:
-#          result["data"]["stud"] = []
-#        if i == 20*(int('0'+counter)+1):
-#          c.append(result)
-#          return HttpResponse(c)
-#      c.append(result)
-#      return HttpResponse(c)
 
 #faculty search
   if role == "fac":
     faculties = Faculty.objects.all()
     if srch_str != "":
-#      flag = 1
       faculties = faculties.filter(user__name__icontains=srch_str)
-#    print faculties
     if faculty_department != "":
       faculties = faculties.filter(department__icontains=faculty_department)
     if faculty_designation != "":
       faculties = faculties.filter(designation__icontains=faculty_designation)
     count = faculties.count()
     result["count"] = count
-#if source == "web" or source == "ajax":
     if source == "android":
       faculties = faculties[counter:counter+10]
     for faculty in faculties:
@@ -254,34 +224,13 @@ def index(request):
       return render(request, 'peoplesearch/results_ajax.html', result)
     elif source == "web":
       return render(request, 'peoplesearch/results_extension.html', result)
-#    if flag == 0:
     c.append(result)
     return HttpResponse(c)
-#    else:
-#      temp = faculties.count()
-#      result["temp"]=temp
-#      for faculty in faculties:
-#        result["data"]["fac"].append({
-#            'name':faculty.user.name.encode('utf-8'),
-#            'username':faculty.user.username.encode('utf-8'),
-#            'department':faculty.department.encode('utf-8'),
-#            'designation':faculty.designation.encode('utf-8'),
-#            'office-no':faculty.user.contact_no.encode('utf-8'),
-#            })
-#        i = i+1
-#        if i == 20*counter or i == temp/20*20:
-#          result["data"]["fac"] = []
-#        if i == 20*(int('0'+counter)+1):
-#          c.append(result)
-#          return HttpResponse(c)
-#      c.append(result)
-#      return HttpResponse(c)
 
 #services search
   if role == "serv":
     services = Services.objects.all()
     if srch_str != "":
-#      flag = 1
       services = services.filter(name__icontains = srch_str)
     if services_list != "":
       services = services.filter(service__icontains = services_list)
@@ -299,43 +248,18 @@ def index(request):
       return render(request, 'peoplesearch/results_ajax.html', result)
     elif source == "web":
       return render(request, 'peoplesearch/results_extension.html', result)
-#if flag == 0:
     c.append(result)
     return HttpResponse(c)
-#    else:
-#      temp = services.count()
-#      result["temp"]=temp
-#      for service in services:
-#      result["data"]["serv"].append({
-#            'name':service.name.encode('utf-8'),
-#            'office_no':service.office_no.encode('utf-8'),
-#            'service':service.service.encode('utf-8'),
-#            })
-#        i = i+1
-#        if i == 20*counter or i == temp/20*20:
-#          result["data"]["serv"] = []
-#        if i == 20*(int('0'+counter)+1):
-#        c.append(result)
-#          return HttpResponse(c)
-#      c.append(result)
-#      return HttpResponse(c)
 
 #group search
   if role == "groups":
     groups = GroupInfo.objects.all()
     if srch_str != "":
-#      flag = 1
       groups = groups.filter(group__name__icontains = srch_str)
     if groups_list != "":
       groups = groups.filter(group__user__username__icontains = groups_list)
     count = groups.count()
     result["count"]=count
-#    if flag == 0:
-#      c.append(result)
-#      return HttpResponse(c)
-#    else:
-#      temp = groups.count()
-#      result["temp"] = temp
     groups = groups[counter:counter+10]
     for group in groups:
         result["data"]["groups"].append({
@@ -343,12 +267,6 @@ def index(request):
             'phone-no':group.phone_no.encode('utf-8'),
             'email':group.email.encode('utf-8'),
             })
-#        i = i+1
-#        if i == 20*counter or i == temp/20*20:
-#          result["data"]["groups"] = []
-#        if i == 20*(int('0'+counter)+1):
-#          c.append(result)
-#          return HttpResponse(c)
     c.append(result)
     return HttpResponse(c)
 
@@ -370,42 +288,6 @@ def index(request):
         count_groups = groups.count()
       count = count_stud + count_fac + count_serv + count_groups
       result["count"] = count
-#      if source == "android":
-#
-#      if source == "web" or source == "ajax":
-#        for student in students:
-#          result["data"]["stud"].append(
-#                {
-#                'name':student.user.name.encode('utf-8'),
-#                'enrollment_no':student.user.username.encode('utf-8'),
-#                'branch':student.branch.code.encode('utf-8'),
-#                'year':int((student.semester_no+1)/2),
-#                'bhawan':student.bhawan.encode('utf-8'),
-#                'room':student.room_no.encode('utf-8'),
-#                })
-#        for faculty in faculties:
-#          result["data"]["fac"].append({
-#                'username':faculty.user.username.encode('utf-8'),
-#                'name':faculty.user.name.encode('utf-8'),
-#                'department':faculty.department.encode('utf-8'),
-#                'designation':faculty.designation.encode('utf-8'),
-#                'office-no':faculty.user.contact_no.encode('utf-8'),
-#                })
-#        for service in services:
-#          result["data"]["serv"].append({
-#                'name':service.name.encode('utf-8'),
-#                'office_no':service.office_no.encode('utf-8'),
-#                'service':service.service.encode('utf-8'),
-#                })
-#        for group in groups:
-#          result["data"]["groups"].append({
-#          'name':group.group.user.username.encode('utf-8'),
-#          'phone-no':group.phone_no.encode('utf-8'),
-#          'email':group.email.encode('utf-8'),
-#        })
-#        if source == "ajax":
-#          return render(request, 'peoplesearch/results_ajax.html', result)
-#        return render(request, 'peoplesearch/results_extension.html', result)
       for student in students:
         if student.bhawan is None:
           student.bhawan = ""
@@ -468,10 +350,6 @@ def index(request):
             return HttpResponse(c)
       else:
         i = i+count_groups
-
-#    else:
-#      c.append(result)
-#      return HttpResponse(c)
       if source == "web":
         return render(request, 'peoplesearch/results_extension.html', result)
       elif source == "ajax":

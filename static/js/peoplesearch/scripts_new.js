@@ -12,7 +12,7 @@ function loadResult(form)
 	document.getElementById('advanced').style.display = 'none';
 	document.getElementById('adv_right').className='advUp';
 	var str="name="+form.Name.value+"&form_submitted=true&role="+active+"&year="+form.student_year.value+"&branch="+form.student_deptt.value+"&faculty_department="+form.faculty_deptt.value+"&services_list="+form.services_list.value+"&faculty_designation="+form.faculty_post.value+"&advanced_search_status="+form.advanced_search_status.value+"&groups_list=&counter=&source=ajax";
-	xmlhttp.open("GET","http://172.25.55.5:8000/peoplesearch/index/?"+str,false);
+	xmlhttp.open("GET","index/?"+str,false);
 	xmlhttp.send();
 	document.getElementById("results").innerHTML=xmlhttp.responseText;
 	form.advanced_search_status.value = "off";
