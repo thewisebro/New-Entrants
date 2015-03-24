@@ -1,0 +1,57 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+
+{% if title %}
+<h3>{{ title }}</h3>
+<hr/>
+{% endif %}
+
+{% if form %}
+
+{% if editables %}
+
+{% if form.is_multipart %}
+<form action="{{ action }}" method="POST" name="{{ name|default:'generic_form' }}" enctype="multipart/form-data">
+{% else %}
+<form action="{{ action }}" method="POST" name="{{ name|default:'generic_form' }}">
+{% endif %}
+
+{% csrf_token %}
+{% endif %} {# End if editables #}
+
+<table class="table table-striped table-bordered table-condensed">
+  {% load filters %}
+
+  {% for field in form.visible_fields %}
+  <tr class="{% cycle 'odd' 'even' %} {% if forloop.last %}lastline{% endif %}">
+
+    {% if field.name in editables %}
+    <td {% if forloop.last %}class="leftbottomcurve"{% endif %}>{{ field.label_tag }}
+    {% if field.help_text %}
+    <span style="font-size:10px;">({{ field.help_text }})</span>
+    {% endif %}
+    </td>
+    <td {% if forloop.last %}class="rightbottomcurve"{% endif %}>{{ field }}</td>
+    {% else %}
+    <td {% if forloop.last %}class="leftbottomcurve"{% endif %}>{{ field.label }}</td>
+    <td {% if forloop.last %}class="rightbottomcurve"{% endif %}>
+      {{ field|get_display|default:'-' }}
+    </td>
+    {% endif %}
+
+  </tr>
+  {% endfor %} {# for field in form.visible_fields #}
+
+</table>
+
+{% if editables %}
+<div class='submit_button' id='{{ name|default:"generic_form" }}_submit'>
+  <input type="submit" value="{{ submit|default:'Submit' }}" class="btn btn-primary"/>
+</div>
+</form>
+{% endif %}
+{% else %}
+No information filled by you.
+{% endif %} {# if form #}
+{% endblock %}

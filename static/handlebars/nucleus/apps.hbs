@@ -1,0 +1,12 @@
+<div class="app-heading">Apps </div>
+<div class="appbox-container">
+{{#each apps }}
+  <div class="appbox">
+    <img class="app-pic" data-app="{{ app }}" src="/static/images/nucleus/app-icons/{{ app }}.png"/>
+    <a {{#if target_blank}}target="_blank"{{/if}} href="{{ app_data.url }}">
+      <div class="app-name">{{ app_data.name }}</div>
+    </a>
+  </div>
+{{/each}}
+</div>
+<div class="clear-both"></div>

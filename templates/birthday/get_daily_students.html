@@ -1,0 +1,49 @@
+<html>
+<body>
+{% if bday %}
+  <h1>Happy Birthday!</h1>
+  <br/>
+{% endif %}
+
+{% if wishes %}
+
+  {% for x in wishes %}
+ <br/>
+  {{x.deliver}}:{{x.message}}
+  {% endfor %}
+ <br/>
+{% endif %}
+
+{% if students %}
+	folowing have there bday today. 
+	plz select if you want to wish any of your friend:
+	<form action="/birthday/get_message/" method="post">
+  {% csrf_token %}
+  {% for student in students %}
+		<input type="checkbox" name="receiver" value="{{student.person.user.username}}"/><b>{{student.person.name}}</b>, {{student.person.branch}}, {{student.person.semester}}
+		<br/>
+	{% endfor %}
+	<p>enter your message here:</p><input type="text" name="message" value="enter your wishes here!"/>
+	<input type="submit" value='Wish!'/>
+	</form>
+	
+{% else %}
+	<p>sorry, none of your friend seem to have born today.</p>
+{% endif %}
+
+{% if students_week %}
+	<br/><br/>
+	<h2>Upcoming Birthdays:</h2><br/>
+	<form action="/birthday/" method="post">
+  {% csrf_token %}
+	{% for student in students_week %}
+		<input type="checkbox" name="event_object" value={{student.person.user.username}} /><b>{{student.person.name}}</b>,{{student.person.branch}}
+		<br/>
+	{% endfor %}
+    <input type="submit" value="Add event"/>
+  </form>
+{% else %}
+	no upcoming bday
+{% endif %}
+</body>
+</html>

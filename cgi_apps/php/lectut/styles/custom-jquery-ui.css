@@ -1,0 +1,44 @@
+.ui-dialog{
+  padding:0px;
+  border-radius:0px;        
+}
+.ui-dialog-titlebar{
+  border-radius:0px;
+  border:0px;
+  border-bottom:1px solid #d5d5d5;
+  background:#ffffff;
+} 
+.ui-dialog-title{
+  font:16px "Tahoma";
+  color:#dd4b39;
+}  
+.ui-dialog .ui-dialog-content{
+  padding:15px;
+}
+.ui-dialog-content iframe
+{
+  border:0px;
+}
+
+.ui-autocomplete
+{
+  border-radius:0px;
+}
+
+.ui-menu-item
+{
+  border-radius:0px;
+}
+
+.ui-menu-item a
+{
+  font:13px "Tahoma";
+  color:#333;
+  border-radius:0px;      
+}
+
+.ui-menu-item a:hover
+{
+  background:#eee;
+  border-color:#b6cee6;
+}  

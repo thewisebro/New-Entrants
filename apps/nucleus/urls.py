@@ -26,6 +26,7 @@ urlpatterns = patterns('nucleus.views',
   url(r'^about/$', 'about', name='about'),
   url(r'^terms/$', 'terms', name='terms'),
   url(r'^hogwarts$', 'is_authenticate'),
+  url(r'^get_links/$', 'get_links'),
   url(r'', include(pagelet_patterns))
 )
 

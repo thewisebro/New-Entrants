@@ -16,6 +16,7 @@
   <script type="text/javascript" src="{{ STATIC_URL }}jquery/modernizr.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/common.js"></script>
   <script type="text/javascript">
+    var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
     $('body').ready(function(){
       display_messages({{ django_messages }});
       $('[autofocus]').focus();
@@ -45,7 +46,11 @@
     });
     function login_help(){
       var username = $('input[name=username]').val();
-      dialog_iframe({
+      var fun = {% if not dialog %}dialog_iframe{% else %}parent.dialog_iframe{% endif %};
+      {% if dialog %}
+        parent.close_dialog('login_dialog');
+      {% endif %}
+      fun({
         name:'login_help_dialog',
         title:'Having trouble signing in ?',
         width:800,
@@ -91,9 +96,9 @@
               <input class="input-button" type="submit" id="sign_in_button" value="Sign in"/>
 					  </form>
           </div>
-					{% if not dialog %}
-          <div id ="helptext"><span onclick="login_help();">Having trouble signing in ?</span></div>
-				  {% endif %}
+          <div id ="helptext">
+            <span onclick="login_help();">Having trouble signing in ?</span><br><br>
+          </div>
         </div>
   {% if not dialog %}
 			</div>
