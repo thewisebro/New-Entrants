@@ -208,11 +208,13 @@ function fill_data_in_pagelet(pagelet_name, html){
   forms = $elem.find('form');
   for(i=0; i<forms.length; i++){
     var $form = $(forms[i]);
-    if($form.attr('action') === '')
-      $form.attr('action',$elem.attr('pagelet-url'));
-    $form.ajaxForm({
-      success: ajaxform_success
-    });
+    if(!$form.attr('data-ajax-action')){
+      if($form.attr('action') === '')
+        $form.attr('action',$elem.attr('pagelet-url'));
+      $form.ajaxForm({
+        success: ajaxform_success
+      });
+    }
   }
   load_pagelets($elem);
 }
