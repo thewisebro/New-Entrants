@@ -111,10 +111,10 @@ def coursepage(request, batch_id):
     number = 0
 #    userType=getUserType(user)
 
-    previous_posts = Post.objects.all().filter(batch_id = batch_id).order_by('-datetime_created')
+    previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created')
 #    [number:(number+post_count)]
     for post in previous_posts:
-      documents =  Uploadedfile.objects.all().filter(post=post)
+      documents =  Uploadedfile.file_objects.all().filter(post=post)
       post = post.as_dict()
       files = []
       for document in documents:
@@ -251,7 +251,8 @@ def download_file(request, file_id):
 #  downloadlog = DownloadLog(uploadfile=download_file , user = user)
 #  downloadlog.save()
 
-  response = HttpResponse(file_check.read(),content_type='application/force-download')
+#  response = HttpResponse(file_check.read(),content_type='application/force-download')
+  response = HttpResponse(file_check.read(),content_type='application/octet-stream')
 #response = HttpResponse(file.read(), mimetype=mimetype)
   response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(download_file)
   response['X-Sendfile'] = smart_str(download_file_open)
@@ -443,6 +444,7 @@ def search(request):
     query_courses =  SearchQuerySet().all().autocomplete(name_auto = value).models(Course)
   else:
     query = SearchQuerySet().autocomplete(content_auto = value).models(filter_model)
+
   posts = map(lambda result:{'post':result.content},query_post)
   upload_files = map(lambda result:{'filename':result.upload_file},query_uploadfile)
   courses = map(lambda result:{'name':result.name,'code':result.code},query_courses)

@@ -51,6 +51,9 @@ class BaseUpload(models.Model):
             ('exm' , 'Exam Papers')
             )
 '''
+class DeleteManager(models.Manager):
+  def get_query_set(self):
+    return super(DeleteManager, self).get_query_set().filter(deleted = False)
 
 # Each post attributes
 class Post(models.Model):
@@ -58,6 +61,10 @@ class Post(models.Model):
   batch = models.ForeignKey(Batch)
   content = models.CharField(max_length = '1000')
   privacy = models.BooleanField(max_length = 3 , default = 'tut')
+  deleted = models.BooleanField(default = False)
+
+  objects = models.Manager()
+  post_objects = DeleteManager()
 
   def __unicode__(self):
     return str(self.content)
@@ -68,8 +75,13 @@ class Post(models.Model):
     currentBatch = Batch.objects.get(id = self.batch.id)
     students = currentBatch.students.all()
     users = map(lambda x:x.user, students)
-    Notification.save_notification('lectut','The user ' +str(self.upload_user.name)+ ' uploaded a post','lectut/'+str(currentBatch.id)+'/upload',users,self)
+    if not self.pk:
+      Notification.save_notification('lectut','The user ' +str(self.upload_user.name)+ ' uploaded a post','lectut/'+str(currentBatch.id)+'/upload',users,self)
     return post
+
+  def delete(self):
+    self.deleted = True
+    self.save()
 
   def as_dict(self):
     postData={
@@ -96,9 +108,17 @@ class Uploadedfile(BaseUpload):
   description=models.CharField(max_length=100 , null=False)
   file_type=models.CharField(max_length=10 , null=False)
   upload_type=models.CharField(max_length=3 , default='tut')
+  deleted = models.BooleanField(default = False)
+
+  objects = models.Manager()
+  file_objects = DeleteManager()
 
   def __unicode__(self):
     return str(self.upload_file)
+
+  def delete(self):
+    self.deleted = True
+    self.save()
 
   def as_dict(self):
         filepath = str(self.upload_file)
@@ -116,6 +136,13 @@ class Uploadedfile(BaseUpload):
         }
         return fileData
 
+
+class post_comment(models.Model):
+  post = models.ForeignKey(Post)
+  description = models.CharField(max_length=100)
+
+  def __unicode__(self):
+    return str(self.description)
 
 class UploadFile(BaseUpload):
   upload_file=models.FileField(upload_to='lectut/images/')
