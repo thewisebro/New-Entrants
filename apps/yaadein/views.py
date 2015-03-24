@@ -67,9 +67,9 @@ def index(request,enrno=None):
       y_user.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
 #user = User.objects.get(username ='13114068')
     s = Student.objects.get(user__username=enrno)#=enrno
-    posts_usertagged = Post.objects.filter(user_tags=s)#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
-    posts_owned = Post.objects.filter(owner=s)
-    posts_onwall = Post.objects.filter(wall_user=s)
+    posts_usertagged = Post.objects.filter(user_tags=s).filter(status='A')#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
+    posts_owned = Post.objects.filter(owner=s).filter(status='A')
+    posts_onwall = Post.objects.filter(wall_user=s).filter(status='A')
     posts = list(set(list(posts_onwall)+list(posts_owned)+list(posts_usertagged)))#.order_by('post_date').reverse()
     bubble(posts)
     posts_data = []
@@ -113,6 +113,7 @@ def index(request,enrno=None):
       post_data = str(simplejson.loads(request.POST['data'])['post_text'])
       user_tagged = simplejson.loads(request.POST['data'])['user_tags']
       spots = simplejson.loads(request.POST['data'])['spot']
+# stat = simplejson.loads(request.POST['data'])['post_type']
       if spots:
         spot = Spot.objects.get(name=str(spots[0]['id']))
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
@@ -416,6 +417,29 @@ def spot_search(request):
 
 @csrf_exempt
 @CORS_allow
+def invite(request):
+  if request:
+#   import ipdb;ipdb.set_trace()
+    app = 'Yaadein'
+    student = Student.objects.get(user__username=request.user.username)
+    notif_msg1 = ' '+student.user.name+' invited you to cherrish memories with the person.'
+    user_tagged = simplejson.loads(request.body)['user_tags']
+    url = 'http://172.25.55.156:7000/profile/'+student.user.username
+    tagged_users = []
+    for user in user_tagged:
+      student_related = Student.objects.get(user__username=str(user['id']))
+      if student_related.user!=request.user:
+        tagged_users.append(student_related.user)
+    if len(user_tagged)>0: 
+      Notification.save_notification(app,notif_msg1,url,tagged_users,student)
+      return HttpResponse("True")
+    else:
+      return HttpResponse("False")
+  return HttpResponse("False")
+
+
+@csrf_exempt
+@CORS_allow
 def hashtag(request,slug):
   if request:
     posts_data = []
@@ -493,6 +517,7 @@ def spot_page(request,name):
   return HttpResponse('1')
 
 
+
 @csrf_exempt
 @CORS_allow
 def delete(request,id):
@@ -502,7 +527,9 @@ def delete(request,id):
     except Post.DoesNotExist:
       return HttpResponse("False")
     if post.owner.user==request.user or post.wall_user.user==request.user: #use request.user in place of enrollment number
-      post.delete()
+# post.delete()
+      post.status = 'B'
+      post.save()
       return HttpResponse("True")
     return HttpResponse("False")
 
@@ -520,6 +547,8 @@ def private_posts(request,id):
       return HttpResponse("Your Post is now Private.")
     return HttpResponse("You don't have the previleges to change the privacy.")
 
+@csrf_exempt
+@CORS_allow
 def trending(request):
   tag_frequency = defaultdict(int)
   for item in Post.objects.all():

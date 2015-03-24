@@ -7,5 +7,5 @@ YAADEIN_USER_STATUS = (
 POST_STATUS = (
   ("A", "Public"),
   ("B", "Private"),
-  ("RA", "Report Abuse"),
+  ("D", "Deleted"),
 )
