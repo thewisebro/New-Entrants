@@ -1,0 +1,1693 @@
+/*
+@font-face {
+    font-family: 'Ancient geek';
+
+   src:url('./fonts/GEEK.ttf') format('truetype');
+    }
+
+@font-face {
+    font-family: 'bebas neue';
+
+   src:url('./fonts/BebasNeue.otf') format('opentype');
+    }
+
+@font-face {
+    font-family: 'crimson text';
+
+   src:url('./fonts/crimson_text_roman.ttf') format('truetype');
+    }
+
+
+*/
+@font-face {
+    font-family: 'crimson text';
+    src: url('./fonts/crimson_text_roman-webfont.eot');
+    src: url('./fonts/crimson_text_roman-webfont.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/crimson_text_roman-webfont.woff') format('woff'),
+         url('./fonts/crimson_text_roman-webfont.ttf') format('truetype'),
+         url('./fonts/crimson_text_roman-webfont.svg#CrimsonTextRoman') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Ancient geek';
+    src: url('./fonts/geek-webfont.eot');
+    src: url('./fonts/geek-webfont.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/geek-webfont.woff') format('woff'),
+         url('./fonts/geek-webfont.ttf') format('truetype'),
+         url('./fonts/geek-webfont.svg#AncientGeekRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'bebas neue';
+    src: url('./fonts/bebasneue-webfont.eot');
+    src: url('./fonts/bebasneue-webfont.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/bebasneue-webfont.woff') format('woff'),
+         url('./fonts/bebasneue-webfont.ttf') format('truetype'),
+         url('./fonts/bebasneue-webfont.svg#BebasNeueRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+.margin_left
+{
+height:100%;
+float:left;
+width:2px;
+
+}
+
+a{
+outline:none;
+color:white;
+text-decoration:none;
+
+
+}
+
+body {		
+		margin:0px;
+		padding:0px;
+		background-color:white;
+			
+}
+#container{
+
+height:100%;
+width:100%;
+overflow:hidden;
+/*background-color: black;*/
+}
+.dont-show {
+			position: absolute;
+			display: block;
+			height: 18px;
+			width: 100px;
+			cursor: pointer;
+			z-index: 10;
+			color: #EC7700;
+		}
+
+		
+.search{
+			height:100%;
+			width:100%;
+			background-color:#6a4a61;
+			color:#000;
+			display:none;
+			}
+			
+.close-meerkat {
+			height: 18px;
+			width: 18px;
+			color:#3a2a31;
+			float:right;
+			cursor: pointer;
+			z-index: 10;
+			font-family:bebas neue;
+			font-size:20px;
+			font-weight:bolder;
+		}
+
+.credits {		height:100%;
+			width:100%;
+			background-color:#6a4a61;
+			display:none;
+			text-align:center;
+			color:white;
+		}
+.fadeout
+{
+z-index:-1000;
+}
+			
+#search_box
+{
+
+width:1024px;
+margin:auto;
+height:100%;
+}
+#search_input
+{
+float:left;
+margin-top:15px; 
+height:30px;
+width:600px;
+margin-left:150px;
+font-size:25px;
+color:#6a4a61;
+
+}
+#search_submit
+{
+
+font-family:Ancient geek;
+font-size:36px;
+color:white;
+letter-spacing:4px;
+height:60px;
+float:left;
+text-decoration:none;
+
+}
+
+
+#spacer{
+
+	height:100%;
+	width:300%;
+
+}
+
+
+
+
+.ss
+{
+	float:left;
+	height:100%;
+	width:33%;
+}
+
+#main_topbar
+{
+padding:0px;
+height:125px;
+width:100%;
+background-color:#bfcf04;		
+}
+
+.logout_button
+{
+font-family:bebas neue;
+text-decoration:none;
+position:relative;
+top:-125px;
+float:right;
+margin-right:50px;
+letter-spacing:3px;
+font-size:24px;
+color:white;
+
+}
+
+#main_title
+{
+font-family:Ancient geek;
+font-size:36px;
+color:white;
+float:left;
+position:relative;
+top:-100px;
+letter-spacing:10px;
+margin-left:100px;
+width:924px;
+}
+#main_intro
+{
+font-family:crimson text;
+font-size:24px;
+margin-top:100px;
+margin-right:125px;
+height:130px;
+margin-left:100px;
+width:759px;25
+letter-spacing:3px;
+color:#bfcf04;
+}
+
+#navigator
+{
+font-family:bebas neue;
+height:165px;
+float:right;
+margin-top:45px;
+font-size:36px;
+letter-spacing:8px;
+color:#bfcf04;
+text-align:righ25t;
+line-height:110%;
+}
+
+
+
+#browse_by_department_link:link
+{
+	float:right; 
+	width:410px;  
+	color:#00a0b0; 
+	font-family:bebas neue;
+	letter-spacing:2px;
+	font-size:20px;
+}
+#browse_by_department_link:visited
+{
+font-size:24px;
+color:#00a0b0;
+letter-spacing:4px;
+text-decoration:none;
+}
+#browse_by_department_link:hover
+{
+
+text-decoration:none;
+font-size:24px;
+background-color:#00a0b0;
+color:white;
+padding-left:4px;
+letter-spacing:4px;
+}
+#browse_by_department_link:active
+{
+font-size:24px;
+color:#00a0b0;
+letter-spacing:4px;
+text-decoration:none;
+}
+
+
+#browse_by_department_link_2:link
+{
+	float:right; 
+	width:410px;  
+	color:#00a0b0; 
+	font-family:bebas neue;
+	letter-spacing:2px;
+	font-size:20px;
+}
+#browse_by_department_link_2:visited
+{
+font-size:24px;
+color:#00a0b0;
+letter-spacing:4px;
+text-decoration:none;
+}
+#browse_by_department_link_2:hover
+{
+
+text-decoration:none;
+font-size:24px;
+background-color:#00a0b0;
+color:white;
+padding-left:4px;
+letter-spacing:4px;
+}
+#browse_by_department_link_2:active
+{
+font-size:24px;
+color:#00a0b0;
+letter-spacing:4px;
+text-decoration:none;
+}
+
+.back_link:hover
+{
+font-size:25px;
+}
+
+
+.link_space
+{
+float:left;
+height:50%;
+width:100%;
+margin:0px;
+padding:0px;
+}
+
+#my_courses_link:link
+{
+	float:right; 
+	width:410px;
+	color:#eb6864; 
+	font-family:bebas neue;
+	letter-spacing:2px;
+	font-size:20px;
+
+
+
+}
+#my_courses_link:visited
+{
+font-size:24px;
+color:#eb6864;
+letter-spacing:4px;
+text-decoration:none;
+
+}
+#my_courses_link:hover
+{
+
+text-decoration:none;
+font-size:24px;
+background-color:#eb6864;
+color:white;
+padding-left:4px;
+letter-spacing:4px;
+
+
+}
+#my_courses_link:active
+{
+text-decoration:none;
+font-size:24px;
+color:#eb6864;
+letter-spacing:4px;
+
+}
+
+
+
+
+
+
+#search_box_link
+{
+text-decoration:none;
+font-size:24px;
+color:#6a4a61;
+letter-spacing:4px;
+
+}
+#search_box_link:hover
+{
+text-decoration:none;
+font-size:24px;
+background-color:#6a4a61;
+color:white;
+padding-left:4px;
+letter-spacing:4px;
+
+}
+
+
+
+
+#browse_by_department{
+	float:left;
+	background-color:white;	
+	position:relative;
+	margin-left:-512px;	
+	left:50%;
+	height:100%;
+	width:1024px;
+	z-index:50;
+	padding-left:2px;
+	padding-right:2px;
+	
+	}
+
+#main{
+		padding-left:5px;
+		padding-right:5px;
+		position:relative;
+		top:0px;
+		left:50%;
+		margin-left:-512px;
+		height:100%;
+		width:1014px;
+		background-color:white;
+		z-index:23;
+}
+
+#my_courses{
+
+		float:left;
+		position:relative;
+		top:-125px;
+		margin-left:-512px;
+		padding-left:2px;
+		padding-right:2px;
+		background-color:white;
+		height:100%;
+		width:1024px;
+		z-index:50;
+}
+#search_play_area{
+
+		float:left;
+		position:relative;
+		top:-125px;
+		margin-left:-512px;
+		padding-left:2px;
+		padding-right:2px;
+		background-color:white;
+		height:100%;
+		width:1024px;
+		z-index:50;
+}
+
+#bbdr{
+	margin:0px;
+	padding:0px;
+	float:left;
+	position:relative;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:125px;
+	background-color:#bfcf04;
+	}
+
+
+
+
+#bbdl{
+	float:left;
+	margin:0px;
+	padding:0px;
+	position:relative;
+	top:0px;
+	left:0px;
+	width:50%;
+	height:125px;
+	background-color:#00a0b0;
+	}
+
+#mainr
+{
+	
+	float:right;
+	width:50%;
+	height:125px;
+	background-color:#bfcf04;
+	}
+
+#mainl
+{
+	float:left;
+	width:50%;
+	height:125px;
+	background-color:#bfcf04;
+	}
+		
+#mcr
+{
+	float:left;
+	width:50%;
+	height:125px;
+	background-color:#eb6864;
+	}
+#mcl
+{
+	float:left;
+	width:100%;
+	height:125px;
+	background-color:#bfcf04;
+}
+#mcl_container
+{
+height:100%;
+width:50%;
+float:left;
+}
+#bbdr_container
+{
+height:100%;
+width:50%;
+float:left;@m
+}
+
+
+#back_link_container_mc
+{
+font-family:bebas neue;
+font-size:20px;
+width:71px;
+height:100%;
+float:left;
+margin-right:2px;
+
+
+}
+#my_courses_back
+{
+background-color:#bfcf04;
+height:50px;
+overflow:hidden;
+}
+
+#my_courses_bbd_back
+{
+background-color:#00a0b0;
+margin-top:4px;
+height:50px;
+overflow:hidden;
+}
+#browse_by_department_main_link
+{
+background-color:#bfcf04;
+height:50px;
+font-size:20px;
+overflow:hidden;
+}
+
+#browse_by_department_mc_back
+{
+background-color:#eb6864;
+margin-top:4px;
+height:50px;
+font-size:20px;
+overflow:hidden;
+}
+#browse_by_department_mc_back_dummy
+{
+background-color:#bfcf04;
+/*margin-top:4px;*/
+height:50px;
+font-size:20px;
+overflow:hidden;
+}
+.my_courses_back_link
+{
+padding-right:15px;
+writing-mode:tb-rl;
+filter:flipv fliph;
+height:20px;
+margin-top:-20px;
+overflow:visible;
+-o-transform: rotate(-90deg);
+-moz-transform: rotate(-90deg);
+-webkit-transform: rotate(-90deg);
+
+}
+
+.my_courses_bbd_back_link
+{
+padding-right:15px;
+writing-mode:tb-rl;
+filter:fliph flipv;
+-o-transform: rotate(-90deg);
+-moz-transform: rotate(-90deg);
+-webkit-transform: rotate(-90deg);
+overflow:visible;
+margin-top:-20px;
+position:relative;
+}
+
+.my_courses_back_link:hover
+{
+height:25px;
+font-size:21px;
+}
+.my_courses_bbd_back_link:hover
+{
+height:25px;
+font-size:21px;
+position:relative;
+}
+
+
+.space
+{
+
+letter-spacing:3px;
+}
+
+#my_courses_topbar
+{
+height:125px;
+width:949px;
+background-color:#eb6864;
+}
+#my_courses_logout_button
+{
+font-family:bebas neue;
+text-decoration:none;
+float:left;
+text-align:right;
+width:924px;
+margin-right:25px;
+letter-spacing:3px;
+font-size:24px;
+color:white;
+}
+
+#my_courses_title
+{
+font-family:Ancient geek;
+font-size:36px;
+color:white;
+float:left;
+letter-spacing:10px;
+margin-left:25px;
+margin-top:20px;
+width:424px;
+}
+#my_courses_page_container
+{
+width:949px;
+float:left;
+height:100%;
+}
+#welcome_text
+{
+width:420px;
+height:20px;
+margin-top:55px;
+text-align:right;
+color:white;
+margin-right:25px;
+float:right;
+font-family:crimson text;
+}
+
+#prof_name_bbd
+{
+width:225px;
+height:20px;
+margin-top:55px;
+text-align:right;
+color:white;
+margin-right:25px;
+float:left;
+font-family:crimson text;
+}
+
+.serial_no{width:5%;float:left;padding-left:7%;font-family:bebas neue;font-size:16px;color:#57435E;}
+.prof_name{width:20%;float:left;font-family:bebas neue;font-size:16px;color:#57435E;}
+.course_id{width:10%;float:left;
+font-family:bebas neue;font-size:16px;color:#57435E;}
+.check_box{width:3%;}
+
+
+
+#my_courses_selection
+{ 
+
+float:left;
+width:100%;
+height:50px;
+margin-bottom:5px;
+
+}
+
+.my_courses_selected_link
+{
+background-color:#eb6864;
+color:white;
+}
+.my_courses_selection_link
+{
+float:left;
+height:40px;
+width:180px;
+margin-top:2px;
+margin-right:2px;
+
+text-align:center;
+font-size:25px;
+padding-top:10px;
+font-family:bebas neue;
+letter-spacing:2px;
+}
+.my_courses_inactive_link
+{
+color:#6a4a61;
+}
+.my_courses_selection_link:hover 
+{
+background-color:#eb6864;
+color:white;
+}
+
+#my_courses_course_selection
+{
+
+width:300px;
+float:left;
+overflow-y:hidden;
+overflow-x:hidden;
+letter-spacing:2px;
+width:500px;
+background-color:transparent;
+padding-left:20px;
+height:340px;
+
+}
+.my_courses_course_link
+{
+width:100%;
+background-color:white;
+color:#6a4a61;
+}
+
+.my_courses_course_link:hover
+{
+color:#eb6864;
+width:100%;#eb6864
+}
+.my_courses_course_link_selected
+{
+width:100%;
+background-color:white;
+color:#eb6864;
+}
+
+.my_courses_course_link_selected:hover
+{
+color:#6a4a61;
+width:100%;
+}
+.course_code
+{
+margin-top:20px;
+font-family:bebas neue;
+font-size:35px;
+line-height:30px;
+margin-bottom:0px;
+background-color:transparent;
+padding-bottom:2px;
+}
+
+.course_name
+{
+font-family:crimson text;
+font-size:14px;
+color:#6a4a61;
+margin-top:-6px;
+font-style:bold;
+height:15px;
+}
+
+#my_courses_files
+{
+width:100%;
+overflow-y:hidden;
+overflow-x:hidden;
+}
+.file_reg
+{
+letter-spacing:2px;
+float:left;
+text-align:center;
+width:60%;
+font-family:bebas neue;
+font-size:16px;
+color:#6a4a61;
+}
+.file_reg:hover
+{
+background-color:#6a4a61;
+color:white;
+}
+.file
+{
+letter-spacing:2px;
+float:left;
+text-align:center;
+width:90%;
+font-family:bebas neue;
+font-size:16px;
+color:#6a4a61;
+}
+.file:hover
+{
+background-color:#6a4a61;
+color:white;
+}
+
+#ec101_lists
+{
+float:left;
+height:150%; 
+width:400%;
+overflow-y:visible;
+overflow-x:hidden;
+
+}
+.file_list
+{
+float:left;
+width:20%;
+/*height:100%;*/
+overflow-y:visible;
+font-family: bebas neue;
+font-size:16px;
+color:#57435E;
+overflow-x:auto;
+}
+.subjects
+{
+float:left;
+width:500%;
+height:100%;
+color: #6A4A61;
+float: left;
+font-family: bebas neue;
+}
+
+.subjects_bbd
+{
+float:left;
+width:500%;
+height:100%;
+color: #6A4A61;
+float: left;
+font-family: bebas neue;
+
+}
+
+#ec101
+{
+float:left;
+width:14%;
+height:100%;
+}
+
+
+#ce101_lists
+{
+float:left;
+height:150%; #eb6864
+width:400%;
+overflow-y:visible;
+overflow-x:hidden;
+
+}
+
+#ce101
+{
+float:left;
+width:14%;
+height:100%;
+}
+
+.list_selected
+{
+position:relative;
+z-index:100;
+
+}
+.list_inactive
+{
+color:white;
+position:relative;
+z-index:-100;
+}
+
+.reg_fac
+{
+width:30%;
+}
+
+
+	.my_courses_back_link
+	{
+		padding-right:15px\0/IE8+9;
+		writing-mode:tb-rl\0/IE8+9;
+		/*filter:flipv fliph\0/IE8+9;*/
+		height:320px\0/IE8+9;
+		/*margin-top:-280px;*/
+		overflow:visible\0/IE8+9;
+		position:relative\0/IE9;
+		top:-320px\0/IE9;
+		-o-transform: rotate(-90deg)\0/IE8+9;
+		-moz-transform: rotate(-90deg)\0/IE8+9;
+		-webkit-transform: rotate(-90deg)\0/IE8+9;
+		
+		
+	}
+        
+        #my_courses_bbd_back .my_courses_bbd_back_link{height:320px\0/IE8+9;position:relative\0/IE9;top:-320px\0/IE9;}
+	.my_courses_bbd_back_link
+	{
+		padding-right:15px\0/IE8+9;
+		writing-mode:tb-rl\0/IE8+9;
+		/*filter:fliph flipv\0/IE8+9;*/
+		overflow:visible\0/IE8+9;
+		/*margin-top:-190px;*/
+		height:200px\0/IE8+9;
+		position:relative\0/IE8+9;
+		top:-200px\0/IE9;
+		-o-transform: rotate(-90deg)\0/IE8+9;
+		-moz-transform: rotate(-90deg)\0/IE8+9;
+		-webkit-transform: rotate(-90deg)\0/IE8+9;
+		
+	}
+       .my_courses_bbd_back_link:hover {height:200px\0/IE8+9;}
+       .my_courses_back_link:hover {height:320px\0/IE8+9;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#scrollbar1 { width: 520px; margin: 20px 0 10px; }
+#scrollbar1 .viewport { width: 500px; height: 200px; overflow: hidden; position: relative; }
+#scrollbar1 .overview { list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; }
+#scrollbar1 .scrollbar{ background: transparent url(../images/bg-scrollbar-track-y.png) no-repeat 0 0; position: relative; background-position: 0 0; float: right; width: 15px; }
+#scrollbar1 .track { background: transparent url(../images/bg-scrollbar-trackend-y.png) no-repeat 0 100%; height: 100%; width:13px; position: relative; padding: 0 1px; }
+#scrollbar1 .thumb { background: transparent url(../images/bg-scrollbar-thumb-y.png) no-repeat 50% 100%; height: 20px; width: 25px; cursor: pointer; overflow: hidden; position: absolute; top: 0; left: -5px; }
+#scrollbar1 .thumb .end { background: transparent url(../images/bg-scrollbar-thumb-y.png) no-repeat 50% 0; overflow: hidden; height: 5px; width: 25px; }
+#scrollbar1 .disable { display: none; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ #browse_by_department_back
+{
+font-family:bebas neue;
+font-size:30px;
+width:71px;
+height:50px;
+float:right;
+margin-left:2px;
+background-color:#bfcf04;
+margin-right:0px;
+}
+
+#upload_back
+{
+font-family:bebas neue;
+font-size:30px;
+width:71px;
+height:50px;
+float:right;
+margin-left:2px;
+background-color:#bfcf04;
+}
+
+
+.browse_by_department_back_link
+{
+padding-right:15px;
+height:20px;
+writing-mode:tb-rl;
+filter:flipv fliph;
+width:40px;%;
+-o-transform: rotate(-90deg);
+-moz-transform: rotate(-90deg);
+-webkit-transform: rotate(-90deg);
+position:relative;
+top:-30px;
+}
+
+.browse_by_department_back_link:hover
+{
+height:25px;
+font-size:25px;
+}
+
+
+
+#browse_by_department_topbar
+{
+height:125px;
+width:949px;
+background-color:#00a0b0;
+}
+#browse_by_department_logout_button
+{
+font-family:bebas neue;
+text-decoration:none;
+float:left;
+text-align:right;
+width:924px;
+margin-right:25px;
+letter-spacing:3px;
+font-size:24px;
+color:white;
+}
+
+#browse_by_department_title
+{
+font-family:Ancient geek;
+font-size:36px;
+color:white;
+float:left;
+letter-spacing:10px;
+margin-left:25px;
+margin-top:20px;
+width:674px;
+}
+#browse_by_department_page_container
+{
+width:949px;
+float:left;
+height:100%;
+position:absolute;
+top:0px;
+}
+#whats_new2
+{
+width:225px;
+height:51px;
+margin-top:25px;
+text-align:right;
+color:white;
+margin-right:25px;
+float:left;
+font-family:crimson text;
+}
+
+#browse_by_department_selection
+{ 
+
+float:left;
+width:100%;
+height:50px;
+margin-bottom:5px;
+}
+
+.browse_by_department_selected_link
+{
+background-color:#00a0b0;
+color:white;
+}
+.browse_by_department_selection_link
+{
+float:left;
+height:40px;
+width:180px;
+margin-top:2px;
+margin-right:2px;
+text-align:center;
+font-size:25px;
+padding-top:10px;
+font-family:bebas neue;
+letter-spacing:2px;
+}
+.browse_by_department_inactive_link
+{
+color:#6a4a61;
+}
+.browse_by_department_selection_link:hover 
+{
+background-color:#00a0b0;
+color:white;
+}
+
+
+
+#dept_tab_container
+{
+width:500px;
+height:325px;
+float:left;
+overflow-x:hidden;
+}
+
+#dept_tab
+{
+width:200%;
+float:left;
+overflow-y:visible;
+}
+
+#dept_list
+{
+width:50%;
+float:left;
+overflow-x:hidden;
+}
+
+#browse_by_department_course_selection
+{
+
+width:50%;
+height:100%;
+float:left;
+overflow:hidden;
+letter-spacing:2px;
+background-color:transparent;
+}
+
+.browse_by_department_course_link
+{
+width:100%;
+background-color:white;
+color:#6a4a61;
+
+}
+
+.browse_by_department_course_link:hover
+{
+color:#00a0b0;
+width:100%;
+
+}
+.browse_by_department_course_link_selected
+{
+width:100%;
+background-color:white;
+color:#00a0b0;
+
+}
+
+
+.browse_by_department_link_selected:hover
+{
+color:#00a0b0;
+width:100%;
+}
+.dept_name
+{
+font-family:bebas neue;
+color:#00a0b0;
+font-size:20px;
+padding-left:22px;
+padding-top:10px;
+}
+.dept_name:hover
+{
+color:white;
+background-color:#00a0b0;
+
+}
+
+
+
+#details_tab_container
+
+{
+float:left;
+width:425px;
+overflow-x:hidden;
+overflow-y:hidden;
+height:325px;
+}
+
+#details_tab
+{
+float:left;
+width:200%;
+}
+
+#profs_container
+{
+float:left;
+height:100%;
+width:50%;
+}
+#profs
+{
+float:left;
+height:100%;
+width:200%;
+}
+.department_prof_div,.department_prof_div div{
+float:left;
+}
+
+.profs_dept
+{
+
+float:left;
+width:425px;
+}
+.prof_active
+{
+color:#00a0b0;
+text-align:center;
+z-index:1000;
+margin-top:5px;
+}
+.prof_active:hover
+{color:white;background-color:#00a0b0;}
+.prof_inactive
+{
+display:none;
+color:white;
+z-index:-1000;
+}
+
+#browse_by_department_files
+{
+float:right;
+width:50%;
+overflow-y:visible;
+overflow-x:hidden;
+
+}
+
+
+#ec102_lists
+{
+float:left;
+height:150%; 
+width:400%;
+overflow-y:visible;
+overflow-x:hidden;
+
+}
+
+#ec102
+{
+float:left;
+width:14%;
+height:100%;
+}
+
+
+#ce102_lists
+{
+float:left;
+height:150%; 
+width:400%;
+overflow-y:visible;
+overflow-x:hidden;
+
+}
+
+#ce102
+{
+float:left;
+width:14%;
+height:100%;
+}
+
+.select_all_checkbox
+{
+width:100%;
+height:20px;
+background-color:#eee;
+margin-top:5px;
+margin-bottom:5px;
+}
+
+.select_all
+{
+float:right;
+margin-right:24px;
+}
+
+.file_list div
+{
+float:left;
+}
+
+
+/* Tiny Scrollbar */
+#scrollbarer {z-index:100;float:left;width:425px;overflow:hidden;height:340px;}
+/* #scrollbarer .viewport { width: 400px; height: 325px; overflow: hidden; position: relative; }
+#scrollbarer .overview { list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; }
+#scrollbarer .scrollbar{ position: relative; background-position: 0 0; float: right; width: 15px; }
+#scrollbarer .track { background-color:red; no-repeat 0 100%; height: 100%; width:13px; position: relative; padding: 0 1px; }
+#scrollbarer .thumb { height: 20px; width: 25px; cursor: pointer; overflow: hidden; position: absolute; top: 0; left: -5px; }
+#scrollbarer .thumb .end { background-color:green; overflow: hidden; height:100%; width: 25px; }
+#scrollbarer .disable { display: none; }
+*/
+
+#link_div{width:615px;margin-bottom:2px;float:left;margin-right:285px;}
+#link_div .viewport{width:600px;max-height:200px;float:left;height:100%;}
+#link_div .scrollbar{overflow:hidden;}
+
+
+.viewport { width: 485px;height:100%; overflow:hidden; position: relative; }
+.overview { list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; width:100%; }
+.scrollbar{ background: transparent url(bg-scrollbar-track-y.png) no-repeat 0 0; position: relative; background-position: 0 0; float: right; width: 15px; }
+.track { background: transparent url(bg-scrollbar-trackend-y.png) no-repeat 0 100%; height: 100%; width:13px; position: relative; padding: 0 1px; }
+.thumb { background: transparent url(bg-scrollbar-thumb-y.png) no-repeat 50% 100%; height: 20px; width: 25px; cursor: pointer; overflow: hidden; position: absolute; top: 0; left: -5px; }
+.thumb .end { background: transparent url(bg-scrollbar-thumb-y.png) no-repeat 50% 0; overflow: hidden; height: 5px; width: 25px; }
+.disable { display: none; }
+
+
+
+#scroll_prof_target .overview
+{
+
+list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0;overflow:visible;
+}
+#scroll_dept_target .overview{ list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; width:415px;}
+#scroll_dept_target{  width: 425px;overflow:hidden;height:325px;position: relative;}
+#scroll_prof_target{  width: 410px;height:325px; overflow:hidden; position: relative;}
+#scrollbarer .viewport{ width: 410px;height:340px; overflow:hidden; position: relative;}
+#scrollbarer .overview{list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; /*width:100%; height:100%;*/}
+
+/* login form */
+
+#login_form
+{
+float:right;
+height:100px;
+width:300px;
+margin-top:100px;
+}
+
+#login_button
+{
+border:none;
+background-color:white;
+color:#bfcf04;
+font-size:27px;
+float:right;
+margin-right:37px;
+font-family:bebas neue;
+letter-spacing:2px;
+margin-top:2px;
+float:left;
+width:250px;
+text-align:right;
+padding:0px;
+}
+
+.form
+{
+border:none;
+background-color:#bfcf04;
+color:white;
+margin-bottom:4px;
+height:30px;
+font-family:crimson text;
+font-size:20px;
+width:250px;
+text-align:right;
+}
+
+#password_show
+{
+display:none;
+
+
+}
+
+
+#contact_us
+{
+    color:#00a0b0;
+    font-family: verdana;
+    margin-left: 30px;
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+
+
+/* download button */
+
+.download_button
+{
+float:right;
+border:none;
+background:transparent;
+color:#00a0b0;
+font-family:bebas neue;
+margin-right:20px;
+cursor:pointer;
+font-size:20px;
+margin-top:20px;
+}
+
+#d_button_mc{
+
+color:#eb6864;
+
+}
+
+#delete_prof
+{
+color:#eb6864;
+
+}
+
+
+/*search button of main page */
+#search_link_main
+{
+cursor:pointer;
+float:right;
+border:none;
+background:transparent;
+color:#6a4a61;
+font-family:bebas neue;
+font-size:20px;
+margin-right:20px;
+margin-top:20px;
+}
+
+
+/* go back link */
+
+#go_back_container
+{
+float:left;
+font-family:bebas neue;
+color:#00a0b0;
+width:100%;
+}
+
+
+
+/* main page links */
+
+#search_box_link_main
+{
+	float:right; 
+	width:410px;  
+	color:#6a4a61; 
+	font-family:bebas neue;
+	letter-spacing:2px;
+	font-size:20px;
+
+
+
+}
+#search_box_link_main:hover
+{
+text-decoration:none;
+font-size:24px;
+background-color:#6a4a61;
+color:white;
+padding-left:4px;
+letter-spacing:4px;
+
+}
+
+
+/* styling checkboxes */
+
+.link_container
+{
+width:100%;
+margin-bottom:8px;
+}
+.link_container:hover
+{
+background-color:#6a4a61;
+color:white;
+}
+
+.link_container:hover .file
+{
+color:white;
+}
+
+.link_container:hover *
+{
+color:white;
+}
+
+
+/* the upload form*/
+
+#upload
+{
+    color:#00a0b0;
+    font-family: bebas neue;
+    margin-left: 30px;
+    margin-top: 100px;
+    font-size: 20px;
+}
+#upload input
+{
+background-color:none;
+border:1px 1px solid;
+font-family:crimson text;
+text-decoration:none;
+
+}
+
+#widthify
+{
+overflow:hidden;
+width:100px;
+float:left;
+
+}
+
+
+
+
+/* css only for IE 7  */
+
+
+#main{
+*+position:absolute;
+*+top:0px;
+}
+#mainr{
+*+position:absolute;
+*+top:0px;
+}
+#meerkat-wrap
+{
+*+left:0px;
+}
+#main_topbar *
+{
+*+position:relative;
+*+top:10px;
+}
+#main_title
+{
+*+top:50px;
+}
+#navigator
+{
+*+text-align:right;
+}
+#navigator *
+{
+*+margin-left:600px;
+}
+#search_play_area
+{
+*+position:absolute;
+*+top:0px;
+}
+#searchr
+{
+*+position:absolute;
+*+top:0px;
+*+right:0px;
+}
+.my_courses_back_link
+{
+*+overflow:visible;
+*+height:250px;
+*+position:relative;
+*+top:-250px;
+*+cursor:pointer;
+}
+.my_courses_back_link:hover
+{
+*+height:250px;
+}
+.my_courses_bbd_back_link
+{
+*+overflow:visible;
+*+height:250px;
+*+position:relative;
+*+top:-250px;
+*+cursor:pointer;
+}
+.my_courses_bbd_back_link:hover
+{
+*+height:250px;
+}
+#browse_by_department_mc_back_dummy .my_courses_bbd_back_link
+{
+*+top:0px;
+}
+#search_selection
+{
+*+margin-top:10px;
+}
+
+#upload_container *
+{
+*+float:left;
+}
+
+/* facebox */
+
+
+#backy_fb
+{
+position:absolute;
+width:100%;
+height:100%;
+background-color:black;
+top:0px;
+z-index:500;
+display:none;
+opacity:0.75;
+}
+#login_fresh_show
+{
+position:absolute;
+top:50%;
+left:50%;
+padding:25px;
+width:400px;
+height:200px;
+margin-left:-225px;
+margin-top:-75px;
+display:none;
+z-index:501;
+background-color:white;
+opacity:1.00;
+font-family:crimson text;
+color:grey;
+line-height:22px;
+font-size:16px;
+}
+#keyboard_shortcuts_facebox
+{
+position:absolute;
+top:50%;
+left:50%;
+padding:25px;
+width:400px;
+height:150px;
+margin-left:-225px;
+margin-top:-75px;
+display:none;
+z-index:501;
+background-color:white;
+opacity:1.00;
+font-family:crimson text;
+color:grey;
+font-size:16px;
+line-height:22px;
+}
+
+.cross
+{
+float:right;
+font-size:20px;
+cursor:pointer;
+}
+

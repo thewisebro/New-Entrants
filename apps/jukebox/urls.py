@@ -37,6 +37,7 @@ urlpatterns = patterns('',
 # Json Starting
     url(r'^trending/new/$', TemplateView.as_view(template_name='jukebox/trending_json.html')), # for practice
     url(r'^trending/$', TrendingJsonView.as_view()),
+    url(r'^new_releases/$', NewReleasesView.as_view()),
     url(r'^artists/$', ArtistsJsonView.as_view(), name='artists'),
     url(r'^albums/$', AlbumsJsonView.as_view(), name='albums'),
     url(r'^albums/(?P<id>[\d]+)/$', AlbumDescJsonView.as_view(), name='album_desc'),

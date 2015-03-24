@@ -1,0 +1,16 @@
+{% extends "internship/base.html" %}
+
+{% block app_content %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/ckeditor/ckeditor.js"></script>
+
+{% if error_msg %}
+  {{ error_msg }}
+{% endif %}
+
+{% include "internship/generic_form.html" %}
+
+<script type="text/javascript">
+    CKEDITOR.replace('notice',{height:"100", toolbar:"Basic"} ); {# name or id of the textarea that has to be used with CKEditor #}
+</script>
+
+{% endblock app_content %}

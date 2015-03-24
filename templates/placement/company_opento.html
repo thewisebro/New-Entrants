@@ -1,0 +1,50 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+<h3>{{ company.name }} is open for</h3>
+<hr/>
+<div class="tabbable tabs-left">
+  <ul class="nav nav-tabs">
+
+    {% for branch in opento %}
+    {% ifchanged branch.graduation %}
+    <li {% if forloop.first %}class="active"{% endif %}>
+      <a href="#{% for word in branch.get_graduation_display.split %}{{word}}{% if not forloop.last %}_{% endif %}{% endfor %}" data-toggle="tab">
+        {{ branch.get_graduation_display }}
+      </a>
+    </li>
+    {% endifchanged %}
+    {% endfor %}
+
+  </ul>
+  <div class="tab-content">
+    {% for branch in opento %}
+
+    {% ifchanged branch.graduation %}
+
+    {% if forloop.first %}
+    <div class="tab-pane active" id="{% for word in branch.get_graduation_display.split %}{{word}}{% if not forloop.last %}_{% endif %}{% endfor %}">
+      <ul>
+        {% else %}
+      </ul>
+    </div>
+    <div class="tab-pane" id="{% for word in branch.get_graduation_display.split %}{{word}}{% if not forloop.last %}_{% endif %}{% endfor %}">
+      <ul>
+        {% endif %}
+
+        {% endifchanged %}
+
+        <li>{{ branch.name }}</li>
+
+        {% if forloop.last %}
+      </ul>
+    </div>
+    {% endif %}
+
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap-tab.js"></script>
+{% endblock %}

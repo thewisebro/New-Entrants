@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import authenticate, login as auth_login,\
                                  logout as auth_logout
 from django.contrib.auth.models import check_password
@@ -13,6 +15,9 @@ from nucleus.models import User, Student, WebmailAccount, IntroAd
 from nucleus.forms import LoginForm
 from nucleus.utils import check_webmail_login, is_user_django_loginable,\
                           get_webmail_account
+from nucleus import constants as NC
+from games import constants as GC
+from groups.models import Group
 from utilities.models import UserSession
 
 import logging
@@ -23,6 +28,26 @@ def index(request):
 
 def close_dialog(request, dialog_name):
   return render(request, 'close_dialog.html', {'dialog_name': dialog_name})
+
+def get_links(request):
+  if not request.user.is_authenticated() or request.user.in_group('Student'):
+    apps = NC.student_apps
+  elif request.user.in_group('Faculty'):
+    apps = NC.faculty_apps
+  else:
+    apps = NC.other_apps
+  channeli_apps = []
+  for app in apps:
+    channeli_apps.append([app,NC.channeli_apps[app]])
+  data = {
+    'apps': channeli_apps,
+    'links': NC.channeli_links,
+    'games': GC.channeli_games,
+  }
+  if request.user.is_authenticated() and request.user.in_group('IMG Member'):
+      data['img_tools'] = NC.img_tools
+  return HttpResponse(json.dumps(data), content_type='application/json')
+
 
 def login(request, dialog=False):
   if dialog:
@@ -223,7 +248,7 @@ def make_user_logged_in(user, request, next_page, dialog,
   """
   if not (request.META.has_key('HTTP_X_FORWARDED_HOST') and\
         request.META['HTTP_X_FORWARDED_HOST'] == 'people.iitr.ernet.in')\
-        and user.in_group('Student') and user.student.semester_no == 0:
+        and user.in_group('Student') and user.student.passout_year != None:
     logger.info("Nucleus Login : User(username='"+user.username+"')"+\
                 " couldn't login as passout_year is not NULL.")
     messages.error(request, "You have graduated from IIT Roorkee So you"+\

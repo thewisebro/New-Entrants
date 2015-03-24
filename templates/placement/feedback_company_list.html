@@ -1,0 +1,82 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+<h3>Feedback for {{ session }}</h3>
+<hr/>
+
+{% if years_list %}
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    {% for year_display,name in years_list %}
+    {% if year == year_display %}
+    <li class="active">
+      <a>
+        {{ name }}
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url 'placement.views_feedback.index' year_display %}">
+        {{ name }}
+      </a>
+    </li>
+    {% endif %}
+    {% endfor %}
+
+    {% if current_year == year %}
+    <li class="active">
+      <a>Current Session</a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url 'placement.views_feedback.index' %}">Current Session</a>
+    </li>
+    {% endif %}
+
+  </ul>
+</div>
+
+{% endif %}
+
+<div style="float:left;">
+  Total Feedbacks : {{ total_feedbacks }}
+</div>
+
+{% if status == 'VRF' %}
+<div style="float:left;margin-left:550px;margin-top:-10px;margin-bottom:10px;">
+  <a href="{% url 'placement.views_feedback.fill' %}">
+    <button class="btn btn-info">
+      <div style="width:100px;">
+        Give Feedback
+      </div>
+    </button>
+  </a>
+</div>
+{% endif %}
+{% if feedbacks %}
+<table class="sortable table table-striped table-bordered table-condensed" id="t1">
+  <thead>
+    <tr>
+      <th>S.No.</th>
+      <th>Company</th>
+      <th>Feedbacks</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for feedback in feedbacks %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>
+        <a href="{% url 'placement.views_feedback.company' feedback.company %}">
+          {{ feedback.company__name }}
+        </a>
+      </td>
+      <td>{{ feedback.count }}</td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

@@ -1,27 +1,7 @@
 @import '../base'
 
-*
-  margin: 0
-  padding: 0
-
-a
-  color: $blue-link
-  text-decoration: none
-
 body
   overflow-y: scroll
-  color: #202020
-  font-family: 'Arial', sans-serif
-  font-size: 13px
-
-.float-left
-  float: left
-
-.float-right
-  float: right
-
-.clear-both
-  clear: both
 
 #header
   position: fixed
@@ -37,7 +17,7 @@ body
   #header-title
     float: left
     width: 110px
-    margin-left: 10px
+    margin-left: 18px
     font-size: 24px
     color: $blue-link
 
@@ -104,13 +84,13 @@ body
   top: 40px
   bottom: 0
   left: 0
-  width: 120px
+  width: 150px
   z-index: 200
   background: #282828
 
   .tab
-    width: 108px
-    padding: 10px 0px 10px 12px
+    width: 130px
+    padding: 12px 0px 12px 20px
     height: 20px
     line-height: 20px
     cursor: pointer
@@ -141,20 +121,20 @@ body
         margin-left: -3px
 
     .tab-name
-      margin-left: 10px
+      margin-left: 15px
 
   .active-tab
     background-color: rgba(0, 0, 0, 0.45)
     border-left: 2px solid $blue-link
-    width: 108px
-    padding: 10px 0px 10px 10px
+    width: 130px
+    padding: 12px 0px 12px 18px
     &:hover
       background-color: rgba(0, 0, 0, 0.45)
 
   #tab-arrow
     position: fixed
     top: 140px
-    left: 112px
+    left: 140px
     width: 10px
     height: 20px
     padding: 10px 0px
@@ -171,8 +151,8 @@ $footer-height: 40px
   float: left
   min-width: 450px
   max-width: 700px
-  width: 51%
-  margin-left: 120px
+  width: 55%
+  margin-left: 150px
   padding-left: 20px
   min-height: 100%
 
@@ -249,13 +229,50 @@ $footer-height: 40px
     background-color: #fafafa
     border-left: 1px solid #d0d0d0
 
+.appbox-container
+  border-top: 1px solid #eee
+  border-left: 1px solid #eee
+
+.appbox
+  width: 33%
+  min-width: 200px
+  border-bottom: 1px solid #eee
+  border-right: 1px solid #eee
+  overflow: hidden
+  cursor: pointer
+  background: $white
+  float: left
+
+  .app-pic
+    width: 34px
+    height: 34px
+    margin: 15px
+    float: left
+    background-size: 25px 25px
+
+  .app-name
+    float: left
+    padding-left: 5px
+    font-size: 13px
+    color: #0072dc
+    line-height: 63px
+    a
+      text-decoration: none
+      color: #0072dc
+      &:visited, &:active
+        color: #0072dc
+
+.linkbox
+  .app-name
+    padding-left: 20px
+
 .app-heading
   font-size: 14px
   font-family: $sans-serif
   font-weight: bold
   color: $red
   margin-top: 10px
-  margin-bottom: 10px
+  margin-bottom: 17px
 
 .online-users
   width: 200px
@@ -374,6 +391,57 @@ $footer-height: 40px
   padding: 15px
   border: 1px solid $border-gray
   border-radius: 2px
+
+#events-birthdays
+  margin-top: 20px
+
+.right-box
+  margin-bottom: 20px
+  background: $white
+  border: 1px solid $border-gray
+  border-radius: 2px
+  display: none
+
+  .right-content-title
+    height: 16px
+    padding: 8px 0 5px 10px
+    font-size: 14px
+    line-height: 16px
+    color: #DD4B39
+    border-bottom: 1px solid #eee
+    background: $header-bg
+
+  .right-content-information
+    .event-box
+      background-color: #ffffff
+      border-bottom: 1px solid #eee
+      padding: 5px 5px 5px 0
+      cursor: pointer
+      &:hover
+        background: #fafaff
+      .event-name1
+        margin-left: 10px
+        font-size: 12px
+        line-height: 16px
+        color: #0072dc
+
+      .event-date1
+        width: 180px
+        margin-left: 10px
+        font-size: 12px
+        color: #6d6c6c
+        line-height: 16px
+        margin-top: 1px
+        .date, .time
+          color: #333333
+
+  .right-content-see-more
+    margin: 5px 10px
+    span
+      color: #0072DC
+      cursor: pointer
+
+
 
 #footer
   &, a

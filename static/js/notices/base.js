@@ -361,7 +361,7 @@ function redirection()            //The main controller function which defines t
 function create_static_divs()                //Create static buttons like upload, new, old, and additional features, when switched
 {
     $("#content").empty();
-    $("#right-column").empty();
+    $("#right-column .content").empty();
     $('#content').html(welcome_html());
     if(privelege==1)
       $('#notices-header').append(upload_html());
