@@ -274,7 +274,9 @@ def make_user_logged_in(user, request, next_page, dialog,
   user_session.browser = request.user_agent.browser.family
   user_session.os = request.user_agent.os.family
   user_session.save()
-  return HttpResponseRedirect('/close_dialog/login_dialog/')
+
+  if dialog:
+      return HttpResponseRedirect('/close_dialog/login_dialog/')
 
   about_intro = IntroAd.objects.get_or_create(name = 'channeli_about')[0]
   if not about_intro.visited_users.filter(pk=user.pk).exists():
