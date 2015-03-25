@@ -50,23 +50,28 @@ MAX_VIDEO_SIZE = 20971520      # 20 MB
 
 
 # VIEWS
+@csrf_exempt
 @CORS_allow
 def dispbatch(request):
   active = request.user.is_authenticated
   if active:
-    userType = getUserType()
-    if request.user.in_group('Student'):
+    userType = getUserType(request.user)
+    if userType == "0":
       student = request.user.student
       batches = student.batch_set.all()
       courses = map(lambda x: x.course, batches)
-      context = {'courses': courses,
-                 'batches': batches}
+      user_info = request.user.serialize()
+      batches_info = map(lambda x: batch_dict(x),batches)
+      data = {'user': user_info,
+              'batches': batches_info,
+              'userType': userType}
+      return HttpResponse (json.dumps(data),content_type='application/json')
 #      index = settings.PROJECT_ROOT + '/apps/lectut/static/lectut-front/dist/index.html'
 #      with open(index,'r') as f:
 #       response =  HttpResponse(f.read())
 #       return response
 #return render(request, 'dist/index.html', context)
-    elif request.user.in_group('Faculty'):
+    elif userType == "1":
       return HttpResponse("You are a faculty")
 #    else:
 #      return HttpResponse("You are not enrolled.Please visit IMG")
