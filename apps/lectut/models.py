@@ -1,3 +1,5 @@
+""" LECTUT MODELS """
+
 from core import models
 from core import forms
 
@@ -11,12 +13,10 @@ from django.db.models.signals import post_save
 from datetime import datetime, timedelta
 import os
 
-#from lectut.views import getFileType
 from notifications.models import Notification
 
 fs = FileSystemStorage(location='Uploads')
 
-# Create your models here.
 
 class TextNotice(models.Model):
   text=models.CharField(max_length=500 , null=False)
@@ -43,19 +43,19 @@ class BaseUpload(models.Model):
           self.__class__.objects.all().update(featured = False)
      super(Model, self).save(*args, **kwargs)"""
 
-'''Act_Types = (
+Act_Types = (
             ('lec' , 'Lecture'),
             ('tut' , 'Tutorial'),
             ('sol' , 'Solution'),
             ('que' , 'Question'),
-            ('exm' , 'Exam Papers')
+            ('exm' , 'Exam Papers'),
             )
-'''
+
 class DeleteManager(models.Manager):
   def get_query_set(self):
     return super(DeleteManager, self).get_query_set().filter(deleted = False)
 
-# Each post attributes
+''' Each post attributes '''
 class Post(models.Model):
   upload_user = models.ForeignKey(User)
   batch = models.ForeignKey(Batch)
@@ -89,19 +89,33 @@ class Post(models.Model):
       'upload_user': str(self.upload_user.name),
       'user_image': str(self.upload_user.photo_url),
       'datetime_created':str(self.datetime_created),
-      'batch':str(self.batch),
+      'batch':self.batch_dict(),
       'content':self.content,
       'privacy':self.privacy,
     }
     return postData
 
-# Get path where uploaded file is saved
+  def batch_dict(self):
+    batch_info = {
+                  'id':self.batch.id,
+                  'credits':self.batch.course.credits,
+                  'name': self.batch.name,
+                  'course_name':self.batch.course.name,
+                  'code':self.batch.course.code,
+                  'subject_area':self.batch.course.subject_area,
+                  'semtype':self.batch.course.semtype,
+                  'year':self.batch.course.year
+                 }
+    return batch_info
+
+
+#  Gives path where uploaded file is saved
 def upload_path(instance , filename ):
   return ('lectut/'+instance.file_type+'/'+filename)
 #  return os.path.join('lectut/',instance.file_type,'/')
 
 
-# Each file attributes
+''' Each file attributes '''
 class Uploadedfile(BaseUpload):
   post = models.ForeignKey(Post)
   upload_file=models.FileField(upload_to= upload_path)
@@ -144,36 +158,6 @@ class post_comment(models.Model):
   def __unicode__(self):
     return str(self.description)
 
-class UploadFile(BaseUpload):
-  upload_file=models.FileField(upload_to='lectut/images/')
-  name=models.CharField(max_length=100 , null=False)
-  file_type=models.CharField(max_length=10 , null=False)
-  upload_type=models.CharField(max_length=3 , default='tut')
-  privacy=models.BooleanField(default=False)      #false means visible to all
-  upload_user=models.ForeignKey(User)
-  batch=models.ForeignKey(Batch)
-
-  '''def save(self, *args, **kwargs):
-    uploadedFile = super(UploadFile , self).save(*args, **kwargs)
-    currentBatch = Batch.objects.get(id = self.batch)
-    students = currentBatch.students.all()
-    notification.save_notification('lectut','The user' +self.upload_user+ 'uploaded a file','lectut/'+self.id+'/upload',students,self)
-    return uploadFile'''
-
-  def __unicode__(self):
-    return str(self.upload_file)
-
-  def as_dict(self):
-    imageData={
-      'upload_file':str(self.upload_file),
-      'name':self.name,
-      'file_type':self.file_type,
-      'upload_type':self.upload_type,
-      'privacy':self.privacy,
-      'upload_user':str(self.upload_user.name),
-      'batch':str(self.batch)
-    }
-    return imageData
 
 class Reminders(models.Model):
   text = models.CharField(max_length=50 , null=False)
@@ -206,28 +190,17 @@ class DownloadLog(models.Model):
           # the extensions that lectut will recognise for the uploaded pdf
           ext = os.path.splitext(iname)[1].lower()
           return ext in ['.pdf']
-'''
+
 class Activity(models.Model):
   content_type=models.ForeignKey(ContentType, related_name='lectut')
   object_id=models.PositiveIntegerField()
   Upload = generic.GenericForeignKey('content_type','object_id')
 
-  '''def create_upload(sender, instance, *args, **kwargs):
+  def create_upload(sender, instance, *args, **kwargs):
       if kwargs['created']:
                sku = u'%s%s%s' % ()
                u = Upload()
                u.save()
 
-  post_save.connect(create_upload, sender=BaseUpload)
+  post_save.connect(create_upload, sender=BaseUpload)'''
 
-
-
-class Notification(models.Model):
-  pub_date = models.DateTimeField('date published')
-  ping=models.ForeignKey(prof)
-
-  def save(self):
-       "Get last value of serial_num from database, and increment before save"
-       top = notification.objects.order_by('-serial_num')[0]
-       self.serial_num = serial_num + 1
-       super(notification, self).save()'''
