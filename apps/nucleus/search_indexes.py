@@ -11,7 +11,7 @@ class CourseIndex(indexes.SearchIndex, indexes.Indexable):
   def get_model(self):
     return Course
 
-  def index_queryset(self, using=None):                                
+  def index_queryset(self, using=None):
     return Course.objects.all()
 
 
@@ -25,5 +25,5 @@ class UserIndex(indexes.SearchIndex, indexes.Indexable):
   def get_model(self):
     return User
 
-  def index_queryset(self, using=None):                                
+  def index_queryset(self, using=None):
     return User.objects.all()

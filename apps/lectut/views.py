@@ -451,7 +451,7 @@ def search(request):
 
 #  import pdb;pdb.set_trace()
   posts = map(lambda result:{'post':result.content , 'id':result.pk},query_post)
-  upload_files = map(lambda result:{'filename':result.upload_file , 'id':result.pk},query_uploadfile)
+  upload_files = map(lambda result:{'filepath':result.upload_file , 'id':result.pk , 'filename':str(result.upload_file).split('/')[2]},query_uploadfile)
   courses = map(lambda result:{'name':result.name,'code':result.code},query_courses)
 
   results = {'posts':posts , 'files':upload_files , 'courses':courses }
