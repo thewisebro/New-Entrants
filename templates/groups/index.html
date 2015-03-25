@@ -1,0 +1,78 @@
+{% extends "groups/base.html" %}
+{% load group_custom_tags %}
+{% block about-tab-class %}content-tab-active{% endblock%}
+
+{% block group_content %}
+<div class="groups-about-content">
+  <div class="groups-info">
+      <div class="feed-line">About</div>
+      <div class="feed-description">
+        <div class="content-information">
+          {% if group.description %}
+            {{group.description|escape|enter|safe}} 
+          {% endif %}
+        </div>
+      </div>
+  </div>
+  <div class="groups-info">
+    <div class="feed-line">Mission</div>
+    <div class="feed-description">
+      <div class="content-information">
+        {% if group.groupinfo.mission%}
+          {{group.groupinfo.mission|escape|enter|safe}}
+        {% endif %}
+      </div>
+    </div>
+   </div>
+   <div class="groups-info">
+      <div class="feed-line">Basic Info</div>
+      <div class="feed-description">
+      <div class="content-information">
+        <div class="content-specification">
+            <div class="left-field">Founded</div>
+            <div class="right-field">
+                {% if group.groupinfo.founding_year%}
+                  {{group.groupinfo.founding_year}}
+                {% endif %}
+            </div>
+        </div>
+        <div class="content-specification">
+            <div class="left-field">Coordinator</div>
+            <div class="right-field">
+              {% if group.admin.name %}
+                {{group.admin.user.html_name}}
+              {% endif %}
+            </div>
+        </div>
+      </div>
+      </div>
+   </div>
+   <div class="groups-info">
+      <div class="feed-line">Contact Info</div>
+      <div class="feed-description">
+      <div class="content-information">
+        <div class="content-specification">
+            <div class="left-field">Phone</div>
+            <div class="right-field">
+              {% if group.groupinfo.phone_no %}
+                {{group.groupinfo.phone_no}}
+              {% endif %}
+            </div>
+        </div>
+        <div class="content-specification">
+            <div class="left-field">E-mail</div>
+            <div class="right-field">
+              {% if group.groupinfo.email %}
+                {{group.groupinfo.email}}
+              {% endif %}  
+            </div>
+        </div>
+        <div class="content-specification">
+            <div class="left-field">Website</div>
+            <div class="right-field-website" class="right-field"><a href="{{group.website}}" target="_blank">{{group.website}}</a></div>
+        </div>
+      </div>
+      </div>
+    </div>
+</div>
+ {% endblock group_content %}

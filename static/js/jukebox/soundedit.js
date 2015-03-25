@@ -17,19 +17,21 @@ function Player() {
     // handlers for sound events as they're started/stopped/played
 
     play: function() {
-       $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_pause.png")
+       $('#'+sound.id).find('.play_icon img').attr("src","/static_jb/images/jukebox/icon_new_pause.png")
      //  console.log("--------------"+sound.id); 
-
+      if( $('#slider').slider("value")<5){sound.setVolume( $('#slider').slider(0));}
+        else{sound.setVolume( $('#slider').slider("value"));}
+       
        $('#'+sound.id).find('.faint').animate({'opacity':'1'},300);
        $('#'+sound.id).find('.play_icon').animate({'opacity':'1'},300);
-        $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_pause.png");
+        $("#bLeftPlay").find("img").attr("src","/static_jb/images/jukebox/icon_new_pause.png");
         var id_play = sound.id.split('_')[1];
         // document.title=songs_url[id_play].song +'-'+ songs_url[id_play].artists[0].artist;
       
     },
 
     stop: function() {
-      $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_play.png");
+      $('#'+sound.id).find('.play_icon img').attr("src","/static_jb/images/jukebox/icon_new_play.png");
       
        $('#'+sound.id).find('.faint').attr('style','');
        $('#'+sound.id).find('.play_icon').attr('style','');
@@ -39,13 +41,13 @@ function Player() {
 
     pause: function() 
            {
-        $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_play.png");
+        $("#bLeftPlay").find("img").attr("src","/static_jb/images/jukebox/icon_new_play.png");
         // document.title='Jukebox';
     },
 
     resume: function() {
 
-        $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_pause.png");
+        $("#bLeftPlay").find("img").attr("src","/static_jb/images/jukebox/icon_new_pause.png");
         var id_play = sound.id.split('_')[1];
         // document.title=songs_url[id_play].song +'-'+ songs_url[id_play].artists[0].artist;
     },
@@ -57,7 +59,7 @@ function Player() {
        $("#timePlayed").html(0+':'+"00");
         // document.title='Jukebox';
        
-       // $("#bLeftPlay").find("img").attr("src","/static/images/jukebox/icon_new_play.png");
+       // $("#bLeftPlay").find("img").attr("src","/static_jb/images/jukebox/icon_new_play.png");
       // $("#bLeftPlay img").click();
       // $('#'+sound.id).find('.faint').attr('style','');
       // $('#'+sound.id).find('.play_icon').attr('style','');
@@ -295,11 +297,11 @@ function Player() {
       // change icon to pause
        if(sound.paused){
                
-       $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_play.png");
+       $('#'+sound.id).find('.play_icon img').attr("src","/static_jb/images/jukebox/icon_new_play.png");
        }
        else{
        
-       $('#'+sound.id).find('.play_icon img').attr("src","/static/images/jukebox/icon_new_pause.png");
+       $('#'+sound.id).find('.play_icon img').attr("src","/static_jb/images/jukebox/icon_new_pause.png");
        } 
         
       
@@ -382,18 +384,17 @@ function Player() {
     
     $("#shufflepic").on("click",function(){
         if(self.shuffle){
-          $("#shufflepic").html("<span>0</span>");
+           $("#shufflepic").find('img').attr("src","/static_jb/images/jukebox/shufflepic.png");
           self.shuffle=false;
         }
         else{ 
-          $("#shufflepic").html("<span>1</span>");
+          $("#shufflepic").find('img').attr("src","/static_jb/images/jukebox/shufflepicwhite.png");
           self.shuffle=true;
         }
         
         })
     //volume slider
     $('#slider').slider({
-
           slide: function(event, ui) {
 
                 volume = $('#volumeicons i');
@@ -440,7 +441,6 @@ function Player() {
                 }
 
             },
-
             stop: function( event, ui ) {
                 var value = $(this).slider('value');
                 volume = $('#volumeicons i');
@@ -510,9 +510,10 @@ function Player() {
      if(self.loopSetting==0){
       //setting 0 is default , no looping
       //switch to next state 1
+      $("#looppic span").html("1");
      self.loopSetting=1;
      //change css 
-      $("#looppic").html("<span>1</span>");
+      $("#looppic").find('img').attr("src","/static_jb/images/jukebox/looppicwhite.png");
      // self.loopSound(self.currentSound);
          }
      else if(self.loopSetting==1){
@@ -520,14 +521,16 @@ function Player() {
       //switch to next state 2
       self.loopSetting=2;
       //change css
-      $("#looppic").html("<span>2</span>");
+      $("#looppic span").html("");
      }
      else if(self.loopSetting==2){
      //full playlist loop
     //switch  to next state 0
       self.loopSetting=0;
+      $("#looppic span").html("");
      //change css
-      $("#looppic").html("<span>0</span>");
+      // $("#looppic").html("<span>0</span>");
+      $("#looppic").find('img').attr("src","/static_jb/images/jukebox/looppic.png");
      }
     });
 
@@ -672,7 +675,7 @@ soundManager.setup({
   preferFlash: false,
   useFlashBlock: true,
   // path to directory containing SM2 SWF
-  url:'/static/swf/jukebox/',
+  url:'/static_jb/swf/jukebox/',
   // optional: enable MPEG-4/AAC support (requires flash 9)
   flashVersion: 9
 });

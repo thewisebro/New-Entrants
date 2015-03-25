@@ -33,6 +33,8 @@ JUKEBOX_MEDIA_ROOT = '/home/songsmedia/'
 JUKEBOX_MEDIA_URL = '/songsmedia/'
 JUKEBOX_SONGS_BASEURL = '/songs/'
 
+PEOPLESEARCH_URL = ''
+
 # Add apps to python path
 sys.path.append(PROJECT_ROOT + '/apps')
 
@@ -246,6 +248,7 @@ CHANNELI_APPS = (
   'lostfound',
   'notifications',
   'helpcenter',
+  'peoplesearch',
   'feeds',
   'regol',
   'academics',
@@ -254,6 +257,8 @@ CHANNELI_APPS = (
   'utilities',
   'birthday',
   'messmenu',
+  'placement',
+  'internship',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS

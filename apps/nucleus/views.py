@@ -44,14 +44,7 @@ def get_links(request):
     'links': NC.channeli_links,
     'games': GC.channeli_games,
   }
-  user_in_img = False
-  try:
-    if request.user.is_authenticated():
-      img_group = Group.objects.get(user__username='img')
-      user_in_img = img_group.groupinfo.members.filter(user=request.user).exists()
-  except Group.DoesNotExist:
-    pass
-  if user_in_img:
+  if request.user.is_authenticated() and request.user.in_group('IMG Member'):
       data['img_tools'] = NC.img_tools
   return HttpResponse(json.dumps(data), content_type='application/json')
 

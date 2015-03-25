@@ -91,14 +91,16 @@ var keys = {
 
 function keyMap(e)
 {
-  if(e.shiftKey && e.keyCode==keys.Rightarrow)      // For Next Playing
+  if(e.ctrlKey && e.keyCode==keys.Rightarrow)      // For Next Playing
   {
     $('#bLeftRight img').click();
   }
-  if(e.shiftKey && e.keyCode==keys.Leftarrow)      // For Prev Playing
+  else if(e.ctrlKey && e.keyCode==keys.Leftarrow)      // For Prev Playing
   {
     $('#bLeftLeft img').click();
   }
-  if(e.keyCode==32)                                // Play Pause
+  else if(e.keyCode==32)                                // Play Pause
     $("#bLeftPlay img").click();
+  else return;
+  e.preventDefault();
 }

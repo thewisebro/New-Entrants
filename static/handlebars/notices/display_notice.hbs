@@ -1,15 +1,44 @@
 <div id="_notices-header">
-  <div id="_home" class="button4 button-div" onclick="location.hash = '#notices/'">Home</div>
-  <div id="_back" class="button4 button-div" onclick="back_clicked()">Back</div>
+    <div id="_source_wrap">
+      <div id="_next" class="button4 button-div" onclick="prev_next_clicked(1)">Next</div>
+      <div id="_prev" class="button4 button-div" onclick="prev_next_clicked(0)">Prev</div>
+      <div id="_back" class="button4 button-div" onclick="location.hash = prev_content_url"><i id="back" class="fa fa-angle-left categories" style="display: inline"></i></div>
+      <div style="clear:both"></div>
+    </div>
+  <div id="_home" class="button4 button-div" onclick="location.hash = '#notices'">Home</div>
   <div style="clear:both"></div>
 </div>
 <div id="_info">
   <div id="_subject_wrap">
-  <div id="_subject">Subject : </div>
-  <div id="_subject_value">{{ data.subject }} </div>
-  <div style="clear:both"></div>
+    <div id="_subject" class="_details_heading">Subject : </div>
+    <div id="_subject_value" class="_details">{{ data.subject }} </div>
+    <div style="clear:both"></div>
   </div>
-  <div id="_reference">Reference : {{ data.reference }}</div>
-  <div id="_source">Category : {{ data.category }}</div>
-  <div id="_content">Content : {{{ data.content }}}</div>
+
+  <div id="_source_date_ref_wrap">
+
+    <div id="_source_wrap" {{#if ref_exist}}class="ref_yes"{{else}}class="ref_no"{{/if}}>
+      <div id="_source" class="_details_heading">Posted By : </div>
+      <div id="_source_value" class="_details">{{ data.category }} </div>
+      <div style="clear:both"></div>
+    </div>
+
+    <div id="_date_wrap" {{#if ref_exist}}class="ref_yes"{{else}}class="ref_no"{{/if}}>
+      <div id="_date" class="_details_heading">Posted On : </div>
+      <div id="_date_value" class="_details">{{ data.datetime_modified }} </div>
+      <div style="clear:both"></div>
+    </div>
+
+    {{#if ref_exist}}
+      <div id="_ref_wrap" class="ref_yes">
+        <div id="_reference" class="_details">Reference No. :</div>
+        <div id="_reference_value" class="_details">{{ data.reference }} </div>
+        <div style="clear:both"></div>
+      </div>
+    {{/if}}
+
+    <div style="clear:both"></div>
+  </div>
+
+  <div id="_content">{{{ data.content }}}</div>
 </div>
