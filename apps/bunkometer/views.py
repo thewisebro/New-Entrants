@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseServerError
 from django.http import JsonResponse
-from models import Bunk
+from models import Bunk,TimeTable
 from nucleus.models import RegisteredCourse,Student
 from django.db.models.base import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 import json
+import pdb
 # Create your views here.
 def bunkometer(request):
   return HttpResponse('So, started with bunkometer django part!')
@@ -77,18 +78,44 @@ def times(x):
   elif x is 9:
     return '5-6'
   return 'Invalid time'
+
+
 @csrf_exempt
-def receive(request,username):
-  if request.method == 'POST':
-      try:
+def saveTimeTable(request,username):
+   try:
+     student = Student.objects.get(user__username=username)
+     TimeTable.objects.filter(student__user__username=username).delete()
+     
+     if request.method == 'POST':
+       try:
         json_data = json.loads(request.body)
         for i in range(5):
           print day(i)
           dayData = json_data['%d'%i]
           for j in range(10):
+            TimeTable.objects.create(student=student,day=day(i),subject=dayData['%d'%j]['subCode'],class_type=dayData['%d'%j]['classType'],time=times(j))
             print times(j)
             print dayData['%d'%j]['subCode'],dayData['%d'%j]['classType']
 
-      except KeyError:
-        return HttpResponseServerError("Malformed data!")
-      return HttpResponse("Got json data")
+       except KeyError:
+          return HttpResponseServerError("Malformed data!")
+       return HttpResponse("Got json data")
+   except ObjectDoesNotExist:
+      return HttpResponse('Student doesn\'t exist.')
+
+
+@csrf_exempt
+def saveBunks(request,username):
+  try:
+    student = Student.objects.get(user__username=username)
+    Bunk.objects.filter(student__user__username=username).delete()
+    courses = RegisteredCourse.objects.filter(student__user__username=username)
+    try:
+      json_data = json.loads(request.body)
+      for i in range(len(courses)):
+        Bunk.objects.create(student=student,subject=courses[i].course.code,lec_bunk=json_data[[courses[i].course.code]]['lec'],tut_bunk=json_data[courses[i].course.code]['tut'],prac_bunk=json_data[courses[i].course.code]['prac'])
+    except KeyError:
+      return HttpResponseServerError('Malformed data!')
+  except ObjectDoesNotExist:
+    return HttpResponse('Student or bunk data for student %s not found'%username)
+
