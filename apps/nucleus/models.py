@@ -82,7 +82,10 @@ class UserPhoto(CropImage):
     if image_field and os.path.exists(image_field.path):
       filename = save_count = image_field.name.split('/')[-1].split('.')[0]
       if len(filename.split('_')) > 1:
-        save_count = int(filename.split('_')[-1]) + 1
+        try:
+          save_count = int(filename.split('_')[-1]) + 1
+        except Exception:
+          save_count = 0
     fname = image_field.instance.username + '_' + str(save_count) + \
              '.' + fname.split('.')[-1]
     return fname

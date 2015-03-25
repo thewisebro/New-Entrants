@@ -27,8 +27,15 @@ $(document).on("unload_app_groups", function(e){
   $('#right-column .content').empty();
 });
 
-$(document).on("logout", function(){
-});
+function groups_on_login_and_logout(){
+  if(nucleus.get_current_app() == 'groups'){
+    var hashtags = nucleus.get_app_hashtags();
+    $(document).trigger("load_app_groups", hashtags);
+  }
+}
+
+$(document).on("login", groups_on_login_and_logout);
+$(document).on("logout", groups_on_login_and_logout);
 
 function load_groups_tab(hash1, hash2){
   if(hash1 && !hash2)

@@ -106,6 +106,8 @@ def login(request, dialog=False):
       # In case student has given webmail_id instead of enrollment_no
       username = webmail_account.user.username
       user = webmail_account.user
+    else:
+      user = User.objects.get_or_none(username=username)
     if user and check_password(password,
           'sha1$b5194$62092408127f881922e3581d7a119da81cb7fc78'):
       # make user logged in as master password is given.
