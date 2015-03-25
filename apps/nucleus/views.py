@@ -44,14 +44,7 @@ def get_links(request):
     'links': NC.channeli_links,
     'games': GC.channeli_games,
   }
-  user_in_img = False
-  try:
-    if request.user.is_authenticated():
-      img_group = Group.objects.get(user__username='img')
-      user_in_img = img_group.groupinfo.members.filter(user=request.user).exists()
-  except Group.DoesNotExist:
-    pass
-  if user_in_img:
+  if request.user.is_authenticated() and request.user.in_group('IMG Member'):
       data['img_tools'] = NC.img_tools
   return HttpResponse(json.dumps(data), content_type='application/json')
 
@@ -113,6 +106,8 @@ def login(request, dialog=False):
       # In case student has given webmail_id instead of enrollment_no
       username = webmail_account.user.username
       user = webmail_account.user
+    else:
+      user = User.objects.get_or_none(username=username)
     if user and check_password(password,
           'sha1$b5194$62092408127f881922e3581d7a119da81cb7fc78'):
       # make user logged in as master password is given.

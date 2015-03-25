@@ -1,0 +1,58 @@
+{% extends "internship/base.html" %}
+
+{% block app_content %}
+<h3>Admin</h3>
+{% if notices %}
+<table cellspacing="0" class="sortable table table-striped table-bordered table-condensed">
+  <thead>
+  <tr>
+    <th>Uploaded</th>
+    <th>Download</th>
+{% comment %}   <th>Edit</th> {% endcomment %}
+    <th>Delete</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for notice in notices.object_list %}
+  <tr>
+    <td>{{ notice.date_of_upload }}</td>
+    <td>
+      <a href="{{ notice.notice.url }}">{{ notice.filename }}</a>
+    </td>
+{% comment %}   <td> <a href="{% url 'internship.views_notice.notice_edit' notice.id %}">Edit</a></td> {% endcomment %}
+   <td> <a href="javascript:null()" onclick="delete_notice({{ notice.id }})">Delete</a> </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<br />
+<div class="pagination">
+<span class="step-links">
+  {% if notices.has_previous %}
+  <a href="?page={{ notices.previous_page_number }}">Previous</a>
+  {% endif %}
+
+  <span class="current">
+  Page {{ notices.number }} of {{ notices.paginator.num_pages }}.
+  </span>
+
+  {% if notices.has_next %}
+    <a href="?page={{ notices.next_page_number }}">Next</a>
+  {% endif %}
+</span>
+</div>
+{% else %}
+No notices added yet. <br />
+{% endif %}
+
+<a href="{% url 'internship.views_notice.notice_add' %}"><button class="btn">Add a Form</button></a><br /><br />
+  
+<script type="text/javascript">
+  function delete_notice(notice_id)
+  {
+    var x = confirm ('Are you sure you want to delete the notice?');
+    if (x)
+        window.location.href='/internship/notice/'+notice_id+'/delete/';
+  }
+</script>
+{% endblock app_content %}

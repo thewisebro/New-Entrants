@@ -7,7 +7,7 @@ from django.core.files.storage import FileSystemStorage
 from api import model_constants as MC
 
 from jukebox import constants as JC
-import nucleus
+from nucleus.models import User
 
 # jukebox.models starts
 
@@ -15,7 +15,7 @@ import nucleus
 
 
 def content_file_name(instance, filename):
-  return '/'.join([instance.album.album, filename])
+  return '/'.join([instance.artists.all()[0].artist, instance.album.album, filename])
 
 
 class Artist(models.Model):
@@ -55,11 +55,12 @@ class Album(models.Model):
       ('mal','Malyali')
   )
   language = models.CharField(max_length=10, choices=lang_choices)
+  latest = models.BooleanField(default=False)
   def __unicode__(self):
     return self.album
 
 class Song(models.Model):
-  id_no = models.IntegerField(max_length=MC.TEXT_LENGTH)
+  id_no = models.IntegerField(max_length=MC.TEXT_LENGTH, default=0)
   upload_storage = FileSystemStorage(location=JC.SONG_DIR, base_url='/uploads')
   song = models.CharField(max_length=MC.TEXT_LENGTH)          # Dispay name of Song
   file_name = models.FileField(upload_to=content_file_name, storage=upload_storage, max_length=1000)     # Name of The Song on the disk
@@ -114,7 +115,7 @@ class Song(models.Model):
 
 
 class Jukebox_Person(models.Model):
-  person = models.OneToOneField(nucleus.models.User)
+  person = models.OneToOneField(User)
   songs_listen = models.TextField()
 
   def add_songs_listen(self, song):
@@ -131,7 +132,7 @@ class Playlist(models.Model):
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   songs = models.TextField(null=True, blank=True)                                     # TextField:-> Large amount of songs with 'b' in between
   private = models.BooleanField(default=True)
-  liked_by = models.ManyToManyField(nucleus.models.User, related_name='jukebox_playlist_likes')
+  liked_by = models.ManyToManyField(User, related_name='jukebox_playlist_likes')
   public_count = models.PositiveIntegerField(default=0)          # For Trending Playlists
   def __unicode__(self):
     return self.name
@@ -170,5 +171,13 @@ class Playlist(models.Model):
     self.songs = songs
     self.save()
 
+  def save(self, *args, **kwargs):
+    """
+      To remove songs 'NaN' from playlists
+    """
+    if self.songs:
+      songs = filter(lambda x: x.isnumeric(), self.songs.split('b'))
+      self.songs = 'b'.join(songs)
+    super(Playlist,self).save(*args, **kwargs)              # Save the usual way
 
 

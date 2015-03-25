@@ -1,0 +1,327 @@
+body {
+background-image:url("images/strip.jpg");
+background-repeat:repeat;
+border-top:10px solid #49330f;
+
+margin: -4px -4px 0px -4px;;
+text-align:center;
+font-family:verdana,arial;
+
+}
+
+
+
+#container {
+	width:790px;
+	margin:0 auto 0 auto;
+	border-top:1px solid #73562b;
+	_border-top:0px solid #73562b;
+        text-align: left;
+	height: 100%;
+
+	}
+
+#top_links {
+
+height:17px;
+margin-top:-1px;
+float:right;
+
+
+}
+
+.link {
+
+background-color: #49330f; 
+float:left;
+height: 17px;
+color:#d3bb9a;
+font-size: 13px;
+text-decoration:none;
+}
+
+.link a {
+text-decoration: none;
+color:#d3bb9a;
+}
+
+.link a:hover {
+
+
+color:#d3bb9a;
+font-size: 13px;
+text-decoration:underline;
+}
+
+.curve_edge_lt  {
+
+background-image: url(images/curve_edge_lt.gif);
+background-repeat: no-repeat;
+width: 9px;
+height: 17px;
+float: left;
+}
+
+.curve_edge_rt {
+
+background-image: url(images/curve_edge_rt.gif);
+float: left;
+width: 9px;
+height: 17px;
+background-repeat: no-repeat;
+}
+
+#header_search {
+margin-top:40px;
+width: 790px;
+}
+
+#header {
+
+
+background-image: url(images/header.jpg);
+height: 116px;
+background-repeat: no-repeat;
+width:452px;
+float: left;
+}
+
+#search_bar {
+float: right;
+margin-left: 15px;
+height: 46px;
+overflow: hidden;
+margin-top:20px;
+}
+
+#search_curve_lt {
+
+background-image: url(images/search_bar_curve_lt.jpg);
+width:10px;
+height:46px;
+float:left;
+
+}
+
+#search {
+
+padding-top:0px;
+background-color: #a58454;
+float:left;
+
+height:46px;
+
+}
+
+#search_box {
+
+background-color:#f0ece7; 
+border:solid 2px #8c7048;
+height: 20px;
+margin-left:12px;
+
+}
+
+#search_button {
+
+margin-top:12px;
+margin-bottom:-5px;
+margin-left:10px;
+
+}
+
+
+#search_curve_rt {
+
+background-image: url(images/search_bar_curve_rt.jpg);
+width:15px;
+height:46px;
+float:left;
+
+}
+
+#footer {
+width: 100%;
+float: right;
+border-bottom:5px solid #49330f;
+position: absolute fixed;
+bottom: 0px;
+}
+
+#bottom_curve_lt {
+
+background-image:url(images/bottom_curve_lt.gif);
+background-repeat:no-repeat;
+width:13px;
+height:16px;
+float:left;
+
+
+}
+
+#img a {
+
+background-color:#49330f;
+color:#d3bb9a;
+font-size:11px;
+text-decoration:none;
+
+
+
+}
+
+#img {
+
+background-color:#49330f;
+color:#d3bb9a;
+font-size:11px;
+float:left;
+padding-top:3px;
+text-decoration:none;
+
+
+
+}
+
+#img a:hover {
+
+background-color:#49330f;
+color:#d3bb9a;
+font-size:11px;
+
+text-decoration:underline;
+
+
+
+}
+
+
+#bottom_curve_rt {
+
+background-image:url(images/bottom_curve_rt.gif);
+background-repeat:no-repeat;
+float:left;
+
+
+}
+
+
+#left_list_header {
+
+background-image:url(images/left_list.jpg);
+width:331px;
+height:76px;
+background-repeat: no-repeat;
+float:left;
+padding-top:10px;
+padding-left:10px;
+
+font-size:18px;
+font-weight:bold;
+
+}
+
+#left_list
+{
+
+float:left;
+width:330px;
+margin-top:30px;
+
+}
+
+#left_list_bottom {
+
+background-color:#d8cc92;
+margin-top:-10px;
+margin-left:1px;
+_margin-left:1px;
+float:left;
+width:324px;
+_width:329px; 
+font-family:verdana, arial, sans-serif;
+font-size:14px;
+padding-left:6px;
+padding-bottom:8px;
+}
+
+#left_list_bottom a {
+
+background-color:#d8cc92;
+color:#454443;
+font-family:verdana, arial, sans-serif;
+font-size:14px;
+text-decoration:none;
+
+}
+
+#left_list_bottom a:hover {
+
+background-color:#d8cc92;
+color:#454443;
+font-family:verdana, arial, sans-serif;
+font-size:14px;
+text-decoration:underline;
+
+
+
+}
+
+
+#main_body
+{
+	color:#454443;
+	width:790px;
+	float:left;
+}
+
+#rght_text {
+
+width:365px;
+float:right;
+
+}
+
+#top_rt_text {
+
+background-color:#69502c;
+width:355px;
+float:left;
+margin-top:30px;
+color:#d2bd9f;
+font-size:14px;
+font-weight:bold;
+height:45px;
+padding-left: 10px;
+padding-top:15px;
+
+
+}
+
+
+
+#bottom_block {
+
+background-color:#ddd8a6;
+font-size:14px;
+color:#494846;
+float:right;
+margin-top:20px;
+padding-top: 10px;
+padding-left:5px;
+
+
+}
+
+#list_students {
+
+list-style-image:url(images/bullet2.gif);
+padding-right:10px;
+
+}
+
+#footer_text {
+
+float: right;
+margin-bottom: -2px;
+}

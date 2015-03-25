@@ -1,0 +1,613 @@
+--
+-- PostgreSQL database dump
+--
+
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'Standard public schema';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: admin_activity; Type: TABLE; Schema: public; Owner: mentor; Tablespace: 
+--
+
+CREATE TABLE admin_activity (
+    "action" text,
+    "time" text
+);
+
+
+ALTER TABLE public.admin_activity OWNER TO mentor;
+
+--
+-- Name: basic_data; Type: TABLE; Schema: public; Owner: mentor; Tablespace: 
+--
+
+CREATE TABLE basic_data (
+    username text NOT NULL,
+    "password" text,
+    enrollment_no text,
+    fullname text,
+    email text,
+    department text,
+    degree text,
+    passing_year text,
+    status text,
+    photosrc character varying
+);
+
+
+ALTER TABLE public.basic_data OWNER TO mentor;
+
+--
+-- Name: codes_used; Type: TABLE; Schema: public; Owner: mentor; Tablespace: 
+--
+
+CREATE TABLE codes_used (
+    code text,
+    value text
+);
+
+
+ALTER TABLE public.codes_used OWNER TO mentor;
+
+--
+-- Name: mentor_data; Type: TABLE; Schema: public; Owner: mentor; Tablespace: 
+--
+
+CREATE TABLE mentor_data (
+    username text NOT NULL,
+    company text,
+    city text,
+    current_desc text,
+    industry text,
+    ind_spl text,
+    other_ind text,
+    num_students integer,
+    mentor_area text,
+    country text,
+    state text,
+    other_mentor_area text,
+    aoi text,
+    msg_consent text
+);
+
+
+ALTER TABLE public.mentor_data OWNER TO mentor;
+
+--
+-- Name: problem_data; Type: TABLE; Schema: public; Owner: mentor; Tablespace: 
+--
+
+CREATE TABLE problem_data (
+    contact text,
+    problem text
+);
+
+
+ALTER TABLE public.problem_data OWNER TO mentor;
+
+--
+-- Name: suggestion_data; Type: TABLE; Schema: public; Owner: mentor; Tablespace: 
+--
+
+CREATE TABLE suggestion_data (
+    username text,
+    suggestion text
+);
+
+
+ALTER TABLE public.suggestion_data OWNER TO mentor;
+
+--
+-- Data for Name: admin_activity; Type: TABLE DATA; Schema: public; Owner: mentor
+--
+
+COPY admin_activity ("action", "time") FROM stdin;
+ludsfsd changed to R	May 26, 2009, 2:59 am
+lrustagi changed to A	May 26, 2009, 3:00 am
+abhishek changed to A	May 26, 2009, 3:00 am
+abhi_iitr changed to A	May 26, 2009, 3:01 am
+dfsdfs changed to R	May 26, 2009, 3:01 am
+kkdffafsfa changed to R	May 26, 2009, 3:01 am
+mayank changed to A	May 26, 2009, 3:01 am
+sdsaddasa changed to A	May 26, 2009, 3:02 am
+sdfsdfsdf changed to A	May 26, 2009, 3:02 am
+dfsdfs changed to A	May 26, 2009, 3:02 am
+ludsfsd changed to A	May 26, 2009, 3:02 am
+brij17goel changed to A	May 26, 2009, 3:05 am
+csv1234 changed to M	May 26, 2009, 3:05 am
+csv1234 changed to R	May 26, 2009, 3:06 am
+jainsaab changed to M	May 26, 2009, 3:06 am
+jainsaab changed to R	May 26, 2009, 3:19 am
+asdsas changed to R	May 26, 2009, 12:40 pm
+sdfsdfsdf changed to M	May 26, 2009, 12:41 pm
+lrustagi changed to M	May 26, 2009, 12:43 pm
+abhishek changed to M	May 26, 2009, 12:44 pm
+abhi_iitr changed to R	May 26, 2009, 12:44 pm
+sdsaddasa changed to R	May 26, 2009, 12:44 pm
+mayank changed to R	May 26, 2009, 12:44 pm
+dfsdfs changed to M	May 26, 2009, 12:44 pm
+kkdffafsfa changed to A	May 26, 2009, 12:44 pm
+csv1234 changed to A	May 26, 2009, 12:44 pm
+jainsaab changed to A	May 26, 2009, 12:44 pm
+abhi_iitr changed to A	May 26, 2009, 12:44 pm
+asdsas changed to A	May 26, 2009, 12:44 pm
+sdsaddasa changed to A	May 26, 2009, 12:44 pm
+kkdffafsfa changed to R	May 26, 2009, 12:45 pm
+csv1234 changed to R	May 26, 2009, 12:45 pm
+jainsaab changed to R	May 26, 2009, 12:45 pm
+brij17goel changed to R	May 26, 2009, 12:45 pm
+ludsfsd changed to R	May 26, 2009, 12:45 pm
+abhi_iitr changed to R	May 26, 2009, 12:46 pm
+asdsas changed to R	May 26, 2009, 12:46 pm
+lrustagi changed to A	May 26, 2009, 12:46 pm
+sdfsdfsdf changed to A	May 26, 2009, 12:46 pm
+abhishek changed to A	May 26, 2009, 12:46 pm
+sdfsdfsdf changed to R	May 26, 2009, 12:47 pm
+sdsaddasa changed to M	May 26, 2009, 12:49 pm
+lrustagi changed to R	May 26, 2009, 12:49 pm
+abhishek changed to R	May 26, 2009, 12:49 pm
+csv1234 changed to A	May 26, 2009, 12:49 pm
+jainsaab changed to A	May 26, 2009, 12:49 pm
+kkdffafsfa changed to A	May 26, 2009, 12:49 pm
+mayank changed to A	May 26, 2009, 12:50 pm
+csv1234 changed to R	May 26, 2009, 12:50 pm
+jainsaab changed to R	May 26, 2009, 12:50 pm
+kkdffafsfa changed to R	May 26, 2009, 12:50 pm
+mayank changed to R	May 26, 2009, 12:50 pm
+dfsdfs changed to R	May 26, 2009, 12:51 pm
+ludsfsd changed to A	May 26, 2009, 12:51 pm
+abhi_iitr changed to A	May 26, 2009, 12:51 pm
+asdsas changed to A	May 26, 2009, 12:51 pm
+brij17goel changed to A	May 26, 2009, 12:51 pm
+lrustagi changed to A	May 26, 2009, 12:51 pm
+abhishek changed to A	May 26, 2009, 12:51 pm
+csv1234 changed to A	May 26, 2009, 12:51 pm
+jainsaab changed to A	May 26, 2009, 12:51 pm
+kkdffafsfa changed to A	May 26, 2009, 12:51 pm
+sdfsdfsdf changed to A	May 26, 2009, 12:51 pm
+ludsfsd changed to R	May 26, 2009, 12:52 pm
+abhi_iitr changed to R	May 26, 2009, 12:52 pm
+asdsas changed to R	May 26, 2009, 12:52 pm
+lrustagi changed to R	May 26, 2009, 12:52 pm
+abhishek changed to R	May 26, 2009, 12:52 pm
+csv1234 changed to R	May 26, 2009, 12:52 pm
+jainsaab changed to R	May 26, 2009, 12:52 pm
+sdfsdfsdf changed to M	May 26, 2009, 12:52 pm
+lrustagi changed to A	May 27, 2009, 2:46 pm
+lrustagi changed to R	May 27, 2009, 2:46 pm
+luvrustagi changed to A	May 27, 2009, 4:00 pm
+lvrustagi changed to R	May 27, 2009, 4:01 pm
+luvrustagi changed to M	May 27, 2009, 4:01 pm
+swsaddas changed to A	May 27, 2009, 10:58 pm
+lrustagi changed to A	May 27, 2009, 11:25 pm
+lrustagi changed to A	May 27, 2009, 11:26 pm
+lrustagi changed to A	May 27, 2009, 11:30 pm
+brij17goel changed to M	May 27, 2009, 11:31 pm
+brij17goel changed to A	May 27, 2009, 11:31 pm
+lrustagi changed to A	May 27, 2009, 11:31 pm
+lrustagi changed to A	May 27, 2009, 11:32 pm
+lrustagi changed to A	May 27, 2009, 11:34 pm
+lrustagi changed to A	May 27, 2009, 11:35 pm
+brij17goel changed to A	May 28, 2009, 3:29 pm
+shweta changed to M	June 21, 2009, 5:57 pm
+shweta changed to A	June 21, 2009, 5:57 pm
+vnkatesh changed to M	July 16, 2009, 10:20 am
+aaaa00 changed to A	July 16, 2009, 10:20 am
+ashishiitr changed to A	September 23, 2009, 11:20 pm
+ashish02 changed to A	January 17, 2010, 8:09 pm
+anomaly changed to A	January 18, 2010, 12:50 am
+ramiliitr changed to A	March 16, 2010, 3:11 pm
+\.
+
+
+--
+-- Data for Name: basic_data; Type: TABLE DATA; Schema: public; Owner: mentor
+--
+
+COPY basic_data (username, "password", enrollment_no, fullname, email, department, degree, passing_year, status, photosrc) FROM stdin;
+ashish01	d0a4da43d6f7751f2d0af80af88cfbee	060223	Ashish Gupta	guptaashish@iitr.gmail.com	EE	B.Tech.	2010	W	uploads/ashish01.jpeg
+ashish02	6dbf939fb7d1400e6306f1aebfccef93	060223	Ashish Gupta	07ashis@gmail.com	EE	B.Tech.	2010	A	uploads/ashish02.jpeg
+mohitberi	a2476a23db04473287c11c5aa758ec6a	030513	Mohit Beri	mohit.beri@gmail.com	ECE	B.Tech.	2007	W	\N
+anomaly	6aa8906d8a8df9d23ba996c431d73144	040301	abhinav pandey	abhinavmail02@gmail.com	MI	B.Tech.	2008	A	uploads/anomaly.jpeg
+brij17goel	ad8d86aec83dba8c2c82c4f7e4f094be	030316	Brijesh Goel	brijesh2goel@gmail.com	MI	B.Tech.	2007	W	\N
+vishvendra	59d9ceba972e4eb6443f8a9645952fe5	08116043	vishvendra	vishvendraiit@gmail.com	BT	B.Tech.	2012	W	uploads/vishvendra.jpeg
+bharat1	34f25fd9eca919b53abbce18253ba39e	123132	bharat1	bharat1@h.com	CY	B.Tech. Dual	2134	W	\N
+amittyagi	310978cc2e93fda596c4a0aab7c8ee6a	6302	Amit Kumar Tyagi	amittyagig71@gmail.com	CH	Ph.D.	2006	W	\N
+dilipuor	331e7a42b95209dd31766d385e10a87f		Dilip Singh	dilipuor@gmail.com	ECE	B.Tech.	1999	W	\N
+bizidea	e99a18c428cb38d5f260853678922e03		kjkjkjkj kjkjk	ajainume@iitr.ernt.in	AP	B.Arch.	9876	W	\N
+shreyas	e9a853502f63df3c5cac8a762154b277	941006	Shreyas Kumar	shreyas.kmr@gmail.com	AP	B.Arch.	1999	W	\N
+ramiliitr	68a4ff997a5e5d2a1019a213f70c303e	060725	Ramil Bansal	guptaashish.iitr@gmail.com	EE	B.Tech.	2010	W	uploads/ramiliitr.jpeg
+ajainume	e99a18c428cb38d5f260853678922e03	060302	Abhishek Jain	ajainume@iitr.ernet.in	MI	B.Tech.	2010	W	\N
+\.
+
+
+--
+-- Data for Name: codes_used; Type: TABLE DATA; Schema: public; Owner: mentor
+--
+
+COPY codes_used (code, value) FROM stdin;
+EE	Electrical Engineering
+ES	Earth Sciences
+AP	Architecture and Planning
+MT	Metallurgical and Materials Engineering
+MI	Mechanical and Industrial Engineering
+BT	Biotechnology
+PH	Physics
+WR	Water Resources Development and Management
+MA	Mathematics
+CY	Chemistry
+PP	Paper Technology
+HS	Humanities and Social Sciences
+ECE	Electronics and Computer Engineering
+AHEC	Alternate Hydro Energy Centre
+CH	Chemical Engineering
+CE	Civil Engineering
+HY	Hydrology
+EQ	Earthquake Engineering
+200	Automobiles
+300	Chemicals, Metals, Papers, Other Materials
+500	Construction, Building
+1600	Consulting, Legal, Engineering, Accounting
+400	Consumer Goods, Consumer Services
+600	Education
+700	Energy, Oil, Gas
+800	Federal, State, Local Governments
+900	Financial Services, Banks, Credit Unions
+1000	Healthcare, Pharmaceuticals, Life Sciences, Biotechnology
+1200	Heavy Machinery, Industrial Markets, Defense
+1100	Hotels, Restaurants, Clubs, Other Leisure
+1300	Information Technology, Software, Hardware, Electronics
+1400	Media, Advertising, Publishing, Entertainment
+1500	Non-profit, Social Sector
+1700	Real Estate, Insurance
+1800	Retail, Wholesale
+1900	Telecommunications
+100	Transportation, Rail, Road, Air, Marine
+ax	Aland Islands
+al	Albania
+dz	Algeria
+as	American Samoa
+ad	Andorra
+ao	Angola
+ai	Anguilla
+aq	Antarctica
+ag	Antigua and Barbuda
+ar	Argentina
+am	Armenia
+aw	Aruba
+au	Australia
+at	Austria
+az	Azerbaijan
+bs	Bahamas
+bh	Bahrain
+bd	Bangladesh
+bb	Barbados
+by	Belarus
+be	Belgium
+bz	Belize
+bj	Benin
+bm	Bermuda
+bt	Bhutan
+bo	Bolivia
+ba	Bosnia and Herzegovina
+bw	Botswana
+bv	Bouvet Island
+br	Brazil
+io	British Indian Ocean Territory
+vg	British Virgin Islands
+bn	Brunei
+bg	Bulgaria
+bf	Burkina Faso
+bi	Burundi
+kh	Cambodia
+cm	Cameroon
+ca	Canada
+cv	Cape Verde
+ky	Cayman Islands
+cf	Central African Republic
+td	Chad
+cl	Chile
+cn	China
+cx	Christmas Island
+cc	Cocos (Keeling) Islands
+co	Colombia
+cg	Congo
+ck	Cook Islands
+cr	Costa Rica
+hr	Croatia
+cu	Cuba
+cy	Cyprus
+cz	Czech Republic
+cd	Democratic Republic of Congo
+dk	Denmark
+xx	Disputed Territory
+dj	Djibouti
+dm	Dominica
+do	Dominican Republic
+tl	East Timor
+ec	Ecuador
+eg	Egypt
+sv	El Salvador
+gq	Equatorial Guinea
+er	Eritrea
+ee	Estonia
+et	Ethiopia
+fk	Falkland Islands
+fo	Faroe Islands
+fm	Federated States of Micronesia
+fj	Fiji
+fi	Finland
+fr	France
+gf	French Guyana
+pf	French Polynesia
+tf	French Southern Territories
+ga	Gabon
+gm	Gambia
+ge	Georgia
+de	Germany
+gh	Ghana
+gi	Gibraltar
+gr	Greece
+gl	Greenland
+gd	Grenada
+gp	Guadeloupe
+gu	Guam
+gt	Guatemala
+gn	Guinea
+gw	Guinea-Bissau
+gy	Guyana
+ht	Haiti
+hm	Heard Island and McDonald Islands
+hn	Honduras
+hk	Hong Kong
+hu	Hungary
+is	Iceland
+id	Indonesia
+ir	Iran
+iq	Iraq
+xe	Iraq-Saudi Arabia Neutral Zone
+ie	Ireland
+il	Israel
+it	Italy
+ci	Ivory Coast
+jm	Jamaica
+jp	Japan
+jo	Jordan
+kz	Kazakhstan
+ke	Kenya
+ki	Kiribati
+kw	Kuwait
+kg	Kyrgyz Republic
+la	Laos
+lv	Latvia
+lb	Lebanon
+ls	Lesotho
+lr	Liberia
+ly	Libya
+li	Liechtenstein
+lt	Lithuania
+lu	Luxembourg
+mo	Macau
+mk	Macedonia
+mg	Madagascar
+mw	Malawi
+my	Malaysia
+mv	Maldives
+ml	Mali
+mt	Malta
+mh	Marshall Islands
+mq	Martinique
+mr	Mauritania
+mu	Mauritius
+yt	Mayotte
+mx	Mexico
+md	Moldova
+mc	Monaco
+mn	Mongolia
+ms	Montserrat
+ma	Morocco
+mz	Mozambique
+mm	Myanmar
+na	Namibia
+nr	Nauru
+np	Nepal
+an	Netherlands Antilles
+nl	Netherlands
+nc	New Caledonia
+nz	New Zealand
+ni	Nicaragua
+ne	Niger
+ng	Nigeria
+nu	Niue
+nf	Norfolk Island
+kp	North Korea
+mp	Northern Mariana Islands
+no	Norway
+ps	Occupied Palestinian Territories
+om	Oman
+pk	Pakistan
+pw	Palau
+pa	Panama
+pg	Papua New Guinea
+py	Paraguay
+pe	Peru
+ph	Philippines
+pn	Pitcairn Islands
+pl	Poland
+pt	Portugal
+pr	Puerto Rico
+qa	Qatar
+re	Reunion
+ro	Romania
+ru	Russia
+rw	Rwanda
+sh	Saint Helena and Dependencies
+kn	Saint Kitts &amp; Nevis
+lc	Saint Lucia
+pm	Saint Pierre and Miquelon
+vc	Saint Vincent and the Grenadines
+ws	Samoa
+sm	San Marino
+st	Sao Tome and Principe
+sa	Saudi Arabia
+	Select One
+sn	Senegal
+cs	Serbia and Montenegro
+sc	Seychelles
+sl	Sierra Leone
+sg	Singapore
+sk	Slovakia
+si	Slovenia
+sb	Solomon Islands
+so	Somalia
+za	South Africa
+gs	South Georgia and the South Sandwich Islands
+kr	South Korea
+es	Spain
+pi	Spratly Islands
+lk	Sri Lanka
+sd	Sudan
+sr	Suriname
+sj	Svalbard and Jan Mayen Islands
+sz	Swaziland
+se	Sweden
+ch	Switzerland
+sy	Syria
+tw	Taiwan
+tj	Tajikistan
+tz	Tanzania
+th	Thailand
+tg	Togo
+tk	Tokelau
+to	Tonga
+tt	Trinidad and Tobago
+tn	Tunisia
+tr	Turkey
+tm	Turkmenistan
+tc	Turks and Caicos Islands
+tv	Tuvalu
+vi	US Virgin Islands
+ug	Uganda
+ua	Ukraine
+km	Union of the Comoros
+ae	United Arab Emirates
+uk	United Kingdom
+xd	United Nations Neutral Zone
+um	United States Minor Outlying Islands
+us	United States
+uy	Uruguay
+uz	Uzbekistan
+vu	Vanuatu
+va	Vatican City
+ve	Venezuela
+vn	Vietnam
+wf	Wallis and Futuna Islands
+eh	Western Sahara
+ye	Yemen
+zm	Zambia
+zw	Zimbabwe
+in	India
+\.
+
+
+--
+-- Data for Name: mentor_data; Type: TABLE DATA; Schema: public; Owner: mentor
+--
+
+COPY mentor_data (username, company, city, current_desc, industry, ind_spl, other_ind, num_students, mentor_area, country, state, other_mentor_area, aoi, msg_consent) FROM stdin;
+07ashuee	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
+ashish02	abc	abc	abc\t\t	500	Area Of Specialization	Please Specify	3	training#initial#	in	abc			Yes
+mohitberi	ibibo	gurgaon	Tech Lead at Gaming Business Unit, ibibo.	1300	Internet gaming	Please Specify	3	education#entrepreneur#training#career#initial#employment#entrepreneur#	in	haryana	\N	\N	Yes
+anomaly	IIT	a	asdfsdfsfdf	200	abc	Please Specify	4	initial#training#	in	b	\N	\N	Yes
+brij17goel	Deutsche Bank Group	Mumbai	Will fill later	900	Credit Risk, Pricing exotic credit derivatives trades	Please Specify	3	education#entrepreneur#initial#training#employment#	in	Maharashtra	\N	\N	Yes
+vishvendra	asr	drasgtg	\t\tfddddddggfg	1900	gfd	Please Specify	3	education#entrepreneur#	in	fdfsgf	dfsgfg	dffsg	No
+newuser	123434	231423	sghf\t\t	1100	Area Of Specialization	Please Specify	5	education#initial#	in	2314123423		2341123	Yes
+amittyagi	Centro Química Estrutural, Instituto Superior Técnico	Lisboa	NET, GATE Examination\r\nDiagnostic Industry\r\nCoordination chemistry and catalysis	1000	Coordination Chemistry and catalysis, Clinical Chemistry	Please Specify	5	education#entrepreneur#initial#training#employment#career#	pt	Lisboa	\N	\N	Yes
+dilipuor	Synopsys Inc	Mountain View	Later...	1300	VLSI & ASIC design	Please Specify	2	initial#training#employment#employment#	us	California	\N	\N	Yes
+shreyas	Oracle America Inc	Redwood Shores	I can help a student in the area of Computer, Softrware related profession or for higher educartion in the USA	1300	Product Development	Please Specify	5	education#initial#entrepreneur#career#	us	CA	\N	\N	Yes
+\.
+
+
+--
+-- Data for Name: problem_data; Type: TABLE DATA; Schema: public; Owner: mentor
+--
+
+COPY problem_data (contact, problem) FROM stdin;
+\.
+
+
+--
+-- Data for Name: suggestion_data; Type: TABLE DATA; Schema: public; Owner: mentor
+--
+
+COPY suggestion_data (username, suggestion) FROM stdin;
+pulkit	gr8 program
+alok goel	Since I belong to Roorkee , I can guide students as per my experience mentioned during registration .\r\n\r\nregards\r\n\r\nalok goel
+virendra	CLOSE INTRECTION BETWEEN STAFF AND STUDENT AT ALL LEVEL WILL PROVIDE HEALTHY ATMOSPHERE IN TERM OF RESEARCH OTHER THEN THE MANAGEMENT
+gargis	Popularize it among alumni and students both.
+bijnori	NO THANKS
+test123	uo
+test123	uo
+temp12	sdased
+temp12	sdased
+temp12	sdased
+temp12	sdased
+temp12	sdased
+temp12	sdased
+temp12	sdased
+temp12	sdased
+temp12	sdased
+temp12	sdased
+temp12	sdased
+temp123	temp123
+hellouch	Contact Alumni through email/letters to join this programme. Make Alumni Function a bigger event than it presently is.
+shreyas	It is difficult to remember the enrolment number!
+\.
+
+
+--
+-- Name: basic_data_pkey; Type: CONSTRAINT; Schema: public; Owner: mentor; Tablespace: 
+--
+
+ALTER TABLE ONLY basic_data
+    ADD CONSTRAINT basic_data_pkey PRIMARY KEY (username);
+
+
+--
+-- Name: mentor_data_pkey; Type: CONSTRAINT; Schema: public; Owner: mentor; Tablespace: 
+--
+
+ALTER TABLE ONLY mentor_data
+    ADD CONSTRAINT mentor_data_pkey PRIMARY KEY (username);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
