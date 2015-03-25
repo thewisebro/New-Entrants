@@ -294,6 +294,7 @@ class Notices(models.Model):
     return filename
 # Miscellaneous models start.
 
+'''
 class ContactPerson(models.Model):
     """
       Contains company contact student details
@@ -331,6 +332,7 @@ class CompanyCoordi(models.Model):
 
     def __unicode__(self):
       return self.student.user.name
+'''
 
 class CompanySlot(models.Model):
     """
@@ -372,4 +374,54 @@ class WorkshopPriority(models.Model):
   def __unicode__(self):
      return str(self.student.user.name)+str(self.day1_priority)+str(self.day2_priority)+str(self.day3_priority)+str(self.day4_priority)+str(self.day5_priority)
 
+class CompanyContactInfo(models.Model):
+    """
+        Company info which links to a primary contact person, i.e, the HR or manager
+        whom one should contact as a primary designated identity of that company.
+    """
+    name = models.CharField(max_length=250)
+    cluster = models.IntegerField(choices=PC.CLUSTER_CHOICES, null=True, blank=True)
+    status = models.CharField(max_length=40, choices=PC.STATUS_CHOICES, null=True, blank=True)
+    primary_contact_person = models.OneToOneField(ContactPerson)
 
+    def __unicode__(self):
+        return str(self.name)+str(self.status)
+
+class ContactPerson(models.Model):
+    """
+        Details of person inside the company whom campus contact would be
+        contacting.
+    """
+    name = models.CharField(max_length=250)
+    designation = models.CharField(max_length=100, null=True , blank=True)
+    phone_no = models.CharField(max_length=250, null=True , blank=True)
+    email = models.CharField(max_length=250 , null=True  , blank=True)
+    company_contact = models.ForeignKey(CampusContactInfo)
+
+    def __unicode__(self):
+        return str(self.name)+' '+str(self.designation)
+
+class CampusContact(models.Model):
+    """
+        Students in the campus who would be contacting different companies contact
+        F.K. to student field to get info about that student and extending info about
+        the contact person like when to contact, last contact.
+    """
+    student = models.ForeignKey(Student)
+    last_contact = models.CharField(max_length=100, null=True, blank=True)
+    when_to_contact = models.DateField(null=True, blank=True)
+    contact_person =  models.OneToOneField(ContactPerson)
+
+    def __unicode__(self):
+        return str(self.student.user.name)+' '+str(contact_person)
+
+class CompanyContactComments(models.Model):
+    """
+        Comments to keep updated about contacts status
+    """
+    comment = models.CharField(max_length=300)
+    date_created = models.DateTimeField(auto_now_add=True)
+    campus_contact = models.ForeignKey(CampusContact)
+
+    def __unicode__(self):
+      return str(self.campus_contact)+' '+str(self.comment)
