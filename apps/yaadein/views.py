@@ -218,7 +218,7 @@ def homePage(request):
              'spot':spotlist,
              }
       posts_data.append( tmp )
-  data ={'name':logged_user.name, 'coverPic': y_user.coverpic.url, 'enrolmentNo':logged_user.username, 'posts_data':posts_data, 'label':logged_user.info, 'profilePic':logged_user.photo_url}
+  data ={'name':logged_user.name,'sem':s.semester_no, 'total_sems':s.branch.no_of_semesters, 'coverPic': y_user.coverpic.url, 'enrolmentNo':logged_user.username, 'posts_data':posts_data, 'label':logged_user.info, 'profilePic':logged_user.photo_url}
   return HttpResponse(simplejson.dumps(data),'application/json') 
 
 
