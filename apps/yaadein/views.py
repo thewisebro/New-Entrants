@@ -9,7 +9,7 @@ from django.utils import timezone
 from taggit.models import Tag,TaggedItem
 from django.views.generic import DetailView, ListView
 from nucleus.models import Student,User
-from django.db.models import Q,Count
+from django.db.models import Q,Count,F
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from notifications.models import Notification
@@ -55,7 +55,9 @@ def CORS_allow(view):
 @CORS_allow
 #@login_required
 def index(request,enrno=None):
-#import ipdb;ipdb.set_trace()
+  if request:
+    if not request.user.is_authenticated():
+      return HttpResponse('Error')
   if request.method == 'GET':
     print "HEre"
     print enrno
@@ -297,7 +299,10 @@ def post(request,wall_user):
 @CORS_allow
 def post_display(request,pk):
   if request:
-    post = Post.objects.get(pk=pk)
+    if not request.user.is_authenticated():
+      return HttpResponse('Error')
+    post = Post.objects.filter(pk=pk).filter(status="A")
+    post = post[0]  
     spotlist = []
     spot = post.spots.all()
     if len(spot)>0:
@@ -331,9 +336,12 @@ def post_display(request,pk):
 @CORS_allow
 def search(request,id):
    if request: #.is_ajax():
+     if not request.user.is_authenticated():
+       return HttpResponse('Error')
      query = request.GET.get('q','')
 #   import ipdb;ipdb.set_trace()
      students = Student.objects.filter(Q(user__name__icontains = query)).order_by('-user__name')[:10]
+     students_final = Student.objects.filter(Q(user__name__icontains = query)).filter(branch__no_of_semesters = F('semester_no')).order_by('-user__name')[:10]
      def person_dict(student):
        return {
          'id':student.user.username,
@@ -353,6 +361,8 @@ def search(request,id):
        data = map(person_dict,students)
      elif id=='2':
        data = map(spot_dict,spots)
+     elif id=='4':
+       data = map(person_dict,students_final)
      else :
        data = map(person_dict,students)+map(spot_dict,spots)
      search_data = {'results':data}
@@ -419,10 +429,15 @@ def spot_search(request):
 @CORS_allow
 def invite(request):
   if request:
+    if not request.user.is_authenticated():
+      return HttpResponse('Error')
 #   import ipdb;ipdb.set_trace()
     app = 'Yaadein'
     student = Student.objects.get(user__username=request.user.username)
-    notif_msg1 = ' '+student.user.name+' invited you to cherrish memories with the person.'
+    if student.user.gender=='M':
+      notif_msg1 = ' '+student.user.name+' invited you to cherrish memories with him.'
+    else:
+      notif_msg1 = ' '+student.user.name+' invited you to cherrish memories with her.' 
     user_tagged = simplejson.loads(request.body)['user_tags']
     url = 'http://172.25.55.156:7000/profile/'+student.user.username
     tagged_users = []
@@ -442,8 +457,10 @@ def invite(request):
 @CORS_allow
 def hashtag(request,slug):
   if request:
+    if not request.user.is_authenticated():
+      return HttpResponse('Error')
     posts_data = []
-    posts = Post.objects.filter(tags__slug=slug).order_by('post_date').reverse()
+    posts = Post.objects.filter(tags__slug=slug).filter(status='A').order_by('post_date').reverse()
     for post in posts:
           images = PostImage.objects.filter(post=post)
           image_url=[]
@@ -481,6 +498,8 @@ def hashtag(request,slug):
 @CORS_allow
 def spot_page(request,name):
   if request:
+    if not request.user.is_authenticated():
+      return HttpResponse('Error')
 #  import ipdb;ipdb.set_trace()
     posts_data = []
     spot = Spot.objects.get(name=str(name))
@@ -488,7 +507,7 @@ def spot_page(request,name):
       spot.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
     spotlist = []
     spotlist.append({'id':spot.name,'name':spot.name,'label':spot.tagline})
-    posts = Post.objects.filter(spots__name=name).order_by('post_date').reverse()
+    posts = Post.objects.filter(spots__name=name).filter(status="A").order_by('post_date').reverse()
     for post in posts:
           images = PostImage.objects.filter(post=post)
           image_url=[]
@@ -522,6 +541,8 @@ def spot_page(request,name):
 @CORS_allow
 def delete(request,id):
   if request:
+    if not request.user.is_authenticated():
+      return HttpResponse('Error')
     try:
       post = Post.objects.get(pk=id)
     except Post.DoesNotExist:
@@ -550,14 +571,17 @@ def private_posts(request,id):
 @csrf_exempt
 @CORS_allow
 def trending(request):
+  if not request.user.is_authenticated():
+    return HttpResponse('Error')
   tag_frequency = defaultdict(int)
-  for item in Post.objects.all():
+  for item in Post.objects.all().filter(status="A"):
     for tag in item.tags.all():
       tag_frequency[tag.name] += 1
   count_list = Counter(tag_frequency).most_common()
   hash_list = []
   for hash in count_list:
     hash_list.append(str(hash[0][1:]))
+  hash_list = hash_list[:10]    
   data = {'hashed':hash_list}
   return HttpResponse(simplejson.dumps(data),'application/json')
 
