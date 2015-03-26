@@ -276,6 +276,15 @@ function main_check(id_parent,id,len_sub)
 
 
  }
+ $('body').ready(function(){
+      $('#id_username').autocomplete({
+        source:'/settings/person_search/',
+        select:function( event,ui ){
+        $('#enroll').val(ui.item.id);
+        },
+        minLength:1
+           });
+      });
 
 show_contact();
 //trash("sell",4);

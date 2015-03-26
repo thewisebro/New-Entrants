@@ -1,5 +1,5 @@
 import datetime
-import json
+import simplejson
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -17,7 +17,8 @@ from utilities.forms import ProfileFormPrimary, ProfileFormGuardian,\
                             ProfileFormExtra, ChangePasswordForm,\
                             ChangePasswordFirstYearForm, EmailForm,\
                             EventsSubscribeFormGen, GenProfileForm
-
+from nucleus.models import *
+from django.db.models import Q
 @pagelet_login_required
 def edit_profile(request):
   if request.user.in_group('Student'):
@@ -154,3 +155,20 @@ def email(request):
       'emailform': emailform,
       'email_subscribed': events_user.email_subscribed,
   })
+
+@login_required
+def person_search(request):
+  if request.is_ajax():
+    q = request.GET.get('term','')
+    persons = Student.objects.filter(Q(user__name__icontains = q)|Q(user__username__icontains = q)).order_by('-user__username')[:10]
+    def person_dict(person):
+      return {
+        'id':person.user.username,
+        'label':str(person)+" ("+str(person.branch.code)+")",
+        'value':person.user.name
+      }
+    data = simplejson.dumps(map(person_dict,persons))
+  else:
+    data = 'fail'  
+  return HttpResponse(data,'application/json') 
+

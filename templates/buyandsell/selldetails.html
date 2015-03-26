@@ -7,9 +7,14 @@
 {% if item %}
 <p> {{ item.item_name }} </p>
 <p> {{ item.cost }}<p>
+{% if show_contact %}
+<p> {{ item.contact }}</p>
 {% endif %}
+{% endif %}
+{% if not self_flag %}
 <form action ="" method="POST">
 {% csrf_token %}
 <input type="password" name="password">
 <input type="submit" value="submit">
 </form>
+{% endif %}

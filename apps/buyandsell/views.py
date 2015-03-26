@@ -260,6 +260,7 @@ def watch(request,mc=None,c=None):
   return HttpResponse(success, content_type="application/json")
 
 def selldetails(request,pk):
+  show_contact=1
   item=SaleItems.objects.get(pk=pk)
   self_flag=0
   user=request.user
@@ -276,13 +277,20 @@ def selldetails(request,pk):
 
     elif not user.check_password(password):
       messages.error(request, 'Incorrect password' )
+  if len(ShowContact.objects.filter(user=user))==1:
+    if ShowContact.objects.filter(user=user)[0].contact_shown==0:
+      show_contact=0
+
   context={
     'item':item,
-    'self_flag':self_flag
+    'self_flag':self_flag,
+    'show_contact':show_contact
           }
+  print show_contact
   return render(request,'buyandsell/selldetails.html',context)
 
 def requestdetails(request,pk):
+  show_contact=1
   item=RequestedItems.objects.get(pk=pk)
   self_flag=0
   user=request.user
@@ -299,10 +307,14 @@ def requestdetails(request,pk):
 
     elif not user.check_password(password):
       messages.error(request, 'Incorrect password' )
+  if len(ShowContact.objects.filter(user=user))==1:
+    if ShowContact.objects.filter(user=user)[0].contact_shown==0:
+      show_contact=0
 
   context={
     'item':item,
-    'self_flag':self_flag
+    'self_flag':self_flag,
+    'show_contact':show_contact
           }
   return render(request,'buyandsell/requestdetails.html',context)
 
@@ -520,7 +532,29 @@ def seeall(request,search_type):
     count_date_sorted_queryset=sorted(date_sorted_queryset, key= lambda l: count[l], reverse=True)
     for item_id in count_date_sorted_queryset:
       queryset.append(un_queryset[item_id])
-    return render(request,'buyandsell/show_requests.html',{'table_data':queryset})
+
+    queries_without_page=request.GET.copy()                      #this is for preserving the query parameter on pagination
+    if queries_without_page.has_key('page'):
+      del queries_without_page['page']
+
+    paginator = Paginator(queryset, 10)
+    page = request.GET.get('page', 1)
+    page_list = _get_page_list(page, paginator.num_pages, 10)
+    try:
+      table_data = paginator.page(page)
+    except PageNotAnInteger:
+      logger.info(request.user.username+": pagination error PageNotAnInteger")
+      table_data = paginator.page(1)
+    except EmptyPage:
+      logger.info(request.user.username+": pagination error EmptyPage")
+      table_data = paginator.page(paginator.num_pages)
+
+    context={'table_data':table_data,
+             'paginator':paginator,
+             'page_list':page_list,
+             'queries':queries_without_page
+    }
+    return render(request,'buyandsell/show_requests.html',context)
 
   if search_type=="sell":
     queryset=[]
@@ -540,7 +574,29 @@ def seeall(request,search_type):
     count_date_sorted_queryset=sorted(date_sorted_queryset, key= lambda l: count[l], reverse=True)
     for item_id in count_date_sorted_queryset:
       queryset.append(un_queryset[item_id])
-    return render(request,'buyandsell/buy.html',{'table_data':queryset})
+
+    queries_without_page=request.GET.copy()                      #this is for preserving the query parameter on pagination
+    if queries_without_page.has_key('page'):
+      del queries_without_page['page']
+
+    paginator = Paginator(queryset, 10)
+    page = request.GET.get('page', 1)
+    page_list = _get_page_list(page, paginator.num_pages, 10)
+    try:
+      table_data = paginator.page(page)
+    except PageNotAnInteger:
+      logger.info(request.user.username+": pagination error PageNotAnInteger")
+      table_data = paginator.page(1)
+    except EmptyPage:
+      logger.info(request.user.username+": pagination error EmptyPage")
+      table_data = paginator.page(paginator.num_pages)
+
+    context={'table_data':table_data,
+             'paginator':paginator,
+             'page_list':page_list,
+             'queries':queries_without_page
+    }
+    return render(request,'buyandsell/buy.html',context)
 
 def edit(request,form_type,pk):
   user=request.user
@@ -679,14 +735,44 @@ def trash_item(request,item_type,pk):
 def transaction(request,item_type,pk):
   user=request.user
   if item_type=="sell":
+    itm=SaleItems.objects.get(pk=pk)
+    itm_user=itm.user
+    if itm_user != user:
+      messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.You can only fill the form for the items in your account below")
+      return HttpResponseRedirect('/buyandsell/my-account/')
+    try:
+      filled_form=SuccessfulTransaction.objects.get(sell_item=itm)
+      if filled_form:
+        messages.error(request,"oops!This item is already sold!!")
+        return HttpResponseRedirect('/buyandsell/my-account/')
+    except:
+      pass
+
     if request.method=="POST":
+      try:
+        filled_form=SuccessfulTransaction.objects.get(sell_item=itm)
+        if filled_form:
+          messages.error(request,"oops!This item is already sold!!")
+          return HttpResponseRedirect('/buyandsell/my-account/')
+      except:
+        pass
+
       form=TransactionForm()
       buyer_username=request.POST.get('buyer_username')
+      username_other=request.POST.get('username_other')
       print buyer_username
+      print username_other
       if buyer_username != "":
         buyer=User.objects.get(username=buyer_username)
-      else:
+      elif buyer_username=="" and ( not username_other.isspace() and username_other!=""):
+        tentative_buyer=User.objects.get(username=username_other)
+        if tentative_buyer:
+          buyer=tentative_buyer
+        else:
+          buyer=None
+      elif buyer_username=="" and ( username_other.isspace() or username_other==""):
         buyer=None
+
       new_item=form.save(commit=False)
       if  not  request.POST.get('feedback').isspace() and  request.POST.get('feedback')!="":
         new_item.feedback=request.POST.get('feedback')
@@ -698,19 +784,50 @@ def transaction(request,item_type,pk):
       sell_item=SaleItems.objects.get(pk=pk)
       new_item.sell_item=sell_item
       new_item.trasaction_date=timezone.now()
-      new_item.save()      
+      new_item.save()
     sell_item=SaleItems.objects.get(pk=pk)
-    mail_list=BuyMails.objects.filter(item=sell_item)  
+    mail_list=BuyMails.objects.filter(item=sell_item)
     return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list,'type':item_type})
 
   if item_type=="request":
+    itm=RequestedItems.objects.get(pk=pk)
+    itm_user=itm.user
+    if itm_user != user:
+      messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.You can only fill the form for the items in your account below")
+      return HttpResponseRedirect('/buyandsell/my-account/')
+    try:
+      filled_form=SuccessfulTransaction.objects.get(request_item=itm)
+      if filled_form:
+        messages.error(request,"oops!This request is already fulfilled!!")
+        return HttpResponseRedirect('/buyandsell/my-account/')
+    except:
+      pass
+
     if request.method=="POST":
+      try:
+        filled_form=SuccessfulTransaction.objects.get(request_item=itm)
+        if filled_form:
+          messages.error(request,"oops!This request is already fulfilled!!")
+          return HttpResponseRedirect('/buyandsell/my-account/')
+      except:
+        pass
+
       form=TransactionForm()
       seller_username=request.POST.get('seller_username')
-      if seller_username !="":
+      username_other=request.POST.get('username_other')
+      print seller_username
+      print username_other
+      if seller_username != "":
         seller=User.objects.get(username=seller_username)
-      else:
+      elif seller_username=="" and ( not username_other.isspace() and username_other!=""):
+        tentative_seller=User.objects.get(username=username_other)
+        if tentative_seller:
+          seller=tentative_seller
+        else:
+          seller=None
+      elif seller_username=="" and ( username_other.isspace() or username_other==""):
         seller=None
+
       new_item=form.save(commit=False)
       if  not  request.POST.get('feedback').isspace() and  request.POST.get('feedback')!="":
         new_item.feedback=request.POST.get('feedback')
@@ -723,11 +840,11 @@ def transaction(request,item_type,pk):
       new_item.request_item=request_item        #need to redirect if already existing request item or sell item is present
       new_item.is_requested=True
       new_item.trasaction_date=timezone.now()
-      new_item.save()      
+      new_item.save()
     request_item=RequestedItems.objects.get(pk=pk)
     mail_list=RequestMails.objects.filter(item=request_item)
     return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list})
-  
+
 def  get_watched_categories(request):
   user=request.user
   cat_dict=get_category_dictionary()

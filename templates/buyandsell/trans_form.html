@@ -1,4 +1,7 @@
- {% if messages %}
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script></head>
+<body>
+{% if messages %}
     {% for message in messages %}
         <div class="alert alert-{{ message.tags }}">{{ message }} </div>
     {% endfor %}
@@ -14,12 +17,14 @@
 {% endfor %}
 </select>
 <br>
+<label for="other">Other</label>
+<input type="text" id="id_username"></input><br>
+<input type="hidden" id="enroll" name="username_other">
 <label for="feedback">Feedback</label>
 <textarea cols="40" id="sell_feedback" name="feedback" rows="10"></textarea>
 <br>
 <input type="submit"  value="submit">
 </form>
-
 {% else %}
 <form action="" method="post">
 {% csrf_token %}
@@ -31,11 +36,16 @@
 {% endfor %}
 </select>
 <br>
+<label for="other">Other</label>
+<input type="text" id="id_username"></input><br>
+<input type="hidden" id="enroll" name="username_other">
 <label for="feedback">Feedback</label>
 <textarea cols="40" id="request_feedback" name="feedback" rows="10"></textarea>
 <br>
 <input type="submit" value="submit">
 </form>
 {% endif %}
-
-
+</body>
+<script src="{{ STATIC_URL }}js/common.js"></script>
+<script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>
+  
