@@ -444,8 +444,8 @@ def download_scholarship_data(request):
   degree = request.GET.get('degree')
   scholarship_type = request.GET.get('scholarship_type')
   persons = MCM.objects.filter(scholar_type = scholarship_type, student__branch__degree = degree, check = True, datetime__gt=datetime.date(2014,8,1))
-  persons = persons.order_by('person__branch__code')
-  departments = persons.values_list('person__branch').distinct()
+  persons = persons.order_by('student__branch__code')
+  departments = persons.values_list('student__branch').distinct()
 
   dept_no=0
   department_sorted = [[] for i in range(len(departments))]
@@ -458,7 +458,7 @@ def download_scholarship_data(request):
       department_sorted[dept_no].append(per)
   dept_no=0
   for arr in department_sorted:
-    department_sorted[dept_no] = sorted(arr, key=lambda mcm_obj:mcm_obj.person.semester)
+    department_sorted[dept_no] = sorted(arr, key=lambda mcm_obj:mcm_obj.student.semester)
     dept_no+=1
 
   import xlwt
@@ -496,17 +496,17 @@ def download_scholarship_data(request):
   for arr in department_sorted:
     for mcm_obj in arr:
       row_num+=1
-      person_info = StudentInfo.objects.get(student=mcm_obj.person)
+      person_info = StudentInfo.objects.get(student=mcm_obj.student)
       if mcm_obj.unfair_means == True:
         uf = "Yes"
       else :
         uf = "No"
       row = [
-        mcm_obj.person.user.username,
-        mcm_obj.person.user.name,
-        mcm_obj.person.branch.name,
-        mcm_obj.person.branch.code,
-        mcm_obj.person.semester,
+        mcm_obj.student.user.username,
+        mcm_obj.student.user.name,
+        mcm_obj.student.branch.name,
+        mcm_obj.student.branch.code,
+        mcm_obj.student.semester,
         mcm_obj.air,
         mcm_obj.cgpa,
         mcm_obj.sgpa,
