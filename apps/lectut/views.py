@@ -106,9 +106,8 @@ def coursepage(request, batch_id):
       posts.append(complete_post)
 
     context = {'posts': posts,
-#               'batch':userBatch,
-               'userType':userType,
-               'viewType':'Coursepage'}
+               'batch':batch_dict(userBatch),
+               'userType':userType,}
 
     return HttpResponse(json.dumps(context),content_type='application/json')
 #    return render( request, 'lectut/image.html', context)
@@ -164,7 +163,13 @@ def uploadedFile(request , batch_id):
     user = request.user
 #    usrname = allData['user']
 #    user = User.objects.get(username=usrname)
-    userBatch = Batch.objects.get(id=batch_id)
+    if Batch.objects.filter(id = batch_id).exists():
+      userBatch = Batch.objects.get(id = batch_id)
+    elif Course.objects.filter(id = batch_id).exists():
+      course = Course.objects.get(id = batch_id)
+    else:
+      return HttpResponse(json.dumps('Invalid location. Please contact IMG if problem persists'), content_type='application/json')
+
 #    data = request.POST.get('formText','')
     data = allData['formText']
     uploadTypes = allData['typeData']
@@ -174,7 +179,8 @@ def uploadedFile(request , batch_id):
     msg = ''
     counter = 0
     try:
-      new_post = Post(upload_user = user, batch = userBatch, content = data)
+      course = userBatch.course
+      new_post = Post(upload_user = user, batch = userBatch, course = course, content = data)
       new_post.save()
     except:
       msg = "Cannot save post"
@@ -272,8 +278,8 @@ def batch_dict(Batch):
 @CORS_allow
 def get_post(request , batch_id , post_id):
   user = request.user
-  if Post.objects.get(id = post_id).exists():
-    if Post.post_objects.get(id = post_id).exists():
+  if Post.objects.filter(id = post_id).exists():
+    if Post.post_objects.filter(id = post_id).exists():
       post = Post.post_objects.get(id = post_id)
       documents =  Uploadedfile.file_objects.all().filter(post=post)
       post = post.as_dict()
@@ -378,7 +384,6 @@ def userdownloads(request , batch_id):
 @CORS_allow
 def batchMembers(request , batch_id):
   currentBatch = Batch.objects.get(id = batch_id)
-  import pdb;pdb.set_trace()
   students = currentBatch.students.all()
   users = map(lambda x:x.user, students)
   students =[]
@@ -404,11 +409,18 @@ def batchMembers(request , batch_id):
 def get_files(request, batch_id):
   currentBatch = Batch.objects.get(id = batch_id)
   AllFiles = {'lec':[],'tut':[],'exp':[],'sol':[],'que':[]}
-  files = Uploadedfile.file_objects.all().filter(post__batch_id = batch_id)
-  for File in files:
+  currentFiles = Uploadedfile.file_objects.all().filter(post__batch_id = batch_id)
+  for File in currentFiles:
     AllFiles[File.upload_type].append(File.as_dict())
 
-  return HttpResponse(json.dumps(AllFiles), content_type="application/json")
+  AllArchives = {'lec':[],'tut':[],'exp':[],'sol':[],'que':[]}
+  currentCourse = currentBatch.course
+  oldFiles =Uploadedfile.file_objects.all().filter(post__course_id = currentCourse.id).filter(post__batch_id__isnull = True)
+  for File in oldFiles:
+   AllArchives[File.upload_type].append(File.as_dict())
+
+  files = {'currentFiles':AllFiles , 'archiveFiles':AllArchives}
+  return HttpResponse(json.dumps(files), content_type="application/json")
 
 @csrf_exempt
 @CORS_allow

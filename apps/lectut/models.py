@@ -58,7 +58,8 @@ class DeleteManager(models.Manager):
 ''' Each post attributes '''
 class Post(models.Model):
   upload_user = models.ForeignKey(User)
-  batch = models.ForeignKey(Batch)
+  batch = models.ForeignKey(Batch , null=True)
+  course = models.ForeignKey(Course)
   content = models.CharField(max_length = '1000')
   privacy = models.BooleanField(max_length = 3 , default = 'tut')
   deleted = models.BooleanField(default = False)
