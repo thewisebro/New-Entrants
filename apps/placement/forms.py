@@ -144,25 +144,25 @@ class ExcelForm(forms.Form):
       else:
         return excel_file
 
-class CompanycontactForm(forms.ModelForm):
-  when_to_contact = forms.DateField(widget=AdminDateWidget, required=False)
-  class Meta:
-    model = models.CompanyContact
-    exclude = {'contactperson', 'last_updated', 'last_contact'}
-
-class ContactpersonForm(forms.ModelForm):
-  class Meta:
-    model = models.ContactPerson
-
-class AssignCoordinatorForm(forms.Form):
-  company_coordinator = forms.ModelChoiceField(queryset=models.CompanyCoordi.objects.all(), empty_label="None", required=False)
-
-class AddCoordinatorForm(forms.Form):
-  student = forms.CharField(widget=forms.TextInput)
-  enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
-  class Meta:
-    model = models.CompanyCoordi
-
+#class CompanycontactForm(forms.ModelForm):
+#  when_to_contact = forms.DateField(widget=AdminDateWidget, required=False)
+#  class Meta:
+#    model = models.CompanyContact
+#    exclude = {'contactperson', 'last_updated', 'last_contact'}
+#
+#class ContactpersonForm(forms.ModelForm):
+#  class Meta:
+#    model = models.ContactPerson
+#
+#class AssignCoordinatorForm(forms.Form):
+#  company_coordinator = forms.ModelChoiceField(queryset=models.CompanyCoordi.objects.all(), empty_label="None", required=False)
+#
+#class AddCoordinatorForm(forms.Form):
+#  student = forms.CharField(widget=forms.TextInput)
+#  enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
+#  class Meta:
+#    model = models.CompanyCoordi
+#
 class CreateSlotForm(forms.ModelForm):
   start_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])
   end_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])

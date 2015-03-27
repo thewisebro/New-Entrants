@@ -41,12 +41,12 @@ Placement Online
       {% endif %}
 
       {% if group.name == 'Placement Manager' %}
-      <a href="{% url 'placement.views_img.placement_manager_view' %}" target=blank >Placement Manager</a>
+{% comment %}      <a href="{% url 'placement.views_img.placement_manager_view' %}" target=blank >Placement Manager</a>  {% endcomment %}
       &nbsp;|&nbsp;
       {% endif %}
 
       {% if group.name == 'Company Coordinator' %}
-      <a href="{% url 'placement.views_img.company_coordinator_view' %}" target=blank>Company Coordinator</a>
+{% comment %}      <a href="{% url 'placement.views_img.company_coordinator_view' %}" target=blank>Company Coordinator</a>  {% endcomment %}
       &nbsp;|&nbsp;
       {% endif %}
 
