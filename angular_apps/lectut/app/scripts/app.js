@@ -76,31 +76,31 @@ lectutApp.config(['$locationProvider','$routeProvider',
     
     $routeProvider.
       when('/', {
-        templateUrl: '/views/partials/common-course-home.html',
+        templateUrl: 'views/partials/common-course-home.html',
         controller: 'CourseHomeCtrl'
       }).
       when('/course/:courseId/', {
-        templateUrl: '/views/partials/course-detail.html',
+        templateUrl: 'views/partials/course-detail.html',
         controller: 'CourseDetailCtrl'
       }).
       when('/course/:courseId/feeds', {
-        templateUrl: '/views/partials/course-feeds.html',
+        templateUrl: 'views/partials/course-feeds.html',
         controller: 'CourseDetailCtrl'
       }).
       when('/course/:courseId/files', {
-        templateUrl: '/views/partials/course-files.html',
+        templateUrl: 'views/partials/course-files.html',
         controller: 'CourseFilesCtrl'
       }).
       when('/course/:courseId/members', {
-        templateUrl: '/views/partials/course-members.html',
+        templateUrl: 'views/partials/course-members.html',
         controller: 'CourseMembersCtrl'
       }).
       when('/course/:courseId/feeds/:postId', {
-        templateUrl: '/views/partials/one-post.html',
+        templateUrl: 'views/partials/one-post.html',
         controller: 'CourseOnePostCtrl'
       }).
       otherwise({
-        redirectTo: '/course/'
+        redirectTo: '/'
       });
     //$locationProvider.html5Mode(true);
   }]);
