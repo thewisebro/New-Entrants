@@ -1,0 +1,218 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- build:[href] lectut/ -->
+    <base href="/" />
+    <!-- /build -->
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="bower_components/datatables/media/css/jquery.dataTables.css" />
+    <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
+    <link rel="stylesheet" href="bower_components/angucomplete-alt/angucomplete-alt.css" />
+    <link rel="stylesheet" href="bower_components/sweetalert/lib/sweet-alert.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="fonts/fonts.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="lectutApp" ng-controller="MainCtrl" ng-cloak class="ng-cloak">
+    <div growl></div>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <div class="fullBox">
+ 
+      <!-- Header white 50px full width -->
+      <div class="header">
+        <!-- Appname-->
+        <div class="appName"><i class="fa fa-bookmark" style="padding-right:5px;"></i>Lectut</div>
+        <div class="topSearchBox"><!-- Search box-->
+        <span class="searchIconTop"><i class="fa fa-search"></i></span>
+        <div class="crossTop" ng-click="clearSearch()" ng-show="queryString.length != 0"><i class="fa fa-times-circle"></i></div>
+        <input class="mainSearch" type="text" placeholder="Search" ng-model="queryString"  ng-change="searchFunc(queryString)"></input>
+        </div>
+        <div class="searchResult" ng-show="(searchResults.files.length != 0 || searchResults.courses.length != 0 || searchResults.posts.length != 0 )&& queryString.length != 0">
+            <div class="searchFor">Search results for <span class="textHighlightSearch">{[queryString]}</span></div>
+            <div class="subSearchHeading">Courses</div>
+            <div class="noResults" ng-hide="searchResults.courses.length != 0">No Results</div>
+            <div class="subSearchContent" ng-show="searchResults.courses.length != 0">
+              <div ng-repeat="course in searchResults.courses |limitTo: 5">{[course.name]}<span class="courseCodeSearchTop">{[course.code]}</span></div>
+            </div>
+            <div class="subSearchHeading">Files</div>
+            <div class="noResults" ng-hide="searchResults.files.length != 0">No Results</div>
+            <div class="subSearchContent">
+               <div ng-repeat="file in searchResults.files | limitTo: 5">
+                <div class="sImageDiv">
+                  <img ng-src="{[base_domain]}{[file.filepath]}"></img>
+                </div>
+                <div class="sFileData">
+                  <div class="sImageName">
+                  {[file.upload_file]}
+                  </div>
+                  <div class="sImagePostedBy">  <i class="fa fa-circle c_{[file.upload_type]}" style="padding-right: 3px;"></i> {[file.upload_type]} | by {[file.username]} | on {[file.datetime_created]}</div>
+                </div>
+              </div>
+            </div>
+            <div class="subSearchHeading">Posts</div>
+            <div class="noResults" ng-hide="searchResults.posts.length != 0">No Results</div>
+            <div class="subSearchContent">
+               <div ng-repeat="post in searchResults.posts | limitTo: 3">
+                <div><div style="float:left;"><i class="fa fa-pencil-square-o" style="margin-right:5px;"></i></div><div style="margin-left:20px;">{[post.content]}</div></div>
+                <div class="sPostPostedBy">by {[post.upload_user]} | on {[post.datetime_created]} | in {[post.batch.code]} {[post.batch.year]}</div>
+               </div>
+            </div>
+        </div>
+      </div>
+ 
+      <!-- Left Div 180px -->      
+      <div class="leftDiv">
+       
+          
+         <!-- User block-->
+         <div id="userblock">
+            <div id="userpic">
+              <img ng-src="{[base_domain]}{[auth.user.photo]}" alt="">
+            </div>
+            <div id="userdata">
+ 	      <div>
+          <div>{[auth.user.name]}</div>
+ 	        <div>{[auth.user.role]}</div>
+	      </div>
+             
+            </div>
+         </div> 
+         
+         <!-- My Courses -->
+         <div class="myCourse">
+            <div class="myCourseHeading">My Courses</div>
+            <ul class="myCourseUl" ng-init="selectedCourse='{[selectedCourse]}'">
+               <a class="crsA" ng-repeat="crs in auth.batches" ng-href="/course/{[crs.id]}/feeds">
+                 <li class="crsLi" ng-click="getFeedData(crs.id);" ng-class="{'activeCourse':selectedCourse == '{[crs.id]}'}" >
+                   <div class="crsIdName"> 
+                    <div class="crsId">
+                      <span>{[::crs.code]}</span>
+                      <span class="crsNotification">{[::crs.id]}</span> 
+                    </div>
+                    <div class="crsName">{[::crs.course_name]}</div>
+                   </div>
+                   
+                 </li>
+               </a>
+            </ul>
+         </div> 
+        <!-- Copyright-->
+        <div class="footerIMG">
+          Copyright 2015<a style=" padding-left:5px;" traget="_blank" href="http://img.channeli.in">IMG IIT Roorkee</a>
+        </div>
+      </div>
+
+<!-- Center view -->
+<div class="centerDiv" class="ng-fadeInUp">
+  <div ng-click="getPostData()" class="courseFullDiv">
+    <div class="courseHeading">
+      <div class="courseHeadingNameId">
+        {[courseId.courseId]}<span style="padding-left:10px; text-transform: capitalize;">{[courseName]}</span>
+      </div>
+
+     <div class="courseFilters" >
+       <ul ng-init="selectedTab = 'feeds'">
+          <a ng-href="/course/{[courseId.courseId]}/feeds" ng-class="{'activeFilter':selectedTab === 'feeds'}" ng-click="selectedTab = 'feeds'">
+            <li ng-click='getFeedData(courseId.courseId)' >
+                Feed
+            </li>
+          </a>
+          <span class="vertLine"></span>
+          <a ng-href="/course/{[courseId.courseId]}/files" ng-class="{'activeFilter':selectedTab === 'files'}" ng-click="selectedTab = 'files'">
+            <li ng-click='getFeedData(courseId.courseId)'>
+                Files
+            </li>
+          </a>
+          <span class="vertLine"></span>
+          <a ng-href="/course/{[courseId.courseId]}/members" ng-class="{'activeFilter':selectedTab === 'members'}" ng-click="selectedTab = 'members'">
+            <li ng-click='getFeedData(courseId.courseId)'>
+                Members
+            </li>
+          </a>
+       </ul>
+    </div>
+  </div>
+</div>
+
+<div class="filteredContent" ng-view>
+ 
+<div>
+
+</div>
+      
+      <!-- Right Div -->
+      <div class="rightDiv">
+
+      </div>
+    </div>
+
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+     <script>
+       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-XXXXX-X');
+       ga('send', 'pageview');
+    </script>
+
+    <!-- build:js(.) scripts/oldieshim.js -->
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <![endif]-->
+    <!-- endbuild -->
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/datatables/media/js/jquery.dataTables.js"></script>
+    <script src="bower_components/angular-datatables/dist/angular-datatables.js"></script>
+    <script src="bower_components/angular-file-upload/angular-file-upload.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/angular-moment/angular-moment.js"></script>
+    <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="bower_components/angucomplete-alt/angucomplete-alt.js"></script>
+    <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
+    <script src="bower_components/sweetalert/lib/sweet-alert.js"></script>
+    <script src="bower_components/angular-sweetalert/SweetAlert.js"></script>
+    <script src="bower_components/angular-growl/build/angular-growl.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:include production.html -->
+      <script type="text/javascript" src='scripts/development.js'></script>
+    <!-- /build -->
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.services.js"></script>
+    <script src="scripts/controllers/main.directives.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <!-- endbuild -->
+
+</body>
+</html>

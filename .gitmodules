@@ -37,6 +37,3 @@
 [submodule "third_party_apps/django-static-precompile"]
 	path = third_party_apps/django-static-precompile
 	url = http://git.channeli.in/django-static-precompile.git
-[submodule "apps/lectut/static/lectut-front"]
-	path = apps/lectut/static/lectut-front
-	url = git@git.channeli.in:lectut-front.git
