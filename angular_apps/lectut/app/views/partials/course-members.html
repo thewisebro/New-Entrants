@@ -1,0 +1,41 @@
+<div class="membersDisplay">
+
+
+  <div class="prof">
+     <div class="profHeading">
+      Teacher
+     </div>
+     <div class="teach" ng-repeat="t in members.faculties">
+    <div class="mPic">
+      <img src="{[t.photo]}" />
+    </div>
+    <div class="mDesc">
+      <div class="mName">
+        {[t.name]}
+      </div>
+      <div class="mData">
+        {[t.role]}
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="studentList">
+  <div class="studHeading">
+    Students
+  </div>
+  <div class="stud" ng-repeat="s in members.students">
+    <div class="mPic">
+      <img ng-src="{[s.photo]}" />
+    </div>
+    <div class="mDesc">
+      <div class="mName">
+        {[s.name]}
+      </div>
+      <div class="mData">
+        {[s.role]}
+      </div>
+    </div>
+  </div> 
+</div>  
+</div>
