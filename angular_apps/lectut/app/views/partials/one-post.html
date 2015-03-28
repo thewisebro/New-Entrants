@@ -3,7 +3,7 @@
 <div class="postDiv">
 <div class="mainPost">
       <div class="postUserPic">
-          <img ng-src=http://172.25.55.156:60000{[onePost.post.user_image]}></img>
+          <img ng-src="{[base_domain]}/{[onePost.post.user_image]}"></img>
       </div>
       <div class="postData">
           <div class="postUserNameTime">
@@ -27,10 +27,10 @@
                       <i class="fa fa-times"></i>
                     </div>
                     <div class="fileOverlay" ng-click='downloadFeedFile(file.id)'>
-                      <a download ng-href="http://172.25.55.156:60002/lectut_api/download/{[file.id]}"><i class="fa fa-arrow-down"></i></a>
+                      <a download ng-href="{[base_domain]}/lectut_api/download/{[file.id]}"><i class="fa fa-arrow-down"></i></a>
                     </div>
                     <div class="fileImage">
-                        <img ng-show='file.file_type == "image"' src="http://172.25.55.156:60002/{[file.filepath]}/"></img>
+                        <img ng-show='file.file_type == "image"' ng-src="{[base_domain]}/{[file.filepath]}/"></img>
                         <i ng-hide='file.file_type == "image"' class="fa fa-file-{[file.file_type]}-o"></i>
                         <i ng-show='file.file_type == "unknown"' class="fa fa-file"></i>
                     </div>

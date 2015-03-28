@@ -2,7 +2,7 @@
     
   <div class="createPost">
     <div class="cPPic">
-       <img ng-src="http://172.25.55.156:60002{[auth.user.photo]}"></img> 
+       <img ng-src="{[base_domain]}{[auth.user.photo]}"></img> 
     </div>
     <div class="cPContent" ng-init="tab=1">
       <div class="postType">
@@ -127,7 +127,7 @@
 
     <div class="mainPost">
       <div class="postUserPic">
-          <img ng-src=http://172.25.55.156:60000{[post.post.user_image]}></img>
+          <img ng-src="{[base_domain]}{[post.post.user_image]}"></img>
       </div>
       <div class="postData">
           <div class="postUserNameTime">
@@ -138,7 +138,7 @@
               </span>
             </div>
             <div class="postTime">
-              <a am-time-ago="post.post.datetime_created" ng-href="/course/{[coId.courseId]}/feeds/{[post.post.id]}"></a>
+              <a am-time-ago="post.post.datetime_created" ng-href="#/course/{[coId.courseId]}/feeds/{[post.post.id]}"></a>
             </div>
           </div>
           <div class="postContentAll">
@@ -151,10 +151,10 @@
                       <i class="fa fa-times"></i>
                     </div>
                     <div class="fileOverlay">
-                      <a download ng-href="http://172.25.55.156:60002/lectut_api/download/{[file.id]}"><i class="fa fa-arrow-down"></i></a>
+                      <a download ng-href="{[base_domain]}/lectut_api/download/{[file.id]}"><i class="fa fa-arrow-down"></i></a>
                     </div>
                     <div class="fileImage">
-                       <img ng-show='file.file_type == "image"' src="http://172.25.55.156:60002/{[file.filepath]}/"></img>
+                       <img ng-show='file.file_type == "image"' ng-src="{[base_domain]}/{[file.filepath]}"></img>
                        <i ng-hide='file.file_type == "image"' class="fa fa-file-{[file.file_type]}-o"></i>
                        <i ng-show='file.file_type == "unknown"' class="fa fa-file"></i> 
                     </div>
