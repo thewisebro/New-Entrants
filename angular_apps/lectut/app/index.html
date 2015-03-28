@@ -74,10 +74,8 @@
         </div>
       </div>
  
-      <!-- Left Div 180px -->      
+      <!-- Left Div 180px -->
       <div class="leftDiv">
-       
-          
          <!-- User block-->
          <div id="userblock">
             <div id="userpic">
@@ -96,7 +94,7 @@
          <div class="myCourse">
             <div class="myCourseHeading">My Courses</div>
             <ul class="myCourseUl" ng-init="selectedCourse='{[selectedCourse]}'">
-               <a class="crsA" ng-repeat="crs in auth.batches" ng-href="/course/{[crs.id]}/feeds">
+               <a class="crsA" ng-repeat="crs in auth.batches" ng-href="#/course/{[crs.id]}/feeds">
                  <li class="crsLi" ng-click="getFeedData(crs.id);" ng-class="{'activeCourse':selectedCourse == '{[crs.id]}'}" >
                    <div class="crsIdName"> 
                     <div class="crsId">
@@ -126,19 +124,19 @@
 
      <div class="courseFilters" >
        <ul ng-init="selectedTab = 'feeds'">
-          <a ng-href="/course/{[courseId.courseId]}/feeds" ng-class="{'activeFilter':selectedTab === 'feeds'}" ng-click="selectedTab = 'feeds'">
+          <a ng-href="#/course/{[courseId.courseId]}/feeds" ng-class="{'activeFilter':selectedTab === 'feeds'}" ng-click="selectedTab = 'feeds'">
             <li ng-click='getFeedData(courseId.courseId)' >
                 Feed
             </li>
           </a>
           <span class="vertLine"></span>
-          <a ng-href="/course/{[courseId.courseId]}/files" ng-class="{'activeFilter':selectedTab === 'files'}" ng-click="selectedTab = 'files'">
+          <a ng-href="#/course/{[courseId.courseId]}/files" ng-class="{'activeFilter':selectedTab === 'files'}" ng-click="selectedTab = 'files'">
             <li ng-click='getFeedData(courseId.courseId)'>
                 Files
             </li>
           </a>
           <span class="vertLine"></span>
-          <a ng-href="/course/{[courseId.courseId]}/members" ng-class="{'activeFilter':selectedTab === 'members'}" ng-click="selectedTab = 'members'">
+          <a ng-href="#/course/{[courseId.courseId]}/members" ng-class="{'activeFilter':selectedTab === 'members'}" ng-click="selectedTab = 'members'">
             <li ng-click='getFeedData(courseId.courseId)'>
                 Members
             </li>

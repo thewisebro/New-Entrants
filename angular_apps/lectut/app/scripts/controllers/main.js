@@ -407,13 +407,18 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
    
    $scope.dtOptions = DTOptionsBuilder.fromFnPromise(promiseCourseData.then(
       function(d){
-      console.log(d);
+        console.log(d);
         var allFiles = [];
-        allFiles = allFiles.concat(d.tut);
-        allFiles = allFiles.concat(d.lec);
-        allFiles = allFiles.concat(d.exp);
-        allFiles = allFiles.concat(d.sol);
-        allFiles = allFiles.concat(d.que);
+        allFiles = allFiles.concat(d.archiveFiles.tut);
+        allFiles = allFiles.concat(d.archiveFiles.lec);
+        allFiles = allFiles.concat(d.archiveFiles.exp);
+        allFiles = allFiles.concat(d.archiveFiles.sol);
+        allFiles = allFiles.concat(d.archiveFiles.que);
+        allFiles = allFiles.concat(d.currentFiles.tut);
+        allFiles = allFiles.concat(d.currentFiles.lec);
+        allFiles = allFiles.concat(d.currentFiles.exp);
+        allFiles = allFiles.concat(d.currentFiles.sol);
+        allFiles = allFiles.concat(d.currentFiles.que);
         return allFiles;
       }
    )
@@ -542,7 +547,8 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                } );
          } });
       // ------------------------------
-
+    
+         //console.log("err1");
      var _toggle = true;
      $scope.toggleAll = function(){
        //console.log("asd");
