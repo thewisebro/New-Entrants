@@ -1,0 +1,56 @@
+ngo.db import models
+
+class LectutDesignChoice(models.Model):
+      id = models.BigIntegerField(primary_key=True)
+          faculty_id = models.CharField(max_length=45)
+          choice = models.IntegerField()
+          class Meta:
+                    db_table = u'lectut_design_choice'
+
+                    class LectutExamPapers(models.Model):
+                          id = models.BigIntegerField(primary_key=True)
+                              faculty_id = models.CharField(max_length=45)
+                              course_id = models.CharField(max_length=24)
+                              file = models.CharField(max_length=450)
+                              topic = models.CharField(max_length=450)
+                              permission = models.IntegerField()
+                              timestamp = models.DateTimeField()
+                              year = models.CharField(max_length=45, blank=True)
+                              class Meta:
+                                        db_table = u'lectut_exam_papers'
+
+                                        class LectutLectures(models.Model):
+                                              id = models.BigIntegerField(primary_key=True)
+                                                  faculty_id = models.CharField(max_length=45)
+                                                  course_id = models.CharField(max_length=24)
+                                                  file = models.CharField(max_length=450)
+                                                  topic = models.CharField(max_length=450)
+                                                  permission = models.IntegerField()
+                                                  timestamp = models.DateTimeField()
+                                                  class Meta:
+                                                            db_table = u'lectut_lectures'
+
+                                                            class LectutSolutions(models.Model):
+                                                                  id = models.BigIntegerField(primary_key=True)
+                                                                      faculty_id = models.CharField(max_length=45)
+                                                                      course_id = models.CharField(max_length=24)
+                                                                      file = models.CharField(max_length=450)
+                                                                      topic = models.CharField(max_length=450)
+                                                                      permission = models.IntegerField()
+                                                                      timestamp = models.DateTimeField()
+                                                                      link_type = models.CharField(max_length=3, blank=True)
+                                                                      link_id = models.IntegerField(null=True, blank=True)
+                                                                      class Meta:
+                                                                                db_table = u'lectut_solutions'
+
+                                                                                class LectutTutorials(models.Model):
+                                                                                      id = models.BigIntegerField(primary_key=True)
+                                                                                          faculty_id = models.CharField(max_length=45)
+                                                                                          course_id = models.CharField(max_length=24)
+                                                                                          file = models.CharField(max_length=450)
+                                                                                          topic = models.CharField(max_length=450)
+                                                                                          permission = models.IntegerField()
+                                                                                          timestamp = models.DateTimeField()
+                                                                                          class Meta:
+                                                                                                    db_table = u'lectut_tutorials'
+

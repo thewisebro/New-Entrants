@@ -3,3 +3,6 @@
 python -Wi prod_manage.py collectstatic --noinput
 python -Wi prod_manage.py cachepages
 touch production/wsgi.py
+
+# For building lectut static files
+grunt --gruntfile apps/lectut/static/lectut-front/Gruntfile.js build

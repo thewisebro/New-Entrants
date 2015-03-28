@@ -1,0 +1,101 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Tahoma", sans-serif;
+  font-size: 13px; }
+
+body {
+  overflow-y: scroll; }
+
+#header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 40px;
+  line-height: 40px;
+  background-color: white;
+  box-shadow: 0px 0px 2px 1px #dddddd; }
+  #header #header-title {
+    float: left;
+    margin-left: 10px;
+    font-size: 24px;
+    color: #0072dc; }
+  #header #header-options {
+    float: right;
+    font-size: 14px; }
+    #header #header-options .header-option {
+      float: right;
+      margin-right: 20px;
+      text-decoration: none;
+      cursor: pointer; }
+  #header #user-account {
+    float: right;
+    margin-right: 20px;
+    font-size: 14px; }
+
+#sidebar-tabs {
+  position: fixed;
+  top: 40px;
+  bottom: 0;
+  left: 0;
+  width: 120px;
+  z-index: 200;
+  background: #333333; }
+  #sidebar-tabs .tab {
+    width: 110px;
+    padding: 10px 0px 10px 10px;
+    height: 20px;
+    line-height: 20px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px; }
+    #sidebar-tabs .tab:hover {
+      background-color: rgba(0, 0, 0, 0.25); }
+  #sidebar-tabs .active-tab {
+    background-color: rgba(0, 0, 0, 0.45); }
+    #sidebar-tabs .active-tab:hover {
+      background-color: rgba(0, 0, 0, 0.45); }
+  #sidebar-tabs #tab-arrow {
+    position: fixed;
+    top: 140px;
+    left: 112px;
+    width: 10px;
+    height: 20px;
+    padding: 10px 0px;
+    display: none; }
+    #sidebar-tabs #tab-arrow div {
+      width: 100%;
+      height: 20px;
+      background: url("/static/images/nucleus/css_sprites.png") -45px -70px; }
+
+#content, #content-back {
+  float: left;
+  min-width: 450px;
+  max-width: 630px;
+  width: 48%;
+  margin-left: 120px;
+  padding-left: 20px;
+  margin-top: 40px;
+  padding-top: 10px;
+  height: 100%; }
+
+#free-area {
+  position: fixed;
+  top: 40px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: -50;
+  background: #f8f8f8; }
+  #free-area #content-back {
+    margin-top: 0;
+    padding-top: 0; }
+  #free-area #right-column {
+    float: left;
+    height: 100%;
+    margin-left: 20px;
+    width: 220px;
+    z-index: 50;
+    overflow-y: auto; }

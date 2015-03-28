@@ -252,6 +252,7 @@ CHANNELI_APPS = (
   'feeds',
   'regol',
   'academics',
+  'lectut',
   'games',
   'buysell',
   'utilities',
@@ -265,6 +266,7 @@ INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
 FEED_APPS = (
   'events',
   'lostfound',
+  'lectut',
 )
 
 FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
@@ -293,6 +295,7 @@ COMPRESS_PRECOMPILERS = (
 SHELL_PLUS = "ipython"
 
 SESSION_COOKIE_NAME = 'CHANNELI_SESSID'
+SESSION_COOKIE_HTTPONLY = False
 SESSION_ENGINE = 'nucleus.session'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
@@ -388,7 +391,7 @@ LOGGING = {
 HAYSTACK_CONNECTIONS = {
     'default': {
       'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-      'URL': 'http://192.168.121.5:9200/',
+      'URL': 'http://172.25.55.156:9200/',
       'INDEX_NAME': 'channeli',
       'INCLUDE_SPELLING': True,
       # ...or for multicore...
@@ -396,7 +399,7 @@ HAYSTACK_CONNECTIONS = {
     },
     'autocomplete': {
       'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-      'URL': 'http://192.168.121.5:9200/',
+      'URL': 'http://172.25.55.156:9200/',
       'INDEX_NAME': 'channeli',
       'INCLUDE_SPELLING': True,
       # ...or for multicore...

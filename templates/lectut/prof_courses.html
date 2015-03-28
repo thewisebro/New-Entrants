@@ -1,0 +1,11 @@
+<html>
+  <head>
+    <title> Courses </title>
+  </head>
+  <body>
+    <p>Your Courses are - </p>
+    {% for item in batches %}
+      <li><a href="/lectut/disp/{{ item.id }}/">{{ item.course.name }}</a></li>  
+    {% endfor %}
+  </body>
+</html>
