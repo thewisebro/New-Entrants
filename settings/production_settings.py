@@ -1,6 +1,7 @@
 from settings.development import *
 
 PRODUCTION = True
+DEVELOPMENT = False
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 

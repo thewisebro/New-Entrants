@@ -11,7 +11,7 @@ from django.conf import settings
 from haystack.query import SearchQuerySet
 
 from django.contrib.sessions.models import Session
-from settings.development import PRODUCTION, MEDIA_URL , GLOBAL_MEDIA_ROOT
+from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
 import mimetypes, os
@@ -22,11 +22,14 @@ from forms import *
 from models import *
 from django import forms
 
+DEVELOPMENT = settings.DEVELOPMENT
+MEDIA_URL = settings.MEDIA_URL
+GLOBAL_MEDIA_ROOT = settings.GLOBAL_MEDIA_ROOT
 
 ''' Decorator to handle cross origin requests '''
 def CORS_allow(view):
   def wrapped_view(request, *args, **kwargs):
-    if PRODUCTION == False:
+    if DEVELOPMENT:
       if request.method == 'POST':
         session_id = request.COOKIES['CHANNELI_SESSID']
         session = Session.objects.get(session_key=session_id)
@@ -35,7 +38,7 @@ def CORS_allow(view):
         request.user = user
 
     response = view(request, *args, **kwargs)
-    if PRODUCTION == False:
+    if DEVELOPMENT:
       response["Access-Control-Allow-Origin"] = "http://172.25.55.156:9008"
       response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
       response["Access-Control-Allow-Credentials"] = 'true'
