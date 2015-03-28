@@ -7,7 +7,7 @@
      </div>
      <div class="teach" ng-repeat="t in members.faculties">
     <div class="mPic">
-      <img src="{[t.photo]}" />
+      <img src="{[base_domain]}{[t.photo]}" />
     </div>
     <div class="mDesc">
       <div class="mName">
@@ -26,7 +26,7 @@
   </div>
   <div class="stud" ng-repeat="s in members.students">
     <div class="mPic">
-      <img ng-src="{[s.photo]}" />
+      <img ng-src="{[base_domain]}{[s.photo]}" />
     </div>
     <div class="mDesc">
       <div class="mName">
