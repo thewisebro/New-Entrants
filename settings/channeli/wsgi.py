@@ -15,15 +15,15 @@ framework.
 """
 import os, sys
 
-apache_configuration= os.path.dirname(os.path.abspath(__file__))
-project_path = os.path.dirname(apache_configuration)
+configuration_path = os.path.dirname(os.path.abspath(__file__))
+project_path = os.path.dirname(os.path.dirname(configuration_path))
 sys.path.append(project_path)
 
 # We defer to a DJANGO_SETTINGS_MODULE already in the environment. This breaks
 # if running multiple sites in the same mod_wsgi process. To fix this, use
 # mod_wsgi daemon mode with each site in its own daemon process, or use
 # os.environ["DJANGO_SETTINGS_MODULE"] = "settings"
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.production_settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.channeli.prod_settings")
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
@@ -37,7 +37,7 @@ application = get_wsgi_application()
 def ApplicationWrapper(application):
   def wrapped_application(environ, start_response):
     if environ['PATH_INFO'] == '/':
-      f = open(project_path+'/production/cached_pages/index.html','r')
+      f = open(project_path+'/static_root/CACHE_PAGES/index.html','r')
       response_body = f.read()
       f.close()
       status = '200 OK'

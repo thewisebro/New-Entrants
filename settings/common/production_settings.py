@@ -1,4 +1,4 @@
-from settings.development import *
+from .settings import *
 
 PRODUCTION = True
 DEVELOPMENT = False
@@ -18,8 +18,3 @@ SESSION_COOKIE_HTTPONLY = True
 LOGGING['loggers']['channel-i_logger']['handlers'].append('file_logger')
 LOGGING['loggers']['lostfound']['handlers'].append('lostfound_file_logger')
 LOGGING['loggers']['buysell']['handlers'].append('buysell_file_logger')
-
-try:
-  from production.settings import *
-except ImportError:
-  pass
