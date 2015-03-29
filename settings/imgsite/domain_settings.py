@@ -1,6 +1,6 @@
-# SITE ID corressponding to Channel i (Internet) or people.iitr.ernet.in
-SITE_ID = 2
-SITE = 'internet'
+# SITE ID corressponding to IMG website (dynamic)
+SITE_ID = 3
+SITE = 'imgsite'
 
 try:
   from .local_settings import *
