@@ -153,8 +153,9 @@ def email(request):
   if request.method == 'POST':
     emailform = EmailForm(request.POST)
     if emailform.is_valid():
-      request.user.email = emailform.cleaned_data['email']
-      request.user.save()
+      if not request.user.email:
+        request.user.email = emailform.cleaned_data['email']
+        request.user.save()
       events_subscribe_form = EventsSubscribeForm(request.POST,
                                                   instance=events_user)
       events_subscribe_form.save()
@@ -208,7 +209,7 @@ def email_verify(request):
           entry.confirmation_key= confirmation_key
           entry.last_datetime_created = datetime.datetime.today()
           entry.save()
-          send_verification_mail(confirmation_key,entry.email)
+          send_verification_mail(request,confirmation_key,entry.email)
           messages.success(request,"A verification link has been sent"+\
             " to your email address.")
         else:
@@ -231,8 +232,8 @@ def email_verify(request):
               =confirmation_key, last_datetime_created=datetime.datetime.today(),\
               verify_num=1)
           new_entry.save()
-          send_verification_mail(confirmation_key,email)
-          mail_to_primary(email,request.user.email)
+          send_verification_mail(request,confirmation_key,email)
+          mail_to_primary(request,email,request.user.email)
           messages.success(request,"A verification link has been sent"+\
               " to your email address.")
 
@@ -324,7 +325,7 @@ def password_reset_request(request):
             entry.reset_key= reset_key
             entry.last_datetime_created = datetime.datetime.today()
             entry.save()
-            send_passwordreset_mail(reset_key,email)
+            send_passwordreset_mail(request,reset_key,email)
             messages.success(request,"A password reset link has been sent"+\
                 " to your email address.")
           else:
@@ -334,7 +335,7 @@ def password_reset_request(request):
           new_entry = PasswordReset(user=user, reset_key =reset_key,
               last_datetime_created=datetime.datetime.today(), verify_num=1)
           new_entry.save()
-          send_passwordreset_mail(reset_key,email)
+          send_passwordreset_mail(request,reset_key,email)
           messages.success(request,"A password reset link has been sent"+\
               " to your email address.")
       return HttpResponseRedirect(reverse('close_dialog', kwargs={
