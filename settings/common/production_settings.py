@@ -18,3 +18,8 @@ SESSION_COOKIE_HTTPONLY = True
 LOGGING['loggers']['channel-i_logger']['handlers'].append('file_logger')
 LOGGING['loggers']['lostfound']['handlers'].append('lostfound_file_logger')
 LOGGING['loggers']['buysell']['handlers'].append('buysell_file_logger')
+
+try:
+  from .local_prod_settings import *
+except ImportError:
+  pass
