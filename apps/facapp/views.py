@@ -58,29 +58,29 @@ def index(request):
     rs_group = ResearchScholarGroup.objects.filter(faculty = faculty, visibility = True).order_by('priority')
     invitations = Invitations.objects.filter(faculty = faculty, visibility = True).order_by('priority')
     print '5'
-    return render(request,'facapp/index.html') # , {
-      # 'interests': interests,
-      # 'professional_background' : professional_background,
-      # 'honors' : honors,
-      # 'education' : education,
-      # 'administrative_background' : administrative_background,
-      # 'research_projects' : research_projects,
-      # 'seminars' : seminars,
-      # 'membership' : membership,
-      # 'teaching' : teaching,
-      # 'project_supervision' : project_supervision,
-      # 'rs_group' : rs_group,
-      # 'phd_supervised' : phd_supervised,
-      # 'visits' : visits,
-      # 'invitations' : invitations,
-      # 'short_term_courses' : short_term_courses,
-      # 'organised_conferences' : organised_conferences,
-      # 'special_lectures' : special_lectures,
-      # 'misc' : misc,
-      # 'collaboration' : collaboration,
-      # 'books' : books,
-      # 'refereed_papers' : refereed_papers,
-      # })
+    return render(request,'facapp/index.html', {
+      'interests': interests,
+      'professional_background' : professional_background,
+      'honors' : honors,
+      'education' : education,
+      'administrative_background' : administrative_background,
+      'research_projects' : research_projects,
+      'seminars' : seminars,
+      'membership' : membership,
+      'teaching' : teaching,
+      'project_supervision' : project_supervision,
+      'rs_group' : rs_group,
+      'phd_supervised' : phd_supervised,
+      'visits' : visits,
+      'invitations' : invitations,
+      'short_term_courses' : short_term_courses,
+      'organised_conferences' : organised_conferences,
+      'special_lectures' : special_lectures,
+      'misc' : misc,
+      'collaboration' : collaboration,
+      'books' : books,
+      'refereed_papers' : refereed_papers,
+      })
   except Exception as e:
     # Can't use handle_exc here because it redirects here. To avoid infinite loop, redirect to a static page.
     print 'Exception: ' + str(e)
