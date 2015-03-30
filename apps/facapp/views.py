@@ -28,7 +28,7 @@ import json
 def index(request):
   try:
     print 'yes'
-    faculty = 'padamkk' # request.session['faculty']
+    faculty = request.user
     #photo_form = PhotoUploadForm()
     #resume_form = ResumeUploadForm()
     print 'yess'
@@ -92,7 +92,7 @@ def index(request):
 @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
 def add(request, model_name):
   try:
-    faculty = 'padamkk' # request.session['faculty']
+    faculty = request.user
     model_type = globals()[model_name]
     print 'ok'
     if(model_name == 'Faculty'):
@@ -147,7 +147,7 @@ def add(request, model_name):
 # @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
 # def update(request, model_name, instance_id):
 #   try:
-#     faculty = request.session['faculty']
+#     faculty = request.user
 #     model_type = globals()[model_name]
 #     if(model_name == 'Faculty'):
 #       exclude_list = ['user',]
@@ -203,7 +203,7 @@ def add(request, model_name):
 # @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
 # def delete(request, model_name, instance_id):
 #   try:
-#     faculty = request.session['faculty']
+#     faculty = request.user
 #     model_type = globals()[model_name]
 #     if(model_name == 'Faculty'):
 #       messages.error(request, 'Faculty can\'t be deleted.')
