@@ -603,6 +603,7 @@ def edit(request,form_type,pk):
   post_date=date.today()
   if form_type=="sell":
     instance=SaleItems.objects.get(pk=pk)
+    flag=instance.item_image
     old_category=instance.category
     if request.method=='POST':
       form=SellForm(request.POST,request.FILES,instance=instance)
@@ -640,12 +641,13 @@ def edit(request,form_type,pk):
         else:
           print "form filled wrongly"
       else:
-        return render(request,'buyandsell/form.html',{'form':form})
+        return render(request,'buyandsell/form.html',{'form':form,'flag':flag})
     form=SellForm(instance=instance)
-    return render(request,'buyandsell/form.html',{'form':form})
+    return render(request,'buyandsell/form.html',{'form':form,'flag':flag})
 
   if form_type=="request":
-    instance=RequestedItems.objects.get(pk=pk)    #update notifications to be given to watch users
+    instance=RequestedItems.objects.get(pk=pk)
+    flag=instance.item_image  #update notifications to be given to watch users
     old_category=instance.category
     if request.method=='POST':
       form=RequestForm(request.POST,request.FILES,instance=instance)
@@ -683,9 +685,9 @@ def edit(request,form_type,pk):
         else:
           print "form filled wrongly"
       else:
-        return render(request,'buyandsell/form.html',{'form':form})
+        return render(request,'buyandsell/form.html',{'form':form,'flag':flag})
     form=RequestForm(instance=instance)
-    return render(request,'buyandsell/form.html',{'form':form})
+    return render(request,'buyandsell/form.html',{'form':form,'flag':flag})
 
 def my_account(request):
   show_contact=1
@@ -735,7 +737,11 @@ def trash_item(request,item_type,pk):
 def transaction(request,item_type,pk):
   user=request.user
   if item_type=="sell":
-    itm=SaleItems.objects.get(pk=pk)
+    try:
+      itm=SaleItems.items.get(pk=pk)
+    except:
+      messages.error(request,"This item has been deleted or does not exist")
+       
     itm_user=itm.user
     if itm_user != user:
       messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.You can only fill the form for the items in your account below")
@@ -743,7 +749,7 @@ def transaction(request,item_type,pk):
     try:
       filled_form=SuccessfulTransaction.objects.get(sell_item=itm)
       if filled_form:
-        messages.error(request,"oops!This item is already sold!!")
+        messages.error(request,"oops!This item is already sold !!")
         return HttpResponseRedirect('/buyandsell/my-account/')
     except:
       pass
@@ -752,7 +758,7 @@ def transaction(request,item_type,pk):
       try:
         filled_form=SuccessfulTransaction.objects.get(sell_item=itm)
         if filled_form:
-          messages.error(request,"oops!This item is already sold!!")
+          messages.error(request,"oops!This item is already sold,you cant submit the form again!!")
           return HttpResponseRedirect('/buyandsell/my-account/')
       except:
         pass
@@ -781,17 +787,21 @@ def transaction(request,item_type,pk):
         return HttpResponseRedirect('/buyandsell/succ_trans/sell/'+pk+'/')
       new_item.seller=user
       new_item.buyer=buyer
-      sell_item=SaleItems.objects.get(pk=pk)
+      sell_item=SaleItems.items.get(pk=pk)
       new_item.sell_item=sell_item
       new_item.trasaction_date=timezone.now()
       new_item.save()
-    sell_item=SaleItems.objects.get(pk=pk)
+    sell_item=SaleItems.items.get(pk=pk)
     mail_list=BuyMails.objects.filter(item=sell_item)
     return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list,'type':item_type})
 
   if item_type=="request":
-    itm=RequestedItems.objects.get(pk=pk)
-    itm_user=itm.user
+    itm=RequestedItems.items.get(pk=pk)
+    try:
+      itm=SaleItems.items.get(pk=pk)
+    except:
+      messages.error(request,"This item has been deleted or does not exist")
+
     if itm_user != user:
       messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.You can only fill the form for the items in your account below")
       return HttpResponseRedirect('/buyandsell/my-account/')
@@ -807,7 +817,7 @@ def transaction(request,item_type,pk):
       try:
         filled_form=SuccessfulTransaction.objects.get(request_item=itm)
         if filled_form:
-          messages.error(request,"oops!This request is already fulfilled!!")
+          messages.error(request,"oops!This request is already fulfilled,you cant submit the form again!!")
           return HttpResponseRedirect('/buyandsell/my-account/')
       except:
         pass
@@ -836,12 +846,12 @@ def transaction(request,item_type,pk):
         return HttpResponseRedirect('/buyandsell/succ_trans/request/'+pk+'/')
       new_item.seller=seller
       new_item.buyer=user
-      request_item=RequestedItems.objects.get(pk=pk)
+      request_item=RequestedItems.items.get(pk=pk)
       new_item.request_item=request_item        #need to redirect if already existing request item or sell item is present
       new_item.is_requested=True
       new_item.trasaction_date=timezone.now()
       new_item.save()
-    request_item=RequestedItems.objects.get(pk=pk)
+    request_item=RequestedItems.items.get(pk=pk)
     mail_list=RequestMails.objects.filter(item=request_item)
     return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list})
 
