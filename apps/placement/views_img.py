@@ -162,85 +162,7 @@ def generate_missing_resumes(request, company_id):
                             'errors' : errors,
                             }, context_instance = RequestContext(request))
 
-#@login_required
-#@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
-#def placement_manager_view(request):
-#  contactperson_data = CompanyContact.objects.all()
-#  assign_form = AssignCoordinatorForm()
-#  if request.method == 'POST' :
-#    form = ExcelForm(request.POST , request.FILES)
-#    if form.is_valid():
-#      excel_file= request.FILES['excel_file']
-#      workbook = xlrd.open_workbook(file_contents=excel_file.read())
-#      worksheet = workbook.sheet_by_index(0)
-#      num_rows = worksheet.nrows - 1
-#      num_cells = worksheet.ncols -1
-#      curr_row = 0
-#      companyname = ""
-#      while curr_row < num_rows:
-#         curr_row += 1
-#         row = worksheet.row(curr_row)
-#         contactperson    = ContactPerson()
-#         company          = CompanyContact()
-#
-#         try:
-#
-#           company.company_name     = row[0].value.encode('ascii', 'ignore')
-#           company.status           = row[6].value.encode('ascii', 'ignore')
-#           company.last_contact     = row[7].value.encode('ascii', 'ignore')
-#           company.person_in_contact= row[8].value.encode('ascii', 'ignore')
-#           company.comments         = row[9].value.encode('ascii', 'ignore')
-#           try:
-#              company.cluster = int(row[1].value)
-#           except ValueError:
-#              pass
-#           contactperson.contact_person = row[2].value.encode('ascii', 'ignore')
-#           contactperson.designation    = row[3].value.encode('ascii', 'ignore')
-#           try:
-#              contactperson.phone_no       = unicode(int(row[4].value)).encode('ascii', 'ignore')
-#           except ValueError:
-#              contactperson.phone_no       = unicode(row[4].value).encode('ascii', 'ignore')
-#           contactperson.email          = row[5].value.encode('ascii', 'ignore')
-#
-#         except IndexError:
-#             pass
-#         contactperson.save()
-#         company.contactperson = contactperson
-#         company.save()
-#
-#  else:
-#    form=ExcelForm()
-#
-#  lst = contactperson_data.values_list('pk', 'company_name', 'cluster',
-#              'contactperson__contact_person', 'contactperson__designation', 'contactperson__phone_no',
-#              'contactperson__email', 'status', 'last_contact', 'person_in_contact', 'comments',
-#              'when_to_contact', 'pk', 'pk')
-#
-#
-##  data_to_send = [[str(x) for x in list(item)] for item in lst]
-#
-#  data_to_send = []
-#
-#  for item in lst:
-#      a = []
-#      for x in list(item):
-#         try:
-#            if isinstance(x , datetime.date):
-#               df = DateFormat(x)
-#               dl = df.format(get_format('DATE_FORMAT'))
-#               a.append(str(dl))
-#            else:
-#               a.append(str(x))
-#         except UnicodeEncodeError:
-#            a.append('')
-#      data_to_send.append(a)
-#
-#  return render_to_response('placement/placement_mgr.html',{
-#          'excel_form' : form,
-#          'assign_form' : assign_form,
-#          'contactperson_data': data_to_send
-#        },context_instance = RequestContext(request))
-#
+
 #@login_required
 #@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists() , login_url=login_url)
 #def contactmanager_edit(request, company_id=None):
@@ -352,71 +274,6 @@ def generate_missing_resumes(request, company_id):
 #  return HttpResponseRedirect('/placement/contact_manager/')
 #
 #@login_required
-#@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
-#def company_coordinator_view(request):
-#  user =  request.user
-#  student = user.student
-#  companycontact_data = CompanyContact.objects.filter(person_in_contact=student.user.name)
-#
-#  lst = companycontact_data.values_list('company_name', 'cluster',
-#              'contactperson__contact_person', 'contactperson__designation', 'contactperson__phone_no',
-#              'contactperson__email', 'status', 'last_contact', 'person_in_contact', 'comments',
-#              'when_to_contact', 'pk', 'pk')
-#
-##  data_to_send = [[str(x) for x in list(item)] for item in lst]
-#
-#
-#  data_to_send = []
-#
-#  for item in lst:
-#      a = []
-#      for x in list(item):
-#         try:
-#            if isinstance(x , datetime.date):
-#               df = DateFormat(x)
-#               dl = df.format(get_format('DATE_FORMAT'))
-#               a.append(str(dl))
-#            else:
-#               a.append(str(x))
-#         except UnicodeEncodeError:
-#            a.append('')
-#      data_to_send.append(a)
-#
-#  return render_to_response('placement/company_coordi.html',{
-#        'contactperson_data' : data_to_send,
-#        }, context_instance = RequestContext(request))
-#
-#@login_required
-#@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
-#def company_coordinator_today_view(request):
-#  user =  request.user
-#  student = user.student
-#  companycontact_data = CompanyContact.objects.filter(person_in_contact=student.name, when_to_contact__lte=datetime.date.today())
-#
-#  lst = companycontact_data.values_list('company_name', 'cluster',
-#              'contactperson__contact_person', 'contactperson__designation', 'contactperson__phone_no',
-#              'contactperson__email', 'status', 'last_contact', 'person_in_contact', 'comments',
-#              'when_to_contact', 'pk', 'pk')
-#
-##  data_to_send = [[str(x) for x in list(item)] for item in lst]
-#
-#
-#  data_to_send = []
-#
-#  for item in lst:
-#      a = []
-#      for x in list(item):
-#         try:
-#            a.append(str(x))
-#         except UnicodeEncodeError:
-#            a.append('')
-#      data_to_send.append(a)
-#
-#  return render_to_response('placement/company_coordi.html',{
-#        'contactperson_data' : data_to_send,
-#        }, context_instance = RequestContext(request))
-#
-#@login_required
 #@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
 #def add_company_coordinator(request):
 #  import ipdb; ipdb.set_trace()
@@ -471,27 +328,195 @@ def generate_missing_resumes(request, company_id):
 #    wb.save(response)
 #    return response
 #
-#@login_required
-#def person_search(request):
-#  if request.is_ajax():
-#    q = request.GET.get('term','')
-#    print q
-#    persons = Student.objects.filter(Q(user__name__icontains = q)|Q(user__username__icontains = q),passout_year=None).order_by('-user__username')[:50]
-#    if not persons:
-#      obj = [{
-#        'id':'00000000',
-#        'label':'No results found',
-#        'value':q,
-#      }]
-#      data = simplejson.dumps(obj)
-#      return HttpResponse(data,'application/json')
-#    def person_dict(student):
-#      return {
-#        'id':str(student.user.username),
-#        'label':str(student.user.name)+" ( "+str(student.user.info)+" )",
-#        'value':str(student.user.name),
-#      }
-#    data = simplejson.dumps(map(person_dict,persons))
-#  else:
-#    data = 'fail'
-#  return HttpResponse(data,'application/json')
+
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
+def company_coordinator_view(request):
+  user =  request.user
+  if user.groups.filter(name='Company Coordinator'):
+    student = user.student
+    campus_contact = CampusContact.objects.filter(student = student)
+  elif user.groups.filter(name='Placement Manager'):
+    campus_contact = CampusContact.objects.all()
+  lst = []
+  for campus_contact_inst in campus_contact:
+    contactPerson = campus_contact_inst.contact_person
+    values = [contactPerson.company_contact.name, contactPerson.company_contact.cluster,]
+    values.append(contactPerson.name, contactPerson.designation, contactPerson.phone_no, contactPerson.email)
+    values.append(contactPerson.company_contact.status)
+    values.append(campus_contact_inst.last_contact)
+    comment = CompanyContactComments.objects.filter(campus_contact = camous_contact_inst).order_by('date_created')[0]
+    values.append(comment.comment)
+    values.append(campus_contact_inst.when_to_contact)
+    values.append('pk','pk')
+    lst.append(values[:])
+
+
+  data_to_send = []
+
+  for item in lst:
+      a = []
+      for x in list(item):
+         try:
+            if isinstance(x , datetime.date):
+               df = DateFormat(x)
+               dl = df.format(get_format('DATE_FORMAT'))
+               a.append(str(dl))
+            else:
+               a.append(str(x))
+         except UnicodeEncodeError:
+            a.append('')
+      data_to_send.append(a)
+
+  return render_to_response('placement/company_coordi.html',{
+        'contactperson_data' : data_to_send,
+        }, context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
+def placement_manager_view(request):
+  contactperson_data = CompanyContactInfo.objects.all()
+#  assign_form = AssignCoordinatorForm()
+  if request.method == 'POST' :
+    pass
+#    form = ExcelForm(request.POST , request.FILES)
+#    if form.is_valid():
+#      excel_file= request.FILES['excel_file']
+#      workbook = xlrd.open_workbook(file_contents=excel_file.read())
+#      worksheet = workbook.sheet_by_index(0)
+#      num_rows = worksheet.nrows - 1
+#      num_cells = worksheet.ncols -1
+#      curr_row = 0
+#      companyname = ""
+#      while curr_row < num_rows:
+#         curr_row += 1
+#         row = worksheet.row(curr_row)
+#         contactperson    = ContactPerson()
+#         company          = CompanyContactInfo()
+#
+#         try:
+#
+#           company.name     = row[0].value.encode('ascii', 'ignore')
+#           company.status           = row[6].value.encode('ascii', 'ignore')
+#           company.last_contact     = row[7].value.encode('ascii', 'ignore')
+#           company.person_in_contact= row[8].value.encode('ascii', 'ignore')
+#           company.comments         = row[9].value.encode('ascii', 'ignore')
+#           try:
+#              company.cluster = int(row[1].value)
+#           except ValueError:
+#              pass
+#           contactperson.name = row[2].value.encode('ascii', 'ignore')
+#           contactperson.designation    = row[3].value.encode('ascii', 'ignore')
+#           try:
+#              contactperson.phone_no       = unicode(int(row[4].value)).encode('ascii', 'ignore')
+#           except ValueError:
+#              contactperson.phone_no       = unicode(row[4].value).encode('ascii', 'ignore')
+#           contactperson.email          = row[5].value.encode('ascii', 'ignore')
+#
+#         except IndexError:
+#             pass
+#         contactperson.save()
+#         company.contactperson = contactperson
+#         company.save()
+#
+  else:
+    form=ExcelForm()
+  campus_contact = CampusContact.objects.all()
+  lst = []
+  for campus_contact_inst in campus_contact:
+    contactPerson = campus_contact_inst.contact_person
+    values = [contactPerson.company_contact.name, contactPerson.company_contact.cluster,]
+    values.append(contactPerson.name, contactPerson.designation, contactPerson.phone_no, contactPerson.email)
+    values.append(contactPerson.company_contact.status)
+    values.append(campus_contact_inst.last_contact)
+    comment = CompanyContactComments.objects.filter(campus_contact = camous_contact_inst).order_by('date_created')[0]
+    values.append(comment.comment)
+    values.append(campus_contact_inst.when_to_contact)
+    values.append('pk','pk')
+    lst.append(values[:])
+
+  data_to_send = []
+
+  for item in lst:
+      a = []
+      for x in list(item):
+         try:
+            if isinstance(x , datetime.date):
+               df = DateFormat(x)
+               dl = df.format(get_format('DATE_FORMAT'))
+               a.append(str(dl))
+            else:
+               a.append(str(x))
+         except UnicodeEncodeError:
+            a.append('')
+      data_to_send.append(a)
+
+  return render_to_response('placement/placement_mgr.html',{
+          'excel_form' : form,
+#          'assign_form' : assign_form,
+          'contactperson_data': data_to_send
+        },context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
+def company_coordinator_today_view(request):
+  user =  request.user
+  if user.groups.filter(name='Company Coordinator'):
+    student = user.student
+    campus_contact = CampusContact.objects.filter(student=student, when_to_contact__lte=datetime.date.today())
+  elif user.groups.filter(name='Placement Manager'):
+    campus_contact = CampusContact.objects.filter(when_to_contact__lte=datetime.date.today())
+  lst = []
+  for campus_contact_inst in campus_contact:
+    contactPerson = campus_contact_inst.contact_person
+    values = [contactPerson.company_contact.name, contactPerson.company_contact.cluster,]
+    values.append(contactPerson.name, contactPerson.designation, contactPerson.phone_no, contactPerson.email)
+    values.append(contactPerson.company_contact.status)
+    values.append(campus_contact_inst.last_contact)
+    comment = CompanyContactComments.objects.filter(campus_contact = camous_contact_inst).order_by('date_created')[0]
+    values.append(comment.comment)
+    values.append(campus_contact_inst.when_to_contact)
+    values.append('pk','pk')
+    lst.append(values[:])
+
+  data_to_send = []
+
+  for item in lst:
+      a = []
+      for x in list(item):
+         try:
+            a.append(str(x))
+         except UnicodeEncodeError:
+            a.append('')
+      data_to_send.append(a)
+
+  return render_to_response('placement/company_coordi.html',{
+        'contactperson_data' : data_to_send,
+        }, context_instance = RequestContext(request))
+
+@login_required
+def person_search(request):
+  if request.is_ajax():
+    q = request.GET.get('term','')
+    print q
+    persons = Student.objects.filter(Q(user__name__icontains = q)|Q(user__username__icontains = q),passout_year=None,user__groups__in=['Company Coordinator', 'Placement Manager']).order_by('-user__username')[:50]
+    if not persons:
+      obj = [{
+        'id':'00000000',
+        'label':'No results found',
+        'value':q,
+      }]
+      data = simplejson.dumps(obj)
+      return HttpResponse(data,'application/json')
+    def person_dict(student):
+      return {
+        'id':str(student.user.username),
+        'label':str(student.user.name)+" ( "+str(student.user.info)+" )",
+        'value':str(student.user.name),
+      }
+    data = simplejson.dumps(map(person_dict,persons))
+  else:
+    data = 'fail'
+  return HttpResponse(data,'application/json')
+

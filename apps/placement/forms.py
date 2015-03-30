@@ -155,8 +155,8 @@ class ExcelForm(forms.Form):
 #    model = models.ContactPerson
 #
 #class AssignCoordinatorForm(forms.Form):
-#  company_coordinator = forms.ModelChoiceField(queryset=models.CompanyCoordi.objects.all(), empty_label="None", required=False)
-#
+#  company_coordinator = forms.ModelChoiceField(queryset=models.Students.objects.all(), empty_label="None", required=False)
+
 #class AddCoordinatorForm(forms.Form):
 #  student = forms.CharField(widget=forms.TextInput)
 #  enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
