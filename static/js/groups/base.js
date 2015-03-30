@@ -41,7 +41,7 @@ function load_groups_tab(hash1, hash2){
   if(hash1 && !hash2)
   {
     $('#content').html("<div "+
-      "id='content-pagelet' class='pagelet' pagelet-url='/groups/"+hash1+"'></div>");
+      "id='content-pagelet' class='pagelet' pagelet-url='/groups/"+hash1+"/'></div>");
   }
   else if(hash1 && hash2)
   {
