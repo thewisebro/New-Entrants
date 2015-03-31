@@ -83,7 +83,7 @@ def company_results(request, company_id, year = None) :
     try:
       company = Company.objects.get(pk = company_id)
     except Exception as e:
-      return TemplateView.as_view(template_name='404.html')
+      raise Http404
     results = ResultsNew.objects.filter(company = company)
 #    degrees = []
 #    for result in results :
@@ -164,7 +164,7 @@ def branch_results(request, discipline_name, year = None) :
       branch = Branch.objects.get(code = discipline_name)
     except Exception as e:
       l.info(request.user.username+' : Exception while viewing results of '+str(discipline_name))
-      return TemplateView.as_view(template_name='404.html')
+      raise Http404
     results = ResultsNew.objects.filter(student__branch = branch, company__year__exact = year).order_by('student__user__name')
 #    degrees = []
 #    for result in results :
@@ -203,7 +203,7 @@ def branch_results_company(request, discipline_name, year = None) :
       branch = Branch.objects.get(code = discipline_name)
     except Exception as e:
       l.info(request.user.username +': encountered an exception while getting the branch name')
-      return TemplateView.as_view(template_name='404.html')
+      raise Http404
     results = results.filter(student__branch = branch).values('company', 'company__name_of_company').order_by('company__name_of_company').annotate(placed = Count('company__name_of_company'))
     session = str(year) + '-' + str(year+1)[2:4]
     total_placed = []

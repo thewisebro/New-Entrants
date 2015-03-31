@@ -39,6 +39,16 @@ INSERT INTO nci.regol_registeredcourses (student_id,course_details_id,credits,re
 # groups
 INSERT INTO nci.groups_group (user_id,nickname,website,description,admin_id,is_active) SELECT user_id,nickname,website,description,admin_id,is_active FROM channeli_dump.groups_group;
 
+INSERT INTO nci.groups_groupinfo (group_id,mission,founding_year,facebook_url,twitter_url,gplus_url) (SELECT a.user_id as group_id,b.mission,b.founding_year,b.facebook_url,b.twitter_url,b.gplus_url FROM channeli_dump.groups_group a JOIN channeli_dump.groups_groupinfo b ON a.id = b.group_id);
+
+INSERT INTO nci.groups_post (id, post_name) SELECT id, post_name FROM channeli_dump.groups_post;
+
+INSERT INTO nci.groups_membership (id,groupinfo_id,post_id,student_id) (SELECT a.id, c.user_id as groupinfo_id, a.post_id, a.person_id as student_id FROM channeli_dump.groups_membership a JOIN channeli_dump.groups_groupinfo b ON a.groupinfo_id = b.id JOIN channeli_dump.groups_group c ON b.group_id = c.id);
+
+INSERT INTO nci.groups_groupinfo_posts (id,groupinfo_id,post_id) (SELECT a.id, c.user_id as groupinfo_id, a.post_id FROM channeli_dump.groups_groupinfo_posts a JOIN channeli_dump.groups_groupinfo b ON a.groupinfo_id = b.id JOIN channeli_dump.groups_group c ON b.group_id = c.id);
+
+INSERT INTO nci.groups_groupactivity (id,group_id,text,datetime_created) (SELECT a.id, b.user_id as group_id, a.text, a.datetime as datetime_created FROM channeli_dump.groups_groupactivity a JOIN channeli_dump.groups_group b ON a.group_id = b.id);
+
 
 # events
 INSERT INTO nci.events_calendar (id,name,cal_type) SELECT id,name,cal_type FROM channeli_dump.events_calendar;

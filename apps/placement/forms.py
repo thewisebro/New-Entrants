@@ -21,6 +21,31 @@ class CompanyForm(forms.ModelForm) :
   open_for_disciplines = forms.ModelMultipleChoiceField(queryset=Branch.objects.all().order_by('degree','department'), widget=forms.CheckboxSelectMultiple)
   class Meta :
     model   = models.Company
+    fields = ['name',
+              'status',
+              'place_of_posting',
+              'category',
+              'latest_date_of_joining',
+              'package_ug', 'package_pg', 'package_phd', 'ctc_remark',
+              'cgpa_requirement',
+              'company_description',
+              'contact_person',
+              'pre_placement_talk',
+              'shortlist_from_resumes',
+              'group_discussion',
+              'online_test',
+              'written_test',
+              'paper_based_test',
+              'interview_1', 'interview_2', 'interview_3',
+              'last_date_of_applying',
+              'name_of_post',
+              'description_of_post',
+              'other_requirements',
+              'total_vacancies_for_iitr',
+              'website',
+              'brochure',
+              'sector',
+              'open_for_disciplines']
     exclude = ('year', )
     widgets = {#'open_for_disciplines' : forms.CheckboxSelectMultiple(),
                'package_ug' : CurrencyWidget(choices_whole = PC.PAY_WHOLE_CHOICES,

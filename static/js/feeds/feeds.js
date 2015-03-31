@@ -16,7 +16,7 @@ function load_feeds_page(){
   else{
     display_add_feeds('end',feeds);
   }
-  //load_events_birthdays();
+  show_default_right_column();
 }
 
 function update_feeds(action,number){

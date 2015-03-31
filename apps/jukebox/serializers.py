@@ -1,7 +1,7 @@
 from HTMLParser import HTMLParser
 from django.forms import widgets
 from rest_framework import serializers
-from jukebox.models import Song, Artist, Album, Playlist
+from jukebox.models import *
 #from jukebox.views import get_json_Queue
 
 def get_json_Queue(song):
@@ -77,6 +77,12 @@ class ArtistSerializer(serializers.ModelSerializer):
     fields = ('id', 'artist')
     depth = 1
 
+def get_songs_ser(x):
+  try:
+    return SongSerializer(x).data
+  except:
+    return None
+
 class AlbumDescSerializer(serializers.ModelSerializer):
   song_set = serializers.SerializerMethodField('get_song_set')
   artists = ArtistSerializer(many=True)
@@ -84,11 +90,12 @@ class AlbumDescSerializer(serializers.ModelSerializer):
     model = Album
     fields = ('id', 'song_set', 'album', 'artists', 'album_art')
     depth = 2
+
   def get_song_set(self,obj):
     if(obj==None):
       return []
     songs = obj.song_set.all().order_by('id')
-    songs = map(lambda x: SongSerializer(x).data,songs)
+    songs = map(get_songs_ser, songs)
     return songs
 
 class ArtistDescSerializer(serializers.ModelSerializer):
@@ -132,9 +139,10 @@ class PlaylistSerializer(serializers.ModelSerializer):
 class PlaylistDescSerializer(serializers.ModelSerializer):
   person = serializers.Field(source='person.username')
   songs_list = serializers.SerializerMethodField('get_songs_list')
+  owner = serializers.SerializerMethodField('get_owner')
   class Meta:
     model = Playlist
-    fields = ('id', 'songs', 'name', 'songs_list')
+    fields = ('id', 'songs', 'name', 'songs_list', 'private', 'owner')
     depth = 2
 
   def get_songs_list(self, obj):
@@ -149,6 +157,19 @@ class PlaylistDescSerializer(serializers.ModelSerializer):
       lsongs[key]=SongSerializer(lsongs[key]).data
 
     return lsongs
+
+  def get_owner(self, obj):
+    request = self.context.get('request', None)
+    if(request and request.jb_user and request.jb_user.username):                                           # if anonymous user user.username=''
+      user = Jukebox_Person.objects.get_or_create(person=request.jb_user)[0]                             # user logged in
+      if user==obj.person:
+        return True
+      elif not obj.private:
+        return obj.person.person.html_name()
+    elif not obj.private:
+      return obj.person.person.html_name()
+    return False
+
 
 
 class PlayQueueSerializer(serializers.Serializer):

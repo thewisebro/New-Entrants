@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xlmns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>
+		People Search
+	</title>
+	<link rel="stylesheet" type="text/css" href="peoplestyle.css" />
+  <link rel="icon" type="image/png"  href="/static/images/nucleus/app-icons/peoplesearch.png">
+</head>
+
+<body style="background:#d8d8d8 url('images/ps_01.jpg') repeat-x;">
+    <div id="container" style="padding-top:230px;">
+	<div id="div_main" style="margin-left:170px">
+	    <div id="div_left_big_image">
+			<img src="images/ps_04.gif" alt="People search" />
+	    </div>
+	    <div id="div_right">
+		<div id="div_up">
+			    <img src="images/ps_07.gif" alt="People search" />
+		</div>
+		<div id="div_down">
+		    <p>
+			<form method="post" action="./index.cgi">
+			    <div id="tabs">
+				<div id="all_tab" onClick="javascript:switchSearch('all')" class="active_tab">
+				    <div id="img_all_left" class="active_left">
+				    </div>
+				    <div class="tab_text">
+					All
+				    </div>
+				    <div id="img_all_right" class="active_right">
+				    </div>
+				</div>
+				<div id="stud_tab" onClick="javascript:switchSearch('stud')" class="inactive_tab">
+				    <div id="img_stud_left" class="inactive_left">
+				    </div>
+				    <div class="tab_text">
+					Students
+				    </div>
+				    <div id="img_stud_right" class="inactive_right">
+				    </div>
+				</div>
+				<div id="fac_tab" onClick="javascript:switchSearch('fac')" class="inactive_tab">
+				    <div id="img_fac_left" class="inactive_left">
+				    </div>
+				    <div class="tab_text">
+					Faculty
+				    </div>
+				    <div id="img_fac_right" class="inactive_right">
+				    </div>
+				</div>
+				<div id="serv_tab" onClick="javascript:switchSearch('serv')" class="inactive_tab">
+				    <div id="img_serv_left" class="inactive_left">
+				    </div>
+				    <div class="tab_text">
+					Services
+				    </div>
+				    <div id="img_serv_right" class="inactive_right">
+				    </div>
+				</div>
+			    </div>
+			    <div id="searchbar">
+				<input type="text" name="Name" id="searchbox" value="">
+				<input type="submit" value=" " name="submit" id="search_button"/>
+			    </div>
+			    <div style="clear:both"></div>
+			    <div id="advanced_main">
+				<div id="advanced">
+				    <div id="all" >
+				    </div>
+				    <div id="stud" style="display:none">
+					<select name="student_programme" style="margin-top:5px">
+					    <option value="null">Programme</option>
+					    <option value="1">Under Graduate</option>
+					    <option value="2">Post Graduate</option>
+					    <option value="3">Ph. D</option>
+					</select>
+					<br />
+					<select name="student_year" style="margin-top:5px;">
+					    <option value="null">Year</option>
+					    <option value="1">First Year</option>
+					    <option value="2">Second Year</option>
+					    <option value="3">Third Year</option>
+					    <option value="4">Fourth Year</option>
+					    <option value="5">Fifth Year</option>
+					</select>
+					<br />
+						<select name="student_deptt" style="margin-top:5px">
+							<!--Disciplines here-->
+						</select> 
+					<br />
+				    </div>
+				    <div id="fac" style="display:none">
+					<select name="faculty_post" style="margin-top:13px;">
+					    <!--Posts here-->
+					</select>
+					<br />
+					<select name="faculty_deptt" style="margin-top:17px;">
+					    <!--Departments here-->
+					</select>
+					<br />
+				    </div>
+				    <div id="serv" style="display:none">
+						<select name="services_list" style="margin-top:35px">
+						    <!--Services list here-->
+						</select>
+					<br />
+				    </div>
+				</div>
+				<div id="advanced_bottom">
+				    <div id="adv_left">
+				    </div>
+				    <div id="adv_middle" onclick="javascript:advDrop()">
+				    Advanced&nbsp;Search
+				    </div>
+				    <div id="adv_right" onClick="javascript:advDrop()" class="advUp">
+				</div>
+			    </div>
+			    <input type="hidden" name="form_submitted" value="true" />
+			    <input type="hidden" name="search_category" id="search_category" value="all">
+			    <input type="hidden" name="advanced_search_status" value="off">
+			    <br />
+			</form>
+		    </p>
+		</div>
+	    </div>
+	</div>
+    </div>
+</body>
+<script type="text/javascript" src="scripts.js" ></script>
+<script type="text/javascript" src="/static/js/piwik.js"></script>
+</html>

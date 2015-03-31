@@ -2,12 +2,10 @@ var loaded_scripts_apps = [];
 
 var apps_scripts = {
   'home':[
-    '/static/js/prettydate.js',
     '/static/handlebars/feeds/templates.js',
     '/static/js/feeds/feeds.js'
   ],
   'notifications':[
-    '/static/js/prettydate.js',
     '/static/js/notifications/base.js'
   ],
   'forum':[
@@ -17,7 +15,8 @@ var apps_scripts = {
     '/static/handlebars/notices/templates.js',
     '/static/js/notices/constants.js',
     '/static/js/notices/jquery.simplePagination.js',
-    '/static/js/notices/base.js'
+    '/static/js/notices/base.js',
+    '/static/js/notices/date.js',
   ],
   'events':[
     '/static/js/events/events.js'
@@ -31,12 +30,16 @@ var apps_scripts = {
   ],
   'helpcenter':[
     '/static/handlebars/helpcenter/templates.js',
-    '/static/js/prettydate.js',
     '/static/js/helpcenter/helpcenter.js'
   ],
   'settings':[
     '/static/handlebars/utilities/templates.js',
     '/static/js/utilities/base.js'
+  ],
+  'groups':[
+    '/static/handlebars/groups/templates.js',
+    '/static/js/groups/base.js',
+    '/static/js/groups/activity.js',
   ]
 };
 
