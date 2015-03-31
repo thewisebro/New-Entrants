@@ -17,6 +17,9 @@ from collections import defaultdict, Counter
 from django.contrib.sessions.models import Session
 #from nucleus import get_info, html_name
 import json as simplejson
+
+DEVELOPMENT = settings.DEVELOPMENT
+
 """
 def CORS_allow(view):
   def wrapped_view(request, *args, **kwargs):
@@ -35,14 +38,16 @@ def CORS_allow(view):
 
 def CORS_allow(view):
   def wrapped_view(request, *args, **kwargs):
-    response = view(request, *args, **kwargs)
-    if settings.PRODUCTION == False:
+    if DEVELOPMENT:
       if request.method == 'POST':
         session_id = request.COOKIES['CHANNELI_SESSID']
         session = Session.objects.get(session_key=session_id)
         uid = session.get_decoded().get('_auth_user_id')
         user = User.objects.get(pk=uid)
         request.user = user
+
+    response = view(request, *args, **kwargs)
+    if DEVELOPMENT:
       response["Access-Control-Allow-Origin"] = "http://172.25.55.156:7000"
       response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
       response["Access-Control-Allow-Credentials"] = 'true'
