@@ -30,6 +30,7 @@ GLOBAL_MEDIA_ROOT = settings.GLOBAL_MEDIA_ROOT
 def CORS_allow(view):
   def wrapped_view(request, *args, **kwargs):
     if DEVELOPMENT:
+      import pdb;pdb.set_trace()
       if request.method == 'POST':
         session_id = request.COOKIES['CHANNELI_SESSID']
         session = Session.objects.get(session_key=session_id)
