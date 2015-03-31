@@ -149,6 +149,7 @@ class Uploadedfile(BaseUpload):
            'description':self.description,
            'file_type':self.file_type,
            'upload_type':self.upload_type,
+           'download_count':self.download_count,
         }
         return fileData
 
