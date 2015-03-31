@@ -53,6 +53,17 @@ MAX_VIDEO_SIZE = 20971520      # 20 MB
 
 
 # VIEWS
+
+def get_post_dict(post):
+  documents =  Uploadedfile.file_objects.all().filter(post=post)
+  post = post.as_dict()
+  files = []
+  for document in documents:
+    document = document.as_dict()
+    files.append(document)
+  return {'post':post,'files':files}
+
+
 @csrf_exempt
 @CORS_allow
 def dispbatch(request):
@@ -61,11 +72,16 @@ def dispbatch(request):
     if userType == "0":
       student = request.user.student
       batches = student.batch_set.all()
+      posts = []
       courses = map(lambda x: x.course, batches)
       user_info = request.user.serialize()
       batches_info = map(lambda x: batch_dict(x),batches)
+      userPosts = Post.post_objects.all().filter(batch__in = batches).order_by('-datetime_created')
+      for post in userPosts:
+        posts.append(get_post_dict(post))
       data = {'user': user_info,
               'batches': batches_info,
+              'posts':posts,
               'userType': userType}
       return HttpResponse (json.dumps(data),content_type='application/json')
 #      index = settings.PROJECT_ROOT + '/apps/lectut/static/lectut-front/dist/index.html'
@@ -79,16 +95,18 @@ def dispbatch(request):
     posts = []
     latest_posts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created') #[number:(number+post_count)]
     for post in latest_posts:
-      documents =  Uploadedfile.file_objects.all().filter(post=post)
-      post = post.as_dict()
-      files = []
-      for document in documents:
-        document = document.as_dict()
-        files.append(document)
-      complete_post = {'post':post,'files':files}
+      complete_post = get_post_dict(post)
       posts.append(complete_post)
     return HttpResponse (json.dumps(posts),content_type='application/json')
 
+@csrf_exempt
+@CORS_allow
+def latest_feeds(request):
+  latest_posts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created')
+  posts = []
+  for post in latest_posts:
+    posts.append(get_post_dict(post))
+  return HttpResponse (json.dumps(posts),content_type='application/json')
 
 @csrf_exempt
 @CORS_allow
@@ -97,6 +115,8 @@ def coursepage(request, batch_id):
     user = request.user
 #    usrname = request.POST.get('user','harshithere')
 #    user = User.objects.get(username=usrname)
+    if not Batch.objects.filter(id=batch_id).exists():
+      return HttpResponse(json.dumps('This batch doesnot exist'),content_type='application/json')
     userBatch = Batch.objects.get(id=batch_id)
     posts = []
     request.session['batchId'] = batch_id
@@ -105,15 +125,12 @@ def coursepage(request, batch_id):
     number = 0
     userType=getUserType(user)
 
-    previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
+    if user in userBatch.students.all():
+      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
+    else:
+      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
     for post in previous_posts:
-      documents =  Uploadedfile.file_objects.all().filter(post=post)
-      post = post.as_dict()
-      files = []
-      for document in documents:
-        document = document.as_dict()
-        files.append(document)
-      complete_post = {'post':post,'files':files}
+      complete_post = get_post_dict(post)
       posts.append(complete_post)
 
     context = {'posts': posts,
@@ -145,7 +162,6 @@ def uploadFile(request , batch_id):
       file_type = getFileType(upload_file)
       upload_type = request.POST['upload_type']
       file_name=request.POST['upload_name']
-#import pdb;pdb.set_trace();
 
       if file_type!='Video' and  upload_file._size>MAX_FILE_SIZE:
         msg = "File too large.Must be smaller than 5MB"
@@ -292,13 +308,7 @@ def get_post(request , batch_id , post_id):
   if Post.objects.filter(id = post_id).exists():
     if Post.post_objects.filter(id = post_id).exists():
       post = Post.post_objects.get(id = post_id)
-      documents =  Uploadedfile.file_objects.all().filter(post=post)
-      post = post.as_dict()
-      files = []
-      for document in documents:
-        document = document.as_dict()
-        files.append(document)
-      complete_post = {'post':post,'files':files}
+      complete_post = get_post_dict(post)
       return HttpResponse(json.dumps(complete_post), content_type='application/json')
     else:
       msg = 'Post has been deleted'

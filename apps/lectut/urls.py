@@ -10,6 +10,7 @@ urlpatterns = patterns('',
         url(r'^files/(?P<batch_id>\w+)/$', views.get_files, name='get_files'),
 #        url(r'^ajax/feed/(?P<post_id>\w+)/$', views.get_post, name='get_post'),
         url(r'^feeds/(?P<batch_id>\w+)/(?P<post_id>\w+)/$', views.get_post, name='get_post'),
+        url(r'^feeds/$', views.latest_feeds, name='latest_feeds'),
 
         url(r'^download/(?P<file_id>\w+)/$', views.download_file, name='download_file'),
         url(r'^myuploads/(?P<batch_id>\w+)/$', views.useruploads, name='useruploads'),
