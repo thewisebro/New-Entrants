@@ -30,13 +30,15 @@ GLOBAL_MEDIA_ROOT = settings.GLOBAL_MEDIA_ROOT
 def CORS_allow(view):
   def wrapped_view(request, *args, **kwargs):
     if DEVELOPMENT:
-      import pdb;pdb.set_trace()
       if request.method == 'POST':
-        session_id = request.COOKIES['CHANNELI_SESSID']
-        session = Session.objects.get(session_key=session_id)
-        uid = session.get_decoded().get('_auth_user_id')
-        user = User.objects.get(pk=uid)
-        request.user = user
+        try:
+          session_id = request.COOKIES['CHANNELI_SESSID']
+          session = Session.objects.get(session_key=session_id)
+          uid = session.get_decoded().get('_auth_user_id')
+          user = User.objects.get(pk=uid)
+          request.user = user
+        except:
+          pass
 
     response = view(request, *args, **kwargs)
     if DEVELOPMENT:
@@ -90,6 +92,8 @@ def dispbatch(request):
       batches_info = map(lambda x: batch_dict(x),batches)
       userPosts = Post.post_objects.all().filter(batch__in = batches).order_by('-datetime_created')
 
+    else:
+      userPosts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created')  
     for post in userPosts:
       posts.append(get_post_dict(post))
     data = {'user': user_info,
@@ -97,13 +101,13 @@ def dispbatch(request):
             'posts':posts,
             'userType': userType}
 
-    return HttpResponse (json.dumps(posts),content_type='application/json')
+    return HttpResponse (json.dumps(data),content_type='application/json')
 
   latest_posts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created') #[number:(number+post_count)]
   for post in latest_posts:
     complete_post = get_post_dict(post)
     posts.append(complete_post)
-  return HttpResponse (json.dumps(posts),content_type='application/json')
+  return HttpResponse (json.dumps({'posts':posts,'userType':"2"}),content_type='application/json')
 
 @csrf_exempt
 @CORS_allow
@@ -113,7 +117,7 @@ def latest_feeds(request):
   posts = []
   for post in latest_posts:
     posts.append(get_post_dict(post))
-  return HttpResponse (json.dumps(posts),content_type='application/json')
+  return HttpResponse (json.dumps({'posts':posts, 'userType':userType}),content_type='application/json')
 
 @csrf_exempt
 @CORS_allow
@@ -132,12 +136,24 @@ def coursepage(request, batch_id):
     number = 0
     userType=getUserType(user)
 
-    if user in userBatch.students.all():
-      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
-      in_batch = True
+    if userType == "0":
+      if user.student in userBatch.students.all():
+        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
+        in_batch = True
+      else:
+        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = True).order_by('-datetime_created')
+        in_batch = False
+    elif userType == "1":
+      if user.faculty in userBatch.faculties.all():
+        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
+        in_batch = True
+      else:
+        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = True).order_by('-datetime_created')
+        in_batch = False
     else:
-      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
+      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = True).order_by('-datetime_created')
       in_batch = False
+
     for post in previous_posts:
       complete_post = get_post_dict(post)
       posts.append(complete_post)
@@ -329,6 +345,26 @@ def get_post(request , batch_id , post_id):
       msg = 'Post has been deleted'
   else:
     msg = 'Post doesnot exist'
+
+  response = HttpResponse(json.dumps(msg), content_type='application/json')
+  return response
+
+
+@csrf_exempt
+@CORS_allow
+def get_file(request , batch_id , file_id):
+  user = request.user
+  if Uploadedfile.objects.filter(id = file_id).exists():
+    if Uploadedfile.file_objects.filter(id = file_id).exists():
+      File = Uploadedfile.file_objects.get(id = file_id)
+      user = File.post.upload_user
+      user_info = user.serialize()
+      File = File.as_dict()
+      return HttpResponse(json.dumps({'file':File , 'user_info':user_info}), content_type='application/json')
+    else:
+      msg = 'File has been deleted'
+  else:
+    msg = 'File doesnot exist'
 
   response = HttpResponse(json.dumps(msg), content_type='application/json')
   return response
