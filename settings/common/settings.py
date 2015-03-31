@@ -92,6 +92,18 @@ USE_L10N = False
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = False
 
+SITES = {
+  'INTRANET': {'id': 1, 'domain': 'https://channeli.in'},
+  'INTERNET': {'id': 2, 'domain': 'http://people.iitr.ernet.in'},
+  'IMGSITE': {'id': 3, 'domain': 'http://imgsite.channeli.in'},
+}
+
+DEVELOPMENT_SITES = {
+  'INTRANET': {'id': 1, 'domain': 'http://goku.channeli.in'},
+  'INTERNET': {'id': 2, 'domain': 'http://people.goku.channeli.in'},
+  'IMGSITE': {'id': 3, 'domain': 'http://imgsite.goku.channeli.in'},
+}
+
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media') + os.sep

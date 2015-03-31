@@ -259,9 +259,8 @@ def make_user_logged_in(user, request, next_page, dialog,
                         session_for_remote=True):
   """ Make user logged in. And returns HttpResponse object.
   """
-  if not (request.META.has_key('HTTP_X_FORWARDED_HOST') and\
-        request.META['HTTP_X_FORWARDED_HOST'] == 'people.iitr.ernet.in')\
-        and user.in_group('Student') and user.student.passout_year != None:
+  if settings.SITE == 'INTRANET' and\
+        user.in_group('Student') and user.student.passout_year != None:
     logger.info("Nucleus Login : User(username='"+user.username+"')"+\
                 " couldn't login as passout_year is not NULL.")
     messages.error(request, "You have graduated from IIT Roorkee So you"+\

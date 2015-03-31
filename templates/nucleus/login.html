@@ -17,7 +17,11 @@
   <script type="text/javascript" src="{{ STATIC_URL }}js/common.js"></script>
   <script type="text/javascript">
     var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
-    $('body').ready(function(){
+    $(document).ready(function(){
+      if(location.hash){
+        var action_url = $('#login-form').attr('action');
+        $('#login-form').attr('action', action_url + location.hash);
+      }
       display_messages({{ django_messages }});
       $('[autofocus]').focus();
       if (!Modernizr.input.placeholder){

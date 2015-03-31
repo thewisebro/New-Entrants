@@ -1,6 +1,7 @@
 # SITE ID corressponding to IMG website (dynamic)
+
 SITE_ID = 3
-SITE = 'imgsite'
+SITE = 'IMGSITE'
 
 try:
   from .local_settings import *
