@@ -37,3 +37,6 @@
 [submodule "third_party_apps/django-static-precompile"]
 	path = third_party_apps/django-static-precompile
 	url = http://git.channeli.in/django-static-precompile.git
+[submodule "apps/yaadein/static/yaadein-front"]
+	path = apps/yaadein/static/yaadein-front
+	url = git@git.channeli.in:yaadein-front.git
