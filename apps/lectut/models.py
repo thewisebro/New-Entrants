@@ -124,6 +124,7 @@ class Uploadedfile(BaseUpload):
   file_type=models.CharField(max_length=10 , null=False)
   upload_type=models.CharField(max_length=3 , default='tut')
   deleted = models.BooleanField(default = False)
+  download_count = models.IntegerField(default = 0)
 
   objects = models.Manager()
   file_objects = DeleteManager()
@@ -148,6 +149,7 @@ class Uploadedfile(BaseUpload):
            'description':self.description,
            'file_type':self.file_type,
            'upload_type':self.upload_type,
+           'download_count':self.download_count,
         }
         return fileData
 
@@ -179,11 +181,19 @@ class Reminders(models.Model):
     return reminder
 
 class DownloadLog(models.Model):
-  uploadfile = models.ForeignKey(Uploadedfile)
+  uploadedfile = models.ForeignKey(Uploadedfile)
   user = models.ForeignKey(User)
 
   def __unicode__(self):
     return self.id
+
+  def save(self , *args, **kwargs):
+    log_entry = super(DownloadLog , self).save(*args, **kwargs)
+    uploadedfile = self.uploadedfile
+    uploadedfile.download_count = uploadedfile.download_count+1
+    uploadedfile.save()
+    return log_entry
+
 
 '''class UploadPdf(BaseUpload):
   upload_pdf=models.FileField(upload_to='lectut/pdf',null=True)

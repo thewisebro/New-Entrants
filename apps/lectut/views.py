@@ -67,41 +67,47 @@ def get_post_dict(post):
 @csrf_exempt
 @CORS_allow
 def dispbatch(request):
+  posts = []
   if request.user.is_authenticated():
     userType = getUserType(request.user)
+    user_info = request.user.serialize()
     if userType == "0":
       student = request.user.student
       batches = student.batch_set.all()
-      posts = []
       courses = map(lambda x: x.course, batches)
-      user_info = request.user.serialize()
       batches_info = map(lambda x: batch_dict(x),batches)
       userPosts = Post.post_objects.all().filter(batch__in = batches).order_by('-datetime_created')
-      for post in userPosts:
-        posts.append(get_post_dict(post))
-      data = {'user': user_info,
-              'batches': batches_info,
-              'posts':posts,
-              'userType': userType}
-      return HttpResponse (json.dumps(data),content_type='application/json')
 #      index = settings.PROJECT_ROOT + '/apps/lectut/static/lectut-front/dist/index.html'
 #      with open(index,'r') as f:
 #       response =  HttpResponse(f.read())
 #       return response
 #return render(request, 'dist/index.html', context)
-    else:
-      return HttpResponse("You are a faculty")
-  else:
-    posts = []
-    latest_posts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created') #[number:(number+post_count)]
-    for post in latest_posts:
-      complete_post = get_post_dict(post)
-      posts.append(complete_post)
+    elif userType == "1":
+      faculty = request.user.faculty
+      batches = faculty.batch_set.all()
+      courses = map(lambda x: x.course, batches)
+      batches_info = map(lambda x: batch_dict(x),batches)
+      userPosts = Post.post_objects.all().filter(batch__in = batches).order_by('-datetime_created')
+
+    for post in userPosts:
+      posts.append(get_post_dict(post))
+    data = {'user': user_info,
+            'batches': batches_info,
+            'posts':posts,
+            'userType': userType}
+
     return HttpResponse (json.dumps(posts),content_type='application/json')
+
+  latest_posts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created') #[number:(number+post_count)]
+  for post in latest_posts:
+    complete_post = get_post_dict(post)
+    posts.append(complete_post)
+  return HttpResponse (json.dumps(posts),content_type='application/json')
 
 @csrf_exempt
 @CORS_allow
 def latest_feeds(request):
+  userType = getUserType(request.user)
   latest_posts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created')
   posts = []
   for post in latest_posts:
@@ -127,15 +133,18 @@ def coursepage(request, batch_id):
 
     if user in userBatch.students.all():
       previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
+      in_batch = True
     else:
       previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
+      in_batch = False
     for post in previous_posts:
       complete_post = get_post_dict(post)
       posts.append(complete_post)
 
     context = {'posts': posts,
                'batch':batch_dict(userBatch),
-               'userType':userType,}
+               'userType':userType,
+               'in_batch':in_batch,}
 
     return HttpResponse(json.dumps(context),content_type='application/json')
 #    return render( request, 'lectut/image.html', context)
@@ -250,9 +259,9 @@ def getFileType(file_name):
     elif extension in ['dv', 'mov', 'mp4', 'avi', 'wmv']:
       file_type="video"
     else:
-      file_type="unknown"
+      file_type="other"
   except:
-    file_type="unknown"
+    file_type="other"
   return file_type
 
 
@@ -265,9 +274,9 @@ def download_file(request, file_id):
   file_check = open(download_file_open,"r")
 #mimetype = mimetypes.guess_type(filename)[0]
 
-  user = User.objects.get(username = 'harshithere')
-#  downloadlog = DownloadLog(uploadfile=download_file , user = user)
-#  downloadlog.save()
+#  user = User.objects.get(username = 'harshithere')
+  downloadlog = DownloadLog(uploadedfile=download_file , user = request.user)
+  downloadlog.save()
 
 #  response = HttpResponse(file_check.read(),content_type='application/force-download')
   response = HttpResponse(file_check.read(),content_type='application/octet-stream')
@@ -282,10 +291,15 @@ def get_path_to_file(file_name):
 
 ''' Function to differentiate between faculty and students '''
 def getUserType(user):
-  if user.in_group('faculty'):
-    return "1"
-  else:
-    return "0"
+  try:
+    if user.in_group('student'):
+      return "0"
+    elif user.in_group('faculty'):
+      return "1"
+    else:
+      return "2"
+  except:
+    return "2"
 
 def batch_dict(Batch):
   batch_info = {
