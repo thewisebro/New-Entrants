@@ -18,22 +18,6 @@ from notifications.models import Notification
 fs = FileSystemStorage(location='Uploads')
 
 
-class TextNotice(models.Model):
-  text=models.CharField(max_length=500 , null=False)
-  upload_user=models.ForeignKey(User)
-  batch=models.ForeignKey(Batch)
-
-  def __unicode__(self):
-    return str(self.text)
-
-  def as_dict(self):
-    fileData={
-      'text':str(self.text),
-      'upload_user':str(self.upload_user.name),
-      'batch':str(self.batch)
-    }
-    return fileData
-
 class BaseUpload(models.Model):
   class Meta:
     abstract = True
