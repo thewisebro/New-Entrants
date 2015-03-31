@@ -153,8 +153,9 @@ def email(request):
   if request.method == 'POST':
     emailform = EmailForm(request.POST)
     if emailform.is_valid():
-      request.user.email = emailform.cleaned_data['email']
-      request.user.save()
+      if not request.user.email:
+        request.user.email = emailform.cleaned_data['email']
+        request.user.save()
       events_subscribe_form = EventsSubscribeForm(request.POST,
                                                   instance=events_user)
       events_subscribe_form.save()
@@ -243,6 +244,10 @@ def email_verify(request):
           request.user).get(confirmation_key=confirmation_key)
       if email_profile.last_datetime_created + datetime.timedelta(2) < timezone.now():
         messages.error(request,"The verification-key expired.")
+      elif UserEmail.objects.filter(email=email_profile.email,
+          verified=True).exclude(user=email_profile.user).exists():
+        messages.error("This email can not be verified as another user has already"
+            " verified it as his/her email address.")
       else:
         email_profile.verified = True
         email_profile.save()

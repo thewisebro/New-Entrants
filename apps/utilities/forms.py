@@ -6,7 +6,26 @@ from nucleus.models import StudentUserInfo, User
 from events.models import Calendar, EventsUser
 
 
-class GenProfileForm(forms.ModelForm, FormMixin):
+class ProfileFormCleanMixin(forms.Form):
+  "Mixin form for cleaning fields"
+  def clean_first_name(self):
+    first_name = self.cleaned_data['first_name']
+    first_name = first_name.strip()
+    name = self.instance.name
+    first_name_chunks = set(map(lambda a:a, first_name.lower().split(' ')))
+    name_chunks = set(map(lambda a:a, name.lower().split(' ')))
+    if first_name_chunks.issubset(name_chunks) and\
+          (not len(first_name_chunks) == len(name_chunks) or
+          len(name_chunks) == 1):
+      if first_name.lower() == first_name or first_name.upper() == first_name:
+        first_name = first_name.title()
+    else:
+      raise forms.ValidationError(
+        'First name is not valid. It should be subname of your full name.')
+    return first_name
+
+
+class GenProfileForm(forms.ModelForm, FormMixin, ProfileFormCleanMixin):
   class Meta:
     model = User
     fields = [
@@ -22,7 +41,7 @@ class GenProfileForm(forms.ModelForm, FormMixin):
     one_time_editable_fields = ('first_name', 'gender', 'birth_date', 'email')
 
 
-class ProfileFormPrimary(forms.ModelForm, FormMixin):
+class ProfileFormPrimary(forms.ModelForm, FormMixin, ProfileFormCleanMixin):
   class Meta:
     model = StudentUserInfo
     fields = [

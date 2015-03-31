@@ -1,0 +1,14 @@
+{% extends "feeds/base.html" %}
+
+{% block link %}
+  {{ instance.link }}
+{% endblock %}
+
+{% block feed_line %}
+  {{ instance.upload_user.name }}
+{% endblock %}
+
+{% block feed_detail %}
+Uploaded a lecture {{ instance.item_lost }} at {{ instance.place }}.
+{% endblock %}
+

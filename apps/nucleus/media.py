@@ -19,7 +19,7 @@ def photo(request, username=None):
       user = User.objects.get_or_none(username=username)
   elif request.user.is_authenticated():
     user = request.user
-  if user:
+  if user and user.photo:
     filepath = user.photo.path
   if not filepath or not os.path.exists(filepath):
     if user and user.in_group('Student Group'):
