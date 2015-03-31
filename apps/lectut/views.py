@@ -56,8 +56,7 @@ MAX_VIDEO_SIZE = 20971520      # 20 MB
 @csrf_exempt
 @CORS_allow
 def dispbatch(request):
-  active = request.user.is_authenticated
-  if active:
+  if request.user.is_authenticated():
     userType = getUserType(request.user)
     if userType == "0":
       student = request.user.student
@@ -74,12 +73,21 @@ def dispbatch(request):
 #       response =  HttpResponse(f.read())
 #       return response
 #return render(request, 'dist/index.html', context)
-    elif userType == "1":
+    else:
       return HttpResponse("You are a faculty")
-#    else:
-#      return HttpResponse("You are not enrolled.Please visit IMG")
   else:
-      return HttpResponse("Please log-in to view your courses")
+    posts = []
+    latest_posts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created') #[number:(number+post_count)]
+    for post in latest_posts:
+      documents =  Uploadedfile.file_objects.all().filter(post=post)
+      post = post.as_dict()
+      files = []
+      for document in documents:
+        document = document.as_dict()
+        files.append(document)
+      complete_post = {'post':post,'files':files}
+      posts.append(complete_post)
+    return HttpResponse (json.dumps(posts),content_type='application/json')
 
 
 @csrf_exempt
