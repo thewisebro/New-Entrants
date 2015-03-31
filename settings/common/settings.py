@@ -294,6 +294,7 @@ CRISPY_CLASS_CONVERTERS = {
   'timewidget': "textinput textInput",
   'datetimewidget': "textinput textInput",
   'emailinput': "textinput textInput",
+  'urlinput': "textinput textInput",
   'numberinput': "textinput textInput",
   'readonlytextinput': "textinput textInput readonlytextinput",
 }
