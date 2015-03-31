@@ -51,6 +51,8 @@ def CORS_allow(view):
     return response
   return wrapped_view
 
+
+"This view returns the contents of the index page."
 @csrf_exempt
 @CORS_allow
 #@login_required
@@ -172,6 +174,8 @@ def index(request,enrno=None):
     else:
       return HttpResponse('Hello')
 
+
+"This view displays used to render data on homepage."
 @csrf_exempt
 @CORS_allow
 def homePage(request):
@@ -222,21 +226,22 @@ def homePage(request):
   return HttpResponse(simplejson.dumps(data),'application/json') 
 
 
+"View to upload user's coverpic."
 @csrf_exempt
 @CORS_allow
 #@login_required
 def coverpic_upload(request):
 # import ipdb;ipdb.set_trace()
-  if request.method == 'POST': #and request.is_ajax():
+  if request.method == 'POST': 
     cover_pic = request.FILES.get('file')
     print cover_pic
     cover_pic_name = cover_pic.name
     ext = cover_pic.name.split('.')[1]
     fname = "cp_" + request.user.username + "." + ext
-    yu = YaadeinUser.objects.get(user = request.user)#request.user)
+    yu = YaadeinUser.objects.get(user = request.user)
     yu.coverpic.save(fname, cover_pic)
     yu.save()
-    return HttpResponse('Uploaded')#/yaadein/user/13117060')
+    return HttpResponse('Uploaded')
   else:
     return HttpResponse('hello')
 #  return render_to_response('yaadein/base.html',{},context_instance=requestContext(request))
@@ -252,7 +257,6 @@ def post(request,wall_user):
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
       hash_tag = []
       for word in hashed:
-# te mp =[ word.split('#') ]
         temp =  filter(None, word.replace(' ','').split("#"))
         hash_tag.extend(temp)
       hash_tag = list(set(hash_tag))
@@ -270,11 +274,6 @@ def post(request,wall_user):
       student = Student.objects.get(user=request.user)
       post = Post(text_content=post_data, post_date=timezone.now(), owner=student, wall_user=s)
       post.save()
-# notif_msg = 'You were tagged in a post by '+student.user.name+'.'
-#     app = 'Yaadein'
-#     pk = post.pk
-#     url = '/yaadein/post_disp/'+pk+'/'  
-#     Notification.save_notification(app,notif_msg,url,user_tagged,post)
       print post.wall_user
       if len(imgs)>0:
         for key in imgs:
@@ -294,7 +293,7 @@ def post(request,wall_user):
       return HttpResponse('Hello')
 
 
-#view to display a single post
+"View to display a single post with given primary key."
 @csrf_exempt
 @CORS_allow
 def post_display(request,pk):
@@ -333,6 +332,7 @@ def post_display(request,pk):
   else:
     return HttpResponse('Hello')
 
+
 @CORS_allow
 def search(request,id):
    if request: #.is_ajax():
@@ -370,6 +370,8 @@ def search(request,id):
      data = 'fail'
    return HttpResponse(simplejson.dumps(search_data),'application/json')
 
+
+"View to return all the users as a list of json objects."
 @csrf_exempt
 @CORS_allow
 def all_users(request):
@@ -404,6 +406,7 @@ def all_users(request):
   return HttpResponse(simplejson.dumps(search_data),'application/json')
 
 
+"View to search for spots"
 @csrf_exempt
 @CORS_allow
 def spot_search(request):
@@ -425,6 +428,7 @@ def spot_search(request):
   return HttpResponse(simplejson.dumps(search_data),'application/json')
 
 
+"Sending invite notification to users."
 @csrf_exempt
 @CORS_allow
 def invite(request):
@@ -453,6 +457,7 @@ def invite(request):
   return HttpResponse("False")
 
 
+"Display results of the posts containing the requested hashtags."
 @csrf_exempt
 @CORS_allow
 def hashtag(request,slug):
@@ -494,6 +499,7 @@ def hashtag(request,slug):
   return HttpResponse('1')
 
 
+"Display the posts with the requested spot."
 @csrf_exempt
 @CORS_allow
 def spot_page(request,name):
@@ -537,6 +543,7 @@ def spot_page(request,name):
 
 
 
+"Sets the status of post to private. Only the posts with public status are resulted on the profile/home or any other pages."
 @csrf_exempt
 @CORS_allow
 def delete(request,id):
@@ -568,6 +575,8 @@ def private_posts(request,id):
       return HttpResponse("Your Post is now Private.")
     return HttpResponse("You don't have the previleges to change the privacy.")
 
+
+"Displays the most frequently used hashtags."
 @csrf_exempt
 @CORS_allow
 def trending(request):
@@ -586,7 +595,7 @@ def trending(request):
   return HttpResponse(simplejson.dumps(data),'application/json')
 
  
-#utility function bubble sorting
+"Utility function:bubble sorting"
 def bubble(bad_list):
   length = len(bad_list) - 1
   sorted = False
