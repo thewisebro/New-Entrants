@@ -133,15 +133,18 @@ def coursepage(request, batch_id):
 
     if user in userBatch.students.all():
       previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
+      in_batch = True
     else:
       previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
+      in_batch = False
     for post in previous_posts:
       complete_post = get_post_dict(post)
       posts.append(complete_post)
 
     context = {'posts': posts,
                'batch':batch_dict(userBatch),
-               'userType':userType,}
+               'userType':userType,
+               'in_batch':in_batch,}
 
     return HttpResponse(json.dumps(context),content_type='application/json')
 #    return render( request, 'lectut/image.html', context)
@@ -271,9 +274,9 @@ def download_file(request, file_id):
   file_check = open(download_file_open,"r")
 #mimetype = mimetypes.guess_type(filename)[0]
 
-  user = User.objects.get(username = 'harshithere')
-#  downloadlog = DownloadLog(uploadfile=download_file , user = user)
-#  downloadlog.save()
+#  user = User.objects.get(username = 'harshithere')
+  downloadlog = DownloadLog(uploadedfile=download_file , user = request.user)
+  downloadlog.save()
 
 #  response = HttpResponse(file_check.read(),content_type='application/force-download')
   response = HttpResponse(file_check.read(),content_type='application/octet-stream')
