@@ -35,7 +35,7 @@ root = os.getenv("HOME")
 def index(request, bhawan, week = 0):
   #pdb.set_trace()
   logger = logging.getLogger(__name__)
-  fixed_params = add_common_functionality()
+  fixed_params = add_common_functionality(request)
   
   week = int(week)
   if week < -2 or week > 2:
@@ -49,6 +49,7 @@ def index(request, bhawan, week = 0):
     if not(bhawan and date) or date < current_date:
       raise Http404
     try:
+      print request.POST
       Menu.save_menu(request.POST, bhawan, date)
     except:
       logger.error(traceback.format_exc())
@@ -63,18 +64,18 @@ def index(request, bhawan, week = 0):
     raise Http404
   bhawans = dict(BHAWAN_CHOICES)
   try:
-    request.user.person = get_person(request.user)
+    request.user.student
   except:
     return HttpResponseRedirect('/')
   try:
-    if bhawan != request.user.person.bhawan:
+    if bhawan != request.user.student.bhawan:
       raise
   except:
-    if request.user.person and not request.user.person.bhawan:
+    if request.user.student and not request.user.student.bhawan:
       ## flash session message
       pass
     raise PermissionDenied
-  request.user.person.bhawan_name = bhawans.get(bhawan, '')
+  request.user.student.bhawan_name = bhawans.get(bhawan, '')
   try:
     week_iter = 0
     while week_iter >= -weeks_to_show:
@@ -88,11 +89,19 @@ def index(request, bhawan, week = 0):
       last_filled_week = 0
       
     date += datetime.timedelta(days = last_filled_week * 7)
-    menu = get_list_or_404(Menu.objects.all(),
+    for i in range(0,7):
+      for j in range(1,4):
+        menu = Menu.objects.filter(bhawan = bhawan, date = date + datetime.timedelta(i),time_of_day=j)
+        if not menu:
+          Menu.objects.create(bhawan = bhawan, date = date + datetime.timedelta(i),time_of_day=j,content='')
+
+    
+    menu = Menu.objects.filter(
                             bhawan = bhawan,
                             date__gte = date,
                             date__lte = date + datetime.timedelta(days = 6)
-           )
+                            )
+         
     date -= datetime.timedelta(days = last_filled_week * 7)
   except:
     logger.error(traceback.format_exc())

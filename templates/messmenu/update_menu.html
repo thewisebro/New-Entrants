@@ -1,5 +1,4 @@
 {% extends "messmenu/menu_table.html" %}
-{% load custom_tags %}
 {% load mess_tags %}
 
 {% block title %}
@@ -47,7 +46,7 @@
                     {% else %}
                         class="not_selected"
                     {% endif %}
-                    value="{% url update_menu bhawan week %}">
+                    value="{% url 'update_menu' bhawan week %}">
                     {{ desired_date|get_date_1:0 }} - {{ desired_date|get_date_1:6 }}
                 </option>
                 {% endwith %}
@@ -75,7 +74,7 @@
         <div id="presentbhawan_date">
             <b>
             <div id="presentbhawan">
-                {{ request.user.person.bhawan_name|upper }} BHAWAN MESS TIME TABLE
+                {{ user.student.bhawan_name|upper }} BHAWAN MESS TIME TABLE
             </div>
             <div id="date"> 
                 ({{ date|get_date_1:0 }} - {{ date|get_date_1:6 }})
@@ -83,7 +82,7 @@
             </b>
         </div>
     </div>
-    <form method="POST" action="" name="menu" save_url="{% url save_menu %}">
+    <form method="POST" action="" name="menu" save_url="{% url 'save_menu' %}">
     {% csrf_token %}
 
 {% endblock %}
@@ -92,17 +91,16 @@
     <div id="changemenu">
         <div id="left_buttons">
             <input type="submit" value="Submit" class="button_1 button_1_format_input" />
-            <input type="button" class="button_1 button_1_format_input" value="Save" name="save_menu" />
-        </div>
-        <a href="{% url display_menu request.user.person.bhawan week %}" class="button_1 button_1_format_a back_btn">
+        <a href="{% url 'display_menu' user.student.bhawan week %}" class="button_1 button_1_format_a back_btn">
             Back
         </a>
+        </div>
         <div id="right_buttons">
             <input type="button" class="button_1 button_1_format_input" value="Reset" name="reset_menu" />
             <input type="button" class="button_1 button_1_format_input" value="Clear All" name="clear_menu" />
         </div>
     </div>
-    <input type="hidden" name="bhawan" value="{{ request.user.person.bhawan }}" />
+    <input type="hidden" name="bhawan" value="{{ user.student.bhawan }}" />
     <input type="hidden" name="date" value="{{ date_str }}" />
     </form>
 {% endblock %}

@@ -29,13 +29,14 @@ from messmenu.models import Menu
 
 # local imports
 from api.model_constants import BHAWAN_CHOICES
-from messmenu.utils.utils import get_monday_date, get_person
+from messmenu.utils.utils import get_monday_date
 from messmenu.utils.views_common import add_common_functionality
 
 root = os.getenv("HOME")
 
 #### 'bhawan' refers to bhawan code
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name='Student').count() != 0)
 def index(request, bhawan = None, week = 0, pdf = None):
   logger = logging.getLogger(__name__)
   if pdf and pdf != 'pdf':
@@ -50,15 +51,15 @@ def index(request, bhawan = None, week = 0, pdf = None):
   bhawans = dict(BHAWAN_CHOICES)
   try:
     try:
-      request.user.person = get_person(request.user)
+      request.user.student
     except:
       raise HttpResponseRedirect('/')
   except:
-    request.user.person = None
+    request.user.student = None
   if not bhawan:
     try:
-      if request.user.person.bhawan and request.user.person.bhawan != 'NA':
-        bhawan = request.user.person.bhawan
+      if request.user.student.bhawan and request.user.student.bhawan != 'NA':
+        bhawan = request.user.student.bhawan
       else:
         ## bhawan not set
         bhawan = bhawans.iterkeys().next()
@@ -69,11 +70,19 @@ def index(request, bhawan = None, week = 0, pdf = None):
       bhawan = 'RVB'
   try:
     print bhawan, date, date + datetime.timedelta(days = 6)
-    menu = get_list_or_404(Menu.objects.all(),
+
+    for i in range(0,7):
+      for j in range(1,4):
+        menu = Menu.objects.filter(bhawan = bhawan, date = date + datetime.timedelta(i),time_of_day=j)
+        if not menu:
+          Menu.objects.create(bhawan = bhawan, date = date + datetime.timedelta(i),time_of_day=j,content='')
+
+    menu = Menu.objects.filter(
                             bhawan = bhawan,
                             date__gte = date,
                             date__lte = date + datetime.timedelta(days = 6)
-           )
+                            )
+           
   except:
     print traceback.format_exc()
     logger.error(traceback.format_exc())
@@ -133,7 +142,7 @@ def index(request, bhawan = None, week = 0, pdf = None):
     pdf.close()
     os.unlink(pdf.name)
 
-    response = HttpResponse(content, mimetype='application/pdf')
+    response = HttpResponse(content, content_type='application/pdf')
     """
     
     result = StringIO.StringIO()
@@ -143,7 +152,7 @@ def index(request, bhawan = None, week = 0, pdf = None):
     if pdf.err :
       logger.info(request.user.username + ': Error in PDF generation of %s' % bhawan)
       return HttpResponse('An error occured while generating the PDF file.')
-    response = HttpResponse(result.getvalue(), mimetype='application/pdf')
+    response = HttpResponse(result.getvalue(), content_type='application/pdf')
     filename = bhawan + '_' + str(date) + '_mess_menu'
     #filename = filename.replace(' ', '-')    
     response['Content-Disposition'] = 'attachment; filename=' + filename + '.pdf'
@@ -168,7 +177,7 @@ def menu_dict(menu):
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').count() != 0)
 def todays_menu(request):
-  bhawan = request.user.person.bhawan
+  bhawan = request.user.student.bhawan
   menus = Menu.objects.filter(bhawan=bhawan, date=datetime.date.today()).exclude(content='')
-  json_data = simplejson.dumps(map(menu_dict, menus))
-  return HttpResponse(json_data, mimetype='application/json')
+  json_data = json.dumps(map(menu_dict, menus))
+  return HttpResponse(json_data, content_type='application/json')

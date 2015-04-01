@@ -5,7 +5,14 @@
 {% block app_content %}
     {% block above_menu_table %}{% endblock %}
 
+
+
+
     <div id="menubox">
+
+{% if not  menu %}<div style="font-weight: bolder;font-size: 15px;padding: 12px 0 12px 33%;"> Mess Menu is not uploaded by The Mess Secretary.</div>
+{% endif %}
+
         <div id="menublankleftright"></div>
         <div id="menublank">
             <div id="menu">

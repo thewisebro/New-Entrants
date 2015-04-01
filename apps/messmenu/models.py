@@ -40,11 +40,14 @@ class Menu(models.Model):
       for day in range(7):
         for time_of_day in range(1, 4):
           try:
-            Menu.objects.filter(bhawan = bhawan,
+            menu = Menu.objects.filter(bhawan = bhawan,
                               date = date + datetime.timedelta(days = day),
-                              time_of_day = time_of_day).\
-                         update(content = formArray.get(
-                                  'content_%s_%s' % (day, time_of_day)))
+                              time_of_day = time_of_day)
+            map(lambda x: x.delete(),menu)
+            Menu.objects.create(bhawan = bhawan,
+                              date = date + datetime.timedelta(days = day),
+                              time_of_day = time_of_day,
+                              content = formArray.get('content_%s_%s' % (day, time_of_day)))
           except:
             print traceback.format_exc()
             logger.error(traceback.format_exc())

@@ -5,6 +5,7 @@ import datetime
 
 # django imports
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse , HttpResponseRedirect, HttpRequest
 
 # models
 from messmenu.models import Menu
@@ -16,6 +17,7 @@ from messmenu.utils.utils import get_monday_date, get_person
 
 @login_required
 def index(request):
+  print request.POST
   #logger = logging.getLogger(__name__)
   #pdb.set_trace()
   current_date = get_monday_date(0)
@@ -26,10 +28,10 @@ def index(request):
     try:
       date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
     except:
-      return ErrorResponse(error_msg = 'date improperly set')
+      return HttpResponse('date improperly set')
     if not(bhawan and date) or date < current_date:
       #logger.warning('bhawan/date not set or improperly set')
-      return ErrorResponse(error_msg = 'There was some error in processing')
+      return HttpResponse('There was some error in processing')
     try:
       Menu.save_menu(request.POST, bhawan, date)
       print '111'
@@ -38,5 +40,5 @@ def index(request):
       except:
         print traceback.format_exc()
     except:
-      return ErrorResponse(error_msg = 'database error')
-  return ErrorResponse(error_msg = 'There was some error in processing')
+      return HttpResponse(error_msg = 'database error')
+  return HttpResponse(error_msg = 'There was some error in processing')

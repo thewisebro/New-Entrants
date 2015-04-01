@@ -103,12 +103,12 @@
     {% endblock %}
         
     {% block below_menu_table %}
-        {% if is_mess_secy and request.user.person.bhawan = bhawan %}
+        {% if is_mess_secy and user.student.bhawan = bhawan %}
             <div id="changemenu">
                 <span class="text" id="display_menu_text">
                     This is your last uploaded time table. To change the time table click on change. 
                 </span>
-                <a href="{% url update_menu bhawan week %}" class="button_1" style="padding: 6px 18px">Change</a>
+                <a href="{% url 'update_menu' bhawan week %}" class="button_1" style="padding: 6px 18px">Change</a>
             </div>
         {% endif %}
     {% endblock %}
