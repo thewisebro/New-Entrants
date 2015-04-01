@@ -32,10 +32,10 @@ Faculty Profile
 {% block contents %}
 <div id ="messages-div" class="message"></div>
 <div class="buttons">
-  <a href="http://cms.channeli.in/nova/index.php?r=dynamicPage/preview&name={{request.user.username}}&type=fa" target="_blank"><button class="btn" type="button">Preview</button></a>
+  <a href="http://cms.channeli.in/nova/index.php?r=dynamicPage/preview&name={{user.username}}&type=fa" target="_blank"><button class="btn" type="button">Preview</button></a>
 <button class="btn btn-success" type="button" data-toggle="tooltip"
   title="Click here to reflect the changes made here on Department's website"
-  onclick="send_request('{{request.user.username}}');">Publish Profile on IITR
+  onclick="send_request('{{user.username}}');">Publish Profile on IITR
   Website</button>
 <!--
   <button class="btn btn-success" type="button" data-toggle="tooltip"

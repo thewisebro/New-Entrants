@@ -17,9 +17,9 @@ from facapp.models import *
 from facapp.utils import handle_exc
 from facapp.forms import BooksAuthoredForm, RefereedJournalPapersForm, PhotoUploadForm, ResumeUploadForm, BaseModelFormFunction, ConfirmDeleteForm
 
-# import pika
+import pika
 # from django.utils import simplejson
-import json
+import json as simplejson
 
 # Create your views here.
 
@@ -228,21 +228,21 @@ def delete(request, model_name, instance_id):
   except Exception as e:
     return handle_exc(e, request)
 
-# @login_required
-# @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
-# def publish(request):
-#   try:
-#     username = request.user.faculty.username
-#     connection = pika.BlockingConnection(pika.ConnectionParameters(
-#                 host='cms.channeli.in'))
-#     channel = connection.channel()
-#     channel.queue_declare(queue='publish_faculty_page_queue')
-#     channel.basic_publish(exchange='',
-#                 routing_key='publish_faculty_page_queue',
-#                 body=username)
-#     connection.close()
-#     messages.success(request, 'Request sent successfully. Changes will be reflected soon!')
-#     json = simplejson.dumps({})
-#     return HttpResponse(json,mimetype='application/json')
-#   except Exception as e:
-#     print e
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
+def publish(request):
+  try:
+    username = request.user.faculty.username
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+                host='cms.channeli.in'))
+    channel = connection.channel()
+    channel.queue_declare(queue='publish_faculty_page_queue')
+    channel.basic_publish(exchange='',
+                routing_key='publish_faculty_page_queue',
+                body=username)
+    connection.close()
+    messages.success(request, 'Request sent successfully. Changes will be reflected soon!')
+    json = simplejson.dumps({})
+    return HttpResponse(json, content_type='application/json')
+  except Exception as e:
+    print e
