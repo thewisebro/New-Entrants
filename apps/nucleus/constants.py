@@ -35,9 +35,7 @@ channeli_apps = {
   'softwares':{'name':'Download Softwares', 'url':'/softwares/'},
   'messmenu' : {'name':'Mess Menu', 'url':'/messmenu/'},
   'helpcenter' : {'name':'Help Center', 'url':'/#helpcenter/'},
-  'peoplesearch' : {'name':'People Search',
-    'url':'http://people.iitr.ernet.in/PeopleSearch/'
-  },
+  'peoplesearch' : {'name':'People Search', 'url':'/peoplesearch/'},
   'research' : {'name':'Research Assistant', 'url':'/research_assistant/'},
   'facultyfilemanager' : {'name':'File Manager', 'url':'/settings/filemanager/'},
   'acad' : {'name':'Academics', 'url':'/acad/'},
