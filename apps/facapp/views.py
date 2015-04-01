@@ -178,54 +178,55 @@ def update(request, model_name, instance_id):
   except Exception as e:
     return handle_exc(e, request)
 
-# @login_required
-# @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
-# def delete(request, model_name, instance_id):
-#   try:
-#     faculty = request.user.faculty
-#     model_type = globals()[model_name]
-#     if(model_name == 'Faculty'):
-#       messages.error(request, 'Faculty can\'t be deleted.')
-#       return HttpResponseRedirect(reverse('facapp.views.index'))
-#     exclude_list = ['faculty',]
-#     old = model_type.objects.filter(id=instance_id)[0]
-#     model_name_space_separated = re.sub(r"(?<=\w)([A-Z])", r" \1", model_name)
-#     template_name = model_name_space_separated.lower().replace(' ', '_').strip() + '.html'
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
+def delete(request, model_name, instance_id):
+  try:
+    faculty = request.user.faculty
+    model_type = globals()[model_name]
+    if(model_name == 'Faculty'):
+      messages.error(request, 'Faculty can\'t be deleted.')
+      return HttpResponseRedirect(reverse('facapp.views.index'))
+    exclude_list = ['faculty',]
+    # old = model_type.objects.filter(id=instance_id)[0]
+    old = get_object_or_404(model_type, faculty=faculty, id=instance_id)
+    model_name_space_separated = re.sub(r"(?<=\w)([A-Z])", r" \1", model_name)
+    template_name = model_name_space_separated.lower().replace(' ', '_').strip() + '.html'
   
-#     # If the form was submitted.
-#     if request.method == 'POST':
-#       form = ConfirmDeleteForm(request.POST)
-#       if form.is_valid():
-#         yes_or_no = form.cleaned_data['choices']
-#         if yes_or_no == 'Y':
-#           old.delete()
-#           messages.success(request, model_name_space_separated + ' was successfully deleted.')
-#         else:
-#           messages.success(request, 'Action was cancelled.')
-#       else:
-#         messages.error(request, form.errors, extra_tags='form_error')
-#       # Direct to the add page.
-#       form = BaseModelFormFunction(model_type, exclude_list)
-#       new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
-#       return render(request, 'facapp/' + template_name, {
-#           'form': form,
-#           'action': '/facapp/add/' + model_name + '/',
-#           'list': new_list,
-#           'model_name': model_name,
-#           'model_name_space_separated': model_name_space_separated,
-#           })
+    # If the form was submitted.
+    if request.method == 'POST':
+      form = ConfirmDeleteForm(request.POST)
+      if form.is_valid():
+        yes_or_no = form.cleaned_data['choices']
+        if yes_or_no == 'Y':
+          old.delete()
+          messages.success(request, model_name_space_separated + ' was successfully deleted.')
+        else:
+          messages.success(request, 'Action was cancelled.')
+      else:
+        messages.error(request, form.errors, extra_tags='form_error')
+      # Direct to the add page.
+      form = BaseModelFormFunction(model_type, exclude_list)
+      new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
+      return render(request, 'facapp/' + template_name, {
+          'form': form,
+          'action': '/facapp/add/' + model_name + '/',
+          'list': new_list,
+          'model_name': model_name,
+          'model_name_space_separated': model_name_space_separated,
+          })
 
-#     # If user clicked 'Delete' link then redirect him to a confirmation page.
-#     form = ConfirmDeleteForm()
-#     return render(request, 'facapp/' + template_name, {
-#         'form': form,
-#         'action': '/facapp/delete/' + model_name + '/' + str(instance_id) + '/',
-#         'model_to_delete': old,
-#         'model_name': model_name,
-#         'model_name_space_separated': model_name_space_separated,
-#         })
-#   except Exception as e:
-#     return handle_exc(e, request)
+    # If user clicked 'Delete' link then redirect him to a confirmation page.
+    form = ConfirmDeleteForm()
+    return render(request, 'facapp/' + template_name, {
+        'form': form,
+        'action': '/facapp/delete/' + model_name + '/' + str(instance_id) + '/',
+        'model_to_delete': old,
+        'model_name': model_name,
+        'model_name_space_separated': model_name_space_separated,
+        })
+  except Exception as e:
+    return handle_exc(e, request)
 
 # @login_required
 # @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
