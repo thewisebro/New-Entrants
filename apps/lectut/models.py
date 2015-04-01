@@ -61,7 +61,7 @@ class Post(models.Model):
     students = currentBatch.students.all()
     users = map(lambda x:x.user, students)
     if not self.pk:
-      Notification.save_notification('lectut','The user ' +str(self.upload_user.name)+ ' uploaded a post','lectut_api/feeds/'+str(currentBatch.id)+'/'+str(post.id)+'/',users,self)
+      Notification.save_notification('lectut','The user ' +str(self.upload_user.name)+ ' added a post','#/course/'+currentBatch.id+'/posts/'+post.id+'/',users,self)
     return post
 
   def delete(self):

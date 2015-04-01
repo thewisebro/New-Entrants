@@ -73,6 +73,7 @@ def dispbatch(request):
   posts = []
   if request.user.is_authenticated():
     userType = getUserType(request.user)
+    batches_info = []
     user_info = request.user.serialize()
     if userType == "0":
       student = request.user.student
@@ -93,7 +94,7 @@ def dispbatch(request):
       userPosts = Post.post_objects.all().filter(batch__in = batches).order_by('-datetime_created')
 
     else:
-      userPosts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created')  
+      userPosts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created')
     for post in userPosts:
       posts.append(get_post_dict(post))
     data = {'user': user_info,
