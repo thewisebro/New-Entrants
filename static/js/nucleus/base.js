@@ -12,6 +12,15 @@
   var previous_app = null;
   var account_navigation_open = false;
 
+  var showLoading = true;
+  $(document).ajaxStart(function(){
+      if(showLoading)
+        $('#loading-div').show();
+  }).ajaxStop(function(){
+      $('#loading-div').hide();
+      showLoading = true;
+  });
+
   $(document).ready(function(){
     $('body').click(function(){
       if(account_navigation_open)
