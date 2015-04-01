@@ -87,16 +87,22 @@ body {
 
 .header{
   position:fixed;
-  left: 230px;
+  left: 0px;
   right:0px;
   background-color: #FFF;
   border-bottom:1px solid $g1;
   z-index: 131;
   height:50px;
   top: 0px;
+  .topSearchBox{
+    position: relative;
+    width: calc(100% - 230px);
+    margin-left: 230px;
+    height: 51px;
+  }
   .searchIconTop{
     position: absolute;
-    left: 29px;
+    left: 28px;
     top: 15px;
     color: #B4B4B4;
   }
@@ -104,7 +110,7 @@ body {
         position: absolute;
         cursor: pointer;
         color: #AEAEAE;
-        left: 200px;
+        left: 233px;
         top: 15px;
         font-size: 14px;
         line-height: 22px;
@@ -118,10 +124,11 @@ body {
     color: #666;
     font-size: 13px;
     //padding: 10px;
-    margin-left: 21px;
+    margin-left: 250px;
     border-radius: 5px;
     margin-top: 4px;
-    border: 1px solid #E5E5E5;
+    border: 1px solid #DADADA;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
     .noResults{
       padding: 8px 8px;
     }
@@ -152,6 +159,10 @@ body {
       cursor: pointer;
       word-break: break-word;
       border-bottom: 1px solid #EEE;
+      >a{
+        color: #848484;
+        text-decoration: blink;
+      }
       .sImageDiv{
         float:left;
         width: 50px;
@@ -190,12 +201,15 @@ body {
         background-color:#008fd5;
         color: #fff;
       }
+      &:hover a{
+        color: #FFF;
+      }
       }
     }
   }
   .mainSearch{
     height: 50px;
-    width: 200px;
+    width: 230px;
     outline: 0px;
     height: 26px;
     background-color: #FAFAFA;
@@ -207,12 +221,12 @@ body {
     margin-top: 12px;
     border-radius: 3px;
     margin-left:20px;
-    border: 1px solid #EEE;
+    border: 1px solid #E6E6E6;
     &:hover{
     }
-   
     &:focus{
         outline: 0px;
+        box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.09);
         color: $g13;
     }
    
@@ -224,7 +238,7 @@ body {
   position:fixed;
   width: 230px;
   height: 100%;
-  top: 0px;
+  top: 50px;
   bottom:0px;
   left:0px;
   background-color: rgba(55,61,73,0.975);  
@@ -236,12 +250,19 @@ body {
      position: absolute;
      bottom: 10px;
      color: #808080;
-     border-top: 1px solid #DADADA;
+     border-top: 1px solid #292e38;
      padding-top: 10px;
      text-align: center;
      width: 230px;
      >a{
       color: #777;
+     }
+     .footerLine{
+        border-top: 1px solid rgba(95, 95, 95, 0.39);
+        position: absolute;
+        top: 0px;
+        z-index: 23;
+        width: 100%;
      }
   }
 }
@@ -308,28 +329,30 @@ body {
   z-index: 123;
   border-bottom: 1px solid #eeeeee;
   float: left;
-  margin-left: 25px;
+  width: 230px;
+  text-align: center;
 }
 // UserBlock
 
 #userblock{
-  padding: 22px 10px 16px 12px;
+  padding: 5px 0px 15px 0px;
   position:relative;
   height:auto;
   //background-color:$g0;  
   border-bottom: 1px solid rgba(41, 46, 56, 1);
   >div{
-    display: inline-block;  
+    //display: inline-block;  
   }
 }
 
 #userpic{
   border-radius: 10px;
   overflow: hidden;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border: 1px solid #4B4B4B;
-  //margin-left: 10px;
+  margin: 10px auto;
+  border-radius: 100px;
   //margin-right: 10px;
 }
 
@@ -342,9 +365,7 @@ body {
 }
 
 #userdata{
-  position: absolute;
-  left: 76px;
-  top: 28px;
+  text-align: center;
   font-size: 14px;
   font-family: $osB;
   color: rgba(255, 255, 255, 0.88);
@@ -410,7 +431,7 @@ body {
         position: relative;
         &:hover{
           //border-left-color: #407cc1;
-          //color: #407cc1; 
+          color: rgba(255, 255, 255, 0.65); 
         }
         > div{
           display:inline-block;
@@ -420,16 +441,16 @@ body {
          
          } 
          .crsId{
-           font-size:17px;
+           font-size:14px;
+           font-family: $osB;
            >span{
            }
          }
          .crsName{
-
            overflow: hidden;
            text-overflow: ellipsis;
            white-space: nowrap;
-           width: 200px;
+           width: 174px;
            font-size:13px;
            font-family:$osR;
          }
@@ -465,6 +486,7 @@ body {
 
 .courseFullDiv{
   z-index: 2;
+  margin-bottom:20px;
   background-color:$g0;
   .courseHeading{
     height: 49px;
@@ -472,7 +494,7 @@ body {
     font-size: 19px;
     line-height: 50px;
     padding: 0px 20px;
-    border:1px solid $g6; 
+    border:1px solid #DDD; 
     > div{
       display: inline-block;
       font-family: $osR;
@@ -548,18 +570,23 @@ body {
 .filteredContent{
      .courseFeeds{
            margin-bottom:20px;
+           background: #FFF;
+           border: 1px solid #DDD;
+           //border-top: 0px;
            .createPost{
-            padding:20px;
+            padding:20px 0px;
+            //padding-right:0px;
             min-height: 150px;
-            border: 1px solid $g6;
+            //border: 1px solid $g6;
             border-top:0px;
-            background-color: #fafafa;
+            //background-color: #fafafa;
             .cPPic{
                float: left;
-                border-radius: 10px;
+                border-radius: 600px;
                 overflow: hidden;
-                width: 60px;
-                height: 60px;
+                width: 65px;
+                height: 65px;
+                margin-left:25px;
                 border: 1px solid #EAEAEA;
                 img{
                   width:inherit;
@@ -567,7 +594,12 @@ body {
                 }
             }
             .cPContent{
-                margin-left:80px;
+                margin-left:105px;
+                background: #FFF;
+                border: 1px solid #DDD;
+                padding: 10px 15px 20px 15px;
+                margin-right: 20px;
+                margin-bottom: 20px;
                 .postType{
                   ul{
                     li{
@@ -590,61 +622,28 @@ body {
                 .postView{
                   .inputTextPost{
                     >textarea{
-                      border:1px solid $g6;
-                      width:calc(100% - 20px);
+                      border:0px solid #D8D8D8;
+                      width: 100%;
                       resize:vertical;
                       outline: 0px;
-                      min-height: 60px;
-                      max-height: 100px;
+                      //min-height: 60px;
+                      //max-height: 100px;
                       font-size: 14px;
                       line-height: 1.5;
                       color: #555555;
-                      padding:10px;
+                      //padding:10px;
+                      font-family: $osR;
                     }
                   }
                   .postOptions{
-                    min-height: 50px;
-                    margin-top: 5px;
+                    //min-height: 50px;
+                    //margin-top: 5px;
                     .uploadFiles{
-                      .addFiles{
-                        font-family: "opensans_bold";
-                        color: #FFF;
-                        background-color: #008fd5;
-                        width: 50px;
-                        padding: 5px 10px;
-                        text-align: center;
-                        border-radius: 3px;
-                        bottom: 10px;
-                        cursor: pointer;
-                        font-size: 13px;
-                        border: 1px solid #0275AE;
-                        -webkit-transition: all .1s;
-                        -o-transition: all .1s;
-                        transition: all .1s;
-                        &:hover{
-                          background-color: #0085C7;
-                        }
-                      }
-                      .addFilesWhite{
-                        font-family: "opensans_bold";
-                        color: #9E9E9E;
-                        background-color: #FFF;
-                        width: 50px;
-                        padding: 5px 10px;
-                        text-align: center;
-                        border-radius: 3px;
-                        bottom: 10px;
-                        cursor: pointer;
-                        font-size: 13px;
-                        border: 1px solid #DFDFDF;
-                        transition: all .1s;
-                        border-bottom-left-radius: 0px;
-                      }
                       .fourChoice{
                         position: absolute;
                         list-style: none;
                         text-align: left;
-                        margin-top: 8px;
+                        margin-top: 47px;
                         border: 1px solid #E7E7E7;
                         border-top-left-radius: 3px;
                         border-top-right-radius: 3px;
@@ -658,7 +657,7 @@ body {
                         //-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.25);
                         //box-shadow: 0 1px 1px rgba(0,0,0,.25);
                         >li{
-                          padding: 3px 10px;
+                          padding: 8px 20px;
                           border-bottom: 1px solid #EEE;
                           color: #555;
                           font-size:13px;
@@ -680,10 +679,10 @@ body {
                       }
                       .itemDisplay{
                         list-style: none;
-                        margin-top: 15px;
-                        border: 1px solid #EAEAEA;
+                        //margin-top: 15px;
+                        //border: 1px solid #EAEAEA;
                         background: #FFF;
-                        padding: 15px;
+                        //padding: 15px;
                         position: relative;
                         >li{
                           font-size: 18px;
@@ -701,7 +700,7 @@ body {
                               border: 1px solid #EAEAEA;
                               padding: 5px 10px;
                               font-size:15px;
-                              margin-bottom:20px;
+                              margin-bottom:10px;
                               margin-right:20px;
                               list-style:none;
                               color:#444;
@@ -731,27 +730,68 @@ body {
                         }
                       }
                     }
-                    .postButton{
-                      font-family: $osB;
-                      color: $g0;
-                      background-color:$pink;
-                      width: 50px;
-                      padding: 5px 10px;
-                      text-align: center;
-                      border-radius:3px;
-                      //float: right;
-                      bottom: 10px;
-                      //margin-left: calc(100% - 70px);
-                      cursor:pointer;
-                      font-size:13px;
-                      margin-top:10px;
-                      -webkit-transition: all .1s;
-                      -o-transition: all .1s;
-                      transition: all .1s;
-                      border: 1px solid #CC1D49;
-                      &:hover{
-                        background: #E22253;
+                    .postSettings{
+                      margin-top:5px;
+                      padding-top: 15px;
+                      border-top: 1px solid #EEE;
+                      .postButton{
+                        font-family: $osB;
+                        color: $g0;
+                        background-color:$pink;
+                        width: 50px;
+                        padding: 5px 10px;
+                        text-align: center;
+                        border-radius:3px;
+                        //float: right;
+                        bottom: 10px;
+                        //margin-left: calc(100% - 70px);
+                        cursor:pointer;
+                        font-size:13px;
+                        //margin-top: -25px;
+                        -webkit-transition: all .1s;
+                        -o-transition: all .1s;
+                        transition: all .1s;
+                        border: 1px solid #CC1D49;
+                        float: right;
+                        &:hover{
+                          background: #E22253;
+                        }
+                       }
+                      .addFiles{
+                        color: #FFF;
+                        background-color: #008fd5;
+                        bottom: 10px;
+                        cursor: pointer;
+                        font-size: 13px;
+                        transition: all .1s;
+                        font-family: "opensans_bold";
+                        width: 50px;
+                        padding: 5px 10px;
+                        text-align: center;
+                        border-radius: 3px;
+                        -webkit-transition: all .1s;
+                        -o-transition: all .1s;
+                        transition: all .1s;
+                        &:hover{
+                          background-color: #0085C7;
+                        }
                       }
+                      .addFilesWhite{
+                        font-family: "opensans_bold";
+                        color: #9E9E9E;
+                        background-color: #F2F2F2;
+                        width: 50px;
+                        padding: 5px 10px;
+                        text-align: center;
+                        border-radius: 3px;
+                        bottom: 10px;
+                        cursor: pointer;
+                        font-size: 13px;
+                        border: 1px solid #DFDFDF;
+                        transition: all .1s;
+                        border-bottom-left-radius: 0px;
+                      }
+
                     }
                   }
                 }
@@ -759,12 +799,13 @@ body {
            }
           .postDiv{
               .mainPost{
-                padding: 30px 20px;
+                padding: 25px;
+                border-top: 1px solid #DDD;
                 .commentsBlock{
                   margin-left: 80px;
-                  border-top: 1px solid #EEE;
+                  border: 1px solid #EEE;
                   padding-top: 6px;
-                  margin-top: 15px;
+                  margin-top: 0px;
                   background: #FAFAFA;
                   .showHideComments{
                     font-size: 13px;
@@ -773,7 +814,7 @@ body {
                     padding-top: 3px;
                     padding-bottom: 10px;
                     cursor:pointer;
-                    border-bottom: 1px solid #EEE;
+                    //border-bottom: 1px solid #EEE;
                     .commentsCount{
                        margin-left: 8px;
                        background: #EFEFEF;
@@ -792,17 +833,18 @@ body {
                   }
                 }
               }
-              background:$g0;
+              //background:$g0;
               overflow: hidden;
               position: relative;
-              border: 1px solid #E7E7E7;
-              margin: 20px 0px;
+              //border: 1px solid #E7E7E7;
+              border-top:0px;
+              //margin: 20px 0px;
               .postUserPic{
                 float: left;
-                border-radius: 10px;
+                border-radius: 600px;
                 overflow: hidden;
-                width: 60px;
-                height: 60px;
+                width: 65px;
+                height: 65px;
                 border: 1px solid #EAEAEA;
                 img{
                   width:inherit;
@@ -811,10 +853,14 @@ body {
               }
               .postData{
                   margin-left:80px;
+                  //padding: 15px 20px;
+                  background: #FFF;
+                  //border: 1px solid #DDD;
+                  border-bottom: 0px;
                   .postUserNameTime{
-                      padding: 10px 0px 10px 0px;
+                      padding: 12px 0px 13px 0px;
                       border-bottom: 1px solid $g6;
-                      margin-bottom: 15px;
+                      margin-bottom: 25px;
                       .postUser{
                          .postUserName{
                             font-size: 15px;
@@ -866,7 +912,7 @@ body {
                     display:inline-block;
                     margin-right: 10px;
                     width: 250px;
-                    border: 1px solid $g6;
+                    border: 1px solid #EEE;
                             >div{
                               //padding:5px;
                             }
@@ -875,6 +921,10 @@ body {
                       position:relative;
                       margin-bottom:10px;
                       padding: 5px;
+                      -webkit-transition: border-color 0.2s;
+                      -moz-transition: border-color 0.2s;
+                      -ms-transition: border-color 0.2s;
+                      transition: border-color 0.2s;
                       .removeFeedFile{
                         position: absolute;
                         display: none;
@@ -908,6 +958,9 @@ body {
                            text-align: center;
                          }
                       }
+                      &:hover{
+                        border: 1px solid $g6;
+                      }
                       &:hover .removeFeedFile{
                         display: block;
                       }
@@ -939,6 +992,13 @@ body {
                             color: $g17;
                             width: calc(100% - 97px);
                             .filename{
+                              >a{
+                                color: #545454 !important;
+                                text-decoration: blink;
+                              }
+                              &:hover{
+                                text-decoration: underline;
+                              }
                               width:100%;
                               overflow: hidden;
                               text-overflow: ellipsis;
@@ -1012,6 +1072,7 @@ body {
 }
 .timeFile{
   color: #BBBBBB;
+  font-size: 13px;
 }
 
 .dt-loading{
@@ -1093,9 +1154,7 @@ table.dataTable tfoot td {
 .dataTables_wrapper{
   padding-top:20px; 
   padding-bottom: 10px;
-  border: 1px solid #E9E9E9;
-  border-top: 0px;
-  border-top-width: 3px;
+  border: 1px solid #DDD;
   background-color: #fafafa; 
 }
 
@@ -1186,8 +1245,7 @@ table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border t
 .membersDisplay{
   padding: 20px;
   background: #FFF;
-  border: 1px solid #E7E7E7;
-  border-top: 0px;
+  border: 1px solid #DDD;
   .prof{
      height: 110px;
      color: $g16;
