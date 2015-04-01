@@ -272,6 +272,7 @@ CHANNELI_APPS = (
   'buysell',
   'utilities',
   'birthday',
+  'messmenu',
   'placement',
   'internship',
   'yaadein',
