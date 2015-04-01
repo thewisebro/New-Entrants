@@ -1,0 +1,51 @@
+<html>
+ <head>
+  <title>yaadein</title>
+ </head>  
+ <body>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui.js"></script>
+  <script type = "text/javascript" src = "{{STATIC_URL }}js/csrf.js"></script>
+  <script type = "text/javascript" src = "{{STATIC_URL }}js/yaadein/bootstrap-typeahead.js"></script>
+  <script type = "text/javascript" src = "{{STATIC_URL }}js/yaadein/rangy-core.js"></script>
+  <script type = "text/javascript" src = "{{STATIC_URL }}js/yaadein/caret-position.js"></script>
+  <script type = "text/javascript" src = "{{STATIC_URL }}js/yaadein/bootstrap-tagautocomplete.js"></script>
+  <script> </script>
+ 
+<div id="one" contenteditable="true">My name is {{ user.username }}</div>
+  <form action="/yaadein/cover/upload/" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    CoverPic: <input type="file" name="cover" accept="image/*"/> 
+    <input type="submit" value="Upload"/>
+  </form>
+  <img width="200"height="200" src="{{ cover_pic }}"/>
+
+  <div id="post" contenteditable="true">
+    {% if enrno %}
+      <form method="POST" action="/yaadein/post/{{ enrno }}/" enctype="multipart/form-data">
+    {% else %}
+      <form method="POST" action="/yaadein/post/{{ user.username }}/" enctype="multipart/form-data">
+    {% endif %}
+    {% csrf_token %}
+     <textarea id="text" rows="4" name ="content" cols="50">
+        Enter your post!!! 
+        
+     </textarea>
+      Upload:<input type="file" name="pic" accept="image/*" multiple/>
+
+     <input type="submit" value="post"/>
+    </form>
+  </div>
+    {% block content %} 
+    {% endblock content %}
+ </body>
+ <script type="text/javascript">
+      console.log("hello");
+      $('#one').tagautocomplete({
+                        source: 'yaadein/abc'
+                                    });
+  
+  </script>
+
+
+</html>
