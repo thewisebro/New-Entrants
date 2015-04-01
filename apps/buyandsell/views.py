@@ -646,8 +646,7 @@ def edit(request,form_type,pk):
     return render(request,'buyandsell/form.html',{'form':form,'flag':flag})
 
   if form_type=="request":
-    instance=RequestedItems.objects.get(pk=pk)
-    flag=instance.item_image  #update notifications to be given to watch users
+    instance=RequestedItems.objects.get(pk=pk)  #update notifications to be given to watch users
     old_category=instance.category
     if request.method=='POST':
       form=RequestForm(request.POST,request.FILES,instance=instance)
@@ -685,9 +684,9 @@ def edit(request,form_type,pk):
         else:
           print "form filled wrongly"
       else:
-        return render(request,'buyandsell/form.html',{'form':form,'flag':flag})
+        return render(request,'buyandsell/form.html',{'form':form})
     form=RequestForm(instance=instance)
-    return render(request,'buyandsell/form.html',{'form':form,'flag':flag})
+    return render(request,'buyandsell/form.html',{'form':form})
 
 def my_account(request):
   show_contact=1
