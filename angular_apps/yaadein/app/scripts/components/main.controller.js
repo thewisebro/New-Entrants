@@ -2,6 +2,7 @@
 
 var app = angular.module('yaadeinApp');
 var originURL = base_domain;
+var redirect_url = base_doamin + '/login/?next=/yaadein/';
 
 app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$upload', '$location', '$routeParams', '$route', 'ngNotify', 'TickerService', 'HomeService', 'PostService', 'Lightbox', 'SweetAlert',
     function ($scope, $http, $q, $timeout, $upload, $location, $routeParams, $route, ngNotify, TickerService, HomeService, PostService, Lightbox, SweetAlert) {
@@ -153,6 +154,9 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
 	$scope.user = {};
   var LoggedUserData = HomeService.getLoggedUser();
   LoggedUserData.then(function (d) {
+      if (d.logged === 'false') {
+        window.location = redirect_url;
+      }
       $scope.user = d;
       $scope.navigationItems[0].url += $scope.user.enrolmentNo;
       $scope.navigationItems[0].hint = $scope.user.name;
@@ -401,6 +405,9 @@ app.controller('ProfileController', ['$routeParams', '$scope', '$http', 'UserSer
 	$scope.currentUser = {};
 	var userPromise = UserService.getUser($routeParams.enrolmentNo);
 	userPromise.then(function (d) {
+      if (d.logged === 'false') {
+        window.location = redirect_url;
+      }
 			$scope.currentUser = d;
 
       //Add originURL to image URLs
@@ -464,6 +471,9 @@ app.controller('GalleryController', ['$routeParams', '$scope', 'dataUserService'
 	$scope.currentUser = {};
 	var userData = UserService.getUser($routeParams.enrolmentNo);
 	userData.then(function (d) {
+    if (d.logged === 'false') {
+      window.location = redirect_url;
+    }
     $scope.currentUser = d;
 	});
 
@@ -476,6 +486,9 @@ app.controller('HashtagController', ['$routeParams', '$scope', '$http', 'Hashtag
 	$scope.posts = [];
 	var dataPromise = HashtagService.getHashtaggedPosts($routeParams.hashtag);
 	dataPromise.then(function (d) {
+    if (d.logged === 'false') {
+      window.location = redirect_url;
+    }
 
     //Add originURL to image URLs
     for(var i = 0; i < d.posts_data.length; i += 1) {
@@ -521,6 +534,9 @@ app.controller('PostController', ['$routeParams', '$scope', '$q', '$http', 'Post
    $scope.post = {};
    var postData = PostService.getPost($routeParams.postId);
    postData.then(function (d) {
+     if (d.logged === 'false') {
+      window.location = redirect_url;
+     }
 
      //Add originURL to image URLs
      for(var j = 0; j < d.image_url.length; j += 1) {
