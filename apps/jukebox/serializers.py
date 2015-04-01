@@ -165,9 +165,9 @@ class PlaylistDescSerializer(serializers.ModelSerializer):
       if user==obj.person:
         return True
       elif not obj.private:
-        return obj.person.person.html_name()
+        return obj.person.person.name()
     elif not obj.private:
-      return obj.person.person.html_name()
+      return obj.person.person.name()
     return False
 
 
