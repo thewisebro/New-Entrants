@@ -1,0 +1,94 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<link rel="stylesheet" href="css/styles.css" />
+	<link type="text/css" rel="stylesheet" href="css/formCss.css" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Alumni Mentorship Programme :: Indian Institute Of Technology, Roorkee</title>
+<script language="javascript" src="js/mandatory_fields.js"></script>
+<script language="javascript" src="js/displayAction.js"></script>
+<!--   Newly added    -->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="facebox/facebox.js" type="text/javascript"></script>
+<link href="facebox/facebox.css" media="screen" rel="stylesheet" type="text/css"/>
+<script src="js/jquery_function.js" type="text/javascript"></script>
+
+<!--       Newly added Ends   -->            
+</head>
+<body onload="initializePage()" onBeforeUnload="if(document.getElementById('notSubmit').value==1)return '';">
+	
+<div id="container">
+	<div id="top">
+		<div id="main_banner"><img src="images/alumni_mentorship.gif" alt="Alumni Mentorship" /></div>
+		<div id="iitr_logo"><img src="images/iitr_logo.jpg" alt="IIT Roorkee"></div>
+		<div id="main_links"></div>
+	</div>
+	<div class="divider">&nbsp;</div>
+	<div class="divider">&nbsp;</div>
+	<div id="bottom">
+		<div id="middle_left">
+	<input type="hidden" id="intro_text">
+			<div id="middle_left_top">
+			
+				Submitting your information...<br/>
+				If the form submission takes too long, click <a href="javascript:history.go(-1);"><b>here</b></a> to go back and submit again.   			
+
+			</div>		</div>
+		
+		<div id="middle_right">
+		
+		<div id="side_box">
+			<div id="image_pane">
+			<div id="snapshot">Snapshots@IITR</div>
+				
+			<img name="SlideShow" src="images/1.jpg" alt="Snapshots@IIT Roorkee">
+			
+			</div>
+
+
+			<span class="header" ><a href="#Introduction" onclick="updateInfo('Introduction',1)">Introduction</a></span><br /><br />
+			<div id="separator"></div>
+			<span class="header"> <a href="#Register" onclick="updateInfo('Register',1)">Register</a></span><br /><br />
+			<div id="separator"></div>
+			<span class="header"> <a href="#Message" onclick="updateInfo('Message',1)">Message from the Dean</a></span><br /><br />
+			<span class="header"> <a href="#Guidelines" onclick="updateInfo('Guidelines',1)">Guidelines</a></span><br /><br />
+			<div id="separator"></div>
+			<span class="header" id="already_text">Already Registered?</span><br /><br />
+			
+		
+		<!--Member Login-->
+		
+			 <form action='loginPost.php' method="post" name="Loginform" id="Loginform">
+				 Username &nbsp;<br/>
+			<input type="text" name="username"/><br />
+			Password &nbsp;<br/>
+			<input type="password" name="password"/><br/><br/>
+			<input type="submit"  value="Login" onclick="document.getElementById('notSubmit').value=0" />
+			</form>
+		<!--Member Login ends-->
+
+			<span class="header"><a href="#ForgotPasswordForm" onclick="updateInfo('ForgotPasswordForm',1)">Forgot Password?</a></span><br /><br />
+			</div>
+	
+
+
+			<div class="divider_small">&nbsp;</div>
+			<br />
+			<div id="special_links">
+				<span class="header">Useful Links</span><br /><br />
+				<a href="http://www.iitr.ac.in">IITR Home</a><br />
+				<a href="http://59.163.196.162:8080/Thinktank/static/Home.jsp">Think Tank</a>
+				<br />
+			</div>
+			
+		</div>
+	</div>
+</div>
+<hr height="1px" width="960px" color="#cccccc" style="height:1px;"/>
+<div id="footer">Credits: Information Management Group <br/>&copy; Copyright 2009. All Rights Reserved, IIT Roorkee.</div>
+ <script language="javascript" src="js/image_fader.js"></script>
+</body>
+</html>
+

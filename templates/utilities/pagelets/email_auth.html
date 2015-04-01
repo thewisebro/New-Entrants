@@ -1,0 +1,63 @@
+{% extends "pagelet_base.html" %}
+
+{% block styles %}
+  {{ form.media.css }}
+{% endblock %}
+
+{% block content %}
+  <div class="form-div" id="email-auth-form">
+    {% for useremail in emails_for_user %}
+      <div class="row">
+        <form action="/settings/email_auth/" method="POST">
+          <div class="email">
+            {{ forloop.counter }}) {{ useremail.email }}
+          </div>
+          <input type="hidden" name="email" value="{{ useremail.email }}">
+          <input type="hidden" name="id" value="{{ useremail.pk}}">
+          {% if not useremail.verified %}
+            <input class="button2" type="submit" name="verify" value="Verify">
+          {% else %}
+            <input class="button2" type="submit" name="verify" value="Verified" disabled="disabled">
+          {% endif %}
+          {% if useremail.email == primary_email %}
+            <input class="button2 primary-email" type="submit" name="primary" value="Primary email" disabled="disabled">
+          {% else %}
+            <input class="button2" type="submit" name="primary" value="Make it primary">
+            <input class="button2" type="submit" style="display:none" name="primary_2" id="{{useremail.pk}}_primary_2">
+          {% endif %}
+          <input class="button2" type="submit" name="delete" value="Delete">
+          <br>
+          {% if useremail in verifiable_emails %}
+            <p class="note">*A verification link has been sent to this email address.</p>
+          {% endif %}
+          <br>
+        </form>
+        <div class="clear-both"></div>
+      </div>
+    {% endfor %}
+    {% if count < 5 %}
+      <div class="row">
+        <form id="email-form" class="uniForm add-email" action="/settings/email_auth/" method="POST">
+          {% csrf_token %}
+          <div id="div_id_email">
+            <label for="id_email" class="requiredField">
+              Add new email
+            </label>
+            <input class="textinput textInput float-left" id="id_email" name="email" type="email">
+            <input class='input-button' type="submit" name="submission" value="Submit" />
+          </div>
+        </form>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ form.media.js }}
+  <script type="text/javascript" src="/static/js/common.js"></script>
+  {% if primary_entry %}
+    <script>
+      check_password('email_auth', 60,function(){document.getElementById('{{ primary_entry.pk }}_primary_2').click();});
+    </script>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,79 @@
+/*======= Ticker styles =======*/
+//begin -- .ticker-content
+.ticker-content {
+	position: relative;
+	width: 100%;
+	height: 100vh; // Subtract height of .credits div
+	overflow: auto;
+	//begin -- a.ticker-element
+  .trending {
+    color: $dark-grey;
+    font-size: $med;
+    padding: 15px;
+    &.invite {
+      text-align: center;
+      border-bottom: 1px solid $grey;
+      & .invite-button {
+        padding: 7px 10px;
+        border-radius: 3px;
+        color: $white;
+        background: $primary;
+        cursor: pointer;
+        &:hover {
+          background: darken($primary, 6);
+        }
+      }
+    }
+  }
+	a.ticker-element {
+		display: block;
+		width: 100%;
+    font-size: 16px;
+    word-break: break-word;
+		overflow: hidden;
+		background: $white;
+		padding: 15px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		color: $primary;
+		cursor: pointer;
+		@include transition (all 150ms ease-out);
+		&:hover {
+			color: $white;
+			background: $primary;
+		}
+		.user-image-container {
+			position: relative;
+			float: left;
+			width: 40px;
+			padding: 0;
+			.user-image {
+				width: 40px;
+				height: 40px;
+				margin: 0 auto;
+				background: $dark-grey;
+				background-repeat: no-repeat !important;
+				background-position: center !important;
+				background-size: cover !important;
+				border-radius: 2px;
+			}
+		}
+		.ticker-details {
+			position: relative;
+			overflow: hidden;
+			float: left;
+			width: 140px;
+			padding-left: 10px;
+			text-align: left;
+			p {
+				$line-height: 1.4;
+				$lines-to-show: 3;
+				height: $tiny * $line-height * $lines-to-show;
+				font-size: $tiny;
+				line-height: $line-height;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+	}//end -- a.ticker-element
+}//end -- .ticker-content

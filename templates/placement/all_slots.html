@@ -1,0 +1,33 @@
+{% extends "placement/base.html" %}
+
+{% block app_styles %}
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/jquery-timepicker.css">
+    <script src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>
+    <script src="{{ STATIC_URL }}jquery/jquery-timepicker.js"></script>
+
+<style>
+  .header_text
+  {
+    font-size:20px;
+  }
+</style>
+
+{% endblock %}
+
+{% block app_content %}
+
+{% if message %}
+  {{message}}
+{% else %}
+
+<h1> Slots </h1>
+<ul>
+  {% for slot in slots %}
+    <li><a href="{% url 'placement.views_slots.view_slot' slot.id %}">{{slot.start_date}} -- {{slot.end_date}}</a></li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

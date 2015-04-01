@@ -245,6 +245,8 @@ BHAWAN_CHOICES = (
     ('SB','Sarojini Bhawan'),
     ('KB','Kasturba Bhawan'),
     ('IB',' Indra Bhawan'),
+    ('DAY','Day Scholar'),
+    ('KIH','Khosla International House'),
 )
 
 RESIDENTIAL_CHOICES = BHAWAN_CHOICES + (
@@ -517,3 +519,37 @@ CONNECTION_STATUS = (
   (2, 'UNFRIEND'),
   (3, 'BLOCK')
 )
+
+HANDICAPPED_CHOICES = (
+  ('NO', 'No'),
+  ('ORT', 'Orthopaedically Impaired'),
+  ('VIS', 'Visually Impaired'),
+  ('HEA', 'Hearing Impaired'),
+  )
+
+GATE_JAM_CAT_CHOICES = (
+  ('GATE', 'GATE'),
+  ('JAM', 'JAM'),
+  ('CAT', 'CAT'),
+  ('CSIR', 'CSIR'),
+  ('UNET', 'UGC NET'),
+  ('CEED', 'CEED'),
+  ('GPAT', 'GPAT'),
+  ('INS', 'Inspire'),
+  ('ICAR', 'ICAR'),
+  ('ICMR', 'ICMR'),
+  )
+
+
+FELLOSHIP_CATEGORY_CHOICES = (
+  ('MHRD', 'MHRD'),
+  ('UGC', 'UGC'),
+  ('CSIR', 'CSIR'),
+  ('SPON', 'SPONSRED'),
+  ('DST', 'DST'),
+  )
+
+PHD_STATUS_CHOICES = (
+  ('F', 'Full-Time'),
+  ('P', 'Part-Time'),
+    )

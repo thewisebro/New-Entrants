@@ -1,0 +1,68 @@
+{% block active-home %}{% endblock %}
+
+{% block app_scripts %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/groups/subscribe.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/csrf.js"></script>
+  <script type='text/javascript'>
+ /*   $('body').ready(function(){
+      $('#content').pickify_users();
+    });*/
+  </script>
+{% endblock %}
+
+{% block app_styles %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/groups/groups.css"/>
+{% endblock %}
+
+
+{% block horizontal_tabs_block %}
+{% endblock %}
+{% block content %}
+{% if error_msg %}
+  {{error_msg}}
+{% else %}
+  <div id="groups-header">
+    <img id="groups-profile-pic" src="/photo/{{username}}/"/>
+    <div id="groups-details">
+      <div id="groups-name">{{group.name}}</div>
+      <div id="groups-description">
+        {% if group.description %}
+          {{group.description|escape|safe|slice:":130"}}...
+          <a><span id="read-more" onclick="location ='/#groups/{{username}}'">Read more</span></a>
+        {% endif %}
+        <div id="groups-website"><a href="{{group.website}}" target="_blank">{{group.website}}</a></div>
+      </div>
+      {% block edit-member %}
+      {% endblock %}
+      {% block add-event %}
+      {% endblock %}
+    </div>
+  </div>
+  <div id="groups-container">
+    <table id="content-top-bar">
+      <td id="activity-tab" class="content-tab {% block activity-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/activity'">Activity</td>
+      <td class="content-tab {% block about-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}'">About</td>
+      <td class="content-tab {% block members-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/members'">Members</td>
+      <td class="content-tab {% block events-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/events'">Events</td>
+      {% if can_edit %}
+        <td class="content-tab {% block edit-tab-class %}{% endblock %}" onclick="location = '/#groups/{{group.user.username}}/edit'">Edit</td>
+      {% endif %}
+      </table>
+    <div id="groups-content">
+     {% block group_content %}
+     {% endblock group_content %}
+  <script type="text/javascript">
+    var group_username = '{{ username }}';
+    var group_name = '{{ group.user.name }}';
+  </script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/prettydate.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/groups/activity.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/crop_image/crop_image.js"></script>
+    </div>
+  </div>
+  <div style="clear:both"></div>
+{% endif %}
+{% endblock %}
+
+

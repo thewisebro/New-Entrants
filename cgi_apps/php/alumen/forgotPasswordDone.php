@@ -1,0 +1,1 @@
+<p>An email has been sent to the email address specified (please check your <i>spam</i> mail also) by you containing a temporary password. You can login with your username and this password, to reset your password using the <span class="header">[Profile]</span> link.</p>

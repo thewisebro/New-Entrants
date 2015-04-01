@@ -1,0 +1,37 @@
+{% extends "groups/base.html" %}
+
+{% block app_content %}
+
+<h3>Add Members to {{ group.name }}</h3>
+
+Add comma separated enrollment numbers to be added to the group
+{% include "generic_form.html" with action=action form=form %}
+
+{% if results %}
+
+<h4>Search Results</h4>
+<table>
+  <tr>
+    <td>S. No.</td>
+    <th>Enrollment No.</th>
+    <th>Status</th>
+    <th></th>
+  </tr>
+  {% for username, status in results %}
+  <tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ username }}</td>
+    <td>{{ status }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% else %}
+
+{% if request.method == 'POST' %}
+Error in data entry !
+{% endif %}
+
+{% endif %} 
+<br /><a href="{% url groups.views.members group.id  %}"><button><div class="text">Add or remove members</div></button></a>
+{% endblock app_content %}

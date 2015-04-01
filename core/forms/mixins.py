@@ -31,7 +31,7 @@ class ReadOnlyTextInput(forms.TextInput):
 class FormMixin(forms.BaseForm):
     def __init__(self, *args, **kwargs):
         super(FormMixin, self).__init__(*args, **kwargs)
-        if self.instance and self.instance.pk:
+        if isinstance(self, forms.ModelForm) and self.instance and self.instance.pk:
           for field in self._read_only_fields():
               model_field = dict(map(lambda k:(k.name,k),
                     self.instance._meta.fields))[field]

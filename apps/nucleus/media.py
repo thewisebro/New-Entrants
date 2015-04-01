@@ -19,13 +19,13 @@ def photo(request, username=None):
       user = User.objects.get_or_none(username=username)
   elif request.user.is_authenticated():
     user = request.user
-  if user:
+  if user and user.photo:
     filepath = user.photo.path
-    if not os.path.exists(filepath):
-      if user.in_group('Student Group'):
-        filepath = STATIC_PATH + 'images/nucleus/default_group_dp.png'
-  if not filepath:
-    filepath = STATIC_PATH + 'images/nucleus/default_dp.png'
+  if not filepath or not os.path.exists(filepath):
+    if user and user.in_group('Student Group'):
+      filepath = STATIC_PATH + 'images/nucleus/default_group_dp.png'
+    else:
+      filepath = STATIC_PATH + 'images/nucleus/default_dp.png'
   wrapper = FileWrapper(file(filepath))
   response = HttpResponse(wrapper, content_type=mimetypes.guess_type(filepath)[0])
   response['Content-Length'] = os.path.getsize(filepath)

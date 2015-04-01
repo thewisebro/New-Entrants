@@ -19,6 +19,8 @@ from email import Encoders
 from include import *
 from constant import *
 
+ChanneliUrl = "https://channeli.in/notices/"
+
 def EmailContent(content,subject,reference,idee):
   return """
   <div style="min-height:36px;background:#1b6f81;color:#ffffff;border-top-left-radius:5px;border-top-right-radius:5px;">
@@ -36,8 +38,8 @@ def EmailContent(content,subject,reference,idee):
         </table>
       </td>
       <td style="width:100px;vertical-align:top">
-        <a href=\" """+PeopleProxyUrl+"""\" style="text-decoration:none;color:#ffffff;" target="_blank">
-          <img src=\" """+PeopleProxyUrl+"""template/images/enotice.png\" style="font-weight:bold;font-size:15px;color:#ffffff;" alt="eNotice"/>
+        <a href='"""+ChanneliUrl+"""' style="text-decoration:none;color:#ffffff;" target="_blank">
+          <img src='"""+PeopleProxyUrl+"""template/images/enotice.png' style="font-weight:bold;font-size:15px;color:#ffffff;" alt="eNotice"/>
 	</a>  
       </td>
     </tr></tbody></table>
@@ -48,7 +50,7 @@ def EmailContent(content,subject,reference,idee):
   <div style="clear:both"></div>
   <div style="height:18px;background:#1b6f81;padding:8px 6px 6px 6px;font-size:13px;color:#ffffff;">
     <div style="padding-right:6px;border-right:1px solid #0f404b;float:left;">
-      <a href=\" """+PeopleProxyUrl+"""#content/"""+str(idee)+"""\" style="text-decoration:none;color:#ffffff;" target="_blank">
+      <a href='"""+ChanneliUrl+"""#content/"""+str(idee)+"""' style="text-decoration:none;color:#ffffff;" target="_blank">
         <b>Web Version</b>
       </a>	
     </div>  
@@ -59,7 +61,7 @@ def EmailContent(content,subject,reference,idee):
     </div>
     <div style="margin:-30px;float:right;width:153px">
       <a href="https://market.android.com/details?id=in.ernet.iitr.people" style="text-decoration:none;" target="_blank">
-        <img src=\" """+PeopleProxyUrl+"""template/images/android.png\" style="color:#92B901;font-weight:bold;" alt="Android Notice-Board" title="Android Notice-Board"/>
+        <img src='"""+PeopleProxyUrl+"""template/images/android.png' style="color:#92B901;font-weight:bold;" alt="Android Notice-Board" title="Android Notice-Board"/>
       </a>
     </div>  
   </div>
@@ -85,8 +87,8 @@ def EmailContent(content,subject,reference,idee):
        <b>POWERED BY</b>
       </td>
       <td style="width:78px;vertical-align:top">
-        <a href="http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html" style="text-decoration:none;color:#ffffff;" target="_blank">
-          <img src=\" """+PeopleProxyUrl+"""template/images/imglogo.png\" style="font-family:verdana;font-size:30px;font-weight:bold;line-height:26px" alt="IMG"
+        <a href="img.channeli.in" style="text-decoration:none;color:#ffffff;" target="_blank">
+          <img src='"""+PeopleProxyUrl+"""template/images/imglogo.png' style="font-family:verdana;font-size:30px;font-weight:bold;line-height:26px" alt="IMG"
 	  title="Information Management Group"/>
         </a>
       </td> 
@@ -94,7 +96,7 @@ def EmailContent(content,subject,reference,idee):
     </div>
     <div style="height:14px;border-top:1px solid #1b6f81;padding-top:6px;font-size:11px;">
       Copyright &copy; """+str(current_year)+""". All Rights Reserved. 
-      <a href="http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html" style="text-decoration:none;color:#ffffff;" target="_blank">
+      <a href="img.channeli.in" style="text-decoration:none;color:#ffffff;" target="_blank">
         Information Management Group
       </a>
     </div>

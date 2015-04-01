@@ -1,0 +1,67 @@
+{% extends "groups/base.html" %}
+
+{% block edit-tab-class %}content-tab-active{% endblock%}
+
+{% block app_styles %}
+{{ block.super }}
+{{ form1.media.css }}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/utilities/edit_profile.css"/>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/smoothness/jquery-ui.css"/>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/smoothness/custom-jquery-ui.css"/>
+
+{% endblock %}
+
+{% block app_scripts %}
+  {{ form1.media.js }}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/groups/subscribe.js"></script>
+  <script type="text/javascript">
+    function iframe(url){
+      dialog_iframe({
+        name:'Edit',
+        title:'Edit Member Details',
+        width:800,
+        height:500,
+        src:url,
+      });
+    }
+  </script>
+{% endblock %}
+{% block group_content %}
+  {% if form1.errors or form2.errors %}
+  <div class="errors">
+    <p style = "color: red;">
+      Please Correct the error below.
+    </p>
+  </div>
+  {% endif %}
+  <form action = "" method = "post" class="uniForm">
+    {% csrf_token %}
+    <div class="edit-categories">
+      {{ form1.uniform }}
+      {{ form2.uniform }}
+      <input class="input-button" type = "submit" name ="submit_button" value = "Save Changes">
+      <input class="input-button" type="button" name="reset" value="Reset" onclick="location='';">
+    </div>
+    {% if not is_active %}
+    <div class="activate">
+      <div class="activate-msg">
+        <p>
+          This group is not visible to others because it is not activated. You must activate it in order to make it visible to other people.
+          But remember, once activated it can't be deactivated.
+        </p>
+      </div>
+      <div class="activate-link">
+        <a href="/#groups/{{group.user.username}}/activate/">Activate now</a>
+      </div>
+    </div>
+    {% endif %}
+  </form>
+{% endblock group_content %}
+{% block edit-member %}
+<div class="edit-member">
+  <div class="button2 button-div" onclick="upload_image('user_photo', {{ group.user.pk }});">Edit Group Logo</div>
+</div>
+<div class="edit-member">
+  <div class="button2 button-div" onclick="iframe('/groups/{{group.user.username}}/add_member/');">Edit Members </div>
+</div>
+{% endblock %}
