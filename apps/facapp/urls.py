@@ -10,11 +10,11 @@ urlpatterns = patterns('facapp.views',
     (r'^delete/(?P<model_name>\w+)/(?P<instance_id>\d+)/$', 'delete'),
     # (r'^publish/$','publish'),
 )
-# urlpatterns += patterns('facapp.views_mass_mailer',
-#     (r'^mass_mailer/$', 'mass_mailer'),
-#     (r'^mass_mailer/choose_semester/$', 'choose_semester'),
-#     (r'^mass_mailer/show_student_list/$', 'show_student_list'),
-# )
+urlpatterns += patterns('facapp.views_mass_mailer',
+    (r'^mass_mailer/$', 'mass_mailer'),
+    (r'^mass_mailer/choose_semester/$', 'choose_semester'),
+    (r'^mass_mailer/show_student_list/$', 'show_student_list'),
+)
 urlpatterns += patterns('facapp.views_ckeditor',
     (r'^books_authored/$', 'books_authored'),
     (r'^refereed_journal_papers/$', 'refereed_journal_papers'),
