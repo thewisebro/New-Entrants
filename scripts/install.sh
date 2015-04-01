@@ -77,6 +77,7 @@ pip install mutagen
 pip install reportlab
 pip install python-dateutil
 pip install simplejson
+pip install pika
 
 # fuzzy wuzzy
 pip install -e git+https://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy
