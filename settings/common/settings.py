@@ -272,10 +272,12 @@ CHANNELI_APPS = (
   'buysell',
   'utilities',
   'birthday',
+  'messmenu',
   'placement',
   'internship',
   'yaadein',
   'softwares',
+  'mcm',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS

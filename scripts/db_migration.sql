@@ -54,3 +54,6 @@ INSERT INTO nci.groups_groupactivity (id,group_id,text,datetime_created) (SELECT
 INSERT INTO nci.events_calendar (id,name,cal_type) SELECT id,name,cal_type FROM channeli_dump.events_calendar;
 INSERT INTO nci.events_calendar_users (id,calendar_id,user_id) SELECT id,calendar_id,user_id FROM channeli_dump.events_calendar_users;
 INSERT INTO nci.events_event (id,calendar_id,uploader_id,title,date,time,upto_date,upto_time,place,description,event_type,datetime_added,email_sent) SELECT id,calendar_id,uploader_id,title,date,time,upto_date,upto_time,place,description,event_type,datetime_added,email_sent FROM channeli_dump.events_event;
+
+# Download Softwares
+INSERT INTO nci.softwares_software (id,soft_name,category,image,url,version,description,date_added,download_count,added_by,soft_file) SELECT id,soft_name,category,image,url,version,description,date_added,download_count,added_by,soft_file FROM channeli_dump.softwares_software;

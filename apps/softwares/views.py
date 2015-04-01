@@ -10,6 +10,8 @@ from django.conf import settings
 from softwares.models import Software
 from constants import CATEGORIES, SOFTWARE_LOCATION, SOFTWARE_IDS
 
+MEDIA_ROOT = settings.MEDIA_ROOT
+
 def browse(request, category=None, softwareid=None):
   try:
     software = Software.objects.get(pk=softwareid)
