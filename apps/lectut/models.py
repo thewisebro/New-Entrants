@@ -18,22 +18,6 @@ from notifications.models import Notification
 fs = FileSystemStorage(location='Uploads')
 
 
-class TextNotice(models.Model):
-  text=models.CharField(max_length=500 , null=False)
-  upload_user=models.ForeignKey(User)
-  batch=models.ForeignKey(Batch)
-
-  def __unicode__(self):
-    return str(self.text)
-
-  def as_dict(self):
-    fileData={
-      'text':str(self.text),
-      'upload_user':str(self.upload_user.name),
-      'batch':str(self.batch)
-    }
-    return fileData
-
 class BaseUpload(models.Model):
   class Meta:
     abstract = True
@@ -61,7 +45,7 @@ class Post(models.Model):
   batch = models.ForeignKey(Batch , null=True)
   course = models.ForeignKey(Course)
   content = models.CharField(max_length = '1000')
-  privacy = models.BooleanField(max_length = 3 , default = 'tut')
+  privacy = models.BooleanField(default = False)
   deleted = models.BooleanField(default = False)
 
   objects = models.Manager()
@@ -77,7 +61,7 @@ class Post(models.Model):
     students = currentBatch.students.all()
     users = map(lambda x:x.user, students)
     if not self.pk:
-      Notification.save_notification('lectut','The user ' +str(self.upload_user.name)+ ' uploaded a post','lectut/'+str(currentBatch.id)+'/upload',users,self)
+      Notification.save_notification('lectut','The user ' +str(self.upload_user.name)+ ' added a post','#/course/'+currentBatch.id+'/posts/'+post.id+'/',users,self)
     return post
 
   def delete(self):

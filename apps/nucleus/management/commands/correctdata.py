@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from nucleus.models import Student
+from nucleus.models import Student, StudentInfo
 
 class Command(BaseCommand):
    args = ''
@@ -23,3 +23,10 @@ class Command(BaseCommand):
                 student.semester_no % 2 == 0) else 'A'
             student.save()
             print i, student
+     print "correcting categories"
+     studentinfos = StudentInfo.objects.filter(category='GE')
+     for i, si in enumerate(studentinfos):
+       si.category = 'GEN'
+       si.save()
+       print i, si
+
