@@ -11,7 +11,7 @@ from django.db.models import Q
 
 from core.forms import BaseForm, BaseModelForm
 
-from nucleus.models import Branch
+from nucleus.models import Branch, Faculty, User
 
 from facapp.models import *
 from facapp.utils import handle_exc
@@ -27,19 +27,13 @@ import json
 @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)  
 def index(request):
   try:
-    print 'yes'
-    faculty = request.user
-    #photo_form = PhotoUploadForm()
-    #resume_form = ResumeUploadForm()
-    print 'yess'
+    faculty = request.user.faculty
+    # photo_form = PhotoUploadForm()
+    # resume_form = ResumeUploadForm()
     education = EducationalDetails.objects.filter(faculty = faculty, visibility = True).order_by('priority')
-    print '1'
     interests = Interests.objects.filter(faculty = faculty, visibility = True).order_by('priority')
-    print '2'
     professional_background = ProfessionalBackground.objects.filter(faculty = faculty, visibility = True).order_by('priority')
-    print '3'
     administrative_background = AdministrativeBackground.objects.filter(faculty = faculty, visibility = True).order_by('priority')
-    print '4'
     honors = Honors.objects.filter(faculty = faculty, visibility = True).order_by('priority')
     teaching = TeachingEngagement.objects.filter(faculty = faculty, visibility = True).order_by('priority')
     seminars = ParticipationSeminar.objects.filter(faculty = faculty, visibility = True).order_by('priority')
@@ -57,7 +51,6 @@ def index(request):
     visits = Visits.objects.filter(faculty = faculty, visibility = True).order_by('priority')
     rs_group = ResearchScholarGroup.objects.filter(faculty = faculty, visibility = True).order_by('priority')
     invitations = Invitations.objects.filter(faculty = faculty, visibility = True).order_by('priority')
-    print '5'
     return render(request,'facapp/index.html', {
       'interests': interests,
       'professional_background' : professional_background,
@@ -92,29 +85,22 @@ def index(request):
 @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
 def add(request, model_name):
   try:
-    faculty = request.user
+    faculty = request.user.faculty
     model_type = globals()[model_name]
-    print 'ok'
     if(model_name == 'Faculty'):
-      print 'okk'
       messages.error(request, 'Faculty can\'t be added.')
       return HttpResponseRedirect(reverse('facapp.views.index'))
     exclude_list = ['faculty',]
-    print 'ok1'
     model_name_space_separated = re.sub(r"(?<=\w)([A-Z])", r" \1", model_name)
-    print 'ok2'
     template_name = model_name_space_separated.lower().replace(' ', '_').strip() + '.html'
-    print 'ok3'
-  
+
     # If the form was submitted.
     if request.method == 'POST':
-      print 'ok4'
       form = BaseModelFormFunction(model_type, exclude_list, request.POST)
-      print 'ok5'
       if form.is_valid():
-        print 'ok6'
         # Get a model instance without committing the form.
         new_entry = form.save(commit=False)
+        print new_entry
         # Now fill the empty faculty field.
         new_entry.faculty = faculty
         # Now commit the model.
@@ -123,16 +109,9 @@ def add(request, model_name):
       else:
         messages.error(request, form.errors, extra_tags='form_error')
 
-    print 'ok7'
     # Direct to the details page.
     form = BaseModelFormFunction(model_type, exclude_list)
-    print 'ok8'
-    # new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
     new_list = list({})
-    print 'ok9'
-    print template_name
-    print model_name
-    print model_name_space_separated
     return render(request, 'facapp/' + template_name, {
         'form': form,
         'action': '/facapp/add/' + model_name + '/',
@@ -147,7 +126,7 @@ def add(request, model_name):
 # @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
 # def update(request, model_name, instance_id):
 #   try:
-#     faculty = request.user
+#     faculty = request.user.faculty
 #     model_type = globals()[model_name]
 #     if(model_name == 'Faculty'):
 #       exclude_list = ['user',]
@@ -158,7 +137,7 @@ def add(request, model_name):
 #       # we are guaranteed that index out of range exception will not occur, if a valid instance_id was passed.
 #     model_name_space_separated = re.sub(r"(?<=\w)([A-Z])", r" \1", model_name)
 #     template_name = model_name_space_separated.lower().replace(' ', '_').strip() + '.html'
-  
+
 #     # If the form was submitted.
 #     if request.method == 'POST':
 #       # Build a new instance from old instance too.
@@ -203,7 +182,7 @@ def add(request, model_name):
 # @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
 # def delete(request, model_name, instance_id):
 #   try:
-#     faculty = request.user
+#     faculty = request.user.faculty
 #     model_type = globals()[model_name]
 #     if(model_name == 'Faculty'):
 #       messages.error(request, 'Faculty can\'t be deleted.')
@@ -252,7 +231,7 @@ def add(request, model_name):
 # @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
 # def publish(request):
 #   try:
-#     username = request.user.username
+#     username = request.user.faculty.username
 #     connection = pika.BlockingConnection(pika.ConnectionParameters(
 #                 host='cms.channeli.in'))
 #     channel = connection.channel()
