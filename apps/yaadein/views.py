@@ -64,7 +64,7 @@ def CORS_allow(view):
 def index(request,enrno=None):
   if request:
     if not request.user.is_authenticated():
-      data = {'logged':false}
+      data = {'logged':"false"}
       return HttpResponse(simplejson.dumps(data),'application/json') 
   if request.method == 'GET':
     print "HEre"
@@ -187,7 +187,7 @@ def index(request,enrno=None):
 def homePage(request):
 # import ipdb;ipdb.set_trace()
   if not request.user.is_authenticated():
-    data = {'logged':false}
+    data = {'logged':"false"}
     return HttpResponse(simplejson.dumps(data),'application/json') 
   y_user = YaadeinUser.objects.get_or_create(user=request.user)[0]#user=request.user
 
@@ -306,7 +306,7 @@ def post(request,wall_user):
 def post_display(request,pk):
   if request:
     if not request.user.is_authenticated():
-      data = {'logged':false}
+      data = {'logged':"false"}
       return HttpResponse(simplejson.dumps(data),'application/json') 
     post = Post.objects.filter(pk=pk).filter(status="A")
     post = post[0]  
@@ -345,7 +345,7 @@ def post_display(request,pk):
 def search(request,id):
    if request: #.is_ajax():
      if not request.user.is_authenticated():
-       data = {'logged':false}
+       data = {'logged':"false"}
        return HttpResponse(simplejson.dumps(data),'application/json') 
      query = request.GET.get('q','')
 #   import ipdb;ipdb.set_trace()
@@ -443,7 +443,7 @@ def spot_search(request):
 def invite(request):
   if request:
     if not request.user.is_authenticated():
-      data = {'logged':false}
+      data = {'logged':"false"}
       return HttpResponse(simplejson.dumps(data),'application/json') 
 #   import ipdb;ipdb.set_trace()
     app = 'Yaadein'
@@ -473,7 +473,7 @@ def invite(request):
 def hashtag(request,slug):
   if request:
     if not request.user.is_authenticated():
-      data = {'logged':false}
+      data = {'logged':"false"}
       return HttpResponse(simplejson.dumps(data),'application/json') 
     posts_data = []
     posts = Post.objects.filter(tags__slug=slug).filter(status='A').order_by('post_date').reverse()
@@ -516,7 +516,7 @@ def hashtag(request,slug):
 def spot_page(request,name):
   if request:
     if not request.user.is_authenticated():
-      data = {'logged':false}
+      data = {'logged':"false"}
       return HttpResponse(simplejson.dumps(data),'application/json') 
 #  import ipdb;ipdb.set_trace()
     posts_data = []
@@ -561,7 +561,7 @@ def spot_page(request,name):
 def delete(request,id):
   if request:
     if not request.user.is_authenticated():
-      data = {'logged':false}
+      data = {'logged':"false"}
       return HttpResponse(simplejson.dumps(data),'application/json') 
     try:
       post = Post.objects.get(pk=id)
@@ -594,7 +594,7 @@ def private_posts(request,id):
 @CORS_allow
 def trending(request):
   if not request.user.is_authenticated():
-    data = {'logged':false}
+    data = {'logged':"false"}
     return HttpResponse(simplejson.dumps(data),'application/json') 
   tag_frequency = defaultdict(int)
   for item in Post.objects.all().filter(status="A"):
