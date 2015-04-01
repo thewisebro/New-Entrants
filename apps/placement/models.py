@@ -382,7 +382,6 @@ class CompanyContactInfo(models.Model):
     name = models.CharField(max_length=250)
     cluster = models.IntegerField(choices=PC.CLUSTER_CHOICES, null=True, blank=True)
     status = models.CharField(max_length=40, choices=PC.STATUS_CHOICES, null=True, blank=True)
-    primary_contact_person = models.OneToOneField('ContactPerson')
 
     def __unicode__(self):
         return str(self.name)+str(self.status)
@@ -397,9 +396,10 @@ class ContactPerson(models.Model):
     phone_no = models.CharField(max_length=250, null=True , blank=True)
     email = models.CharField(max_length=250 , null=True  , blank=True)
     company_contact = models.ForeignKey(CompanyContactInfo)
+    is_primary = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return str(self.name)+' '+str(self.designation)
+        return str(self.name)+' '+str(self.designation)+' '+str(self.is_primary)
 
 class CampusContact(models.Model):
     """
