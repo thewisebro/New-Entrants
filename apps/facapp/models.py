@@ -1,27 +1,8 @@
 from core import models
 from api import model_constants as MC
 from facapp import constants as FC
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from nucleus.models import User, Faculty ####
-
-# Create your models here.
-
-# class Faculty(models.Model):
-#   user = models.OneToOneField(User, primary_key=True)
-#   name = models.CharField(max_length=MC.TEXT_LENGTH)
-#   department = models.CharField(max_length=MC.CODE_LENGTH, choices=MC.DEPARTMENT_CHOICES)
-#   photo = models.ImageField(upload_to="facapp/photos", null=True, blank=True)
-#   resume = models.FileField(upload_to="facapp/resumes", null=True, blank=True)
-#   designation = models.CharField(max_length=MC.CODE_LENGTH, choices=FC.DESIGNATION_CHOICES)
-#   date_of_birth = models.CharField(max_length=MC.CODE_LENGTH, blank=True, null=True)
-#   phone = models.CharField(max_length=20, blank=True, null=True)
-#   address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True, null=True)
-#   alternate_mail_id = models.EmailField(blank=True, null=True)
-#   employee_code = models.CharField(max_length=MC.CODE_LENGTH)
-#   date_of_joining = models.CharField(max_length=MC.CODE_LENGTH, blank=True, null=True)
-#   home_page = models.URLField(blank=True, null=True)
-#   def __unicode__(self):
-#     return str(self.user) + ':' + self.name
 
 class Honors(models.Model):
   faculty = models.ForeignKey(Faculty)
