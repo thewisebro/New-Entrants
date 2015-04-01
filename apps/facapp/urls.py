@@ -15,12 +15,12 @@ urlpatterns = patterns('facapp.views',
 #     (r'^mass_mailer/choose_semester/$', 'choose_semester'),
 #     (r'^mass_mailer/show_student_list/$', 'show_student_list'),
 # )
-# urlpatterns += patterns('facapp.views_ckeditor',
-#     (r'^books_authored/$', 'books_authored'),
-#     (r'^refereed_journal_papers/$', 'refereed_journal_papers'),
-#     (r'^refereed_journal_papers/edit/$', 'refereed_journal_papers_edit'),
-#     (r'^books_authored/edit/$', 'books_authored_edit'),
-# )
+urlpatterns += patterns('facapp.views_ckeditor',
+    (r'^books_authored/$', 'books_authored'),
+    (r'^refereed_journal_papers/$', 'refereed_journal_papers'),
+    (r'^refereed_journal_papers/edit/$', 'refereed_journal_papers_edit'),
+    (r'^books_authored/edit/$', 'books_authored_edit'),
+)
 # urlpatterns += patterns('facapp.views_upload',
 #     (r'^upload/photo/$', 'upload_photo'),
 #     (r'^upload/resume/$', 'upload_resume'),
