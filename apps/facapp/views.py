@@ -1,7 +1,7 @@
 import re
 
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest, Http404
-from django.shortcuts import render_to_response, get_object_or_404, render
+from django.shortcuts import render, get_object_or_404
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -51,7 +51,7 @@ def index(request):
     visits = Visits.objects.filter(faculty = faculty, visibility = True).order_by('priority')
     rs_group = ResearchScholarGroup.objects.filter(faculty = faculty, visibility = True).order_by('priority')
     invitations = Invitations.objects.filter(faculty = faculty, visibility = True).order_by('priority')
-    return render(request,'facapp/index.html', {
+    return render(request, 'facapp/index.html', {
       'interests': interests,
       'professional_background' : professional_background,
       'honors' : honors,
@@ -78,8 +78,8 @@ def index(request):
     # Can't use handle_exc here because it redirects here. To avoid infinite loop, redirect to a static page.
     print 'Exception: ' + str(e)
     messages.error(request, 'Unknown error has occured. Please try again later. The issue has beeen reported')
-    return render_to_response('error.html', {
-        }, context_instance=RequestContext(request))
+    return render(request, 'error.html', {
+        })
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
@@ -118,7 +118,7 @@ def add(request, model_name):
         'list': new_list,
         'model_name': model_name,
         'model_name_space_separated': model_name_space_separated,
-        }) # , context_instance=RequestContext(request))
+        })
   except Exception as e:
     return handle_exc(e, request)
 
@@ -207,23 +207,23 @@ def update(request, model_name, instance_id):
 #       # Direct to the add page.
 #       form = BaseModelFormFunction(model_type, exclude_list)
 #       new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
-#       return render_to_response('facapp/' + template_name, {
+#       return render(request, 'facapp/' + template_name, {
 #           'form': form,
 #           'action': '/facapp/add/' + model_name + '/',
 #           'list': new_list,
 #           'model_name': model_name,
 #           'model_name_space_separated': model_name_space_separated,
-#           }, context_instance=RequestContext(request))
+#           })
 
 #     # If user clicked 'Delete' link then redirect him to a confirmation page.
 #     form = ConfirmDeleteForm()
-#     return render_to_response('facapp/' + template_name, {
+#     return render(request, 'facapp/' + template_name, {
 #         'form': form,
 #         'action': '/facapp/delete/' + model_name + '/' + str(instance_id) + '/',
 #         'model_to_delete': old,
 #         'model_name': model_name,
 #         'model_name_space_separated': model_name_space_separated,
-#         }, context_instance=RequestContext(request))
+#         })
 #   except Exception as e:
 #     return handle_exc(e, request)
 
