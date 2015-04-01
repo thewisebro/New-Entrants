@@ -95,6 +95,18 @@ body {
   height:50px;
   top: 0px;
   .topSearchBox{
+    .homeTab{
+       float: right;
+       margin-right: 247px;
+       margin-top: 16px;
+       font-size: 14px;
+       font-family: opensans_semibold;
+       color: #656565;
+       cursor: pointer;
+       &:hover{
+        color:#f62459;
+       }
+    }
     position: relative;
     width: calc(100% - 230px);
     margin-left: 230px;
@@ -376,7 +388,31 @@ body {
   font-size:12px;
 }
 .myCourse{
-   ul{
+  .signInBox{
+     padding: 20px;
+     color: #ACACAC;
+     font-size: 13px;
+     text-align: center;
+     font-family: $osB;
+     margin-top: 10px;
+    .signInButton{
+      padding: 0px 13px;
+      margin-top: 13px;
+      cursor: pointer;
+      border-radius: 25px;
+      margin: 20px auto;
+      width: 65px;
+      background: #f62459;
+      border: 1px solid #3B3B3B;
+      color: #FFF;
+      height: 33px;
+      line-height: 33px;
+      &:hover{
+        background:#E02050;
+      } 
+    }
+  } 
+  ul{
     li{
       overflow: hidden;
       text-overflow: ellipsis;
@@ -572,9 +608,9 @@ body {
            margin-bottom:20px;
            background: #FFF;
            border: 1px solid #DDD;
-           //border-top: 0px;
+           border-top: 0px;
            .createPost{
-            padding:20px 0px;
+            //padding:20px 0px;
             //padding-right:0px;
             min-height: 150px;
             //border: 1px solid $g6;
@@ -1306,6 +1342,7 @@ table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border t
       >div{
         float:left;
         font-size:14px;
+        width: calc( 100% - 75px);
       } 
       .mPic{
         margin-right:10px;

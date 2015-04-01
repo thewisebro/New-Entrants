@@ -9,32 +9,36 @@ var thing;
  */
 lectutApp
   .controller('MainCtrl', ['$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails',function ($scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails) {
-
+    
+    $rootScope.whichView = "MainCtrl";
     $scope.base_media_url = base_domain+"/media/";
     $scope.base_domain = base_domain;
 
     //------------------ Initial setup-------------------------------------
     $scope.logIn = false;
     $scope.auth;
+    //console.log("This is start ----- lectut");
     var promiseInitialSetup = InitialSetup.getInitialData();
     promiseInitialSetup.then(function(d){
          // console.log(d);
          console.log(d);
          $scope.auth = d;
          $rootScope.commonPosts = d.posts;
-         //console.log($scope.auth);
-         if($scope.userType === "0" || "1"){
+         console.log("this is auth");
+         //console.log($scope.auth.userType == "2");
+         if($scope.auth.userType == "0" || $scope.auth.userType == "1"){
             $scope.logIn = true;
             for(var i=0;i<$scope.auth.batches.length;i++){
               if($scope.auth.batches[i].id == $scope.courseId.courseId){
                 $scope.courseName = $scope.auth.batches[i].course_name;
+                $scope.courseCode = $scope.auth.batches[i].code;
               }
             }
         }
         else{
           //anon user
-          alert("anon");
-          
+          console.log("-------------------anon--------------------");
+          $scope.logIn = false;
         }
     });
     
@@ -92,7 +96,7 @@ lectutApp
 lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','RemoveFeedPost','RemoveFeedFile', 'Comments',function($routeParams, $scope,$rootScope, RemoveFeedPost, RemoveFeedFile, Comments) {
   //this.params = $routeParams;
    
-  
+   $rootScope.whichView = "CourseHomeCtrl";  
   // ------------------------- Comments -----------------------
   $scope.loadCommentsFunc = function(id){
     var promiseComments = Comments.getComments(id);
@@ -173,8 +177,9 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
 
 }]);
 
-lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDownload', 'RemoveFeedPost','RemoveFeedFile','$cookies','$upload','$timeout','$routeParams','LoadFeed','growl','Comments',function($scope,CourseDetails,FeedFileDownload, RemoveFeedPost , RemoveFeedFile,$cookies,$upload, $timeout, $routeParams,LoadFeed, growl, Comments) {
-
+lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDownload', 'RemoveFeedPost','RemoveFeedFile','$cookies','$upload','$timeout','$routeParams','LoadFeed','growl','Comments','$rootScope',function($scope,CourseDetails,FeedFileDownload, RemoveFeedPost , RemoveFeedFile,$cookies,$upload, $timeout, $routeParams,LoadFeed, growl, Comments,$rootScope) {
+   
+   $rootScope.whichView = "CourseDetailCtrl";
    this.params = $routeParams;
    var csrf = $cookies.csrftoken;
    var y = $routeParams;
@@ -491,10 +496,10 @@ lectutApp.controller('CourseFeedsCtrl', ['$stateParams','$scope', function($stat
 
 }]);
 
-lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DTColumnBuilder','DTInstances', '$scope', '$compile', '$routeParams',function( DataTables, DTOptionsBuilder, DTColumnBuilder, DTInstances,$scope, $compile, $routeParams) {
+lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DTColumnBuilder','DTInstances', '$scope', '$compile', '$routeParams','$rootScope',function( DataTables, DTOptionsBuilder, DTColumnBuilder, DTInstances,$scope, $compile, $routeParams, $rootScope) {
    console.log("++++++++++++++++Course Files Ctrl+++++++++++++++");
     var promiseCourseData = DataTables.getTable($routeParams.courseId);
-
+  $rootScope.whichView = "CourseFilesCtrl";
    $scope.selected = {};
    
    $scope.dtOptions = DTOptionsBuilder.fromFnPromise(
@@ -678,9 +683,9 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
 }]);
 
 
-lectutApp.controller('CourseMembersCtrl', ['Members','$scope','$routeParams', function(Members, $scope, $routeParams) {
+lectutApp.controller('CourseMembersCtrl', ['Members','$scope','$routeParams', '$rootScope',function(Members, $scope, $routeParams, $rootScope) {
     //var batId;
-
+    $rootScope.whichView = "CourseMembersCtrl";
     var promiseMembers = Members.getMembers($routeParams.courseId);
     promiseMembers.then(function(d){
       $scope.members = d;
@@ -689,8 +694,9 @@ lectutApp.controller('CourseMembersCtrl', ['Members','$scope','$routeParams', fu
 }]);
 
 
-lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams','FeedFileDownload','RemoveFeedPost' ,'RemoveFeedFile','Comments',function(LoadOnePost, $scope, $routeParams, FeedFileDownload, RemoveFeedPost, RemoveFeedFile, Comments) {
+lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams','FeedFileDownload','RemoveFeedPost' ,'RemoveFeedFile','Comments', '$rootScope',function(LoadOnePost, $scope, $routeParams, FeedFileDownload, RemoveFeedPost, RemoveFeedFile, Comments, $rootScope) {
     //console.log($routeParams);
+    $rootScope.whichView = "CourseOnePostCtrl";
     var promiseMembers = LoadOnePost.getOnePost($routeParams.courseId,$routeParams.postId);
     promiseMembers.then(function(d){
       $scope.onePost = d;
@@ -776,8 +782,9 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
 
 }]);
 
-lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams','FeedFileDownload','RemoveFeedFile',function(LoadOneFile, $scope, $routeParams, FeedFileDownload, RemoveFeedFile) {
+lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams','FeedFileDownload','RemoveFeedFile','$rootScope',function(LoadOneFile, $scope, $routeParams, FeedFileDownload, RemoveFeedFile, $rootScope) {
     console.log($routeParams);
+    $rootScope.whichView = "CourseOneFileCtrl";
     var promiseMembers = LoadOneFile.getOneFile($routeParams.courseId,$routeParams.fileId);
     promiseMembers.then(function(d){
       $scope.oneFile = d;
