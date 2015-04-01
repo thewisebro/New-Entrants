@@ -122,61 +122,61 @@ def add(request, model_name):
   except Exception as e:
     return handle_exc(e, request)
 
-# @login_required
-# @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
-# def update(request, model_name, instance_id):
-#   try:
-#     faculty = request.user.faculty
-#     model_type = globals()[model_name]
-#     if(model_name == 'Faculty'):
-#       exclude_list = ['user',]
-#       old = model_type.objects.filter(pk=faculty.user)[0]  
-#     else:
-#       exclude_list = ['faculty',]
-#       old = model_type.objects.filter(id=instance_id)[0]
-#       # we are guaranteed that index out of range exception will not occur, if a valid instance_id was passed.
-#     model_name_space_separated = re.sub(r"(?<=\w)([A-Z])", r" \1", model_name)
-#     template_name = model_name_space_separated.lower().replace(' ', '_').strip() + '.html'
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
+def update(request, model_name, instance_id):
+  try:
+    faculty = request.user.faculty
+    model_type = globals()[model_name]
+    if(model_name == 'Faculty'):
+      exclude_list = ['user',]
+      old = model_type.objects.filter(pk=faculty.user)[0]  
+    else:
+      exclude_list = ['faculty',]
+      old = model_type.objects.filter(id=instance_id)[0]
+      # we are guaranteed that index out of range exception will not occur, if a valid instance_id was passed.
+    model_name_space_separated = re.sub(r"(?<=\w)([A-Z])", r" \1", model_name)
+    template_name = model_name_space_separated.lower().replace(' ', '_').strip() + '.html'
 
-#     # If the form was submitted.
-#     if request.method == 'POST':
-#       # Build a new instance from old instance too.
-#       form = BaseModelFormFunction(model_type, exclude_list, request.POST, files=request.FILES, instance=old)
-#       if form.is_valid():
-#         # Now commit the model.
-#         form.save()
-#         messages.success(request, model_name_space_separated + ' were successfully saved.')
-#         # If Faculty then redirect to the home page.
-#         if(model_name == 'Faculty'):
-#           return HttpResponseRedirect(reverse('facapp.views.index'))
-#         # For other redirect to the add page.
-#         form = BaseModelFormFunction(model_type, exclude_list)
-#         new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
-#         return render_to_response('facapp/' + template_name, {
-#             'form': form,
-#             'action': '/facapp/add/' + model_name + '/',   # Add action.
-#             'list': new_list,
-#             'model_name': model_name,
-#             'model_name_space_separated': model_name_space_separated,
-#             }, context_instance=RequestContext(request))
-#       else:
-#         messages.error(request, form.errors, extra_tags='form_error')
+    # If the form was submitted.
+    if request.method == 'POST':
+      # Build a new instance from old instance too.
+      form = BaseModelFormFunction(model_type, exclude_list, request.POST, files=request.FILES, instance=old)
+      if form.is_valid():
+        # Now commit the model.
+        form.save()
+        messages.success(request, model_name_space_separated + ' were successfully saved.')
+        # If Faculty then redirect to the home page.
+        if(model_name == 'Faculty'):
+          return HttpResponseRedirect(reverse('facapp.views.index'))
+        # For other redirect to the add page.
+        form = BaseModelFormFunction(model_type, exclude_list)
+        new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
+        return render(request, 'facapp/' + template_name, {
+            'form': form,
+            'action': '/facapp/add/' + model_name + '/',   # Add action.
+            'list': new_list,
+            'model_name': model_name,
+            'model_name_space_separated': model_name_space_separated,
+            })
+      else:
+        messages.error(request, form.errors, extra_tags='form_error')
     
-#     # instance argument should not be empty.
-#     form = BaseModelFormFunction(model_type, exclude_list, instance=old)
-#     # Direct to the details page.
-#     new_list = []
-#     if(model_name != 'Faculty'):
-#       new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
-#     return render_to_response('facapp/' + template_name, {
-#         'form': form,
-#         'action': '/facapp/update/' + model_name + '/' + str(instance_id) + '/',  # Update action.
-#         'list': new_list,
-#         'model_name': model_name,
-#         'model_name_space_separated': model_name_space_separated,
-#         }, context_instance=RequestContext(request))
-#   except Exception as e:
-#     return handle_exc(e, request)
+    # instance argument should not be empty.
+    form = BaseModelFormFunction(model_type, exclude_list, instance=old)
+    # Direct to the details page.
+    new_list = []
+    if(model_name != 'Faculty'):
+      new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
+    return render(request, 'facapp/' + template_name, {
+        'form': form,
+        'action': '/facapp/update/' + model_name + '/' + str(instance_id) + '/',  # Update action.
+        'list': new_list,
+        'model_name': model_name,
+        'model_name_space_separated': model_name_space_separated,
+        })
+  except Exception as e:
+    return handle_exc(e, request)
 
 # @login_required
 # @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
