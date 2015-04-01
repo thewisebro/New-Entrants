@@ -179,5 +179,6 @@ def menu_dict(menu):
 def todays_menu(request):
   bhawan = request.user.student.bhawan
   menus = Menu.objects.filter(bhawan=bhawan, date=datetime.date.today()).exclude(content='')
+  print menus
   json_data = json.dumps(map(menu_dict, menus))
   return HttpResponse(json_data, content_type='application/json')
