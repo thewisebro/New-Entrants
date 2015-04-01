@@ -111,7 +111,7 @@ def add(request, model_name):
 
     # Direct to the details page.
     form = BaseModelFormFunction(model_type, exclude_list)
-    new_list = list({})
+    new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
     return render(request, 'facapp/' + template_name, {
         'form': form,
         'action': '/facapp/add/' + model_name + '/',
