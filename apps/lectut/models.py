@@ -18,22 +18,6 @@ from notifications.models import Notification
 fs = FileSystemStorage(location='Uploads')
 
 
-class TextNotice(models.Model):
-  text=models.CharField(max_length=500 , null=False)
-  upload_user=models.ForeignKey(User)
-  batch=models.ForeignKey(Batch)
-
-  def __unicode__(self):
-    return str(self.text)
-
-  def as_dict(self):
-    fileData={
-      'text':str(self.text),
-      'upload_user':str(self.upload_user.name),
-      'batch':str(self.batch)
-    }
-    return fileData
-
 class BaseUpload(models.Model):
   class Meta:
     abstract = True
@@ -61,7 +45,7 @@ class Post(models.Model):
   batch = models.ForeignKey(Batch , null=True)
   course = models.ForeignKey(Course)
   content = models.CharField(max_length = '1000')
-  privacy = models.BooleanField(max_length = 3 , default = 'tut')
+  privacy = models.BooleanField(default = False)
   deleted = models.BooleanField(default = False)
 
   objects = models.Manager()
@@ -77,7 +61,7 @@ class Post(models.Model):
     students = currentBatch.students.all()
     users = map(lambda x:x.user, students)
     if not self.pk:
-      Notification.save_notification('lectut','The user ' +str(self.upload_user.name)+ ' uploaded a post','lectut/'+str(currentBatch.id)+'/upload',users,self)
+      Notification.save_notification('lectut','The user ' +str(self.upload_user.name)+ ' added a post','#/course/'+currentBatch.id+'/posts/'+post.id+'/',users,self)
     return post
 
   def delete(self):
@@ -124,6 +108,7 @@ class Uploadedfile(BaseUpload):
   file_type=models.CharField(max_length=10 , null=False)
   upload_type=models.CharField(max_length=3 , default='tut')
   deleted = models.BooleanField(default = False)
+  download_count = models.IntegerField(default = 0)
 
   objects = models.Manager()
   file_objects = DeleteManager()
@@ -148,6 +133,7 @@ class Uploadedfile(BaseUpload):
            'description':self.description,
            'file_type':self.file_type,
            'upload_type':self.upload_type,
+           'download_count':self.download_count,
         }
         return fileData
 
@@ -179,11 +165,19 @@ class Reminders(models.Model):
     return reminder
 
 class DownloadLog(models.Model):
-  uploadfile = models.ForeignKey(Uploadedfile)
+  uploadedfile = models.ForeignKey(Uploadedfile)
   user = models.ForeignKey(User)
 
   def __unicode__(self):
     return self.id
+
+  def save(self , *args, **kwargs):
+    log_entry = super(DownloadLog , self).save(*args, **kwargs)
+    uploadedfile = self.uploadedfile
+    uploadedfile.download_count = uploadedfile.download_count+1
+    uploadedfile.save()
+    return log_entry
+
 
 '''class UploadPdf(BaseUpload):
   upload_pdf=models.FileField(upload_to='lectut/pdf',null=True)

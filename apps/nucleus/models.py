@@ -199,7 +199,14 @@ class User(AbstractUser, models.Model):
       to_user = user,
       status = 1
     )
-    to_user__user_info = {'user_id': user.pk,'name': user.name, 'username': user.username, 'status': 0, 'is_chat_on': 0, 'photo': user.photo_url}
+    to_user__user_info = {
+      'user_id': user.pk,
+      'name': user.name,
+      'username': user.username,
+      'status': 0,
+      'is_chat_on': 0,
+      'photo': user.photo_url
+    }
     client.hmset('user:'+str(user.pk), to_user__user_info)
     client.sadd('friends:'+str(self.pk), user.pk)
     if symmetric:
@@ -299,7 +306,7 @@ class Branch(models.Model):
 
 class AbstractStudentBase(django_models.Model):
   # semester field for backward compatibility, never change it's value
-  # directly.
+  # directly. Use semester_no instead.
   semester = models.CharField(max_length=MC.CODE_LENGTH,
                               choices=MC.SEMESTER_CHOICES)
   semester_no = models.IntegerField()
@@ -321,7 +328,8 @@ class AbstractStudentBase(django_models.Model):
 
   def save(self, *args, **kwargs):
     # Change semester value automatically on save.
-    if self.semester_no > 0:
+    if self.semester_no > 0 and (self.semester[:2] in ['UG','PG'] or
+            self.semester[:3] == 'PHD'):
       year = (self.semester_no + 1)/2
       semtype_int = (self.semester_no + 1)%2
       self.semester = self.branch.graduation + str(year) + str(semtype_int)

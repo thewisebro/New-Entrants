@@ -73,3 +73,21 @@ def link_url(link):
     return external_links[link]['url']
   else:
     return channeli_apps[link]['url']
+
+
+## get_value : to get value of a dictionary with key
+## get_range : to use
+
+@register.filter
+def get_value(dictionary, key):
+  return dictionary.get(key, '')
+
+
+@register.filter
+def get_range(val_from, val_to):
+  return range(val_from, val_to)
+
+
+@register.filter
+def to_string(val):
+  return str(val)

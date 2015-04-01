@@ -5,6 +5,6 @@ from lectut.models import *
 
 #admin.site.register(LectutUser )
 #admin.site.register(LectutBatch)
-admin.site.register(TextNotice)
 admin.site.register(Reminders)
 admin.site.register(Post)
+admin.site.register(Uploadedfile)

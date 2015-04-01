@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
+from django.conf import settings
 
 from api.utils import get_client_ip
 from nucleus.models import User, Student, WebmailAccount, IntroAd
@@ -18,7 +19,7 @@ from nucleus.utils import check_webmail_login, is_user_django_loginable,\
 from nucleus import constants as NC
 from games import constants as GC
 from groups.models import Group
-from utilities.models import UserSession
+from utilities.models import UserSession, UserEmail
 
 import logging
 logger = logging.getLogger('channel-i_logger')
@@ -98,8 +99,19 @@ def login(request, dialog=False):
 
   elif form.is_bound:
     username = form['username'].value()
-    if username:
-      username = username.split('@')[0]
+    if username and '@' in username:
+      useremails = UserEmail.objects.filter(email=username,
+          user__email=username, verified=True)
+      if useremails.exists():
+        if len(useremails) == 1:
+          user = useremails[0].user
+          username = user.username
+        else:
+          messages.info(request, "More than 1 user exists for given email."
+              " Please inform IMG.")
+      elif 'iitr.ac.in' in username or 'iitr.ernet.in' in username:
+        username = username.split('@')[0]
+
     password = form['password'].value()
     webmail_account = get_webmail_account(username)
     if webmail_account:
@@ -248,9 +260,8 @@ def make_user_logged_in(user, request, next_page, dialog,
                         session_for_remote=True):
   """ Make user logged in. And returns HttpResponse object.
   """
-  if not (request.META.has_key('HTTP_X_FORWARDED_HOST') and\
-        request.META['HTTP_X_FORWARDED_HOST'] == 'people.iitr.ernet.in')\
-        and user.in_group('Student') and user.student.passout_year != None:
+  if settings.SITE == 'INTRANET' and\
+        user.in_group('Student') and user.student.passout_year != None:
     logger.info("Nucleus Login : User(username='"+user.username+"')"+\
                 " couldn't login as passout_year is not NULL.")
     messages.error(request, "You have graduated from IIT Roorkee So you"+\

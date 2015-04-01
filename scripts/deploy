@@ -1,5 +1,6 @@
 #!/bin/bash
 
-python -Wi prod_manage.py collectstatic --noinput
-python -Wi prod_manage.py cachepages
-touch production/wsgi.py
+python -Wi manage.py collectstatic --settings=settings.common.deploy_settings --noinput
+python -Wi manage.py cachepages --settings=settings.common.deploy_settings
+touch settings/channeli/wsgi.py
+
