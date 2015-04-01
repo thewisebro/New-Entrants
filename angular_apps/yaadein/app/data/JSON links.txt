@@ -1,6 +1,0 @@
-USERS - http://beta.json-generator.com/H_C2KqA
-http://beta.json-generator.com/api/json/get/H_C2KqA
-
-POSTS - http://beta.json-generator.com/CdKiYNy
-
-TICKER - http://beta.json-generator.com/HByxuXv
