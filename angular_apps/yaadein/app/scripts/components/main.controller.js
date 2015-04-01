@@ -2,7 +2,7 @@
 
 var app = angular.module('yaadeinApp');
 var originURL = base_domain;
-var redirect_url = base_doamin + '/login/?next=/yaadein/';
+var redirect_url = base_domain + '/login/?next=/yaadein/';
 
 app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$upload', '$location', '$routeParams', '$route', 'ngNotify', 'TickerService', 'HomeService', 'PostService', 'Lightbox', 'SweetAlert',
     function ($scope, $http, $q, $timeout, $upload, $location, $routeParams, $route, ngNotify, TickerService, HomeService, PostService, Lightbox, SweetAlert) {
