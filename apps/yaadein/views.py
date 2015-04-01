@@ -151,7 +151,7 @@ def index(request,enrno=None):
       notif_msg1 = ''+student.user.name+' posted a memory on your wall'  
       app = 'Yaadein'
       pk = str(post.pk)
-      url = '/yaadein/post/'+pk+'/'
+      url = 'http://172.25.55.156/yaadein/#/post/'+pk+'/'
       notif_users=[]
       tagged_users = []
       if s.user!=request.user:
@@ -443,8 +443,8 @@ def spot_search(request):
 def invite(request):
   if request:
     if not request.user.is_authenticated():
-       data = {'logged':false}
-       return HttpResponse(simplejson.dumps(data),'application/json') 
+      data = {'logged':false}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
 #   import ipdb;ipdb.set_trace()
     app = 'Yaadein'
     student = Student.objects.get(user__username=request.user.username)
@@ -453,7 +453,7 @@ def invite(request):
     else:
       notif_msg1 = ' '+student.user.name+' invited you to cherrish memories with her.' 
     user_tagged = simplejson.loads(request.body)['user_tags']
-    url = 'http://172.25.55.156/yaadein/profile/'+student.user.username
+    url = 'http://172.25.55.156/yaadein/#/profile/'+student.user.username
     tagged_users = []
     for user in user_tagged:
       student_related = Student.objects.get(user__username=str(user['id']))
@@ -473,8 +473,8 @@ def invite(request):
 def hashtag(request,slug):
   if request:
     if not request.user.is_authenticated():
-       data = {'logged':false}
-       return HttpResponse(simplejson.dumps(data),'application/json') 
+      data = {'logged':false}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
     posts_data = []
     posts = Post.objects.filter(tags__slug=slug).filter(status='A').order_by('post_date').reverse()
     for post in posts:
@@ -516,8 +516,8 @@ def hashtag(request,slug):
 def spot_page(request,name):
   if request:
     if not request.user.is_authenticated():
-       data = {'logged':false}
-       return HttpResponse(simplejson.dumps(data),'application/json') 
+      data = {'logged':false}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
 #  import ipdb;ipdb.set_trace()
     posts_data = []
     spot = Spot.objects.get(name=str(name))
@@ -561,8 +561,8 @@ def spot_page(request,name):
 def delete(request,id):
   if request:
     if not request.user.is_authenticated():
-       data = {'logged':false}
-       return HttpResponse(simplejson.dumps(data),'application/json') 
+      data = {'logged':false}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
     try:
       post = Post.objects.get(pk=id)
     except Post.DoesNotExist:
