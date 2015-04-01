@@ -48,7 +48,7 @@ def CORS_allow(view):
 
     response = view(request, *args, **kwargs)
     if DEVELOPMENT:
-      response["Access-Control-Allow-Origin"] = "http://172.25.55.156:7000"
+      response["Access-Control-Allow-Origin"] = "http://172.25.55.156"
       response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
       response["Access-Control-Allow-Credentials"] = 'true'
 #     response["Access-Control-Max-Age"] = "1000"
@@ -64,7 +64,8 @@ def CORS_allow(view):
 def index(request,enrno=None):
   if request:
     if not request.user.is_authenticated():
-      return HttpResponse('Error')
+      data = {'logged':false}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
   if request.method == 'GET':
     print "HEre"
     print enrno
@@ -150,7 +151,7 @@ def index(request,enrno=None):
       notif_msg1 = ''+student.user.name+' posted a memory on your wall'  
       app = 'Yaadein'
       pk = str(post.pk)
-      url = 'http://172.25.55.156:7000/post/'+pk+'/'
+      url = 'http://172.25.55.156/yaadein/#/post/'+pk+'/'
       notif_users=[]
       tagged_users = []
       if s.user!=request.user:
@@ -186,7 +187,8 @@ def index(request,enrno=None):
 def homePage(request):
 # import ipdb;ipdb.set_trace()
   if not request.user.is_authenticated():
-    return HttpResponse('Error')
+    data = {'logged':false}
+    return HttpResponse(simplejson.dumps(data),'application/json') 
   y_user = YaadeinUser.objects.get_or_create(user=request.user)[0]#user=request.user
 
   logged_user = y_user.user
@@ -304,7 +306,8 @@ def post(request,wall_user):
 def post_display(request,pk):
   if request:
     if not request.user.is_authenticated():
-      return HttpResponse('Error')
+      data = {'logged':false}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
     post = Post.objects.filter(pk=pk).filter(status="A")
     post = post[0]  
     spotlist = []
@@ -342,7 +345,8 @@ def post_display(request,pk):
 def search(request,id):
    if request: #.is_ajax():
      if not request.user.is_authenticated():
-       return HttpResponse('Error')
+       data = {'logged':false}
+       return HttpResponse(simplejson.dumps(data),'application/json') 
      query = request.GET.get('q','')
 #   import ipdb;ipdb.set_trace()
      students = Student.objects.filter(Q(user__name__icontains = query)).order_by('-user__name')[:10]
@@ -439,7 +443,8 @@ def spot_search(request):
 def invite(request):
   if request:
     if not request.user.is_authenticated():
-      return HttpResponse('Error')
+      data = {'logged':false}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
 #   import ipdb;ipdb.set_trace()
     app = 'Yaadein'
     student = Student.objects.get(user__username=request.user.username)
@@ -448,7 +453,7 @@ def invite(request):
     else:
       notif_msg1 = ' '+student.user.name+' invited you to cherrish memories with her.' 
     user_tagged = simplejson.loads(request.body)['user_tags']
-    url = 'http://172.25.55.156:7000/profile/'+student.user.username
+    url = 'http://172.25.55.156/yaadein/#/profile/'+student.user.username
     tagged_users = []
     for user in user_tagged:
       student_related = Student.objects.get(user__username=str(user['id']))
@@ -468,7 +473,8 @@ def invite(request):
 def hashtag(request,slug):
   if request:
     if not request.user.is_authenticated():
-      return HttpResponse('Error')
+      data = {'logged':false}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
     posts_data = []
     posts = Post.objects.filter(tags__slug=slug).filter(status='A').order_by('post_date').reverse()
     for post in posts:
@@ -510,7 +516,8 @@ def hashtag(request,slug):
 def spot_page(request,name):
   if request:
     if not request.user.is_authenticated():
-      return HttpResponse('Error')
+      data = {'logged':false}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
 #  import ipdb;ipdb.set_trace()
     posts_data = []
     spot = Spot.objects.get(name=str(name))
@@ -554,7 +561,8 @@ def spot_page(request,name):
 def delete(request,id):
   if request:
     if not request.user.is_authenticated():
-      return HttpResponse('Error')
+      data = {'logged':false}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
     try:
       post = Post.objects.get(pk=id)
     except Post.DoesNotExist:
@@ -586,7 +594,8 @@ def private_posts(request,id):
 @CORS_allow
 def trending(request):
   if not request.user.is_authenticated():
-    return HttpResponse('Error')
+    data = {'logged':false}
+    return HttpResponse(simplejson.dumps(data),'application/json') 
   tag_frequency = defaultdict(int)
   for item in Post.objects.all().filter(status="A"):
     for tag in item.tags.all():
