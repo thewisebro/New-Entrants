@@ -17,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 import mimetypes, os
 import json
 
-from nucleus.models import Batch, Course, User, Student
+from nucleus.models import Batch, Course, User, Student , Faculty
 from forms import *
 from models import *
 from django import forms
@@ -73,6 +73,7 @@ def dispbatch(request):
   posts = []
   if request.user.is_authenticated():
     userType = getUserType(request.user)
+    batches_info = []
     user_info = request.user.serialize()
     if userType == "0":
       student = request.user.student
@@ -93,7 +94,7 @@ def dispbatch(request):
       userPosts = Post.post_objects.all().filter(batch__in = batches).order_by('-datetime_created')
 
     else:
-      userPosts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created')  
+      userPosts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created')
     for post in userPosts:
       posts.append(get_post_dict(post))
     data = {'user': user_info,
@@ -141,17 +142,17 @@ def coursepage(request, batch_id):
         previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
         in_batch = True
       else:
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = True).order_by('-datetime_created')
+        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
         in_batch = False
     elif userType == "1":
       if user.faculty in userBatch.faculties.all():
         previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
         in_batch = True
       else:
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = True).order_by('-datetime_created')
+        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
         in_batch = False
     else:
-      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = True).order_by('-datetime_created')
+      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
       in_batch = False
 
     for post in previous_posts:
@@ -553,8 +554,8 @@ def search(request):
   upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk),query_uploadfile)
   courses = map(lambda result:{'name':result.name,'code':result.code},query_courses)
 
-  final_posts = map(lambda result:result.as_dict(),posts)
-  final_files = map(lambda result:result.as_dict(),upload_files)
+  final_posts = map(lambda result:result.as_dict() if result.deleted == False else None,posts)
+  final_files = map(lambda result:result.as_dict() if result.deleted == False else None,upload_files)
 
   results = {'posts':final_posts , 'files':final_files , 'courses':courses }
   return HttpResponse(json.dumps(results), content_type="application/json")

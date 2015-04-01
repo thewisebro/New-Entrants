@@ -26,27 +26,27 @@ app.config(['LightboxProvider', function (LightboxProvider) {
 app.config(['$locationProvider', '$routeProvider', function ($locationProvider, $routeProvider) {
 	$routeProvider
 	.when('/', {
-		templateUrl: '/views/home.html',
+		templateUrl: '/yaadein/views/home.html',
 		controller: 'HomeController',
 		resolve: resolve
 	})
 	.when('/profile/:enrolmentNo', {
-		templateUrl: '/views/profile.html',
+		templateUrl: '/yaadein/views/profile.html',
 		controller: 'ProfileController',
 		resolve: resolve
 	})
 	.when('/gallery/:enrolmentNo', {
-		templateUrl: '/views/gallery.html',
+		templateUrl: '/yaadein/views/gallery.html',
 		controller: 'GalleryController',
 		resolve: resolve
 	})
 	.when('/hashtag/:hashtag', {
-		templateUrl: '/views/hashtag.html',
+		templateUrl: '/yaadein/views/hashtag.html',
 		controller: 'HashtagController',
 		resolve: resolve
 	})
 	.when('/post/:postId', {
-		templateUrl: '/views/post.html',
+		templateUrl: '/yaadein/views/post.html',
 		controller: 'PostController',
 		resolve: resolve
 	})

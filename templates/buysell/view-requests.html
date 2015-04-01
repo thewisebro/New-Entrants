@@ -70,18 +70,18 @@ active_tab
 <div class="pagination pagination-centered">
 <ul class="pagination">
         {% if table_data.has_previous %}
-           <li> <a href="?page={{ table_data.previous_page_number }}">&laquo</a></li>
+           <li> <a href="?{% if queries %}{{ queries.urlencode }}&amp;{% endif %}page={{ table_data.previous_page_number }}">&laquo</a></li>
         {% endif %}
 {% for page in pages %}
 {% if table_data.number == page %}
-<li class="disabled"><a href="?page={{page}}">{{page}}</a></li>
+<li class="disabled"><a href="?{% if queries %}{{ queries.urlencode }}&amp;{% endif %}page={{page}}">{{page}}</a></li>
 {%else%}
-<li><a href="?page={{page}}">{{page}}</a></li>
+<li><a href="?{% if queries %}{{ queries.urlencode }}&amp;{% endif %}page={{page}}">{{page}}</a></li>
 {% endif %}
 {% endfor %}
 
         {% if table_data.has_next %}
-          <li><a href="?page={{ table_data.next_page_number }}">&raquo</a></li>
+          <li><a href="?{% if queries %}{{ queries.urlencode }}&amp;{% endif %}page={{ table_data.next_page_number }}">&raquo</a></li>
         {% endif %}
 </div>
 
