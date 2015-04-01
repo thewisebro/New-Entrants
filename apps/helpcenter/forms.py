@@ -4,6 +4,7 @@ from nucleus.constants import *
 UserTypeChoices = (
   ('student','Student'),
   ('faculty','Faculty'),
+  ('alumni','Alumni'),
   ('other','Other'),
 )
 

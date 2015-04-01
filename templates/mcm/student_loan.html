@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Loan Aid Scholarship</title>
+<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+<script type='text/javascript' href="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src = "{{ STATIC_URL }}js/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $(".add-more").click(function(){
+            var new_field = '<textarea name="other-scholarship-detail"></textarea>';
+    $(this).before(new_field);
+    })});
+</script>
+</head>
+<script type="text/javascript">
+
+</script>
+
+<body>
+<div class='container'>
+<div class="well">
+  <div>
+    <div style="width:500px; font-size:30px; float:left;">Student Loan Aid Scholarship</div>
+    <div style="float:left; padding-left:290px;"><a href='/'>Channel I</a></div>
+    <div style="float:left; padding-left:10px;"><a href='{% url nucleus.views.logout %}'>Logout</a></div>
+  </div>
+  
+  <br/><br/>
+{% if not student.check %}
+<div>
+<form action="" method="post">
+<p>*If the read only fields are empty, please fill your information on channeli settings first and then reload this page.<br/> Also this form can only be submitted once.</p>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+        <div class="fieldWrapper">
+         {{ form.name.errors }}
+          <label for="id_name">Name Of Student:</label>
+          {{ form.name }}
+        </div>
+         <div class="fieldWrapper">
+         {{ form.enroll_no.errors }}
+          <label for="id_enroll_no">Enrollment No:</label>
+          {{ form.enroll_no }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.graduation.errors }}
+          <label for="id_graduation">Class:</label>
+          {{ form.graduation }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.branch.errors }}
+          <label for="id_branch">Student's Branch:</label>
+          {{ form.branch }}
+        </div>
+       <div class="fieldWrapper">
+          {{ form.semester.errors }}
+          <label for="id_semester">Semester:</label>
+          {{ form.semester }}
+        </div>
+         <div class="fieldWrapper">
+          {{ form.category.errors }}
+          <label for="id_category">Category:</label>
+          {{ form.category }}
+        </div>
+      <div class="fieldWrapper">
+         {{ form.cgpa.errors }}
+          <label for="id_cgpa">CGPA:</label>
+          {{ form.cgpa }}
+        </div>
+        <p>Attach a photocopy of your last semesters SGPA/ CGPA along with this form</p>
+           <div class="fieldWrapper">
+         {{ form.sgpa.errors }}
+          <label for="id_sgpa">SGPA (Last Semester):</label>
+          {{ form.sgpa }}<br/>
+        Attach Grade Sheet/ Progress Report(In case of PhD Students)
+        </div>
+        <div class="fieldWrapper">
+          {{ form.bank_name.errors }}
+          <label for="id_bank_name">Bank name (Only IITR Branch):</label>
+          {{ form.bank_name }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.bhawan.errors }}
+          <label for="id_bhawan">Bhawan:</label>
+          {{ form.bhawan }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.room_no.errors }}
+          <label for="id_room_no">Room no:</label>
+          {{ form.room_no }}
+        </div>
+       <div class="fieldWrapper">
+          {{ form.account_no.errors }}
+          <label for="id_account_no">Bank Account no.:</label>
+          {{ form.account_no }}
+        </div>
+       <div class="fieldWrapper">
+          {{ form.fathers_name.errors }}
+          <label for="id_fathers_name">Father's Name:</label>
+          {{ form.fathers_name }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.fathers_occupation.errors }}
+          <label for="id_fathers_occupation">Father's Occupation:</label>
+          {{ form.fathers_occupation }}
+        </div>
+         <div class="fieldWrapper">
+          {{ form.fathers_pan_no.errors }}
+          <label for="id_fathers_pan_no">Father's Pan No:</label>
+          {{ form.fathers_pan_no }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.mothers_name.errors }}
+          <label for="id_mothers_name">Mothers's Name:</label>
+          {{ form.mothers_name }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.mothers_occupation.errors }}
+          <label for="id_mothers_occupation">Mother's Occupation:</label>
+          {{ form.mothers_occupation }}
+        </div>
+         <div class="fieldWrapper">
+          {{ form.mothers_pan_no.errors }}
+          <label for="id_mothers_pan_no">Mother's Pan No:</label>
+          {{ form.mothers_pan_no }}
+        </div>
+      <br/>
+        <div class="fieldWrapper">
+          {{ form.home_address.errors }}
+          <label for="id_home_address">Permanent Address:</label>
+          {{ form.home_address }}
+        </div><br/>
+       <div class="fieldWrapper">
+        <p>If father not alive, Guardian's name, Occupation, Permanent address, PAN No.:</p>
+           {{ form.home_address.errors }}
+          <label for="id_guardians_name">Guardian's Name:</label>
+          {{ form.guardians_name }}
+          <br/>
+          {{ form.guardians_occupation.errors }}
+          <label for="id_guardians_occupation">Guardian's Occupation:</label>
+          {{ form.guardians_occupation }}
+          <br/>
+          {{ form.home_address.errors }}
+          <label for="id_guardians_address">Guardian's Address:</label>
+          {{ form.home_address }}
+          <br/>
+           {{ form.guardians_pan_no.errors }}
+          <label for="id_guardians_pan_no">Guardian's PAN No:</label>
+          {{ form.guardians_pan_no }}
+          </div>
+           <br/><br/>
+          <div class="fieldWrapper">
+          <p>Current monthly income(Certificate of Parent/Gaurdian's income from employer(Separately for both, if both are employed) in original supported by PAN No. In case PAN No. has not been assigned, copy of PAN application form must be attached. In case parent/Guardian is not in service, income certificate from Magistrate/SDM/Tehsildar supported by PAN No. must be attached in all other cases.)</p>
+          <br/>
+          {{ form.fathers_income.errors }}
+          <label for="id_fathers_income">Father's Income:</label>
+          {{ form.fathers_income }}
+          <br/>
+          {{ form.mothers_income.errors }}
+          <label for="id_mothers_income">Mother's Income:</label>
+          {{ form.mothers_income }}
+          <br/>
+          {{ form.guardians_income.errors }}
+          <label for="id_guardians_income">Guardian's Income:</label>
+          {{ form.guardians_income }}
+           </div>
+          <br/>
+          <div class="fieldWrapper">
+          <p>Whether receipent of any other financial aid/ Scholarship during current session (2014-2015) (Already received or expecting, give details)</p>
+          {{ form.other_scholarship_details.errors }}
+          <label for="id_other_scholarship_details">Details:</label>
+          <textarea name="other-scholarship-detail"></textarea>
+          <br/>
+          <a href="javascript: return null;" class="add-more">Add More</a>
+          </div>
+          <br/><br/>
+          <div class="fieldWrapper">
+          <p>
+          <p>Details of Aid Sanctioned from student Loan &amp; Aid Fund in previous years at this institute.<br/>
+          {{ form.previous_aid_amount.errors }}
+          <label for="id_previous_aid_amount">Previous Aid amount:</label>
+          {{ form.previous_aid_amount }}
+          <br/>
+          {{ form.previous_aid_session.errors }}
+          <label for="id_previous_aid_session">Session:</label>
+          {{ form.previous_aid_session }}
+          <br/>
+           </div>
+         <br/>
+          <div class="fieldWrapper">
+          {{ form.other_work_bhawan_details.errors }}
+          <label for="id_work_bhawan_details">Details of work done in Bhawan/Mess. Attach certificate from Chief Warden/ Warden.</label>
+          {{ form.work_bhawan_details }}
+          <br/>  
+<input type="submit" value="Submit" />
+</form>
+</div>
+{% else %}
+You have succesfully registered for Loan Aid Scholarship. Click <a href="{% url mcm.views.print_pdf %}">here</a> to print pdf of your application form.
+{% endif %}
+</div>
+</div>
+</body>
+</html>
