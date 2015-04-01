@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
+from django.conf import settings
 
 from api.utils import get_client_ip
 from nucleus.models import User, Student, WebmailAccount, IntroAd

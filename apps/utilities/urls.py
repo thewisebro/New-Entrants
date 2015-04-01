@@ -10,4 +10,5 @@ urlpatterns = patterns('utilities.views',
     (r'^password_check/$', 'password_check'),
     (r'^forgot_password/$', 'password_reset_request'),
     (r'^password_reset/$', 'password_reset'),
+    (r'^person_search/','person_search'),
 )

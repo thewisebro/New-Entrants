@@ -16,7 +16,7 @@ var apps_scripts = {
     '/static/js/notices/constants.js',
     '/static/js/notices/jquery.simplePagination.js',
     '/static/js/notices/base.js',
-    '/static/js/notices/date.js'
+    '/static/js/notices/date.js',
   ],
   'events':[
     '/static/js/events/events.js'

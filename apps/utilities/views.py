@@ -395,3 +395,18 @@ def password_reset(request):
       'form': form,
   })
 
+@login_required
+def person_search(request):
+  if request.is_ajax():
+    q = request.GET.get('term','')
+    persons = Person.objects.filter(Q(name__icontains = q)|Q(user__username__icontains = q)).order_by('-user__username')[:10]
+    def person_dict(person):
+      return {
+        'id':person.user.username,
+        'label':str(person)+" ("+str(person.branch.code)+")",
+        'value':person.user.username
+      }
+    data = simplejson.dumps(map(person_dict,persons))
+  else:
+    data = 'fail'
+  return HttpResponse(data,'application/json') 
