@@ -1,0 +1,107 @@
+{% extends "placement/base.html" %}
+
+{% block app_styles %}
+<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+<style>
+  #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+  #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em;
+    font-size: 1.4em; height: 18px; }
+  #sortable li span { position: absolute; margin-left: -1.3em; }
+  .header_text
+  {
+    font-size:20px;
+  }
+  #access_message{
+    font-size: 14px;
+    font-weight: bold;
+    font-family: "Myriad Pro","Arial";
+  }
+  .mock_interview{
+    margin-top: 20px;
+  }
+</style>
+{% endblock %}
+
+{% block app_scripts %}
+  <script>
+    $(function() {
+      $( "#sortable" ).sortable();
+      $( "#sortable" ).disableSelection();
+    });
+    $('#submit').click(function()
+    {
+      var values = $("#sortable").sortable("toArray");
+      var dataArray = [];
+      for (var x in values) {
+        var item = {
+          "priority": x,
+          "id": values[x],
+        };
+        dataArray.push(item);
+      }
+      var check = $("#apply").is(":checked");
+      var apply = {"apply": check};
+      dataArray.push(apply);
+      var myJSON = JSON.stringify(dataArray);
+      $.ajax
+      ({
+        url: '',
+        data: myJSON,
+        type: 'POST',
+        success: function(data)
+        {
+          if(data["is_success"]){
+            $(".error").css("display","None");
+            $(".success").html(data["message"]);
+            $(".success").css("display","Block");
+            setTimeout(function() {
+              $(".success").css("display", "None")
+            }, 2000);
+          }
+          else{
+            $(".success").css("display","None");
+            $(".error").html(data["message"]);
+            $(".error").css("display","Block");
+            setTimeout(function() {
+              $(".error").css("display", "None")
+            }, 2000);
+          }
+        }
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block app_content %}
+{% if access_message %}
+<p id="access_message"> {{access_message}}</p>
+{% else %}
+<div id="content_success">
+  <p class="success" style="display:none"></p>
+  <p class="error" style="display:none"></p>
+</div>
+{% if message %}
+  {{message}}
+{% else %}
+  <div class="header_text" style="margin-bottom: 15px;">
+    <span> Set your preference for the following workshop days</span>
+  </div>
+  <ul id="sortable" style="font-size: 10px;">
+  {% for day in data %}
+  <li id = "{{day}}" class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>{{day}}</li>
+  {% endfor %}
+  </ul>
+  <p/>
+  <h4 class="mock_interview">Apply for Mock Interviews:
+  {% if is_checked %}
+  <input id="apply" type="checkbox" name="apply" checked/></h4>
+  {% else %}
+  <input id="apply" type="checkbox" name="apply" /></h4>
+  {% endif %}
+  <br/>
+  <input id ="submit" type="submit" value="Submit" class="btn btn-primary"
+  style="margin-top: 10px;">
+{% endif %}
+{% endif %}
+{% endblock %}

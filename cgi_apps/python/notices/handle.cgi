@@ -55,7 +55,8 @@ def get_notices_list(notice,after,mx):
         ntc = "<notice>\n"
         ntc += "<id>" + str(row['id']) + "</id>\n"
         ntc += "<subject>" + ampEscape(row['subject']) + "</subject>\n"
-        ntc += "<date>" + row['date'].split(' ')[0] + "</date>\n"
+        #ntc += "<date>" + row['date'].split(' ')[0] + "</date>\n"
+        ntc += "<date>" + row['date'] + "</date>\n"
         ntc += "<reference>" + row['reference'] + "</reference>\n"
         ntc += "<from>" + row['sent_from'] + "</from>\n"
         ntc += "<to>" + row['sent_to'] + "</to>\n"
@@ -77,7 +78,7 @@ def getNotice(ide):
     if len(result.dictresult()) == 0:
         result = db.query("select * from old_notices where id="+ide+";")
         if len(result.dictresult()) == 0:
-            return html + "failue</body></html>"
+            return html + "failure</body></html>"
     notice = result.dictresult()[0]
     content = ""
     try:
@@ -85,6 +86,8 @@ def getNotice(ide):
         temphandle = open(tempfile,"r")
         tempinput = temphandle.read()
         temphandle.close()
+	#convert static url on people to relative
+	tempinput = tempinput.replace("http://people.iitr.ernet.in/Notices","/notices")
         content += tempinput
     except Exception:
         return html + "failure"

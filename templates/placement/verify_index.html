@@ -1,0 +1,100 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+
+<h3>Welcome to Placement Online Module where you can verify students</h3>
+<hr/>
+<p style="margin-bottom:-5px;">Search students who are sitting for placement.</p>
+{% include "placement/generic_form.html" with action=action form=form %}
+
+<a href="?debar=True"><button class="btn">List of Debarred Students</button></a><br /><br />
+
+{% if results %}
+
+<h4>Search Results</h4>
+<table class="sortable table table-striped table-bordered table-condensed" id="t1">
+  <thead>
+    <tr>
+      <th>S. No.</th>
+      <th>Enrollment No.</th>
+      <th>Name</th>
+      <th>Contact No</th>
+      <th>Resume</th>
+      <th>Scorecard</th>
+      <th>Status</th>
+      <th>Debarred?</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for plac_person in results %}
+    {% with student=plac_person.student %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ student.user.username }}</td>
+      <td>{{ student.user.name }}</td>
+      <td>{{ student.user.contact_no }}</td>
+      <td>
+        <a target="_blank" href="{% url 'placement.views_verify.resume' enrollment_no=student.user.username %}">
+          View
+        </a>
+      </td>
+      <td>
+        <a target="_blank" href="{% url 'placement.views_verify.scorecard' enrollment_no=student.user.username %}">
+          View
+        </a>
+      </td>
+    {% endwith %}
+      <td>
+        <!-- do not change the id of these two links, it is used by updatestatus.js -->
+        {#<span id="status_{{ student.user.username }}">{{ plac_person.get_status_display }}</span>#}
+        {#<a id="change_status_{{ student.user.username }}" href="#" class="change_status_link">Change</a>#}
+        {% with status=plac_person.status %}
+          <div class="btn-group">
+            <a onclick="change_status('{{ plac_person.student.user.username }}', 'CLS')"><button id="status_CLS_{{ plac_person.student.user.username }}"
+            {% if status = 'CLS' %} class="btn btn-primary" {% else %} class = "btn" {% endif %} style="width:30px;" title="Closed - ineligible for Placement">C</button></a>
+            <a onclick="change_status('{{ plac_person.student.user.username }}', 'OPN')"><button id="status_OPN_{{ plac_person.student.user.username }}" title="Open - can edit profile" 
+            {% if status = 'OPN' %} class="btn btn-primary" {% else %} class = "btn" {% endif %} style="width:30px;">O</button></a>
+            <a onclick="change_status('{{ plac_person.student.user.username }}', 'LCK')"><button id="status_LCK_{{ plac_person.student.user.username }}"
+            title="Locked - neither can apply to companies nor can edit the profile" 
+            {% if status = 'LCK' %} class="btn btn-primary" {% else %} class = "btn" {% endif %} style="width:30px;">L</button></a>
+            <a onclick="change_status('{{ plac_person.student.user.username }}', 'VRF')"><button id="status_VRF_{{ plac_person.student.user.username }}" title="Verified - can apply to companies" 
+            {% if status = 'VRF' %} class="btn btn-primary" {% else %} class = "btn" {% endif %} style="width:30px;">V</button></a>
+          </div>
+        {% endwith %}
+        <div id='old_status_{{ plac_person.student.user.username }}' style="display:none;">{{ plac_person.status }}</div>
+        </td>
+        <td>
+        <a onclick="change_debar_status('{{ plac_person.student.user.username }}', 'Y')"><button id="debar_Y_{{ plac_person.student.user.username }}" style="width:50px;" 
+        {% if plac_person.is_debarred %} class = "btn btn-primary" {% else %} class="btn" {% endif %}>Yes</button></a>
+        <a onclick="change_debar_status('{{ plac_person.student.user.username }}', 'N')"><button id="debar_N_{{ plac_person.student.user.username }}" style="width:50px;" 
+        {% if plac_person.is_debarred %} class = "btn" {% else %} class="btn btn-primary" {% endif %}>No</button></a>
+        </td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
+{% else %}
+
+{% if request.method == 'POST' %}
+No search results found !
+{% endif %}
+{% endif %} {# {% if results %} #}
+
+<!-- do not change this div, it's id is used by changestatus.js -->
+<div style="display:none;" id="error_popup" title="An error occured">
+
+</div>
+
+<div style="display:none;" id="dialog_popup" title="Information">
+
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/placement/changestatus.js"></script>
+{% endblock %}

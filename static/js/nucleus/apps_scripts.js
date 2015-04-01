@@ -17,7 +17,8 @@ var apps_scripts = {
     '/static/handlebars/notices/templates.js',
     '/static/js/notices/constants.js',
     '/static/js/notices/jquery.simplePagination.js',
-    '/static/js/notices/base.js'
+    '/static/js/notices/base.js',
+    '/static/js/notices/date.js'
   ],
   'events':[
     '/static/js/events/events.js'
@@ -37,6 +38,11 @@ var apps_scripts = {
   'settings':[
     '/static/handlebars/utilities/templates.js',
     '/static/js/utilities/base.js'
+  ],
+  'groups':[
+    '/static/handlebars/groups/templates.js',
+    '/static/js/groups/base.js',
+    '/static/js/groups/activity.js',
   ]
 };
 

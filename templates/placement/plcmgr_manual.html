@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+{% load kwacros %}
+<html>
+  <head>
+    <title>
+      Contact manager
+    </title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/nucleus/style.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+    <script src="{{ STATIC_URL }}jquery/jquery-1.10.2.js"></script>
+    <script src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>
+    <script>
+    $(function() {
+      $( "#id_when_to_contact" ).datepicker({ dateFormat: "dd-mm-yy" }).val();
+     });
+  </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="tittle">
+          <h2 >Contact Manager</h2>
+        </div>
+        <div class="links">
+          <div class="sub-links">
+            <a href="/placement/contact_manager" >Back</a>
+          </div>
+          <div class="sub-links">
+            <a href="/" target="_blank">Channel-i</a>
+          </div>
+          <div class="sub-links">
+            <a href="/placement/" target="_blank">Placement Online</a>
+          </div>
+          <div class="sub-links">
+            <a href="/logout" target="_blank">Logout</a>
+          </div>
+        </div>
+      </div>
+      <div class="manual-form">
+        <form method="post" action="">{% csrf_token %}
+          {% kwacro editable_field_div field %}
+            <div class="edit-row">
+              <div class="dabba">
+                {{field.errors}}
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                       <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <div class="field-label-big">{{field.label}}</div>
+                <div class="field">{{field}}</div>
+              </div>
+            </div>
+          {% endkwacro %}
+          {% usekwacro editable_field_div companyform.company_name %}
+          {% usekwacro editable_field_div contactpersonform.contact_person %}
+          {% usekwacro editable_field_div contactpersonform.designation %}
+          {% usekwacro editable_field_div contactpersonform.phone_no %}
+          {% usekwacro editable_field_div contactpersonform.email %}
+          {% usekwacro editable_field_div companyform.last_contact %}
+          {% usekwacro editable_field_div companyform.cluster %}
+          {% usekwacro editable_field_div companyform.status %}
+          {% usekwacro editable_field_div companyform.person_in_contact %}
+          {% usekwacro editable_field_div companyform.comments %}
+          {% usekwacro editable_field_div companyform.when_to_contact %}
+          {% for  group in user.groups.all %}
+            {% if group.name == 'Placement Manager' %}
+                {% usekwacro editable_field_div assignform.company_coordinator %}
+            {% endif %}
+          {% endfor %}
+
+          <div class="edit-row">
+            <div class="dabba">
+              <div class="field-label-big">Change Last Contact</div>
+                <div class="field">
+                  <input type="checkbox" name="changelastcontact" value="1" checked />
+                </div>
+            </div>
+          </div>
+          <div class="edit-row">
+            <div class="dabba">
+              <input class="input-button" type="submit" value="Submit" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+   </body>
+</html>

@@ -1,0 +1,101 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+<style type="text/css">
+  .categoryA { color:GREEN; }
+  .categoryB { color:BROWN; }
+  .categoryC { color:BLUE; }
+  .categoryU { color:DARKSLATEGREY; }
+  .category  { color:RED ; }
+</style>
+<h3>Applications to {{ company.name }}</h3>
+<hr/>
+
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li>
+      <a href="{% url 'placement.views_admin.finalize' company.id %}">
+        Finalize
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'placement.views_admin.unfinalize' company.id %}">
+        Unfinalize
+      </a>
+    </li>
+    <li class="active">
+      <a>
+        Shortlist
+      </a>
+    </li>
+  </ul>
+</div>
+
+{% if applications %}
+<div style="float:right; margin-bottom:10px;" class="btn-group">
+  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+    Color codes
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu">
+    <li><a href="#"><span class="categoryA">Placed in A-company</span></a></li>
+    <li><a href="#"><span class="categoryB">Placed in B-company</span></a></li>
+    <li><a href="#"><span class="categoryC">Placed in C-company</span></a></li>
+    <li><a href="#"><span class="categoryU">Placed in University</span></a></li>
+    <li><a href="#"><span class="category">Not Placed</span></a></li>
+  </ul>
+</div>
+<div class="clearfix"></div>
+<button type="button" class="btn btn-primary" onclick="check_all('applications');">Select All</button>
+<button type="button" class="btn btn-primary" onclick="uncheck_all('applications');">Unselect All</button>
+<form method="POST">
+  {% csrf_token %}
+  <table class="sortable table table-striped table-bordered table-condensed" id="t1">
+    <thead>
+      <tr>
+        <th>S.No.</th>
+        <th>Select</th>
+        <th>Name</th>
+        <th>Discipline</th>
+        <th>Course</th>
+        <th>CGPA</th>
+        <th>Birth Date</th>
+        <th>Gender</th>
+        <th>Category</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for application in applications %}
+      <tr class="category{{ application.plac_person.placed_company_category|default:'' }}">
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <input type="checkbox" name="selected_applications" value="{{ application.id }}"
+                 {% if application.shortlisted %}checked="checked"{% endif %}/>
+        </td>
+        <td>{{ application.plac_person.student.name }}</td>
+        <td>{{ application.plac_person.student.branch.name }}</td>
+        <td>{{ application.plac_person.student.get_semester_display }}</td>
+        <td>{{ application.plac_person.student.cgpa }}</td>
+        <td>{{ application.plac_person.student.user.birth_date|default:'-' }}</td>
+        <td>{{ application.plac_person.student.user.get_gender_display }}</td>
+        <td>{{ application.plac_person.student.studentinfo.get_category_display|default:'-' }}</td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+  <div class="submit_button">
+    <input type="submit" class="btn btn-primary" value="Shortlist & Download XLS list" onclick="document.getElementsByTagName('form')[0].action='xlslist/';"/>
+    <input type="submit" class="btn btn-primary" value="Download Resumes"  onclick="document.getElementsByTagName('form')[0].action='resumes/';"/>
+  </div>
+</form>
+{% else %}
+No applications yet!
+{% endif %}
+{% endblock %}
+
+{% block app_scripts %}
+<script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/placement/check_all.js"></script>
+{% endblock %}

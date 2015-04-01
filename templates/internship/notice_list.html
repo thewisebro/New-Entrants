@@ -1,0 +1,44 @@
+{% extends "internship/base.html" %}
+
+{% block app_content %}
+<h3>Forms</h3>
+{% if notices %}
+<table cellspacing="0" class="sortable table table-striped table-bordered table-condensed">
+  <thead>
+  <tr>
+    <th>Uploaded</th>
+    <th>Subject</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for notice in notices.object_list %}
+  <tr>
+    <td>{{ notice.date_of_upload }}</td>
+    <td>
+      <a href="{{ notice.notice.url }}">{{ notice.filename }}</a>
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<br />
+<div class="pagination">
+<span class="step-links">
+  {% if notices.has_previous %}
+  <a href="?page={{ notices.previous_page_number }}">Previous</a>
+  {% endif %}
+
+  <span class="current">
+  Page {{ notices.number }} of {{ notices.paginator.num_pages }}.
+  </span>
+
+  {% if notices.has_next %}
+    <a href="?page={{ notices.next_page_number }}">Next</a>
+  {% endif %}
+</span>
+</div>
+{% else %}
+No notices under this section. <br />
+{% endif %}
+<br />
+{% endblock app_content %}
