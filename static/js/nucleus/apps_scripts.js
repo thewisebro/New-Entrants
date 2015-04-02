@@ -19,6 +19,7 @@ var apps_scripts = {
     '/static/js/notices/date.js',
   ],
   'events':[
+    '/static/handlebars/events/templates.js',
     '/static/js/events/events.js'
   ],
   'news':[
