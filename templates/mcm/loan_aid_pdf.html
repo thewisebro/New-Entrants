@@ -1,0 +1,151 @@
+<html>
+<body style="font-size:14px;">
+<table>
+  <tr>
+    <td style="width:25%"><img src="{{ STATIC_URL }}images/iitrlogo.jpg" style="width:60px; height:60px;"/></td>
+    <td style="width:50%"><p style="text-align:center;">
+          <b>OFFICE OF THE DEAN OF STUDENT'S WELFARE<br/>
+             INDIAN INSTITUTE OF TECHNOLOGY ROORKEE</b></p>
+    </td>
+    <td style="width:25%;"></td>
+  </tr>
+</table>
+<p style="text-align:center">APPLICATION FOR GRANT OF STUDENT'S LOAN &amp; AID FUND FOR THE SESSION 2014-2015</p>
+<hr/>
+
+<table padding=7>
+  <tr>
+    <td>Name:</td>
+    <td> {{ person.name }}</td>
+    <td>Enrollment No:</td>
+    <td> {{ person.user.username }}</td>
+  </tr>
+
+  <tr>
+    <td>Class:</td>
+    <td> {{ person.branch.degree }}</td>
+    <td>Branch:</td>
+    <td> {{ person.branch.code }}</td>
+  </tr>
+  <tr>
+    <td>Semester: </td>
+    <td>{{ person.semester }}</td>
+    <td> Category: </td>
+    <td>{{form_personinfo.get_category_display }}</td>
+  </tr>
+  <tr>
+    <td>SGPA (Last Semester):</td>
+    <td> {{ studentloanaid.sgpa }}</td>
+    <td>CGPA:</td>
+    <td> {{ studentloanaid.cgpa }}</td>
+  </tr>
+  <tr>
+    <td>Bhawan:</td>
+    <td>{{ person.bhawan}}</td>
+    <td>Room no: </td>
+    <td>{{ person.room_no}}</td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td style="width:30%">Permanent Address:</td>
+    <td style="padding:3px;">{{ form_personinfo.permanent_address }}</td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td style="width:10%;">Bank:</td>
+    <td style="width:10%;">{{form_personinfo.bank_name}}</td>
+    <td style="width:20%;"> Account No.: </td>
+    <td>{{ form_personinfo.bank_account_no}}</td>
+  </tr>
+</table>
+
+<b>Father's Information</b><br/>
+<table padding = 1>
+  <tr>
+    <td>Name:</td>
+    <td> {{form_personinfo.fathers_name}}</td>
+    <td>Occupation:</td>
+    <td> {{form_personinfo.fathers_occupation}}</td>
+  </tr>
+  <tr>
+    <td>Income : </td>
+    <td>{{ studentloanaid.fathers_income}}</td>
+    <td>PAN No. : </td>
+    <td>{{ studentloanaid.fathers_pan_no}}</td>
+  </tr>
+</table>
+
+<b>Mother's Information</b></br>
+<table padding = 1>
+  <tr>
+    <td>Name:</td>
+    <td> {{form_personinfo.mothers_name}}</td>
+    <td>Occupation:</td>
+    <td> {{studentloanaid.mothers_occupation}}</td>
+  </tr>
+  <tr>
+    <td>Income : </td>
+    <td>{{ studentloanaid.mothers_income}}</td>
+    <td>PAN No. : </td>
+    <td>{{ studentloanaid.mothers_pan_no}}</td>
+  </tr>
+</table>
+{% if  studentloanaid.guardians_name or studentloanaid.guardians_income %}
+<b>Guardian's Information</b><br/>
+  <table padding = 1>
+    <tr>
+      <td>Name :</td>
+      <td> {{studentloanaid.guardians_name}}</td>
+      <td>Income : </td><td>{{ studentloanaid.guardians_income}}</td>
+    </tr>
+    <tr>
+      <td>Address : </td>
+      <td>{{ studentloanaid.guardians_address }}</td>
+    </tr>
+    <tr>
+      <td>Occupation : </td>
+      <td>{{ studentloanaid.guardians_occupation}}</td>
+      <td>PAN No. : </td>
+      <td>{{ studentloanaid.guardians_pan_no}}</td>
+    </tr>
+</table>
+{% endif %}
+<br/>
+
+{% if studentloanaid.other_scholarship_details %}
+  <b>Details of other Scholarships/Financial Aid during the current session (2014-2015)</b><br/>
+    {{ studentloanaid.other_scholarship_details}}
+{% endif %}
+<br/>
+
+{% if studentloanaid.previous_aid_amount and studentloanaid.previous_aid_session %}
+<b>Details of Aid sanctioned from students Loan and Aid Fund in previous years at this institute</b><br/>
+<table padding = 1>
+  <tr>
+    <td>Amount: </td>
+    <td>{{ studentloanaid.previous_aid_amount}}</td>
+    <td>Session:  </td>
+    <td>{{ studentloanaid.previous_aid_session}}</td>
+  </tr>
+</table>
+{% endif %}
+{% if studentloanaid.work_bhawan_details %}
+<b>Details of work done in Bhawan/Mess :</b><br/>
+  {{ studentloanaid.work_bhawan_details}}
+{% endif %}
+
+<br/>
+<div style="margin-left: 500px; margin-top: 70px;">
+Signature of Student<br/>{{date}}
+</div>
+<br/>
+Enclosures:<br/>
+1) Computer generated application form<br/>
+2) Parent's income certificate signed by Revenue officer<br/>
+3) Photo copy of last semester Grade Sheet<br/>
+4) In case of PH.D. Scholars, progress report of previous semester should be submitted.<br/>
+</body>
+</html>
+

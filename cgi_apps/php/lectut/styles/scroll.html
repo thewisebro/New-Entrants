@@ -1,0 +1,570 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="scroll.css">
+
+
+
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jquery.scrollTo-1.4.2-min.js"></script>
+<script type="text/javascript" src="jquery.meerkat.1.3.min.js"></script>
+<script type="text/javascript" src="action.js"></script>
+<script type="text/javascript" src="search.js"></script>
+<script type="text/javascript" src="konami.1.3.3.pack.js"></script>
+<script type="text/javascript" src="jquery.tinyscrollbar.min.js"></script>
+
+
+
+</head>
+<!--head tag ends here , body tag begins-->
+<body>
+
+
+
+<div id="container">
+<div id="spacer">
+
+
+
+
+<div class="ss" id="browse_by_department_goto">
+
+
+	<div id="bbdl"></div> 
+	
+<a href="javascript:func1('#main_goto');"><div id="bbdr_container"><div id="bbdr"></div></div></a>
+
+
+	
+<div id="browse_by_department" >
+<a href="javascript:func1('#main_goto');">
+
+
+<div  id="browse_by_department_back">
+
+
+<div class="browse_by_department_back_link" >e</div>
+<div class="browse_by_department_back_link browse_by_department_back_link2" >g</div>
+<div class="browse_by_department_back_link" >a</div>
+<div class="browse_by_department_back_link" >p</div>
+<div class="browse_by_department_back_link" > </div>
+<div class="browse_by_department_back_link space" >n</div>
+<div class="browse_by_department_back_link" >i</div>
+<div class="browse_by_department_back_link" >a</div>
+<div class="browse_by_department_back_link" >m</div>
+<div class="browse_by_department_back_link" > </div>
+<div class="browse_by_department_back_link space" >o</div>
+<div class="browse_by_department_back_link" >t</div>
+<div class="browse_by_department_back_link" >  </div>
+<div class="browse_by_department_back_link space" >k</div>
+<div class="browse_by_department_back_link" >c</div>
+<div class="browse_by_department_back_link" >a</div>
+<div class="browse_by_department_back_link" >b</div>
+
+</div>
+</a>
+
+
+
+<div id="browse_by_department_page_container">
+<div id="browse_by_department_topbar">
+
+<div id="browse_by_department_logout_button" >
+<a href="">LOGOUT</a> 
+</div>
+
+<div id="browse_by_department_title">
+BROWSE BY DEPARTMENT
+</div>
+
+<div id="whats_new2">
+x new lectures</br>
+y new tutorials</br>
+z new solutions</br>
+</div>
+
+</div>
+<div id="browse_by_department_selection">
+<a href="javascript:func22('_lectures','#browse_by_department_files','#browse_by_department_lectures_link');"  id="browse_by_department_lectures_link" class="browse_by_department_selection_link browse_by_department_inactive_link browse_by_department_link">LECTURES</a>
+
+<a href="javascript:func22('_tutorials','#browse_by_department_files','#browse_by_department_tutorials_link');"  id="browse_by_department_tutorials_link" class="browse_by_department_selection_link browse_by_department_inactive_link browse_by_department_link">TUTORIALS</a>
+<a href="javascript:func22('_exam_papers','#browse_by_department_files','#browse_by_department_exam_papers_link');"  id="browse_by_department_exam_papers_link" class="browse_by_department_selection_link browse_by_department_inactive_link browse_by_department_link">EXAM PAPERS</a>
+<a href="javascript:func22('_solutions','#browse_by_department_files','#browse_by_department_solutions_link');"  id="browse_by_department_solutions_link" class="browse_by_department_selection_link browse_by_department_inactive_link browse_by_department_link">SOLUTIONS</a>
+</div>
+<div id="dept_tab_container">
+<div id="dept_tab">
+
+	<div id="dept_list">
+	<a href="javascript:dept_goto('#dept1');"> <div class="dept_name">Department 1</div> </a>
+	<a href="javascript:dept_goto('#dept2');"> <div class="dept_name">Department 2</div> </a>
+	<a href="javascript:f()">x</a>
+	</div>
+
+	<div id="browse_by_department_course_selection">
+	<a href="javascript:func32('ec102','#details_tab_container','.ec102');" id="ec" class="browse_by_department_course_link ec102_link bbd_course_link">
+		<div class="course_code">
+		E-102</div>
+		<div class="course_name">Electronics</div>
+	</a>
+	<a href="javascript:func32('ce102','#details_tab_container','.ce102');" id="ce" class="browse_by_department_course_link ce102_link bbd_course_link">
+		<div class="course_code">
+		CE-102</div>
+		<div class="course_name">Environmental science</div>
+	</a>
+	</div>
+
+</div>
+</div>
+
+
+
+<div id="details_tab_container">
+<div id="details_tab">
+
+
+<div id="profs_container">
+<div id="profs">
+<a href="javascript:prof_goto('#browse_by_department_course_selection');" class="profs_dept prof_active"><div id="dept1">
+prof_1
+</div></a>
+<a href="javascript:prof_goto('#browse_by_department_course_selection');" class="profs_dept prof_active"><div id="dept2">
+Sorry, no profs!!
+</div></a>
+</div>
+</div>
+
+
+<div id="browse_by_department_files">
+<div id="subjects" class="subjects">
+
+
+<div id="ec102">
+<div id="ec102_lists">
+<div id="ec102_lectures" class="file_list">
+<a class="file list_selected ec102" href="">lecture1.xyz</a>
+<a class="file list_selected ec102" href="">lecture2.xyz</a>
+<a class="file list_selected ec102" href="">lecture3.xyz</a>
+<a class="file list_selected ec102" href="">lecture4.xyz</a>
+<a class="file list_selected ec102" href="">lecture5.xyz</a>
+<a class="file list_selected ec102" href="">lecture6.xyz</a>
+<a class="file list_selected ec102" href="">lecture7.xyz</a>
+<a class="file list_selected ec102" href="">lecture8.xyz</a>
+<a class="file list_selected ec102" href="">lecture9.xyz</a>
+<a class="file list_selected ec102" href="">lecture10.xyz</a>
+</div>
+<div id="ec102_tutorials" class="file_list">
+<a class="file list_selected ec102" href="">tutorial1.xyz</a>
+<a class="file list_selected ec102" href="">tutorial2.xyz</a>
+<a class="file list_selected ec102" href="">tutorial3.xyz</a>
+<a class="file list_selected ec102" href="">tutorial4.xyz</a>
+<a class="file list_selected ec102" href="">tutorial5.xyz</a>
+<a class="file list_selected ec102" href="">tutorial6.xyz</a>
+<a class="file list_selected ec102" href="">tutorial7.xyz</a>
+<a class="file list_selected ec102" href="">tutorial8.xyz</a>
+<a class="file list_selected ec102" href="">tutorial9.xyz</a>
+<a class="file list_selected ec102" href="">tutorial10.xyz</a>
+</div>
+<div id="ec102_exam_papers" class="file_list">
+<a class="file list_selected ec102" href="">exam paper1.xyz</a>
+<a class="file list_selected ec102" href="">exam paper2.xyz</a>
+<a class="file list_selected ec102" href="">exam paper3.xyz</a>
+<a class="file list_selected ec102" href="">exam paper4.xyz</a>
+<a class="file list_selected ec102" href="">exam paper5.xyz</a>
+<a class="file list_selected ec102" href="">exam paper6.xyz</a>
+<a class="file list_selected ec102" href="">exam paper7.xyz</a>
+<a class="file list_selected ec102" href="">exam paper8.xyz</a>
+<a class="file list_selected ec102" href="">exam paper9.xyz</a>
+<a class="file list_selected ec102" href="">exam paper10.xyz</a>
+</div>
+
+<div id="ec102_solutions" class="file_list">
+<a class="file list_selected ec102" href="">solution1.xyz</a>
+<a class="file list_selected ec102" href="">solution2.xyz</a>
+<a class="file list_selected ec102" href="">solution3.xyz</a>
+<a class="file list_selected ec102" href="">solution4.xyz</a>
+<a class="file list_selected ec102" href="">solution5.xyz</a>
+<a class="file list_selected ec102" href="">solution6.xyz</a>
+<a class="file list_selected ec102" href="">solution7.xyz</a>
+<a class="file list_selected ec102" href="">solution8.xyz</a>
+<a class="file list_selected ec102" href="">solution9.xyz</a>
+<a class="file list_selected ec102" href="">solution10.xyz</a>
+</div>
+</div>
+</div>
+
+<div id="ce102">
+<div id="ce102_lists">
+<div id="ce102_lectures" class="file_list">
+<a class="file list_inactive ce102" href="">lecture1.xyz</a>
+<a class="file list_inactive ce102" href="">lecture2.xyz</a>
+<a class="file list_inactive ce102" href="">lecture3.xyz</a>
+<a class="file list_inactive ce102" href="">lecture4.xyz</a>
+<a class="file list_inactive ce102" href="">lecture5.xyz</a>
+<a class="file list_inactive ce102" href="">lecture6.xyz</a>
+<a class="file list_inactive ce102" href="">lecture7.xyz</a>
+<a class="file list_inactive ce102" href="">lecture8.xyz</a>
+<a class="file list_inactive ce102" href="">lecture9.xyz</a>
+<a class="file list_inactive ce102" href="">lecture10.xyz</a>
+</div>
+<div id="ce102_tutorials" class="file_list">
+<a class="file list_inactive ce102" href="">tutorial1.xyz</a>
+<a class="file list_inactive ce102" href="">tutorial2.xyz</a>
+<a class="file list_inactive ce102" href="">tutorial3.xyz</a>
+<a class="file list_inactive ce102" href="">tutorial4.xyz</a>
+<a class="file list_inactive ce102" href="">tutorial5.xyz</a>
+<a class="file list_inactive ce102" href="">tutorial6.xyz</a>
+<a class="file list_inactive ce102" href="">tutorial7.xyz</a>
+<a class="file list_inactive ce102" href="">tutorial8.xyz</a>
+<a class="file list_inactive ce102" href="">tutorial9.xyz</a>
+<a class="file list_inactive ce102" href="">tutorial10.xyz</a>
+</div>
+<div id="ce102_exam_papers" class="file_list">
+<a class="file list_inactive ce102" href="">exam paper1.xyz</a>
+<a class="file list_inactive ce102" href="">exam paper2.xyz</a>
+<a class="file list_inactive ce102" href="">exam paper3.xyz</a>
+<a class="file list_inactive ce102" href="">exam paper4.xyz</a>
+<a class="file list_inactive ce102" href="">exam paper5.xyz</a>
+<a class="file list_inactive ce102" href="">exam paper6.xyz</a>
+<a class="file list_inactive ce102" href="">exam paper7.xyz</a>
+<a class="file list_inactive ce102" href="">exam paper8.xyz</a>
+<a class="file list_inactive ce102" href="">exam paper9.xyz</a>
+<a class="file list_inactive ce102" href="">exam paper10.xyz</a>
+</div>
+
+<div id="ce102_solutions" class="file_list">
+<a class="file list_inactive ce102" href="">solution1.xyz</a>
+<a class="file list_inactive ce102" href="">solution2.xyz</a>
+<a class="file list_inactive ce102" href="">solution3.xyz</a>
+<a class="file list_inactive ce102" href="">solution4.xyz</a>
+<a class="file list_inactive ce102" href="">solution5.xyz</a>
+<a class="file list_inactive ce102" href="">solution6.xyz</a>
+<a class="file list_inactive ce102" href="">solution7.xyz</a>
+<a class="file list_inactive ce102" href="">solution8.xyz</a>
+<a class="file list_inactive ce102" href="">solution9.xyz</a>
+<a class="file list_inactive ce102" href="">solution10.xyz</a>
+</div>
+</div>
+</div>
+
+
+</div>
+</div>
+
+
+
+</div>
+</div>
+</div>
+
+
+</div>
+	
+
+</div>
+
+
+
+
+
+
+
+
+<div class="ss"id="main_goto">
+
+
+<div id="mainl"></div>
+<div id="mainr"></div>
+
+
+<div id="main" class="main">
+
+
+	<div id="main_topbar">
+
+		<a class="logout_button" href="">
+		LOGOUT
+		</a>
+
+
+		<div id="main_title">
+		LECTURES AND TUTORIALS
+		</div>
+
+	</div> 
+
+	<div id="main_intro">
+		
+							Welcome to the new lectures and tutorials webpage. Here you may find various lectures,tutorials, exams papers and solutions as submitted by the respective faculty. PLease select one of the links given below to proceed.
+		
+	</div>
+
+	<div id="navigator">
+	What would you like to do? <br>
+	<a id="browse_by_department_link" href="javascript:func1('#browse_by_department_goto');">Browse courses by department</a> <br>
+	<a id="my_courses_link" href="javascript:func1('#my_courses_goto');">View registered courses </a><br>
+	<a id="search_box_link" href="javascript:s();">Search for lectures/tutorials</a>
+
+
+
+	</div>
+
+
+
+
+</div>
+
+</div>
+
+
+
+
+<div class="ss" id="my_courses_goto">
+<div id="mcl_container"> <div id="mcl">	</div> 
+<a href="javascript:func1('#main_goto');"><div class="link_space"></div> </a>
+ <a href="javascript:func1('#browse_by_department_goto');"><div class="link_space"></div> </a>
+</div>
+
+
+<div id="mcr"></div>
+<div id="my_courses" >
+
+
+<div id="back_link_container_mc">
+<a href="javascript:func1('#main_goto');">
+<div  id="my_courses_back" >
+<div class="my_courses_back_link space" >back &nbsp; to &nbsp; main &nbsp; page</div>
+</div>
+</a>
+<a href="javascript:func1('#browse_by_department_goto');"> 
+<div id="my_courses_bbd_back">
+<div class="my_courses_bbd_back_link space" >browse &nbsp; by &nbsp; department &nbsp; </div>
+</div>
+</a>
+</div>
+
+
+<div id="my_courses_page_container">
+<div id="my_courses_topbar">
+
+<div id="my_courses_logout_button" >
+<a href="">LOGOUT</a> 
+</div>
+
+<div id="my_courses_title">
+MY COURSES
+</div>
+
+<div id="whats_new">
+x new lectures</br>
+y new tutorials</br>
+z new solutions</br>
+</div>
+
+</div>
+
+<div id="my_courses_selection">
+<a href="javascript:func2('_lectures','#my_courses_files','#my_courses_lectures_link');"  id="my_courses_lectures_link" class="my_courses_selection_link my_courses_inactive_link my_courses_link">LECTURES</a>
+
+<a href="javascript:func2('_tutorials','#my_courses_files','#my_courses_tutorials_link');"  id="my_courses_tutorials_link" class="my_courses_selection_link my_courses_inactive_link my_courses_link">TUTORIALS</a>
+<a href="javascript:func2('_exam_papers','#my_courses_files','#my_courses_exam_papers_link');"  id="my_courses_exam_papers_link" class="my_courses_selection_link my_courses_inactive_link my_courses_link">EXAM PAPERS</a>
+<a href="javascript:func2('_solutions','#my_courses_files','#my_courses_solutions_link');"  id="my_courses_solutions_link" class="my_courses_selection_link my_courses_inactive_link my_courses_link">SOLUTIONS</a>
+</div>
+
+<div id="my_courses_course_selection">
+
+<a href="javascript:func3('ec101','#my_courses_files','.ec101');" id="ec" class="my_courses_course_link ec101_link mc_course_link">
+<div class="course_code">
+EC-101</div>
+<div class="course_name">Computer Systems and Programming</div>
+</a>
+
+<a href="javascript:func3('ce101','#my_courses_files','.ce101');" id="ce" class="my_courses_course_link ce101_link mc_course_link">
+<div class="course_code">
+CE-101</div>
+<div class="course_name">Engineering Graphics</div>
+</a>
+
+</div>
+<div id="scrollbarer">
+<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+		<div class="viewport">
+			 <div class="overview">
+
+<div id="my_courses_files">
+
+<div id="subjects" class="subjects">
+
+
+<div id="ec101">
+<div id="ec101_lists">
+<div id="ec101_lectures" class="file_list">
+<a class="file list_selected ec101" href="">lecture1.xyz</a>
+<a class="file list_selected ec101" href="">lecture2.xyz</a>
+<a class="file list_selected ec101" href="">lecture3.xyz</a>
+<a class="file list_selected ec101" href="">lecture4.xyz</a>
+<a class="file list_selected ec101" href="">lecture5.xyz</a>
+<a class="file list_selected ec101" href="">lecture6.xyz</a>
+<a class="file list_selected ec101" href="">lecture7.xyz</a>
+<a class="file list_selected ec101" href="">lecture8.xyz</a>
+<a class="file list_selected ec101" href="">lecture9.xyz</a>
+<a class="file list_selected ec101" href="">lecture10.xyz</a>
+</div>
+<div id="ec101_tutorials" class="file_list">
+<a class="file list_selected ec101" href="">tutorial1.xyz</a>
+<a class="file list_selected ec101" href="">tutorial2.xyz</a>
+<a class="file list_selected ec101" href="">tutorial3.xyz</a>
+<a class="file list_selected ec101" href="">tutorial4.xyz</a>
+<a class="file list_selected ec101" href="">tutorial5.xyz</a>
+<a class="file list_selected ec101" href="">tutorial6.xyz</a>
+<a class="file list_selected ec101" href="">tutorial7.xyz</a>
+<a class="file list_selected ec101" href="">tutorial8.xyz</a>
+<a class="file list_selected ec101" href="">tutorial9.xyz</a>
+<a class="file list_selected ec101" href="">tutorial10.xyz</a>
+</div>
+<div id="ec101_exam_papers" class="file_list">
+<a class="file list_selected ec101" href="">exam paper1.xyz</a>
+<a class="file list_selected ec101" href="">exam paper2.xyz</a>
+<a class="file list_selected ec101" href="">exam paper3.xyz</a>
+<a class="file list_selected ec101" href="">exam paper4.xyz</a>
+<a class="file list_selected ec101" href="">exam paper5.xyz</a>
+<a class="file list_selected ec101" href="">exam paper6.xyz</a>
+<a class="file list_selected ec101" href="">exam paper7.xyz</a>
+<a class="file list_selected ec101" href="">exam paper8.xyz</a>
+<a class="file list_selected ec101" href="">exam paper9.xyz</a>
+<a class="file list_selected ec101" href="">exam paper10.xyz</a>
+</div>
+
+<div id="ec101_solutions" class="file_list">
+<a class="file list_selected ec101" href="">solution1.xyz</a>
+<a class="file list_selected ec101" href="">solution2.xyz</a>
+<a class="file list_selected ec101" href="">solution3.xyz</a>
+<a class="file list_selected ec101" href="">solution4.xyz</a>
+<a class="file list_selected ec101" href="">solution5.xyz</a>
+<a class="file list_selected ec101" href="">solution6.xyz</a>
+<a class="file list_selected ec101" href="">solution7.xyz</a>
+<a class="file list_selected ec101" href="">solution8.xyz</a>
+<a class="file list_selected ec101" href="">solution9.xyz</a>
+<a class="file list_selected ec101" href="">solution10.xyz</a>
+</div>
+</div>
+</div>
+
+<div id="ce101">
+<div id="ce101_lists">
+<div id="ce101_lectures" class="file_list">
+<a class="file list_inactive ce101" href="">lecture1.xyz</a>
+<a class="file list_inactive ce101" href="">lecture2.xyz</a>
+<a class="file list_inactive ce101" href="">lecture3.xyz</a>
+<a class="file list_inactive ce101" href="">lecture4.xyz</a>
+<a class="file list_inactive ce101" href="">lecture5.xyz</a>
+<a class="file list_inactive ce101" href="">lecture6.xyz</a>
+<a class="file list_inactive ce101" href="">lecture7.xyz</a>
+<a class="file list_inactive ce101" href="">lecture8.xyz</a>
+<a class="file list_inactive ce101" href="">lecture9.xyz</a>
+<a class="file list_inactive ce101" href="">lecture10.xyz</a>
+</div>
+<div id="ce101_tutorials" class="file_list">
+<a class="file list_inactive ce101" href="">tutorial1.xyz</a>
+<a class="file list_inactive ce101" href="">tutorial2.xyz</a>
+<a class="file list_inactive ce101" href="">tutorial3.xyz</a>
+<a class="file list_inactive ce101" href="">tutorial4.xyz</a>
+<a class="file list_inactive ce101" href="">tutorial5.xyz</a>
+<a class="file list_inactive ce101" href="">tutorial6.xyz</a>
+<a class="file list_inactive ce101" href="">tutorial7.xyz</a>
+<a class="file list_inactive ce101" href="">tutorial8.xyz</a>
+<a class="file list_inactive ce101" href="">tutorial9.xyz</a>
+<a class="file list_inactive ce101" href="">tutorial10.xyz</a>
+</div>
+<div id="ce101_exam_papers" class="file_list">
+<a class="file list_inactive ce101" href="">exam paper1.xyz</a>
+<a class="file list_inactive ce101" href="">exam paper2.xyz</a>
+<a class="file list_inactive ce101" href="">exam paper3.xyz</a>
+<a class="file list_inactive ce101" href="">exam paper4.xyz</a>
+<a class="file list_inactive ce101" href="">exam paper5.xyz</a>
+<a class="file list_inactive ce101" href="">exam paper6.xyz</a>
+<a class="file list_inactive ce101" href="">exam paper7.xyz</a>
+<a class="file list_inactive ce101" href="">exam paper8.xyz</a>
+<a class="file list_inactive ce101" href="">exam paper9.xyz</a>
+<a class="file list_inactive ce101" href="">exam paper10.xyz</a>
+</div>
+
+<div id="ce101_solutions" class="file_list">
+<a class="file list_inactive ce101" href="">solution1.xyz</a>
+<a class="file list_inactive ce101" href="">solution2.xyz</a>
+<a class="file list_inactive ce101" href="">solution3.xyz</a>
+<a class="file list_inactive ce101" href="">solution4.xyz</a>
+<a class="file list_inactive ce101" href="">solution5.xyz</a>
+<a class="file list_inactive ce101" href="">solution6.xyz</a>
+<a class="file list_inactive ce101" href="">solution7.xyz</a>
+<a class="file list_inactive ce101" href="">solution8.xyz</a>
+<a class="file list_inactive ce101" href="">solution9.xyz</a>
+<a class="file list_inactive ce101" href="">solution10.xyz</a>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+</div>
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+</div>
+<div class="search">
+<div href="#" class="close-meerkat">X</div>
+<div id="search_box">
+
+<input type="text" id="search_input">
+
+<a id="search_submit" href="" >Search</a>
+
+
+</div>
+
+
+
+</div>
+
+<div class="credits">
+
+&copy; Information Management group, IIT Roorkee.
+</br>
+
+</br>
+Special thanks to: 
+</div> 
+
+
+
+</body>
+<script>
+
+/*
+standing script to be put here!
+dimensions of container for scroll to be specified on the basis of number of subjects,
+*/
+</script>
+
+
+
+
+
+</html>
+

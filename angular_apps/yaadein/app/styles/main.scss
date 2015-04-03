@@ -1,0 +1,313 @@
+// bower:scss
+@import "bourbon/app/assets/stylesheets/_bourbon.scss";
+// endbower
+
+@import "partials/normalize";
+@import "partials/font-styles";
+@import "partials/elements";
+@import "partials/animations";
+@import "../../bower_components/bourbon/app/assets/stylesheets/bourbon";
+@import "partials/emoji.min";
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+html {
+  height: 100%;
+  min-height: 100%;
+}
+
+body {
+  background: #e9eaed;
+  font-family: $font-stack;
+  font-size: $small;
+  color: $black;
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  line-height: 1.4;
+}
+
+*:focus {
+  outline: none;
+}
+
+a[ng-click] {
+cursor: pointer;
+}
+
+a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+//Notifications
+.ngn {
+  width: 40%;
+  left: 50%;
+  margin-left: -20%;
+  line-height: 30px;
+  border-radius: 4px;
+  padding: 0.4% 5%;
+  box-shadow: 0 0 8px 3px rgba(0,0,0,0.15);
+  z-index: 9999 !important;
+}
+.ngn-top {
+  top: 10px;
+}
+.ngn-dismiss {
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: inset 2px 2px 7px 2px rgba(0, 0, 0, 0.15);
+  color: $white;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  opacity: 0.9;
+}
+
+//Lightbox
+.modal-content {
+  height: auto !important;
+}
+
+//Predictions
+mentio-menu {
+	z-index: 1200 !important;
+  width: 250px !important;
+}
+
+
+::-webkit-input-placeholder {
+  color: $dark-grey;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  color: $dark-grey;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+  color: $dark-grey;
+}
+
+:-ms-input-placeholder {
+  color: $dark-grey;
+}
+
+@import "partials/compose";
+@import "partials/search";
+@import "partials/emoji-predictions";
+
+.lightbox.invite {
+  display: none;
+}
+
+.blur-back {
+	filter: blur(12px);
+  -moz-filter: blur(12px);
+}
+
+//Loaders
+#loading-bar {
+  & .bar {
+    background: $primary;
+  }
+  & .peg {
+    box-shadow: $primary 1px 0 6px 1px;
+  }
+}
+#loading-bar-spinner {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-left: -31px;
+  margin-top: -7px;
+  z-index: 950;
+  & .spinner-icon {
+    width: 21px;
+    height: 21px;
+    border: 4px solid transparent;
+    border-top-color: lighten($primary, 7);
+    border-left-color: lighten($primary, 7);
+  }
+}
+
+.lightbox .container {
+  text-align: center;
+  width: 550px;
+  margin: 0 auto;
+  padding: 50px;
+  .invite-button {
+    float: right;
+    padding: 7px 10px;
+    background: $primary;
+    border-radius: 3px;
+    color: $white;
+    margin: 7.5px 0;
+  }
+}
+
+//begin -- .left-sidebar
+.left-sidebar {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 200px;
+	height: 100vh;
+	overflow: hidden;
+	z-index: 1000;
+	//For padding in % width containers
+	div {
+		padding: 0;
+    //App Title
+    #app-title {
+      width: 100%;
+      padding: 15px;
+      font-size: 9px;
+      background: $white;
+      text-align: center;
+      border-bottom: 1px solid $grey;
+      a {
+        display: table;
+        margin: 0 auto;
+        #yaadein-title {
+          position: relative;
+          display: block;
+          font-family: $script-font;
+          color: $primary;
+          background: $white;
+          font-size: $massive;
+          text-transform: lowercase;
+          text-align: center;
+          z-index: 901;
+        }
+      }
+    }
+		//begin -- .nav
+		.nav {
+			width: 200px;
+			height: 100vh;
+			background: $white;
+			z-index: 1000;
+			a.nav-link {
+				display: block;
+				div {
+					width: 100%;
+					overflow: hidden;
+					padding: 13px 10px;
+					text-align: left;
+					border-right: 0;
+					font-size: $small;
+					@include transition(all 100ms ease-out);
+					&:hover, &:focus {
+						color: $primary;
+					}
+					&.active {
+						color: $white;
+						background: $primary;
+					}
+				}
+			}
+			//Credits
+			.credits {
+				display: block;
+        padding: 10px 15px;
+				position: absolute;
+				left: 0;
+				bottom: 0;
+        color: $dark-grey;
+				background: $white;
+				font-size: $tiny;
+				z-index: 1000;
+        text-align: center;
+        line-height: 1.4;
+        a{
+          color: $black;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+        img {
+          width: 100%;
+          margin-bottom: 3px;
+          opacity: 0.9;
+        }
+			}
+		}//end -- .nav
+		//More options - Level 2 Navigation
+		.options {
+			position: relative;
+			width: 210px;
+			height: 100vh;
+			margin-right: 2px;
+			margin-left: 51px;
+			background: rgba(250, 250, 250, 0.8);
+			z-index: 999;
+			overflow: hidden;
+		}
+	}
+}//end -- .left-sidebar
+.nano > .nano-pane {
+	width: 8px;
+	background: rgba(0, 0, 0, 0);
+}
+.nano > .nano-pane > .nano-slider {
+	background: rgba(0, 0, 0, 0.4);
+}
+.loader > img {
+	height: 12px;
+}
+//begin -- .center-content
+.center-content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 800;
+	margin-left: 200px;
+  margin-right: 200px;
+	@include transition(all 150ms ease-out);
+	div.padded {
+		padding: 20px;
+		h2.page-title {
+			color: rgba(180, 180, 180, 0.8); //#ddd, 80% opaque
+			font-weight: 500;
+			margin-bottom: 20px;
+			//text-shadow: 1px 2px 2px $white, 0 0 0 $black, 1px 2px 4px $white;
+      font-size: 22px !important;
+      margin: 0 auto;
+		}
+	}
+	//For padding in % width containers
+	& > div {
+		padding: 0;
+		text-align: center;
+		//For the scrollable attribute div of different views
+		& > div {
+			@include calc(height, 100%);
+			
+			/*======= Put view styles here =======*/
+			@import "partials/feed";
+			@import "partials/profile";
+			@import "partials/gallery";
+		}
+	}
+}//end -- .center_content
+//begin -- .right-sidebar
+
+.right-sidebar {
+	position: fixed;
+	right: 0;
+	top: 0;
+	width: 200px;
+	height: 100vh;
+	z-index: 900;
+	background: $white;
+	@include transition(all 150ms ease-out);
+	@import "partials/ticker";
+}//end -- .right-sidebar

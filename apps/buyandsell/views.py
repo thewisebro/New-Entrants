@@ -694,18 +694,18 @@ def my_account(request):
   sell_items=SaleItems.items.filter(user=user).order_by('-pk')
   request_items=RequestedItems.items.filter(user=user).order_by('-pk')
   main_watched_cat,sub_watched_cat=get_watched_categories(request)
-  
+
   if len(ShowContact.objects.filter(user=user))==1:
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
       show_contact=0
-  
+
   context={'sell_items':sell_items,
            'request_items':request_items,
            'main_watched_cat':main_watched_cat,
            'sub_watched_cat':sub_watched_cat,
            'show_contact':show_contact
           }
- 
+
   return render(request,'buyandsell/myaccount.html',context) 
 
 def get_category_dictionary():
@@ -718,7 +718,7 @@ def get_category_dictionary():
   for mcat in main_cat:
     sub_cat=BuySellCategory.objects.filter(main_category=mcat)
     cat_dict[mcat]=sub_cat
-  return cat_dict  
+  return cat_dict
 
 def trash_item(request,item_type,pk):
   if item_type=="request":
@@ -740,7 +740,7 @@ def transaction(request,item_type,pk):
       itm=SaleItems.items.get(pk=pk)
     except:
       messages.error(request,"This item has been deleted or does not exist")
-       
+
     itm_user=itm.user
     if itm_user != user:
       messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.You can only fill the form for the items in your account below")

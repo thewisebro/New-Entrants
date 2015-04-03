@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.db import models, migrations
 import core.models.fields
 import taggit_autocomplete.managers
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
@@ -46,7 +47,7 @@ class Migration(migrations.Migration):
             name='Profile',
             fields=[
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
-                ('student', models.OneToOneField(primary_key=True, serialize=False, to='nucleus.Student')),
+                ('user', models.OneToOneField(primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
                 ('answers_down', models.ManyToManyField(related_name=b'downvoted_by', null=True, to='forum.Answer', blank=True)),
             ],
             options={
@@ -88,13 +89,36 @@ class Migration(migrations.Migration):
                 ('description', models.TextField()),
                 ('title', models.CharField(max_length=100)),
                 ('profile', models.ForeignKey(related_name=b'added', to='forum.Profile')),
-                ('tags', taggit_autocomplete.managers.TaggableManager(to='taggit.Tag', through='taggit.TaggedItem', help_text='A comma-separated list of tags.', verbose_name='Tags')),
-                ('user_views', models.ManyToManyField(related_name=b'viewed', to='forum.Profile')),
             ],
             options={
                 'abstract': False,
             },
             bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='TagDescription',
+            fields=[
+                ('datetime_created', models.DateTimeField(auto_now_add=True)),
+                ('description', models.TextField()),
+                ('photo_url', models.URLField()),
+                ('tag', models.OneToOneField(primary_key=True, serialize=False, to='taggit.Tag')),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='question',
+            name='tags',
+            field=taggit_autocomplete.managers.TaggableManager(to='taggit.Tag', through='taggit.TaggedItem', help_text='A comma-separated list of tags.', verbose_name='Tags'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='question',
+            name='user_views',
+            field=models.ManyToManyField(related_name=b'viewed', to='forum.Profile'),
+            preserve_default=True,
         ),
         migrations.AddField(
             model_name='profilequestionfollowed',

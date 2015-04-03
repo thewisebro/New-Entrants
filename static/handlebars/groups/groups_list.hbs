@@ -1,0 +1,12 @@
+<div class="app-heading">Groups </div>
+<div class="appbox-container">
+{{#each groups }}
+  <div class="appbox">
+    <img class="app-pic" data-app="{{ username }}" src="{{ photo }}"/>
+    <a href="/#groups/{{ username }}/activity">
+      <div class="app-name">{{ name }}</div>
+    </a>
+  </div>
+{{/each}}
+</div>
+<div class="clear-both"></div>

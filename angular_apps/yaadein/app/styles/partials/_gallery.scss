@@ -1,0 +1,39 @@
+/*======= Gallery page styles =======*/
+//Flexbox Layout
+//.gallery-image-container {
+//	font-size: 0;
+//	display: flex;
+//	flex-flow: row wrap;
+//	overflow: hidden;
+//	text-align: center;
+//	* {
+//		flex: auto;
+//		width: 32%;
+//		margin: 0.5%;
+//		border-radius: 3px;
+//	}
+//	* img {
+//		width: 100%;
+//		height: auto;
+//	}
+//}
+
+//Dynamic Columns Layout
+.gallery-image-container {
+	column-width: 275px;
+	column-gap: 8px;
+	width: inherit;
+	max-width: 1200px;
+	margin: 0 auto;
+	* {
+		-webkit-column-break-inside: avoid;
+		display: inline-block;
+		border-radius: 3px;
+		margin-bottom: 2px;
+	}
+	* img {
+		width: 100%;
+		height: auto;
+		border-radius: 3px;
+	}
+}

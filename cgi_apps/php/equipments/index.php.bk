@@ -1,0 +1,127 @@
+<?php
+require 'files/connection.php';
+require 'files/map.php';
+?>
+<div class="header">
+<div class= "container">
+<div class="app-name">
+Institute Instruments Search
+</div>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="files/jquery-ui.min.js"></script>
+<script type="text/javascript" src="files/jquery-1.9.1.min.js"></script>
+
+<script type="text/javascript" src="files/auto.js"></script>
+<?php
+$dept = $_GET["value"];
+$temp1 = $_GET["val1"];
+$values = mysqli_query($var, "SELECT DISTINCT deptname FROM equip_entries");
+echo "<select name= 'Departments' id='dropdown' onclick='getdept()'>";
+echo "<option>Departments</option>";
+while($row = mysqli_fetch_array($values))
+{
+                           $temp=$row['deptname'];
+                           reset($arr);
+                           while (list($key, $val) = each($arr)) {
+                             if($key==$temp)
+                             {
+                                echo "<option><a href='files/dept.php?val=$temp'>" .$val. "</a></option>";
+                             }
+                           }
+                           echo "<br>";
+}
+echo "</select>";
+echo "<div class='search'> ";
+echo "<form name='search' method='post' action=''> ";
+echo "<link href='files/help.css' rel='stylesheet' type='text/css'>
+<input type='text' name='abc' id='search-text'>
+<img  class ='search-image' src='images/search.jpg'>
+</div> ";
+echo "</div>";
+echo "</div>";
+
+//to check if smethng is entered in the search bar
+if(isset($_POST['abc']))
+{
+  $word=$_POST['abc'];
+  $query1= mysqli_query($var, "SELECT * FROM equip_entries WHERE equipname LIKE '%$word%'");
+  $temp1= $word;
+}
+if($temp1!=NULL)
+{
+  echo "<div class = 'container'>";
+  echo "<table border='1' class='table table-striped results' >";
+  echo "<div class ='equip-place'>";
+  echo "<br>EQUIPMENTS-<br>";
+    if(mysqli_num_rows($query1)==0)
+        {
+           echo "No results found";
+        }
+  echo "</div>";
+  echo "<tr>
+  <th>Equipment</th>
+  <th>Professor</th>
+  <th>Department</th>
+  </tr>";
+  $row1 = mysqli_fetch_array($query1);
+ while($row = mysqli_fetch_array($query1))
+ {
+       echo "<tr>";
+       echo "<td>".$row['equipname']."</td>";
+       echo "<td>".$row['profname']."</td>";
+       echo "<td>".$row['deptname']."</td>";
+       echo "</tr>";
+ }
+ echo "<br>";
+ echo "</div>";
+}
+else if($temp1==NULL && $dept==NULL)
+{
+  echo "<br>NO results found";
+}
+?>
+ <script>
+ function getdept()
+ {
+  var e = document.getElementById("dropdown");
+  var myvar=e.options[e.selectedIndex].text;
+  window.location.href = "index2.php?value=" +myvar;
+ }
+ </script>
+<?php
+if($temp1==NULL)
+{
+ echo "<div class='container'>";
+ echo "<div class='dept-name'>";
+ echo "<br>DEPARTMENT-" ;
+ echo $dept;
+ echo "<br>";
+ echo "</div>";
+   reset($arr);
+   while (list($key, $val) = each($arr)) {
+   if($dept==$val)
+   {
+     $dept=$key;
+   }
+}
+echo "<table border='1' class='table table-striped results'>";
+$values = mysqli_query($var, "SELECT * FROM equip_entries WHERE deptname='$dept'");
+echo " <tr>
+<th>Equipment</th>
+<th>Professor</th>
+</tr>";
+ while($row = mysqli_fetch_array($values))
+{
+    echo "<tr>";
+    echo "<td>".$row['equipname']."</td>";
+    echo "<td>".$row['profname']."</td>";
+    echo "</tr>";
+}
+echo "</table>";
+echo "</div>";
+echo "</form>";
+}
+echo "</form>";
+?>

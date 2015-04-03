@@ -4,6 +4,10 @@
   {{ block.super }}
   {{ form.media.js }}
   <script type="text/javascript">
+    function forgot_pass(){
+      parent.forgot_password();
+      parent.close_dialog('login_help_dialog');
+    }
     $('body').ready(function(){
         $('#id_user_type').change();
       }
@@ -46,10 +50,9 @@
    <div id="content">
      {% if option == None %}
        <div class="point">
-         You need <a href="http://mail.iitr.ac.in/iwc" target="_blank">IITR Webmail</a> credentials to sign into Channel i.
-       </div>
-       <div class="point">
-         Please Choose one option:<br>
+         You may need to have a <a href="http://mail.iitr.ac.in/iwc" target="_blank">Webmail</a> account and then will have to use your
+         Webmail credentials to sign into Channel i.
+         If this is the case, then please choose one option:<br>
        </div>
        <div class="point">
          1) <a href="?option=get_one">I don't have a Webmail account.</a>
@@ -65,6 +68,16 @@
        </div>
        <div class="point">
          5) <a href="?option=ask_help">I am able to log into Webmail but still not able to sign into Channel i.</a>
+       </div>
+       <div class="point">
+       If you've forgot your password and have your primary email verified already
+       then you can reset you Channel i password through this <span class="blue-link" onclick="forgot_pass()">*link</span>.<br>
+       </div>
+       <div class="point">
+       * In this case, you will not be able to recover your Webmail password
+       and password of Channel i and Webmail will be different.
+       And if you're a student then you will have to log into Channel i
+       using your Enrollment No. as username.
        </div>
      {% else %}{% if option == 'get_one' %}
        <div class="point">

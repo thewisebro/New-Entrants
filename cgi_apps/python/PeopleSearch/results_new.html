@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>People Search</title>
+<link rel="stylesheet" type="text/css" href="peoplestyle.css" />
+<link rel="icon" type="image/png"  href="/static/images/nucleus/app-icons/peoplesearch.png">
+</head>
+
+<body style="background-color:#f4f4f4;">
+    <div id="container">
+    	<div id="floating">
+	<div id="div_main" style="padding-left:150px">
+	    <div id="div_left_small_image">
+	    	<a href="./index.cgi">
+			<img src="images/results_img_02.gif" alt="People search" />
+		</a>
+	    </div>
+	    <div id="div_right">
+		<div id="div_up">
+	    		<a href="./index.cgi">
+			    <img src="images/results_text_04.png" alt="People search" />
+			</a>
+		</div>
+		<div id="div_down">
+		    <form onsubmit="return loadResult(this)" >
+			<div id="tabs">
+			    <div id="all_tab" onClick="javascript:switchSearch('all')" class="active_tab">
+				<div id="img_all_left" class="active_left" >
+				</div>
+				<div class="tab_text">
+				    All
+				</div>
+				<div id="img_all_right" class="active_right">
+				</div>
+			    </div>
+			    <div id="stud_tab" onClick="javascript:switchSearch('stud')" class="inactive_tab">
+				<div id="img_stud_left" class="inactive_left">
+				</div>
+				<div class="tab_text">
+				    Students
+				</div>
+				<div id="img_stud_right" class="inactive_right">
+				</div>
+			    </div>
+			    <div id="fac_tab" onClick="javascript:switchSearch('fac')" class="inactive_tab">
+				<div id="img_fac_left" class="inactive_left">
+				</div>
+				<div class="tab_text">
+				    Faculty
+				</div>
+				<div id="img_fac_right" class="inactive_right">
+				</div>
+			    </div>
+			    <div id="serv_tab" onClick="javascript:switchSearch('serv')" class="inactive_tab">
+				<div id="img_serv_left" class="inactive_left">
+				</div>
+				<div class="tab_text">
+				    Services
+				</div>
+				<div id="img_serv_right" class="inactive_right">
+				</div>
+			    </div>
+			</div>
+			<div id="searchbar">
+			    <input type="text" id="searchbox" value="" name="Name" />
+			    <input type="submit" value=" " name="submit" id="search_button"/><!-- value = ""(without spaces)  must be avoided for some reasons-->
+			</div>
+			<div style="clear:both"></div>
+			<div id="advanced_main">
+			    <div id="advanced">
+				<div id="all" >
+				</div>
+				<div id="stud" style="display:none">
+				    <select name="student_programme" style="margin-top:5px">
+					<option value="null">Programme</option>
+					<option value="1">Under Graduate</option>
+					<option value="2">Post Graduate</option>
+					<option value="3">Ph. D</option>
+				    </select>
+				    <br />
+				    <select name="student_year" style="margin-top:5px">
+					<option value="null">Year</option>
+					<option value="1">First Year</option>
+					<option value="2">Second Year</option>
+					<option value="3">Third Year</option>
+					<option value="4">Fourth Year</option>
+					<option value="5">Fifth Year</option>
+				    </select>
+				    <br />
+
+						<select name="student_deptt" style="margin-top:5px">
+							<!--Disciplines here-->
+						</select> 
+				    <br />
+				</div>
+				<div id="fac" style="display:none">
+				    <select name="faculty_post" style="margin-top:13px">
+					<!--Posts here-->
+				    </select>
+				    <br />
+				    <select name="faculty_deptt" style="margin-top:17px">
+					<!--Departments here-->
+				    </select>
+				    <br />
+				</div>
+				<div id="serv" style="display:none">
+						<select name="services_list" style="margin-top:35px">
+					    		<!--Services list here-->
+						</select>
+				    <br />
+				</div>
+			    </div>
+			    <div id="advanced_bottom">
+				<div id="adv_left">
+				</div>
+				<div id="adv_middle" onclick="javascript:advDrop()">
+				    Advanced&nbsp;Search
+				</div>
+				<div id="adv_right" onClick="javascript:advDrop()" class="advUp">
+				</div>
+			    </div>
+			</div>
+			<input type="hidden" name="form_submitted" value="true" />
+			<!--</p>-->
+			<input type="hidden" name="search_category" id="search_category" value="all" />
+			<input type="hidden" name="advanced_search_status" value="off" />
+			<br />
+		    </form>
+		</div>
+	    </div>
+	</div>
+	</div>
+	<br />
+	<center>
+	<div id="results">
+		<!--Search Results-->
+	</div>
+	<br />
+	<hr />
+	<div id="footer_note">
+		Note: The students that are unable to view the Student Home Pages are required to "Generate Profile" in the Student HomePages at Channel I.
+<!--	</div>
+	<div id="copyright">-->
+	<br />
+		<a href="http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html" target="_blank">&copy;Information Management Group <span id="year-span"></span></a>
+	</div>
+	<script type="text/javascript">
+	    document.getElementById('year-span').innerHTML = new Date().getFullYear();
+	</script>
+	</center>
+    </div>
+</body>
+<script type="text/javascript" src="scripts_new.js"></script>
+<script type="text/javascript" src="/static/js/piwik.js"></script>
+</html>

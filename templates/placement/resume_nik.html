@@ -1,0 +1,336 @@
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        font-size:16px;
+      }
+      h3 {
+        font-size:16px;
+        background-color:#CCC;
+        padding-bottom:-2.5mm;
+        margin-bottom:-3.5mm;
+        padding-top:0.5mm;
+        padding-left:0.5mm;
+      }
+      .bold_first{
+        font-weight:bold;
+        line-height:80%;
+        margin-top:2mm;
+        margin-bottom:-10mm;
+      }
+      .bold_second {
+        font-weight:bold;
+        line-height:80%;
+        margin-top:1px;
+        margin-bottom:-10mm;
+      }
+      .bold_text {
+        line-height:80%;
+        margin-top:2mm;
+        margin-bottom:-10mm;
+      }
+      .intern_subtitle{
+        line-height:80%;
+        margin-top:1px;
+        margin-bottom:-10mm;
+      }
+      .research {
+        line-height:100%;
+      }
+      #headers{
+        width:600px;
+      }
+      .top_rows {
+        margin-bottom:-10mm;
+        margin-top:-5px;
+        line-height:120%;
+      }
+      #qualifications {
+        position:relative;
+      }
+      #references_table, #grades_table td, #grades_table th {
+        padding:1mm;
+        vertical-align:middle;
+        line-height:100%;
+      }
+      #personal_details_table td {
+        padding:1mm;
+        vertical-align:top;
+        line-height:110%;
+      }
+      #pic_td {
+        width:15%;
+        padding-left:2mm;
+        vertical-align:top;
+        padding-top:2mm;
+      }
+      #pic {
+        width:80px;
+      }
+      #scale {
+        font-size:10px;
+        text-align:center;
+      }
+      .person_name {
+        font-weight:bold;
+        font-size:18px;
+      }
+      #top-left{
+        width:800px;
+        float:left;
+        text-align:left;
+      }
+      #top-right{
+        width:300px;
+        float:left;
+        text-align:right;
+      }
+      #logo {
+        width:60px;
+        height:60px;
+      }
+      .skill{
+        font-weight:bold;
+        margin-bottom:-5mm;
+        vertical-align:middle;
+        margin-top:-2mm;
+        padding-top:-2mm;
+      }
+      .bar {
+        margin-bottom:3mm;
+        margin-top:-3mm;
+      }
+
+      td, th {
+        padding:2px;
+      }
+
+      table{
+        margin-bottom:5px;
+      }
+      .center{
+        text-align:center;
+      }
+      .less{
+        line-height:105%;
+        margin-bottom:2mm;
+        padding-bottom:0px;
+        text-align:justify;
+        text-justify:inter-word;
+      }
+      .bring_td_up {
+        vertical-align:top;
+        padding-top:3mm;
+      }
+      .skills {
+        margin-bottom:2mm;
+      }
+      .skill_table {
+        line-height:100%;
+        text-align:justify;
+        text-justify:inter-word;
+      }
+      .normal{
+        font-weight:normal;
+      }
+      .research{
+        margin-top:10px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Headers -->
+    <div id='top-info'>
+      <table>
+        <tr>
+          <td width="55%">
+            <!-- Contact details -->
+            <p class="top_rows">
+            <span class="person_name">
+              {{ plac_person.person.name }}
+            </span>
+            </p>
+            <p class="top_rows">
+            {{ plac_person.person.branch.degree }}&nbsp;{{ plac_person.person.branch.name }}
+            </p>
+            <p class="top_rows">
+            {{ plac_person.person.get_semester_display }}
+            </p>
+            {% comment %}
+            {% if display %}
+            <p class="top_rows">
+            Registration No: {{ plac_info.registration_no }}
+            <p>
+            {% endif %}
+            {% endcomment %}
+            <p class="top_rows">
+            Email: {{ plac_person.person.email_id }}
+            </p>
+            <!-- Area of interest and CGPA -->
+          </td>
+          <td style="text-align:right;" width="45%">
+            {% if verification_resume %}
+            Master resume, {% now "M j, P" %}
+            {% endif %}
+            <img id='logo' src="{{ STATIC_URL }}images/iitrlogo.jpg"/>
+            <br> <b>Indian Institute of Technology Roorkee</b>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <hr class="bar"/>
+    <div id='qualifications'>
+      {% if plac_info.area_of_interest %}
+      <b>Areas of Interest:</b> {{ plac_info.area_of_interest }}
+      {% endif %}
+      <table id="grades_table" border="1" class="center">
+        <tr><th>Educational Qualifications</th><th width="20%">Year</th><th>Board/Institution</th><th width="20%">CGPA / %</th></tr>
+        {% for edu,course_name in education %}
+        {% if edu.year == 2012 %}
+          <tr><td>{{ edu.get_course_display }}</td><td>{{ edu.year }}</td><td>{{ edu.institution }}</td><td>{{edu.cgpa}} /10</td></tr>
+        {% else %}
+          <tr><td>{{ edu.get_course_display }}</td><td>{{ edu.year }}</td><td>{{ edu.institution }}</td><td>{{edu.cgpa}} /100</td></tr>
+        {% endif %}
+        {% endfor %}
+     </table>
+{#     <div id="scale">*on a scale of 10</div> #}
+    </div>
+
+    {% if publications %}
+    <h3>RESEARCH PUBLICATIONS</h3>
+    {% for p in publications %}
+    <div class="research">{{ p.author }}<b> "{{ p.title }}" </b>, {{ p.publisher }}, {{ p.year }}</div>
+    {% endfor %}
+    {% endif %}
+
+    {% if jobs %}
+    <h3>JOB EXPERIENCE</h3>
+    {% for job in jobs %}
+    <div class="bold_first">{{ job.organisation }}</div>
+    <div class="bold_text" style="margin-top:1px;"><b>{{ job.post }}</b> ( {{ job.date_of_joining }} - {{ job.date_of_leaving }} )</div>
+    <div class="less">{{ job.brief_description|linebreaksbr }}</div>
+    {% endfor %}
+    {% endif %}
+
+    {% if internships %}
+    <h3>INTERNSHIP INFORMATION</h3>
+    {% for internship in internships %}
+    <div class="bold_first">{{ internship.industry }}</div>
+    <div class="intern_subtitle"><b>{{ internship.title }}</b>&nbsp;({{ internship.period }})</div>
+    <div class="less">{{ internship.brief_description|linebreaksbr }}</div>
+    {% endfor %}
+    {% endif %}
+    <!-- Projects -->
+    {% if projects %}
+    <h3>PROJECTS</h3>
+    {% for project in projects %}
+    <div class="bold_first">{{ project.industry }}</div>
+    <div class="bold_second">{{ project.title }} <span class='normal'>({{ project.period }})</span></div>
+    <div class="less">{{ project.brief_description|linebreaksbr }}</div>
+    {% endfor %}
+    {% endif %}
+    <!-- Skills and achievements -->
+    <h3 class="skills">SKILLS AND ACHIEVEMENTS</h3>
+    <table style="-pdf-keep-with-next:false;" class="skill_table">
+    {% if plac_info.computer_languages %}
+      <tr>
+        <td style="width:30%;" class="bring_td_up">
+          <div class='skill bold_first'>Computer Languages</div>
+        </td>
+        <td style="width:70%;">
+          <div>{{ plac_info.computer_languages }}</div>
+        </td>
+      </tr>
+    {% endif %}
+    {% if plac_info.software_packages %}
+      <tr>
+        <td style="width:30%;" class="bring_td_up">
+            <div class='skill bold_first'>Software Packages</div>
+          </td>
+        <td style="width:70%;">
+            <div>{{ plac_info.software_packages }}</div>
+          </td>
+      </tr>
+     {% endif %}
+
+     {% if plac_info.achievements %}
+       <tr>
+        <td style="width:30%;" class="bring_td_up">
+          <div class='skill bold_first'>Academic Achievements</div>
+        </td>
+        <td style="width:70%;">
+          <div>{{ achievements|linebreaksbr }}</div>
+        </td>
+      </tr>
+     {% endif %}
+
+     {% if plac_info.course_taken %}
+       <tr>
+        <td style="width:30%;" class="bring_td_up">
+           <div class='skill bold_first'>Additional Courses Taken</div>
+         </td>
+        <td style="width:70%;">
+           <div>{{ plac_info.course_taken }}</div>
+         </td>
+       </tr>
+     {% endif %}
+     {% comment %}
+     {% if languages %}
+       <tr>
+        <td style="width:30%;" class="bring_td_up">
+           <div class='skill bold_first'>Languages Known</div>
+         </td>
+        <td style="width:70%;">
+            <div>
+              {% for language in languages %}
+                {{ language.get_language_display }} ({{ language.proficiency }})
+                {% if not forloop.last %} , {% endif %}
+              {% endfor %}
+            </div>
+        </td>
+      </tr>
+    {% endif %}
+    {% endcomment %}
+    </table>
+    <!-- Extra Curricullars -->
+    {% if extra %}
+    <h3>EXTRA CURRICULARS</h3>
+    {% for unit in extra %}
+    <div class="bold_text"><b>{{ unit.name_of_activity }} </b> ({{ unit.year }})</div>
+    <div class="less">{{ unit.achievement|linebreaksbr }}</div>
+    {% endfor %}
+    {% endif %}
+
+    <h3> PERSONAL DETAILS </h3>
+    <table id="personal_details_table">
+      <tr>
+        <td style="width:50%;">
+          <div>
+{#          <b>Father's Name:</b> {{ info.fathers_name }}<br />#}
+          <b>Date of Birth:</b> {{ info.birth_date }}<br />
+{#          <b>Gender:</b> {{ plac_person.person.get_gender_display }}<br />#}
+          <b>Contact No:</b> {{ plac_person.person.personal_contact_no }}<br />
+{#          <b>Category:</b> {{ info.get_category_display }}<br />#}
+        </td>
+        <td style="width:50%;">
+          <b>Address:</b> {{ info.permanent_address }}, {{ info.city }} - {{ info.pincode }}<br />
+{#          <b>Current Address:</b> {{ plac_person.person.room_no }}, {{ plac_person.person.get_bhawan_display }}, IIT Roorkee-247667<br />#}
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    {% if plac_info.reference_1 or plac_info.reference_2 %}
+    <h3> REFERENCES </h3>
+    <div id="references_table">
+      <table width= "100%">
+        <tr>
+          <td style="padding-top:1mm;"><div style="padding-bottom:0mm;" class="bold_first">{{ plac_info.reference_1 }}</div>{{ plac_info.designation_1 }}<br />{{ plac_info.institute_1 }}<br />{{ plac_info.email_1 }}{#<br />{{ plac_info.phone_1 }}#}</td>
+          <td style="padding-top:1mm;"><div style="padding-bottom:0mm;" class="bold_first">{{ plac_info.reference_2 }}</div>{{ plac_info.designation_2 }}<br />{{ plac_info.institute_2 }}<br />{{ plac_info.email_2 }}{#<br />{{ plac_info.phone_2 }}#}</td>
+        </tr>
+      </table>
+    </div>
+    {% endif %}
+
+  </body>
+</html>
