@@ -10,7 +10,7 @@
             <div class="postUserNameTime">
                 <div class="postUser">
                   <span class="postUserName">{[oneFile.user_info.name]}</span>
-                  <span class="removeFeedPost" ng-show="logIn" ng-click="removeFeedPost(post.post.id, $index)">
+                  <span class="removeFeedPost" ng-show="logIn && post.post.upload_user == auth.user.username" ng-click="removeFeedPost(post.post.id, $index)">
                     <i class="fa fa-times-circle-o"></i>
                   </span>
                 </div>
@@ -22,7 +22,7 @@
 
             <div class="filesDisplay">
               <div class="postContent">
-                <div class="removeFeedFile" ng-show="logIn" ng-click="removeFeedFile(oneFile.file.id,$parent.$index,$index)">
+                <div class="removeFeedFile" ng-show="logIn && oneFile.file.username == auth.user.username" ng-click="removeFeedFile(oneFile.file.id,$parent.$index,$index)">
                 <i class="fa fa-times"></i>
               </div>
               <div class="fileOverlay">
