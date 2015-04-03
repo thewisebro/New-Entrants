@@ -219,22 +219,29 @@ def uploadedFile(request , batch_id):
 #    user = User.objects.get(username=usrname)
     if Batch.objects.filter(id = batch_id).exists():
       userBatch = Batch.objects.get(id = batch_id)
+      course = userBatch.course
     elif Course.objects.filter(id = batch_id).exists():
       course = Course.objects.get(id = batch_id)
+      userBatch = None
     else:
-      return HttpResponse(json.dumps('Invalid location. Please contact IMG if problem persists'), content_type='application/json')
+      return HttpResponse(json.dumps('Invalid Course. Please contact IMG if problem persists'), content_type='application/json')
 
 #    data = request.POST.get('formText','')
     data = allData['formText']
+    privacy = False
     uploadTypes = allData['typeData']
     documents = request.FILES.getlist('file')
     extra = request.POST.getlist('extra','')
+    if getUserType(user) == 1:
+      privacy = allData['privacy']
     files = []
     msg = ''
     counter = 0
     try:
-      course = userBatch.course
-      new_post = Post(upload_user = user, batch = userBatch, course = course, content = data)
+      if userBatch is not None:
+        new_post = Post(upload_user = user, batch = userBatch, course = course, content = data , privacy = privacy)
+      else:
+        new_post = Post(upload_user = user, course = course, content = data , privacy = privacy)
       new_post.save()
     except:
       msg = "Cannot save post"
@@ -268,13 +275,13 @@ def getFileType(file_name):
   try:
     extension = file_name.split(".")[1]
     extension = extension.lower()
-    if extension in ['jpg','png','jpeg','gif']:
+    if extension in ['jpg','png','jpeg','gif','exif','tiff']:
       file_type="image"
     elif extension=='pdf':
       file_type="pdf"
     elif extension=='ppt':
       file_type="ppt"
-    elif extension in ['dv', 'mov', 'mp4', 'avi', 'wmv']:
+    elif extension in ['dv', 'mov', 'mp4', 'avi', 'wmv', 'mkv', 'webm']:
       file_type="video"
     else:
       file_type="other"
@@ -332,6 +339,7 @@ def batch_dict(Batch):
                }
   return batch_info
 
+
 ''' Show a particular post '''
 @csrf_exempt
 @CORS_allow
@@ -341,7 +349,7 @@ def get_post(request , batch_id , post_id):
     if Post.post_objects.filter(id = post_id).exists():
       post = Post.post_objects.get(id = post_id)
       complete_post = get_post_dict(post)
-      return HttpResponse(json.dumps(complete_post), content_type='application/json')
+      return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize()}), content_type='application/json')
     else:
       msg = 'Post has been deleted'
   else:

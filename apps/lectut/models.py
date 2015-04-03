@@ -56,12 +56,16 @@ class Post(models.Model):
 
 # Over-ridden to create notification
   def save(self, *args, **kwargs):
-    post = super(Post , self).save(*args, **kwargs)
-    currentBatch = Batch.objects.get(id = self.batch.id)
-    students = currentBatch.students.all()
-    users = map(lambda x:x.user, students)
     if not self.pk:
-      Notification.save_notification('lectut','The user ' +str(self.upload_user.name)+ ' added a post','#/course/'+currentBatch.id+'/posts/'+post.id+'/',users,self)
+      super(Post , self).save(*args, **kwargs)
+      post = Post.objects.get(id = self.id)
+      currentBatch = Batch.objects.get(id = self.batch.id)
+      students = currentBatch.students.all()
+      users = map(lambda x:x.user, students)
+      noti_text = str(self.upload_user.name) + " has added a post on Lectut"
+      Notification.save_notification('lectut',noti_text,'#/course/'+str(currentBatch.id)+'/posts/'+str(post.id)+'/',users,self)
+    else:
+      post = super(Post , self).save(*args, **kwargs)
     return post
 
   def delete(self):
