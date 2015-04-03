@@ -94,7 +94,8 @@ def dispbatch(request):
       userPosts = Post.post_objects.all().filter(batch__in = batches).order_by('-datetime_created')
 
     else:
-      userPosts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created')
+      userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')
+      user_info = 'Unknown'
     for post in userPosts:
       posts.append(get_post_dict(post))
     data = {'user': user_info,
@@ -104,7 +105,7 @@ def dispbatch(request):
 
     return HttpResponse (json.dumps(data),content_type='application/json')
 
-  latest_posts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created') #[number:(number+post_count)]
+  latest_posts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created') #[number:(number+post_count)]
   for post in latest_posts:
     complete_post = get_post_dict(post)
     posts.append(complete_post)
@@ -232,7 +233,7 @@ def uploadedFile(request , batch_id):
     uploadTypes = allData['typeData']
     documents = request.FILES.getlist('file')
     extra = request.POST.getlist('extra','')
-    if getUserType(user) == 1:
+    if getUserType(user) == "1":
       privacy = allData['privacy']
     files = []
     msg = ''
