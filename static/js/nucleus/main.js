@@ -81,7 +81,7 @@ var todays_menu = null;
 
 function load_events_birthdays(){
   $('#events-birthdays').html("</div><div id='birthdays' class='right-box'></div>"+
-      "<div id='menu' class='right-box'></div>"+
+      "<div id='mess-menu' class='right-box'></div>"+
       "<div id='upcoming-events' class='right-box'></div>"
       );
   events_birthdays();
@@ -190,29 +190,31 @@ function display_birthdays(){
 }
 
 function display_menu(){
-  if(todays_menu.length > 0){
-    $('#menu').show();
-    $('#menu').html(""+
-      "<div class='right-content-title'>Today's Mess Menu</div>"+
-      "<div class='right-content-information' id='menu-boxes'></div>"
-    );
-    var time_of_day_map = {
-      1: 'Breakfast',
-      2: 'Lunch',
-      3: 'Dinner'
-    };
-    for(var i=1; i<=3; i++) {
-      if(todays_menu.filter(function(a){return a.time_of_day==i}).length > 0) {
-        var html = ""+
-          "<div class='event-box' onclick='location=\"/messmenu/\";'>"+
-            "<div class='event-name1'><span class='time_of_day'>"+time_of_day_map[i]+": </span>"+
-            "<span class='menu-content'>"+todays_menu.filter(function(a){return a.time_of_day==i})[0].content+
-            "</span></div>"+
-          "</div>";
-        $('#menu-boxes').append(html);
+  try{
+    if(todays_menu.length > 0 && typeof(todays_menu)=="object"){
+      $('#mess-menu').show();
+      $('#mess-menu').html(""+
+        "<div class='right-content-title'>Today's Mess Menu</div>"+
+        "<div class='right-content-information' id='menu-boxes'></div>"
+      );
+      var time_of_day_map = {
+        1: 'Breakfast',
+        2: 'Lunch',
+        3: 'Dinner'
+      };
+      for(var i=1; i<=3; i++) {
+        if(todays_menu.filter(function(a){return a.time_of_day==i}).length > 0) {
+          var html = ""+
+            "<div class='event-box' onclick='location=\"/messmenu/\";'>"+
+              "<div class='event-name1'><span class='time_of_day'>"+time_of_day_map[i]+": </span>"+
+              "<span class='menu-content'>"+todays_menu.filter(function(a){return a.time_of_day==i})[0].content+
+              "</span></div>"+
+            "</div>";
+          $('#menu-boxes').append(html);
+        }
       }
     }
-  }
+  }catch(e){};
 }
 
 function birthday_wish(username,name){

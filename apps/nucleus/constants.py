@@ -48,7 +48,7 @@ channeli_apps = {
 
 student_apps = ['acad','jukebox','dc++','lectut','placement',
                 'buysell','grades', 'thinktank','lostfound','softwares',
-                'peoplesearch','messmenu','research']
+                'peoplesearch','messmenu','research','yaadein']
 
 faculty_apps = ['facapp','lectut','placement',
                 'thinktank','lostfound','softwares','peoplesearch']
