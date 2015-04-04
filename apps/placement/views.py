@@ -176,7 +176,10 @@ def apply(request, company_id) :
     if company_req > float(student_cgpa):
       l.info(request.user.username +' applying to company having higher CGPA requirements.')
       return HttpResponse("You can not apply to this company as it has higher CGPA requirements.")
-    pdf = get_resume_binary(RequestContext(request), student, company.sector)
+    if company.category_required:
+      pdf = get_resume_binary(RequestContext(request), person, company.sector, category_required=company.category_required)
+    else:
+      pdf = get_resume_binary(RequestContext(request), person, company.sector)
     if pdf['err'] :
       return HttpResponse('Your resume cannot be generated. Please contact IMG immediately.')
     filepath = os.path.join(settings.MEDIA_ROOT, 'placement', 'applications', 'company'+str(company_id), str(student.user.username)+'.pdf')

@@ -310,7 +310,9 @@
           <b>Date of Birth:</b> {{ info.birth_date }}<br />
 {#          <b>Gender:</b> {{ plac_person.person.get_gender_display }}<br />#}
           <b>Contact No:</b> {{ plac_person.person.personal_contact_no }}<br />
+          {% if category_required %}
 {#          <b>Category:</b> {{ info.get_category_display }}<br />#}
+          {% endif %}
         </td>
         <td style="width:50%;">
           <b>Address:</b> {{ info.permanent_address }}, {{ info.city }} - {{ info.pincode }}<br />

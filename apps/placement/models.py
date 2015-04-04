@@ -183,6 +183,7 @@ class Company(models.Model):
   # Sector cannot be blank. Also the sector 'VER' is reserved for the full resume for verification.
   # It decides what kind of resume will be submitted to the company.
   sector = models.CharField(max_length=3, choices=PC.COMPANY_RESUME_CHOICES)
+  category_required = models.BooleanField(default=False)
   def __unicode__(self):
     return str(self.name)
 
