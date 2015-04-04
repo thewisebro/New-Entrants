@@ -271,7 +271,8 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
       data: {
         user: "harshithere",
         formText: content,
-        typeData: typeArray
+        typeData: typeArray,
+        privacy: !$scope.privacy
       },
       withCredentials: true,
       //and all other angular $http() options could be used here.
@@ -342,6 +343,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 
           console.log("Things dajlksdjsa ld");
           console.log(things);
+          console.log(!$scope.privacy);
           upload(things,typeData,$scope.thing.content);
           //console.log("----------------");
           console.log(typeData);
@@ -699,8 +701,8 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
     $rootScope.whichView = "CourseOnePostCtrl";
     var promiseMembers = LoadOnePost.getOnePost($routeParams.courseId,$routeParams.postId);
     promiseMembers.then(function(d){
-      $scope.onePost = d;
-      //console.log(d);
+      $scope.onePost = d.post;
+      console.log(d);
     });
 
   // ------------------------- Comments -----------------------

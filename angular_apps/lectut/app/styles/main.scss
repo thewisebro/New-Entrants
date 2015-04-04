@@ -902,11 +902,11 @@ body {
                             font-size: 15px;
                             padding-bottom: 3px;
                             color: $th1;
-                            cursor:pointer;
+                            //cursor:pointer;
                             text-transform: capitalize;
                             &:hover{
-                              text-decoration:underline;
-                              color: $g19;
+                              //text-decoration:underline;
+                              //color: $g19;
                             }
                          }
                          .removeFeedPost{
@@ -1726,4 +1726,70 @@ ul.comment-list-wrapper ul.comment-list-wrapper {
 }
 .c_sol{
   color: #9B59B6;
+}
+
+
+
+// ------------------Toggle Switch ---------------------
+
+.onoffswitch {
+      position: relative; width: 100px;
+                    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+                    text-align:center;
+float: right;
+       margin-right: 10px;
+}
+.onoffswitch-checkbox {
+      display: none;
+}
+.onoffswitch-label {
+      display: block; overflow: hidden; cursor: pointer;
+      border: 2px solid #FFFFF; border-radius: 3px;
+}
+.onoffswitch-inner {
+      display: block; width: 200%; margin-left: -100%;
+      -moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
+      -o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+      display: block; 
+      float: left; 
+      width: 50%; 
+      height: 30px; 
+      padding: 0; 
+      line-height: 30px;
+      font-size: 15px; 
+      color: white; 
+      font-family: Trebuchet, Arial, sans-serif; 
+      font-weight: bold;
+      -moz-box-sizing: border-box; 
+      -webkit-box-sizing: border-box; 
+      box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+      content: "Public";
+      //padding-left: 6px;
+      background-color: #34A7C1; 
+      color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+      content: "Private";
+      //padding-right: 6px;
+      background-color: #EEEEEE; color: #999999;
+      text-align: center;
+border: 1px solid #D9D9D9;
+}
+.onoffswitch-switch {
+      display: block; width: 50px; margin: 8.5px;
+      background: #FFFFFF;
+      border: 2px solid #FFFFF; border-radius: 11px;
+      position: absolute; top: 0; bottom: 0; right: 134px;
+      -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
+      -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s; 
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+      margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+      right: 0px; 
 }
