@@ -43,7 +43,7 @@
         <div class="topSearchBox"><!-- Search box-->
         <span class="searchIconTop"><i class="fa fa-search"></i></span>
         <div class="crossTop" ng-click="clearSearch()" ng-show="queryString.length != 0"><i class="fa fa-times-circle"></i></div>
-        <input class="mainSearch" type="text" placeholder="Search" ng-model="queryString"  ng-change="searchFunc(queryString)"></input>
+        <input class="mainSearch" type="text" placeholder="Search for courses, files and posts..." ng-model="queryString"  ng-change="searchFunc(queryString)"></input>
         <a ng-href="#/"><div class="homeTab">Home</div></a>
         </div>
         <div class="searchResult" ng-show="(searchResults.files.length != 0 || searchResults.courses.length != 0 || searchResults.posts.length != 0 )&& queryString.length != 0">
@@ -71,7 +71,7 @@
                     <div class="sImageName">
                     {[file.upload_file]}
                     </div>
-                    <div class="sImagePostedBy">  <i class="fa fa-circle c_{[file.upload_type]}" style="padding-right: 3px;"></i> {[file.upload_type]} | by {[file.username]} | on {[file.datetime_created]}</div>
+                    <div class="sImagePostedBy"><i class="fa fa-circle c_{[file.upload_type]}" style="padding-right: 3px;"></i> {[file.upload_type]} | by {[file.username]} | on {[file.datetime_created]}</div>
                   </div>
                 </a>
               </div>

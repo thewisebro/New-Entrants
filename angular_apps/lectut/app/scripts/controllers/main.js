@@ -99,12 +99,19 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
    $rootScope.whichView = "CourseHomeCtrl";  
   // ------------------------- Comments -----------------------
   $scope.loadCommentsFunc = function(id){
-    var promiseComments = Comments.getComments(id);
-          promiseComments.then(function(x){
-          console.log("-------------------");
-          console.log(id);
-          $('#postComments_'+id).append(x);
-    });
+   if($('#postComments_'+id).hasClass("open")){
+        $('#postComments_'+id).removeClass("open");
+        $('#postComments_'+id).html("");
+    }
+    else{
+      $('#postComments_'+id).addClass("open");
+      var promiseComments = Comments.getComments(id);
+            promiseComments.then(function(x){
+            console.log("------Course Home Co-----------");
+            //console.log(id);
+            $('#postComments_'+id).append(x);
+      });
+    }
   }
 
 
@@ -358,12 +365,19 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 
   // ------------------------- Comments -----------------------
   $scope.loadCommentsFunc = function(id){
-    var promiseComments = Comments.getComments(id);
-          promiseComments.then(function(x){
-          console.log("-------------------");
-          console.log(id);
-          $('#postComments_'+id).append(x);
-    });
+    if($('#postComments_'+id).hasClass("open")){
+        $('#postComments_'+id).removeClass("open");
+        $('#postComments_'+id).html("");
+    }
+    else{
+      $('#postComments_'+id).addClass("open");
+      var promiseComments = Comments.getComments(id);
+            promiseComments.then(function(x){
+            console.log("------Common fgeed commne-----------");
+            //console.log(id);
+            $('#postComments_'+id).append(x);
+      });
+    }
   }
 
   //-------------------------- Posts---------------------------
@@ -707,14 +721,20 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
 
   // ------------------------- Comments -----------------------
   $scope.loadCommentsFunc = function(id){
-    var promiseComments = Comments.getComments(id);
-          promiseComments.then(function(x){
-          console.log("-------------------");
-          console.log(id);
-          $('#postComments_'+id).append(x);
-    });
+    if($('#postComments_'+id).hasClass("open")){
+        $('#postComments_'+id).removeClass("open");
+        $('#postComments_'+id).html("");
+    }
+    else{
+      $('#postComments_'+id).addClass("open");
+      var promiseComments = Comments.getComments(id);
+            promiseComments.then(function(x){
+            console.log("------One Post Comments-----------");
+            //console.log(id);
+            $('#postComments_'+id).append(x);
+      });
+    }
   }
- 
   $scope.removeFeedPost = function(id, index){
     console.log("This is to be deleted.. "+id);
     console.log($scope.onePost);
