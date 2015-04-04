@@ -9,20 +9,20 @@
           <div class="postContentAll">
             <div class="postUserNameTime">
                 <div class="postUser">
-                  <span class="postUserName">{[oneFile.user_info.name]}</span>
-                  <span class="removeFeedPost" ng-show="logIn && post.post.upload_user == auth.user.username" ng-click="removeFeedPost(post.post.id, $index)">
+                  <span class="postUserName">{[oneFile.file.username]}</span>
+                  <span class="removeFeedPost" ng-show="logIn && oneFile.file.username == oneFile.user_info.name" ng-click="removeFeedPost(oneFile.file.post, $index)">
                     <i class="fa fa-times-circle-o"></i>
                   </span>
                 </div>
                <div class="postTime">
-                <a am-time-ago="oneFile.user_info.datetime_created" ng-href="#/course/{[coId.courseId]}/feeds/{[post.post.id]}"></a>
+                <a am-time-ago="oneFile.file.datetime_created" ng-href="#/course/{[coId.courseId]}/feeds/{[post.post.id]}"></a>
                </div>
               </div>
 
 
             <div class="filesDisplay">
               <div class="postContent">
-                <div class="removeFeedFile" ng-show="logIn && oneFile.file.username == auth.user.username" ng-click="removeFeedFile(oneFile.file.id,$parent.$index,$index)">
+                <div class="removeFeedFile" ng-show="logIn && oneFile.file.username == oneFile.user_info.name" ng-click="removeFeedFile(oneFile.file.id,$parent.$index,$index)">
                 <i class="fa fa-times"></i>
               </div>
               <div class="fileOverlay">
@@ -30,7 +30,7 @@
               </div>
               <div class="fileImage">
                 <img ng-show='oneFile.file.file_type == "image"' ng-src="{[base_domain]}/{[oneFile.file.filepath]}"></img>
-                <!-- <i ng-hide='oneFile.file_type == "image"' class="fa fa-file-{[oneFile.file_type]}-o"></i> -->
+                <i ng-show='oneFile.file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>
                 <i ng-show='oneFile.file.file_type == "other"' class="fa fa-file"></i> 
               </div>
               <div class="fileData">
