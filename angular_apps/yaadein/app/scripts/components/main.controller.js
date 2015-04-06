@@ -68,11 +68,15 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
 		if ($scope.currentNavItem.id === 'search' || $scope.currentNavItem.id === 'post') {
 			$('#centered').addClass('blur-back');
 			$('.right-sidebar').addClass('blur-back');
+      $scope.clearNewPostData();
 		} else {
       $location.path(navItem.url);
 			$('#centered').removeClass('blur-back');
 			$('.right-sidebar').removeClass('blur-back');
 		}
+    if ($scope.currentNavItem.id != 'post') {
+      $scope.clearNewPostData();
+    }
 	};
 
 	$scope.isCurrentNavItem = function (navItem) {
@@ -203,6 +207,7 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
     $scope.newPost.user_tags = [];
     $scope.newPost.image_url = [];
     $scope.images1.imageArray = [];
+    $scope.newPost.spot = [];
   };
 
   $scope.loadTags = function (query, num) {
