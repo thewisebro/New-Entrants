@@ -40,7 +40,7 @@
               <div class="tag-input-box">
                 <i class="inline fa fa-user-plus"></i>
                 <tags-input type="text" ng-model="newPost.user_tags" class="" display-property="value" placeholder="Invite friends" tabindex="0" add-from-autocomplete-only="true" replace-spaces-with-dashes="false" show-focus="true" ng-required="required">
-                   <auto-complete source="loadTags($query)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
+                   <auto-complete source="loadTags($query, 1)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
                 </tags-input>
               </div>
               <button class="invite-button" ng-click="inviteUsers()">Invite</button>
@@ -80,7 +80,7 @@
               <div class="tag-input-box">
                 <i class="inline fa fa-user-plus"></i>
                 <tags-input type="text" ng-model="newPost.user_tags" class="" display-property="value" placeholder="Tag friends" tabindex="0" add-from-autocomplete-only="true" replace-spaces-with-dashes="false" show-focus="true">
-                   <auto-complete source="loadTags($query)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
+                   <auto-complete source="loadTags($query, 4)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
                 </tags-input>
               </div>
               <div class="tag-input-box">
