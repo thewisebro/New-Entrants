@@ -333,11 +333,11 @@ def editset(request, model_name):
       l.info(request.user.username + ': Tried to edit ' + model_name + ', which is not allowed.')
       return TemplateView.as_view(template_name="404.html")
     if model_name == 'ProjectInformation':
-      editable_warning = '"Description", "Proirity" and "Visible" fields will be editable once Verified'
+      editable_warning = '"Description", "Priority" and "Visible" fields will be editable once Verified'
     elif model_name == 'LanguagesKnown':
       editable_warning = 'Will not be editable once Locked'
     else:
-      editable_warning = '"Proirity" and "Visible" fields will be editable once Verified'
+      editable_warning = '"Priority" and "Visible" fields will be editable once Verified'
 
     model_type = globals()[model_name]
     if plac_person.status in ('LCK', 'VRF') :

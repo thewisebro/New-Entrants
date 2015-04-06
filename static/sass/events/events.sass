@@ -19,14 +19,12 @@
 
 #month-name
   float: left
-  font-family: "Tahoma"
   font-size: 14px
   color: $blue-link
   cursor: pointer
 
 #month-nav
   float: left
-  font-family: "Tahoma"
   font-size: 14px
   color: $blue-link
   cursor: pointer
@@ -47,7 +45,6 @@
     width: 27px
     height: 27px
     float: left
-    font-family: "Tahoma"
     font-size: 11px
     text-align: center
     color: #606060
@@ -57,7 +54,6 @@
     width: 27px
     height: 27px
     float: left
-    font-family: "Tahoma"
     font-size: 11px
     text-align: center
     color: #606060
@@ -80,7 +76,6 @@
 #labels-header
   width: 100%
   height: 20px
-  font-family: "Tahoma"
   font-size: 14px
   color: #404040
   border-bottom: 1px solid $border-light-gray
@@ -95,12 +90,15 @@
 
 .label:hover
   background: #f4f4f4
+  // blue: #23B7E5
+  // puple: #7266ba
+  // green: #37BC9B
+  // yellow: #fad733
 
 .label-name
   float: left
   margin-left: 8px
   font-size: 13px
-  font-family: "Tahoma"
   line-height: 15px
 
 .active-label
@@ -121,7 +119,6 @@
 #events-head
   padding: 10px 0px 0px 5px
   color: $blue-link
-  font: 14px "Tahoma"
 
 .event-container
   margin-top: 10px
@@ -133,20 +130,15 @@
 
 .event-type-head
   height: 16px
-  padding: 3px 0px 3px 5px
-  font-family: "Tahoma"
+  //padding: 3px 0px 3px 5px
   font-size: 13px
   line-height: 16px
   color: #202020
-
-.event
-  margin-top: 15px
-  margin-bottom: 10px
+  margin-left: 65px
 
 .event-shown-calendar-name
   margin-right: 2px
   float: right
-  font-family: "Tahoma"
   font-size: 12px
   color: $gray-text
 
@@ -157,35 +149,38 @@
 
 .event-time
   float: left
-  width: 60px
+  width: 50px
+  height: 50px
   min-height: 20px
-  padding: 0px 5px 0px 5px
   font-size: 12px
   line-height: 20px
-  font-family: "Tahoma"
-  color: $blue-link
+  color: $white
   text-align: center
+  background: #37BC9B
+  border-radius: 2px
+  margin-bottom: 10px
 
 .event-name
   float: left
   min-height: 16px
   margin-left: 15px
   font-family: "Arial",sans-serif
-  font-size: 13px
+  font-size: 14px
   font-weight: bold
-  line-height: 16px
+  //line-height: 16px
   color: #575757
-  max-width: 415px
+  max-width: 85%
   padding-bottom: 4px
   overflow-x: hidden
+  padding-top: 2px
 
 .event-by, .event-place, .event-short-description, .event-duration
-  margin-left: 56px
+  margin-left: 36px
   padding: 4px 0px
   border-bottom: 1px solid $border-light-gray
 
 .event-by, .event-place, .event-duration
-  min-height: 14px
+  min-height: 20px
   margin-top: 4px
   margin-bottom: 2px
 
@@ -207,44 +202,70 @@
 
 .event-left
   float: left
-  font-size: 12px
-  font-family: "Tahoma"
-  color: #404040
+  font-size: 14px
+  color: #656565
   line-height: 15px
   height: 12px
   width: 12px
+  text-align: center
+
+.event-place
+  .event-left
+    font-size: 18px
 
 .event-duration
-  margin-left: 25px
   .event-left
-    width: 43px
+    font-size: 16px
     text-align: right
+
+.event-by
+  .event-left
+    font-size: 13px
+    font-weight: bold
 
 .event-right
   float: left
   margin-left: 16px
-  font-size: 12px
-  font-family: "Tahoma"
+  font-size: 13px
   color: #505050
   overflow: hidden
-  text-align: justify
-  max-width: 400px
+  max-width: 94%
+  line-height: 18px
   a
     text-decoration: none
     color: $blue-link
 
+.event-date
+  font-size: 25px
+  padding-top: 8px
+
+.event-monthyear
+  font-weight: bold
+
+.event-weekday
+  background: $white
+  padding: 0px 5px
+  border: 1px solid #DBDBDB
+  color: #888
+  border-radius: 2px
+  font-size: 12px
+  margin-right: 10px
+
 .event-short-description .event-right
-  margin-bottom: 4px
   overflow: visible
+  line-height: 1.6 !important
+  margin-top: -2px
   img
     width: 250px !important
     height: auto !important
     border: 1px solid $border-light-gray
     cursor: pointer
+    margin-top: 3px
+  p
+    margin-bottom: 2px
 
 #add-event-div
   margin-top: 8px
-  font-family: "Tahoma"
   font-size: 13px
   color: $blue-link
   cursor: pointer

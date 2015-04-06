@@ -17,7 +17,7 @@ class PlacementPerson(models.Model):
   placed_company_category = models.CharField(max_length=3,null=True,blank=True,choices=PC.COMPANY_CATEGORY_CHOICES)
   no_of_companies_placed = models.IntegerField(default=0)
   status = models.CharField(max_length=3, choices=PC.PLACEMENT_STATUS_CHOICES, default='CLS')
-  photo = models.AutoDeleteImageField(upload_to='placement/photos/',null=True,blank=True,help_text="<span style='margin-left:-70px;font-size:0.9em;'>Recommended size: <b>35mm width x 45mm height</b></span>")
+  photo = models.AutoDeleteImageField(upload_to='placement/photos/',null=True,blank=True,help_text="<span style='font-size:0.9em;'>Recommended size: <b>35mm width x 45mm height</b></span>")
   is_debarred = models.BooleanField(default=False)
   def __unicode__(self):
     return str(self.status) + str(self.student) + str(self.photo)
@@ -183,6 +183,7 @@ class Company(models.Model):
   # Sector cannot be blank. Also the sector 'VER' is reserved for the full resume for verification.
   # It decides what kind of resume will be submitted to the company.
   sector = models.CharField(max_length=3, choices=PC.COMPANY_RESUME_CHOICES)
+  category_required = models.BooleanField(default=False)
   def __unicode__(self):
     return str(self.name)
 

@@ -119,7 +119,7 @@ app.service('Members', ['$http','$q',
       function($http, $q){
         var deferred;
           this.getMembers = function(id){
-          var urlSend = base_domain+'/lectut_api/members/'+3+'/'; 
+          var urlSend = base_domain+'/lectut_api/members/'+id+'/'; 
           deferred = $q.defer();
            $http.post(urlSend).success(function(d){
           deferred.resolve(d);
@@ -134,7 +134,8 @@ app.service('LoadFeed', ['$http','$q',
       function($http, $q){
         var deferred;
           this.loadFeed = function(id){
-          var urlSend = base_domain+'/lectut_api/feeds/'+id+'/'; 
+          var urlSend = base_domain+'/lectut_api/feeds/'+id+'/';
+          console.log(urlSend);
           deferred = $q.defer();
           $http.post(urlSend, {dataId: id}).success(function(d){
               deferred.resolve(d);
@@ -148,8 +149,8 @@ app.service('LoadFeed', ['$http','$q',
 app.service('LoadOnePost', ['$http','$q',
       function($http, $q){
         var deferred;
-          this.getOnePost = function(postId){
-          var urlSend = base_domain+'/lectut_api/feeds/'+3+'/'+ postId+'/';
+          this.getOnePost = function(courseId,postId){
+          var urlSend = base_domain+'/lectut_api/feeds/'+courseId+'/'+ postId+'/';
           deferred = $q.defer();
           $http.post(urlSend).success(function(d){
               deferred.resolve(d);
@@ -160,6 +161,20 @@ app.service('LoadOnePost', ['$http','$q',
         };
 }]);
 
+app.service('LoadOneFile', ['$http','$q',
+      function($http, $q){
+        var deferred;
+          this.getOneFile = function(courseId,fileId){
+          var urlSend = base_domain+'/lectut_api/feeds/file/'+courseId+'/'+ fileId+'/';
+          deferred = $q.defer();
+          $http.post(urlSend).success(function(d){
+              deferred.resolve(d);
+          }).error(function(d){
+            console.log("error");
+          });
+          return deferred.promise;
+        };
+}]);
 
 app.service('SearchService', ['$http','$q',
       function($http, $q){

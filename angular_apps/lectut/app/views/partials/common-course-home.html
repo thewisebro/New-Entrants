@@ -1,3 +1,62 @@
-<div class="commonCourse">
-Waka Wkaa  
+<div class="courseFeeds">
+
+  <div class="postDiv" ng-repeat="post in commonPosts">
+    <div class="mainPost">
+      <div class="postUserPic">
+          <img ng-src="{[base_domain]}{[post.post.user_image]}"></img>
+      </div>
+      <div class="postData">
+          <div class="postUserNameTime">
+            <div class="postUser">
+              <span class="postUserName">{[post.post.upload_user]}</span>
+              <span class="removeFeedPost" ng-show="logIn && auth.user.name == post.post.upload_user" ng-click="removeFeedPost(post.post.id, $index)">
+                  <i class="fa fa-times-circle-o"></i>
+              </span>
+            </div>
+            <div class="postTime">
+              <a am-time-ago="post.post.datetime_created" ng-href="#/course/{[post.post.batch.id]}/feeds/{[post.post.id]}"></a>
+            </div>
+          </div>
+          <div class="postContentAll">
+              <div class="postText">
+                {[post.post.content]}
+              </div>
+              <div class="filesDisplay" ng-show="post.files.length > 0" >
+                  <div class="postContent" ng-repeat="file in post.files">
+                    <div class="removeFeedFile" ng-show="logIn && auth.user.name == file.username" ng-click="removeFeedFile(file.id,$parent.$index,$index)">
+                      <i class="fa fa-times"></i>
+                    </div>
+                    <div class="fileOverlay">
+                      <a download ng-href="{[base_domain]}/lectut_api/download/{[file.id]}"><i class="fa fa-arrow-down"></i></a>
+                    </div>
+                    <div class="fileImage">
+                       <img ng-show='file.file_type == "image"' ng-src="{[base_domain]}/{[file.filepath]}"></img>
+                       <i ng-hide='file.file_type == "image"' class="fa fa-file-{[file.file_type]}-o"></i>
+                       <i ng-show='file.file_type == "ppt"' class="fa fa-file-powerpoint-o"></i>
+                       <i ng-hide='file.file_type == "zip"' class="fa fa-file-archive-o"></i>
+                       <i ng-show='file.file_type == "other"' class="fa fa-file"></i> 
+                    </div>
+                    <div class="fileData">
+                       <div class="filename">
+                          <a ng-href="#/course/{[post.post.batch.id]}/files/{[file.id]}">{[file.upload_file]}</a>
+                       </div>
+                       <div class="fileType">
+                            <i class="fa fa-circle c_{[file.upload_type]}" style="padding-right: 3px;"></i>
+                           {[file.upload_type]}
+                       </div>
+                    </div>
+                  </div>   
+              </div> 
+          </div>
+        </div>
+        <div class="commentsBlock" ng-show="logIn">
+          <div ng-click="loadCommentsFunc(post.post.id)" class="showHideComments">
+            Comments <span class="commentsCount">3</span>
+          </div>
+          <div id="postComments_{[post.post.id]}" class="loadComments">
+            
+          </div>
+        </div>
+</div>
+
 </div>

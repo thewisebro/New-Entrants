@@ -40,15 +40,15 @@
     </div>
   </div>
   <div id="groups-container">
-    <div id="content-top-bar">
-      <div id="activity-tab" class="content-tab {% block activity-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/activity'">Activity</div>
-      <div class="content-tab {% block about-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}'">About</div>
-      <div class="content-tab {% block members-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/members'">Members</div>
-      <div class="content-tab {% block events-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/events'">Events</div>
+    <table id="content-top-bar">
+      <td id="activity-tab" class="content-tab {% block activity-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/activity'">Activity</td>
+      <td class="content-tab {% block about-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}'">About</td>
+      <td class="content-tab {% block members-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/members'">Members</td>
+      <td class="content-tab {% block events-tab-class %}{% endblock %}" onclick="location ='/#groups/{{username}}/events'">Events</td>
       {% if can_edit %}
-        <!--<div class="content-tab {% block edit-tab-class %}{% endblock %}" onclick="location = '/#groups/{{group.user.username}}/edit'">Edit</div>-->
+        <td class="content-tab {% block edit-tab-class %}{% endblock %}" onclick="location = '/#groups/{{group.user.username}}/edit'">Edit</td>
       {% endif %}
-    </div>
+      </table>
     <div id="groups-content">
      {% block group_content %}
      {% endblock group_content %}
