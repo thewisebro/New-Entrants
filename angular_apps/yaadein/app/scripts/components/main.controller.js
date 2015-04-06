@@ -205,10 +205,14 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
     $scope.images1.imageArray = [];
   };
 
-  $scope.loadTags = function (query) {
+  $scope.loadTags = function (query, num) {
     var defer = $q.defer();
-    $http.get(originURL + '/yaadein_api/search/4/?q=' + query, {ignoreLoadingBar: true})
+    $http.get(originURL + '/yaadein_api/search/' + num + '/?q=' + query, {ignoreLoadingBar: true})
       .success(function (d) {
+          console.log(d.results);
+          for(var i = 0; i < d.results.length; i += 1) {
+            d.results[i].value += ' (' + d.results[i].label + ')';
+          }
           defer.resolve(d.results);
     });
     return defer.promise;
