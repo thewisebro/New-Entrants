@@ -349,8 +349,10 @@ def search(request,id):
        return HttpResponse(simplejson.dumps(data),'application/json') 
      query = request.GET.get('q','')
 #   import ipdb;ipdb.set_trace()
-     students = Student.objects.filter(Q(user__name__icontains = query)).order_by('-user__name')[:10]
-     students_final = Student.objects.filter(Q(user__name__icontains = query)).filter(branch__no_of_semesters = F('semester_no')).order_by('-user__name')[:10]
+     students = Student.objects.filter(Q(user__name__icontains = query)).order_by('-user__name')
+     students = prefix_filter(students,query)[:10]
+     students_final = Student.objects.filter(Q(user__name__icontains = query)).filter(branch__no_of_semesters = F('semester_no')).order_by('-user__name')
+     students_final = prefix_filter(students_final,query)[:10]
      def person_dict(student):
        return {
          'id':student.user.username,
@@ -358,7 +360,8 @@ def search(request,id):
          'value':student.user.name,
          'profile_pic':student.user.photo_url
         }
-     spots = Spot.objects.filter(Q(name__icontains = query)).order_by('-name')[:10]
+     spots = Spot.objects.filter(Q(name__icontains = query)).order_by('-name')
+     spots = prefix_filter(spots,query)[:10]
      def spot_dict(spot):
        return {
          'id':spot.name,
@@ -620,7 +623,14 @@ def bubble(bad_list):
       if bad_list[i].post_date < bad_list[i+1].post_date:
         sorted = False
         bad_list[i], bad_list[i+1] = bad_list[i+1], bad_list[i]
-  return bad_list    
+  return bad_list
+
+def prefix_filter(bad_list,query):
+  x=[]
+  for i in bad_list:
+    if i.name.lower().startswith(query):
+      x.append(i)
+  return x
   """
 class TagIndexView(ListView):
 # template_name = 'yaadein/tagged.html'
