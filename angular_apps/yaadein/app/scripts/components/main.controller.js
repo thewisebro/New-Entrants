@@ -68,11 +68,15 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
 		if ($scope.currentNavItem.id === 'search' || $scope.currentNavItem.id === 'post') {
 			$('#centered').addClass('blur-back');
 			$('.right-sidebar').addClass('blur-back');
+      $scope.clearNewPostData('');
 		} else {
       $location.path(navItem.url);
 			$('#centered').removeClass('blur-back');
 			$('.right-sidebar').removeClass('blur-back');
 		}
+    if ($scope.currentNavItem.id != 'post') {
+      $scope.clearNewPostData('Type memory here');
+    }
 	};
 
 	$scope.isCurrentNavItem = function (navItem) {
@@ -93,7 +97,7 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
 		$('.right-sidebar').removeClass('blur-back');
 		$('#postBox').fadeOut(300);
 		$scope.setCurrentNavItem($scope.navigationItems[1]);
-    $scope.clearNewPostData();
+    $scope.clearNewPostData('Type memory here');
 	};
 
 	$scope.closeSearch = function () {
@@ -198,17 +202,21 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
   //    }
   //});
 
-  $scope.clearNewPostData = function () {
-    $scope.newPost.post_text = '';
+  $scope.clearNewPostData = function (x) {
+    $scope.newPost.post_text = x;
     $scope.newPost.user_tags = [];
     $scope.newPost.image_url = [];
     $scope.images1.imageArray = [];
+    $scope.newPost.spot = [];
   };
 
-  $scope.loadTags = function (query) {
+  $scope.loadTags = function (query, num) {
     var defer = $q.defer();
-    $http.get(originURL + '/yaadein_api/search/4/?q=' + query, {ignoreLoadingBar: true})
+    $http.get(originURL + '/yaadein_api/search/' + num + '/?q=' + query, {ignoreLoadingBar: true})
       .success(function (d) {
+          for(var i = 0; i < d.results.length; i += 1) {
+            d.results[i].value += ' (' + d.results[i].label + ')';
+          }
           defer.resolve(d.results);
     });
     return defer.promise;

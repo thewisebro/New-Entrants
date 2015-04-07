@@ -99,12 +99,19 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
    $rootScope.whichView = "CourseHomeCtrl";  
   // ------------------------- Comments -----------------------
   $scope.loadCommentsFunc = function(id){
-    var promiseComments = Comments.getComments(id);
-          promiseComments.then(function(x){
-          console.log("-------------------");
-          console.log(id);
-          $('#postComments_'+id).append(x);
-    });
+   if($('#postComments_'+id).hasClass("open")){
+        $('#postComments_'+id).removeClass("open");
+        $('#postComments_'+id).html("");
+    }
+    else{
+      $('#postComments_'+id).addClass("open");
+      var promiseComments = Comments.getComments(id);
+            promiseComments.then(function(x){
+            console.log("------Course Home Co-----------");
+            //console.log(id);
+            $('#postComments_'+id).append(x);
+      });
+    }
   }
 
 
@@ -271,7 +278,8 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
       data: {
         user: "harshithere",
         formText: content,
-        typeData: typeArray
+        typeData: typeArray,
+        privacy: !$scope.privacy
       },
       withCredentials: true,
       //and all other angular $http() options could be used here.
@@ -342,6 +350,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 
           console.log("Things dajlksdjsa ld");
           console.log(things);
+          console.log(!$scope.privacy);
           upload(things,typeData,$scope.thing.content);
           //console.log("----------------");
           console.log(typeData);
@@ -356,12 +365,19 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 
   // ------------------------- Comments -----------------------
   $scope.loadCommentsFunc = function(id){
-    var promiseComments = Comments.getComments(id);
-          promiseComments.then(function(x){
-          console.log("-------------------");
-          console.log(id);
-          $('#postComments_'+id).append(x);
-    });
+    if($('#postComments_'+id).hasClass("open")){
+        $('#postComments_'+id).removeClass("open");
+        $('#postComments_'+id).html("");
+    }
+    else{
+      $('#postComments_'+id).addClass("open");
+      var promiseComments = Comments.getComments(id);
+            promiseComments.then(function(x){
+            console.log("------Common fgeed commne-----------");
+            //console.log(id);
+            $('#postComments_'+id).append(x);
+      });
+    }
   }
 
   //-------------------------- Posts---------------------------
@@ -699,20 +715,26 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
     $rootScope.whichView = "CourseOnePostCtrl";
     var promiseMembers = LoadOnePost.getOnePost($routeParams.courseId,$routeParams.postId);
     promiseMembers.then(function(d){
-      $scope.onePost = d;
-      //console.log(d);
+      $scope.onePost = d.post;
+      console.log(d);
     });
 
   // ------------------------- Comments -----------------------
   $scope.loadCommentsFunc = function(id){
-    var promiseComments = Comments.getComments(id);
-          promiseComments.then(function(x){
-          console.log("-------------------");
-          console.log(id);
-          $('#postComments_'+id).append(x);
-    });
+    if($('#postComments_'+id).hasClass("open")){
+        $('#postComments_'+id).removeClass("open");
+        $('#postComments_'+id).html("");
+    }
+    else{
+      $('#postComments_'+id).addClass("open");
+      var promiseComments = Comments.getComments(id);
+            promiseComments.then(function(x){
+            console.log("------One Post Comments-----------");
+            //console.log(id);
+            $('#postComments_'+id).append(x);
+      });
+    }
   }
- 
   $scope.removeFeedPost = function(id, index){
     console.log("This is to be deleted.. "+id);
     console.log($scope.onePost);

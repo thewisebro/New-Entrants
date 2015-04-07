@@ -20,7 +20,6 @@ from notices.utils import *
 import pytz
 from datetime import datetime
 
-privelege=0
 PeopleProxyUrl = "http://people.iitr.ernet.in/"
 
 def index(request):
@@ -36,6 +35,7 @@ def index(request):
 @login_required
 def upload(request):
   category = None
+  privelege = request.user.uploader_set.all().exists()
   categories = request.user.category_set.all()
   form = DummyForm()
   if (privelege and request.method == 'POST' and request.POST.has_key('category_name') and request.POST['category_name']):
@@ -57,8 +57,8 @@ def upload(request):
 
 class PrivelegeJsonView(TemplateView):
   def get(self, request):
-    global privelege
     privelege = request.user.uploader_set.all().exists()
+    print "privelege1 " + str(privelege)
     privelege1 = {'privelege' : privelege}
     privelege_json = simplejson.dumps(privelege1)
     return HttpResponse(privelege_json, content_type="application/json")
@@ -283,7 +283,7 @@ class Read_notice_list(TemplateView):
 class Show_Uploads(ListAPIView):
   def get_queryset(self):
     queryset = []
-    print privelege, "asd"
+    privelege = self.request.user.uploader_set.all().exists()
     if privelege:
       uploaders = self.request.user.uploader_set.all()
       for i in uploaders:
@@ -295,6 +295,7 @@ class Show_Uploads(ListAPIView):
 def edit(request, pk):
   NoticeForm = EditForm()
   n = Notice.objects.get(id=pk)
+  privelege = request.user.uploader_set.all().exists()
   if request.method == 'POST' and privelege:
     form = EditForm(request.POST)
     if form.is_valid():
@@ -327,6 +328,7 @@ def edit(request, pk):
 @login_required
 def delete(request, pk):
   n = Notice.objects.get(id=pk)
+  privelege = request.user.uploader_set.all().exists()
   if privelege:
     tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=-1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created)
     tnotice.save()

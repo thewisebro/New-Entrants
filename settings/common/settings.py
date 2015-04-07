@@ -94,7 +94,7 @@ USE_I18N = True
 USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = False
+USE_TZ = True
 
 SITES = {
   'INTRANET': {'id': 1, 'domain': 'https://channeli.in'},
