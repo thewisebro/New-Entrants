@@ -1,0 +1,47 @@
+/* animations.scss */
+
+.slide.ng-enter,
+.slide.ng-leave {
+	@include transition(450ms cubic-bezier(0.250, 0.460, 0.450, 0.940) all);
+	position: absolute;
+	top: 0;
+	display: block;
+}
+.slide.ng-enter {
+	@include transform(translateX(-100%));
+}
+.slide.ng-enter-active {
+	@include transform(translateX(0));
+}
+.slide.ng-leave {
+	@include transform(translateX(0));
+}
+.slide.ng-leave-active {
+	@include transform(translateX(100%));
+}
+
+.fade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  opacity: 1;
+}
+
+.fade.ng-enter,
+.fade.ng-leave {
+  @include transition(500ms cubic-bezier(0.250, 0.460, 0.450, 0.940) all);
+}
+.fade.ng-enter {
+  opacity: 0;
+}
+.fade.ng-enter-active {
+  opacity: 1;
+}
+.fade.ng-leave {
+  opacity: 1;
+}
+.fade.ng-leave-active {
+  opacity: 0;
+}

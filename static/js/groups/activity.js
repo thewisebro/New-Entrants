@@ -3,7 +3,9 @@ var activities_per_request = 20;
 var more_activities=true;
 
 function update_activities(action){
-  $.post("/groups/fetch_activities",
+  if(activities.length == 0 && action == 'next')
+    action = 'first';
+  $.get("/groups/fetch_activities",
     {'action' : action,
      'id' : (activities.length ? activities[activities.length-1].id : null),
      'number' : activities_per_request,
@@ -11,7 +13,6 @@ function update_activities(action){
     },
     function(data){
         activities = activities.concat(data.activities);
-        console.log(activities);
         more_activities = data.more?true:false;
         display_add_activities('end',data.activities);
     }
@@ -23,10 +24,11 @@ function activity_html(activity){
     "<div class='feed-box'>"+
       "<img class='feed-propic' src='/photo/"+group_username+"/'/>"+
         "<div class='feed-text'>"+
-          "<div class='feed-line'><div class='feed-heading'>"+group_name+"</div></div>"+
-        "<!--<div class='feed-right'>"+
-          "<div class='feed-time'>"+prettyDate(activity.datetime)+"</div>"+
-        "</div>-->"+
+          "<div class='feed-line'><div class='feed-heading'>"+group_name+"</div>"+
+            "<div class='feed-right'>"+
+              "<div class='feed-time'>"+prettyDate(activity.datetime)+"</div>"+
+            "</div>"+
+          "</div>"+
         "<div class='feed-description'>"+activity.text+"</div>"+
     "</div>";
 }
@@ -34,7 +36,6 @@ function activity_html(activity){
 function display_add_activities(position,activities){
  for(var i=0;i<activities.length;i++){
 //   try{
-     console.log("xyz");
      if(position == 'end')
        $('#activities').append(activity_html(activities[i]));
      else

@@ -57,7 +57,7 @@ def is_user_django_loginable(user, password):
   or webmail is not working
   or webmail username/password matches.
   """
-  if user.is_active:
+  if user.is_active or not settings.PRODUCTION:
     return True
   webmail_matched = None
   result = check_webmail_login(user.username, password)

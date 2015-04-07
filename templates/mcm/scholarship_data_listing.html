@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>Scholarship Data</title>
+  </head>
+  <body style="margin:0; padding:20px; background-color:#aaaaab">
+    <div class="container"i style="width:1000px; margin:0 auto; font-family:sans-serif; text-align:center">
+      <h1 style="color:#fdfbfc">Scholarship Data Retrieval</h1>
+      <h3>Please click on link to download the excel file</h3>
+      <div class="MCM">
+        <h2>MCM</h2>
+        {% for degree in MCM %}
+          <div>
+            <a href="/scholarships/export/data/?degree={{ degree }}&scholarship_type=MCM">{{ degree }}</a>
+          </div>
+        {% endfor %}
+      </div>
+      <br>
+      <div class="FreeMessing">
+        <h2>Free Messing</h2>
+        {% for degree in FreeMessing %}
+          <div>
+            <a href="/scholarships/export/data/?degree={{ degree }}&scholarship_type=GIS">{{ degree }}</a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

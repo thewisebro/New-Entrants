@@ -1,0 +1,49 @@
+
+     <div class="courseFeeds">
+      <div class="postDiv">
+       <div class="mainPost">
+        <div class="postUserPic">
+          <img ng-src="{[base_domain]}{[oneFile.user_info.photo]}">
+        </div>
+        <div class="postData">
+          <div class="postContentAll">
+            <div class="postUserNameTime">
+                <div class="postUser">
+                  <span class="postUserName">{[oneFile.file.username]}</span>
+                  <span class="removeFeedPost" ng-show="logIn && oneFile.file.username == oneFile.user_info.name" ng-click="removeFeedPost(oneFile.file.post, $index)">
+                    <i class="fa fa-times-circle-o"></i>
+                  </span>
+                </div>
+               <div class="postTime">
+                <a am-time-ago="oneFile.file.datetime_created" ng-href="#/course/{[coId.courseId]}/feeds/{[post.post.id]}"></a>
+               </div>
+              </div>
+
+
+            <div class="filesDisplay">
+              <div class="postContent">
+                <div class="removeFeedFile" ng-show="logIn && oneFile.file.username == oneFile.user_info.name" ng-click="removeFeedFile(oneFile.file.id,$parent.$index,$index)">
+                <i class="fa fa-times"></i>
+              </div>
+              <div class="fileOverlay">
+                <a download ng-href="{[base_domain]}/lectut_api/download/{[oneFile.file.id]}"><i class="fa fa-arrow-down"></i></a>
+              </div>
+              <div class="fileImage">
+                <img ng-show='oneFile.file.file_type == "image"' ng-src="{[base_domain]}/{[oneFile.file.filepath]}"></img>
+                <i ng-show='oneFile.file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>
+                <i ng-show='oneFile.file.file_type == "other"' class="fa fa-file"></i> 
+              </div>
+              <div class="fileData">
+              <div class="filename">
+                {[oneFile.file.upload_file]}
+              </div>
+              <div class="fileType">
+                <i class="fa fa-circle c_{[oneFile.file.upload_type]}" style="padding-right: 3px;"></i>
+                {[oneFile.file.upload_type]}
+              </div>
+            </div>
+          </div>   
+        </div>
+       </div>
+      </div>
+     </div>

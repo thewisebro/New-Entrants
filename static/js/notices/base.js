@@ -56,8 +56,8 @@ function initialize_global_variables()
 
 function first_time_functions()                 //This function is responsible for calling 6 important basic functions to store necessary data
 {
-    $("#global_search_bar").val("");
-    $("#global_search_bar").attr('placeholder', 'Search In Notices');
+    $("#search-inp").val("");
+    $("#search-inp").attr('placeholder', 'Search notices');
     get_privelege();                            //First time function 1
 }
 
@@ -79,8 +79,7 @@ $(document).on("load_app_notices", function(e, hash1, hash2, hash3, hash4, hash5
 
 $(document).on("unload_app_notices", function(e, hash1, hash2, hash3, hash4, hash5){
     $("#container").removeAttr("class")
-    $("#global_search_bar").val("");
-    $("#global_search_bar").attr('placeholder', 'Search here');
+    $("#search-inp").attr('placeholder', 'Search notices');
     $("#content").empty();
 });
 
@@ -121,14 +120,6 @@ $(document).on("logout", function(){
     hashtags = [h1, h2, h3, h4, h5];
     $(document).trigger("load_app_notices", hashtags);
   }
-});
-
-$('#global_search_bar').on("keydown", function(event){
-        if(event.which==13 && nucleus.get_current_app()=="notices")
-              {
-                      console.log("search_global_bar");
-                      set_search_string();
-              }
 });
 
 function redirection()            //The main controller function which defines the function path, execution will follow
@@ -204,7 +195,7 @@ function redirection()            //The main controller function which defines t
           h3="All";
           h4="All";
           h5="1";
-          $("#global_search_bar").val("");
+          $("#search-inp").val("");
           if(static_divs_created==0)
           {
             create_static_divs();
@@ -245,7 +236,7 @@ function redirection()            //The main controller function which defines t
           $("#category_name").text(m_category);
         else
           $("#category_name").text(sub_category);
-        $("#global_search_bar").attr('placeholder', 'Search In Notices');
+        $("#search-inp").attr('placeholder', 'Search notices');
 
       
         if(main_mode=="display")
@@ -335,8 +326,7 @@ function redirection()            //The main controller function which defines t
         }
         else if(main_mode=="search")
         {
-            $("#global_search_bar").val("");
-            $("#global_search_bar").attr('placeholder', search_string);
+            $("#search-inp").val(search_string);
             if(same_except_page_no && !search_string_changed)
             {
               load_numbers_bar(search_total_pages, "search_");
@@ -345,6 +335,7 @@ function redirection()            //The main controller function which defines t
             }
             else
             {
+              console.log("calling bring_search_results");
               search_string_changed = 0;
               bring_search_results();
             }
@@ -369,6 +360,7 @@ function create_static_divs()                //Create static buttons like upload
       $('#notices-header').append(load_cat_bar_html(m_category));
     else
       $('#notices-header').append(load_cat_bar_html(sub_category));
+    $('#notices-header').append(search_bar_html());
     $('#content').append('<div id="filters"></div>');
     $('#filters').append('<div id="breadcrumbs_container"><div id="breadcrumbs"></div></div>');
     $('#filters').append(newold_buttons_html());
@@ -647,9 +639,9 @@ function display_notice(id)
 function set_search_string()
 {
       console.log("entered search");
-      if($("#global_search_bar").val()!=search_string)
+      if($("#search-inp").val()!=search_string)
         search_string_changed=1;
-      search_string = $("#global_search_bar").val();
+      search_string = $("#search-inp").val();
       search_change_page(1);
 }
 
@@ -1272,6 +1264,16 @@ function bind_unbind_tooltip()
         });
 }
 
+function search_keydown(event)
+{
+    if(event.which==13)
+          {
+                  console.log("search_global_bar");
+                  set_search_string();
+          }
+}
+
+
 function stop_propagation(e)
 {
     console.log("entered stop_propagtion");
@@ -1577,6 +1579,11 @@ function display_sub_categories_html(initi, finali, main_category)
 function list_notices_html()
 {
     return Handlebars.notices_templates.list_notices(context);
+}
+
+function search_bar_html()
+{
+    return Handlebars.notices_templates.search_bar();
 }
 
 function create_breadcrumb_html(tag, code)
