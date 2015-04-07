@@ -202,8 +202,8 @@ class NoticeSearch(ListAPIView):
     if query[:2]==">>":
       print "abcd"
       query=query[2:].split("-")
-      init_date = pytz.utc.localize(datetime.fromtimestamp(int(query[0])/1000.0))     #make the object aware from unaware
-      final_date = pytz.utc.localize(datetime.fromtimestamp(int(query[1])/1000.0))
+      init_date = datetime.fromtimestamp(int(query[0])/1000.0)     #make the object aware from unaware
+      final_date = datetime.fromtimestamp(int(query[1])/1000.0)
       queryset = query1.filter(datetime_modified__gt=init_date).filter(datetime_modified__lt=final_date)
 
     else:
