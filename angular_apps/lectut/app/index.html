@@ -44,7 +44,7 @@
         <span class="searchIconTop"><i class="fa fa-search"></i></span>
         <div class="crossTop" ng-click="clearSearch()" ng-show="queryString.length != 0"><i class="fa fa-times-circle"></i></div>
         <input class="mainSearch" type="text" placeholder="Search for courses, files and posts..." ng-model="queryString"  ng-change="searchFunc(queryString)"></input>
-        <a ng-href="#/"><div class="homeTab">Home</div></a>
+        <a ng-href="#/" ng-class="{activeHome:isHome('/')}"><div class="homeTab">Home</div></a>
         </div>
         <div class="searchResult" ng-show="(searchResults.files.length != 0 || searchResults.courses.length != 0 || searchResults.posts.length != 0 )&& queryString.length != 0">
             <div class="searchFor">Search results for <span class="textHighlightSearch">{[queryString]}</span></div>
@@ -116,9 +116,9 @@
                To view your courses
                <div class="signInButton" ng-click="">Sign In</div>
             </div>
-            <ul class="myCourseUl" ng-show="logIn" ng-init="selectedCourse='{[selectedCourse]}'">
+            <ul class="myCourseUl" ng-show="logIn">
                <a class="crsA" ng-repeat="crs in auth.batches" ng-href="#/course/{[crs.id]}/feeds">
-                 <li class="crsLi" ng-click="getFeedData(crs.id);" ng-class="{'activeCourse':selectedCourse == '{[crs.id]}'}" >
+                 <li class="crsLi" ng-click="getFeedData(crs.id);" ng-class="{'activeCourse':isActive('/course/{[crs.id]}/')}" >
                    <div class="crsIdName"> 
                     <div class="crsId">
                       <span>{[::crs.code]}</span>
@@ -155,21 +155,21 @@
       </div>
 
      <div class="courseFilters" ng-hide="$root.whichView == 'CourseHomeCtrl'">
-       <ul ng-init="selectedTab = 'feeds'">
+       <ul>
 
-          <a ng-href="#/course/{[courseId.courseId]}/feeds" ng-class="{'activeFilter':selectedTab === 'feeds'}" ng-click="selectedTab = 'feeds'">
+          <a ng-href="#/course/{[courseId.courseId]}/feeds" ng-class="{'activeFilter':isActiveTab('/course/{[::courseId.courseId]}/feeds')}">
             <li ng-click='getFeedData(courseId.courseId)' >
                 Feed
             </li>
           </a>
           <span class="vertLine"></span>
-          <a ng-href="#/course/{[courseId.courseId]}/files" ng-class="{'activeFilter':selectedTab === 'files'}" ng-click="selectedTab = 'files'">
+          <a ng-href="#/course/{[courseId.courseId]}/files" ng-class="{'activeFilter':isActiveTab('/course/{[::courseId.courseId]}/files')}">
             <li ng-click='getFeedData(courseId.courseId)'>
                 Files
             </li>
           </a>
           <span class="vertLine" ng-show="logIn"></span>
-          <a ng-show="logIn" ng-href="#/course/{[courseId.courseId]}/members" ng-class="{'activeFilter':selectedTab === 'members'}" ng-click="selectedTab = 'members'">
+          <a ng-show="logIn" ng-href="#/course/{[courseId.courseId]}/members" ng-class="{'activeFilter':isActiveTab('/course/{[::courseId.courseId]}/members')}">
             <li ng-click='getFeedData(courseId.courseId)'>
                 Members
             </li>

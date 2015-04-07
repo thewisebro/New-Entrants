@@ -85,6 +85,13 @@ body {
 }
 // Main blocks 
 
+.activeHome{
+  .homeTab{
+     border-bottom: 3px solid #f62459 !important;
+     color: #f62459;
+     padding-bottom: 8px;
+  }
+}
 .header{
   position:fixed;
   left: 0px;
@@ -98,7 +105,7 @@ body {
     .homeTab{
        float: right;
        margin-right: 247px;
-       margin-top: 16px;
+       margin-top: 21px;
        font-size: 14px;
        font-family: opensans_semibold;
        color: #656565;

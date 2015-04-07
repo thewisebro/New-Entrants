@@ -8,11 +8,61 @@ var thing;
  * Controller of the lectutApp
  */
 lectutApp
-  .controller('MainCtrl', ['$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails',function ($scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails) {
+  .controller('MainCtrl', ['$location','$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails',function ($location,$scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails) {
     
     $rootScope.whichView = "MainCtrl";
     $scope.base_media_url = base_domain+"/media/";
     $scope.base_domain = base_domain;
+    
+        
+    // To get feed data.
+    var x  = $routeParams;
+    $scope.courseId = x;
+    
+    // Initially setting the selected Course
+    console.log("--------------------------------------------");
+    $scope.selectedCourse = x.courseId;
+    console.log($location.path());
+    // Is active
+     $scope.isActive = function(route) {
+        return route === $location.path().substring(0,route.length-1) +"/";
+     }
+    // Is active filter
+     $scope.isActiveTab = function(route) {
+       //console.log($location.path());
+       var routeB = route.split("").reverse().join("");
+       var pathB =  $location.path().split("").reverse().join("");
+       var check =false;
+       console.log(routeB);
+       console.log(pathB);
+       var i=0;
+       while(pathB[i] != "/" || routeB[i] != "/"){
+          if(pathB[i] != routeB[i]){ 
+            console.log(routeB[i]);
+            console.log(pathB[i]);
+            return false;
+          }
+          i++;
+          if(i>30){
+            return false;
+          }
+       }
+       if(pathB[i]==routeB[i]){
+        return true;
+       }
+       else{
+        return false;
+       }
+    }
+
+    $scope.isHome = function(route){
+      // route home
+      console.log("daddddd");
+      console.log(route);
+      console.log($location.path());
+       return route === $location.path();
+
+    }
 
     //------------------ Initial setup-------------------------------------
     $scope.logIn = false;
@@ -41,15 +91,6 @@ lectutApp
           $scope.logIn = false;
         }
     });
-    
-    // To get feed data.
-    var x  = $routeParams;
-    $scope.courseId = x;
-    
-    // Initially setting the selected Course
-    console.log("--------------------------------------------");
-    $scope.selectedCourse = x.courseId;
-
 
     // Search Global
    $scope.queryString = "";
