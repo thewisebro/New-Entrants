@@ -314,14 +314,20 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
         ngNotify.set('Maximum file size for a photo is 2MB', 'warn');
       } else if($scope.newPost.post_text === '')  {
         ngNotify.set('Type in some memories', 'warn');
-        $('#postMessageInput').addClass('error');
+        //$('#postMessageInput').addClass('error');
         $('#postMessageInput').focus();
       }
     }
   };
 
   $scope.uploadCover = function (files) {
-    if (files && files.length === 1) {
+    var sizeExceeded = false;
+    for(var j = 0; j < files.length; j += 1) {
+      if (files[j].size > 3145728) {
+        sizeExceeded = true;
+      }
+    }
+    if (files && files.length === 1 && !sizeExceeded) {
       $upload.upload({
         url: originURL + '/yaadein_api/cover/upload/',
         headers: {'Content-Type':'multipart/form-data'}, 
@@ -330,13 +336,16 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
         },
         file: files,
         withCredentials: true
-      }).progress(function (evt) {
+      }).progress(function (evt) i{
+        ngNotify.set('Uploading...', 'info');
       }).success(function (data, status, headers, config) {
         ngNotify.set('Cover photo updated successfully!', 'success');
         location.reload();
       }).error(function (data, status, headers, config) {
         ngNotify.set('Could not update cover photo.', 'error');
       });
+    } else if (sizeExceeded) {
+      ngNotify.set('Maximum size for cover photo is 3MB', 'warn');
     }
   };
 
