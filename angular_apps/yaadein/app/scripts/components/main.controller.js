@@ -336,7 +336,7 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
         },
         file: files,
         withCredentials: true
-      }).progress(function (evt) i{
+      }).progress(function (evt) {
         ngNotify.set('Uploading...', 'info');
       }).success(function (data, status, headers, config) {
         ngNotify.set('Cover photo updated successfully!', 'success');
