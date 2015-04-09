@@ -1,7 +1,7 @@
 <div scrollable>
 <div class="padded gallery-image-container">
   <a ng-href="#/profile/{~{spot.name}~}" ng-repeat="spot in spots">
-	  <div ng-repeat="spot in spots">
+	  <div>
     <div ng-style="{ 'background-image': 'url(' + spot.cover_pic + ')' }">
       <p ng-bind="spot.name"></p>
     </div>
