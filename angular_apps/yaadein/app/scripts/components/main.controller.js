@@ -29,6 +29,12 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
       'url': '#/',
       'hint': 'Feed'
     },
+    {
+      'id': 'spots',
+      'class': 'fa fa-map-marker',
+      'url': '#/spots/',
+      'hint': 'Spots'
+    },
 		{
 			'id': 'search',
 			'class': 'fa fa-search',
@@ -473,16 +479,16 @@ app.controller('ProfileController', ['$routeParams', '$scope', '$http', 'UserSer
 
 }]);
 
-app.controller('GalleryController', ['$routeParams', '$scope', 'dataUserService',
-	function ($routeParams, $scope, UserService) {
+app.controller('SpotsController', ['$scope', 'HomeService',
+	function ($scope, HomeService) {
 
-	$scope.currentUser = {};
-	var userData = UserService.getUser($routeParams.enrolmentNo);
-	userData.then(function (d) {
+	$scope.spots = [];
+	var spotsData = HomeService.getSpots();
+	spotsData.then(function (d) {
     if (d.logged === 'false') {
       window.location = redirect_url;
     }
-    $scope.currentUser = d;
+    $scope.spots = d;
 	});
 
 }]);

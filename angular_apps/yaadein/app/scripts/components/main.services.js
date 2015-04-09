@@ -55,6 +55,20 @@ app.service('HomeService', ['$http', '$q', function ($http, $q) {
 		return deferred.promise;
 	};
 
+  this.getSpots = function () {
+    var def = $q.defer();
+    var URL = baseURL + '/spots/';
+    $http.get(URL)
+      .success(function (d) {
+          def.resolve(d.results);
+          for(var i = 0; i < d.results.length; i += 1) {
+            d.results[i].profile_pic = baseURL + d[i].profile_pic;
+            d.results[i].cover_pic = baseURL + d[i].cover_pic;
+          }
+      });
+    return def.promise;
+  };
+
 }]);
 
 app.service('UserService', ['$http', '$q', function ($http, $q) {
