@@ -479,7 +479,7 @@ app.controller('ProfileController', ['$routeParams', '$scope', '$http', 'UserSer
 
 }]);
 
-app.controller('SpotsController', ['$scope', 'HomeService'
+app.controller('SpotsController', ['$scope', 'HomeService',
 	function ($scope, HomeService) {
 
 	$scope.spots = [];
