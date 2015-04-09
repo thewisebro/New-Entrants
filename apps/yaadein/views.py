@@ -348,11 +348,12 @@ def search(request,id):
        data = {'logged':"false"}
        return HttpResponse(simplejson.dumps(data),'application/json') 
      query = request.GET.get('q','')
-#   import ipdb;ipdb.set_trace()
-     students = Student.objects.filter(Q(user__name__icontains = query)).order_by('-user__name')
-     students = prefix_filter(students,query)[:10]
-     students_final = Student.objects.filter(Q(user__name__icontains = query)).filter(branch__no_of_semesters = F('semester_no')).order_by('-user__name')
-     students_final = prefix_filter(students_final,query)[:10]
+#     import pdb;pdb.set_trace()
+     students = Student.objects.filter(user__name__istartswith = query).order_by('-user__name')[:10]
+     print len(students)
+# students = prefix_filter(students,query)[:10]
+     students_final = Student.objects.filter(user__name__istartswith = query).filter(branch__no_of_semesters = F('semester_no')).order_by('-user__name')[:10]
+#  students_final = prefix_filter(students_final,query)[:10]
      def person_dict(student):
        return {
          'id':student.user.username,
@@ -360,8 +361,8 @@ def search(request,id):
          'value':student.user.name,
          'profile_pic':student.user.photo_url
         }
-     spots = Spot.objects.filter(Q(name__icontains = query)).order_by('-name')
-     spots = prefix_filter(spots,query)[:10]
+     spots = Spot.objects.filter(name__istartswith = query).order_by('-name')
+#  spots = prefix_filter(spots,query)[:10]
      def spot_dict(spot):
        return {
          'id':spot.name,
@@ -611,7 +612,32 @@ def trending(request):
   data = {'hashed':hash_list}
   return HttpResponse(simplejson.dumps(data),'application/json')
 
- 
+@csrf_exempt
+@CORS_allow
+def spots(request):
+  if not request.user.is_authenticated():
+    data = {'logged':"false"}
+    return HttpResponse(simplejson.dumps(data),'application/json') 
+  y_user = YaadeinUser.objects.get_or_create(user=request.user)[0]#user=request.user
+  logged_user = y_user.user
+  if not y_user.coverpic or y_user.coverpic.name=='':
+    y_user.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
+  s = Student.objects.get(user__username=request.user.username)#=enrno
+  spots_all = Spot.objects.all()
+  spots_data = []
+  for spot in spots_all:
+    if not spot.coverpic or spot.coverpic.name=='':
+      spot.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
+    tmp = {
+           'name': spot.name,
+           'tagline':spot.tagline,
+           'profile_pic':spot.profile_pic.url,
+           'cover_pic':spot.coverpic.url,
+           }
+    spots_data.append( tmp )
+  data ={'results':spots_data,}
+  return HttpResponse(simplejson.dumps(data),'application/json') 
+
 "Utility function:bubble sorting"
 def bubble(bad_list):
   length = len(bad_list) - 1
