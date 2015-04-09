@@ -1,0 +1,12 @@
+<div scrollable>
+<div class="padded gallery-image-container">
+	<div ng-repeat="image in currentUser.gallery">
+		<img ng-src="{~{image.url}~}" alt="{~{$index}~}">
+	</div>
+</div>
+<!-- <div masonry>
+	<div class="masonry-brick" ng-repeat="image in currentUser.gallery">
+		<img ng-src="{~{image.url}~}" alt="{~{$index}~}">
+	</div>
+</div> -->
+</div>

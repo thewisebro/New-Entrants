@@ -1,6 +1,8 @@
 from feeds.helper import ModelFeed
 from django.template.loader import render_to_string
+from django.contrib.auth.models import AnonymousUser
 from events.models import Event
+from events.views import event_dict
 
 class EventFeed(ModelFeed):
   class Meta:
@@ -8,12 +10,13 @@ class EventFeed(ModelFeed):
     app = 'events'
 
   def save(self, event, created):
-    if not event.calendar.cal_type == 'PRI':
+    if event.calendar.cal_type == 'GRP':
       return {
         'content': render_to_string('events/event_feed.html', {
-            'event': event.serialize()
+            'event': event_dict(event, AnonymousUser()),
+            'uploader': event.uploader,
          }),
-        'user': event.uploader if event.calendar.cal_type=='GRP' else None,
+        'user': event.uploader,
         'link': event.link
       }
     else:

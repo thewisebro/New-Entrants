@@ -33,7 +33,8 @@ def calendar_dict(calendar):
 @dialog_login_required
 def add(request):
   # form initiated to render media on template
-  form = EventFormGenerator(Calendar.objects.get(name=request.user.username, cal_type='PRI'))()
+  cal_type = 'GRP' if request.user.in_group('Student Group') else 'PRI'
+  form = EventFormGenerator(Calendar.objects.get(name=request.user.username, cal_type=cal_type))()
   calendar = None
   calendars = Calendar.objects.filter(users__in = [request.user])
   if calendars.count() == 1:
@@ -108,16 +109,20 @@ def delete(request):
 def get_calendars(request):
   if request.is_ajax() and request.method == 'GET':
     calendars = [{'name':'all','verbose_name':'All'}]
+    public_calendars = Calendar.objects.filter(cal_type='PUB')
+    calendars += map(lambda cal:{'name':cal.name,'verbose_name':cal.name},public_calendars)+\
+                  [{'name':'groups','verbose_name':'Groups'}]
     if request.user.is_authenticated():
       user_calendar,created = Calendar.objects.get_or_create(name=request.user.username)
       if created:
         user_calendar.users.add(request.user)
-        user_calendar.cal_type = 'PRI'
+        if request.user.in_group('Student Group'):
+          user_calendar.cal_type = 'GRP'
+        else:
+          user_calendar.cal_type = 'PRI'
         user_calendar.save()
-      calendars += [{'name':user_calendar.name,'verbose_name':'Personal'}]
-    public_calendars = Calendar.objects.filter(cal_type='PUB')
-    calendars += map(lambda cal:{'name':cal.name,'verbose_name':cal.name},public_calendars)+\
-                  [{'name':'groups','verbose_name':'Groups'}]
+      if not request.user.in_group('Student Group'):
+        calendars += [{'name':user_calendar.name,'verbose_name':'Personal'}]
     json = simplejson.dumps({'calendars':calendars})
     return HttpResponse(json, content_type='application/json')
 
@@ -137,13 +142,15 @@ def get_events_dates(request):
 def added_by(event):
   if event.calendar.cal_type == 'GRP':
     group = Group.objects.get(user__username = event.calendar.name)
-    return "<a href='/groups/%s/'>"%group.user.username +\
+    return "<a href='/#groups/%s/'>"%group.user.username +\
            group.user.html_name+"</a>"
   else:
     return ''
 
 def duration(event):
-  if event.upto_date:
+  if event.upto_date or event.upto_time:
+    if event.upto_time and not event.upto_date:
+      event.upto_date = event.date
     upto_dt = datetime.combine(event.upto_date,event.upto_time if event.upto_time else time())
     dt = datetime.combine(event.date,event.time if event.time else time())
     td = upto_dt - dt
@@ -165,6 +172,38 @@ def duration(event):
   else:
     return ''
 
+def time_str(time):
+  return time.strftime("%I:%M %p")
+
+def date_str(date):
+  return "%s %s" % (date.day, date.strftime("%b"))
+
+def uptotime(event):
+  if event.upto_time:
+    if not event.upto_date:
+      event.upto_date = event.date
+    if event.upto_date == event.date:
+      return "%s - %s" % (time_str(event.time),time_str(event.upto_time))
+    else:
+      return "%s %s - %s %s" % (date_str(event.date), time_str(event.time),
+              date_str(event.upto_date), time_str(event.upto_time))
+  elif event.upto_date:
+      return "%s - %s" % (date_str(event.date), date_str(event.upto_date))
+  elif event.time:
+      return "%s" % (time_str(event.time),)
+  else:
+      return ''
+
+def weekday(event):
+  dif = (event.date-datetime.now().date()).days
+  if dif == 0:
+    return 'Today'
+  if dif == 1:
+    return 'Tomorrow'
+  if 1 < dif < 7:
+    return event.date.strftime("%A")
+  return ''
+
 def shown_calendar_name(calendar):
   if calendar.cal_type == 'PRI':
     return 'Personal Calendar'
@@ -184,13 +223,18 @@ def event_dict(event,user):
     'title' : escape(event.title),
     'added_by' : added_by(event),
     'date' : 'Today' if diff(event.date,datetime.today())==0 \
-             else ('Tomorrow' if diff(event.date,datetime.today()) == 1 else str(int(event.date.strftime('%d')))+event.date.strftime(' %B, %Y')),
+             else ('Tomorrow' if diff(event.date,datetime.today()) == 1 else \
+             str(int(event.date.strftime('%d')))+event.date.strftime(' %B, %Y')),
     'time' : event.time.strftime('%I:%M %p') if event.time else '',
-    'datetime':(datetime.combine(event.date,event.time) if event.time else event.date).strftime('%Y-%m-%d %H:%M:%S'),
+    'uptotime' : uptotime(event),
+    'datetime':(datetime.combine(event.date,event.time) if event.time else
+                event.date).strftime('%Y-%m-%d %H:%M:%S'),
     'duration':duration(event),
+    'day': event.date.day,
+    'monthyear': event.date.strftime("%b, %y"),
     'place' : escape(event.place),
     'description' : event.description,
-    'weekday': event.date.weekday() if (lambda td: td>1 and td < 7)((event.date-datetime.now().date()).days) else '',
+    'weekday': weekday(event),
     'editable': event.calendar.users.filter(username = user.username).count()
   }
 

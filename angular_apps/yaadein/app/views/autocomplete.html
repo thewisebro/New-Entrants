@@ -1,0 +1,38 @@
+<div class="angucomplete-holder" ng-class="{'angucomplete-dropdown-visible': showDropdown}">
+  <i class="fa fa-search"></i>
+  <input ng-model="searchStr"
+        type="text"
+        placeholder="{~{placeholder}~}"
+        ng-focus="onFocusHandler()"
+        class="{~{inputClass}~}"
+        ng-focus="resetHideResults()"
+        ng-blur="hideResults($event)"
+        autocapitalize="off"
+        autocorrect="off"
+        autocomplete="off"
+        ng-change="inputChangeHandler(searchStr)"
+        show-focus/>
+  <div class="angucomplete-dropdown" ng-show="showDropdown">
+  <div>
+    <div class="angucomplete-searching" ng-show="searching" ng-bind="textSearching"></div>
+    <div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)" ng-bind="textNoResults"></div>
+
+    <div class="angucomplete-row" ng-repeat="result in results" ng-click="selectResult(result)" ng-mouseenter="hoverRow($index)" ng-class="{'angucomplete-selected-row': $index == currentIndex}">
+
+    <div ng-if="imageField" class="angucomplete-image-holder">
+      <img ng-if="result.image && result.image != ''" ng-src="{~{result.image}~}" class="angucomplete-image"/>
+      <div ng-if="!result.image && result.image != ''" class="angucomplete-image-default"></div>
+    </div>
+    
+    <div class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div>
+    <div class="angucomplete-title" ng-if="!matchClass">{~{ result.title }~}</div>
+
+    <div ng-if="matchClass && result.description && result.description != ''" class="angucomplete-description" ng-bind-html="result.description"></div>
+    <div ng-if="!matchClass && result.description && result.description != ''" class="angucomplete-description">{~{result.description}~}</div>
+  </div>
+  
+  <!--<div class="angucomplete-row" ng-click="selectResult({title: searchStr, originalObject: { name: searchStr, custom: true }})" ng-mouseenter="hoverRow(results.length)" ng-class="{'angucomplete-selected-row': results.length == currentIndex}">-->
+  </div>
+  </div>
+  </div>
+</div>

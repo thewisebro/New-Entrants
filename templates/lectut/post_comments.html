@@ -1,0 +1,6 @@
+{% load comments %}
+
+<script src="{{ STATIC_URL }}fluent_comments/js/ajaxcomments.js" type="text/javascript"></script>
+
+{% render_comment_list for post_comments %}
+{% render_comment_form for post_comments %}

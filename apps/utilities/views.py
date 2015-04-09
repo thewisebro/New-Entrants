@@ -153,8 +153,9 @@ def email(request):
   if request.method == 'POST':
     emailform = EmailForm(request.POST)
     if emailform.is_valid():
-      request.user.email = emailform.cleaned_data['email']
-      request.user.save()
+      if not request.user.email:
+        request.user.email = emailform.cleaned_data['email']
+        request.user.save()
       events_subscribe_form = EventsSubscribeForm(request.POST,
                                                   instance=events_user)
       events_subscribe_form.save()
@@ -243,6 +244,10 @@ def email_verify(request):
           request.user).get(confirmation_key=confirmation_key)
       if email_profile.last_datetime_created + datetime.timedelta(2) < timezone.now():
         messages.error(request,"The verification-key expired.")
+      elif UserEmail.objects.filter(email=email_profile.email,
+          verified=True).exclude(user=email_profile.user).exists():
+        messages.error("This email can not be verified as another user has already"
+            " verified it as his/her email address.")
       else:
         email_profile.verified = True
         email_profile.save()
@@ -390,3 +395,18 @@ def password_reset(request):
       'form': form,
   })
 
+@login_required
+def person_search(request):
+  if request.is_ajax():
+    q = request.GET.get('term','')
+    persons = Person.objects.filter(Q(name__icontains = q)|Q(user__username__icontains = q)).order_by('-user__username')[:10]
+    def person_dict(person):
+      return {
+        'id':person.user.username,
+        'label':str(person)+" ("+str(person.branch.code)+")",
+        'value':person.user.username
+      }
+    data = simplejson.dumps(map(person_dict,persons))
+  else:
+    data = 'fail'
+  return HttpResponse(data,'application/json') 
