@@ -1,6 +1,6 @@
 <div>
 <div id="cover" class="cover-pic" ng-style="{ 'background-image': 'url(' + currentUser.coverPic + ')' }">
-    <div ng-show="isLoggedUserProfile()" id="cover-upload" type="file" ng-mouseover="showCoverHint()" ng-mouseleave="hideCoverHint()" ng-file-select ng-model="coverpic" ng-file-change="uploadCover(coverpic)" ng-accept="'image/*'" ng-multiple="false"><i class="fa fa-camera-retro"></i></div>
+    <div ng-show="isLoggedUserProfile()" id="cover-upload" type="file" ng-mouseover="showCoverHint()" ng-mouseleave="hideCoverHint()" ng-file-select ng-model="coverpic" ng-file-change="uploadCover($files)" ng-accept="'image/*'" ng-multiple="false"><i class="fa fa-camera-retro"></i></div>
     <div id="cover-upload-hint">Update Cover Photo</div>
     <div class="profile-user-details">
     <div>
