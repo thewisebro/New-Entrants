@@ -79,14 +79,14 @@
             <form class="post-form" name="postForm">
               <div class="tag-input-box">
                 <i class="inline fa fa-user-plus"></i>
-                <tags-input type="text" ng-model="newPost.user_tags" class="" display-property="value" placeholder="Tag friends" tabindex="0" add-from-autocomplete-only="true" replace-spaces-with-dashes="false" show-focus="true">
+                <tags-input type="text" ng-model="newPost.user_tags" class="" display-property="value" placeholder="Tag your friends here" tabindex="0" add-from-autocomplete-only="true" replace-spaces-with-dashes="false" show-focus="true">
                    <auto-complete source="loadTags($query, 1)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
                 </tags-input>
               </div>
               <div class="tag-input-box">
                 <i class="inline fa fa-map-marker"></i>
-                <tags-input type="text" ng-model="newPost.spot" class="" display-property="value" placeholder="Add spot. Ex: Nesci, Alpahar..." add-from-autocomplete-only="true" tabindex="1" replace-spaces-with-dashes="false" max-tags="1">
-                  <auto-complete source="loadSpots($query)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
+                <tags-input type="text" ng-model="newPost.spot" class="" display-property="value" placeholder="Where did this happen?" add-from-autocomplete-only="false" tabindex="1" replace-spaces-with-dashes="false" max-tags="1">
+                  <auto-complete source="loadSpots($query)" min-length="1" load-on-empty="true" load-on-focus="true" select-first-match="true" highlight-matched-text="true"></auto-complete>
                 </tags-input>
               </div>
                 <textarea mentio
@@ -102,7 +102,7 @@
                   required
                   name="message"
                   tabindex="2"
-                  class="big-input" placeholder="Share memories here, use : to access emojis. #yaadein" style="resize:none;" ng-model="newPost.post_text"></textarea>
+                  class="big-input" placeholder="Share your memories here... You can also include hashtags and select emojis by typing the : character." style="resize:none;" ng-model="newPost.post_text"></textarea>
                   <!-- <div class="private-select">
                     <input type="checkbox" ng-model="postStatus">&nbsp;Private
                   </div> -->
