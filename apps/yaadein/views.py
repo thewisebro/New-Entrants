@@ -74,7 +74,7 @@ def index(request,enrno=None):
     print y_user
     y_user=y_user[0]
     if not y_user.coverpic or y_user.coverpic.name=='':
-      y_user.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
+      y_user.coverpic = ''
 #user = User.objects.get(username ='13114068')
     s = Student.objects.get(user__username=enrno)#=enrno
     posts_usertagged = Post.objects.filter(user_tags=s).filter(status='A')#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
@@ -126,6 +126,10 @@ def index(request,enrno=None):
 # stat = simplejson.loads(request.POST['data'])['post_type']
       if spots:
         spot = Spot.objects.get(name=str(spots[0]['id']))
+        if not spot or spot =='':
+          spot = Spot.objects.create(name=str(spots[0]['id']))
+          spot.display = False
+          spot.save()
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
       hash_tag = []
       for word in hashed:
@@ -151,7 +155,7 @@ def index(request,enrno=None):
       notif_msg1 = ''+student.user.name+' posted a memory on your wall'  
       app = 'Yaadein'
       pk = str(post.pk)
-      url = 'http://172.25.55.156/yaadein/#/post/'+pk+'/'
+      url = '/yaadein/#/post/'+pk+'/'
       notif_users=[]
       tagged_users = []
       if s.user!=request.user:
@@ -193,7 +197,7 @@ def homePage(request):
 
   logged_user = y_user.user
   if not y_user.coverpic or y_user.coverpic.name=='':
-    y_user.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
+    y_user.coverpic = ''
   s = Student.objects.get(user__username=request.user.username)#=enrno
 # posts_branch_year = Post.objects.filter(owner__branch_id=s.branch_id).filter(owner__semester_no=s.semester_no).filter(status='A').order_by('post_date').reverse()
 # posts_branch = Post.objects.filter(owner__branch_id=s.branch_id).filter(status='A').order_by('post_date').reverse()
@@ -428,7 +432,7 @@ def spot_search(request):
     spots = Spot.objects.filter(Q(name__icontains = query)).order_by('-name')[:10]
     def spot_dict(spot):
       if not spot.coverpic or spot.coverpic.name=='':
-        spot.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
+        spot.coverpic = ''
       return {
         'id':spot.name,
         'cover_pic':spot.coverpic.url,
@@ -457,7 +461,7 @@ def invite(request):
     else:
       notif_msg1 = ' '+student.user.name+' invited you to cherrish memories with her.' 
     user_tagged = simplejson.loads(request.body)['user_tags']
-    url = 'http://172.25.55.156/yaadein/#/profile/'+student.user.username
+    url = '/yaadein/#/profile/'+student.user.username
     tagged_users = []
     for user in user_tagged:
       student_related = Student.objects.get(user__username=str(user['id']))
@@ -526,7 +530,9 @@ def spot_page(request,name):
     posts_data = []
     spot = Spot.objects.get(name=str(name))
     if not spot.coverpic or spot.coverpic.name=='':
-      spot.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
+      spot.coverpic = ''
+    if not spot.profile_pic or spot.profile_pic.name=='':
+      spot.profile_pic = ''
     spotlist = []
     spotlist.append({'id':spot.name,'name':spot.name,'label':spot.tagline})
     posts = Post.objects.filter(spots__name=name).filter(status="A").order_by('post_date').reverse()
@@ -621,13 +627,15 @@ def spots(request):
   y_user = YaadeinUser.objects.get_or_create(user=request.user)[0]#user=request.user
   logged_user = y_user.user
   if not y_user.coverpic or y_user.coverpic.name=='':
-    y_user.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
+    y_user.coverpic = ''
   s = Student.objects.get(user__username=request.user.username)#=enrno
-  spots_all = Spot.objects.all()
+  spots_all = Spot.objects.filter(display=True)
   spots_data = []
   for spot in spots_all:
     if not spot.coverpic or spot.coverpic.name=='':
-      spot.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
+      spot.coverpic = ''
+  if not spot.profile_pic or spot.profile_pic.name=='':
+    spot.profile_pic = ''
     tmp = {
            'name': spot.name,
            'tagline':spot.tagline,
