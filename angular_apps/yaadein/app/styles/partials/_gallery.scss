@@ -42,10 +42,12 @@
   width: 100%;
   margin: 0 auto;
   div {
+    position: relative;
     width: 100%;
     max-width: 850px;
-    height: 160px;
+    height: 100px;
     border-radius: 3px;
+    margin: 0 auto;
     margin-bottom: 20px;
     & > div {
       background-color: $white;
@@ -54,7 +56,8 @@
       background-position: 50% 50%;
       p {
         position: absolute;
-        left: 20px;
+        left: 33px;
+        top: 33px;
         margin: 0;
         font-size: $huge;
         color: $white;
