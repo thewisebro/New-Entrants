@@ -479,11 +479,11 @@ app.controller('ProfileController', ['$routeParams', '$scope', '$http', 'UserSer
 
 }]);
 
-app.controller('SpotsController', ['$scope,
-	function ($scope) {
+app.controller('SpotsController', ['$scope', 'HomeService'
+	function ($scope, HomeService) {
 
 	$scope.spots = [];
-	var spotsData = SpotService.getSpots();
+	var spotsData = HomeService.getSpots();
 	spotsData.then(function (d) {
     if (d.logged === 'false') {
       window.location = redirect_url;
