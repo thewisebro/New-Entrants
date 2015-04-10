@@ -237,16 +237,12 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
     return defer.promise;
   };
 
-  $scope.$watch('coverpic', function (photo) {
-      if (photo !== null) {
-        (function(file){
-         $scope.uploadCover(file);
-        })(photo);
-      }
-  });
-
   $scope.images1 = {
       'imageArray': []
+  };
+
+  $scope.coverpic1 = {
+    'coverpic': []
   };
 
   $scope.addImage = function (files) {
@@ -321,22 +317,35 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
   };
 
   $scope.uploadCover = function (files) {
-    if (files && files.length === 1) {
+    $scope.coverpic1.coverpic = $scope.coverpic1.coverpic.concat(files);
+    var files1 = $scope.coverpic1.coverpic;
+    var sizeExceeded = false;
+    for(var j = 0; j < files1.length; j += 1) {
+      if (files1[j].size > 3145728) {
+        sizeExceeded = true;
+      }
+    }
+    if (files1 && files1.length === 1 && !sizeExceeded) {
       $upload.upload({
         url: originURL + '/yaadein_api/cover/upload/',
         headers: {'Content-Type':'multipart/form-data'}, 
         method: 'POST',
         data: {
         },
-        file: files,
+        file: files1,
         withCredentials: true
       }).progress(function (evt) {
+        ngNotify.set('Uploading...', 'info');
       }).success(function (data, status, headers, config) {
         ngNotify.set('Cover photo updated successfully!', 'success');
         location.reload();
       }).error(function (data, status, headers, config) {
         ngNotify.set('Could not update cover photo.', 'error');
+        $scope.coverpic1.coverpic = [];
       });
+    } else if (sizeExceeded) {
+      ngNotify.set('Maximum size for cover photo is 3MB', 'warn');
+      $scope.coverpic1.coverpic = [];
     }
   };
 
