@@ -237,6 +237,23 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
     return defer.promise;
   };
 
+  $scope.formatSpot = function(tag) {
+    var words = tag.value.split(' ');
+    console.log(tag);
+    console.log(words);
+    //Capitalize all words
+    for(var i = 0; i < words.length; i += 1) {
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+    console.log(words);
+    //Concatenate
+    tag.value = '';
+    for(var i = 0; i < words.length; i += 1) {
+      tag.value = tag.value.concat(words[i]);
+    }
+    console.log(tag);
+  };
+
   $scope.images1 = {
       'imageArray': []
   };
@@ -310,7 +327,7 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
         ngNotify.set('Maximum file size for a photo is 2MB', 'warn');
       } else if($scope.newPost.post_text === '')  {
         ngNotify.set('Type in some memories', 'warn');
-        $('#postMessageInput').addClass('error');
+        //$('#postMessageInput').addClass('error');
         $('#postMessageInput').focus();
       }
     }
