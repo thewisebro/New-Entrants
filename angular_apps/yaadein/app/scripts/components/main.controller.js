@@ -310,7 +310,7 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
         ngNotify.set('Maximum file size for a photo is 2MB', 'warn');
       } else if($scope.newPost.post_text === '')  {
         ngNotify.set('Type in some memories', 'warn');
-        $('#postMessageInput').addClass('error');
+        //$('#postMessageInput').addClass('error');
         $('#postMessageInput').focus();
       }
     }
