@@ -126,9 +126,9 @@ def index(request,enrno=None):
 # stat = simplejson.loads(request.POST['data'])['post_type']
       if spots_tag:
         spot = Spot.objects.get_or_create(name=str(spots_tag[0]['value']))
-        if spot[1]==True:
-          spot[0].display = False
-          spot[0].save()
+# if spot[1]==True:
+#        spot[0].display = False
+#        spot[0].save()
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
       hash_tag = []
       for word in hashed:
