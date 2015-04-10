@@ -531,7 +531,7 @@ def spot_page(request,name):
     if not spot.coverpic or spot.coverpic.name=='':
       spot.coverpic = 'yaadein/default.jpg'
     if not spot.profile_pic or spot.profile_pic.name=='':
-      spot.profile_pic = yaadein/'default.jpg'
+      spot.profile_pic = 'yaadein/default.jpg'
     spotlist = []
     spotlist.append({'id':spot.name,'name':spot.name,'label':spot.tagline})
     posts = Post.objects.filter(spots__name=name).filter(status="A").order_by('post_date').reverse()
