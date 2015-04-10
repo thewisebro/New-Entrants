@@ -17,7 +17,7 @@ from collections import defaultdict, Counter
 from django.contrib.sessions.models import Session
 #from nucleus import get_info, html_name
 import json as simplejson
-
+import requests
 DEVELOPMENT = settings.DEVELOPMENT
 
 """
