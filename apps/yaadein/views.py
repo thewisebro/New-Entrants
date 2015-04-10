@@ -74,7 +74,7 @@ def index(request,enrno=None):
     print y_user
     y_user=y_user[0]
     if not y_user.coverpic or y_user.coverpic.name=='':
-      y_user.coverpic = ''
+      y_user.coverpic = 'yaadein/default.jpg'
 #user = User.objects.get(username ='13114068')
     s = Student.objects.get(user__username=enrno)#=enrno
     posts_usertagged = Post.objects.filter(user_tags=s).filter(status='A')#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
@@ -122,14 +122,13 @@ def index(request,enrno=None):
     if request.method == 'POST':
       post_data = str(simplejson.loads(request.POST['data'])['post_text'])
       user_tagged = simplejson.loads(request.POST['data'])['user_tags']
-      spots = simplejson.loads(request.POST['data'])['spot']
+      spots_tag = simplejson.loads(request.POST['data'])['spot']
 # stat = simplejson.loads(request.POST['data'])['post_type']
-      if spots:
-        spot = Spot.objects.get(name=str(spots[0]['id']))
-        if not spot or spot =='':
-          spot = Spot.objects.create(name=str(spots[0]['id']))
-          spot.display = False
-          spot.save()
+      if spots_tag:
+        spot = Spot.objects.get_or_create(name=str(spots_tag[0]['value']))
+        if spot[1]==True:
+          spot[0].display = False
+          spot[0].save()
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
       hash_tag = []
       for word in hashed:
@@ -149,8 +148,8 @@ def index(request,enrno=None):
       else:
         post = Post(text_content=post_data, post_date=timezone.now(), owner=student)
       post.save()
-      if spots:
-        post.spots.add(spot)
+      if spots_tag:
+        post.spots.add(spot[0])
       notif_msg = 'You were tagged in a memory by '+student.user.name+'.'
       notif_msg1 = ''+student.user.name+' posted a memory on your wall'  
       app = 'Yaadein'
@@ -197,7 +196,7 @@ def homePage(request):
 
   logged_user = y_user.user
   if not y_user.coverpic or y_user.coverpic.name=='':
-    y_user.coverpic = ''
+    y_user.coverpic = 'yaadein/default.jpg'
   s = Student.objects.get(user__username=request.user.username)#=enrno
 # posts_branch_year = Post.objects.filter(owner__branch_id=s.branch_id).filter(owner__semester_no=s.semester_no).filter(status='A').order_by('post_date').reverse()
 # posts_branch = Post.objects.filter(owner__branch_id=s.branch_id).filter(status='A').order_by('post_date').reverse()
@@ -387,7 +386,7 @@ def search(request,id):
      data = 'fail'
    return HttpResponse(simplejson.dumps(search_data),'application/json')
 
-
+"""
 "View to return all the users as a list of json objects."
 @csrf_exempt
 @CORS_allow
@@ -421,8 +420,8 @@ def all_users(request):
   else:
     data = 'fail'
   return HttpResponse(simplejson.dumps(search_data),'application/json')
-
-
+"""
+"""
 "View to search for spots"
 @csrf_exempt
 @CORS_allow
@@ -443,7 +442,7 @@ def spot_search(request):
   else:
     data='fail'
   return HttpResponse(simplejson.dumps(search_data),'application/json')
-
+"""
 
 "Sending invite notification to users."
 @csrf_exempt
@@ -530,9 +529,9 @@ def spot_page(request,name):
     posts_data = []
     spot = Spot.objects.get(name=str(name))
     if not spot.coverpic or spot.coverpic.name=='':
-      spot.coverpic = ''
+      spot.coverpic = 'yaadein/default.jpg'
     if not spot.profile_pic or spot.profile_pic.name=='':
-      spot.profile_pic = ''
+      spot.profile_pic = yaadein/'default.jpg'
     spotlist = []
     spotlist.append({'id':spot.name,'name':spot.name,'label':spot.tagline})
     posts = Post.objects.filter(spots__name=name).filter(status="A").order_by('post_date').reverse()
@@ -627,23 +626,24 @@ def spots(request):
   y_user = YaadeinUser.objects.get_or_create(user=request.user)[0]#user=request.user
   logged_user = y_user.user
   if not y_user.coverpic or y_user.coverpic.name=='':
-    y_user.coverpic = ''
+    y_user.coverpic = 'yaadein/default.jpg'
   s = Student.objects.get(user__username=request.user.username)#=enrno
-  spots_all = Spot.objects.filter(display=True)
-  spots_data = []
-  for spot in spots_all:
+  s_all = Spot.objects.filter(display=True)
+  print s_all
+  s_data = []
+  for spot in s_all:
     if not spot.coverpic or spot.coverpic.name=='':
-      spot.coverpic = ''
-  if not spot.profile_pic or spot.profile_pic.name=='':
-    spot.profile_pic = ''
+      spot.coverpic = 'yaadein/default.jpg'
+    if not spot.profile_pic or spot.profile_pic.name=='':
+      spot.profile_pic = 'yaadein/default.jpg'
     tmp = {
            'name': spot.name,
            'tagline':spot.tagline,
            'profile_pic':spot.profile_pic.url,
            'cover_pic':spot.coverpic.url,
            }
-    spots_data.append( tmp )
-  data ={'results':spots_data,}
+    s_data.append( tmp )
+  data ={'results':s_data,}
   return HttpResponse(simplejson.dumps(data),'application/json') 
 
 "Utility function:bubble sorting"
