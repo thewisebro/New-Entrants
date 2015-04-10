@@ -11,7 +11,7 @@
         </div>
         <div class="details">
           <h1 ng-bind="currentUser.name"></h1>
-          <p ng-hide="currentUser.label == ''"><i class="fa fa-graduation-cap"></i> {~{currentUser.label}~}</p>
+          <p><i class="fa" ng-class="{fa-graduation-cap: !currentUser.isSpot, fa-star: currentUser.isSpot}"></i> {~{currentUser.label}~}</p>
         </div>
     </div>
     </div>
