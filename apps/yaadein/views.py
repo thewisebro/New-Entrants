@@ -125,11 +125,10 @@ def index(request,enrno=None):
       spots = simplejson.loads(request.POST['data'])['spot']
 # stat = simplejson.loads(request.POST['data'])['post_type']
       if spots:
-        spot = Spot.objects.get(name=str(spots[0]['id']))
-        if not spot or spot =='':
-          spot = Spot.objects.create(name=str(spots[0]['id']))
-          spot.display = False
-          spot.save()
+        spot = Spot.objects.get_or_create(name=str(spots[0]['id']))
+        if spot[1]=='True':
+          spot[0].display = False
+          spot[0].save()
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
       hash_tag = []
       for word in hashed:
@@ -387,7 +386,7 @@ def search(request,id):
      data = 'fail'
    return HttpResponse(simplejson.dumps(search_data),'application/json')
 
-
+"""
 "View to return all the users as a list of json objects."
 @csrf_exempt
 @CORS_allow
@@ -421,8 +420,8 @@ def all_users(request):
   else:
     data = 'fail'
   return HttpResponse(simplejson.dumps(search_data),'application/json')
-
-
+"""
+"""
 "View to search for spots"
 @csrf_exempt
 @CORS_allow
@@ -443,7 +442,7 @@ def spot_search(request):
   else:
     data='fail'
   return HttpResponse(simplejson.dumps(search_data),'application/json')
-
+"""
 
 "Sending invite notification to users."
 @csrf_exempt
@@ -530,9 +529,9 @@ def spot_page(request,name):
     posts_data = []
     spot = Spot.objects.get(name=str(name))
     if not spot.coverpic or spot.coverpic.name=='':
-      spot.coverpic = ''
+      spot.coverpic = 'default.jpg'
     if not spot.profile_pic or spot.profile_pic.name=='':
-      spot.profile_pic = ''
+      spot.profile_pic = 'default.jpg'
     spotlist = []
     spotlist.append({'id':spot.name,'name':spot.name,'label':spot.tagline})
     posts = Post.objects.filter(spots__name=name).filter(status="A").order_by('post_date').reverse()
@@ -629,21 +628,22 @@ def spots(request):
   if not y_user.coverpic or y_user.coverpic.name=='':
     y_user.coverpic = ''
   s = Student.objects.get(user__username=request.user.username)#=enrno
-  spots_all = Spot.objects.filter(display=True)
-  spots_data = []
-  for spot in spots_all:
+  s_all = Spot.objects.filter(display=True)
+  print s_all
+  s_data = []
+  for spot in s_all:
     if not spot.coverpic or spot.coverpic.name=='':
-      spot.coverpic = ''
-  if not spot.profile_pic or spot.profile_pic.name=='':
-    spot.profile_pic = ''
+      spot.coverpic = 'default.jpg'
+    if not spot.profile_pic or spot.profile_pic.name=='':
+      spot.profile_pic = 'default.jpg'
     tmp = {
            'name': spot.name,
            'tagline':spot.tagline,
            'profile_pic':spot.profile_pic.url,
            'cover_pic':spot.coverpic.url,
            }
-    spots_data.append( tmp )
-  data ={'results':spots_data,}
+    s_data.append( tmp )
+  data ={'results':s_data,}
   return HttpResponse(simplejson.dumps(data),'application/json') 
 
 "Utility function:bubble sorting"

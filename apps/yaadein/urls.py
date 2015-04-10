@@ -16,8 +16,8 @@ urlpatterns = [
     url(r'^private/(?P<id>[\w]+)/$',private_posts, name='private_post'),
     url(r'^trending/$',trending,name='trending_users'),
     url(r'^spot/(?P<name>[\w]+)/$', spot_page, name='spots'),
-    url(r'^search_spot/$',spot_search,name='spots_search'),
-    url(r'^users/$',all_users,name='users'),
+#    url(r'^search_spot/$',spot_search,name='spots_search'),
+#    url(r'^users/$',all_users,name='users'),
     url(r'^invite/$',invite,name='invitation'),
     url(r'^spots/$',spots,name='spots_disp'),
     ]
