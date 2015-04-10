@@ -343,7 +343,7 @@ def post_display(request,pk):
   else:
     return HttpResponse('Hello')
 
-
+@csrf_exempt
 @CORS_allow
 def search(request,id):
    if request: #.is_ajax():
