@@ -74,7 +74,7 @@ def index(request,enrno=None):
     print y_user
     y_user=y_user[0]
     if not y_user.coverpic or y_user.coverpic.name=='':
-      y_user.coverpic = ''
+      y_user.coverpic = 'default.jpg'
 #user = User.objects.get(username ='13114068')
     s = Student.objects.get(user__username=enrno)#=enrno
     posts_usertagged = Post.objects.filter(user_tags=s).filter(status='A')#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
