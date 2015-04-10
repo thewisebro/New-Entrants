@@ -74,7 +74,7 @@ def index(request,enrno=None):
     print y_user
     y_user=y_user[0]
     if not y_user.coverpic or y_user.coverpic.name=='':
-      y_user.coverpic = 'default.jpg'
+      y_user.coverpic = 'yaadein/default.jpg'
 #user = User.objects.get(username ='13114068')
     s = Student.objects.get(user__username=enrno)#=enrno
     posts_usertagged = Post.objects.filter(user_tags=s).filter(status='A')#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
@@ -196,7 +196,7 @@ def homePage(request):
 
   logged_user = y_user.user
   if not y_user.coverpic or y_user.coverpic.name=='':
-    y_user.coverpic = ''
+    y_user.coverpic = 'yaadein/default.jpg'
   s = Student.objects.get(user__username=request.user.username)#=enrno
 # posts_branch_year = Post.objects.filter(owner__branch_id=s.branch_id).filter(owner__semester_no=s.semester_no).filter(status='A').order_by('post_date').reverse()
 # posts_branch = Post.objects.filter(owner__branch_id=s.branch_id).filter(status='A').order_by('post_date').reverse()
@@ -529,9 +529,9 @@ def spot_page(request,name):
     posts_data = []
     spot = Spot.objects.get(name=str(name))
     if not spot.coverpic or spot.coverpic.name=='':
-      spot.coverpic = 'default.jpg'
+      spot.coverpic = 'yaadein/default.jpg'
     if not spot.profile_pic or spot.profile_pic.name=='':
-      spot.profile_pic = 'default.jpg'
+      spot.profile_pic = yaadein/'default.jpg'
     spotlist = []
     spotlist.append({'id':spot.name,'name':spot.name,'label':spot.tagline})
     posts = Post.objects.filter(spots__name=name).filter(status="A").order_by('post_date').reverse()
@@ -626,16 +626,16 @@ def spots(request):
   y_user = YaadeinUser.objects.get_or_create(user=request.user)[0]#user=request.user
   logged_user = y_user.user
   if not y_user.coverpic or y_user.coverpic.name=='':
-    y_user.coverpic = ''
+    y_user.coverpic = 'yaadein/default.jpg'
   s = Student.objects.get(user__username=request.user.username)#=enrno
   s_all = Spot.objects.filter(display=True)
   print s_all
   s_data = []
   for spot in s_all:
     if not spot.coverpic or spot.coverpic.name=='':
-      spot.coverpic = 'default.jpg'
+      spot.coverpic = 'yaadein/default.jpg'
     if not spot.profile_pic or spot.profile_pic.name=='':
-      spot.profile_pic = 'default.jpg'
+      spot.profile_pic = 'yaadein/default.jpg'
     tmp = {
            'name': spot.name,
            'tagline':spot.tagline,
