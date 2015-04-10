@@ -150,16 +150,19 @@ def index(request,enrno=None):
       post.save()
       if spots_tag:
         post.spots.add(spot[0])
-      notif_msg = 'You were tagged in a memory by '+student.user.name+'.'
-      notif_msg1 = ''+student.user.name+' posted a memory on your wall'  
+      notif_msg = 'You were tagged in a memory by '+student.user.html_name+'.'
+      notif_msg1 = ''+student.user.html_name+' posted a memory on your wall'  
       app = 'Yaadein'
       pk = str(post.pk)
       url = '/yaadein/#/post/'+pk+'/'
       notif_users=[]
+      sent_users =[]
       tagged_users = []
       if s.user!=request.user:
         notif_users.append(s.user)
+        sent_users.append(s.user.username)
       Notification.save_notification(app,notif_msg1,url,notif_users,post)
+      requests.post("/notifications/add/",data={'channeli':True,'app':app,'text':notif_msg1,'users':sent_users,'url':url})
       print post.wall_user
       if len(imgs)>0:
         for key in imgs:
@@ -176,6 +179,7 @@ def index(request,enrno=None):
           post.user_tags.add(student_related)
       if len(user_tagged)>0: 
         Notification.save_notification(app,notif_msg,url,tagged_users,post)
+        requests.post("/notifications/add/",data={'channeli':True,'app':app,'text':notif_msg,'users':sent_users,'url':url})
       posts_data=[{'post_id':str(post.pk)}]  
       data = {'posts_data':posts_data}
 # return  HttpResponse("post added")
@@ -462,12 +466,15 @@ def invite(request):
     user_tagged = simplejson.loads(request.body)['user_tags']
     url = '/yaadein/#/profile/'+student.user.username
     tagged_users = []
+    sent_users=[]
     for user in user_tagged:
       student_related = Student.objects.get(user__username=str(user['id']))
       if student_related.user!=request.user:
         tagged_users.append(student_related.user)
+        sent_users.append(student_related.user.username)
     if len(user_tagged)>0: 
       Notification.save_notification(app,notif_msg1,url,tagged_users,student)
+      requests.post("/notifications/add/",data={'channeli':True,'app':app,'text':notif_msg1,'users':sent_users,'url':url})
       return HttpResponse("True")
     else:
       return HttpResponse("False")
