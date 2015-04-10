@@ -122,11 +122,11 @@ def index(request,enrno=None):
     if request.method == 'POST':
       post_data = str(simplejson.loads(request.POST['data'])['post_text'])
       user_tagged = simplejson.loads(request.POST['data'])['user_tags']
-      spots = simplejson.loads(request.POST['data'])['spot']
+      spots_tag = simplejson.loads(request.POST['data'])['spot']
 # stat = simplejson.loads(request.POST['data'])['post_type']
-      if spots:
-        spot = Spot.objects.get_or_create(name=str(spots[0]['id']))
-        if spot[1]=='True':
+      if spots_tag:
+        spot = Spot.objects.get_or_create(name=str(spots_tag[0]['value']))
+        if spot[1]==True:
           spot[0].display = False
           spot[0].save()
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
@@ -148,7 +148,7 @@ def index(request,enrno=None):
       else:
         post = Post(text_content=post_data, post_date=timezone.now(), owner=student)
       post.save()
-      if spots:
+      if spots_tag:
         post.spots.add(spot)
       notif_msg = 'You were tagged in a memory by '+student.user.name+'.'
       notif_msg1 = ''+student.user.name+' posted a memory on your wall'  
