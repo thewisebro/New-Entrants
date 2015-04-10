@@ -85,7 +85,7 @@
               </div>
               <div class="tag-input-box">
                 <i class="inline fa fa-map-marker"></i>
-                <tags-input type="text" ng-model="newPost.spot" class="" display-property="value" placeholder="Where did this happen?" add-from-autocomplete-only="false" tabindex="1" replace-spaces-with-dashes="true" max-tags="1">
+                <tags-input type="text" ng-model="newPost.spot" class="" display-property="value" placeholder="Where did this happen?" add-from-autocomplete-only="false" tabindex="1" replace-spaces-with-dashes="false" max-tags="1" on-tag-added="formatSpot($tag)">
                   <auto-complete source="loadSpots($query)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
                 </tags-input>
               </div>
