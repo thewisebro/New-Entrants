@@ -637,7 +637,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                  //console.log(data);
                  var html = "";
                  html += '<div style=" display: inline-block;"><span class="timeFile">'+ moment(data).format("DD-MM-YY, HH:mm");+'</span></div>';
-                 html += '<div style="display: inline-block; margin-left:30px;"><a download style="text-decoration:none" ng-href="{[base_domain]}/'+ full.filepath+'/"><i class="fa fa-chevron-circle-down fileSetting" ng-click="toggleAll()"></i></a></div>';
+                 html += '<div style="display: inline-block; margin-left:30px;"><a download style="text-decoration:none" ng-href="{[base_domain]}/'+ full.filepath+'"><i class="fa fa-chevron-circle-down fileSetting" ng-click="toggleAll()"></i></a></div>';
                  return html;
              })/*
              DTColumnBuilder.newColumn(null).withTitle('').notSortable()
