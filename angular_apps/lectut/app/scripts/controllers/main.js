@@ -16,13 +16,20 @@ lectutApp
     
         
     // To get feed data.
-    var x  = $routeParams;
-    $scope.courseId = x;
-    
+    $scope.courseId = $routeParams;
+    $scope.updateCourseId = function(id){
+           for(var i=0;i<$scope.auth.batches.length;i++){
+              if($scope.auth.batches[i].id == id){
+                $scope.courseCode = $scope.auth.batches[i].code;
+                //alert($scope.courseCode);
+              }
+            }
+
+    }
     // Initially setting the selected Course
-    console.log("--------------------------------------------");
-    $scope.selectedCourse = x.courseId;
-    console.log($location.path());
+    //console.log("--------------------------------------------");
+    $scope.selectedCourse = $routeParams.courseId;
+    //console.log($location.path());
     // Is active
      $scope.isActive = function(route) {
         return route === $location.path().substring(0,route.length-1) +"/";
@@ -33,13 +40,13 @@ lectutApp
        var routeB = route.split("").reverse().join("");
        var pathB =  $location.path().split("").reverse().join("");
        var check =false;
-       console.log(routeB);
-       console.log(pathB);
+       //console.log(routeB);
+       //console.log(pathB);
        var i=0;
        while(pathB[i] != "/" || routeB[i] != "/"){
           if(pathB[i] != routeB[i]){ 
-            console.log(routeB[i]);
-            console.log(pathB[i]);
+          //  console.log(routeB[i]);
+          //  console.log(pathB[i]);
             return false;
           }
           i++;
@@ -57,9 +64,9 @@ lectutApp
 
     $scope.isHome = function(route){
       // route home
-      console.log("daddddd");
-      console.log(route);
-      console.log($location.path());
+     // console.log("daddddd");
+      //console.log(route);
+      //console.log($location.path());
        return route === $location.path();
 
     }
@@ -392,7 +399,12 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
           console.log("Things dajlksdjsa ld");
           console.log(things);
           console.log(!$scope.privacy);
-          upload(things,typeData,$scope.thing.content);
+          if(things.length == 0 && $scope.thing.content == ""){
+             alert("Post cannot be empty");
+          }
+          else{
+            upload(things,typeData,$scope.thing.content);
+          }
           //console.log("----------------");
           console.log(typeData);
   }
@@ -594,14 +606,28 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                  //console.log(full.file_type);
                  var html= "";
                  //html += '<input type="checkbox" style="margin-right:10px;margin-left:5px;" ng-change="toggleOne('+ data.id+')" ng-checked="selected['+data.id+']" ng-model="$scope.selected[' + data.id + ']">';
-                 if(full.file_type == "unknown"){
-                   html += '<i class="fa fa-file" style="margin-right:10px; font-size:16px;"></i><span>'+full.description+'</span>';
+                /* <i ng-show='file.file_type == "ppt"' class="fa fa-file-powerpoint-o"></i>
+                 <i ng-show='file.file_type == "zip"' class="fa fa-file-archive-o"></i>
+                 <i ng-show='file.file_type == "other"' class="fa fa-file"></i>
+                  */
+                 if(full.file_type == "image"){
+                   html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'">'+full.description+'</a></span>';
+                 } 
+                 else if(full.file_type == "ppt"){
+                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:10px; font-size:16px;"></i><span><a ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'">'+full.description+'</a></span>';
+                 }
+                 else if(full.file_type == "zip"){
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:10px; font-size:16px;"></i><span><a ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'">'+full.description+'</a></span>';
+                 }
+
+                 else if(full.file_type == "pdf"){
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:10px; font-size:16px;"></i><span><a ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'">'+full.description+'</a></span>';
                  }
                  else{
-                   html += '<i class="fa fa-file-'+ full.file_type +'-o" style="margin-right:10px; font-size:16px;"></i><span>'+full.description+'</span>';
-                }
+                   html += '<i class="fa fa-file" style="margin-right:10px; font-size:16px;"></i><span><a ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'">'+full.description+'</a></span>';
+                 }
                 html += '<span class="fileShowUser">by: '+full.username+'</span>';
-                html += '<span class="fileShowDownloads">Downloads: '+2+'</span>';
+                html += '<span class="fileShowDownloads">Downloads: '+full.download_count+'</span>';
                 return html;
              }),
             // DTColumnBuilder.newColumn('description').withTitle('Name'),
@@ -611,7 +637,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                  //console.log(data);
                  var html = "";
                  html += '<div style=" display: inline-block;"><span class="timeFile">'+ moment(data).format("DD-MM-YY, HH:mm");+'</span></div>';
-                 html += '<div style="display: inline-block; margin-left:30px;"><i class="fa fa-cog fileSetting" ng-click="toggleAll()"></i></div>';
+                 html += '<div style="display: inline-block; margin-left:30px;"><a download style="text-decoration:none" ng-href="{[base_domain]}/'+ full.filepath+'/"><i class="fa fa-chevron-circle-down fileSetting" ng-click="toggleAll()"></i></a></div>';
                  return html;
              })/*
              DTColumnBuilder.newColumn(null).withTitle('').notSortable()
