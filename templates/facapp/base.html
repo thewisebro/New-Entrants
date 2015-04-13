@@ -33,14 +33,17 @@ Faculty Profile
 <div id ="messages-div" class="message"></div>
 <div class="buttons">
   <a href="http://cms.channeli.in/nova/index.php?r=dynamicPage/preview&name={{user.username}}&type=fa" target="_blank"><button class="btn" type="button">Preview</button></a>
-<button class="btn btn-success" type="button" data-toggle="tooltip"
-  title="Click here to reflect the changes made here on Department's website"
-  onclick="send_request('{{user.username}}');">Publish Profile on IITR
-  Website</button>
+  <button class="btn btn-success" type="button" data-toggle="tooltip"
+    title="Click here to reflect the changes made here on Department's website"
+    onclick="send_request('{{user.username}}');">Publish Profile on IITR
+    Website</button>
+
+{% comment "Uncomment the next tag and comment the previous one when publish button is under maintainance" %}
 <!--
   <button class="btn btn-success" type="button" data-toggle="tooltip"
     title="Click here to reflect the changes made here on Department's website"
     onclick="under_maintenance();">Publish Profile on IITR Website</button>-->
+{% endcomment %}
 </div>
 {% endblock %}
 {% block left_sidebar %}
