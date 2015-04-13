@@ -27,15 +27,18 @@
 .notification-box
   min-height: 20px
   padding: 10px
-  background: #fafafa
+  background: #fff
   border-bottom: 1px solid #d0d0d0
   &:hover
     background: #f3f3f3
 
 .notification-box-not-viewed
-  background: #F4F8FF
+  //background: #F4F8FF
+  background: #C9D9F4
   &:hover
-    background: #FAFCFF
+    background: #C6DAFC
+    .notification-mark-read
+      color: #333
 
 .notification-text
   min-width: 250px
@@ -50,7 +53,11 @@
     color: #0072dc
     text-decoration: none
 
-.notification-time
+.notification-time, .notification-mark-read
   float: right
   font-size: 12px
   color: #797979
+  margin-left: 20px
+
+.notification-mark-read:hover
+  color: $blue-link !important
