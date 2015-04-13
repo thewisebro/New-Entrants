@@ -20,6 +20,8 @@ def custom(request):
     'channeli_links': channeli_links,
     'login_page_links':login_page_links,
     'django_messages':mark_safe(django_messages),
+    'jb_user':request.jb_user,
+    'jb_user1':request.jb_user,
   }
   context.update({
     'owner': request.owner if hasattr(request, 'owner') else None,

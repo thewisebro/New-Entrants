@@ -204,6 +204,12 @@ function update_events(calendar,action,number){
 }
 
 function event_html(Event,calendar_name){
+  var context = {
+    'Event': Event,
+    'date': Event.date+(Event.weekday ? ' , '+Weekdays[Event.weekday]+'' : ''),
+    'calendar_name': calendar_name,
+    'virtual_calendar': virtual_calendar
+  };
   var html =
     "<div class='event-container' id='event-container"+Event.id+"' onmouseover='event_container_mouse_over("+Event.id+");'"+
                                  " onmouseout='event_container_mouse_out("+Event.id+");'>"+
@@ -258,6 +264,7 @@ function event_html(Event,calendar_name){
   html+=
       "</div>"+
     "</div> ";
+  var html = Handlebars.events_templates.event_html(context);
   return html;
 }
 
