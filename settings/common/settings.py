@@ -271,6 +271,7 @@ CHANNELI_APPS = (
   'lectut',
   'games',
   'buysell',
+  'facapp',
   'utilities',
   'birthday',
   'messmenu',

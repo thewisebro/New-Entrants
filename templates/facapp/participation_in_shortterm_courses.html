@@ -1,0 +1,12 @@
+{% extends "facapp/base.html" %}
+
+{% block model_details %}
+	    <li>Course name : {{ l.course_name }}</li>
+      <li>Sponsored by : {{ l.sponsored_by }}</li>
+      <li>Date : {{ l.date }}</li>
+
+{% endblock %}
+
+{% block model_details_to_delete %}
+	    {{ model_to_delete.course_name }} by {{ model_to_delete.sponsored_by }}
+{% endblock %}

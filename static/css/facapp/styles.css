@@ -1,7 +1,61 @@
-*{
-  padding: 0;
+/***********************************************************/
+/* The right content div is hidden in placement and the    */
+/* middle content div spans over it.                       */
+/***********************************************************/
+
+#id_photo
+{
+  margin-left:100px;
 }
 
-body{
-    background-color: #E5F2F7;
+#profile_pic img {
+  height:100px;
+  width:100px;
+  border:1px solid #dedede;
+}
+
+div[id^="div_"]
+{
+  margin-top:10px;
+}
+
+
+h4, h5, h6
+{
+  line-height:40px;
+}
+
+
+textarea
+{
+  width:400px;
+  height:150px;
+  margin-bottom:20px;
+}
+.buttons
+{
+  position:relative;
+  float:right;
+  margin-top:75px;
+
+}
+#messages-div
+{
+  position: absolute;
+  top: 85px;
+  left: 150px;
+  right: 130px;
+  text-align: center;
+}
+#messages-div span
+{
+  color: #468847;
+  background-color: #dff0d8;
+  padding: 8px 14px 8px 14px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  border: 1px solid #dff0d8; 
+  -webkit-border-radius: 4px; 
+  -moz-border-radius: 4px; 
+  border-radius: 4px; 
+  float:none;
 }

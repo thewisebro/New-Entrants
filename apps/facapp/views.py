@@ -1,72 +1,249 @@
+import re
+
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest, Http404
+from django.shortcuts import render, get_object_or_404
+from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
+from django.template import RequestContext 
+from django.db.models import Q
+
+from core.forms import BaseForm, BaseModelForm
+
+from nucleus.models import Branch, Faculty, User
+
+from facapp.models import *
+from facapp.utils import handle_exc
+from facapp.forms import BooksAuthoredForm, RefereedJournalPapersForm, PhotoUploadForm, ResumeUploadForm, BaseModelFormFunction, ConfirmDeleteForm
+
+import pika
+# from django.utils import simplejson
+import json as simplejson
+
 # Create your views here.
 
-from django.http import HttpResponse, HttpResponseRedirect
-from facapp.models import *
-from django.shortcuts import render
-from facapp import sectionData
-from django.views.decorators.csrf import csrf_exempt
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)  
+def index(request):
+  try:
+    faculty = request.user.faculty
+    # photo_form = PhotoUploadForm()
+    # resume_form = ResumeUploadForm()
+    education = EducationalDetails.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    interests = Interests.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    professional_background = ProfessionalBackground.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    administrative_background = AdministrativeBackground.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    honors = Honors.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    teaching = TeachingEngagement.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    seminars = ParticipationSeminar.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    membership = Membership.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    misc = Miscellaneous.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    collaboration = Collaboration.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    books = BooksAuthored.objects.filter(faculty = faculty)
+    refereed_papers = RefereedJournalPapers.objects.filter(faculty = faculty)
+    research_projects = SponsoredResearchProjects.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    project_supervision = ProjectAndThesisSupervision.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    phd_supervised = PhdSupervised.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    organised_conferences = OrganisedConference.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    short_term_courses = ParticipationInShorttermCourses.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    special_lectures = SpecialLecturesDelivered.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    visits = Visits.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    rs_group = ResearchScholarGroup.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    invitations = Invitations.objects.filter(faculty = faculty, visibility = True).order_by('priority')
+    return render(request, 'facapp/index.html', {
+      'interests': interests,
+      'professional_background' : professional_background,
+      'honors' : honors,
+      'education' : education,
+      'administrative_background' : administrative_background,
+      'research_projects' : research_projects,
+      'seminars' : seminars,
+      'membership' : membership,
+      'teaching' : teaching,
+      'project_supervision' : project_supervision,
+      'rs_group' : rs_group,
+      'phd_supervised' : phd_supervised,
+      'visits' : visits,
+      'invitations' : invitations,
+      'short_term_courses' : short_term_courses,
+      'organised_conferences' : organised_conferences,
+      'special_lectures' : special_lectures,
+      'misc' : misc,
+      'collaboration' : collaboration,
+      'books' : books,
+      'refereed_papers' : refereed_papers,
+      })
+  except Exception as e:
+    # Can't use handle_exc here because it redirects here. To avoid infinite loop, redirect to a static page.
+    print 'Exception: ' + str(e)
+    messages.error(request, 'Unknown error has occured. Please try again later. The issue has beeen reported')
+    return render(request, 'error.html', {
+        })
 
-@csrf_exempt
-def home(request):
-  data = {}
-#   if 'title' in request.POST:
-#     title = request.POST['title']
-#     value = request.POST['content']
-#     s = Section.objects.get(title=title)
-#     s.content = value
-#     s.save()
-#     return HttpResponse(value)
-# #   return HttpResponse(data.titles)
-#   sections = Section.objects.order_by('priority')
-#   titlesList = sectionData.titles
-#   data = {"sections" : sections, "titles_list" : titlesList}
-  return render(request, 'facapp/index.html', data)
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
+def add(request, model_name):
+  try:
+    faculty = request.user.faculty
+    model_type = globals()[model_name]
+    if(model_name == 'Faculty'):
+      messages.error(request, 'Faculty can\'t be added.')
+      return HttpResponseRedirect(reverse('facapp.views.index'))
+    exclude_list = ['faculty',]
+    model_name_space_separated = re.sub(r"(?<=\w)([A-Z])", r" \1", model_name)
+    template_name = model_name_space_separated.lower().replace(' ', '_').strip() + '.html'
 
-@csrf_exempt
-def sendFields(request, title):
-  sections = sectionData.data
-  for section in sections:
-    if section[0][1] == title:
-#       print section[2][1]
-      sendIt = ""
-      for fields in section[2][1]:
-        sendIt += fields[0] + ":" + fields[1] + ","
-      print sendIt
-#       return HttpResponse(section[2][1])
-      return HttpResponse(sendIt)
-  return HttpResponse('try using the others category if you want another title')
+    # If the form was submitted.
+    if request.method == 'POST':
+      form = BaseModelFormFunction(model_type, exclude_list, request.POST)
+      if form.is_valid():
+        # Get a model instance without committing the form.
+        new_entry = form.save(commit=False)
+        print new_entry
+        # Now fill the empty faculty field.
+        new_entry.faculty = faculty
+        # Now commit the model.
+        new_entry.save()
+        messages.success(request, model_name_space_separated + ' were successfully saved.')
+      else:
+        messages.error(request, form.errors, extra_tags='form_error')
 
-@csrf_exempt
-def createSection(request):
-  print "recieved"
-  if 'title' in request.POST:
-    title = request.POST['title']
-    content = request.POST['content']
-    priority = request.POST['priority']
-    user = request.user
-    print user
-    p = Faculty.objects.get(user=user)
-    s = Section.objects.create(title  = title, professor = p, priority = priority, content = content)
-    return HttpResponse('created new section instance')
-  return HttpResponse('no post request detected')
+    # Direct to the details page.
+    form = BaseModelFormFunction(model_type, exclude_list)
+    new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
+    return render(request, 'facapp/' + template_name, {
+        'form': form,
+        'action': '/facapp/add/' + model_name + '/',
+        'list': new_list,
+        'model_name': model_name,
+        'model_name_space_separated': model_name_space_separated,
+        })
+  except Exception as e:
+    return handle_exc(e, request)
 
-@csrf_exempt
-def setPriority(request):
-  if 'priority' in request.POST and request.user!='NULL' :
-    data = request.POST['priority']
-    professor = request.user
-    titles = data.split(',')
-    for idx,title in enumerate(titles):
-      section = Section.objects.get(title = title, professor = professor)
-      section.priority = idx + 1
-      section.save()
-      print section.priority
-    # try:
-    # print section.priority
-    # except Section.DoesNotExist:
-    #   # no employee found
-    # except Section.MultipleObjectsReturned:
-    #   # what to do if multiple employees have been returned?
-    return HttpResponse('priority set')
-  else:
-    HttpResponse('something is not right.')
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
+def update(request, model_name, instance_id):
+  try:
+    faculty = request.user.faculty
+    model_type = globals()[model_name]
+    if(model_name == 'Faculty'):
+      exclude_list = ['user',]
+      old = model_type.objects.filter(pk=faculty.user)[0]  
+    else:
+      exclude_list = ['faculty',]
+      old = model_type.objects.filter(id=instance_id)[0]
+      # we are guaranteed that index out of range exception will not occur, if a valid instance_id was passed.
+    model_name_space_separated = re.sub(r"(?<=\w)([A-Z])", r" \1", model_name)
+    template_name = model_name_space_separated.lower().replace(' ', '_').strip() + '.html'
+
+    # If the form was submitted.
+    if request.method == 'POST':
+      # Build a new instance from old instance too.
+      form = BaseModelFormFunction(model_type, exclude_list, request.POST, files=request.FILES, instance=old)
+      if form.is_valid():
+        # Now commit the model.
+        form.save()
+        messages.success(request, model_name_space_separated + ' were successfully saved.')
+        # If Faculty then redirect to the home page.
+        if(model_name == 'Faculty'):
+          return HttpResponseRedirect(reverse('facapp.views.index'))
+        # For other redirect to the add page.
+        form = BaseModelFormFunction(model_type, exclude_list)
+        new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
+        return render(request, 'facapp/' + template_name, {
+            'form': form,
+            'action': '/facapp/add/' + model_name + '/',   # Add action.
+            'list': new_list,
+            'model_name': model_name,
+            'model_name_space_separated': model_name_space_separated,
+            })
+      else:
+        messages.error(request, form.errors, extra_tags='form_error')
+    
+    # instance argument should not be empty.
+    form = BaseModelFormFunction(model_type, exclude_list, instance=old)
+    # Direct to the details page.
+    new_list = []
+    if(model_name != 'Faculty'):
+      new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
+    return render(request, 'facapp/' + template_name, {
+        'form': form,
+        'action': '/facapp/update/' + model_name + '/' + str(instance_id) + '/',  # Update action.
+        'list': new_list,
+        'model_name': model_name,
+        'model_name_space_separated': model_name_space_separated,
+        })
+  except Exception as e:
+    return handle_exc(e, request)
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
+def delete(request, model_name, instance_id):
+  try:
+    faculty = request.user.faculty
+    model_type = globals()[model_name]
+    if(model_name == 'Faculty'):
+      messages.error(request, 'Faculty can\'t be deleted.')
+      return HttpResponseRedirect(reverse('facapp.views.index'))
+    exclude_list = ['faculty',]
+    # old = model_type.objects.filter(id=instance_id)[0]
+    old = get_object_or_404(model_type, faculty=faculty, id=instance_id)
+    model_name_space_separated = re.sub(r"(?<=\w)([A-Z])", r" \1", model_name)
+    template_name = model_name_space_separated.lower().replace(' ', '_').strip() + '.html'
+  
+    # If the form was submitted.
+    if request.method == 'POST':
+      form = ConfirmDeleteForm(request.POST)
+      if form.is_valid():
+        yes_or_no = form.cleaned_data['choices']
+        if yes_or_no == 'Y':
+          old.delete()
+          messages.success(request, model_name_space_separated + ' was successfully deleted.')
+        else:
+          messages.success(request, 'Action was cancelled.')
+      else:
+        messages.error(request, form.errors, extra_tags='form_error')
+      # Direct to the add page.
+      form = BaseModelFormFunction(model_type, exclude_list)
+      new_list = list(model_type.objects.filter(Q(faculty=faculty)).order_by('priority'))
+      return render(request, 'facapp/' + template_name, {
+          'form': form,
+          'action': '/facapp/add/' + model_name + '/',
+          'list': new_list,
+          'model_name': model_name,
+          'model_name_space_separated': model_name_space_separated,
+          })
+
+    # If user clicked 'Delete' link then redirect him to a confirmation page.
+    form = ConfirmDeleteForm()
+    return render(request, 'facapp/' + template_name, {
+        'form': form,
+        'action': '/facapp/delete/' + model_name + '/' + str(instance_id) + '/',
+        'model_to_delete': old,
+        'model_name': model_name,
+        'model_name_space_separated': model_name_space_separated,
+        })
+  except Exception as e:
+    return handle_exc(e, request)
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
+def publish(request):
+  try:
+    username = request.user.username
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+                host='cms.channeli.in'))
+    channel = connection.channel()
+    channel.queue_declare(queue='publish_faculty_page_queue')
+    channel.basic_publish(exchange='',
+                routing_key='publish_faculty_page_queue',
+                body=username)
+    connection.close()
+    messages.success(request, 'Request sent successfully. Changes will be reflected soon!')
+    json = simplejson.dumps({})
+    return HttpResponse(json, content_type='application/json')
+  except Exception as e:
+    print e
+    return handle_exc(e, request)

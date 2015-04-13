@@ -1,0 +1,12 @@
+{% extends "facapp/base.html" %}
+
+{% block model_details %}
+	    <li>Was {{ l.designation }} at {{ l.organisation }} from {{ l.from_year}} 
+      {% if l.to_year %}to {{ l.to_year }} {% endif %}. Priority : {{ l.priority }}</li>
+
+{% endblock %}
+
+{% block model_details_to_delete %}
+	   Was {{ model_to_delete.designation }} at {{ model_to_delete.organisation }} from {{ model_to_delete.from_year}} 
+      {% if model_to_delete.to_year %}to {{ model_to_delete.to_year }} {% endif %} 
+{% endblock %}
