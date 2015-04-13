@@ -17,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 import mimetypes, os
 import json
 
-from nucleus.models import Batch, Course, User, Student , Faculty
+from nucleus.models import Batch, Course, User, Student , Faculty , RegisteredCourse
 from forms import *
 from models import *
 from django import forms
@@ -233,6 +233,8 @@ def uploadedFile(request , batch_id):
     uploadTypes = allData['typeData']
     documents = request.FILES.getlist('file')
     extra = request.POST.getlist('extra','')
+    if not data and not documents:
+      return HttpResponse(json.dumps('Empty posts are not allowed'), content_type='application/json')
     if getUserType(user) == "1":
       privacy = allData['privacy']
     files = []
@@ -615,7 +617,7 @@ def join_batch(request , batch_id):
 
   return HttpResponse(json.dumps(batch.batch_dict()), content_type='application/json')
 
-def ini_batch_data(request):
+def ini_batch_student(request):
   user = request.user
   student = user.student
   regis_courses = RegisteredCourse.objects.all().filter(student = student).filter(cleared_status = 'current')
@@ -636,7 +638,6 @@ def ini_batch_data(request):
   for faculty in faculty_objects:
     user = faculty.user
     some_dict = {
-                 'id':faculty.id,
                  'department' : faculty.department,
                  'user_id': user.id,
                  'name':user.name,
@@ -644,4 +645,9 @@ def ini_batch_data(request):
     faculties.append(some_dict)
 
   details = {'courses':courses , 'batches':batches_info , 'faculties':faculties}
-  return HttpResponse(json.dumps(details) , content_type = 'application/json'
+  return HttpResponse(json.dumps(details) , content_type = 'application/json')
+
+def ini_batch_faculty(request):
+  user = request.user
+  faculty = user.faculty
+  return   
