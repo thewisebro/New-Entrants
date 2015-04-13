@@ -2,6 +2,7 @@
 
 var app = angular.module('yaadeinApp');
 var originURL = base_domain;
+var redirect_url = base_domain + '/login/?next=/yaadein/';
 
 app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$upload', '$location', '$routeParams', '$route', 'ngNotify', 'TickerService', 'HomeService', 'PostService', 'Lightbox', 'SweetAlert',
     function ($scope, $http, $q, $timeout, $upload, $location, $routeParams, $route, ngNotify, TickerService, HomeService, PostService, Lightbox, SweetAlert) {
@@ -27,6 +28,12 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
       'class': 'fa fa-bars',
       'url': '#/',
       'hint': 'Feed'
+    },
+    {
+      'id': 'spots',
+      'class': 'fa fa-map-marker',
+      'url': '#/spots/',
+      'hint': 'Spots'
     },
 		{
 			'id': 'search',
@@ -67,11 +74,15 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
 		if ($scope.currentNavItem.id === 'search' || $scope.currentNavItem.id === 'post') {
 			$('#centered').addClass('blur-back');
 			$('.right-sidebar').addClass('blur-back');
+      $scope.clearNewPostData('');
 		} else {
       $location.path(navItem.url);
 			$('#centered').removeClass('blur-back');
 			$('.right-sidebar').removeClass('blur-back');
 		}
+    if ($scope.currentNavItem.id != 'post') {
+      $scope.clearNewPostData('Type memory here');
+    }
 	};
 
 	$scope.isCurrentNavItem = function (navItem) {
@@ -92,7 +103,7 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
 		$('.right-sidebar').removeClass('blur-back');
 		$('#postBox').fadeOut(300);
 		$scope.setCurrentNavItem($scope.navigationItems[1]);
-    $scope.clearNewPostData();
+    $scope.clearNewPostData('Type memory here');
 	};
 
 	$scope.closeSearch = function () {
@@ -153,6 +164,9 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
 	$scope.user = {};
   var LoggedUserData = HomeService.getLoggedUser();
   LoggedUserData.then(function (d) {
+      if (d.logged === 'false') {
+        window.location = redirect_url;
+      }
       $scope.user = d;
       $scope.navigationItems[0].url += $scope.user.enrolmentNo;
       $scope.navigationItems[0].hint = $scope.user.name;
@@ -194,17 +208,21 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
   //    }
   //});
 
-  $scope.clearNewPostData = function () {
-    $scope.newPost.post_text = '';
+  $scope.clearNewPostData = function (x) {
+    $scope.newPost.post_text = x;
     $scope.newPost.user_tags = [];
     $scope.newPost.image_url = [];
     $scope.images1.imageArray = [];
+    $scope.newPost.spot = [];
   };
 
-  $scope.loadTags = function (query) {
+  $scope.loadTags = function (query, num) {
     var defer = $q.defer();
-    $http.get(originURL + '/yaadein_api/search/4/?q=' + query, {ignoreLoadingBar: true})
+    $http.get(originURL + '/yaadein_api/search/' + num + '/?q=' + query, {ignoreLoadingBar: true})
       .success(function (d) {
+          for(var i = 0; i < d.results.length; i += 1) {
+            d.results[i].value += ' (' + d.results[i].label + ')';
+          }
           defer.resolve(d.results);
     });
     return defer.promise;
@@ -219,16 +237,25 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
     return defer.promise;
   };
 
-  $scope.$watch('coverpic', function (photo) {
-      if (photo !== null) {
-        (function(file){
-         $scope.uploadCover(file);
-        })(photo);
-      }
-  });
+  $scope.formatSpot = function(tag) {
+    var words = tag.value.split(' ');
+    //Capitalize all words
+    for(var i = 0; i < words.length; i += 1) {
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+    //Concatenate
+    tag.value = '';
+    for(var i = 0; i < words.length; i += 1) {
+      tag.value = tag.value.concat(words[i]);
+    }
+  };
 
   $scope.images1 = {
       'imageArray': []
+  };
+
+  $scope.coverpic1 = {
+    'coverpic': []
   };
 
   $scope.addImage = function (files) {
@@ -296,29 +323,42 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
         ngNotify.set('Maximum file size for a photo is 2MB', 'warn');
       } else if($scope.newPost.post_text === '')  {
         ngNotify.set('Type in some memories', 'warn');
-        $('#postMessageInput').addClass('error');
+        //$('#postMessageInput').addClass('error');
         $('#postMessageInput').focus();
       }
     }
   };
 
   $scope.uploadCover = function (files) {
-    if (files && files.length === 1) {
+    $scope.coverpic1.coverpic = $scope.coverpic1.coverpic.concat(files);
+    var files1 = $scope.coverpic1.coverpic;
+    var sizeExceeded = false;
+    for(var j = 0; j < files1.length; j += 1) {
+      if (files1[j].size > 3145728) {
+        sizeExceeded = true;
+      }
+    }
+    if (files1 && files1.length === 1 && !sizeExceeded) {
       $upload.upload({
         url: originURL + '/yaadein_api/cover/upload/',
         headers: {'Content-Type':'multipart/form-data'}, 
         method: 'POST',
         data: {
         },
-        file: files,
+        file: files1,
         withCredentials: true
       }).progress(function (evt) {
+        ngNotify.set('Uploading...', 'info');
       }).success(function (data, status, headers, config) {
         ngNotify.set('Cover photo updated successfully!', 'success');
         location.reload();
       }).error(function (data, status, headers, config) {
         ngNotify.set('Could not update cover photo.', 'error');
+        $scope.coverpic1.coverpic = [];
       });
+    } else if (sizeExceeded) {
+      ngNotify.set('Maximum size for cover photo is 3MB', 'warn');
+      $scope.coverpic1.coverpic = [];
     }
   };
 
@@ -356,7 +396,7 @@ app.controller('YaadeinController', ['$scope', '$http', '$q', '$timeout', '$uplo
   //Emoji Service
   $scope.predictEmoji = function(term) {
     var emojiList = [];
-    return $http.get('scripts/emojis.json')
+    return $http.get('data/emojis.json')
       .then(function (response) {
           angular.forEach(response.data, function(item) {
             if (item.name.toUpperCase().indexOf(term.toUpperCase()) >= 0) {
@@ -401,6 +441,9 @@ app.controller('ProfileController', ['$routeParams', '$scope', '$http', 'UserSer
 	$scope.currentUser = {};
 	var userPromise = UserService.getUser($routeParams.enrolmentNo);
 	userPromise.then(function (d) {
+      if (d.logged === 'false') {
+        window.location = redirect_url;
+      }
 			$scope.currentUser = d;
 
       //Add originURL to image URLs
@@ -458,13 +501,16 @@ app.controller('ProfileController', ['$routeParams', '$scope', '$http', 'UserSer
 
 }]);
 
-app.controller('GalleryController', ['$routeParams', '$scope', 'dataUserService',
-	function ($routeParams, $scope, UserService) {
+app.controller('SpotsController', ['$scope', 'HomeService',
+	function ($scope, HomeService) {
 
-	$scope.currentUser = {};
-	var userData = UserService.getUser($routeParams.enrolmentNo);
-	userData.then(function (d) {
-    $scope.currentUser = d;
+	$scope.spots = [];
+	var spotsData = HomeService.getSpots();
+	spotsData.then(function (d) {
+    if (d.logged === 'false') {
+      window.location = redirect_url;
+    }
+    $scope.spots = d;
 	});
 
 }]);
@@ -476,6 +522,9 @@ app.controller('HashtagController', ['$routeParams', '$scope', '$http', 'Hashtag
 	$scope.posts = [];
 	var dataPromise = HashtagService.getHashtaggedPosts($routeParams.hashtag);
 	dataPromise.then(function (d) {
+    if (d.logged === 'false') {
+      window.location = redirect_url;
+    }
 
     //Add originURL to image URLs
     for(var i = 0; i < d.posts_data.length; i += 1) {
@@ -521,6 +570,9 @@ app.controller('PostController', ['$routeParams', '$scope', '$q', '$http', 'Post
    $scope.post = {};
    var postData = PostService.getPost($routeParams.postId);
    postData.then(function (d) {
+     if (d.logged === 'false') {
+      window.location = redirect_url;
+     }
 
      //Add originURL to image URLs
      for(var j = 0; j < d.image_url.length; j += 1) {

@@ -7,8 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function (grunt) {
-  // 
+module.exports = function (grunt) { 
   var modRewrite = require('connect-modrewrite');
 
   // Load grunt tasks automatically
@@ -352,7 +351,15 @@ module.exports = function (grunt) {
           cwd: '.tmp/images',
           dest: '<%= yeoman.dist %>/images',
           src: ['generated/*']
-        }]
+        },
+        {   //for font-awesome
+            expand: true,
+            dot: true,
+            cwd: 'bower_components/font-awesome',
+            src: ['fonts/*.*'],
+            dest: '<%= yeoman.dist %>'
+            }
+        ]
       },
       styles: {
         expand: true,

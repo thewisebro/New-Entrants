@@ -99,6 +99,10 @@ lectutApp.config(['$locationProvider','$routeProvider',
         templateUrl: 'views/partials/one-post.html',
         controller: 'CourseOnePostCtrl'
       }).
+      when('/course/:courseId/files/:fileId', {
+        templateUrl: 'views/partials/one-file.html',
+        controller: 'CourseOneFileCtrl'
+      }).
       otherwise({
         redirectTo: '/'
       });

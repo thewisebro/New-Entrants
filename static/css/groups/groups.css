@@ -13,6 +13,16 @@ body
    margin-top:-10px;
 }
 
+#add-event-button
+{
+  float:right;
+}
+
+.content-tab-active
+{
+  color:#0072dc;
+}
+
 .content-tab
 {
   height: 30px;
@@ -44,7 +54,7 @@ body
 
 #groups-description
 {
-  max-width: 450px;
+  max-width: 510px;
   margin-top: 5px;
 }
 
@@ -60,6 +70,7 @@ body
   color:#0072dc;
   font-size:18px;
   font-weight:700;
+  float:left;
 }
 
 #read-more
@@ -224,6 +235,12 @@ body
   font-size:13px;
   color:#303030;
 }
+
+#edit_group
+{
+  background-color:#ffffff;
+}
+
 .edit-row
 {
   overflow:auto;
@@ -250,7 +267,7 @@ body
 {
   padding-left:15px;
   font-size:13px;
-  color:#0072dc;                   
+  color:#0072dc;
 }
 .gtab-name a
 {
@@ -259,12 +276,12 @@ body
 
 }
 
-.gtab-name a:visited 
+.gtab-name a:visited
 {
   color:#0072dc;
 }
 
-.gtab-name a:active 
+.gtab-name a:active
 {
   color:#0072dc;
 }
@@ -282,7 +299,8 @@ body
 }
 .edit-categories
 {
-  padding:0px 10px 10px 10px;
+  padding:10px;
+  border:1px solid #DDDBDB;
 }
 .field-label-big
 {
@@ -290,9 +308,9 @@ body
   height:25px;
   width:155px;
   font-size:13px;
-  margin-right:10px;  
+  margin-right:10px;
   color:#202020;
-  cursor:pointer;      
+  cursor:pointer;
 }
 .body-content
 {
@@ -300,7 +318,7 @@ body
   color: #202020;
   height:353px;
 }
-.checkbox-div input 
+.checkbox-div input
 {
   width: 50px;
   height: 18px;
@@ -387,7 +405,7 @@ body
   /*margin-top:12px;*/
 }
 .activate-link a
-{ 
+{
   color:#0072dc;
 }
 
@@ -407,7 +425,7 @@ body
   text-align: center;
   font-size: 40px;
   color: #DDDBDB;
-}  
+}
 
 .activity-field-box
 {

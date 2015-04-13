@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import smart_str
 from django.contrib import messages
 from django.conf import settings
@@ -17,7 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 import mimetypes, os
 import json
 
-from nucleus.models import Batch, Course, User, Student
+from nucleus.models import Batch, Course, User, Student , Faculty , RegisteredCourse
 from forms import *
 from models import *
 from django import forms
@@ -73,6 +74,7 @@ def dispbatch(request):
   posts = []
   if request.user.is_authenticated():
     userType = getUserType(request.user)
+    batches_info = []
     user_info = request.user.serialize()
     if userType == "0":
       student = request.user.student
@@ -93,7 +95,8 @@ def dispbatch(request):
       userPosts = Post.post_objects.all().filter(batch__in = batches).order_by('-datetime_created')
 
     else:
-      userPosts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created')  
+      userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')
+      user_info = 'Unknown'
     for post in userPosts:
       posts.append(get_post_dict(post))
     data = {'user': user_info,
@@ -103,7 +106,7 @@ def dispbatch(request):
 
     return HttpResponse (json.dumps(data),content_type='application/json')
 
-  latest_posts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created') #[number:(number+post_count)]
+  latest_posts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created') #[number:(number+post_count)]
   for post in latest_posts:
     complete_post = get_post_dict(post)
     posts.append(complete_post)
@@ -141,17 +144,17 @@ def coursepage(request, batch_id):
         previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
         in_batch = True
       else:
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = True).order_by('-datetime_created')
+        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
         in_batch = False
     elif userType == "1":
       if user.faculty in userBatch.faculties.all():
         previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
         in_batch = True
       else:
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = True).order_by('-datetime_created')
+        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
         in_batch = False
     else:
-      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = True).order_by('-datetime_created')
+      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
       in_batch = False
 
     for post in previous_posts:
@@ -218,22 +221,31 @@ def uploadedFile(request , batch_id):
 #    user = User.objects.get(username=usrname)
     if Batch.objects.filter(id = batch_id).exists():
       userBatch = Batch.objects.get(id = batch_id)
+      course = userBatch.course
     elif Course.objects.filter(id = batch_id).exists():
       course = Course.objects.get(id = batch_id)
+      userBatch = None
     else:
-      return HttpResponse(json.dumps('Invalid location. Please contact IMG if problem persists'), content_type='application/json')
+      return HttpResponse(json.dumps('Invalid Course. Please contact IMG if problem persists'), content_type='application/json')
 
 #    data = request.POST.get('formText','')
     data = allData['formText']
+    privacy = False
     uploadTypes = allData['typeData']
     documents = request.FILES.getlist('file')
     extra = request.POST.getlist('extra','')
+    if not data and not documents:
+      return HttpResponse(json.dumps('Empty posts are not allowed'), content_type='application/json')
+    if getUserType(user) == "1":
+      privacy = allData['privacy']
     files = []
     msg = ''
     counter = 0
     try:
-      course = userBatch.course
-      new_post = Post(upload_user = user, batch = userBatch, course = course, content = data)
+      if userBatch is not None:
+        new_post = Post(upload_user = user, batch = userBatch, course = course, content = data , privacy = privacy)
+      else:
+        new_post = Post(upload_user = user, course = course, content = data , privacy = privacy)
       new_post.save()
     except:
       msg = "Cannot save post"
@@ -267,14 +279,16 @@ def getFileType(file_name):
   try:
     extension = file_name.split(".")[1]
     extension = extension.lower()
-    if extension in ['jpg','png','jpeg','gif']:
+    if extension in ['jpg','png','jpeg','gif','exif','tiff']:
       file_type="image"
     elif extension=='pdf':
       file_type="pdf"
     elif extension=='ppt':
       file_type="ppt"
-    elif extension in ['dv', 'mov', 'mp4', 'avi', 'wmv']:
+    elif extension in ['dv', 'mov', 'mp4', 'avi', 'wmv', 'mkv', 'webm']:
       file_type="video"
+    elif extension in ['gz','tar','iso','lbr']:
+      file_type="zip"
     else:
       file_type="other"
   except:
@@ -294,6 +308,7 @@ def download_file(request, file_id):
 #  user = User.objects.get(username = 'harshithere')
   downloadlog = DownloadLog(uploadedfile=download_file , user = request.user)
   downloadlog.save()
+#  file_name = smart_str(download_file)
 
 #  response = HttpResponse(file_check.read(),content_type='application/force-download')
   response = HttpResponse(file_check.read(),content_type='application/octet-stream')
@@ -331,6 +346,7 @@ def batch_dict(Batch):
                }
   return batch_info
 
+
 ''' Show a particular post '''
 @csrf_exempt
 @CORS_allow
@@ -340,7 +356,7 @@ def get_post(request , batch_id , post_id):
     if Post.post_objects.filter(id = post_id).exists():
       post = Post.post_objects.get(id = post_id)
       complete_post = get_post_dict(post)
-      return HttpResponse(json.dumps(complete_post), content_type='application/json')
+      return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize()}), content_type='application/json')
     else:
       msg = 'Post has been deleted'
   else:
@@ -543,7 +559,8 @@ def search(request):
   if filter_model == None:
     query_post = SearchQuerySet().all().autocomplete(content_auto = value).models(Post)
     query_uploadfile = SearchQuerySet().all().autocomplete(filename_auto = value).models(Uploadedfile)
-    query_courses =  SearchQuerySet().all().autocomplete(name_auto = value).models(Course)
+    query_courses_name =  SearchQuerySet().all().autocomplete(name_auto = value).models(Course)
+    query_courses_code =  SearchQuerySet().all().autocomplete(code_auto = value).models(Course)
   else:
     query = SearchQuerySet().autocomplete(content_auto = value).models(filter_model)
 
@@ -551,10 +568,92 @@ def search(request):
   final_files = []
   posts = map(lambda result:Post.objects.get(id = result.pk),query_post)
   upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk),query_uploadfile)
-  courses = map(lambda result:{'name':result.name,'code':result.code},query_courses)
+  courses1 = map(lambda result:{'name':result.name,'code':result.code},query_courses_name)
+  courses2 = map(lambda result:{'name':result.name,'code':result.code},query_courses_code)
 
-  final_posts = map(lambda result:result.as_dict(),posts)
-  final_files = map(lambda result:result.as_dict(),upload_files)
+  final_posts = map(lambda result:result.as_dict() if result.deleted == False else None,posts)
+  final_files = map(lambda result:result.as_dict() if result.deleted == False else None,upload_files)
 
-  results = {'posts':final_posts , 'files':final_files , 'courses':courses }
+  results = {'posts':final_posts , 'files':final_files , 'courses':courses1+courses2 }
   return HttpResponse(json.dumps(results), content_type="application/json")
+
+
+# VIEWS FOR INITIAL REGISTRATION
+
+def create_batch(request):
+  user = request.user
+  data = json.loads(request.POST['data'])
+  course = Course.objects.get(id = data['id'])
+  userType = getUserType(user)
+  if userType == "0":
+    faculties = data['faculty']
+    if not faculties:
+      return HttpResponse(json.dumps('There must be atleast one faculty'), content_type='appliaction/json')
+    try:
+      batchToAdd = Batch(name = data['name'] , course= course)
+      batchToAdd.save()
+      for faculty in faculties:
+        batch.faculties.add(faculty)
+      batch.students.add(user)
+    except:
+      return HttpResponse(json.dumps('Insufficient data provided'), content_type='appliaction/json')
+  elif userType == "1":
+    try:
+      batchToAdd = Batch(name = data['name'] , course= course)
+      batchToAdd.save()
+      batch.faculties.add(user)
+    except:
+      return HttpResponse(json.dumps('Insufficient data provided'), content_type='appliaction/json')
+  else:
+    return HttpResponse(json.dumps('This user cannot create a batch'), content_type='appliaction/json')
+
+  return HttpResponse(json.dumps(batch.batch_dict()), content_type='appliaction/json')
+
+
+def join_batch(request , batch_id):
+  batch = Batch.objects.get(id = batch_id)
+  user = request.user
+  userType = getUserType(user)
+  if userType == "0":
+    batch.students.add(user)
+  elif userType == "1":
+    batch.faculties.add(user)
+  else:
+    return HttpResponse(json.dumps('This user cannot join this batch'), content_type='application/json')
+
+  return HttpResponse(json.dumps(batch.batch_dict()), content_type='application/json')
+
+def ini_batch_student(request):
+  user = request.user
+  student = user.student
+  regis_courses = RegisteredCourse.objects.all().filter(student = student).filter(cleared_status = 'current')
+  courses = []
+  for regis_course in regis_courses:
+    course = regis_course.course
+    some_dict = {
+                 'id':course.id,
+                 'code':course.code,
+                 'name':course.name,
+    }
+    courses.append(some_dict)
+
+  batches = student.batch_set.all()
+  batches_info = map(lambda x: batch_dict(x),batches)
+  faculty_objects = Faculty.objects.all()
+  faculties = []
+  for faculty in faculty_objects:
+    user = faculty.user
+    some_dict = {
+                 'department' : faculty.department,
+                 'user_id': user.id,
+                 'name':user.name,
+    }
+    faculties.append(some_dict)
+
+  details = {'courses':courses , 'batches':batches_info , 'faculties':faculties}
+  return HttpResponse(json.dumps(details) , content_type = 'application/json')
+
+def ini_batch_faculty(request):
+  user = request.user
+  faculty = user.faculty
+  return   
