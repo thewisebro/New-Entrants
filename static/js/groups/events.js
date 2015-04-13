@@ -6,7 +6,7 @@ function update_events(action){
   var id = null;
   if(action == 'next')
     id = groups_events[groups_events.length-1].id;
-  $.post("/events/fetch",
+  $.get("/events/fetch",
     {'calendar_name':'groups',
      'group_name':calendar_name,
      'action' : action,
@@ -27,6 +27,7 @@ function update_events(action){
 }
 
 function display_add_events(position,groups_events){
+console.log("Abc");
  for(var i=0;i<groups_events.length;i++){
    try{
      if(position == 'end')
@@ -43,24 +44,15 @@ function display_add_events(position,groups_events){
  }
  if(!more_groups_events && $('#see-more-events').length==1){
   $('#see-more-events').css('display','none');
- } 
+ }
  $('.event-right').find('img').click(function(){
      $.fancybox($(this).attr('src'));
    }
  );
  if(!$('#events').html())
    $('#events').html("<div class='no-events'>No Events</div>");
-} 
+}
 
 function see_more_events(){
   update_events('next');
-}  
-
-$('body').ready(function(){
-  update_events('first');
-  $('body').bind('click',function(e){
-      $('.event-options-pop-up').hide();
-      event_options_display_on = false;
-    }
-  );
-});
+}
