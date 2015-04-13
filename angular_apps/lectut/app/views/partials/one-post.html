@@ -30,9 +30,11 @@
                       <a download ng-href="{[base_domain]}/lectut_api/download/{[file.id]}"><i class="fa fa-arrow-down"></i></a>
                     </div>
                     <div class="fileImage">
-                        <img ng-show='file.file_type == "image"' ng-src="{[base_domain]}/{[file.filepath]}/"></img>
-                        <i ng-hide='file.file_type == "image"' class="fa fa-file-{[file.file_type]}-o"></i>
-                        <i ng-show='file.file_type == "unknown"' class="fa fa-file"></i>
+                        <img ng-show='file.file_type == "image"' ng-src="{[base_domain]}/{[file.filepath]}"></img>
+                        <i ng-show='file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>
+                        <i ng-show='file.file_type == "ppt"' class="fa fa-file-powerpoint-o"></i>
+                        <i ng-show='file.file_type == "zip"' class="fa fa-file-archive-o"></i>
+                        <i ng-show='file.file_type == "other"' class="fa fa-file"></i> 
                     </div>
                     <div class="fileData">
                        <div class="filename">
@@ -49,7 +51,7 @@
    </div>
           <div class="commentsBlock" ng-show="logIn">
             <div ng-click="loadCommentsFunc(onePost.post.id)" class="showHideComments">
-            Comments <span class="commentsCount">3</span>
+            Comments <span class="commentsCount">{[onePost.post.count]}</span>
             </div>
             <div id="postComments_{[onePost.post.id]}" class="loadComments">
             </div>

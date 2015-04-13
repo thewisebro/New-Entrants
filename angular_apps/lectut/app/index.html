@@ -118,7 +118,7 @@
             </div>
             <ul class="myCourseUl" ng-show="logIn">
                <a class="crsA" ng-repeat="crs in auth.batches" ng-href="#/course/{[crs.id]}/feeds">
-                 <li class="crsLi" ng-click="getFeedData(crs.id);" ng-class="{'activeCourse':isActive('/course/{[crs.id]}/')}" >
+                 <li class="crsLi" ng-click="getFeedData(crs.id);updateCourseId(crs.id)" ng-class="{'activeCourse':isActive('/course/{[crs.id]}/')}" >
                    <div class="crsIdName"> 
                     <div class="crsId">
                       <span>{[::crs.code]}</span>

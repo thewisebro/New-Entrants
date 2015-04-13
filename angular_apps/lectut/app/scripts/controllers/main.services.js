@@ -179,7 +179,7 @@ app.service('LoadOneFile', ['$http','$q',
 app.service('SearchService', ['$http','$q',
       function($http, $q){
         var deferred;
-          console.log("s");
+          //console.log("s");
           this.getSearchData = function(qs){
           var urlSend = base_domain+'/lectut_api/search/?q='+qs;
           deferred = $q.defer();
