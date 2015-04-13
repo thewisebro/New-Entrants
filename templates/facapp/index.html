@@ -23,7 +23,7 @@
 {#  Resume Upload form done #}
 {% endcomment %}
 
-{% with faculty=request.user.faculty %}
+{% with faculty=user.faculty %}
 <table class="table table-striped table-bordered">
 <tr>
 <td>
@@ -34,7 +34,7 @@
 
 <br />
 
-Email: {{ request.user.username }}@iitr.ernet.in<br />
+Email: {{ user.username }}@iitr.ernet.in<br />
 Phone No: {{ faculty.phone }}
 </td>
 </tr>

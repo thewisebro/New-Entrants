@@ -232,7 +232,7 @@ def delete(request, model_name, instance_id):
 @user_passes_test(lambda u: u.groups.filter(name='Faculty').count() != 0)
 def publish(request):
   try:
-    username = request.user.faculty.username
+    username = request.user.username
     connection = pika.BlockingConnection(pika.ConnectionParameters(
                 host='cms.channeli.in'))
     channel = connection.channel()
@@ -246,3 +246,4 @@ def publish(request):
     return HttpResponse(json, content_type='application/json')
   except Exception as e:
     print e
+    return handle_exc(e, request)

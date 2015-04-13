@@ -6,8 +6,8 @@
 {% endblock %}
 
 {% block profile_pic %}
-{% if request.user.faculty.photo %}
-<img src="{{ request.user.faculty.photo.url }}" />
+{% if user.faculty.photo %}
+<img src="{{ user.faculty.photo.url }}" />
 {% else %}
 <img src="/photo/" />
 {% endif %}
@@ -21,11 +21,11 @@ Faculty Profile
 {% block header_links %}
 <div id="header_app_links">
   <nav>
-    <a href="{% url facapp.views.index %}">Home</a>
+    <a href="{% url 'facapp.views.index' %}">Home</a>
     &nbsp;|&nbsp;
     <a href="/">Channel i</a>
     &nbsp;|&nbsp;
-    <a href="{% url nucleus.views.logout %}">Logout</a>
+    <a href="{% url 'nucleus.views.logout' %}">Logout</a>
  </nav>
 </div>
 {% endblock %}
@@ -86,11 +86,11 @@ Faculty Profile
   {% if model_to_delete %}
     <h4>Are you sure you want to delete this entry?</h4>
     {% block model_details_to_delete %} {% endblock %}
-    {% include "facapp/generic_form.html" %}
+    {% include "generic_form.html" %}
 
   {% else %}
     <link rel='stylesheet' href='{{ STATIC_URL }}css/facapp/generic_form.css' type='text/css'/>
-    {% include "facapp/generic_form.html" %}
+    {% include "generic_form.html" %}
     {% if list %}
       <h4>{{ model_name_space_separated }}:</h4> 
       <ul>

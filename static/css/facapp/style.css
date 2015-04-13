@@ -217,7 +217,7 @@ td { vertical-align: top; }
    Author: Sampath
    ========================================================================== */
 body {
-	  background-image:url(../images/bkg_theme1.jpg); background-repeat:repeat; font-size: 12px;
+	  background-image:url(../../images/bkg_theme1.jpg); background-repeat:repeat; font-size: 12px;
 }
 header {
 	  /* styling the header */
@@ -225,7 +225,7 @@ header {
 
 .shadow {
 	  /* shadow */
-	  background-image:url(../images/header_shadow.png); background-repeat: no-repeat; background-position:center; }
+	  background-image:url(../../images/header_shadow.png); background-repeat: no-repeat; background-position:center; }
 
 #header_accessories { float: right; width: 420px; }
 
