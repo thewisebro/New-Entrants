@@ -514,7 +514,7 @@ def get_files(request, batch_id):
 @CORS_allow
 def post_comments(request , post_id):
   post = Post.post_objects.get(id = post_id)
-  return render(request,'comments/comments.html',{'instance': post , 'count':count})
+  return render(request,'comments/comments.html',{'instance': post})
 
 
 ''' Creates a event/reminder '''

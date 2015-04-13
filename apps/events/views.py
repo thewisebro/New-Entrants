@@ -206,11 +206,11 @@ def weekday(event):
 
 def shown_calendar_name(calendar):
   if calendar.cal_type == 'PRI':
-    return 'Personal Calendar'
+    return 'Personal'
   if calendar.cal_type == 'PUB':
-    return calendar.name + ' Calendar'
+    return calendar.name
   if calendar.cal_type == 'GRP':
-    return 'Groups Calendar'
+    return 'Groups'
 
 def diff(d1,d2):
   return (d1-d2.date()).days
