@@ -13,6 +13,11 @@ body
    margin-top:-10px;
 }
 
+#add-event-button
+{
+  float:right;
+}
+
 .content-tab-active
 {
   color:#0072dc;
@@ -49,7 +54,7 @@ body
 
 #groups-description
 {
-  max-width: 450px;
+  max-width: 510px;
   margin-top: 5px;
 }
 
@@ -65,6 +70,7 @@ body
   color:#0072dc;
   font-size:18px;
   font-weight:700;
+  float:left;
 }
 
 #read-more

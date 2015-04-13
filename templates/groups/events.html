@@ -22,12 +22,6 @@
 {% endblock %}
 
 {% block group_content %}
-  {% if can_edit %}
-    <div class="edit-member">
-      <div class="div-button" id="add-event-button" onclick="add_event();">Add Event</div>
-    </div>
-  {% endif %}
-
   <div class="app-heading"> {{ group.nickname }} Events </div>
   <div id="events"></div>
   <script type="text/javascript">
