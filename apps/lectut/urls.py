@@ -19,6 +19,11 @@ urlpatterns = patterns('',
         url(r'^deleteFile/(?P<file_id>\w+)/$', views.deleteFile, name='deleteFile'),
         url(r'^deletePost/(?P<post_id>\w+)/$', views.deletePost, name='deletePost'),
 
+# URLS for initial regiteration of batches
+        url(r'^createBatch/$', views.create_batch, name='create_batch'),
+        url(r'^joinBatch/(?P<batch_id>\w+)/$', views.join_batch, name='join_batch'),
+        url(r'^batch_data/$', views.ini_batch_data, name='ini_batch_data'),
+
         url(r'^createevent/$', views.createReminder, name='createReminder'),
         url(r'^search/$', views.search, name='search'),
         url(r'^events/$', views.getReminder, name='getReminder'),

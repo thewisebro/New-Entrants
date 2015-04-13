@@ -568,3 +568,80 @@ def search(request):
 
   results = {'posts':final_posts , 'files':final_files , 'courses':courses }
   return HttpResponse(json.dumps(results), content_type="application/json")
+
+
+# VIEWS FOR INITIAL REGISTRATION
+
+def create_batch(request):
+  user = request.user
+  data = json.loads(request.POST['data'])
+  course = Course.objects.get(id = data['id'])
+  userType = getUserType(user)
+  if userType == "0":
+    faculties = data['faculty']
+    if not faculties:
+      return HttpResponse(json.dumps('There must be atleast one faculty'), content_type='appliaction/json')
+    try:
+      batchToAdd = Batch(name = data['name'] , course= course)
+      batchToAdd.save()
+      for faculty in faculties:
+        batch.faculties.add(faculty)
+      batch.students.add(user)
+    except:
+      return HttpResponse(json.dumps('Insufficient data provided'), content_type='appliaction/json')
+  elif userType == "1":
+    try:
+      batchToAdd = Batch(name = data['name'] , course= course)
+      batchToAdd.save()
+      batch.faculties.add(user)
+    except:
+      return HttpResponse(json.dumps('Insufficient data provided'), content_type='appliaction/json')
+  else:
+    return HttpResponse(json.dumps('This user cannot create a batch'), content_type='appliaction/json')
+
+  return HttpResponse(json.dumps(batch.batch_dict()), content_type='appliaction/json')
+
+
+def join_batch(request , batch_id):
+  batch = Batch.objects.get(id = batch_id)
+  user = request.user
+  userType = getUserType(user)
+  if userType == "0":
+    batch.students.add(user)
+  elif userType == "1":
+    batch.faculties.add(user)
+  else:
+    return HttpResponse(json.dumps('This user cannot join this batch'), content_type='application/json')
+
+  return HttpResponse(json.dumps(batch.batch_dict()), content_type='application/json')
+
+def ini_batch_data(request):
+  user = request.user
+  student = user.student
+  regis_courses = RegisteredCourse.objects.all().filter(student = student).filter(cleared_status = 'current')
+  courses = []
+  for regis_course in regis_courses:
+    course = regis_course.course
+    some_dict = {
+                 'id':course.id,
+                 'code':course.code,
+                 'name':course.name,
+    }
+    courses.append(some_dict)
+
+  batches = student.batch_set.all()
+  batches_info = map(lambda x: batch_dict(x),batches)
+  faculty_objects = Faculty.objects.all()
+  faculties = []
+  for faculty in faculty_objects:
+    user = faculty.user
+    some_dict = {
+                 'id':faculty.id,
+                 'department' : faculty.department,
+                 'user_id': user.id,
+                 'name':user.name,
+    }
+    faculties.append(some_dict)
+
+  details = {'courses':courses , 'batches':batches_info , 'faculties':faculties}
+  return HttpResponse(json.dumps(details) , content_type = 'application/json'
