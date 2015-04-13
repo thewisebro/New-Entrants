@@ -41,6 +41,7 @@ var apps_scripts = {
     '/static/handlebars/groups/templates.js',
     '/static/js/groups/base.js',
     '/static/js/groups/activity.js',
+    '/static/js/events/events.js'
   ]
 };
 
