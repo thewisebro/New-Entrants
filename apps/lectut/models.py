@@ -14,6 +14,8 @@ from datetime import datetime, timedelta
 import os
 
 from notifications.models import Notification
+from django.contrib.comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 
 fs = FileSystemStorage(location='Uploads')
 
@@ -73,6 +75,8 @@ class Post(models.Model):
     self.save()
 
   def as_dict(self):
+    ct = ContentType.objects.get_for_model(Post)
+    count = Comment.objects.filter(content_type=ct,object_pk=self.id).count()
     postData={
       'id':self.id,
       'upload_user': str(self.upload_user.name),
@@ -81,6 +85,7 @@ class Post(models.Model):
       'batch':self.batch_dict(),
       'content':self.content,
       'privacy':self.privacy,
+      'count':str(count),
     }
     return postData
 

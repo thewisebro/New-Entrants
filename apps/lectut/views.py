@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import smart_str
 from django.contrib import messages
 from django.conf import settings
@@ -286,6 +287,8 @@ def getFileType(file_name):
       file_type="ppt"
     elif extension in ['dv', 'mov', 'mp4', 'avi', 'wmv', 'mkv', 'webm']:
       file_type="video"
+    elif extension in ['gz','tar','iso','lbr']:
+      file_type="zip"
     else:
       file_type="other"
   except:
@@ -305,6 +308,7 @@ def download_file(request, file_id):
 #  user = User.objects.get(username = 'harshithere')
   downloadlog = DownloadLog(uploadedfile=download_file , user = request.user)
   downloadlog.save()
+#  file_name = smart_str(download_file)
 
 #  response = HttpResponse(file_check.read(),content_type='application/force-download')
   response = HttpResponse(file_check.read(),content_type='application/octet-stream')
@@ -510,7 +514,7 @@ def get_files(request, batch_id):
 @CORS_allow
 def post_comments(request , post_id):
   post = Post.post_objects.get(id = post_id)
-  return render(request,'comments/comments.html',{'instance': post})
+  return render(request,'comments/comments.html',{'instance': post , 'count':count})
 
 
 ''' Creates a event/reminder '''
@@ -555,7 +559,8 @@ def search(request):
   if filter_model == None:
     query_post = SearchQuerySet().all().autocomplete(content_auto = value).models(Post)
     query_uploadfile = SearchQuerySet().all().autocomplete(filename_auto = value).models(Uploadedfile)
-    query_courses =  SearchQuerySet().all().autocomplete(name_auto = value).models(Course)
+    query_courses_name =  SearchQuerySet().all().autocomplete(name_auto = value).models(Course)
+    query_courses_code =  SearchQuerySet().all().autocomplete(code_auto = value).models(Course)
   else:
     query = SearchQuerySet().autocomplete(content_auto = value).models(filter_model)
 
@@ -563,12 +568,13 @@ def search(request):
   final_files = []
   posts = map(lambda result:Post.objects.get(id = result.pk),query_post)
   upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk),query_uploadfile)
-  courses = map(lambda result:{'name':result.name,'code':result.code},query_courses)
+  courses1 = map(lambda result:{'name':result.name,'code':result.code},query_courses_name)
+  courses2 = map(lambda result:{'name':result.name,'code':result.code},query_courses_code)
 
   final_posts = map(lambda result:result.as_dict() if result.deleted == False else None,posts)
   final_files = map(lambda result:result.as_dict() if result.deleted == False else None,upload_files)
 
-  results = {'posts':final_posts , 'files':final_files , 'courses':courses }
+  results = {'posts':final_posts , 'files':final_files , 'courses':courses1+courses2 }
   return HttpResponse(json.dumps(results), content_type="application/json")
 
 
