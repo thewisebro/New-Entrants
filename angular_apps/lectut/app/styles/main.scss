@@ -1121,7 +1121,16 @@ body {
 }
 
 .dt-loading{
-  color: red;
+  color: rgb(185, 185, 185);
+  font-family: opensans_regular;
+}
+
+table.dataTable span a {
+  color: #5f5f5f;
+  text-decoration:none;
+  &:hover{
+    text-decoration:underline;
+  }
 }
 
 table.dataTable tbody tr{
@@ -1244,6 +1253,10 @@ table.dataTable tfoot td {
   color: rgb(183, 183, 183);
   display: none;
   cursor: pointer;
+  font-size: 18px;
+  &:hover{
+    color: #008fd5;
+  }
 }
 
 table.dataTable tbody tr{
@@ -1649,7 +1662,9 @@ li.comment-wrapper {
       font-size: 12px; }
   .comment-item .comment-reply-div {
     padding-left: 15px;
-    float: right; }
+    float: right;
+    display: none;   
+  }
   .comment-item .comment-text {
     margin-left: 51px;
     text-align: justify;
