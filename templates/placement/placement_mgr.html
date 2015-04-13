@@ -1,30 +1,30 @@
 <!DOCTYPE HTML>
+{% extends "placement/nucleus/base_old.html" %}
 {% load kwacros %}
-<html>
-  <head>
-    <title>
+{% block title %}
       Contact Manager
-    </title>
+{% endblock %}
+{% block styles %}
     <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" type="text/css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/dataTables.bootstrap.css" type="text/css">
-<!--    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.css" type="text/css"> -->
-  </head>
-  <body>
-    <div class="content">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/jquery.dataTables.css" type="text/css">
+{% endblock %}
+{% block body %}
+<div class="content">
       <div class="header">
         <div class="tittle">
           <h2 >Contact Manager</h2>
         </div>
         <div class="links">
           <div class="sub-links">
-            <a href="/" target="_blank">Channel-i</a>
+            <a href="{% url 'nucleus.views.index' %}" target="_blank">Channel-i</a>
           </div>
           <div class="sub-links">
-            <a href="/placement/" target="_blank">Placement Online</a>
+            <a href="{% url 'placement.views.index' %}" target="_blank">Placement Online</a>
           </div>
           <div class="sub-links">
-            <a href = "/placement/contact_manager/add/" target="_blank">Add Company Coordinator</a>
+            <a href = "{% url 'placement.views_img.add_company_coordinator' %}" target="_blank">Add Company Coordinator</a>
           </div>
           <div class="sub-links">
             <a href="/logout" target="_blank">Logout</a>
@@ -33,19 +33,12 @@
       </div>
       <div class="exporter">
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-      <li>{{message}}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
 {% comment %}        <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_img.generate_company_contact_xls' %}">
               {% csrf_token %}
               <button class="btn btn-primary" type="submit">Export</button>
         </form>  {% endcomment %}
       </div>
+
       <div class="uploader">
         <table class="table">
           <tr class="row">
@@ -101,17 +94,17 @@
             </tr>
           </thead>
          <tbody>
-{% comment %}           <h5> Assign Company Coordinator</h5>
+          <h5> Assign Company Coordinator</h5>
             {{ assign_form.company_coordinator }}<br/>
-            <button class="btn btn-primary" type="submit">Assign</button>{% endcomment %}
+            <button class="btn btn-primary" type="submit">Assign</button>
             </tbody>
         </table>
       </form>
       </div>
     </div>
-  </body>
-  <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/placement/jquery.dataTables.js"></script>
+{% endblock %} {# Body #}
+{% block app_scripts %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/placement/jquery.dataTables.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/placement/jquery.leanModal.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/placement/dataTables.bootstrap.js"></script>
   <script type="text/javascript">
@@ -156,4 +149,5 @@ function confirmfn(id){
   if (a==true) {window.location="/placement/contact_manager/remove/{0}".format(id)}
 }
 </script>
-</html>
+
+{% endblock %} {# Scripts #}

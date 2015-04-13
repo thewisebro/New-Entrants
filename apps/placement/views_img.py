@@ -16,7 +16,7 @@ import logging, os
 import xlrd
 import xlwt
 import datetime
-from nucleus.models import Student, WebmailAccount
+from nucleus.models import Student, WebmailAccount, User
 from placement import policy, forms
 from placement.policy import current_session_year
 from placement.models import *
@@ -273,26 +273,6 @@ def generate_missing_resumes(request, company_id):
 #    return HttpResponseRedirect('/placement/company_coordinator/')
 #  return HttpResponseRedirect('/placement/contact_manager/')
 #
-#@login_required
-#@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
-#def add_company_coordinator(request):
-#  import ipdb; ipdb.set_trace()
-#  if request.method == 'POST':
-#    form = AddCoordinatorForm(request.POST)
-#    if form.is_valid():
-#      company_coordinator_person =  form.cleaned_data['enroll'].strip()[:8]
-#      coordi_person = Student.objects.get(user__username = company_coordinator_person)
-#      company_coordinator = CompanyCoordi.objects.get_or_create(student=coordi_person)[0]
-#      company_coordinator.save()
-#      g = Group.objects.get(name='Company Coordinator')
-#      g.user_set.add(company_coordinator.student.user)
-#      return HttpResponseRedirect('/placement/contact_manager/')
-#
-#  else:
-#    form = AddCoordinatorForm()
-#  return render_to_response('placement/add_coordinator.html',{
-#      'form': form,
-#      }, context_instance = RequestContext(request))
 #
 #@login_required
 #@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
@@ -377,7 +357,7 @@ def company_coordinator_view(request):
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
 def placement_manager_view(request):
   contactperson_data = CompanyContactInfo.objects.all()
-#  assign_form = AssignCoordinatorForm()
+  assign_form = AssignCoordinatorForm()
   if request.method == 'POST' :
     pass
 #    form = ExcelForm(request.POST , request.FILES)
@@ -454,7 +434,7 @@ def placement_manager_view(request):
 
   return render_to_response('placement/placement_mgr.html',{
           'excel_form' : form,
-#          'assign_form' : assign_form,
+          'assign_form' : assign_form,
           'contactperson_data': data_to_send
         },context_instance = RequestContext(request))
 
@@ -496,11 +476,30 @@ def company_coordinator_today_view(request):
         }, context_instance = RequestContext(request))
 
 @login_required
+@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
+def add_company_coordinator(request):
+  if request.method == 'POST':
+    form = AddCoordinatorForm(request.POST)
+    if form.is_valid():
+      company_coordinator_person =  form.cleaned_data['enroll'].strip()[:8]
+      user=User.objects.get(username=company_coordinator_person)
+      g = Group.objects.get(name='Company Coordinator')
+      g.user_set.add(user)
+      messages.success(request, 'Company Coordinator added successfully')
+      return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+
+  else:
+    form = AddCoordinatorForm()
+  return render_to_response('placement/add_coordinator.html',{
+      'form': form,
+      }, context_instance = RequestContext(request))
+
+@login_required
 def person_search(request):
   if request.is_ajax():
     q = request.GET.get('term','')
     print q
-    persons = Student.objects.filter(Q(user__name__icontains = q)|Q(user__username__icontains = q),passout_year=None,user__groups__in=['Company Coordinator', 'Placement Manager']).order_by('-user__username')[:50]
+    persons = Student.objects.filter(Q(user__name__icontains = q)|Q(user__username__icontains = q),passout_year=None).order_by('-user__username')[:50]
     if not persons:
       obj = [{
         'id':'00000000',

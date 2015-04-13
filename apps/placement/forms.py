@@ -5,7 +5,7 @@ from django.forms.models import BaseModelFormSet
 
 from core import forms
 from core.forms import CKEditorWidget, CurrencyWidget
-from nucleus.models import Branch, StudentInfo, Student
+from nucleus.models import Branch, StudentInfo, Student, Group
 from placement import models
 from placement import constants as PC
 from placement.policy import current_session_year
@@ -154,15 +154,13 @@ class ExcelForm(forms.Form):
 #  class Meta:
 #    model = models.ContactPerson
 #
-#class AssignCoordinatorForm(forms.Form):
-#  company_coordinator = forms.ModelChoiceField(queryset=models.Students.objects.all(), empty_label="None", required=False)
+class AssignCoordinatorForm(forms.Form):
+  company_coordinator = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label="None", required=False)  #Check This
 
-#class AddCoordinatorForm(forms.Form):
-#  student = forms.CharField(widget=forms.TextInput)
-#  enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
-#  class Meta:
-#    model = models.CompanyCoordi
-#
+class AddCoordinatorForm(forms.Form):
+  student = forms.CharField(widget=forms.TextInput)
+  enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
+
 class CreateSlotForm(forms.ModelForm):
   start_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])
   end_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])
