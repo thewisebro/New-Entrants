@@ -908,6 +908,20 @@ body {
                       border-bottom: 1px solid $g6;
                       margin-bottom: 25px;
                       .postUser{
+                         .postUserWhere{
+                            font-size:15px;
+                            color: #666;
+                            padding-left:3px;
+                            >a{
+                              color:#3498db;
+                              cursor:pointer;
+                              text-decoration:none;
+                              &:hover{
+                                text-decoration:underline;
+                              }
+                            }
+
+                         }
                          .postUserName{
                             font-size: 15px;
                             padding-bottom: 3px;
