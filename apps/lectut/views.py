@@ -347,6 +347,14 @@ def batch_dict(Batch):
   return batch_info
 
 
+@csrf_exempt  
+@CORS_allow
+def batch_data(request , batch_id):
+  batch = Batch.objects.get(id = batch_id)
+  batch_info = batch_dict(batch)
+  response = HttpResponse(json.dumps(batch_info), content_type='application/json')
+  return response
+
 ''' Show a particular post '''
 @csrf_exempt
 @CORS_allow
