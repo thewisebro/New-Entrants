@@ -35,9 +35,9 @@ app.config(['$locationProvider', '$routeProvider', function ($locationProvider, 
 		controller: 'ProfileController',
 		resolve: resolve
 	})
-	.when('/gallery/:enrolmentNo', {
-		templateUrl: '/yaadein/views/gallery.html',
-		controller: 'GalleryController',
+	.when('/spots/', {
+		templateUrl: '/yaadein/views/spots.html',
+		controller: 'SpotsController',
 		resolve: resolve
 	})
 	.when('/hashtag/:hashtag', {

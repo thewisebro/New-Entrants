@@ -39,7 +39,7 @@
       <!-- Header white 50px full width -->
       <div class="header">
         <!-- Appname-->
-        <div class="appName"><i class="fa fa-bookmark" style="padding-right:5px;"></i>Lectut</div>
+        <a href="/#/"><div class="appName"><i class="fa fa-bookmark" style="padding-right:5px;"></i>Lectut</div></a>
         <div class="topSearchBox"><!-- Search box-->
         <span class="searchIconTop"><i class="fa fa-search"></i></span>
         <div class="crossTop" ng-click="clearSearch()" ng-show="queryString.length != 0"><i class="fa fa-times-circle"></i></div>
@@ -79,7 +79,7 @@
             <div class="subSearchHeading">Posts</div>
             <div class="noResults" ng-hide="searchResults.posts.length != 0">No Results</div>
             <div class="subSearchContent">
-               <div ng-repeat="post in searchResults.posts | limitTo: 3" ng-click="clearSearch()">
+               <div ng-repeat="post in searchResults.posts | limitTo: 3" ng-click="clearSearch();updateCourseId(post.batch.id)">
                <a ng-href="#/course/{[post.batch.id]}/feeds/{[post.id]}">
                  <div>
                     <div style="float:left;">
@@ -99,6 +99,7 @@
          <div id="userblock">
             <div id="userpic">
               <img ng-show="logIn" ng-src="{[base_domain]}{[auth.user.photo]}" alt="">
+              <i ng-hide="logIn" class="fa fa-user anonUser"></i>
             </div>
             <div id="userdata">
  	      <div>
@@ -114,11 +115,11 @@
             <div class="myCourseHeading">My Courses</div>
             <div class="signInBox" ng-show="!logIn">
                To view your courses
-               <div class="signInButton" ng-click="">Sign In</div>
+               <div class="signInButton" ng-click="signUp()">Sign In</div>
             </div>
             <ul class="myCourseUl" ng-show="logIn">
                <a class="crsA" ng-repeat="crs in auth.batches" ng-href="#/course/{[crs.id]}/feeds">
-                 <li class="crsLi" ng-click="getFeedData(crs.id);" ng-class="{'activeCourse':isActive('/course/{[crs.id]}/')}" >
+                 <li class="crsLi" ng-click="getFeedData(crs.id);updateCourseId(crs.id)" ng-class="{'activeCourse':isActive('/course/{[crs.id]}/')}" >
                    <div class="crsIdName"> 
                     <div class="crsId">
                       <span>{[::crs.code]}</span>
@@ -144,9 +145,11 @@
     <div class="courseHeading">
       <div class="courseHeadingNameId">
        <div ng-hide="$root.whichView == 'CourseHomeCtrl'">
+       <span>
         <span style="padding-right:10px; text-transform: capitalize;">{[courseName]}</span>({[courseCode]})
-       </div>
-       <div ng-show="$root.whichView == 'CourseHomeCtrl' && !logIn">
+       </span>
+      </div>
+      <div ng-show="$root.whichView == 'CourseHomeCtrl' && !logIn">
          Lectut Activity
        </div>
        <div ng-show="$root.whichView == 'CourseHomeCtrl' && logIn">

@@ -179,9 +179,24 @@ app.service('LoadOneFile', ['$http','$q',
 app.service('SearchService', ['$http','$q',
       function($http, $q){
         var deferred;
-          console.log("s");
+          //console.log("s");
           this.getSearchData = function(qs){
           var urlSend = base_domain+'/lectut_api/search/?q='+qs;
+          deferred = $q.defer();
+          $http.post(urlSend).success(function(d){
+              deferred.resolve(d);
+          }).error(function(d){
+            console.log("error");
+          });
+          return deferred.promise;
+        };
+}]);
+app.service('CourseDataById', ['$http','$q',
+      function($http, $q){
+        var deferred;
+          //console.log("s");
+          this.getCourseDataById = function(batchId){
+          var urlSend = base_domain+'/lectut_api/batchDetails/'+batchId+'/';
           deferred = $q.defer();
           $http.post(urlSend).success(function(d){
               deferred.resolve(d);

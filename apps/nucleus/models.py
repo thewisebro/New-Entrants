@@ -136,10 +136,13 @@ class User(AbstractUser, models.Model):
     if self.in_group('Student'):
       student = self.student
       string = MC.SIMPLIFIED_DEGREE[student.branch.degree]+' '+\
-               (student.branch.name if len(student.branch.name)<20\
-                else student.branch.code)
-      if student.semester > 0:
-        string += ' ' + int2roman(student.year) + ' Year'
+            (student.branch.name if len(student.branch.name)<20\
+            else student.branch.code)
+      if not student.passout_year:
+        if student.semester > 0:
+          string += ' ' + int2roman(student.year) + ' Year'
+      else:
+        string += ' (%s Batch)' % student.passout_year
       return string
     elif self.in_group('Faculty'):
       return dict(FC.DESIGNATION_CHOICES)[self.faculty.designation]+\

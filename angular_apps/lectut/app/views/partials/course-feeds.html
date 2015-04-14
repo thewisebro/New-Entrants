@@ -6,6 +6,8 @@
        <img ng-src="{[base_domain]}{[auth.user.photo]}"></img> 
     </div>
     <div class="cPContent" ng-init="tab=1">
+      <div class="postOverlay">
+      </div>
       <div class="postType">
           <ul>
           <!--
@@ -169,9 +171,9 @@
                     </div>
                     <div class="fileImage">
                        <img ng-show='file.file_type == "image"' ng-src="{[base_domain]}/{[file.filepath]}"></img>
-                       <i ng-hide='file.file_type == "image"' class="fa fa-file-{[file.file_type]}-o"></i>
+                       <i ng-show='file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>
                        <i ng-show='file.file_type == "ppt"' class="fa fa-file-powerpoint-o"></i>
-                       <i ng-hide='file.file_type == "zip"' class="fa fa-file-archive-o"></i>
+                       <i ng-show='file.file_type == "zip"' class="fa fa-file-archive-o"></i>
                        <i ng-show='file.file_type == "other"' class="fa fa-file"></i> 
                     </div>
                     <div class="fileData">
@@ -189,7 +191,7 @@
         </div>
         <div class="commentsBlock" ng-show="logIn">
           <div ng-click="loadCommentsFunc(post.post.id)" class="showHideComments">
-            Comments <span class="commentsCount">3</span>
+            Comments <span class="commentsCount">{[post.post.count]}</span>
           </div>
           <div id="postComments_{[post.post.id]}" class="loadComments">
             

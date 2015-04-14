@@ -8,7 +8,7 @@
       <div class="postData">
           <div class="postUserNameTime">
             <div class="postUser">
-              <span class="postUserName">{[post.post.upload_user]}</span>
+              <span class="postUserName">{[post.post.upload_user]}</span><span class="postUserWhere" ng-click="updateCourseId(post.post.batch.id);">posted in <a ng-href="#/course/{[post.post.batch.id]}/feeds">{[post.post.batch.code]}</a></span>
               <span class="removeFeedPost" ng-show="logIn && auth.user.name == post.post.upload_user" ng-click="removeFeedPost(post.post.id, $index)">
                   <i class="fa fa-times-circle-o"></i>
               </span>
@@ -51,7 +51,7 @@
         </div>
         <div class="commentsBlock" ng-show="logIn">
           <div ng-click="loadCommentsFunc(post.post.id)" class="showHideComments">
-            Comments <span class="commentsCount">3</span>
+            Comments <span class="commentsCount">{[post.post.count]}</span>
           </div>
           <div id="postComments_{[post.post.id]}" class="loadComments">
             

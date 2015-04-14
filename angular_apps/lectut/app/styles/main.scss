@@ -52,7 +52,14 @@
   color:#e74c3c !important;
 }
 .fa-file-excel-o{
-  color:#1abc9c !important;
+  //color:#1abc9c !important;
+  color:#2A9259 !important;
+}
+.fa-file-word-o{
+  color: #2E8DEF !important;
+}
+.fa-file-powerpoint-o{
+  color:#FF6600 !important;
 }
 .fa-file-image-o{
   color:#62CBE2  !important;
@@ -84,7 +91,12 @@ body {
       background: $th1;
 }
 // Main blocks 
-
+.anonUser{
+  font-size: 45px;
+  color: rgb(174, 174, 174);
+  text-align: center;
+  margin: 5px 12px;
+}
 .activeHome{
   .homeTab{
      border-bottom: 3px solid #f62459 !important;
@@ -499,6 +511,7 @@ body {
          }
        }
        .crsNotification{
+          display:none;
           position: absolute;
           height: 20px;
           padding: 0px 7px;
@@ -623,6 +636,9 @@ body {
             //border: 1px solid $g6;
             border-top:0px;
             //background-color: #fafafa;
+            .uploadBox{
+              position: relative;
+            }
             .cPPic{
                float: left;
                 border-radius: 600px;
@@ -637,6 +653,16 @@ body {
                 }
             }
             .cPContent{
+                .postOverlay{
+                  position:absolute;
+                  top: 20px;
+                  right:20px;
+                  left: 105px;
+                  bottom:0;
+                  background:rgba(0, 0, 0, 0.14);
+                  z-index: 12121212;
+                  display:none;
+                }
                 margin-left:105px;
                 background: #FFF;
                 border: 1px solid #DDD;
@@ -907,6 +933,20 @@ body {
                       border-bottom: 1px solid $g6;
                       margin-bottom: 25px;
                       .postUser{
+                         .postUserWhere{
+                            font-size:15px;
+                            color: #666;
+                            padding-left:3px;
+                            >a{
+                              color:#3498db;
+                              cursor:pointer;
+                              text-decoration:none;
+                              &:hover{
+                                text-decoration:underline;
+                              }
+                            }
+
+                         }
                          .postUserName{
                             font-size: 15px;
                             padding-bottom: 3px;
@@ -1099,9 +1139,35 @@ body {
 // Over writes all DataTables Files
 
 #fileFilterType{
-  position: absolute;
-  top:20px;
-  left:290px;
+position: absolute;
+top: 20px;
+right: 20px;
+       -webkit-appearance: button;
+       -moz-appearance: button;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -webkit-padding-end: 11px;
+       -moz-padding-end: 20px;
+       -webkit-padding-start: 7px;
+       -moz-padding-start: 2px;
+       background-color: #E5E5E5;
+       background-image: -webkit-linear-gradient(top, #E5E5E5, #F4F4F4);
+       background-position: center right;
+       background-repeat: no-repeat;
+border: 1px solid #AAA;
+        border-radius: 2px;
+color: #555;
+       font-size: inherit;
+margin: 0;
+overflow: hidden;
+          padding-top: 3px;
+          padding-bottom: 2px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+outline: 0px;
+         font-family: $osSB;
+         font-size:13px;
+         cursor:pointer;
 }
 .fileShowUser{
   font-family: opensans_italic;
@@ -1121,7 +1187,16 @@ body {
 }
 
 .dt-loading{
-  color: red;
+  color: rgb(185, 185, 185);
+  font-family: opensans_regular;
+}
+
+table.dataTable span a {
+  color: #5f5f5f;
+  text-decoration:none;
+  &:hover{
+    text-decoration:underline;
+  }
 }
 
 table.dataTable tbody tr{
@@ -1244,6 +1319,11 @@ table.dataTable tfoot td {
   color: rgb(183, 183, 183);
   display: none;
   cursor: pointer;
+  font-size: 15px;
+  margin-top:3px;
+  &:hover{
+    color: #008fd5;
+  }
 }
 
 table.dataTable tbody tr{
@@ -1649,7 +1729,9 @@ li.comment-wrapper {
       font-size: 12px; }
   .comment-item .comment-reply-div {
     padding-left: 15px;
-    float: right; }
+    float: right;
+    display: none;   
+  }
   .comment-item .comment-text {
     margin-left: 51px;
     text-align: justify;
