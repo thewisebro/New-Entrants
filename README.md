@@ -1,3 +1,0 @@
-# lectut
-
-Testing readme file.
