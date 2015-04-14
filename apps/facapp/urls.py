@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
-# from django.views.generic.simple import direct_to_template
+from django.views.generic import TemplateView
 
-# from api.filemanager import path_end
+from filemanager import path_end
 
 urlpatterns = patterns('facapp.views',
     (r'^$', 'index'),
@@ -21,11 +21,11 @@ urlpatterns += patterns('facapp.views_ckeditor',
     (r'^refereed_journal_papers/edit/$', 'refereed_journal_papers_edit'),
     (r'^books_authored/edit/$', 'books_authored_edit'),
 )
-# urlpatterns += patterns('facapp.views_upload',
-#     (r'^upload/photo/$', 'upload_photo'),
-#     (r'^upload/resume/$', 'upload_resume'),
-#     (r'^websitebrowser/'+path_end, 'websitebrowser'),
-#     (r'^website_page/$', 'website_page'),
-#     (r'^filemanagerhelp/$', direct_to_template, {'template':'facapp/filemanagerhelp.html'}),
-#     (r'^filemanager/'+path_end,'faculty_filemanager')
-# )
+urlpatterns += patterns('facapp.views_upload',
+    (r'^upload/photo/$', 'upload_photo'),
+    (r'^upload/resume/$', 'upload_resume'),
+    (r'^websitebrowser/'+path_end, 'websitebrowser'),
+    (r'^website_page/$', 'website_page'),
+    (r'^filemanagerhelp/$', TemplateView.as_view(template_name='facapp/filemanagerhelp.html')),
+    (r'^filemanager/'+path_end,'faculty_filemanager')
+)
