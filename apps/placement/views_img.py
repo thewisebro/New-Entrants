@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.forms.models import modelformset_factory
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
@@ -407,10 +408,13 @@ def placement_manager_view(request):
   for campus_contact_inst in campus_contact:
     contactPerson = campus_contact_inst.contact_person
     values = [contactPerson.company_contact.name, contactPerson.company_contact.cluster,]
-    values.append(contactPerson.name, contactPerson.designation, contactPerson.phone_no, contactPerson.email)
+    values.append(contactPerson.name)
+    values.append(contactPerson.designation)
+    values.append(contactPerson.phone_no)
+    values.append(contactPerson.email)
     values.append(contactPerson.company_contact.status)
     values.append(campus_contact_inst.last_contact)
-    comment = CompanyContactComments.objects.filter(campus_contact = camous_contact_inst).order_by('date_created')[0]
+    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('date_created')[0]
     values.append(comment.comment)
     values.append(campus_contact_inst.when_to_contact)
     values.append('pk','pk')
@@ -474,6 +478,25 @@ def company_coordinator_today_view(request):
   return render_to_response('placement/company_coordi.html',{
         'contactperson_data' : data_to_send,
         }, context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists(), login_url=login_url)
+def add_manual(request):#, company_id):
+#  if company_id:
+    # Add functions definition to edit
+#    pass
+  if request.method == "POST":
+    pass
+  import ipdb; ipdb.set_trace()
+  companyform = AddCompanyInfoForm()
+  contactpersonformset = modelformset_factory(ContactPerson, form=forms.ModelForm, formset = ContactPersonFormSet, can_delete=False)
+  campuscontactformset = modelformset_factory(CampusContact, form=forms.ModelForm, formset=CampusContactFormSet, can_delete=False)
+  return render_to_response('placement/plcmgr_manual.html',{
+      'companyform' : companyform,
+      'contactpersonformset' : contactpersonformset,
+      'campuscontactformset' : campuscontactformset,
+      }, context_instance = RequestContext(request))
+
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)

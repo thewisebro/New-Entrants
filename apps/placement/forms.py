@@ -154,13 +154,6 @@ class ExcelForm(forms.Form):
 #  class Meta:
 #    model = models.ContactPerson
 #
-class AssignCoordinatorForm(forms.Form):
-  company_coordinator = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label="None", required=False)  #Check This
-
-class AddCoordinatorForm(forms.Form):
-  student = forms.CharField(widget=forms.TextInput)
-  enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
-
 class CreateSlotForm(forms.ModelForm):
   start_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])
   end_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])
@@ -200,3 +193,35 @@ def BaseModelFormFunction(model_type, exclude_list=None, data=None,**kwargs):
 
   return ObjectModelForm(data,**kwargs)
 
+# Following are the forms for new contact manager app
+
+class AssignCoordinatorForm(forms.Form):
+  company_coordinator = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label="None", required=False)  #Check This
+
+class AddCoordinatorForm(forms.Form):
+  student = forms.CharField(widget=forms.TextInput)
+  enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
+
+class AddCompanyInfoForm(forms.ModelForm):
+  class Meta:
+    model = models.CompanyContactInfo
+
+class ContactPersonFormSet(BaseModelFormSet):
+
+  class Meta:
+    model = models.ContactPerson
+    exclude = {'company_contact',}
+
+class CampusContactFormSet(BaseModelFormSet):
+
+  when_to_contact = forms.DateField(widget=AdminDateWidget, required=False)
+
+  class Meta:
+    model = models.CampusContact
+    exclude = {'contact_person',}
+
+class CommentsForm(forms.ModelForm):
+
+  class Meta:
+    model = models.CompanyContactComments
+    exclude = {'date_created', 'campus_contact'}
