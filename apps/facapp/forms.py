@@ -9,7 +9,7 @@ from django.forms.models import ModelMultipleChoiceField
 from django.utils.safestring import mark_safe
 # from settings import DATE_INPUT_FORMATS,TIME_INPUT_FORMATS
 from facapp.models import *
-# from api.custom_widgets import CKeditorWidget
+from core.forms.widgets import CKEditorWidget as CKeditorWidget
 import datetime
 
 ###################### Custom Fields and Widgets ##################
@@ -167,14 +167,14 @@ class MyModelMultipleChoiceField(ModelMultipleChoiceField):
 
 class BooksAuthoredForm(BaseModelForm):
   #Next line uncommented as CKEditor being called in template using JS
-  #books = forms.CharField(label='', widget=CKeditorWidget(toolbar='Basic',height=300))
+  books = forms.CharField(label='', widget=CKeditorWidget())
   class Meta:
     model = BooksAuthored
     exclude = ['faculty',]
 
 class RefereedJournalPapersForm(BaseModelForm):
   #Next line uncommented as CKEditor being called in template using JS
-  #papers = forms.CharField(label='', widget=CKeditorWidget(toolbar='Basic',height=300))
+  papers = forms.CharField(label='', widget=CKeditorWidget())
   class Meta:
     model = RefereedJournalPapers
     exclude = ['faculty',]

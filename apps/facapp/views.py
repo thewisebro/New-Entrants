@@ -28,8 +28,8 @@ import json as simplejson
 def index(request):
   try:
     faculty = request.user.faculty
-    # photo_form = PhotoUploadForm()
-    # resume_form = ResumeUploadForm()
+    photo_form = PhotoUploadForm()
+    resume_form = ResumeUploadForm()
     education = EducationalDetails.objects.filter(faculty = faculty, visibility = True).order_by('priority')
     interests = Interests.objects.filter(faculty = faculty, visibility = True).order_by('priority')
     professional_background = ProfessionalBackground.objects.filter(faculty = faculty, visibility = True).order_by('priority')
