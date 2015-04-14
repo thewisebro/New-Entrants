@@ -84,7 +84,12 @@ body {
       background: $th1;
 }
 // Main blocks 
-
+.anonUser{
+  font-size: 45px;
+  color: rgb(174, 174, 174);
+  text-align: center;
+  margin: 5px 12px;
+}
 .activeHome{
   .homeTab{
      border-bottom: 3px solid #f62459 !important;
