@@ -24,6 +24,7 @@ lectutApp
               if($scope.auth.batches[i].id == id){
                 $scope.courseCode = $scope.auth.batches[i].code;
                 //alert($scope.courseCode);
+                $scope.courseName = $scope.auth.batches[i].course_name;
               }
             }
         }
@@ -371,6 +372,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
           // Notifiaction Success
              console.log("growl below");
           growl.addSuccessMessage("This adds a success message");
+          $(".postOverlay").hide();
         });
 
   }
@@ -417,6 +419,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
              alert("Post cannot be empty");
           }
           else{
+            $(".postOverlay").show();
             upload(things,typeData,$scope.thing.content);
           }
           //console.log("----------------");
@@ -625,23 +628,24 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                  <i ng-show='file.file_type == "other"' class="fa fa-file"></i>
                   */
                  if(full.file_type == "image"){
-                   html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a download ng-href="{[base_domain]}/'+ full.filepath+'">'+full.description+'</a></span>';
                  } 
                  else if(full.file_type == "ppt"){
-                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:10px; font-size:16px;"></i><span><a ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:10px; font-size:16px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
                  }
                  else if(full.file_type == "zip"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:10px; font-size:16px;"></i><span><a ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:10px; font-size:16px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
                  }
 
                  else if(full.file_type == "pdf"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:10px; font-size:16px;"></i><span><a ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:10px; font-size:16px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
                  }
                  else{
-                   html += '<i class="fa fa-file" style="margin-right:10px; font-size:16px;"></i><span><a ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file" style="margin-right:10px; font-size:16px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
                  }
                 html += '<span class="fileShowUser">by: '+full.username+'</span>';
                 html += '<span class="fileShowDownloads">Downloads: '+full.download_count+'</span>';
+                html += '<div style="display: inline-block; float:right;margin-left:10px;"><a style="text-decoration:none" ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'""><i class="fa fa-external-link fileSetting"></i></a></div>';
                 return html;
              }),
             // DTColumnBuilder.newColumn('description').withTitle('Name'),
@@ -651,7 +655,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                  //console.log(data);
                  var html = "";
                  html += '<div style=" display: inline-block;"><span class="timeFile">'+ moment(data).format("DD-MM-YY, HH:mm");+'</span></div>';
-                 html += '<div style="display: inline-block; margin-left:30px;"><a download style="text-decoration:none" ng-href="{[base_domain]}/'+ full.filepath+'"><i class="fa fa-chevron-circle-down fileSetting" ng-click="toggleAll()"></i></a></div>';
+                 
                  return html;
              })/*
              DTColumnBuilder.newColumn(null).withTitle('').notSortable()
@@ -686,13 +690,14 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
               });
             });
           */
-         var table = $("#DataTables_Table_0").DataTable();
+         var table = $(".dataTable").DataTable();
+         console.log(table);
          //table.column(0).visible('false'); 
          table.columns().indexes().flatten().each( function ( i ) {
              if(i==1){
              var column = table.column( i );
              var select = $('<select id="fileFilterType"><option value=""></option></select>')
-             .appendTo( $("#DataTables_Table_0_wrapper") )
+             .appendTo( $(".dataTables_wrapper") )
              .on( 'change', function () {
                var val = $.fn.dataTable.util.escapeRegex(
                  $(this).val()
@@ -707,16 +712,12 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                select.append( '<option value="'+d+'">'+d+'</option>' )
                } );
          } });
-
-
      });
 
-
- 
-
-         // Table Upload Type implementation
-
-         var table = $("#DataTables_Table_0").DataTable();
+       // Table Upload Type implementation
+       function loadFileType(){
+       if($(".dataTable").length != 0){
+         var table = $(".dataTable").DataTable();
          console.log("_+_+_+_+_+_+");
          if(table){
             console.log("_________________________________");
@@ -726,13 +727,12 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
          table.columns().indexes().flatten().each( function ( i ) {
              if(i==1){
              var column = table.column( i );
-             var select = $('<select id="fileFilterType"><option value=""></option></select>')
-             .appendTo( $("#DataTables_Table_0_wrapper") )
+             var select = $('<select id="fileFilterType"><option value="">All </option></select>')
+             .appendTo( $(".dataTables_wrapper") )
              .on( 'change', function () {
                var val = $.fn.dataTable.util.escapeRegex(
                  $(this).val()
-                 );
-
+                );
                column
                .search( val ? '^'+val+'$' : '', true, false )
                .draw();
@@ -742,9 +742,15 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                select.append( '<option value="'+d+'">'+d+'</option>' )
                } );
          } });
+       }
+       else{
+         setTimeout(function(){ loadFileType(); }, 500);
+       }
+       }
+
+       loadFileType();
       // ------------------------------
-    
-         //console.log("err1");
+              //console.log("err1");
      var _toggle = true;
      $scope.toggleAll = function(){
        //console.log("asd");
@@ -776,7 +782,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
               $scope.selected[prop] = true;
          }
      }
-
+      
 }]);
 
 
@@ -791,7 +797,7 @@ lectutApp.controller('CourseMembersCtrl', ['Members','$scope','$routeParams', '$
 }]);
 
 
-lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams','FeedFileDownload','RemoveFeedPost' ,'RemoveFeedFile','Comments', '$rootScope',function(LoadOnePost, $scope, $routeParams, FeedFileDownload, RemoveFeedPost, RemoveFeedFile, Comments, $rootScope) {
+lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams','FeedFileDownload','RemoveFeedPost' ,'RemoveFeedFile','Comments', '$rootScope','$location',function(LoadOnePost, $scope, $routeParams, FeedFileDownload, RemoveFeedPost, RemoveFeedFile, Comments, $rootScope, $location) {
     //console.log($routeParams);
     $rootScope.whichView = "CourseOnePostCtrl";
     var promiseMembers = LoadOnePost.getOnePost($routeParams.courseId,$routeParams.postId);
@@ -838,6 +844,19 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
               console.log($scope.onePost);
               $scope.onePost={};
               sweetAlert("Deleted!", "Post has been deleted.", "success");
+
+               // redirect on file delete to main course page. 
+                 var back_to_course = $location.path();
+                 var i=0;
+                 for(i=back_to_course.length; i>=0;i--){
+                  if(back_to_course[i] == '/'){
+                    break;
+                  }
+                 }
+                 back_to_course = back_to_course.slice(0,i);
+                 console.log(base_domain+"/#"+back_to_course);
+                 window.location = "/#"+back_to_course;
+
             },
             function(reason){
               sweetAlert("Deleted!", reason, "success");
@@ -885,12 +904,13 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
 
 }]);
 
-lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams','FeedFileDownload','RemoveFeedFile','$rootScope',function(LoadOneFile, $scope, $routeParams, FeedFileDownload, RemoveFeedFile, $rootScope) {
+lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams','FeedFileDownload','RemoveFeedFile','$rootScope','$location',function(LoadOneFile, $scope, $routeParams, FeedFileDownload, RemoveFeedFile, $rootScope, $location) {
     console.log($routeParams);
     $rootScope.whichView = "CourseOneFileCtrl";
     var promiseMembers = LoadOneFile.getOneFile($routeParams.courseId,$routeParams.fileId);
     promiseMembers.then(function(d){
       $scope.oneFile = d;
+      console.log("----------Thsi is one File.");
       console.log(d);
     });
 
@@ -912,9 +932,20 @@ lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams'
                var promiseRemoveFeedFile = RemoveFeedFile.deleteFeedFile(id);
                promiseRemoveFeedFile.then(function(d){
                  console.log("Deleted this file man"+ id);
-                 $scope.oneFile.files.splice(index,1);
+                 $scope.oneFile=[];
                  sweetAlert("Deleted!", "File has been deleted.", "success");
                  console.log(d);
+                 // redirect on file delete to main course page. 
+                 var back_to_course = $location.path();
+                 var i=0;
+                 for(i=back_to_course.length; i>=0;i--){
+                  if(back_to_course[i] == '/'){
+                    break;
+                  }
+                 }
+                 back_to_course = back_to_course.slice(0,i);
+                 console.log(base_domain+"/#"+back_to_course);
+                 window.location = "/#"+back_to_course;
                },
                function(reason){
                  sweetAlert("Cancelled!", reason, "error");

@@ -52,7 +52,14 @@
   color:#e74c3c !important;
 }
 .fa-file-excel-o{
-  color:#1abc9c !important;
+  //color:#1abc9c !important;
+  color:#2A9259 !important;
+}
+.fa-file-word-o{
+  color: #2E8DEF !important;
+}
+.fa-file-powerpoint-o{
+  color:#FF6600 !important;
 }
 .fa-file-image-o{
   color:#62CBE2  !important;
@@ -629,6 +636,9 @@ body {
             //border: 1px solid $g6;
             border-top:0px;
             //background-color: #fafafa;
+            .uploadBox{
+              position: relative;
+            }
             .cPPic{
                float: left;
                 border-radius: 600px;
@@ -643,6 +653,16 @@ body {
                 }
             }
             .cPContent{
+                .postOverlay{
+                  position:absolute;
+                  top: 20px;
+                  right:20px;
+                  left: 105px;
+                  bottom:0;
+                  background:rgba(0, 0, 0, 0.14);
+                  z-index: 12121212;
+                  display:none;
+                }
                 margin-left:105px;
                 background: #FFF;
                 border: 1px solid #DDD;
@@ -1119,9 +1139,35 @@ body {
 // Over writes all DataTables Files
 
 #fileFilterType{
-  position: absolute;
-  top:20px;
-  left:290px;
+position: absolute;
+top: 20px;
+right: 20px;
+       -webkit-appearance: button;
+       -moz-appearance: button;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -webkit-padding-end: 11px;
+       -moz-padding-end: 20px;
+       -webkit-padding-start: 7px;
+       -moz-padding-start: 2px;
+       background-color: #E5E5E5;
+       background-image: -webkit-linear-gradient(top, #E5E5E5, #F4F4F4);
+       background-position: center right;
+       background-repeat: no-repeat;
+border: 1px solid #AAA;
+        border-radius: 2px;
+color: #555;
+       font-size: inherit;
+margin: 0;
+overflow: hidden;
+          padding-top: 3px;
+          padding-bottom: 2px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+outline: 0px;
+         font-family: $osSB;
+         font-size:13px;
+         cursor:pointer;
 }
 .fileShowUser{
   font-family: opensans_italic;
@@ -1273,7 +1319,8 @@ table.dataTable tfoot td {
   color: rgb(183, 183, 183);
   display: none;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 15px;
+  margin-top:3px;
   &:hover{
     color: #008fd5;
   }
