@@ -5,10 +5,15 @@
 {% endblock %}
 
 {% block feed_line %}
-  {{ instance.upload_user.name }}
+  {{ instance.upload_user.html_name }}
 {% endblock %}
 
 {% block feed_detail %}
-Uploaded a lecture {{ instance.item_lost }} at {{ instance.place }}.
+Uploaded {{ instance.count }} files in {{ instance.batch.course.name }}.
+{% for file in files %}
+<br>
+<a href = {{file.link}}>{{file.file_name}}</a>
+{% endfor %}
+
 {% endblock %}
 

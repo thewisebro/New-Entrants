@@ -146,10 +146,28 @@ function get_calendars(hashtags){
   );
 }
 
+function get_calendar_color(calendar_name){
+  var color = null;
+  if(calendar_name == 'All')
+    color = null;
+  else if(calendar_name == 'Academic')
+    color = 'blue';
+  else if(calendar_name == 'Miscellaneous')
+    color = 'purple';
+  else if(calendar_name == 'Groups')
+    color = 'green';
+  else if(calendar_name == 'Personal')
+    color = 'yellow';
+  else
+    color = 'blue';
+  return color;
+}
+
 function show_calendar_labels(){
   $('#labels-body').html('');
   for(var i=0;i<calendars.length;i++){
-    $('#labels-body').append("<div id='label_"+calendars[i].name+"' class='label' onclick='calendar_label_clicked(\""+calendars[i].name+"\");'>"+
+    var color = get_calendar_color(calendars[i].verbose_name);
+    $('#labels-body').append("<div id='label_"+calendars[i].name+"' class='label"+(color?' '+color+'-label':'')+"' onclick='calendar_label_clicked(\""+calendars[i].name+"\");'>"+
         "<div class='label-name'>"+calendars[i].verbose_name+"</div></div>");
   }
 }
@@ -204,60 +222,14 @@ function update_events(calendar,action,number){
 }
 
 function event_html(Event,calendar_name){
-  var html =
-    "<div class='event-container' id='event-container"+Event.id+"' onmouseover='event_container_mouse_over("+Event.id+");'"+
-                                 " onmouseout='event_container_mouse_out("+Event.id+");'>"+
-      "<div class='event-type-head'>"+
-        Event.date+(Event.weekday ? ' , '+Weekdays[Event.weekday]+'' : '')+
-         "<div class='event-shown-calendar-name'><div class='event-options-icon-wrapper'>"+
-         (Event.editable?"<div class='event-options-icon-wrapper-inside' onclick='show_event_options(this,event);'>"+
-         "<div class='event-options-icon' id='event-options"+Event.id+"'>&#9660;</div></div>"+
-         "<div style='clear:both'></div><div class='event-options-pop-up'><div onclick='edit_event("+Event.id+",event);'>Edit</div>"+
-         "<div onclick='delete_event("+Event.id+",event);'>Delete</div></div>":"")+
-         "</div>"+(calendar_name=='all' || (calendar_name=='virtual_calendar' && virtual_calendar.calendar_name == 'all')?
-         "<div class='shown-cal-name' "+(Event.shown_calendar_name=='Groups Calendar'?"style='color:#43b167'":"")+
-         ">"+Event.shown_calendar_name+"</div>":"")+
-         "</div>"+
-      "</div> "+
-      "<div class='event'>"+
-        "<div class='event-time-title'>"+
-          "<div class='event-time'>"+(Event.time?Event.time:"Event Title")+"</div>"+
-          "<div class='event-name'>"+Event.title+"</div>"+
-          "<div style='clear:both'></div>"+
-        "</div>";
-
-  if(Event.duration)
-    html+=
-        "<div class='event-duration'>"+
-          "<div class='event-left'>Duration</div>"+
-          "<div class='event-right'>"+Event.duration+"</div>"+
-          "<div style='clear:both'></div>"+
-        "</div>";
-
-  if(Event.added_by)
-    html+=
-        "<div class='event-by'>"+
-          "<div class='event-left'>By</div>"+
-          "<div class='event-right'>"+Event.added_by+"</div>"+
-          "<div style='clear:both'></div>"+
-        "</div>";
-  if(Event.place)
-    html+=
-        "<div class='event-place'>"+
-          "<div class='event-left'><div title='Venue' class='event-place-icon'></div></div>"+
-          "<div class='event-right'>"+Event.place+"</div>"+
-          "<div style='clear:both'></div>"+
-        "</div>";
-  if(Event.description)
-    html+=
-        "<div class='event-short-description'>"+
-          "<div class='event-left'><div title='Description' class='event-detail-icon'></div></div>"+
-          "<div class='event-right'>"+Event.description+"</div>"+
-          "<div style='clear:both'></div>"+
-        "</div>";
-  html+=
-      "</div>"+
-    "</div> ";
+  var context = {
+    'Event': Event,
+    'date': Event.date+(Event.weekday ? ' , '+Weekdays[Event.weekday]+'' : ''),
+    'calendar_name': calendar_name,
+    'color': get_calendar_color(Event.shown_calendar_name),
+    'virtual_calendar': virtual_calendar
+  };
+  var html = Handlebars.events_templates.event_html(context);
   return html;
 }
 

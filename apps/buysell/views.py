@@ -306,7 +306,7 @@ def buy(request, mc=None, sc=None):
 
 @login_required
 def search(request):
-  query=request.GET['query']
+  query=request.GET.get('query','')
   searchIn='buy'
   try:
     searchIn=request.GET['qtype']
@@ -322,6 +322,11 @@ def search(request):
     qryst = ItemsRequested.items.filter(item_name__icontains = query)
     qt_flag=1
   number_rows=qryst.count()
+
+  queries_without_page=request.GET.copy()                      #this is for preserving the query parameter on pagination
+  if queries_without_page.has_key('page'):
+    del queries_without_page['page']
+
   paginator = Paginator(qryst, 10)
   page = request.GET.get('page', 1)
   try:
@@ -332,15 +337,20 @@ def search(request):
   except EmptyPage:
     logger.info(request.user.username + ': pagination error on buy - EmptyPage.' )
     pageTableData = paginator.page(paginator.num_pages)
+  pages = range(1,(qryst.count()+19)/10)
+  # If only a single page, do not show paging                                |
+  if len(pages) == 1 :
+    pages = None
+
   if qryst:
     if number_rows==1:
       messages.success(request,'1 result found!')
     else:
       messages.success(request, ''+str(number_rows)+' results found!')
   if searchIn == 'buy':
-    return render_to_response('buysell/buy.html',{'table_data':pageTableData,'searchflag':srchflag},context_instance=RequestContext(request))
+    return render_to_response('buysell/buy.html',{'table_data':pageTableData,'pages':pages,'searchflag':srchflag,'queries':queries_without_page},context_instance=RequestContext(request))
   elif searchIn == 'request':
-    return render_to_response('buysell/view-requests.html',{'table_data':pageTableData,'searchflag':srchflag},context_instance=RequestContext(request))
+    return render_to_response('buysell/view-requests.html',{'table_data':pageTableData,'pages':pages,'searchflag':srchflag,'queries':queries_without_page},context_instance=RequestContext(request))
 
 @login_required
 def sendmail(request, type_of_mail, id_pk):

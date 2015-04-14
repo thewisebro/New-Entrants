@@ -1,10 +1,13 @@
 <div class="courseFeeds">
     
   <div class="createPost">
+    <div class="uploadBox" ng-show="logIn" style="border-top: 1px solid #DDD;padding-top:20px;">
     <div class="cPPic">
        <img ng-src="{[base_domain]}{[auth.user.photo]}"></img> 
     </div>
     <div class="cPContent" ng-init="tab=1">
+      <div class="postOverlay">
+      </div>
       <div class="postType">
           <ul>
           <!--
@@ -24,20 +27,12 @@
                <!-- For posts -->
                <div ng-show="tab === 1">
                  <div class="inputTextPost">
-                   <textarea type="text" ng-model="thing.content" placeholder="write here ..."></textarea>
+                   <textarea type="text" ng-model="thing.content" placeholder="Write here ..."></textarea>
                  </div>
                  <div class="postOptions">
                    <div class="uploadFiles">
                    <div>
-                         <span ng-click="changeToggle()" ng-class="{'addFilesWhite': !toggled, 'addFiles': toggled}">
-                          <i class="fa fa-cloud-upload" style="padding-right:5px;vertical-align: middle;font-size:20px;"></i>
-                          Add Files
-                         </span>
-                           <ul class="dropdown-menu fourChoice" ng-show="toggled">
-                              <li ng-repeat="choice in uploadItems" ng-click='changeToggle()'  ng-file-select ng-model="fileArray" ng-file-change='update($files,"{[choice]}")' ng-multiple="true">
-                                <span class="button"><i style="margin-left:0px;margin-right:10px;" class="fa fa-plus-square-o"></i>{[choice]}</span>
-                              </li>
-                           </ul>
+                       
                         <ul class="itemDisplay" ng-show="fileArray.Lecture.length != 0 || fileArray.Tutorial.length != 0 || fileArray.ExamPaper.length != 0 || fileArray.Solution.length != 0">
                         <!--LECTURE -->
                            <li style="font:smaller">
@@ -109,12 +104,33 @@
                               </ul>
                            </li>
                         </ul>
+                         <ul class="dropdown-menu fourChoice" ng-show="toggled">
+                              <li ng-repeat="choice in uploadItems" ng-click='changeToggle()'  ng-file-select ng-model="fileArray" ng-file-change='update($files,"{[choice]}")' ng-multiple="true">
+                                <span class="button"><i style="margin-left:0px;margin-right:10px;" class="fa fa-plus-square-o"></i>{[choice]}</span>
+                              </li>
+                         </ul>
                      </div>
                    </div>
-                  <div class="postButton" ng-click="finalSend()">
-                    Post
-                  </div>
-                 </div> 
+                  <div class="postSettings">
+                    <div class="postButton" ng-click="finalSend()">
+                      Post
+                    </div>
+                    <div class="profPrivacy">
+                      <div class="onoffswitch">
+                          <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked ng-model="privacy">
+                          <label class="onoffswitch-label" for="myonoffswitch">
+                            <span class="onoffswitch-inner"></span>
+                           <!-- <span class="onoffswitch-switch"></span>-->
+                          </label>
+                      </div>
+                    </div>
+                    <div>
+                       <span ng-click="changeToggle()" ng-class="{'addFiles': !toggled, 'addFilesWhite': toggled}">
+                        <i class="fa fa-cloud-upload" style="padding-right:5px;vertical-align: middle;font-size:20px;"></i>
+                        Add Files
+                       </span>
+                    </div>
+                 </div>
                </div>
                
                <!-- For events-->
@@ -122,7 +138,7 @@
       </div>
           </div>
   </div>
-
+   </div>
    <div class="postDiv" ng-repeat="post in posts">
 
     <div class="mainPost">
@@ -133,7 +149,7 @@
           <div class="postUserNameTime">
             <div class="postUser">
               <span class="postUserName">{[post.post.upload_user]}</span>
-              <span class="removeFeedPost" ng-click="removeFeedPost(post.post.id, $index)">
+              <span class="removeFeedPost" ng-show="logIn && auth.user.name == post.post.upload_user" ng-click="removeFeedPost(post.post.id, $index)">
                   <i class="fa fa-times-circle-o"></i>
               </span>
             </div>
@@ -147,7 +163,7 @@
               </div>
               <div class="filesDisplay" ng-show="post.files.length > 0" >
                   <div class="postContent" ng-repeat="file in post.files">
-                    <div class="removeFeedFile" ng-click="removeFeedFile(file.id,$parent.$index,$index)">
+                    <div class="removeFeedFile" ng-show="logIn && file.username == auth.user.name" ng-click="removeFeedFile(file.id,$parent.$index,$index)">
                       <i class="fa fa-times"></i>
                     </div>
                     <div class="fileOverlay">
@@ -155,12 +171,14 @@
                     </div>
                     <div class="fileImage">
                        <img ng-show='file.file_type == "image"' ng-src="{[base_domain]}/{[file.filepath]}"></img>
-                       <i ng-hide='file.file_type == "image"' class="fa fa-file-{[file.file_type]}-o"></i>
-                       <i ng-show='file.file_type == "unknown"' class="fa fa-file"></i> 
+                       <i ng-show='file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>
+                       <i ng-show='file.file_type == "ppt"' class="fa fa-file-powerpoint-o"></i>
+                       <i ng-show='file.file_type == "zip"' class="fa fa-file-archive-o"></i>
+                       <i ng-show='file.file_type == "other"' class="fa fa-file"></i> 
                     </div>
                     <div class="fileData">
                        <div class="filename">
-                          {[file.upload_file]}
+                          <a ng-href="#/course/{[coId.courseId]}/files/{[file.id]}">{[file.upload_file]}</a>
                        </div>
                        <div class="fileType">
                             <i class="fa fa-circle c_{[file.upload_type]}" style="padding-right: 3px;"></i>
@@ -171,9 +189,9 @@
               </div> 
           </div>
         </div>
-        <div class="commentsBlock">
+        <div class="commentsBlock" ng-show="logIn">
           <div ng-click="loadCommentsFunc(post.post.id)" class="showHideComments">
-            Comments <span class="commentsCount">3</span>
+            Comments <span class="commentsCount">{[post.post.count]}</span>
           </div>
           <div id="postComments_{[post.post.id]}" class="loadComments">
             

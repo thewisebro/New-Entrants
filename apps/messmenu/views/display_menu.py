@@ -174,9 +174,9 @@ def menu_dict(menu):
                        '\r','').split('\n'))))
   }
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Student').count() != 0)
 def todays_menu(request):
+  if not request.user.is_authenticated() or not request.user.groups.filter(name='Student').exists():
+    return HttpResponse(json.dumps([]), content_type='application/json')
   bhawan = request.user.student.bhawan
   menus = Menu.objects.filter(bhawan=bhawan, date=datetime.date.today()).exclude(content='')
   print menus

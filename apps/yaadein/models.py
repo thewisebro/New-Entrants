@@ -24,6 +24,7 @@ class Spot(models.Model):
   tagline = models.CharField(max_length = 200, null=True)
   profile_pic = models.FileField(upload_to='yaadein/spot/', null=True, blank=True)
   coverpic = models.FileField(upload_to='yaadein/coverpic/',null =True, blank=True)
+  display = models.BooleanField(default=True)#display posts on the spots page 
   def __unicode__(self):
     return self.name
 

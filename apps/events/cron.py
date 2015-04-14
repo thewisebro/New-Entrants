@@ -59,7 +59,7 @@ def added_by(event):
 def event_dict_for_email(event):
   return {
     'title' : event.title,
-    'shown_calendar_name' : shown_calendar_name(event.calendar),
+    'shown_calendar_name' : shown_calendar_name(event.calendar)+' Calendar',
     'added_by' : added_by(event),
     'date' : str(int(event.date.strftime('%d')))+event.date.strftime(' %B, %Y'),
     'time' : event.time.strftime('%I:%M %p') if event.time else '',

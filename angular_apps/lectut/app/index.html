@@ -22,6 +22,10 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+
+    <!-- build:include fonts.html -->
+    
+    <!-- /build -->
   </head>
   <body ng-app="lectutApp" ng-controller="MainCtrl" ng-cloak class="ng-cloak">
     <div growl></div>
@@ -35,56 +39,72 @@
       <!-- Header white 50px full width -->
       <div class="header">
         <!-- Appname-->
-        <div class="appName"><i class="fa fa-bookmark" style="padding-right:5px;"></i>Lectut</div>
+        <a href="/#/"><div class="appName"><i class="fa fa-bookmark" style="padding-right:5px;"></i>Lectut</div></a>
         <div class="topSearchBox"><!-- Search box-->
         <span class="searchIconTop"><i class="fa fa-search"></i></span>
         <div class="crossTop" ng-click="clearSearch()" ng-show="queryString.length != 0"><i class="fa fa-times-circle"></i></div>
-        <input class="mainSearch" type="text" placeholder="Search" ng-model="queryString"  ng-change="searchFunc(queryString)"></input>
+        <input class="mainSearch" type="text" placeholder="Search for courses, files and posts..." ng-model="queryString"  ng-change="searchFunc(queryString)"></input>
+        <a ng-href="#/" ng-class="{activeHome:isHome('/')}"><div class="homeTab">Home</div></a>
         </div>
         <div class="searchResult" ng-show="(searchResults.files.length != 0 || searchResults.courses.length != 0 || searchResults.posts.length != 0 )&& queryString.length != 0">
             <div class="searchFor">Search results for <span class="textHighlightSearch">{[queryString]}</span></div>
             <div class="subSearchHeading">Courses</div>
             <div class="noResults" ng-hide="searchResults.courses.length != 0">No Results</div>
             <div class="subSearchContent" ng-show="searchResults.courses.length != 0">
-              <div ng-repeat="course in searchResults.courses |limitTo: 5">{[course.name]}<span class="courseCodeSearchTop">{[course.code]}</span></div>
+                <div ng-repeat="course in searchResults.courses |limitTo: 5" ng-click="clearSearch()">
+                  <a ng-href="#/courses/{[course.id]}">
+                    {[course.name]}
+                    <span class="courseCodeSearchTop">{[course.code]}</span>
+                  </a>
+                </div>
+              </a>
             </div>
             <div class="subSearchHeading">Files</div>
             <div class="noResults" ng-hide="searchResults.files.length != 0">No Results</div>
             <div class="subSearchContent">
                <div ng-repeat="file in searchResults.files | limitTo: 5">
-                <div class="sImageDiv">
-                  <img ng-src="{[base_domain]}{[file.filepath]}"></img>
-                </div>
-                <div class="sFileData">
-                  <div class="sImageName">
-                  {[file.upload_file]}
+                <a download="" ng-href="{[base_domain]}/lectut_api/download/{[file.id]}">
+                  <div class="sImageDiv">
+                    <img ng-src="{[base_domain]}/{[file.filepath]}"></img>
                   </div>
-                  <div class="sImagePostedBy">  <i class="fa fa-circle c_{[file.upload_type]}" style="padding-right: 3px;"></i> {[file.upload_type]} | by {[file.username]} | on {[file.datetime_created]}</div>
-                </div>
+                  <div class="sFileData">
+                    <div class="sImageName">
+                    {[file.upload_file]}
+                    </div>
+                    <div class="sImagePostedBy"><i class="fa fa-circle c_{[file.upload_type]}" style="padding-right: 3px;"></i> {[file.upload_type]} | by {[file.username]} | on {[file.datetime_created]}</div>
+                  </div>
+                </a>
               </div>
             </div>
             <div class="subSearchHeading">Posts</div>
             <div class="noResults" ng-hide="searchResults.posts.length != 0">No Results</div>
             <div class="subSearchContent">
-               <div ng-repeat="post in searchResults.posts | limitTo: 3">
-                <div><div style="float:left;"><i class="fa fa-pencil-square-o" style="margin-right:5px;"></i></div><div style="margin-left:20px;">{[post.content]}</div></div>
-                <div class="sPostPostedBy">by {[post.upload_user]} | on {[post.datetime_created]} | in {[post.batch.code]} {[post.batch.year]}</div>
-               </div>
+               <div ng-repeat="post in searchResults.posts | limitTo: 3" ng-click="clearSearch();updateCourseId(post.batch.id)">
+               <a ng-href="#/course/{[post.batch.id]}/feeds/{[post.id]}">
+                 <div>
+                    <div style="float:left;">
+                      <i class="fa fa-pencil-square-o" style="margin-right:5px;"></i>
+                    </div>
+                    <div style="margin-left:20px;">{[post.content]}</div>
+                  </div>
+                  <div class="sPostPostedBy">by {[post.upload_user]} | on {[post.datetime_created]} | in {[post.batch.code]} {[post.batch.year]}</div>
+                 </div>
+               </a>
             </div>
         </div>
       </div>
- 
       <!-- Left Div 180px -->
       <div class="leftDiv">
          <!-- User block-->
          <div id="userblock">
             <div id="userpic">
-              <img ng-src="{[base_domain]}{[auth.user.photo]}" alt="">
+              <img ng-show="logIn" ng-src="{[base_domain]}{[auth.user.photo]}" alt="">
+              <i ng-hide="logIn" class="fa fa-user anonUser"></i>
             </div>
             <div id="userdata">
  	      <div>
-          <div>{[auth.user.name]}</div>
- 	        <div>{[auth.user.role]}</div>
+          <div ng-show="logIn">{[auth.user.name]}</div>
+ 	        <div ng-show="logIn">{[auth.user.role]}</div>
 	      </div>
              
             </div>
@@ -93,9 +113,13 @@
          <!-- My Courses -->
          <div class="myCourse">
             <div class="myCourseHeading">My Courses</div>
-            <ul class="myCourseUl" ng-init="selectedCourse='{[selectedCourse]}'">
+            <div class="signInBox" ng-show="!logIn">
+               To view your courses
+               <div class="signInButton" ng-click="signUp()">Sign In</div>
+            </div>
+            <ul class="myCourseUl" ng-show="logIn">
                <a class="crsA" ng-repeat="crs in auth.batches" ng-href="#/course/{[crs.id]}/feeds">
-                 <li class="crsLi" ng-click="getFeedData(crs.id);" ng-class="{'activeCourse':selectedCourse == '{[crs.id]}'}" >
+                 <li class="crsLi" ng-click="getFeedData(crs.id);updateCourseId(crs.id)" ng-class="{'activeCourse':isActive('/course/{[crs.id]}/')}" >
                    <div class="crsIdName"> 
                     <div class="crsId">
                       <span>{[::crs.code]}</span>
@@ -110,6 +134,7 @@
          </div> 
         <!-- Copyright-->
         <div class="footerIMG">
+          <div class="footerLine"></div>
           Copyright 2015<a style=" padding-left:5px;" traget="_blank" href="http://img.channeli.in">IMG IIT Roorkee</a>
         </div>
       </div>
@@ -119,24 +144,35 @@
   <div ng-click="getPostData()" class="courseFullDiv">
     <div class="courseHeading">
       <div class="courseHeadingNameId">
-        {[courseId.courseId]}<span style="padding-left:10px; text-transform: capitalize;">{[courseName]}</span>
+       <div ng-hide="$root.whichView == 'CourseHomeCtrl'">
+       <span>
+        <span style="padding-right:10px; text-transform: capitalize;">{[courseName]}</span>({[courseCode]})
+       </span>
+      </div>
+      <div ng-show="$root.whichView == 'CourseHomeCtrl' && !logIn">
+         Lectut Activity
+       </div>
+       <div ng-show="$root.whichView == 'CourseHomeCtrl' && logIn">
+         Common Feed
+       </div>
       </div>
 
-     <div class="courseFilters" >
-       <ul ng-init="selectedTab = 'feeds'">
-          <a ng-href="#/course/{[courseId.courseId]}/feeds" ng-class="{'activeFilter':selectedTab === 'feeds'}" ng-click="selectedTab = 'feeds'">
+     <div class="courseFilters" ng-hide="$root.whichView == 'CourseHomeCtrl'">
+       <ul>
+
+          <a ng-href="#/course/{[courseId.courseId]}/feeds" ng-class="{'activeFilter':isActiveTab('/course/{[::courseId.courseId]}/feeds')}">
             <li ng-click='getFeedData(courseId.courseId)' >
                 Feed
             </li>
           </a>
           <span class="vertLine"></span>
-          <a ng-href="#/course/{[courseId.courseId]}/files" ng-class="{'activeFilter':selectedTab === 'files'}" ng-click="selectedTab = 'files'">
+          <a ng-href="#/course/{[courseId.courseId]}/files" ng-class="{'activeFilter':isActiveTab('/course/{[::courseId.courseId]}/files')}">
             <li ng-click='getFeedData(courseId.courseId)'>
                 Files
             </li>
           </a>
-          <span class="vertLine"></span>
-          <a ng-href="#/course/{[courseId.courseId]}/members" ng-class="{'activeFilter':selectedTab === 'members'}" ng-click="selectedTab = 'members'">
+          <span class="vertLine" ng-show="logIn"></span>
+          <a ng-show="logIn" ng-href="#/course/{[courseId.courseId]}/members" ng-class="{'activeFilter':isActiveTab('/course/{[::courseId.courseId]}/members')}">
             <li ng-click='getFeedData(courseId.courseId)'>
                 Members
             </li>
