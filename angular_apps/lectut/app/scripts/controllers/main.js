@@ -7,8 +7,9 @@ var thing;
  * # MainCtrl
  * Controller of the lectutApp
  */
+var redirect_url = base_domain + '/login/?next=/lectut/';
 lectutApp
-  .controller('MainCtrl', ['$location','$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails',function ($location,$scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails) {
+  .controller('MainCtrl', ['$location','$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails','CourseDataById',function ($location,$scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails, CourseDataById) {
     
     $rootScope.whichView = "MainCtrl";
     $scope.base_media_url = base_domain+"/media/";
@@ -18,13 +19,22 @@ lectutApp
     // To get feed data.
     $scope.courseId = $routeParams;
     $scope.updateCourseId = function(id){
+        if($scope.logIn){
            for(var i=0;i<$scope.auth.batches.length;i++){
               if($scope.auth.batches[i].id == id){
                 $scope.courseCode = $scope.auth.batches[i].code;
                 //alert($scope.courseCode);
               }
             }
-
+        }
+        else{
+          var promiseCourseDataById = CourseDataById.getCourseDataById(id);
+          promiseCourseDataById.then(function(d){
+            console.log(d);
+            $scope.courseName = d.course_name;
+            $scope.courseCode = d.code;
+          });
+        }
     }
     // Initially setting the selected Course
     //console.log("--------------------------------------------");
@@ -70,6 +80,18 @@ lectutApp
        return route === $location.path();
 
     }
+    
+
+    // ------------------- Sign Up --------------------
+    $scope.signUp = function(){
+      console.log($scope.logIn);
+       if ($scope.logIn === false) {
+           window.location = redirect_url;
+       }
+       else{
+        alert("asd");
+       }
+    }
 
     //------------------ Initial setup-------------------------------------
     $scope.logIn = false;
@@ -96,9 +118,27 @@ lectutApp
           //anon user
           console.log("-------------------anon--------------------");
           $scope.logIn = false;
+          
+          var promiseCourseDataById = CourseDataById.getCourseDataById($routeParams.courseId);
+          promiseCourseDataById.then(function(d){
+            console.log(d);
+            $scope.courseName = d.course_name;
+            $scope.courseCode = d.code;
+          });
         }
     });
-
+   
+    // Anon Course Update
+    /*
+    $scope.updateCourseIdAnon = function(id){
+        var promiseCourseDataById = CourseDataById.getCourseDataById(id);
+          promiseCourseDataById.then(function(d){
+            console.log(d);
+            $scope.courseNameAnon = d.course_name;
+            $scope.courseCodeAnon = d.code;
+        });
+    }
+   */
     // Search Global
    $scope.queryString = "";
    $scope.searchFunc = function(str){
@@ -268,30 +308,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
            $scope.toggled? $scope.changeToggle() : "";
         }
     });
-/*
-    $scope.$watch(
-      function($scope) { 
-        return $scope.toggled;
-      },
-      function($scope){
-        alert("s");
-        if($scope.toggled){
-          $timeout(function(){
-           $scope.toggled = false;
-          },0);
-        }
-        else{
-        $timeout(function(){
-           $scope.toggled = true;
-          },0);
-        }
-    }
-    );
-  */  
-  //--------------------------------------- NEW POST-----------------------------------
-  /*$scope.$watch('files', function () {
-          $scope.upload($scope.files);
-  });*/
+
   $scope.fileArray={
     Lecture : [],
     Tutorial: [],
@@ -357,9 +374,6 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
         });
 
   }
-/* then promise (note that returned promise doesn't have progress, xhr and cancel functions. */
-//var promise = upload.then();
-
 
 //----------------------------------------------------------------------------------
 
@@ -443,7 +457,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 
     promiseCourseData.then(function (d) {
        $scope.posts = d.posts;
-       console.log(d);
+       //console.log(d);
     });
 
   $scope.getFeedData = function(id){
@@ -452,7 +466,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 
     promiseCourseData.then(function (d) {
        $scope.posts = d.posts;
-       console.log(d);
+       //console.log(d);
     });
   }
   
