@@ -57,9 +57,12 @@ def upload(request):
 
 class PrivelegeJsonView(TemplateView):
   def get(self, request):
-    privelege = request.user.uploader_set.all().exists()
-    print "privelege1 " + str(privelege)
-    privelege1 = {'privelege' : privelege}
+    try:
+      privelege = request.user.uploader_set.all().exists()
+      print "privelege1 " + str(privelege)
+      privelege1 = {'privelege' : privelege}
+    except:
+      privelege1 = {'privelege' : False}
     privelege_json = simplejson.dumps(privelege1)
     return HttpResponse(privelege_json, content_type="application/json")
 
@@ -263,7 +266,9 @@ def mul_read_star_notice(request, action):              #action determines wheth
 
 class Show_Starred(ListAPIView):
   def get_queryset(self):
+    print self.request.rest_user
     user = NoticeUser.objects.get_or_create(user=self.request.user)[0]
+    print self.request.user
     queryset = user.starred_notices.all().order_by('-datetime_modified')
     return queryset
   serializer_class = NoticeListViewSerializer
