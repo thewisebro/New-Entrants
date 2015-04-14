@@ -22,7 +22,7 @@ def photo(request, username=None):
     if user and user.in_group('Student Group'):
       filepath = STATIC_PATH + 'images/nucleus/default_group_dp.png'
     else:
-      if username.lower() == 'img':
+      if username and username.lower() == 'img':
         filepath = STATIC_PATH + 'images/nucleus/img.png'
       else:
         filepath = STATIC_PATH + 'images/nucleus/default_dp.png'
