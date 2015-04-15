@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
 <script type="text/javascript">
   parent.display_messages({{django_messages}});
 </script>

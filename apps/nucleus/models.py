@@ -433,8 +433,8 @@ class StudentUserInfo(StudentUser, AbstractStudentInfo):
 
 
 class Course(models.Model):
-  id = models.CharField(primary_key=True, max_length=15)
-  code = models.CharField(max_length=MC.CODE_LENGTH)
+  id = models.CharField(primary_key=True, max_length=60)
+  code = models.CharField(max_length=50)
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   credits = models.IntegerField()
   subject_area = models.CharField(max_length=MC.CODE_LENGTH)

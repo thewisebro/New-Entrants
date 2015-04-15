@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
     <link rel="stylesheet" href="bower_components/angucomplete-alt/angucomplete-alt.css" />
     <link rel="stylesheet" href="bower_components/sweetalert/lib/sweet-alert.css" />
+    <link rel="stylesheet" href="bower_components/ng-notify/src/styles/ng-notify.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -39,7 +40,7 @@
       <!-- Header white 50px full width -->
       <div class="header">
         <!-- Appname-->
-        <a href="/#/"><div class="appName"><i class="fa fa-bookmark" style="padding-right:5px;"></i>Lectut</div></a>
+        <a href="/lectut/#/"><div class="appName"><i class="fa fa-bookmark" style="padding-right:5px;"></i>Lectut</div></a>
         <div class="topSearchBox"><!-- Search box-->
         <span class="searchIconTop"><i class="fa fa-search"></i></span>
         <div class="crossTop" ng-click="clearSearch()" ng-show="queryString.length != 0"><i class="fa fa-times-circle"></i></div>
@@ -145,14 +146,14 @@
     <div class="courseHeading">
       <div class="courseHeadingNameId">
        <div ng-hide="$root.whichView == 'CourseHomeCtrl'">
-       <span>
-        <span style="padding-right:10px; text-transform: capitalize;">{[courseName]}</span>({[courseCode]})
-       </span>
+       <div style="font-family:opensans_semibold;font-size:15px;">
+        <div style="padding-right:10px; text-transform: capitalize;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;max-width: 368px; float:left;">{[courseName]}</div><div style="float:left;">({[courseCode]})</div>
+       </div>
       </div>
-      <div ng-show="$root.whichView == 'CourseHomeCtrl' && !logIn">
+      <div style="padding-right:10px; text-transform: capitalize;font-family:opensans_semibold;font-size:15px;" ng-show="$root.whichView == 'CourseHomeCtrl' && !logIn">
          Lectut Activity
        </div>
-       <div ng-show="$root.whichView == 'CourseHomeCtrl' && logIn">
+       <div style="padding-right:10px; text-transform: capitalize;font-family:opensans_semibold;font-size:15px;" ng-show="$root.whichView == 'CourseHomeCtrl' && logIn">
          Common Feed
        </div>
       </div>
@@ -234,6 +235,7 @@
     <script src="bower_components/sweetalert/lib/sweet-alert.js"></script>
     <script src="bower_components/angular-sweetalert/SweetAlert.js"></script>
     <script src="bower_components/angular-growl/build/angular-growl.js"></script>
+    <script src="bower_components/ng-notify/src/scripts/ng-notify.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
