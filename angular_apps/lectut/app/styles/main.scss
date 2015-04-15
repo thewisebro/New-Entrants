@@ -97,6 +97,15 @@ body {
       background: $th1;
 }
 // Main blocks 
+.noPosts{
+position: absolute;
+top: 275px;
+width: 100%;
+       font-weight: bold;
+       text-align: center;
+       font-size: 33px;
+color: #c0c0c0;
+}
 .anonUser{
   font-size: 45px;
   color: rgb(174, 174, 174);
@@ -865,13 +874,13 @@ body {
                       .addFiles{
                         color: #FFF;
                         background-color: #008fd5;
-                        bottom: 10px;
+                        bottom: -2px;
                         cursor: pointer;
                         font-size: 13px;
                         transition: all .1s;
                         font-family: "opensans_bold";
                         width: 50px;
-                        padding: 5px 10px;
+                        padding: 7px 10px;
                         text-align: center;
                         border-radius: 3px;
                         -webkit-transition: all .1s;
@@ -909,14 +918,14 @@ body {
                 .commentsBlock{
                   margin-left: 80px;
                   border: 1px solid #EEE;
-                  padding-top: 6px;
+                  //padding-top: 6px;
                   margin-top: 0px;
                   background: #FAFAFA;
                   .showHideComments{
                     font-size: 13px;
                     color: #828282;
                     padding-left: 12px;
-                    padding-top: 3px;
+                    padding-top: 9px;
                     padding-bottom: 10px;
                     cursor:pointer;
                     //border-bottom: 1px solid #EEE;
@@ -925,11 +934,12 @@ body {
                        background: #EFEFEF;
                        padding: 0px 6px;
                        border-radius: 38px;
-                       border: 1px solid #E9E9E9;
+                       border: 1px solid #E0E0E0;
                        text-decoration: none;
                     }
                     &:hover{
-                      text-decoration: underline;
+                      //text-decoration: underline;
+                      background: #F3F3F3;
                     }
                   }
                   .loadComments{
@@ -1125,6 +1135,7 @@ body {
                               text-overflow: ellipsis;
                               //important for stable structure
                               white-space: nowrap;
+                              cursor: pointer;
                             }
                             .fileType{
                               font-family: $osR;
@@ -1194,7 +1205,7 @@ right: 20px;
        -moz-padding-end: 20px;
        -webkit-padding-start: 7px;
        -moz-padding-start: 2px;
-       background-color: #E5E5E5;
+       background-color: #F7F7F7;
        background-image: -webkit-linear-gradient(top, #E5E5E5, #F4F4F4);
        background-position: center right;
        background-repeat: no-repeat;
@@ -1804,7 +1815,7 @@ ul.comment-list-wrapper ul.comment-list-wrapper {
   .comments-form textarea {
     height: 30px;
     padding: 3px;
-    color: #333; }
+    color: #797979; }
   .comments-form label {
     float: left;
     margin-right: 10px; }

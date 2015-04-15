@@ -366,8 +366,11 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
             console.log("data");
             var result = JSON.stringify(data);
             //console.log($scope.posts);
-            $scope.posts.unshift(data);
+              $scope.posts.unshift(data.complete_post);
+            console.log("data");
             console.log(data);
+            console.log("-------------------------");
+            console.log($scope.posts);
             // null the top box 
             $scope.thing.content = "";
             $scope.fileArray={
