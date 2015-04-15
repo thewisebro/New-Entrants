@@ -30,8 +30,10 @@
               </div>
               <div class="fileImage">
                 <img ng-show='oneFile.file.file_type == "image"' ng-src="{[base_domain]}/{[oneFile.file.filepath]}"></img>
-                <i ng-show='oneFile.file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>
-                <i ng-show='oneFile.file.file_type == "other"' class="fa fa-file"></i> 
+                <i ng-show='oneFile.file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>  
+                <i ng-show='oneFile.file.file_type == "ppt"' class="fa fa-file-powerpoint-o"></i> 
+                <i ng-show='oneFile.file.file_type == "zip"' class="fa fa-file-archive-o"></i> 
+                <i ng-show='oneFile.file.file_type == "other"' class="fa fa-file"></i>
               </div>
               <div class="fileData">
               <div class="filename">
