@@ -7,10 +7,18 @@ var thing;
  * # MainCtrl
  * Controller of the lectutApp
  */
+
 var redirect_url = base_domain + '/login/?next=/lectut/';
 lectutApp
-  .controller('MainCtrl', ['$location','$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails','CourseDataById',function ($location,$scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails, CourseDataById) {
-    
+  .controller('MainCtrl', ['$location','$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails','CourseDataById','ngNotify',function ($location,$scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails, CourseDataById, ngNotify) {
+   
+      ngNotify.addType('myTheme', 'notiLec');
+      ngNotify.config({
+         theme: 'myTheme'
+      });
+
+
+    // ----------------------------------------------  
     $rootScope.whichView = "MainCtrl";
     $scope.base_media_url = base_domain+"/media/";
     $scope.base_domain = base_domain;
@@ -273,7 +281,7 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
 
 }]);
 
-lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDownload', 'RemoveFeedPost','RemoveFeedFile','$cookies','$upload','$timeout','$routeParams','LoadFeed','growl','Comments','$rootScope',function($scope,CourseDetails,FeedFileDownload, RemoveFeedPost , RemoveFeedFile,$cookies,$upload, $timeout, $routeParams,LoadFeed, growl, Comments,$rootScope) {
+lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDownload', 'RemoveFeedPost','RemoveFeedFile','$cookies','$upload','$timeout','$routeParams','LoadFeed','Comments','$rootScope','ngNotify',function($scope,CourseDetails,FeedFileDownload, RemoveFeedPost , RemoveFeedFile,$cookies,$upload, $timeout, $routeParams,LoadFeed, Comments,$rootScope, ngNotify) {
    
    $rootScope.whichView = "CourseDetailCtrl";
    this.params = $routeParams;
@@ -370,8 +378,12 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
                Solution: []
              };
           // Notifiaction Success
-             console.log("growl below");
-          growl.addSuccessMessage("This adds a success message");
+             ngNotify.set('Successfully posted.', {
+                   sticky: true,
+                   position:'top',
+                   type:'success',
+                   duration: 3000
+             });
           $(".postOverlay").hide();
         });
 
@@ -474,7 +486,6 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
   }
   
   $scope.downloadFeedFile = function(id){
-    growl.addSuccessMessage("This adds a success message");
     console.log("herecomesid");
     console.log(id);
     var promiseFeedFileDownload = FeedFileDownload.getFeedFile(id);
@@ -566,16 +577,6 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 */
 
 
-
-/* ---------------------------------------------------------------------
-    Growl Notifications
-----------------------------------------------------------------------*/
-/*  growl.addWarnMessage("This adds a warn message");
-    growl.addInfoMessage("This adds a info message");
-    growl.addSuccessMessage("This adds a success message");
-    growl.addErrorMessage("This adds a error message");
-*/
-
 }]);
 
 lectutApp.controller('CourseFeedsCtrl', ['$stateParams','$scope', function($stateParams,$scope) {
@@ -631,17 +632,17 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                    html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a download ng-href="{[base_domain]}/'+ full.filepath+'">'+full.description+'</a></span>';
                  } 
                  else if(full.file_type == "ppt"){
-                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:10px; font-size:16px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
                  }
                  else if(full.file_type == "zip"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:10px; font-size:16px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
                  }
 
                  else if(full.file_type == "pdf"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:10px; font-size:16px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
                  }
                  else{
-                   html += '<i class="fa fa-file" style="margin-right:10px; font-size:16px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
                  }
                 html += '<span class="fileShowUser">by: '+full.username+'</span>';
                 html += '<span class="fileShowDownloads">Downloads: '+full.download_count+'</span>';
@@ -654,8 +655,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
              .renderWith(function(data, type, full, meta) {
                  //console.log(data);
                  var html = "";
-                 html += '<div style=" display: inline-block;"><span class="timeFile">'+ moment(data).format("DD-MM-YY, HH:mm");+'</span></div>';
-                 
+                 html += '<div style=" display: inline-block;"><span class="timeFile">'+ moment(data).format("DD-MM-YY, HH:mm");+'</span></div>'; 
                  return html;
              })/*
              DTColumnBuilder.newColumn(null).withTitle('').notSortable()
@@ -797,7 +797,7 @@ lectutApp.controller('CourseMembersCtrl', ['Members','$scope','$routeParams', '$
 }]);
 
 
-lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams','FeedFileDownload','RemoveFeedPost' ,'RemoveFeedFile','Comments', '$rootScope','$location',function(LoadOnePost, $scope, $routeParams, FeedFileDownload, RemoveFeedPost, RemoveFeedFile, Comments, $rootScope, $location) {
+lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams','FeedFileDownload','RemoveFeedPost' ,'RemoveFeedFile','Comments', '$rootScope','$location','ngNotify',function(LoadOnePost, $scope, $routeParams, FeedFileDownload, RemoveFeedPost, RemoveFeedFile, Comments, $rootScope, $location,ngNotify) {
     //console.log($routeParams);
     $rootScope.whichView = "CourseOnePostCtrl";
     var promiseMembers = LoadOnePost.getOnePost($routeParams.courseId,$routeParams.postId);
@@ -904,7 +904,7 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
 
 }]);
 
-lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams','FeedFileDownload','RemoveFeedFile','$rootScope','$location',function(LoadOneFile, $scope, $routeParams, FeedFileDownload, RemoveFeedFile, $rootScope, $location) {
+lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams','FeedFileDownload','RemoveFeedFile','$rootScope','$location','ngNotify',function(LoadOneFile, $scope, $routeParams, FeedFileDownload, RemoveFeedFile, $rootScope, $location, ngNotify) {
     console.log($routeParams);
     $rootScope.whichView = "CourseOneFileCtrl";
     var promiseMembers = LoadOneFile.getOneFile($routeParams.courseId,$routeParams.fileId);
