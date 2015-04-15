@@ -1,0 +1,32 @@
+{% extends "facapp/base.html" %}
+
+{% block app_content %}
+
+<script type="text/javascript">
+
+function edit_profile_pic(unique_name, id){
+  uname = unique_name;
+  dialog_iframe({
+    name: 'edit_pic_dialog',
+    title: 'Upload Image',
+    width: 700,
+    height: 500,
+    src: '/crop_image/upload_image/' + unique_name + '/' + id + '/'
+  });
+}
+
+function cropping_done(change_pics){
+  edit_pic_dialog.dialog('close');
+    $('#profile_pic').find('img').attr('src','/photo');
+}
+
+</script>
+<!-- <script type="text/javascript" src="/static/js/include.js"></script> -->
+<link rel="stylesheet" type="text/css" href="/static/css/smoothness/custom-jquery-ui.css">
+
+<button class="btn btn-success" onclick="edit_profile_pic('user_photo', {{ user.id }});">Upload Profile Picture</button>
+
+{% include "facapp/generic_form.html" %}
+
+{% endblock %}
+

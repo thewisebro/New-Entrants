@@ -1,0 +1,131 @@
+{% extends "nucleus/base.html" %}
+
+{% load tags %}
+
+{% block app_styles %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/nucleus/events.css" type="text/css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/nucleus/notifications.css" type="text/css">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fancybox/source/jquery.fancybox.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}walkthrough/jquery-walkthrough.css"/>
+{% endblock %}
+
+{% block app_scripts %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/nucleus/home.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/prettydate.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/nucleus/events_birthdays.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/nucleus/feeds.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/nucleus/events.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/nucleus/notifications.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}fancybox/source/jquery.fancybox.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}walkthrough/jquery-walkthrough.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}walkthrough/walkermain.js"></script>
+  {% if start_walkthrough %}
+    <script type='text/javascript'>
+      $('body').ready(function(){
+        LaunchWalkthrough();
+      });  
+    </script>
+  {% endif %}
+  {% if pass_change %}
+    <script type='text/javascript'>
+      dialog_iframe({
+        name:'pass_change',
+        title: 'Change Password',
+        width: 450,
+        height: 220,
+        src:'/settings/password_firstyear/'
+      });
+    </script>
+  {% endif %}
+  {% if show_social_like_message %}
+    <script type='text/javascript'>
+      dialog_iframe({
+        name:'social_like_message',
+        title: 'Follow us',
+        width: 500,
+        height: 180,
+        src:'/helpcenter/social_like_message/'
+      });
+    </script>
+  {% endif %}
+{% endblock %}
+
+{% block active-home %}"active-nav"{% endblock %}
+{% block banner_name %}{% get_name user %}{% endblock %}
+{% block banner_info %}{% get_info user %}{% endblock %}
+{% block profile_pic_url %}{% get_profile_pic_url user %}{% endblock %}
+
+{% block apps-list %}
+  {% for app in apps %}
+    <div class="appbox">
+      <img class="app-pic" data-app="{{ app }}" src="{{ STATIC_URL }}images/nucleus/app-icons/{{ app }}.png"/>
+      <a target="_blank" href="{% app_url app %}">
+        <div class="app-name">{% app_verbose_name app %}</div>
+      </a>
+      {% if app == "notices" %}
+        <a href="{% app_url "androidnotices" %}" target="_blank" title="{% app_verbose_name "androidnotices" %}">
+          <img class="android-notices-pic" src="{{ STATIC_URL }}images/nucleus/app-icons/android-bot.png"/>
+        </a>
+      {% endif %}
+    </div> 
+  {% endfor %}  
+{% endblock apps-list %}
+
+{% block groups-list %}
+  {% for group in student_groups %}
+    {% if group.is_active or group.user == user or group.admin == user.person %}
+      <div class="appbox">
+        <img class="app-pic" src="{% group_logo group %}" width="25px" height="25px"/>
+        <div class="app-name"><a href="/groups/{{group.user.username}}/">{% group_name group %}</a></div>
+      </div>
+    {% endif %}  
+  {% endfor %}
+{% endblock groups-list %}
+
+{% block links-list %}
+  {% for link in channeli_links %}
+    {% if link.urls %}
+      <div class="appbox"><div class="app-name"><a target="_blank" href="{{ link.urls.0 }}">{{ link.name }}</a>
+      {% for link_url in link.urls %}    
+        <a target="_blank" href="{{ link_url }}">&nbsp;[{{forloop.counter}}]</a>
+      {% endfor %}
+      </div></div> 
+     {% else %}
+       <div class="appbox"><div class="app-name"><a target="_blank" href="{{ link.url }}">{{ link.name }}</a></div></div> 
+     {% endif %}  
+  {% endfor %}  
+{% endblock links-list%}
+
+{% block imgtools-list %}
+  {% for link in img_tools %}
+     <div class="appbox">
+       <img class="app-pic" src="{{ STATIC_URL }}images/nucleus/imgtools/{{ link.icon }}" width="25px" height="25px"/>
+       <div class="app-name"><a target="_blank" href="{{ link.url }}">{{ link.name }}</a>
+       </div>
+     </div>
+  {% endfor %}
+{% endblock imgtools-list%}
+
+{% block calendar_div %}
+  <div id="calendar">
+    <div id="month-bar">
+      <div id="month-name">
+      </div>
+      <div id="month-nav"><div onclick="previous_month();">&lt;</div> <div onclick="next_month();">&gt;</div> 
+      </div>      
+    </div>
+    <div id="week-bar">
+      <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+    </div>
+    <div id="date-matrix">
+    </div>
+  </div>
+  <div id="add-event-div">
+    <div class='div-button' onclick="add_event();">Add an event</div>
+  </div>
+  <div id="labels">
+    <div id="labels-header">Calendars</div>
+    <div id="labels-body">
+    </div>
+  </div>
+{% endblock calendar_div %}

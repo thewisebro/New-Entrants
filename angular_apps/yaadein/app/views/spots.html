@@ -1,0 +1,16 @@
+<div>
+<div class="padded gallery-image-container">
+  <a ng-href="#/profile/{~{spot.name}~}" ng-repeat="spot in spots">
+	  <div>
+    <div ng-style="{ 'background-image': 'url(' + spot.cover_pic + ')' }">
+      <p ng-bind="spot.name"></p>
+    </div>
+	  </div>
+  </a>
+</div>
+<!-- <div masonry>
+	<div class="masonry-brick" ng-repeat="image in currentUser.gallery">
+		<img ng-src="{~{image.url}~}" alt="{~{$index}~}">
+	</div>
+</div> -->
+</div>

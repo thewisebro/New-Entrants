@@ -9,6 +9,19 @@
 {% endblock %}
 
 {% block feed_detail %}
-Uploaded a lecture {{ instance.item_lost }} at {{ instance.place }}.
+{% if instance.count == 1 %}
+  Added a post in {{ instance.batch.course.name }} <span style ="float:right"><i class='fa fa-file-o'></i> {{ instance.count }} file</span>
+{% else %}
+  Added a post in {{ instance.batch.course.name }} <span style ="float:right"><i class='fa fa-file-o'></i> {{ instance.count }} files</span>
+{% endif %}
+<br>
+<!--div class = 'lectut_feed_files'>
+{% for file in instance.files %}
+<div class = 'lectut_file_details' id = '{{ file.id }}' style = "width:20px;">
+<img src='' href = {{file.file_link}}>{{file.file_name}}</a>
+</div>
+{% endfor %}
+</div-->
+
 {% endblock %}
 

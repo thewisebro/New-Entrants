@@ -1,0 +1,17 @@
+{% extends "facapp/base.html" %}
+
+{% block model_details %}
+	    <li>Type of project : {{ l.type_of_project }}</li>
+      <li>Topic : {{ l.topic }}</li>
+      <li>Year : {{ l.year }}</li>
+      <li>Status : {{ l.status }}</li>
+      <li>Funding agency : {{ l.funding_agaency }}</li>
+      <li>Financial outlay : {{ l.financial_outlay }}</li>
+      <li>Period : {{ l.period }}</li>
+      <li>Other investigating officer : {{ l.other_investigating_officer }}</li>
+
+{% endblock %}
+
+{% block model_details_to_delete %}
+	    {{ model_to_delete.topic }} in {{ model_to_delete.year }}
+{% endblock %}

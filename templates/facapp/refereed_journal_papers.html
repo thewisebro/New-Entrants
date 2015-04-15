@@ -1,0 +1,16 @@
+{% extends "facapp/base.html" %}
+
+{% block app_content %}
+  <h3>Refereed Journal Papers</h3>
+  <a href='/facapp/refereed_journal_papers/edit/'>Edit</a><br /><br />
+  {% if content %}
+    <div class='html_content'>
+    {% autoescape off %}
+      {{ content.papers }}
+    {% endautoescape %}
+    </div>
+  {% else %}
+    <p class='no_html_content'>No Refereed Journal information entered.</p>
+  {% endif %}
+{% endblock %} {# End app_content block. #}
+
