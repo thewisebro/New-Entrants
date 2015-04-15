@@ -145,12 +145,13 @@ def contact(request):
       # TODO : Use cleaned values from the form
       # this may lead to sql insertion!
       student.user.email = request.POST['email_id']
-      student.personal_contact_no = request.POST['personal_contact_no']
+      student.user.contact_no = request.POST['personal_contact_no']
       student.bhawan = request.POST['bhawan']
       student.room_no = request.POST['room_no']
       info.home_contact_no = request.POST['permanent_contact_no']
       info.save()
       student.save()
+      student.user.save()
       l.info(request.user.username + ': Updated Student successfully. Redirecting to home.')
       messages.success(request, 'Profile saved successfully')
       return HttpResponseRedirect(reverse('placement.views_profiles.contact'))
