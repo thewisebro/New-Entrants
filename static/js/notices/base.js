@@ -77,6 +77,7 @@ $(document).on("load_app_notices", function(e, hash1, hash2, hash3, hash4, hash5
 });
 
 $(document).on("unload_app_notices", function(e, hash1, hash2, hash3, hash4, hash5){
+
     $("#container").removeAttr("class")
     $("#search-inp").attr('placeholder', 'Search notices');
     $("#content").empty();
@@ -142,6 +143,9 @@ function redirection()            //The main controller function which defines t
         $('#content').append('<div style="clear:both"></div>');
         console.log("display content");
         main_mode = "content";
+        $("#select_bars").removeAttr("onclick");
+        $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
+        $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
         evaluate_breadcrumbs();
         display_notice(parseInt(h2));
     }
@@ -355,6 +359,8 @@ function redirection()            //The main controller function which defines t
               bring_search_results();
             }
         }
+        if($("#breadcrumbs")[0].innerHTML=="")
+          evaluate_breadcrumbs();
     }
 }
 
@@ -385,7 +391,7 @@ function create_static_divs()                //Create static buttons like upload
     if(star_perm==1)
       $('#additional').append(additional_features_html());
     $('#content').append('<div id="notice_list"></div><br>');
-    $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div id="settings" onclick="location.hash=\'#settings/email\'"><i id="gear" class="fa fa-cog"></i>Settings</div><div style="clear:both"></div></div>');
+    $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div id="settings" onclick="location.hash=\'#settings/email\'"><i id="gear" class="fa fa-cog"></i>Subscription Settings</div><div style="clear:both"></div></div>');
     console.log("switched_to_notices_create : static divs created");
     $('#more').bind("click", bind_unbind_tooltip);
     $('#main_check').tooltip({position: {at: "right+5 top-20"}});
@@ -491,6 +497,7 @@ function load_numbers_bar(tp, mode1)        //tp = total pages, mode1 = new, old
 {
       console.log("pagination reset");
       console.log("tp : " + tp);
+      $("#settings").show();
       if(tp!==0)
       {
       console.log("1pagination reset");
@@ -504,6 +511,7 @@ function load_numbers_bar(tp, mode1)        //tp = total pages, mode1 = new, old
       else
       {
         $("#page_numbers").empty();
+        $("#settings").hide();
         write_no_notices_yet();
       }
 }
