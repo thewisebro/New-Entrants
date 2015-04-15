@@ -1,0 +1,212 @@
+#header_app_links{
+	float:left;
+  margin-top:8px;
+  width:1048px;
+  position:absolute;
+  font-size:16px;
+  padding-top:12px;
+  font-family:Trebuchet MS;
+}
+
+#header_app_links nav
+{
+  float:right;
+}
+
+#header_links{
+	float:left;
+  margin-top:8px;
+  position:absolute;
+  font-size:16px;
+  padding-top:12px;
+  font-family:Trebuchet MS;
+}
+
+#header_parent{
+	width:100%;
+	background-color:#fff;
+	border-bottom:solid 2px #e2e2e2;
+}
+
+#header{
+	width:1000px;
+	margin:0 auto;
+	height:56px;
+}
+
+#header_text{
+	position:absolute;
+	font-family:'DeliciousHeavyRegular';
+	margin-left:100px;
+	margin-top:15px;
+	font-size:38px;
+	color:#4ba4c8;
+  padding-top:5px;
+  height:32px;
+}
+
+#top_right{
+	position:absolute;
+	margin-left:572px;
+	margin-top:2px;
+	height:52px;
+}
+
+#search_box{
+	width:264px;
+	height:32px;
+	margin-top:12px;
+	float:left;
+}
+
+#search_people_input{
+	font-family:Arial, Helvetica, sans-serif;
+	float:left;
+	height:20px;
+	padding:3px;
+	line-height:20px;
+	font-size:13px;
+	vertical-align:middle;
+
+	font-weight:bold;
+	background-color:#eeeeee;
+	color:#fff;
+	border: 1px #cdcdcd solid;
+	-webkit-border-radius-topleft:2px;
+	-webkit-border-radius-bottomleft:2px;
+	-moz-border-radius-topleft:2px;
+	-moz-border-radius-bottomleft:2px;
+	border-top-left-radius:2px;
+	border-bottom-left-radius:2px;
+	margin-left:5px;
+	width:206px;
+}
+
+#search_people_submit{
+	float:left;
+	height:28px;
+	width:32px;
+	margin-left:-1px;
+	background-image:url(../images/channeli_search_button.png);
+	background-position: center;
+	border: 1px #bbbbbb solid;
+	-moz-border-radius-topright:2px;
+	-moz-border-radius-bottomright:2px;
+	border-top-right-radius:2px;
+	-webkit-border-radius-bottomright:2px;
+	-webkit-border-radius-topright:2px;
+	border-bottom-right-radius:2px;
+}
+
+#top_right_line{
+	height:100%;
+	border-left:solid 1px #e2e2e2;
+	float:left;	
+	width:14px;
+}
+
+#top_right_dropdown{
+	float:left;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	color:#717171;
+	font-size:13px;
+	margin-top:12px;
+	height:26px;
+	border:solid 1px #cdcdcd;
+	width:127px;
+	background-image:url(../images/channeli_dropdown_background.png);
+	background-repeat:repeat-x;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+	cursor:pointer;
+}
+
+#top_right_dropdown_left{
+	height:26px;
+	float:left;
+	margin-left:12px;
+	line-height:26px;
+	padding-right:12px;
+	border-right:solid 1px #cdcdcd;
+	vertical-align:middle;
+}
+#top_right_dropdown_right{
+	height:26px;
+	float:left;
+	padding:0 10px;
+	line-height:26px;
+	vertical-align:middle;
+	font-size:9px;
+}
+
+#top_right_dropdown_menu{
+	display:none;
+	width:534px;
+	background-color:#f7f7f7;
+	position:absolute;
+	z-index:200000;
+	margin-left:-127px;
+	margin-top:48px;
+	border:solid 1px #cdcdcd;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+}
+
+.top_right_dropdown_menu_box{
+	width:158px;
+	margin: 8px 10px;
+	margin-bottom:0px;
+	padding-bottom:8px;
+	border-bottom:solid 1px #eff3f5;
+	float:left;
+	paddint-top:6px;
+	height:16px;
+	line-height:16px;
+	vertical-align:top;
+}
+
+#header_shadow{
+	width:585px;
+	height:9px;
+	margin:0 auto;
+	margin-top:-2px;
+	background-image:url(../images/HeaderShadow.png);
+	background-position:center;
+}
+
+#footer{
+	color:#949494;
+	padding:25px 0;
+	background-image:url(../images/FooterShadow.png);
+	background-position:top center;
+	background-repeat:no-repeat;
+	text-align:center;
+}
+/*=======================--------Font faces-----------===============================*/
+@font-face {
+    font-family: 'DeliciousHeavyRegular';
+    src: url('../fonts/delicious-heavy-webfont.eot');
+    src: url('../fonts/delicious-heavy-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/delicious-heavy-webfont.woff') format('woff'),
+         url('../fonts/delicious-heavy-webfont.ttf') format('truetype'),
+         url('../fonts/delicious-heavy-webfont.svg#DeliciousHeavyRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Delicious-Roman';
+    src: url('../fonts/Delicious-Roman.otf');
+	 src: url('../fonts/delicious-roman-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/delicious-roman-webfont.woff') format('woff'),
+         url('../fonts/delicious-roman-webfont.ttf') format('truetype'),
+         url('../fonts/delicious-roman-webfont.svg#DeliciousRoman') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+

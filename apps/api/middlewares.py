@@ -24,6 +24,8 @@ class DelegateMiddleware(object):
   def process_view(self, request, view_func, view_args, view_kwargs):
     #Below line is for jukebox
     request.jb_user = request.user
+    #Below line is for all rest api views
+    request.rest_user = request.user
 
     if request.user.is_authenticated():
       account_username = view_kwargs.pop('account_username', None)

@@ -17,7 +17,7 @@ class Notification(models.Model):
   users = models.ManyToManyField(User, through='UserNotification')
 
   class Meta:
-    ordering = ['-id']
+    ordering = ['-pk']
 
   def __unicode__(self):
     return self.text[:200]
