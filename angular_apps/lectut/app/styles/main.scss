@@ -98,13 +98,12 @@ body {
 }
 // Main blocks 
 .noPosts{
-position: absolute;
-top: 275px;
-width: 100%;
-       font-weight: bold;
-       text-align: center;
-       font-size: 33px;
-color: #c0c0c0;
+   position: absolute;
+   top: 400px;
+   width: 100%;
+   text-align: center;
+   font-size: 33px;
+   color: #c0c0c0;
 }
 .anonUser{
   font-size: 45px;
@@ -392,8 +391,8 @@ color: #c0c0c0;
 
 .appName{
   height:50px;
-  line-height:50px;
-  color: #008fd5;  
+  line-height:54px;
+  color: #E62254;  
   font-family:$osEB;
   font-size:20px;
   background-color: #FFF;
@@ -402,6 +401,7 @@ color: #c0c0c0;
   float: left;
   width: 230px;
   text-align: center;
+  vertical-align:top;
 }
 // UserBlock
 
@@ -518,7 +518,7 @@ color: #c0c0c0;
   }
   .crsLi{
         padding: 5px 15px;
-        color: rgba(255, 255, 255, 0.47);
+        color: rgba(255, 255, 255, 0.58);
         font-size:14px;
         border-left: 4px solid;
         border-left-color: rgba(255, 255, 255, 0.14);
@@ -694,14 +694,22 @@ color: #c0c0c0;
             }
             .cPContent{
                 .postOverlay{
+                  .waitingFor{
+                    font-size:20px;
+                  }
+                  text-shadow: 1px 1px 1px #797979;
                   position:absolute;
                   top: 20px;
                   right:20px;
                   left: 105px;
                   bottom:0;
-                  background:rgba(0, 0, 0, 0.14);
+                  background: rgba(0, 66, 117, 0.21);
                   z-index: 112;
                   display:none;
+                  text-align: center;
+                  padding-top: 30px;
+                  font-size: 52px;
+                  color: #FFF;
                 }
                 margin-left:105px;
                 background: #FFF;
@@ -741,6 +749,8 @@ color: #c0c0c0;
                       line-height: 1.5;
                       color: #555555;
                       //padding:10px;
+                      min-height: 76px;
+                      max-height:200px;
                       font-family: $osR;
                     }
                   }
@@ -1984,6 +1994,7 @@ border: 1px solid #D9D9D9;
 }
 
 .ngn {
+  z-index: 82394290821093812093;
   color: #FFF;
   cursor: default;
   display: none;
