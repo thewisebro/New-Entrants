@@ -12,6 +12,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 from django.views.generic import TemplateView
 import simplejson
 from django.conf import settings
+from django.contrib import messages
 
 from filemanager import FileManager
 from notices.models import *
@@ -49,7 +50,11 @@ def upload(request):
         notice.content = html_parsing_while_uploading(notice.content)
         notice.uploader = uploader
         notice.save()
-        return HttpResponseRedirect('/#notices')
+        messages.success(request,'Your notice has been successfully uploaded.')
+        return HttpResponseRedirect(reverse('close_dialog', kwargs={
+                           'dialog_name': 'notice_upload_dialog'
+                               }))
+
     else:
       form =  NoticeForm()
   context = {'category' : category, 'categories' : categories, 'form' : form, 'privelege' : privelege}
@@ -57,9 +62,12 @@ def upload(request):
 
 class PrivelegeJsonView(TemplateView):
   def get(self, request):
-    privelege = request.user.uploader_set.all().exists()
-    print "privelege1 " + str(privelege)
-    privelege1 = {'privelege' : privelege}
+    try:
+      privelege = request.user.uploader_set.all().exists()
+      print "privelege1 " + str(privelege)
+      privelege1 = {'privelege' : privelege}
+    except:
+      privelege1 = {'privelege' : False}
     privelege_json = simplejson.dumps(privelege1)
     return HttpResponse(privelege_json, content_type="application/json")
 
@@ -263,7 +271,7 @@ def mul_read_star_notice(request, action):              #action determines wheth
 
 class Show_Starred(ListAPIView):
   def get_queryset(self):
-    user = NoticeUser.objects.get_or_create(user=self.request.user)[0]
+    user = NoticeUser.objects.get_or_create(user=self.request.rest_user)[0]
     queryset = user.starred_notices.all().order_by('-datetime_modified')
     return queryset
   serializer_class = NoticeListViewSerializer
@@ -283,9 +291,9 @@ class Read_notice_list(TemplateView):
 class Show_Uploads(ListAPIView):
   def get_queryset(self):
     queryset = []
-    privelege = self.request.user.uploader_set.all().exists()
+    privelege = self.request.rest_user.uploader_set.all().exists()
     if privelege:
-      uploaders = self.request.user.uploader_set.all()
+      uploaders = self.request.rest_user.uploader_set.all()
       for i in uploaders:
         queryset += i.notice_set.all().order_by('-datetime_modified')
     return queryset

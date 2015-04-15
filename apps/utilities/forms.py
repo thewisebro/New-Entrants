@@ -4,7 +4,8 @@ from core import forms
 from core.forms.mixins import FormMixin
 from nucleus.models import StudentUserInfo, User
 from events.models import Calendar, EventsUser
-
+from notices.models import NoticeUser
+from notices.constants import *
 
 class ProfileFormCleanMixin(forms.Form):
   "Mixin form for cleaning fields"
@@ -138,6 +139,15 @@ def EventsSubscribeFormGen(user):
       self.fields['calendars'].queryset = Calendar.objects.exclude(Q(cal_type = 'PRI'),~Q(name = user.username))
       self.fields['email_subscribed'].widget.attrs = {'onchange':'subscription_checkbox_clicked(this)'}
   return EventsSubscribeForm
+
+class NoticesSubscribeForm(forms.ModelForm):
+  categories = forms.MultipleChoiceField(choices=MAIN_CATEGORIES_CHOICES, widget=forms.CheckboxSelectMultiple)
+  class Meta:
+    model = NoticeUser
+    fields = ('subscribed',)
+  def __init__(self, *args, **kwargs):
+    super(NoticesSubscribeForm, self).__init__(*args, **kwargs)
+    self.fields['subscribed'].widget.attrs = {'onchange':'notice_subscription_checkbox_clicked(this)'}
 
 class UserEmailForm(forms.Form):
   email = forms.EmailField(label='Email', required = True)

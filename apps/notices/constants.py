@@ -76,3 +76,9 @@ MAIN_CATEGORIES = {
   'Authorities' : AUTHORITIES_LIST,
   'Departments': DEPARTMENTS_LIST
 }
+
+MAIN_CATEGORIES_CHOICES = (
+  ('Placement', 'Placement'),
+  ('Authorities', 'Authorities'),
+  ('Departments', 'Departments'),
+)

@@ -63,14 +63,13 @@ function first_time_functions()                 //This function is responsible f
 
 $(document).on("load_app_notices", function(e, hash1, hash2, hash3, hash4, hash5){
 
-    $("#container").attr({class : "large-width-content"})
+    console.log("entered load_app_notices");
     h1=hash1;    //The function redirection can only be called once the first_time_functions have played their part. So, we store the current state variables for now.
     h2=hash2;
     h3=hash3;
     h4=hash4;
     h5=hash5;
 
-    console.log("entered load_app_notices");
     if(first_time_visit==0)
       first_time_functions();
     else
@@ -78,6 +77,7 @@ $(document).on("load_app_notices", function(e, hash1, hash2, hash3, hash4, hash5
 });
 
 $(document).on("unload_app_notices", function(e, hash1, hash2, hash3, hash4, hash5){
+
     $("#container").removeAttr("class")
     $("#search-inp").attr('placeholder', 'Search notices');
     $("#content").empty();
@@ -124,10 +124,29 @@ $(document).on("logout", function(){
 
 function redirection()            //The main controller function which defines the function path, execution will follow
 {
+    $("#container").addClass("large-width-content");
     if(h1 == "content")                              //If the main_mode is content, cut the crap and directly display the notice
     {
-        main_mode = "content";
+        $("#content").empty();
+        $("#right-column .content").empty();
+        $('#content').html(welcome_html());
+        if(privelege==1)
+          $('#notices-header').append(upload_html());
+        if(sub_category=="All")
+          $('#notices-header').append(load_cat_bar_html(m_category));
+        else
+          $('#notices-header').append(load_cat_bar_html(sub_category));
+        $('#notices-header').append(search_bar_html());
+        $('#content').append('<div id="filters"></div>');
+        $('#filters').append('<div id="breadcrumbs_container"><div id="breadcrumbs"></div></div>');
+        $('#filters').append(prev_next_buttons_html());
+        $('#content').append('<div style="clear:both"></div>');
         console.log("display content");
+        main_mode = "content";
+        $("#select_bars").removeAttr("onclick");
+        $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
+        $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
+        evaluate_breadcrumbs();
         display_notice(parseInt(h2));
     }
     else
@@ -340,6 +359,8 @@ function redirection()            //The main controller function which defines t
               bring_search_results();
             }
         }
+        if($("#breadcrumbs")[0].innerHTML=="")
+          evaluate_breadcrumbs();
     }
 }
 
@@ -370,7 +391,7 @@ function create_static_divs()                //Create static buttons like upload
     if(star_perm==1)
       $('#additional').append(additional_features_html());
     $('#content').append('<div id="notice_list"></div><br>');
-    $('#content').append('<div id="page_numbers"></div>');
+    $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div id="settings" onclick="location.hash=\'#settings/email\'"><i id="gear" class="fa fa-cog"></i>Subscription Settings</div><div style="clear:both"></div></div>');
     console.log("switched_to_notices_create : static divs created");
     $('#more').bind("click", bind_unbind_tooltip);
     $('#main_check').tooltip({position: {at: "right+5 top-20"}});
@@ -445,7 +466,7 @@ function gap_scanner()                 // Fills the appropriate gaps with notice
       if(main_mode!="content")
         list_notices(parseInt(cur_page_no), temp_store, temp_total_pages, temp_last_page_notices);
       else
-        prev_next_clicked(-1);
+        prev_next_clicked(-1);         //This function is also called, while clicking next in content mode
     }
 }
 
@@ -476,6 +497,7 @@ function load_numbers_bar(tp, mode1)        //tp = total pages, mode1 = new, old
 {
       console.log("pagination reset");
       console.log("tp : " + tp);
+      $("#settings").show();
       if(tp!==0)
       {
       console.log("1pagination reset");
@@ -489,6 +511,7 @@ function load_numbers_bar(tp, mode1)        //tp = total pages, mode1 = new, old
       else
       {
         $("#page_numbers").empty();
+        $("#settings").hide();
         write_no_notices_yet();
       }
 }
@@ -605,7 +628,6 @@ function display_notice(id)
     url : 'notices/get_notice/' + id,
     success: function(data)
     {
-      $('#content').empty();
       $('#content').append(display_notice_html(data));
       var count=0;
       for(var i=0;i<$('#_content img').length;i++)
@@ -766,6 +788,7 @@ function star_notice(id, e)
         check_star_array[id] = 1;
         $("#star_shape_" + id).attr({style : "color:#F1C40F"})
       }
+      nucleus.setShowLoadingOff();
       $.ajax({
       type: 'post',
       url: url,
@@ -1018,6 +1041,7 @@ function read_star_checklist(t)
       url += 'add_read/';
     if(t==4)
       url += 'delete_read/';
+    nucleus.setShowLoadingOff();
     $.ajax({
       type: 'post',
       url: url+q,
@@ -1115,24 +1139,41 @@ function newold_clicked(ns)       //ns stands for new status, storing the sub_mo
 function evaluate_breadcrumbs()
 {
     var notice_prefix;
-    if(sub_mode=="new")
+      console.log("1abcasd");
+    if(main_mode=="content")
+    {
+      console.log("abcasd");
+      temp_arr = prev_content_url.split("/");
+      main_mod=temp_arr[1];
+      sub_mod=temp_arr[2];
+      m_categor=temp_arr[3];
+      sub_categor=temp_arr[4];
+    }
+    else
+    {
+      main_mod=main_mode;
+      sub_mod=sub_mode;
+      m_categor=m_category;
+      sub_categor=sub_category;
+    }
+    if(sub_mod=="new")
       notice_prefix = "Current"
-    if(sub_mode=="old")
+    if(sub_mod=="old")
       notice_prefix = "Expired"
 
-    if(main_mode=="display")
+    if(main_mod=="display")
     {
       if(all==1)
       create_breadcrumbs(notice_prefix + "Notices", "All", 1);
       else
-      create_breadcrumbs(notice_prefix + "Notices", m_category, sub_category, 1);
+      create_breadcrumbs(notice_prefix + "Notices", m_categor, sub_categor, 1);
     }
-    else if(main_mode=="search")
+    else if(main_mod=="search")
     {
       if(all==1)
         create_breadcrumbs("SearchedNotices", notice_prefix, "All", 0);
       else
-        create_breadcrumbs("SearchedNotices", notice_prefix, m_category, sub_category, 0);
+        create_breadcrumbs("SearchedNotices", notice_prefix, m_categor, sub_categor, 0);
     }
 }
 
@@ -1154,13 +1195,29 @@ function create_breadcrumbs()
 function breadcrumb_clicked(tag_type)
 {
   console.log(tag_type);
+  if(main_mode=="content")
+  {
+    console.log("abcasd");
+    temp_arr = prev_content_url.split("/");
+    main_mod=temp_arr[1];
+    sub_mod=temp_arr[2];
+    m_categor=temp_arr[3];
+    sub_categor=temp_arr[4];
+  }
+  else
+  {
+    main_mod=main_mode;
+    sub_mod=sub_mode;
+    m_categor=m_category;
+    sub_categor=sub_category;
+  }
   url = "";
   if(tag_type==0)                                             //coded 0 : main_mode
-    url = '#notices/' + main_mode + '/new/All/All/1'
+    url = '#notices/' + main_mod + '/new/All/All/1'
   if(tag_type==1)                                              //coded 1 : sub_mode
-    url = '#notices/' + main_mode + '/' + sub_mode + '/All/All/1'
+    url = '#notices/' + main_mod + '/' + sub_mod + '/All/All/1'
   if(tag_type==2)                                            //coded 2 : m_category
-    url = '#notices/' + main_mode + '/' + sub_mode + '/' + m_category + '/All/1'
+    url = '#notices/' + main_mod + '/' + sub_mod + '/' + m_categor + '/All/1'
   if(tag_type!=3)
   location.hash = url;
 }
@@ -1182,7 +1239,6 @@ function prev_next_clicked(state)                                         //Prev
   {
     for(i; i<len; i++)
     {
-//      console.log("kaboom" + i);
 //      console.log(i);
 //      console.log(id);
       if(store_to_use[i].id==id)
@@ -1283,6 +1339,18 @@ function stop_propagation(e)
         e.cancelBubble = true;
 }
 
+function open_upload_dialog()
+{
+    dialog_iframe({
+      name:'notice_upload_dialog',
+      title:'Upload a notice',
+      width:900,
+      height:650,
+      src:'/notices/upload',
+  });
+
+}
+
 //Following are the functions that are called the first time, notices is clicked
 
 function get_privelege()
@@ -1292,20 +1360,23 @@ function get_privelege()
         url : 'notices/privelege/',
         success: function (data)
         {
-            star_perm=1;
             if(data.privelege)
             {
+              star_perm=1;
               privelege=1;
               bring_uploads();                         //First time function 2, in case user is an uploader
             }
-            else
+            else if(user.is_authenticated)
+            {
+              star_perm=1;
               bring_starred_notices();                   //First time function 2, in case user is logged in and not an uploader
-            console.log("loaded get_privelge : privelege: " + privelege + " star_perm : " + star_perm)
-        },
-        error: function (data)
-        {
-            get_total_notices_no_first_time();          //First time function 2, in case of anonymous user
-            console.log("loaded get_privelge : anonymous")
+              console.log("loaded get_privelge : privelege: " + privelege + " star_perm : " + star_perm)
+            }
+            else
+            {
+              get_total_notices_no_first_time();          //First time function 2, in case of anonymous user
+              console.log("loaded get_privelge : anonymous")
+            }
         }
   });
 }
@@ -1537,6 +1608,11 @@ function additional_features_html()
 function newold_buttons_html()
 {
     return Handlebars.notices_templates.newold_buttons();
+}
+
+function prev_next_buttons_html()
+{
+    return Handlebars.notices_templates.prev_next_buttons();
 }
 
 function load_numbers_bar_html(tp23, mode1)
