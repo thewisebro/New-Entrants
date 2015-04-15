@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
+from django.contrib import messages
 from django.utils.encoding import smart_str
 from django.contrib import messages
 from django.conf import settings
@@ -261,6 +262,7 @@ def uploadedFile(request , batch_id):
         new_document.save()
         files.append(new_document.as_dict())
       counter = counter+1
+    new_post.save()
     if msg !='':
       response =  HttpResponse(json.dumps(msg), content_type='application/json')
     else:
@@ -364,7 +366,10 @@ def get_post(request , batch_id , post_id):
     if Post.post_objects.filter(id = post_id).exists():
       post = Post.post_objects.get(id = post_id)
       complete_post = get_post_dict(post)
-      return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize()}), content_type='application/json')
+      if user.is_authenticated():
+        return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize()}), content_type='application/json')
+      else:
+        return HttpResponse(json.dumps({'post':complete_post , 'user_info':''}), content_type='application/json')
     else:
       msg = 'Post has been deleted'
   else:
@@ -384,7 +389,10 @@ def get_file(request , batch_id , file_id):
       user = File.post.upload_user
       user_info = user.serialize()
       File = File.as_dict()
-      return HttpResponse(json.dumps({'file':File , 'user_info':user_info}), content_type='application/json')
+      if user.is_authenticated():
+        return HttpResponse(json.dumps({'file':File , 'user_info':user_info}), content_type='application/json')
+      else:
+        return HttpResponse(json.dumps({'file':File , 'user_info':''}), content_type='application/json')
     else:
       msg = 'File has been deleted'
   else:
@@ -401,11 +409,16 @@ def deleteFile(request , file_id):
   user = request.user
   if Uploadedfile.file_objects.filter(pk=file_id).exists():
     fileToDelete = Uploadedfile.objects.get(pk=file_id)
+    post = fileTodelete.post
 
     if user.in_group('faculty') or user == fileToDelete.post.upload_user:
       try:
         fileToDelete.delete()
         msg = 'File has been deleted'
+        counter = Uploadedfile.file_objects.all().filter(post = post).count()
+        if counter ==0 and post.content =='':
+          post.delete()
+          msg = 'The post has been deleted as well'
       except:
         msg = 'Some error Occured'
     else:
