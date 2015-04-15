@@ -83,6 +83,7 @@ def personal_information(request):
     l.info(request.user.username + ': Opened view to update StudentInfo')
     student = request.user.student
     try:
+#      import ipdb; ipdb.set_trace()
       info = StudentInfo.objects.get(student = student)
     except StudentInfo.DoesNotExist as e:
       # create a default entry
@@ -92,6 +93,9 @@ def personal_information(request):
       l.info(request.user.username + ': created a default entry in personinfo.')
     if request.method == 'POST':
       form = plac_forms.Profile(request.POST, instance = info)
+      birth_date = datetime.datetime.strptime(request.POST['birth_date'], '%d-%m-%Y').strftime('%Y-%m-%d')
+      request.user.birth_date = birth_date
+      request.user.save()
       form.student = student
       if form.is_valid() :
         form.student = student
@@ -102,7 +106,17 @@ def personal_information(request):
       else:
         messages.error(request, form.errors, extra_tags='form_error')
     else :
-      form = plac_forms.Profile(instance = info)
+      initial = {'city': info.city,
+                'mothers_name': info.mothers_name,
+                'fathers_office_address': info.fathers_office_address,
+                'state': info.state,
+                'pincode': info.pincode ,
+                'fathers_office_phone_no': info.fathers_office_phone_no,
+                'fathers_name': info.fathers_name,
+                'birth_date': request.user.birth_date.strftime('%d-%m-%Y'),
+                'permanent_address': info.permanent_address,
+                'fathers_occupation': info.fathers_occupation}
+      form = plac_forms.Profile(initial=initial)
     return render_to_response('placement/basic_form.html', {
         'form': form,
         'title': 'Personal Information',
