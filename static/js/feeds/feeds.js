@@ -89,6 +89,10 @@ function display_add_feeds(position,feeds){
 //   }
  }
  $('#feeds').pickify_users();
+ $('.event-right').find('img').click(function(){
+     $.fancybox($(this).attr('src'));
+   }
+ );
  if(more_feeds && $('#see-more-feeds').length === 0){
    $('#content').append("<div id='see-more-feeds' class='see-more'><span class='button2' onclick='see_more_feeds();'>See More</span></div>");
  }
