@@ -96,8 +96,8 @@ class Profile(forms.ModelForm):
                'bank_account_no', 'height', 'blood_group', 'weight',
                'passport_no', 'nearest_station', 'local_guardian_name',
                'local_guardian_address', 'local_guardian_contact_no',
-               'physically_handicapped', 'fulltime', 'resident', 'license_no',
-               'category', 'home_contact_no')
+               'physically_disabled', 'fulltime', 'resident', 'license_no',
+               'category', 'home_contact_no', 'birth_date')
   birth_date = forms.DateField(required = True, widget=forms.DateInput(attrs={'class':'iDateField'}))
 
 class EducationalFormset(BaseModelFormSet):

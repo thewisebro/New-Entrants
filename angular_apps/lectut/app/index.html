@@ -54,14 +54,17 @@
         </div>
 
         <!-- Appname-->
-        <a href="/lectut/#/"><div class="appName"><i class="fa fa-bookmark" style="padding-right:5px;"></i>Lectut</div></a>
+        <a href="/lectut/#/"><div class="appName"><img src="lectutlogo.png" style="padding-right: 8px;width: 19px;padding-top: 10px;"/>Lectut</div></a>
         <div class="topSearchBox"><!-- Search box-->
         <span class="searchIconTop"><i class="fa fa-search"></i></span>
         <div class="crossTop" ng-click="clearSearch()" ng-show="queryString.length != 0"><i class="fa fa-times-circle"></i></div>
         <input class="mainSearch" type="text" placeholder="Search for courses, files and posts..." ng-model="queryString"  ng-change="searchFunc(queryString)"></input>
         <a ng-href="#/" ng-class="{activeHome:isHome('/')}"><div class="homeTab">Home</div></a>
         </div>
-        <div class="searchResult" ng-show="(searchResults.files.length != 0 || searchResults.courses.length != 0 || searchResults.posts.length != 0 )&& queryString.length != 0">
+        <div class="searchResult" ng-show="queryString.length != 0">
+           <div style="padding:10px;" ng-show="(searchResults.files.length == 0 && searchResults.courses.length == 0 && searchResults.posts.length == 0 )&& queryString.length != 0"> No results found
+           </div>
+           <div ng-show="(searchResults.files.length != 0 || searchResults.courses.length != 0 || searchResults.posts.length != 0 )&& queryString.length != 0">
             <div class="searchFor">Search results for <span class="textHighlightSearch">{[queryString]}</span></div>
             <div class="subSearchHeading">Courses</div>
             <div class="noResults" ng-hide="searchResults.courses.length != 0">No Results</div>
@@ -107,6 +110,7 @@
                </a>
             </div>
         </div>
+      </div>
       </div>
       <!-- Left Div 180px -->
       <div class="leftDiv">

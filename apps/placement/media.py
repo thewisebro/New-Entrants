@@ -10,7 +10,7 @@ import logging
 import os, xlwt, datetime
 import mimetypes
 
-from nucleus.models import Student, WebmailAccount, Branch
+from nucleus.models import User, Student, WebmailAccount, Branch
 # import models  #from placement
 from placement.utils import handle_exc, get_ctc, sanitise_for_download
 from placement.policy import current_session_year
@@ -405,12 +405,13 @@ def institute_results(request) :
   students_map = {}
   users = []
   for student in Student.objects.filter(pk__in = results_map.keys()) :
+
     students_map[student.pk] = {'name' : student.name,
                               'cgpa' : student.cgpa,
                               'branch' : student.branch.name,
                               'year' : 1 + current_session - int(student.admission_year),
-                              'email_id' : student.email_id,
-                              'contact_no' : student.personal_contact_no,
+                              'email_id' : student.user.email,
+                              'contact_no' : student.user.contact_no,
                               }
     users.append(student.user_id)
   companies_map = {}

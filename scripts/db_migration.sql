@@ -82,7 +82,7 @@ INSERT INTO nci.placement_researchpublications (id, author, title, publisher, ye
 INSERT INTO nci.placement_educationaldetails (id, year, sgpa, cgpa, course, institution, discipline, discipline_provided, student_id) SELECT id, year, sgpa, cgpa, course, institution, discipline, discipline_provided, person_id from channeli_dump.placement_educationaldetails;
 
 #checked
-INSERT INTO nci.placement_placementinformation (id, registration_no, area_of_interest, computer_languages, achievements, course_taken, reference_1, designation_1, institute_1, email_1, phone_1, reference_2, designation_2, institute_2, email_2, phone_2, student_id) SELECT id, registration_no, area_of_interest, computer_languages, achievements, course_taken, reference_1, designation_1, institute_1, email_1, phone_1, reference_2, designation_2, institute_2, email_2, phone_2, person_id from channeli_dump.placement_placementinformation;
+INSERT INTO nci.placement_placementinformation (id, registration_no, area_of_interest, computer_languages, software_packages, achievements, course_taken, reference_1, designation_1, institute_1, email_1, phone_1, reference_2, designation_2, institute_2, email_2, phone_2, student_id) SELECT id, registration_no, area_of_interest, computer_languages, software_packages, achievements, course_taken, reference_1, designation_1, institute_1, email_1, phone_1, reference_2, designation_2, institute_2, email_2, phone_2, person_id from channeli_dump.placement_placementinformation;
 
 #checked
 INSERT INTO nci.placement_cptmember (id, name, contact_no, year, email, currently_a_member) SELECT id, name, contact_no, year, email, currently_a_member from channeli_dump.placement_cptmember;
