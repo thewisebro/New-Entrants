@@ -57,7 +57,7 @@ INSERT INTO nci.events_event (id,calendar_id,uploader_id,title,date,time,upto_da
 
 #placement
 
-INSERT INTO nci.placement_placementperson (id, placed_company_category, no_of_companies_placed, status, photo, is_debarred, student_id) SELECT  id, placed_company_created, no_of_companies_created, status, photo, is_debarred, person_id FROM channeli_dump.placement_placementperson;
+INSERT INTO nci.placement_placementperson (id, placed_company_category, no_of_companies_placed, status, photo, is_debarred, student_id) SELECT  id, placed_company_category, no_of_companies_placed, status, photo, is_debarred, person_id FROM channeli_dump.placement_placementperson;
 
 INSERT INTO nci.placement_internshipinformation (id, brief_description, industry, title, period, priority, visible, student_id) SELECT id, brief_description, industry, title, period, priority, visible, person_id FROM channeli_dump.placement_internshipinformation;
 
@@ -81,5 +81,39 @@ INSERT INTO nci.placement_company (id, name, year, status, place_of_posting, cat
 
 INSERT INTO  nci.placement_companyapplicationmap (id, status, shortlisted, time_of_application, company_id, plac_person_id) SELECT id, status, shortlisted, time_of_application, company_id, plac_person_id from channeli_dump.placement_companyapplicationmap ;
 
+INSERT INTO nci.placement_secondround (id, branch_id, year) SELECT id, branch_id, year from channeli_dump.placement_secondround;
+
+INSERT INTO nci.placement_results (id, company_id, student_id) SELECT id, company_id, person_id from channeli_dump.placement_results;
+
+INSERT INTO nci.placement_forumpost (id, enrollment_no, person_name, disclipline_name, department_name, title, content, date, forum_type) SELECT id, enrollment_no, person_name, disclipline_name, department_name, title, content, date, forum_type from channeli_dump.placement_forumpost;
+
+INSERT INTO nci.placement_forumreply (id, enrollment_no, person_name, content, date, post_id) SELECT id, enrollment_no, person_name, content, date, post_id from channeli_dump.placement_forumreply ;
+
+INSERT INTO nci.placement_feedback (id, feedback, date, company_id, student_id) SELECT id, feedback, date, company_id, person_id from channeli_dump.placement_feedback ;
+
+INSERT INTO nci.placement_notices (id, notice, date_of_upload) SELECT id, notice, date_of_upload from channeli_dump.placement_notices;
+
+INSERT INTO nci.placement_contactperson (id, contact_person, designation, phone_no, email) SELECT id, contact_person, designation, phone_no, email from channeli_dump.placement_contactperson;
+
+INSERT INTO nci.placement_companycontact (id, company_name, cluster, status, last_contact, person_in_contact, comments, when_to_contact, contactperson_id) SELECT id, company_name, cluster, status, last_contact, person_in_contact, comments, when_to_contact, contactperson_id from channeli_dump.placement_companycontact;
+
+INSERT INTO nci.placement_placementmgr (id, coordi_id, company_name_id) SELECT id, coordi_id, company_name_id from channeli_dump.placement_placmentmgr;
+
+INSERT INTO nci.placement_companycoordi (id, student_id) SELECT id, person_id from channeli_dump.placement_companycoordi;
+
+INSERT INTO nci.placement_companyslot (id, visibility, status, start_date, end_date) SELECT id, visibility, status, start_date, end_date from channeli_dump.placement_companyslot;
+
+INSERT INTO nci.placement_companyplacementpriority (id, priority, date_created, date_updated, company_id, slots_id, student_id) SELECT id, priority, date_created, date_updated, company_id, slots_id, person_id from channeli_dump.placement_companyplacementpriority ;
+
+#checked
+INSERT INTO nci.placement_workshoppriority (id, day1_priority, day2_priority, day3_priority, day4_priority, day5_priority, interview_application, student_id) SELECT id, day1_priority, day2_priority, day3_priority, day4_priority, day5_priority, interview_application, person_id from channeli_dump.placement_workshoppriority ;
+
 # Download Softwares
 INSERT INTO nci.softwares_software (id,soft_name,category,image,url,version,description,date_added,download_count,added_by,soft_file) SELECT id,soft_name,category,image,url,version,description,date_added,download_count,added_by,soft_file FROM channeli_dump.softwares_software;
+
+#MCM
+INSERT INTO nci.mcm_mcmperson (id, air, unfair_means, family_income, other_scholarship, date_time, student_id) SELECT id, air, unfair_means, family_income, other_scholarship, date_time, person_id from channeli_dump.mcm_mcmperson;
+
+INSERT INTO nci.mcm_studentloanaid (id, `check`, cgpa, sgpa, fathers_income, fathers_pan_no, mothers_pan_no, gaurdians_pan_no, guardians_name, guardians_occupation, guardians_income, guardians_address, mothers_occupation, mothers_income, other_scholarship_details, previous_aid_amount, previous_aid_session, work_bhawan_details, date_time, student_id) SELECT id, `check`, cgpa, sgpa, fathers_income, fathers_pan_no, mothers_pan_no, gaurdians_pan_no, guardians_name, guardians_occupation, guardians_income, guardians_address, mothers_occupation, mothers_income, other_scholarship_details, previous_aid_amount, previous_aid_session, work_bhawan_details, date_time, person_id from channeli_dump.mcm_studentloanaid;
+
+INSERT INTO nci.mcm_mcm (id, scholar_type, `check`, air, unfair_means, cgpa, sgpa, family_income, other_scholarship_details, datetime, payment_choice, student_id) SELECT id, scholar_type, `check`, air, unfair_means, cgpa, sgpa, family_income, other_scholarship_details, datetime, payment_choice, person_id from channeli_dump.mcm_mcm;
