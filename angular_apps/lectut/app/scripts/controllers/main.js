@@ -1,29 +1,27 @@
-'use strict';
-var thing;
-/**
- * @ngdoc function
- * @name lectutApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the lectutApp
- */
+  'use strict';
+  var thing;
+  /**
+   * @ngdoc function
+   * @name lectutApp.controller:MainCtrl
+   * @description
+   * # MainCtrl
+   * Controller of the lectutApp
+   */
 
-var redirect_url = base_domain + '/login/?next=/lectut/';
-lectutApp
-  .controller('MainCtrl', ['$location','$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails','CourseDataById','ngNotify',function ($location,$scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails, CourseDataById, ngNotify) {
-   
-      ngNotify.addType('myTheme', 'notiLec');
-      ngNotify.config({
-         theme: 'myTheme'
-      });
+  var redirect_url = base_domain + '/login/?next=/lectut/';
+lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails','CourseDataById','ngNotify',function ($location,$scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails, CourseDataById, ngNotify) {
 
+    // New custom theme in notification
+    ngNotify.addType('myTheme', 'notiLec');
+     ngNotify.config({
+       theme: 'myTheme'
+    });
 
-    // ----------------------------------------------  
+    // Root scope for link highlighting
     $rootScope.whichView = "MainCtrl";
     $scope.base_media_url = base_domain+"/media/";
     $scope.base_domain = base_domain;
-    
-        
+ 
     // To get feed data.
     $scope.courseId = $routeParams;
     $scope.updateCourseId = function(id){
@@ -33,6 +31,7 @@ lectutApp
                 $scope.courseCode = $scope.auth.batches[i].code;
                 //alert($scope.courseCode);
                 $scope.courseName = $scope.auth.batches[i].course_name;
+                $scope.courseid = id;
               }
             }
         }
@@ -42,30 +41,26 @@ lectutApp
             console.log(d);
             $scope.courseName = d.course_name;
             $scope.courseCode = d.code;
+            $scope.courseid = id;
           });
         }
     }
-    // Initially setting the selected Course
-    //console.log("--------------------------------------------");
+    
     $scope.selectedCourse = $routeParams.courseId;
-    //console.log($location.path());
+    
+    // Check if a particular link is active
     // Is active
      $scope.isActive = function(route) {
         return route === $location.path().substring(0,route.length-1) +"/";
      }
     // Is active filter
      $scope.isActiveTab = function(route) {
-       //console.log($location.path());
        var routeB = route.split("").reverse().join("");
        var pathB =  $location.path().split("").reverse().join("");
        var check =false;
-       //console.log(routeB);
-       //console.log(pathB);
        var i=0;
        while(pathB[i] != "/" || routeB[i] != "/"){
           if(pathB[i] != routeB[i]){ 
-          //  console.log(routeB[i]);
-          //  console.log(pathB[i]);
             return false;
           }
           i++;
@@ -80,15 +75,11 @@ lectutApp
         return false;
        }
     }
-
+    
+    // Check if url is Home i.e /#/ 
     $scope.isHome = function(route){
-      // route home
-     // console.log("daddddd");
-      //console.log(route);
-      //console.log($location.path());
        return route === $location.path();
     }
-    
 
     // ------------------- Sign Up --------------------
     $scope.signUp = function(){
@@ -119,6 +110,7 @@ lectutApp
               if($scope.auth.batches[i].id == $scope.courseId.courseId){
                 $scope.courseName = $scope.auth.batches[i].course_name;
                 $scope.courseCode = $scope.auth.batches[i].code;
+                $scope.courseid= $scope.courseId.courseId;
               }
             }
         }
@@ -132,33 +124,22 @@ lectutApp
             console.log(d);
             $scope.courseName = d.course_name;
             $scope.courseCode = d.code;
+            $scope.courseid= id;
           });
         }
     });
    
-    // Anon Course Update
-    /*
-    $scope.updateCourseIdAnon = function(id){
-        var promiseCourseDataById = CourseDataById.getCourseDataById(id);
-          promiseCourseDataById.then(function(d){
-            console.log(d);
-            $scope.courseNameAnon = d.course_name;
-            $scope.courseCodeAnon = d.code;
-        });
-    }
-   */
-    // Search Global
+   // Search Global
    $scope.queryString = "";
    $scope.searchFunc = function(str){
-    //alert("sad");
     console.log(str);
     if(str){
-    var searchData = SearchService.getSearchData(str);
-    searchData.then(function (d) {
-       $scope.searchResults = d;
-       console.log(d);
-    });
-    }
+      var searchData = SearchService.getSearchData(str);
+      searchData.then(function (d) {
+         $scope.searchResults = d;
+         console.log(d);
+      });
+     }
     }
 
    $scope.clearSearch = function(){
@@ -166,14 +147,13 @@ lectutApp
     $scope.queryString="";
     $scope.searchFunc("");
    }
-   
-
+  
    $scope.getFeedData = function(id){
-    //console.log("asdsad");
     $scope.selectedCourse=id;
         for(var i=0;i<$scope.auth.batches.length;i++){
           if($scope.auth.batches[i].id == id){
             $scope.courseName = $scope.auth.batches[i].course_name;
+            $scope.courseid = id;
           }
         }
     var promiseCourseData = CourseDetails.getCourseDetailsData(id);
@@ -183,16 +163,13 @@ lectutApp
        console.log(d);
     });
   }
-
-
-
-  }]);
+}]);
 
 
 lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','RemoveFeedPost','RemoveFeedFile', 'Comments',function($routeParams, $scope,$rootScope, RemoveFeedPost, RemoveFeedFile, Comments) {
   //this.params = $routeParams;
-   
-   $rootScope.whichView = "CourseHomeCtrl";  
+  $rootScope.whichView = "CourseHomeCtrl";  
+  
   // ------------------------- Comments -----------------------
   $scope.loadCommentsFunc = function(id){
    if($('#postComments_'+id).hasClass("open")){
@@ -212,8 +189,8 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
 
 
   $scope.removeFeedPost = function(id, index){
-    console.log("This is to be deleted.. "+id);
-    console.log($scope.posts);
+    //console.log("This is to be deleted.. "+id);
+    //console.log($scope.posts);
 
     sweetAlert({
         title: "Are you sure?",
@@ -229,7 +206,7 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
           if(isConfirm){
             var promiseRemoveFeedPost = RemoveFeedPost.deleteFeedPost(id);
             promiseRemoveFeedPost.then(function(d){
-              console.log("Deleted this man"+ id);
+              //console.log("Deleted this man"+ id);
               $rootScope.commonPosts.splice(index,1);
               sweetAlert("Deleted!", "Post has been deleted.", "success");
             },
@@ -245,8 +222,8 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
 }
 
  $scope.removeFeedFile = function(id, parentIndex, index){
-    console.log("This is to be deleted.. "+id);
-    console.log($scope.posts);
+    //console.log("This is to be deleted.. "+id);
+    //console.log($scope.posts);
 
     sweetAlert({
         title: "Are you sure?",
@@ -262,7 +239,7 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
              if(isConfirm){
                var promiseRemoveFeedFile = RemoveFeedFile.deleteFeedFile(id);
                promiseRemoveFeedFile.then(function(d){
-                 console.log("Deleted this file man"+ id);
+                 //console.log("Deleted this file man"+ id);
                  $rootScope.commonPosts[parentIndex].files.splice(index,1);
                  sweetAlert("Deleted!", "File has been deleted.", "success");
                },
@@ -273,15 +250,14 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
              }
              else{
                  sweetAlert("Cancelled!", "File is not deleted.", "error");
-             } 
+             }
    });
  }
-
 
 }]);
 
 lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDownload', 'RemoveFeedPost','RemoveFeedFile','$cookies','$upload','$timeout','$routeParams','LoadFeed','Comments','$rootScope','ngNotify',function($scope,CourseDetails,FeedFileDownload, RemoveFeedPost , RemoveFeedFile,$cookies,$upload, $timeout, $routeParams,LoadFeed, Comments,$rootScope, ngNotify) {
-   
+
    $rootScope.whichView = "CourseDetailCtrl";
    this.params = $routeParams;
    var csrf = $cookies.csrftoken;
@@ -317,19 +293,22 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
         }
     });
 
-  $scope.fileArray={
-    Lecture : [],
-    Tutorial: [],
-    ExamPaper: [],
-    Solution: []
-  };
+    $scope.fileArray={
+      Lecture : [],
+      Tutorial: [],
+      ExamPaper: [],
+      Solution: []
+    };
 
   var upload = function (myfiles,typeArray,content){
     $upload.upload({
-      url: base_domain+'/lectut_api/upload/'+$routeParams.courseId+'/', // upload.php script, node.js route, or servlet url
-      file: myfiles,  // single file or an array of files (array is for html6 only)
+      url: base_domain+'/lectut_api/upload/'+$routeParams.courseId+'/', 
+      // upload.php script, node.js route, or servlet url
+      file: myfiles,  
+      // single file or an array of files (array is for html6 only)
       method: 'POST',
-      headers: {'Content-Type':'multipart/form-data'}, // only for html5
+      headers: {'Content-Type':'multipart/form-data'}, 
+      // only for html5
       //fileName: 'doc.jpg' or ['1.jpg', '2.jpg', ...], // to modify the name of the file(s)
       /*
          file formData name ('Content-Disposition'), server side request form name could be
@@ -360,14 +339,18 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
             console.log('progress: ' + progressPercentage + '% ' +
             evt.config.file.name);
+            $(".postOverlay").html( progressPercentage + '% <div class="waitingFor">Uploading. Please wait...</div>');
         }).success(function (data, status, headers, config) {
             console.log('file ' + config.file.name + 'uploaded. Response: ' +
             JSON.stringify(data));
             console.log("data");
             var result = JSON.stringify(data);
             //console.log($scope.posts);
-            $scope.posts.unshift(data);
-
+              $scope.posts.unshift(data.complete_post);
+            console.log("data");
+            console.log(data);
+            console.log("-------------------------");
+            console.log($scope.posts);
             // null the top box 
             $scope.thing.content = "";
             $scope.fileArray={
@@ -378,17 +361,14 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
              };
           // Notifiaction Success
              ngNotify.set('Successfully posted.', {
-                   sticky: true,
                    position:'top',
                    type:'success',
                    duration: 3000
              });
           $(".postOverlay").hide();
         });
-
   }
 
-//----------------------------------------------------------------------------------
 
   $scope.update = function(files,type){
      $scope.fileArray[type] = $scope.fileArray[type].concat(files);
@@ -396,10 +376,9 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
   }
 
   $scope.thing = {'content':'','data':''};
-  $scope.finalSend = function(){
-         
-         var things =  [];
 
+  $scope.finalSend = function(){
+         var things =  [];
          var typeData = [];
          var temp = $scope.fileArray.Lecture.length;
          while(temp--){
@@ -427,22 +406,25 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
           console.log(things);
           console.log(!$scope.privacy);
           if(things.length == 0 && $scope.thing.content == ""){
-             alert("Post cannot be empty");
+            //alert("Post cannot be empty");
+            ngNotify.set('Empty post is not allowed.', {
+                   position:'top',
+                   type:'error',
+                   duration: 3000
+             });
           }
           else{
             $(".postOverlay").show();
             upload(things,typeData,$scope.thing.content);
           }
           //console.log("----------------");
-          console.log(typeData);
+          //console.log(typeData);
   }
 
   $scope.deleteItem = function(item, type){
-              //console.log(type);
         $scope.fileArray[type].splice(item,1);
         console.log($scope.fileArray[type]);
   }
- 
 
   // ------------------------- Comments -----------------------
   $scope.loadCommentsFunc = function(id){
@@ -468,7 +450,6 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
   //$scope.courseName = "Physics and Chemistry";
 
   var promiseCourseData = CourseDetails.getCourseDetailsData($scope.courseId);
-
     promiseCourseData.then(function (d) {
        $scope.posts = d.posts;
        //console.log(d);
@@ -485,11 +466,11 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
   }
   
   $scope.downloadFeedFile = function(id){
-    console.log("herecomesid");
-    console.log(id);
+    //console.log("herecomesid");
+    //console.log(id);
     var promiseFeedFileDownload = FeedFileDownload.getFeedFile(id);
     promiseFeedFileDownload.then(function(d){
-         console.log("gai aur ayi downl rq");
+          //console.log("gai aur ayi downl rq");
           var blob = new Blob([d], {type: "image/jpeg"});
               var objectUrl = URL.createObjectURL(blob);
                   window.open(objectUrl);
@@ -497,8 +478,8 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
   }
 
   $scope.removeFeedPost = function(id, index){
-    console.log("This is to be deleted.. "+id);
-    console.log($scope.posts);
+    //console.log("This is to be deleted.. "+id);
+    //console.log($scope.posts);
 
     sweetAlert({
         title: "Are you sure?",
@@ -514,7 +495,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
           if(isConfirm){
             var promiseRemoveFeedPost = RemoveFeedPost.deleteFeedPost(id);
             promiseRemoveFeedPost.then(function(d){
-              console.log("Deleted this man"+ id);
+              //console.log("Deleted this man"+ id);
               $scope.posts.splice(index,1);
               sweetAlert("Deleted!", "Post has been deleted.", "success");
             },
@@ -530,8 +511,8 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 }
 
  $scope.removeFeedFile = function(id, parentIndex, index){
-    console.log("This is to be deleted.. "+id);
-    console.log($scope.posts);
+    //console.log("This is to be deleted.. "+id);
+    //console.log($scope.posts);
 
     sweetAlert({
         title: "Are you sure?",
@@ -547,7 +528,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
              if(isConfirm){
                var promiseRemoveFeedFile = RemoveFeedFile.deleteFeedFile(id);
                promiseRemoveFeedFile.then(function(d){
-                 console.log("Deleted this file man"+ id);
+                 //console.log("Deleted this file man"+ id);
                  $scope.posts[parentIndex].files.splice(index,1);
                  sweetAlert("Deleted!", "File has been deleted.", "success");
                },
@@ -583,9 +564,10 @@ lectutApp.controller('CourseFeedsCtrl', ['$stateParams','$scope', function($stat
 }]);
 
 lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DTColumnBuilder','DTInstances', '$scope', '$compile', '$routeParams','$rootScope',function( DataTables, DTOptionsBuilder, DTColumnBuilder, DTInstances,$scope, $compile, $routeParams, $rootScope) {
-   console.log("++++++++++++++++Course Files Ctrl+++++++++++++++");
-    var promiseCourseData = DataTables.getTable($routeParams.courseId);
-  $rootScope.whichView = "CourseFilesCtrl";
+   //console.log("++++++++++++++++Course Files Ctrl+++++++++++++++");
+   
+   var promiseCourseData = DataTables.getTable($routeParams.courseId);
+   $rootScope.whichView = "CourseFilesCtrl";
    $scope.selected = {};
    
    $scope.dtOptions = DTOptionsBuilder.fromFnPromise(
@@ -607,12 +589,12 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
       }
    )
    ).withOption('createdRow', function(row, data, dataIndex) {
-                 // Recompiling so we can bind Angular directive to the DT
-                 $compile(angular.element(row).contents())($scope);
-    }).withOption('paging',false).withOption('compact','true');
-    //.withPaginationType('full_numbers');
+   // Recompiling so we can bind Angular directive to the DT
+       $compile(angular.element(row).contents())($scope);
+   }).withOption('paging',false).withOption('compact','true');
+   //.withPaginationType('full_numbers');
  
-    $scope.dtColumns = [
+   $scope.dtColumns = [
              /*DTColumnBuilder.newColumn(null).withTitle('<div type="checkbox">Mark</div>').notSortable()
                  .renderWith(function(data, type, full, meta) {
                  return '<input type="checkbox" ng-change="toggleOne('+ data.id+')" ng-checked="selected['+data.id+']" ng-model="$scope.selected[' + data.id + ']">';
@@ -715,9 +697,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
               else if("Solution"){
                 val = "sol"
               }
-               column
-               .search( val ? '^'+val+'$' : '', true, false )
-               .draw();
+               column.search( val ? '^'+val+'$' : '', true, false ).draw();
                } );
 
                column.data().unique().sort().each( function ( d, j ) {
@@ -730,11 +710,11 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
        function loadFileType(){
        if($(".dataTable").length != 0){
          var table = $(".dataTable").DataTable();
-         console.log("_+_+_+_+_+_+");
-         if(table){
-            console.log("_________________________________");
-         }
-         console.log(table);
+         //console.log("_+_+_+_+_+_+");
+         //if(table){
+         //  console.log("_________________________________");
+         //}
+         //console.log(table);
          //table.column(0).visible('false'); 
          table.columns().indexes().flatten().each( function ( i ) {
              if(i==1){
@@ -767,7 +747,6 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
 
        loadFileType();
       // ------------------------------
-              //console.log("err1");
      var _toggle = true;
      $scope.toggleAll = function(){
        //console.log("asd");
@@ -809,7 +788,7 @@ lectutApp.controller('CourseMembersCtrl', ['Members','$scope','$routeParams', '$
     var promiseMembers = Members.getMembers($routeParams.courseId);
     promiseMembers.then(function(d){
       $scope.members = d;
-      console.log(d);
+      //console.log(d);
     });
 }]);
 
@@ -820,7 +799,7 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
     var promiseMembers = LoadOnePost.getOnePost($routeParams.courseId,$routeParams.postId);
     promiseMembers.then(function(d){
       $scope.onePost = d.post;
-      console.log(d);
+      //console.log(d);
     });
 
   // ------------------------- Comments -----------------------
@@ -833,15 +812,15 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
       $('#postComments_'+id).addClass("open");
       var promiseComments = Comments.getComments(id);
             promiseComments.then(function(x){
-            console.log("------One Post Comments-----------");
+            //console.log("------One Post Comments-----------");
             //console.log(id);
             $('#postComments_'+id).append(x);
       });
     }
   }
   $scope.removeFeedPost = function(id, index){
-    console.log("This is to be deleted.. "+id);
-    console.log($scope.onePost);
+    //console.log("This is to be deleted.. "+id);
+    //console.log($scope.onePost);
 
     sweetAlert({
         title: "Are you sure?",
@@ -857,8 +836,8 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
           if(isConfirm){
             var promiseRemoveFeedPost = RemoveFeedPost.deleteFeedPost(id);
             promiseRemoveFeedPost.then(function(d){
-              console.log("Deleted this man"+ id);
-              console.log($scope.onePost);
+              //console.log("Deleted this man"+ id);
+              //console.log($scope.onePost);
               $scope.onePost={};
               sweetAlert("Deleted!", "Post has been deleted.", "success");
 
@@ -871,7 +850,7 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
                   }
                  }
                  back_to_course = back_to_course.slice(0,i);
-                 console.log(base_domain+"/#"+back_to_course);
+                 //console.log(base_domain+"/#"+back_to_course);
                  window.location = "/lectut/#"+back_to_course;
 
             },
@@ -887,7 +866,7 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
 }
 
  $scope.removeFeedFile = function(id, parentIndex, index){
-    console.log("This is to be deleted.. "+id);
+    //console.log("This is to be deleted.. "+id);
     
     sweetAlert({
         title: "Are you sure?",
@@ -903,10 +882,10 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
              if(isConfirm){
                var promiseRemoveFeedFile = RemoveFeedFile.deleteFeedFile(id);
                promiseRemoveFeedFile.then(function(d){
-                 console.log("Deleted this file man"+ id);
+                 //console.log("Deleted this file man"+ id);
                  $scope.onePost.files.splice(index,1);
                  sweetAlert("Deleted!", "File has been deleted.", "success");
-                 console.log(d);
+                 //console.log(d);
                },
                function(reason){
                  sweetAlert("Cancelled!", reason, "error");
@@ -922,17 +901,17 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
 }]);
 
 lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams','FeedFileDownload','RemoveFeedFile','$rootScope','$location','ngNotify',function(LoadOneFile, $scope, $routeParams, FeedFileDownload, RemoveFeedFile, $rootScope, $location, ngNotify) {
-    console.log($routeParams);
+    //console.log($routeParams);
     $rootScope.whichView = "CourseOneFileCtrl";
     var promiseMembers = LoadOneFile.getOneFile($routeParams.courseId,$routeParams.fileId);
     promiseMembers.then(function(d){
       $scope.oneFile = d;
-      console.log("----------Thsi is one File.");
-      console.log(d);
+      //console.log("----------Thsi is one File.");
+      //console.log(d);
     });
 
    $scope.removeFeedFile = function(id, parentIndex, index){
-    console.log("This is to be deleted.. "+id);
+    //console.log("This is to be deleted.. "+id);
 
     sweetAlert({
         title: "Are you sure?",
@@ -948,10 +927,10 @@ lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams'
              if(isConfirm){
                var promiseRemoveFeedFile = RemoveFeedFile.deleteFeedFile(id);
                promiseRemoveFeedFile.then(function(d){
-                 console.log("Deleted this file man"+ id);
+                 //console.log("Deleted this file man"+ id);
                  $scope.oneFile=[];
                  sweetAlert("Deleted!", "File has been deleted.", "success");
-                 console.log(d);
+                 //console.log(d);
                  // redirect on file delete to main course page. 
                  var back_to_course = $location.path();
                  var i=0;
@@ -961,7 +940,7 @@ lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams'
                   }
                  }
                  back_to_course = back_to_course.slice(0,i);
-                 console.log(base_domain+"/#"+back_to_course);
+                 //console.log(base_domain+"/#"+back_to_course);
                  window.location = "/lectut/#"+back_to_course;
                },
                function(reason){
