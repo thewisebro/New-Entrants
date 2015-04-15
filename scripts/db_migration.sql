@@ -57,52 +57,76 @@ INSERT INTO nci.events_event (id,calendar_id,uploader_id,title,date,time,upto_da
 
 #placement
 
+#checked
 INSERT INTO nci.placement_placementperson (id, placed_company_category, no_of_companies_placed, status, photo, is_debarred, student_id) SELECT  id, placed_company_category, no_of_companies_placed, status, photo, is_debarred, person_id FROM channeli_dump.placement_placementperson;
 
+#checked
 INSERT INTO nci.placement_internshipinformation (id, brief_description, industry, title, period, priority, visible, student_id) SELECT id, brief_description, industry, title, period, priority, visible, person_id FROM channeli_dump.placement_internshipinformation;
 
+#checked
 INSERT INTO nci.placement_projectinformation (id, brief_description, industry, title, period, priority, visible, student_id) SELECT id, brief_description, industry, title, period, priority, visible, person_id FROM channeli_dump.placement_projectinformation;
 
+#checked
 INSERT INTO nci.placement_extracurriculars (id, name_of_activity, year, achievement, priority, visible, student_id) SELECT id, name_of_activity, year, achievement, priority, visible, person_id from channeli_dump.placement_extracurriculars;
 
+#checked
 INSERT INTO nci.placement_jobexperiences (id, organisation, post, date_of_joining, date_of_leaving, brief_description, priority, visible, student_id) SELECT id, organisation, post, date_of_joining, date_of_leaving, brief_description, priority, visible, person_id from channeli_dump.placement_jobexperiences;
 
+#checked
 INSERT INTO nci.placement_languagesknown (id, language, proficiency, student_id) SELECT id, language, proficiency, person_id from channeli_dump.placement_languagesknown;
 
+#checked
 INSERT INTO nci.placement_researchpublications (id, author, title, publisher, year, priority, visible, student_id) SELECT id, author, title, publisher, year, priority, visible, person_id  from channeli_dump.placement_researchpublications;
 
+#checked
 INSERT INTO nci.placement_educationaldetails (id, year, sgpa, cgpa, course, institution, discipline, discipline_provided, student_id) SELECT id, year, sgpa, cgpa, course, institution, discipline, discipline_provided, person_id from channeli_dump.placement_educationaldetails;
 
+#checked
 INSERT INTO nci.placement_placementinformation (id, registration_no, area_of_interest, computer_languages, achievements, course_taken, reference_1, designation_1, institute_1, email_1, phone_1, reference_2, designation_2, institute_2, email_2, phone_2, student_id) SELECT id, registration_no, area_of_interest, computer_languages, achievements, course_taken, reference_1, designation_1, institute_1, email_1, phone_1, reference_2, designation_2, institute_2, email_2, phone_2, person_id from channeli_dump.placement_placementinformation;
 
+#checked
 INSERT INTO nci.placement_cptmember (id, name, contact_no, year, email, currently_a_member) SELECT id, name, contact_no, year, email, currently_a_member from channeli_dump.placement_cptmember;
 
+#checked
 INSERT INTO nci.placement_company (id, name, year, status, place_of_posting, category, latest_date_of_joining, package_ug, package_pg, package_phd, ctc_remark, cgpa_requirement, company_description, pre_placement_talk, shortlist_from_resumes, group_discussion, online_test, written_test, paper_based_test, interview_1, interview_2, interview_3, last_date_of_applying, name_of_post, description_of_post, other_requirements, total_vacancies_for_iitr, website, brochure, sector, contact_person_id) SELECT id, name, year, status, place_of_posting, category, latest_date_of_joining, package_ug, package_pg, package_phd, ctc_remark, cgpa_requirement, company_description, pre_placement_talk, shortlist_from_resumes, group_discussion, online_test, written_test, paper_based_test, interview_1, interview_2, interview_3, last_date_of_applying, name_of_post, description_of_post, other_requirements, total_vacancies_for_iitr, website, brochure, sector, contact_person_id from channeli_dump.placement_company;
 
+#checked
 INSERT INTO  nci.placement_companyapplicationmap (id, status, shortlisted, time_of_application, company_id, plac_person_id) SELECT id, status, shortlisted, time_of_application, company_id, plac_person_id from channeli_dump.placement_companyapplicationmap ;
 
+#checked
 INSERT INTO nci.placement_secondround (id, branch_id, year) SELECT id, branch_id, year from channeli_dump.placement_secondround;
 
+#checked
 INSERT INTO nci.placement_results (id, company_id, student_id) SELECT id, company_id, person_id from channeli_dump.placement_results;
 
-INSERT INTO nci.placement_forumpost (id, enrollment_no, person_name, disclipline_name, department_name, title, content, date, forum_type) SELECT id, enrollment_no, person_name, disclipline_name, department_name, title, content, date, forum_type from channeli_dump.placement_forumpost;
+#checked
+INSERT INTO nci.placement_forumpost (id, enrollment_no, person_name, discipline_name, department_name, title, content, date, forum_type) SELECT id, enrollment_no, person_name, discipline_name, department_name, title, content, date, forum_type from channeli_dump.placement_forumpost;
 
+#checked
 INSERT INTO nci.placement_forumreply (id, enrollment_no, person_name, content, date, post_id) SELECT id, enrollment_no, person_name, content, date, post_id from channeli_dump.placement_forumreply ;
 
+#checked
 INSERT INTO nci.placement_feedback (id, feedback, date, company_id, student_id) SELECT id, feedback, date, company_id, person_id from channeli_dump.placement_feedback ;
 
+#checked
 INSERT INTO nci.placement_notices (id, notice, date_of_upload) SELECT id, notice, date_of_upload from channeli_dump.placement_notices;
 
+#checked
 INSERT INTO nci.placement_contactperson (id, contact_person, designation, phone_no, email) SELECT id, contact_person, designation, phone_no, email from channeli_dump.placement_contactperson;
 
+#checked
 INSERT INTO nci.placement_companycontact (id, company_name, cluster, status, last_contact, person_in_contact, comments, when_to_contact, contactperson_id) SELECT id, company_name, cluster, status, last_contact, person_in_contact, comments, when_to_contact, contactperson_id from channeli_dump.placement_companycontact;
 
-INSERT INTO nci.placement_placementmgr (id, coordi_id, company_name_id) SELECT id, coordi_id, company_name_id from channeli_dump.placement_placmentmgr;
+#checked
+INSERT INTO nci.placement_placementmgr (id, coordi_id, company_name_id) SELECT id, coordi_id, company_name_id from channeli_dump.placement_placementmgr;
 
+#checked
 INSERT INTO nci.placement_companycoordi (id, student_id) SELECT id, person_id from channeli_dump.placement_companycoordi;
 
+#checked
 INSERT INTO nci.placement_companyslot (id, visibility, status, start_date, end_date) SELECT id, visibility, status, start_date, end_date from channeli_dump.placement_companyslot;
 
+#checked
 INSERT INTO nci.placement_companyplacementpriority (id, priority, date_created, date_updated, company_id, slots_id, student_id) SELECT id, priority, date_created, date_updated, company_id, slots_id, person_id from channeli_dump.placement_companyplacementpriority ;
 
 #checked
