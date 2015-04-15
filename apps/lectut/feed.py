@@ -14,7 +14,6 @@ class postFeed(ModelFeed):
     Files = Uploadedfile.file_objects.all().filter(post = instance)
     if Files:
       file_details = []
-      import pdb;pdb.set_trace()
       for someFile in Files:
         link = '/lectut/#/course/'+str(instance.batch.id)+'/files/'+str(someFile.id)+'/'
         data = {'file_name':str(someFile.upload_file).split('/')[2] , 'file_link':link , 'id':someFile.id , 'type':someFile.upload_type}
