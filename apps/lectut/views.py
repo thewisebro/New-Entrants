@@ -293,7 +293,7 @@ def getFileType(file_name):
       file_type="ppt"
     elif extension in ['dv', 'mov', 'mp4', 'avi', 'wmv', 'mkv', 'webm']:
       file_type="video"
-    elif extension in ['gz','tar','iso','lbr']:
+    elif extension in ['gz','tar','iso','lbr','zip']:
       file_type="zip"
     else:
       file_type="other"

@@ -132,11 +132,15 @@ class Uploadedfile(BaseUpload):
   def as_dict(self):
         filepath = str(self.upload_file)
         filename = filepath.split("/")[2]
+        if self.file_type == 'image':
+          filepath = 'media/'+filepath
+        else:
+          filepath = ''
         fileData={
            'id':self.id,
            'post':self.post.id,
            'upload_file':filename,
-           'filepath':'media/'+filepath,
+           'filepath':filepath,
            'username':str(self.post.upload_user.name),
            'datetime_created':str(self.datetime_created),
            'description':self.description,
