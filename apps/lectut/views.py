@@ -272,7 +272,7 @@ def uploadedFile(request , batch_id):
       status = 101
     new_post = new_post.as_dict()
     complete_post = {'post':new_post,'files':files}
-    response =  HttpResponse(json.dumps({'complete_post':complete_post,'status':status}), content_type='application/json')
+    response =  HttpResponse(json.dumps({'complete_post':complete_post,'status':status , 'msg':msg}), content_type='application/json')
   else:
     response = HttpResponse('It is not a post request')
   return response
@@ -293,7 +293,7 @@ def getFileType(file_name):
       file_type="ppt"
     elif extension in ['dv', 'mov', 'mp4', 'avi', 'wmv', 'mkv', 'webm']:
       file_type="video"
-    elif extension in ['gz','tar','iso','lbr']:
+    elif extension in ['gz','tar','iso','lbr','zip']:
       file_type="zip"
     else:
       file_type="other"
@@ -536,11 +536,23 @@ def get_files(request, batch_id):
   for File in currentFiles:
     AllFiles[File.upload_type].append(File.as_dict())
 
+  AllFiles['Lecture'] = AllFiles.pop('lec')
+  AllFiles['Tutorial'] = AllFiles.pop('tut')
+  AllFiles['Exam Papers'] = AllFiles.pop('exp')
+  AllFiles['Solution'] = AllFiles.pop('sol')
+  AllFiles['Question'] = AllFiles.pop('que')
+
   AllArchives = {'lec':[],'tut':[],'exp':[],'sol':[],'que':[]}
   currentCourse = currentBatch.course
   oldFiles =Uploadedfile.file_objects.all().filter(post__course_id = currentCourse.id).filter(post__batch_id__isnull = True)
   for File in oldFiles:
    AllArchives[File.upload_type].append(File.as_dict())
+
+  AllArchives['Lecture'] = AllArchives.pop('lec')
+  AllArchives['Tutorial'] = AllArchives.pop('tut')
+  AllArchives['Exam Papers'] = AllArchives.pop('exp')
+  AllArchives['Solution'] = AllArchives.pop('sol')
+  AllArchives['Question'] = AllArchives.pop('que')
 
   files = {'currentFiles':AllFiles , 'archiveFiles':AllArchives , 'status':100}
   return HttpResponse(json.dumps(files), content_type="application/json")

@@ -65,8 +65,12 @@
   color:#62CBE2  !important;
 }
 .fa-file{
- color: #E2E2E2;
+ color: #5DBAE7;
 }
+.fa-file-archive-o{
+  color: #FFC033;
+}
+
 .browsehappy {
   margin:0.2em 0;
   background:#ccc;
@@ -660,7 +664,7 @@ body {
                   left: 105px;
                   bottom:0;
                   background:rgba(0, 0, 0, 0.14);
-                  z-index: 12121212;
+                  z-index: 112;
                   display:none;
                 }
                 margin-left:105px;
@@ -780,6 +784,11 @@ body {
                               .dummyFileName{
                                 font-size: 14px;
                                 color: #8D8D8D;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                width: 226px;
+                                display: inline-block;
                                 .dummyType{
                                   font-family: "opensans_regular";
                                 }
@@ -1167,7 +1176,6 @@ overflow: hidden;
 outline: 0px;
          font-family: $osSB;
          font-size:13px;
-         cursor:pointer;
 }
 .fileShowUser{
   font-family: opensans_italic;
@@ -1194,6 +1202,13 @@ outline: 0px;
 table.dataTable span a {
   color: #5f5f5f;
   text-decoration:none;
+  font-size:13px;
+  display: inline-block;
+  white-space: nowrap;
+  width: 380px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+    vertical-align: sub;
   &:hover{
     text-decoration:underline;
   }
@@ -1911,4 +1926,44 @@ border: 1px solid #D9D9D9;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
       right: 0px; 
+}
+
+
+//Notification
+
+// Notifications
+
+.ngn-top{
+  top:16px;
+}
+
+.ngn {
+  color: #FFF;
+  cursor: default;
+  display: none;
+           font-size: 1.3em;
+  left: 50%;
+        margin-left: -200px;
+  width: 400px;
+  opacity: 1;
+  padding: 8px 24px;
+  position: fixed;
+  right: 0;
+         border-radius: 26px;
+       text-align: center;
+       -webkit-touch-callout: none;
+       -webkit-user-select: none;
+       -khtml-user-select: none;
+       -moz-user-select: none;
+       -ms-user-select: none;
+       user-select: none;
+       font-family: opensans_regular;
+       font-size: 15px;
+}
+.ngn-info{
+  z-index: 12121212;
+}
+
+.ngn-success{
+  z-index: 12312312312;
 }

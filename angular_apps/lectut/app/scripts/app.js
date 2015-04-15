@@ -20,8 +20,7 @@ var lectutApp = angular.module('lectutApp', [
     'angular-loading-bar',
     'infinite-scroll',
     'oitozero.ngSweetAlert',
-    'angular-growl',
-    'angucomplete-alt'
+    'ngNotify'
   ]);
 
 
