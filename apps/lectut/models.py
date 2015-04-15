@@ -65,7 +65,7 @@ class Post(models.Model):
       students = currentBatch.students.all()
       users = map(lambda x:x.user, students)
       noti_text = str(self.upload_user.name) + " has added a post on Lectut"
-      Notification.save_notification('lectut',noti_text,'#/course/'+str(currentBatch.id)+'/posts/'+str(post.id)+'/',users,self)
+      Notification.save_notification('lectut',noti_text,'/lectut/#/course/'+str(currentBatch.id)+'/feeds/'+str(post.id)+'/',users,self)
     else:
       post = super(Post , self).save(*args, **kwargs)
     return post
