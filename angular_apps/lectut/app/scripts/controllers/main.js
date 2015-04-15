@@ -87,7 +87,6 @@ lectutApp
       //console.log(route);
       //console.log($location.path());
        return route === $location.path();
-
     }
     
 
@@ -594,16 +593,16 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
       function(d){
         console.log(d);
         var allFiles = [];
-        allFiles = allFiles.concat(d.archiveFiles.tut);
-        allFiles = allFiles.concat(d.archiveFiles.lec);
-        allFiles = allFiles.concat(d.archiveFiles.exp);
-        allFiles = allFiles.concat(d.archiveFiles.sol);
-        allFiles = allFiles.concat(d.archiveFiles.que);
-        allFiles = allFiles.concat(d.currentFiles.tut);
-        allFiles = allFiles.concat(d.currentFiles.lec);
-        allFiles = allFiles.concat(d.currentFiles.exp);
-        allFiles = allFiles.concat(d.currentFiles.sol);
-        allFiles = allFiles.concat(d.currentFiles.que);
+        allFiles = allFiles.concat(d.archiveFiles.Tutorial);
+        allFiles = allFiles.concat(d.archiveFiles.Lecture);
+        allFiles = allFiles.concat(d.archiveFiles['Exam Papers']);
+        allFiles = allFiles.concat(d.archiveFiles.Solution);
+        allFiles = allFiles.concat(d.archiveFiles.Question);
+        allFiles = allFiles.concat(d.currentFiles.Tutorial);
+        allFiles = allFiles.concat(d.currentFiles.Lecture);
+        allFiles = allFiles.concat(d.currentFiles['Exam Papers']);
+        allFiles = allFiles.concat(d.currentFiles.Solution);
+        allFiles = allFiles.concat(d.currentFiles.Question);
         return allFiles;
       }
    )
@@ -619,7 +618,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                  return '<input type="checkbox" ng-change="toggleOne('+ data.id+')" ng-checked="selected['+data.id+']" ng-model="$scope.selected[' + data.id + ']">';
              }),*/
              // DTColumnBuilder.newColumn('id').withTitle('ID'),
-             DTColumnBuilder.newColumn(null).withTitle('<span>Name</span>')
+             DTColumnBuilder.newColumn(null).withTitle('<span>File Name</span>')
              .renderWith(function(data,type,full){
                  //console.log(full.file_type);
                  var html= "";
@@ -699,18 +698,31 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
              var select = $('<select id="fileFilterType"><option value=""></option></select>')
              .appendTo( $(".dataTables_wrapper") )
              .on( 'change', function () {
-               var val = $.fn.dataTable.util.escapeRegex(
-                 $(this).val()
-                 );
-
+              /*var val = $.fn.dataTable.util.escapeRegex(
+                  $(this).val()
+              );*/
+              var val;
+              var temp = $(this).val();
+              if(temp == "Lecture"){
+                val = "lec";
+              }
+              else if("Tutorial"){
+                val = "tut"
+              }
+              else if("Exam Paper"){
+                val = "exp"
+              }
+              else if("Solution"){
+                val = "sol"
+              }
                column
                .search( val ? '^'+val+'$' : '', true, false )
                .draw();
                } );
 
-             column.data().unique().sort().each( function ( d, j ) {
-               select.append( '<option value="'+d+'">'+d+'</option>' )
-               } );
+               column.data().unique().sort().each( function ( d, j ) {
+                 select.append( '<option value="'+d+'">'+d+'</option>' )
+               });
          } });
      });
 
@@ -727,20 +739,25 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
          table.columns().indexes().flatten().each( function ( i ) {
              if(i==1){
              var column = table.column( i );
-             var select = $('<select id="fileFilterType"><option value="">All </option></select>')
+             var select = $('<select id="fileFilterType"><option value="">All Files</option></select><span id="fileFilterArrow">&#x25BC;</span>')
              .appendTo( $(".dataTables_wrapper") )
              .on( 'change', function () {
                var val = $.fn.dataTable.util.escapeRegex(
                  $(this).val()
                 );
+            
                column
                .search( val ? '^'+val+'$' : '', true, false )
                .draw();
                } );
 
-             column.data().unique().sort().each( function ( d, j ) {
-               select.append( '<option value="'+d+'">'+d+'</option>' )
-               } );
+              //column.data().unique().sort().each( function ( d, j ) {
+               select.append( '<option value="lec">Lectures</option>' );
+               select.append( '<option value="tut">Tutorial</option>' );
+               select.append( '<option value="exp">Exam Papers</option>' );
+               select.append( '<option value="sol">Solution</option>' );
+               //select.append( '<option value="que">'+Question+'</option>' );
+              // } );
          } });
        }
        else{
@@ -855,7 +872,7 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
                  }
                  back_to_course = back_to_course.slice(0,i);
                  console.log(base_domain+"/#"+back_to_course);
-                 window.location = "/#"+back_to_course;
+                 window.location = "/lectut/#"+back_to_course;
 
             },
             function(reason){
@@ -945,7 +962,7 @@ lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams'
                  }
                  back_to_course = back_to_course.slice(0,i);
                  console.log(base_domain+"/#"+back_to_course);
-                 window.location = "/#"+back_to_course;
+                 window.location = "/lectut/#"+back_to_course;
                },
                function(reason){
                  sweetAlert("Cancelled!", reason, "error");

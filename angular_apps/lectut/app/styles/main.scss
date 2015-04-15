@@ -70,7 +70,9 @@
 .fa-file-archive-o{
   color: #FFC033;
 }
-
+.fa-file-zip-o{
+  color: #FFC033;
+}
 .browsehappy {
   margin:0.2em 0;
   background:#ccc;
@@ -1146,7 +1148,15 @@ body {
 }
 
 // Over writes all DataTables Files
-
+#fileFilterArrow{
+  position: absolute;
+  top: 24px;
+  right: 26px;
+  border-radius: 2px;
+  color: #999999;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
 #fileFilterType{
 position: absolute;
 top: 20px;
@@ -1155,7 +1165,7 @@ right: 20px;
        -moz-appearance: button;
        -webkit-user-select: none;
        -moz-user-select: none;
-       -webkit-padding-end: 11px;
+       -webkit-padding-end: 22px;
        -moz-padding-end: 20px;
        -webkit-padding-start: 7px;
        -moz-padding-start: 2px;
@@ -1279,7 +1289,7 @@ table.dataTable tfoot td {
     outline: 0;
     color: #808080;
     margin-right:20px;
-   }
+  }
    label{
     color: $g13;
     font-size:14px;  
