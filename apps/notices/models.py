@@ -7,7 +7,6 @@ from django.core.cache import cache, get_cache
 import simplejson
 
 from notices.constants import *
-from notices.constants import *
 
 class AbstractNotice(models.Model):
   subject = models.CharField(max_length=100)
