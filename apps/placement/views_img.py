@@ -323,16 +323,26 @@ def company_coordinator_view(request):
   lst = []
   for campus_contact_inst in campus_contact:
     contactPerson = campus_contact_inst.contact_person
-    values = [contactPerson.company_contact.name, contactPerson.company_contact.cluster,]
-    values.append(contactPerson.name, contactPerson.designation, contactPerson.phone_no, contactPerson.email)
+    values=[]
+    values.append(contactPerson.company_contact.name)
+    values.append(contactPerson.company_contact.cluster)
+    values.append(contactPerson.name)
+    values.append(contactPerson.designation)
+    values.append(contactPerson.phone_no)
+    values.append(contactPerson.email)
     values.append(contactPerson.company_contact.status)
     values.append(campus_contact_inst.last_contact)
-    comment = CompanyContactComments.objects.filter(campus_contact = camous_contact_inst).order_by('date_created')[0]
-    values.append(comment.comment)
+    values.append(campus_contact_inst.student.user.name)
+    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('date_created')
+    if comment:
+      comment=comment[0].comment
+    else:
+      comment=""
+    values.append(comment)
     values.append(campus_contact_inst.when_to_contact)
-    values.append('pk','pk')
+    values.append(campus_contact_inst.id)
+    values.append(campus_contact_inst.id)
     lst.append(values[:])
-
 
   data_to_send = []
 
@@ -407,17 +417,26 @@ def placement_manager_view(request):
   lst = []
   for campus_contact_inst in campus_contact:
     contactPerson = campus_contact_inst.contact_person
-    values = [contactPerson.company_contact.name, contactPerson.company_contact.cluster,]
+    values = []
+    values.append(campus_contact_inst.id)
+    values.append(contactPerson.company_contact.name)
+    values.append(contactPerson.company_contact.cluster)
     values.append(contactPerson.name)
     values.append(contactPerson.designation)
     values.append(contactPerson.phone_no)
     values.append(contactPerson.email)
     values.append(contactPerson.company_contact.status)
     values.append(campus_contact_inst.last_contact)
-    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('date_created')[0]
-    values.append(comment.comment)
+    values.append(campus_contact_inst.student.user.name)
+    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('date_created')
+    if comment:
+      comment=comment[0].comment
+    else:
+      comment=""
+    values.append(comment)
     values.append(campus_contact_inst.when_to_contact)
-    values.append('pk','pk')
+    values.append(campus_contact_inst.id)
+    values.append(campus_contact_inst.id)
     lst.append(values[:])
 
   data_to_send = []
@@ -461,7 +480,8 @@ def company_coordinator_today_view(request):
     comment = CompanyContactComments.objects.filter(campus_contact = camous_contact_inst).order_by('date_created')[0]
     values.append(comment.comment)
     values.append(campus_contact_inst.when_to_contact)
-    values.append('pk','pk')
+    values.append('pk')
+    values.append('pk')
     lst.append(values[:])
 
   data_to_send = []
