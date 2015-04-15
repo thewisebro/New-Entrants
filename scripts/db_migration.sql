@@ -141,3 +141,27 @@ INSERT INTO nci.mcm_mcmperson (id, air, unfair_means, family_income, other_schol
 INSERT INTO nci.mcm_studentloanaid (id, `check`, cgpa, sgpa, fathers_income, fathers_pan_no, mothers_pan_no, gaurdians_pan_no, guardians_name, guardians_occupation, guardians_income, guardians_address, mothers_occupation, mothers_income, other_scholarship_details, previous_aid_amount, previous_aid_session, work_bhawan_details, date_time, student_id) SELECT id, `check`, cgpa, sgpa, fathers_income, fathers_pan_no, mothers_pan_no, gaurdians_pan_no, guardians_name, guardians_occupation, guardians_income, guardians_address, mothers_occupation, mothers_income, other_scholarship_details, previous_aid_amount, previous_aid_session, work_bhawan_details, date_time, person_id from channeli_dump.mcm_studentloanaid;
 
 INSERT INTO nci.mcm_mcm (id, scholar_type, `check`, air, unfair_means, cgpa, sgpa, family_income, other_scholarship_details, datetime, payment_choice, student_id) SELECT id, scholar_type, `check`, air, unfair_means, cgpa, sgpa, family_income, other_scholarship_details, datetime, payment_choice, person_id from channeli_dump.mcm_mcm;
+
+#INTERNSHIP_ONLINE
+#all_checked
+
+INSERT INTO nci.internship_internshipperson (id, status, is_placed, student_id) SELECT id, status, is_placed, person_id from channeli_dump.internship_internshipperson;
+
+INSERT INTO nci.internship_company (id, name_of_company, status, year, address, latest_date_of_joining, stipend, stipend_remark, cgpa_requirements, description, designation_of_contact_person, email, fax, last_date_of_applying, name_of_contact_person, nature_of_duties, name_of_post, no_of_employees, other_requirements, telephone, pre_internship_talk, shortlist_from_resumes, group_discussion, online_test, written_test, paper_based_test, interview_1, interview_2, interview_3, probable_date_of_arrival, total_vacancies, training_period, turnover, website, brochure,sector) SELECT id, name_of_company, status, year, address, latest_date_of_joining, stipend, stipend_remark, cgpa_requirements, description, designation_of_contact_person, email, fax, last_date_of_applying, name_of_contact_person, nature_of_duties, name_of_post, no_of_employees, other_requirements, telephone, pre_internship_talk, shortlist_from_resumes, group_discussion, online_test, written_test, paper_based_test, interview_1, interview_2, interview_3, probable_date_of_arrival, total_vacancies, training_period, turnover, website, brochure,sector from channeli_dump.internship_company;
+
+INSERT INTO nci.internship_companyapplicationmap (id, status, company_id, student_id) SELECT id, status, company_id, person_id from channeli_dump.internship_companyapplicationmap;
+
+INSERT INTO nci.internship_forumpost (id, enrollment_no, person_name, discipline_name, department_name, title, content, date, forum_type) SELECT id, enrollment_no, person_name, discipline_name, department_name, title, content, date, forum_type from channeli_dump.internship_forumpost;
+
+INSERT INTO nci.internship_forumreply (id, enrollment_no, person_name, content, date, post_id) SELECT id, enrollment_no, person_name, content, date, post_id from channeli_dump.internship_forumreply ;
+
+INSERT INTO nci.internship_feedback (id, enrollment_no, person_name, discipline_name, department_name, company_name, feedback, date, year) SELECT id, enrollment_no, person_name, discipline_name, department_name, company_name, feedback, date, year from channeli_dump.internship_feedback;
+
+INSERT INTO nci.internship_results (enrollment_no, person_name, company_name, discipline_name, department_name, year, company_id) SELECT enrollment_no, person_name, company_name, discipline_name, department_name, year, company_id from channeli_dump.internship_results;
+
+INSERT INTO nci.internship_resultsnew (id, company_id, student_id) SELECT id, company_id, person_id from channeli_dump.internship_resultsnew;
+
+INSERT INTO nci.internship_notices (id, notice, date_of_upload) SELECT id, notice, date_of_upload from channeli_dump.internship_notices ;
+
+INSERT INTO nci.internship_companypriority (id, priority, company_id, student_id) SELECT id, priority, company_id, person_id from channeli_dump.internship_companypriority;
+

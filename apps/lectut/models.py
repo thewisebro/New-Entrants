@@ -29,13 +29,13 @@ class BaseUpload(models.Model):
           self.__class__.objects.all().update(featured = False)
      super(Model, self).save(*args, **kwargs)"""
 
-Act_Types = (
-            ('lec' , 'Lecture'),
-            ('tut' , 'Tutorial'),
-            ('sol' , 'Solution'),
-            ('que' , 'Question'),
-            ('exm' , 'Exam Papers'),
-            )
+Act_Types = {
+            'lec' : 'Lecture',
+            'tut' : 'Tutorial',
+            'sol' : 'Solution',
+            'que' : 'Question',
+            'exm' : 'Exam Papers',
+}
 
 class DeleteManager(models.Manager):
   def get_query_set(self):
