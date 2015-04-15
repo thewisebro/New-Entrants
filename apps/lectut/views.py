@@ -603,6 +603,7 @@ def getReminder(request):
 def search(request):
   value = request.GET.get('q')
   filter_model = request.GET.get('model')
+#  import pdb;pdb.set_trace()
   if filter_model == None:
     query_post = SearchQuerySet().all().autocomplete(content_auto = value).models(Post)
     query_uploadfile = SearchQuerySet().all().autocomplete(filename_auto = value).models(Uploadedfile)
@@ -611,12 +612,14 @@ def search(request):
   else:
     query = SearchQuerySet().autocomplete(content_auto = value).models(filter_model)
 
-  final_posts = []
-  final_files = []
-  posts = map(lambda result:Post.objects.get(id = result.pk),query_post)
-  upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk),query_uploadfile)
-  courses1 = map(lambda result:{'name':result.name,'code':result.code},query_courses_name)
-  courses2 = map(lambda result:{'name':result.name,'code':result.code},query_courses_code)
+  final_posts , final_files ,posts , upload_files , courses1 , courses2 = [],[],[],[],[],[]
+  try:
+    posts = map(lambda result:Post.objects.get(id = result.pk),query_post)
+    upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk),query_uploadfile)
+    courses1 = map(lambda result:{'name':result.name,'code':result.code},query_courses_name)
+    courses2 = map(lambda result:{'name':result.name,'code':result.code},query_courses_code)
+  except:
+    pass
 
   final_posts = map(lambda result:result.as_dict() if result.deleted == False else None,posts)
   final_files = map(lambda result:result.as_dict() if result.deleted == False else None,upload_files)
@@ -703,4 +706,4 @@ def ini_batch_student(request):
 def ini_batch_faculty(request):
   user = request.user
   faculty = user.faculty
-  return   
+  return

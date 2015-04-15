@@ -10,7 +10,7 @@ class postFeed(ModelFeed):
 
   def save(self, instance, created):
     instance.link = '/lectut/#/course/'+str(instance.batch.id)+'/feeds/'+str(instance.id)+'/'
-    import pdb;pdb.set_trace()
+#    import pdb;pdb.set_trace()
     Files = Uploadedfile.file_objects.all().filter(post = instance)
     if Files:
       file_details = []
