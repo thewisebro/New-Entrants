@@ -53,7 +53,8 @@ def CORS_allow(view):
     return response
   return wrapped_view
 
-MAX_FILE_SIZE =  5242880       # 5 MB
+MAX_IMAGE_SIZE =  10485760     # 10 MB
+MAX_PDF_SIZE = 20971520        # 20 MB
 MAX_VIDEO_SIZE = 20971520      # 20 MB
 
 
@@ -193,7 +194,7 @@ def uploadFile(request , batch_id):
       upload_type = request.POST['upload_type']
       file_name=request.POST['upload_name']
 
-      if file_type!='Video' and  upload_file._size>MAX_FILE_SIZE:
+      if file_type!='Video' and  upload_file._size>MAX_IMAGE_SIZE:
         msg = "File too large.Must be smaller than 5MB"
       elif upload_file._size>MAX_VIDEO_SIZE:
         msg = "Video too large.Must be smaller than 20MB"
@@ -217,6 +218,7 @@ def uploadFile(request , batch_id):
 def uploadedFile(request , batch_id):
   if request.method == 'POST':
     allData = json.loads(request.POST['data'])
+    status = 100
     user = request.user
 #    usrname = allData['user']
 #    user = User.objects.get(username=usrname)
@@ -227,7 +229,7 @@ def uploadedFile(request , batch_id):
       course = Course.objects.get(id = batch_id)
       userBatch = None
     else:
-      return HttpResponse(json.dumps('Invalid Course. Please contact IMG if problem persists'), content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'Invalid Course. Please contact IMG if problem persists' , 'status':102}), content_type='application/json')
 
 #    data = request.POST.get('formText','')
     data = allData['formText']
@@ -236,7 +238,7 @@ def uploadedFile(request , batch_id):
     documents = request.FILES.getlist('file')
     extra = request.POST.getlist('extra','')
     if not data and not documents:
-      return HttpResponse(json.dumps('Empty posts are not allowed'), content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'Empty posts are not allowed','status':101}), content_type='application/json')
     if getUserType(user) == "1":
       privacy = allData['privacy']
     files = []
@@ -249,14 +251,16 @@ def uploadedFile(request , batch_id):
         new_post = Post(upload_user = user, course = course, content = data , privacy = privacy)
       new_post.save()
     except:
-      msg = "Cannot save post"
+      return HttpResponse(json.dumps({'msg':'Cannot save post','status':102}), content_type='application/json')
     for document in documents:
       file_type = getFileType(document)
 #      fileData = json.loads(extra[counter])
-      if file_type!='Video' and  document._size>MAX_FILE_SIZE:
-        msg = "File too large.Must be smaller than 5MB"
-      elif document._size>MAX_VIDEO_SIZE:
+      if file_type =='Video' and  document._size>MAX_VIDEO_SIZE:
         msg = "Video too large.Must be smaller than 20MB"
+      if file_type =='pdf' and  document._size>MAX_PDF_SIZE:
+        msg = "Image too large.Must be smaller than 20MB"
+      elif document._size>MAX_IMAGE_SIZE:
+        msg = "File too large.Must be smaller than 20MB"
       else:
         new_document = Uploadedfile(post =new_post, upload_file = document, description = str(document), file_type=file_type, upload_type = uploadTypes[counter])
         new_document.save()
@@ -264,11 +268,11 @@ def uploadedFile(request , batch_id):
       counter = counter+1
     new_post.save()
     if msg !='':
-      response =  HttpResponse(json.dumps(msg), content_type='application/json')
-    else:
-      new_post = new_post.as_dict()
-      complete_post = {'post':new_post,'files':files}
-      response =  HttpResponse(json.dumps(complete_post), content_type='application/json')
+#      response =  HttpResponse(json.dumps(msg), content_type='application/json')
+      status = 101
+    new_post = new_post.as_dict()
+    complete_post = {'post':new_post,'files':files}
+    response =  HttpResponse(json.dumps({'complete_post':complete_post,'status':status}), content_type='application/json')
   else:
     response = HttpResponse('It is not a post request')
   return response
@@ -367,15 +371,15 @@ def get_post(request , batch_id , post_id):
       post = Post.post_objects.get(id = post_id)
       complete_post = get_post_dict(post)
       if user.is_authenticated():
-        return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize()}), content_type='application/json')
+        return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize() , 'status':100}), content_type='application/json')
       else:
-        return HttpResponse(json.dumps({'post':complete_post , 'user_info':''}), content_type='application/json')
+        return HttpResponse(json.dumps({'post':complete_post , 'user_info':'' , 'status':100}), content_type='application/json')
     else:
       msg = 'Post has been deleted'
   else:
     msg = 'Post doesnot exist'
 
-  response = HttpResponse(json.dumps(msg), content_type='application/json')
+  response = HttpResponse(json.dumps({'msg':msg , 'status':101}), content_type='application/json')
   return response
 
 
@@ -390,15 +394,15 @@ def get_file(request , batch_id , file_id):
       user_info = user.serialize()
       File = File.as_dict()
       if user.is_authenticated():
-        return HttpResponse(json.dumps({'file':File , 'user_info':user_info}), content_type='application/json')
+        return HttpResponse(json.dumps({'file':File , 'user_info':user_info , 'status':100}), content_type='application/json')
       else:
-        return HttpResponse(json.dumps({'file':File , 'user_info':''}), content_type='application/json')
+        return HttpResponse(json.dumps({'file':File , 'user_info':'' , 'status':100}), content_type='application/json')
     else:
       msg = 'File has been deleted'
   else:
     msg = 'File doesnot exist'
 
-  response = HttpResponse(json.dumps(msg), content_type='application/json')
+  response = HttpResponse(json.dumps({'msg':msg , 'status':101}), content_type='application/json')
   return response
 
 
@@ -407,25 +411,28 @@ def get_file(request , batch_id , file_id):
 #@login_required
 def deleteFile(request , file_id):
   user = request.user
+  status = 101
   if Uploadedfile.file_objects.filter(pk=file_id).exists():
     fileToDelete = Uploadedfile.objects.get(pk=file_id)
-    post = fileTodelete.post
+    post = fileToDelete.post
 
     if user.in_group('faculty') or user == fileToDelete.post.upload_user:
       try:
         fileToDelete.delete()
         msg = 'File has been deleted'
+        status = 100
         counter = Uploadedfile.file_objects.all().filter(post = post).count()
         if counter ==0 and post.content =='':
           post.delete()
           msg = 'The post has been deleted as well'
       except:
         msg = 'Some error Occured'
+        status = 102
     else:
       msg = 'You are not authorised to delete this file. This shall be reported'
   else:
     msg='File doesnot exist'
-  response = HttpResponse(json.dumps(msg), content_type='application/json')
+  response = HttpResponse(json.dumps({'msg':msg,'status':status}), content_type='application/json')
   return response
 #  return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
@@ -434,6 +441,7 @@ def deleteFile(request , file_id):
 @CORS_allow
 def deletePost(request , post_id):
   user = request.user
+  status = 101
   if Post.post_objects.filter(pk=post_id).exists():
     postToDelete = Post.objects.get(pk=post_id)
     if user.in_group('faculty') or user == postToDelete.upload_user:
@@ -443,13 +451,15 @@ def deletePost(request , post_id):
         for afile in files:
           afile.delete()
         msg = 'Post has been deleted'
+        status = 100
       except:
         msg = 'Kuch katta ho gaya'
+        status = 102
     else:
       msg = 'You are not authorised to delete this post. This shall be reported'
   else:
     msg='Post doesnot exist'
-  response = HttpResponse(json.dumps(msg), content_type='application/json')
+  response = HttpResponse(json.dumps({'msg':msg , 'status':status}), content_type='application/json')
   return response
 
 # Not used currently
@@ -492,6 +502,8 @@ def userdownloads(request , batch_id):
 @csrf_exempt
 @CORS_allow
 def batchMembers(request , batch_id):
+  if not Batch.objects.filter(id = batch_id).exists():
+    return HttpResponse(json.dumps({'msg':'Batch Doesnot exist' , 'status':101}), content_type="application/json")
   currentBatch = Batch.objects.get(id = batch_id)
   students = currentBatch.students.all()
   users = map(lambda x:x.user, students)
@@ -507,7 +519,7 @@ def batchMembers(request , batch_id):
     user = user.serialize()
     faculties.append(user)
 
-  members = {'students':students, 'faculties':faculties}
+  members = {'students':students, 'faculties':faculties , 'status':100}
 
   return HttpResponse(json.dumps(members), content_type="application/json")
 
@@ -516,6 +528,8 @@ def batchMembers(request , batch_id):
 @csrf_exempt
 @CORS_allow
 def get_files(request, batch_id):
+  if not Batch.objects.filter(id = batch_id).exists():
+    return HttpResponse(json.dumps({'msg':'Batch Doesnot exist' , 'status':101}), content_type="application/json")
   currentBatch = Batch.objects.get(id = batch_id)
   AllFiles = {'lec':[],'tut':[],'exp':[],'sol':[],'que':[]}
   currentFiles = Uploadedfile.file_objects.all().filter(post__batch_id = batch_id)
@@ -528,7 +542,7 @@ def get_files(request, batch_id):
   for File in oldFiles:
    AllArchives[File.upload_type].append(File.as_dict())
 
-  files = {'currentFiles':AllFiles , 'archiveFiles':AllArchives}
+  files = {'currentFiles':AllFiles , 'archiveFiles':AllArchives , 'status':100}
   return HttpResponse(json.dumps(files), content_type="application/json")
 
 @csrf_exempt
@@ -595,7 +609,7 @@ def search(request):
   final_posts = map(lambda result:result.as_dict() if result.deleted == False else None,posts)
   final_files = map(lambda result:result.as_dict() if result.deleted == False else None,upload_files)
 
-  results = {'posts':final_posts , 'files':final_files , 'courses':courses1+courses2 }
+  results = {'posts':final_posts , 'files':final_files , 'courses':courses1+courses2 ,'status':100}
   return HttpResponse(json.dumps(results), content_type="application/json")
 
 
