@@ -9,28 +9,27 @@
 {% endblock %}
 
 {% block feed_detail %}
-<!--
 {% if instance.count == 1 %}
-  Added a post in {{ instance.batch.course.name }} <span style ="float:right"><i class='fa fa-file-o'></i> {{ instance.count }} file</span>
+  Added a post in {{ instance.batch.course.name|title }} <span style ="float:right"><i class='fa fa-file-o'></i> {{ instance.count }} file</span>
 {% else %}
-  Added a post in {{ instance.batch.course.name }} <span style ="float:right"><i class='fa fa-file-o'></i> {{ instance.count }} files</span>
+  Added a post in {{ instance.batch.course.name|title }}<span style ="float:right"><i class='fa fa-file-o'></i> {{ instance.count }} files</span>
 {% endif %}
 <br>
--->
+<!--
 {% if instance.count == 1 %}
   Added a post in {{ instance.batch.course.name|title}} with {{ instance.count }} file</span>
 {% else %}
   Added a post in {{ instance.batch.course.name|title }} with {{ instance.count }} files</span>
 {% endif %}
 
-<!--div class = 'lectut_feed_files'-->
+<div class = 'lectut_feed_files'>
 {% for file in instance.files %}
 <div class = 'lectut_file_details' id = '{{ file.id }}' style = "width:20px;">
 <img src='' href = {{file.file_link}}>{{file.file_name}}</a>
 </div>
 <br>
 {% endfor %}
-<!--/div-->
+</div-->
 
 {% endblock %}
 
