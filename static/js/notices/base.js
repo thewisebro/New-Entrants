@@ -385,7 +385,7 @@ function create_static_divs()                //Create static buttons like upload
     if(star_perm==1)
       $('#additional').append(additional_features_html());
     $('#content').append('<div id="notice_list"></div><br>');
-    $('#content').append('<div id="page_numbers"></div>');
+    $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div id="settings" onclick="location.hash=\'#settings/email\'"><i id="gear" class="fa fa-cog"></i>Settings</div><div style="clear:both"></div></div>');
     console.log("switched_to_notices_create : static divs created");
     $('#more').bind("click", bind_unbind_tooltip);
     $('#main_check').tooltip({position: {at: "right+5 top-20"}});
@@ -780,6 +780,7 @@ function star_notice(id, e)
         check_star_array[id] = 1;
         $("#star_shape_" + id).attr({style : "color:#F1C40F"})
       }
+      nucleus.setShowLoadingOff();
       $.ajax({
       type: 'post',
       url: url,
@@ -1032,6 +1033,7 @@ function read_star_checklist(t)
       url += 'add_read/';
     if(t==4)
       url += 'delete_read/';
+    nucleus.setShowLoadingOff();
     $.ajax({
       type: 'post',
       url: url+q,
@@ -1327,6 +1329,18 @@ function stop_propagation(e)
         e.stopPropagation();
     else
         e.cancelBubble = true;
+}
+
+function open_upload_dialog()
+{
+    dialog_iframe({
+      name:'notice_upload_dialog',
+      title:'Upload a notice',
+      width:900,
+      height:650,
+      src:'/notices/upload',
+  });
+
 }
 
 //Following are the functions that are called the first time, notices is clicked
