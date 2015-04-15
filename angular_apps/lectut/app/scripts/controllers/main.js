@@ -33,6 +33,7 @@ lectutApp
                 $scope.courseCode = $scope.auth.batches[i].code;
                 //alert($scope.courseCode);
                 $scope.courseName = $scope.auth.batches[i].course_name;
+                $cope.courseid = id;
               }
             }
         }
@@ -42,6 +43,7 @@ lectutApp
             console.log(d);
             $scope.courseName = d.course_name;
             $scope.courseCode = d.code;
+            $scope.courseid = id;
           });
         }
     }
@@ -119,6 +121,7 @@ lectutApp
               if($scope.auth.batches[i].id == $scope.courseId.courseId){
                 $scope.courseName = $scope.auth.batches[i].course_name;
                 $scope.courseCode = $scope.auth.batches[i].code;
+                $scope.courseid= $scope.courseId.courseId;
               }
             }
         }
@@ -132,6 +135,7 @@ lectutApp
             console.log(d);
             $scope.courseName = d.course_name;
             $scope.courseCode = d.code;
+            $scope.courseid= id;
           });
         }
     });
@@ -174,6 +178,7 @@ lectutApp
         for(var i=0;i<$scope.auth.batches.length;i++){
           if($scope.auth.batches[i].id == id){
             $scope.courseName = $scope.auth.batches[i].course_name;
+            $scope.courseid = id;
           }
         }
     var promiseCourseData = CourseDetails.getCourseDetailsData(id);
@@ -360,6 +365,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
             console.log('progress: ' + progressPercentage + '% ' +
             evt.config.file.name);
+            $(".postOverlay").html( progressPercentage + '% <div class="waitingFor">Uploading. Please wait...</div>');
         }).success(function (data, status, headers, config) {
             console.log('file ' + config.file.name + 'uploaded. Response: ' +
             JSON.stringify(data));
@@ -381,7 +387,6 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
              };
           // Notifiaction Success
              ngNotify.set('Successfully posted.', {
-                   sticky: true,
                    position:'top',
                    type:'success',
                    duration: 3000
@@ -430,7 +435,12 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
           console.log(things);
           console.log(!$scope.privacy);
           if(things.length == 0 && $scope.thing.content == ""){
-             alert("Post cannot be empty");
+            //alert("Post cannot be empty");
+            ngNotify.set('Empty post is not allowed.', {
+                   position:'top',
+                   type:'error',
+                   duration: 3000
+             });
           }
           else{
             $(".postOverlay").show();
