@@ -92,6 +92,7 @@ body
   border-top:0px;
   width:100%;
   border-spacing:0px;
+  table-layout: fixed;
 }
 
 .groups-about-content
@@ -268,6 +269,7 @@ body
   padding-left:15px;
   font-size:13px;
   color:#0072dc;
+  padding-top: 7px;
 }
 .gtab-name a
 {
@@ -293,15 +295,26 @@ body
 
 }
 .right-content
-{
- padding-left: 230px;
- padding-top: 4px;
+ {
+ padding-left: 20px;
+ float: left;
+ width: 450px;
 }
-.edit-categories
+.edit-groups-categories
 {
   padding:10px;
   border:1px solid #DDDBDB;
 }
+
+.edit-categories .input-button {
+  margin-left: 10px;
+}
+
+.edit-categories ul {
+  clear: both !important;
+  width: 90% !important;
+}
+
 .field-label-big
 {
   float:left;
@@ -333,13 +346,13 @@ body
 }
 .page_info
 {
-  padding-left: 20px;
+  padding-left: 10px;
   color: #DD4B39;
   font-size: 14px;
 }
 .msg
 {
-  margin-left:20px;
+  margin-left:10px;
   margin-bottom:10px;
 
 }
