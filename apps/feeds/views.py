@@ -15,8 +15,8 @@ def feed_dict(feed):
     'content' : feed.content,
     'link' : feed.link,
     'reportable': issubclass(feed.instance_type.model_class(), Reportable),
-    'content_type_pk': feed.instance_type.pk,
-    'object_pk': feed.instance.pk
+    'content_type_pk': feed.instance_type.pk if feed.instance_type else '',
+    'object_pk': feed.instance.pk if feed.instance else '',
   }
   if feed.user:
     dictionary.update({

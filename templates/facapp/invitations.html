@@ -1,0 +1,10 @@
+{% extends "facapp/base.html" %}
+
+{% block model_details %}
+	    <li>Invited on the topic {{ l.topic }} to {{ l.organisation }} for {{ l.category }}. Priority : {{ l.priority }}</li>
+
+{% endblock %}
+
+{% block model_details_to_delete %}
+	    Invited on the topic {{ model_to_delete.topic }} to {{ model_to_delete.organisation }} for {{ model_to_delete.category }}
+{% endblock %}

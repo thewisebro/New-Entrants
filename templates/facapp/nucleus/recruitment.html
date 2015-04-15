@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="{{ STATIC_URL }}css/recruitment/style.css" rel="stylesheet">
+	<script src="{{ STATIC_URL }}js/jquery/jquery.min.js"></script>
+	<script>
+	$( document ).ready(function() {
+		$("#right span").addClass("load");
+		/*$("#des").click(function(e){
+			e.preventDefault();
+			$(".description").css("display","none");
+			$("#des_desc").css("display","block");
+			$(this).addClass("active1");
+			$("#cod").removeClass("active2");
+		});
+		$("#cod").click(function(e){
+			e.preventDefault();
+			$(".description").css("display","none");
+			$("#cod_desc").css("display","block");
+			$(this).addClass("active2");
+			$("#des").removeClass("active1");
+		});*/
+	});
+
+	</script>
+
+	<meta name="viewport" content="width=device-width" />
+	<title> We are recruiting! </title>
+</head>
+
+<body>
+	<div class="container">
+		<div id="left">
+			<a href="http://blog.channeli.in" target="_blank"><img src="{{ STATIC_URL }}images/recruitment/img.png"/></a>
+			<div class="social-div">
+				<ul class="social">
+					<a href="https://www.facebook.com/IMGIITRoorkee" target="_blank"> <li> <img src="{{ STATIC_URL }}images/recruitment/facebook.png" /></li> </a>
+					<a href="http://www.quora.com/Information-Management-Group-IIT-Roorkee" target="_blank"> <li> <img src="{{ STATIC_URL }}images/recruitment/quora.png" /> </li> </a>
+					<a href="https://twitter.com/img_iitr" target="_blank"> <li> <img src="{{ STATIC_URL }}images/recruitment/twitter.png" /> </li> </a>
+				</ul>
+			</div>
+			<div class="info-div">
+				<ul class="info">
+					<a href="#"> <li> <img src="{{ STATIC_URL }}images/recruitment/mike.png"/> Introtalk<br/><div class="details">Jan 6th, 6:00 PM <br/>venue: LHC 105</div> </li> </a>
+					<a href="#"> <li> <img src="{{ STATIC_URL }}images/recruitment/test.png"/> Written test (Programmers)<br/><div class="details">Jan 8th, 6:00 PM <br/>venue: LHC 105</div> </li> </a>
+					<a href="#"> <li> <img src="{{ STATIC_URL }}images/recruitment/speech.png"/> Interviews<br/><div class="details">We'll contact you!</div> </li> </a>
+				</ul> <!-- end links -->
+			</div>
+			<div class="links-div">
+				<ul class="links">
+					<li> <a href="http://blog.channeli.in" target="_blank"> Blog </a> </li>
+					<li> <a href="/"> Channel I </a> </li>
+				</ul>
+			</div>
+		</div> <!-- end left -->
+
+		<!--<div id="strip">
+		</div>-->
+
+		<div id="right">
+			<span class="recruiting"> We're recruiting! </span>
+			<img src="{{ STATIC_URL }}images/recruitment/pad.png" />
+			<div class="description">Information Management Group is a student group. IITR website, Channel I, its apps, we work to make them as they are, and better. Recruitment season is here, and we're looking for some interested, enthusiastic designers and programmers! To know more about IMG, check out our <a href="http://blog.channeli.in/" target="_blank">Blog</a>.  </div>
+			<div class="coderordesigner">
+				<div href="" class="here" id="des"> Designers</div>
+				<div href="" class="here" id="cod"> Programmers</div>
+			</div> <!-- end coderordesigner -->
+			<div id="des-con" class="det-con">
+				<div class="designer">
+				</div> <!-- end designer -->
+				<div class="det">
+					<div>This time we're recruiting from <b>both first and second year! </b>  Prepare answers for the provided questionnaire. The selected ones will be then called for interview.</div>
+					<button class="firstyear" type="button" onclick="location.href='/static/pdfs/recruitment/IMG_DESIGNER_RECRUITMENT_2014_1st_year.pdf'">
+            First year paper
+          </button>
+					<button class="secondyear" type="button" onclick="location.href='/static/pdfs/recruitment/IMG_DESIGNER_RECRUITMENT_2014_2nd_year.pdf'">
+            Second year paper
+          </button>
+				</div>
+			</div>
+			<div id="cod-con" class="det-con">
+				<div class="coder">
+				</div> <!-- end coder -->
+				<div class="det">
+					<span>The programmers have to first go through a written test that'll be held on 8th Jan at Lecture Hall Complex. Those who get selected will be then called for interview.</span>
+					<div class="venue">Test venue: LHC 105</div> <div class="date">   Date: Jan 8th, 6:00 PM </div>
+				</div>
+			</div>
+		</div> <!-- end right -->
+	</div> <!-- end container -->
+</body>

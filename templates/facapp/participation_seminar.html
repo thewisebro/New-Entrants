@@ -1,0 +1,10 @@
+{% extends "facapp/base.html" %}
+
+{% block model_details %}
+	    <li>participated in {{ l.name }} held at {{ l.place }} on {{ l.date }}. Priority : {{ l.priority }}</li>
+
+{% endblock %}
+
+{% block model_details_to_delete %}
+	    participated in {{ model_to_delete.name }} held at {{ model_to_delete.place }} on {{ model_to_delete.date }}
+{% endblock %}

@@ -251,6 +251,7 @@ THIRD_PARTY_APPS = (
 CHANNELI_APPS = (
   'nucleus',
   'jukebox',
+  'facapp',
   'api',
   'moderation',
   'notices',
