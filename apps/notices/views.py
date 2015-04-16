@@ -20,6 +20,7 @@ from notices.forms import *
 from notices.utils import *
 import pytz
 from datetime import datetime
+from nucleus.models import GlobalVar
 
 PeopleProxyUrl = "http://people.iitr.ernet.in/"
 
@@ -129,7 +130,6 @@ class ContentFirstTimeBringNotices1(ListAPIView):              #Brings 50 notice
       if notice.id == int(nid):
         break
       i=i+1
-    global set1
     if i!=notice_list.count():
       begin = i-i%50
       end = begin + 50
@@ -141,8 +141,8 @@ class ContentFirstTimeBringNotices1(ListAPIView):              #Brings 50 notice
       set1["mode"] = "new"
       set1["page_no"] = page_no
       set1["status"] = "500"
+      GlobalVar["notices_set1"]=set1
       return queryset
-
     notice_list = Notice.objects.filter(expired_status=True).order_by('datetime_modified')       #Check in old notices
     i=0
     for notice in notice_list:
@@ -161,10 +161,12 @@ class ContentFirstTimeBringNotices1(ListAPIView):              #Brings 50 notice
       set1["mode"] = "old"
       set1["page_no"] = page_no
       set1["status"] = "500"
+      GlobalVar["notices_set1"]=set1
       return queryset
 
 class ContentFirstTimeBringNotices2(TemplateView):              #Brings 50 notices corresponding to the id in the url, when first opened in content mode
   def get(self, request):
+    set1 = GlobalVar["notices_set1"]
     set2 = simplejson.dumps(set1)
     return HttpResponse(set2, content_type="application/json")
 
