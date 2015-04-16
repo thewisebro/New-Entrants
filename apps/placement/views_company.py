@@ -128,7 +128,7 @@ def add(request) :
         messages.success(request, 'Successfully created the company.')
         return HttpResponseRedirect(reverse('placement.views_company.admin_list'))
     else :
-      form = forms.CompanyForm(auto_id='%s')
+      form = forms.CompanyForm()
     # Remove the default help text for a ManyToManyFeild
     form.fields['open_for_disciplines'].help_text = None
     return render_to_response('placement/basic_form.html', {

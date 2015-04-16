@@ -614,19 +614,21 @@ def search(request):
   else:
     query = SearchQuerySet().autocomplete(content_auto = value).models(filter_model)
 
-  final_posts , final_files ,posts , upload_files , courses1 , courses2 = [],[],[],[],[],[]
+  final_posts , final_files ,posts , upload_files , batches , final_batches = [],[],[],[],[],[]
   try:
-    posts = map(lambda result:Post.objects.get(id = result.pk),query_post)
-    upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk),query_uploadfile)
-    courses1 = map(lambda result:{'name':result.name,'code':result.code},query_courses_name)
-    courses2 = map(lambda result:{'name':result.name,'code':result.code},query_courses_code)
+    posts = map(lambda result:Post.objects.get(id = result.pk) if Post.objects.filter(id=result.pk).exists() else None,query_post)
+    upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk) if Uploadedfile.objects.filter(id=result.pk).exists() else None,query_uploadfile)
+    courses = map(lambda result:Course.objects.get(id = result.pk),query_courses_name+query_courses_code)
+    for course in courses:
+      batches.append(Batch.objects.filter(course = course).all())
   except:
     pass
 
-  final_posts = map(lambda result:result.as_dict() if result.deleted == False else None,posts)
-  final_files = map(lambda result:result.as_dict() if result.deleted == False else None,upload_files)
+  final_posts = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,posts)
+  final_files = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,upload_files)
+  final_batches = map(lambda result:result.batch_dict() ,batches)
 
-  results = {'posts':final_posts , 'files':final_files , 'courses':courses1+courses2 ,'status':100}
+  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'status':100}
   return HttpResponse(json.dumps(results), content_type="application/json")
 
 
