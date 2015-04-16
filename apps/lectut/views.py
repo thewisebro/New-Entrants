@@ -287,7 +287,7 @@ def getFileType(file_name):
     extension = extension.lower()
     if extension in ['jpg','png','jpeg','gif','exif','tiff']:
       file_type="image"
-    elif extension=='pdf':
+    elif extension in ['pdf']:
       file_type="pdf"
     elif extension in ['ppt', 'pptx' , 'pot','pptm','potx','potm','ppsx']:
       file_type="ppt"
@@ -297,6 +297,8 @@ def getFileType(file_name):
       file_type="zip"
     elif extension in ['xlsx','xlsv','xls','ods']:
       file_type="sheet"
+    elif extension in ['doc','docx','odt','rtf']:
+      file_type="doc"
     else:
       file_type="other"
   except:
