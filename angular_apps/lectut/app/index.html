@@ -75,9 +75,9 @@
             <div class="subSearchHeading">Courses</div>
             <div class="noResults" ng-hide="searchResults.courses.length != 0">No Results</div>
             <div class="subSearchContent" ng-show="searchResults.courses.length != 0">
-                <div ng-repeat="course in searchResults.courses |limitTo: 5" ng-click="clearSearch()">
-                  <a ng-href="#/courses/{[course.id]}">
-                    {[course.name]}
+                <div ng-repeat="course in searchResults.courses |limitTo: 5" ng-click="updateCourseId(course.id);clearSearch();">
+                  <a ng-href="#/course/{[course.id]}/feeds">
+                    {[course.course_name]}
                     <span class="courseCodeSearchTop">{[course.code]}</span>
                   </a>
                 </div>

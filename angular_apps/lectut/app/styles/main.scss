@@ -175,7 +175,7 @@ body {
    color: #c0c0c0;
 }
 .anonUser{
-  display:none;
+  //display:none;
   font-size: 45px;
   color: rgb(174, 174, 174);
   text-align: center;
@@ -306,10 +306,15 @@ body {
       }
       .sImageDiv{
         float:left;
+        font-size: 36px;
         width: 50px;
         height: 50px;
+        background:#FFF;
         overflow: hidden;
-        border: 1px solid #D6D6D6;
+        border-radius: 2px;
+        text-align:center;
+        margin-top:8px; 
+        //border: 1px solid #D6D6D6;
         >img{
           width: inherit;
           height: inherit;
@@ -318,7 +323,7 @@ body {
       .sFileData{
         margin-left: 60px;
         width: calc(100% - 97px);
-        height: 47px;
+        height: 60px;
         .sImageName{
          font-family: $osSB;
          margin-top:6px;
