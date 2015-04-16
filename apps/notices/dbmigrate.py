@@ -1,30 +1,33 @@
 from notices.models import *
+from notices.constants import *
 
 import psycopg2
 import MySQLdb
 import datetime
 
-for c in Category.objects.all():
-    up = Uploader(user=u, name=u.username+"_"+c.main_category+"_" +c.name.replace(" ", "_"), category=c)
-    up.save()
 
-conn1 = psycopg2.connect("dbname='onatesha1' user='postgres' host='localhost' password='computer'")
+conn1 = psycopg2.connect("dbname='onatesha' user='board_gamers' host='192.168.121.9' password='b0ardg@mers'")
 cur1 = conn1.cursor()
 print "connected to psql database.."
-cur1.execute("update notices set sent_from='Deans' where sent_from='Dean'")
 cur1.execute("select * from notices")
 rows = cur1.fetchall()
+print "rows fetched from psql.."
 
-conn2 = MySQLdb.connect(host="localhost", user="root", passwd="computer", db="channeli")
+conn2 = MySQLdb.connect(host="192.168.121.9", user="channeli", passwd="!ns@nity", db="newchanneli")
 cur2 = conn2.cursor()
 print "connected to mysql database."
 u=User.objects.get(username="admin")
-f = open('log.txt', 'r+')
+f = open('apps/notices/log.txt', 'r+')
 count=0
 for row in rows:
-  c=Category.objects.get(name=row[6])
+  cat=row[6]
+  if row[6]=='Dean':
+	cat='Deans'
+  if count==0:
+  	print cat
+  c=Category.objects.get(name=cat)
   uploader = Uploader.objects.get(user=u, category=c)
-  f1 = open("data/n" + str(row[0]), 'r')
+  f1 = open("apps/notices/data/n" + str(row[0]), 'r')
   html = f1.read()
   ref=row[5]
   emailsend=row[9]
@@ -57,22 +60,31 @@ for row in rows:
 print "new notices done\n"
 f.write("new notices done\n")
 
-cur1.execute("update old_notices set sent_from='Physics' where sent_from='Dr. Aalok Misra';")
-cur1.execute("update old_notices set sent_from='Deans' where sent_from='Dean'")
-cur1.execute("select * from old_notices")
-cur1.execute("delete from old_notices where sent_from='ADAP'")
-cur1.execute("delete from old_notices where sent_from='Paper Tech. Dept.'")
-cur1.execute("delete from old_notices where sent_from='JEE Office'")
-cur1.execute("update old_notices set sent_from='Admin' where sent_from='IMG'")
 cur1.execute("select * from old_notices")
 rows = cur1.fetchall()
 
 count=0
 for row in rows:
-  c=Category.objects.get(name=row[6])
+  cat=row[6]
+  if row[6]=='Dean':
+	cat='Deans'
+  elif row[6]=='Dr. Aalok Misra':
+	cat='Physics'
+  elif row[6]=='IMG':
+	cat='Admin'
+  elif row[6]=='ADAP':
+	continue
+  elif row[6]=='Paper Tech. Dept.':
+	continue
+  elif row[6]=='JEE Office':
+	continue
+  try:
+	  c=Category.objects.get(name=cat)
+  except:
+	print "category "+cat	
   uploader = Uploader.objects.get(user=u, category=c)
   try:
-	  f1 = open("data/n" + str(row[0]), 'r')
+	  f1 = open("apps/notices/data/n" + str(row[0]), 'r')
 	  html = f1.read()
   except:
 	print "file not opening " + str(row[0])

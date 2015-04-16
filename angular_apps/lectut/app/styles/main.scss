@@ -87,6 +87,7 @@
 }
 
 body {
+  display:none;
   font-family: $osR;
   background: #f5f7fa;
   overflow-y:scroll;	
@@ -106,6 +107,7 @@ body {
    color: #c0c0c0;
 }
 .anonUser{
+  display:none;
   font-size: 45px;
   color: rgb(174, 174, 174);
   text-align: center;
@@ -189,6 +191,7 @@ body {
         }
   }
   .searchResult{
+    //display:none;
     background: #FFF;
     width: 400px;
     color: #666;
@@ -406,7 +409,7 @@ body {
 // UserBlock
 
 #userblock{
-  padding: 5px 0px 15px 0px;
+  padding: 20px 0px 15px 0px;
   position:relative;
   height:auto;
   //background-color:$g0;  
@@ -448,6 +451,7 @@ body {
 }
 .myCourse{
   .signInBox{
+     display:none;
      padding: 20px;
      color: #ACACAC;
      font-size: 13px;
@@ -1905,16 +1909,16 @@ ul.comment-list-wrapper ul.comment-list-wrapper {
 
 // Colors 
 
-.c_lec{
+.c_Lecture{
   color:#ff902b;
 }
-.c_tut{
+.c_Tutorial{
   color:#37bc9b;
 }
-.c_exp{
+.c_Exam{
   color: #f2ca27;
 }
-.c_sol{
+.c_Solution{
   color: #9B59B6;
 }
 
