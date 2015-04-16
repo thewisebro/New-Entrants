@@ -24,6 +24,8 @@ AUTHORITIES = (
   ('stdd','Steno to Deputy Director'),
   ('QIP','QIP'),
   ('snt','Senate'),
+  ('admin','Admin'),
+  ('sports','Sports'),
   ('ISC','ISC'),
   )
 
@@ -63,11 +65,11 @@ DEPARTMENTS = (
   ('meta','Metallurgy'),
   ('ph','Physics'),
   ('wtr','Water Resources Development and Management'),
-  ('icc','Institute Computer Centre'),
+  ('icc','Computer Centre'),
   )
 
-AUTHORITIES_LIST = ["All", "Academics", "CPO", "DOSW", "Alumni Affairs", "Construction", "Central Library", "CD", "Deans", "Heads", "Hospital", "Registrar", "Finance", "Ps to Director", "Steno to Deputy Director", "QIP", "Senate", "ISC"]
-DEPARTMENTS_LIST = ["All", "Alternative Hydro Energy Centre", "Architecture and Planning", "Biotechnology", "Chemical", "Civil", "Chemistry", "Earth Science", "Earthquake", "Electrical", "Electronics and Computer Science", "Hydrology", "Humanities", "DPT", "Management Studies", "Mechanical and Indstrial", "Metallurgy", "Physics", "WRDM", "Institute Computer Centre"]
+AUTHORITIES_LIST = ["All", "Academics", "CPO", "DOSW", "Alumni Affairs", "Construction", "Central Library", "CD", "Deans", "Heads", "Hospital", "Registrar", "Finance", "Ps to Director", "Steno to Deputy Director", "QIP", "Senate", "Admin", "Sports", "ISC"]
+DEPARTMENTS_LIST = ["All", "Alternative Hydro Energy Centre", "Architecture and Planning", "Biotechnology", "Chemical", "Civil", "Chemistry", "Earth Science", "Earthquake", "Electrical", "Electronics and Computer Science", "Hydrology", "Humanities", "DPT", "Management Studies", "Mechanical and Indstrial", "Metallurgy", "Physics", "WRDM", "Computer Centre"]
 
 
 MAIN_CATEGORIES = {

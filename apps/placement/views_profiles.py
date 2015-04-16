@@ -401,6 +401,8 @@ def editset(request, model_name):
         if len(instances) > 0 :
           instances[-1].student = student
         # Save each instance individually as formset.save will throw exception if a form is marked as to be deleted.
+        for obj in formset.deleted_objects:
+          obj.delete()
         for instance in instances :
           instance.save()
         l.info (request.user.username + ': Update successfully- '+ model_name_spaced + '. Redirecting to home.')
