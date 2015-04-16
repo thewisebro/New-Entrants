@@ -127,6 +127,8 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
             $scope.courseid= $routeParams.courseId;
           });
         }
+        //$("body").show();
+        $(".bodyOverlay").hide();
     });
    
    // Search Global
