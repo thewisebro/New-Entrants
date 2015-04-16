@@ -80,7 +80,7 @@ class Post(models.Model):
     count = Comment.objects.filter(content_type=ct,object_pk=self.id).count()
     postData={
       'id':self.id,
-      'upload_user': str(self.upload_user.html_name),
+      'upload_user': str(self.upload_user.name),
       'user_image': str(self.upload_user.photo_url),
       'datetime_created':str(self.datetime_created),
       'batch':self.batch_dict(),

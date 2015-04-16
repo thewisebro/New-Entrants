@@ -283,7 +283,7 @@ def getFileType(file_name):
 #file_type = mime.from_file(file_name)
   file_name = str(file_name)
   try:
-    extension = file_name.split(".")[1]
+    extension = file_name.split(".")[-1]
     extension = extension.lower()
     if extension in ['jpg','png','jpeg','gif','exif','tiff']:
       file_type="image"
@@ -608,7 +608,7 @@ def search(request):
 #  import pdb;pdb.set_trace()
   if filter_model == None:
     query_post = SearchQuerySet().all().autocomplete(content_auto = value).models(Post)
-    query_uploadfile = SearchQuerySet().all().autocomplete(filename_auto = value).models(Uploadedfile)
+    query_uploadfile = SearchQuerySet().all().autocomplete(description_auto = value).models(Uploadedfile)
     query_courses_name =  SearchQuerySet().all().autocomplete(name_auto = value).models(Course)
     query_courses_code =  SearchQuerySet().all().autocomplete(code_auto = value).models(Course)
   else:
