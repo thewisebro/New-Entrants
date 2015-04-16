@@ -358,10 +358,10 @@ def editset(request, model_name):
 
     model_type = globals()[model_name]
     if plac_person.status in ('LCK', 'VRF') :
-      FormSetFactory = modelformset_factory(model_type, form=forms.ModelForm,
+      FormSetFactory = modelformset_factory(model_type, formset=forms.BaseModelFormSet,
                                             extra = 0, exclude = ('student', ))
     else :
-      FormSetFactory = modelformset_factory(model_type, form=forms.ModelForm,
+      FormSetFactory = modelformset_factory(model_type, formset=forms.BaseModelFormSet,
                                             can_delete = True, exclude = ('student', ))
     # Details which will be editable even if the student is locked or verified.
     # To make a field editable, just add the field name to the ediatbles tuple

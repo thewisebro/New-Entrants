@@ -182,8 +182,6 @@ function redirection()            //The main controller function which defines t
             $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
           //console.log("6starred_uploads_yes");
             $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
-            $('#select_bars').tooltip("destroy");
-            $('#select_bars').tooltip({content: "Go Back", position: {at: "right+5 top-20"}});
             $("#filters").slideUp(400);
           //console.log("7starred_uploads_yes");
             same_except_page_no=0;
@@ -200,8 +198,6 @@ function redirection()            //The main controller function which defines t
             $("#select_bars").removeAttr("onclick");
             $("#select_bars").attr("onclick", "display_categories(event);");
             $("#back").hide("fade", 200, function(){$("#bars").show("fade", 200);});
-            $('#select_bars').tooltip("destroy");
-            $('#select_bars').tooltip({content: "Display category menu", position: {at: "right+5 top-20"}});
             $("#filters").slideDown(400);
             same_except_page_no=0;
           }
@@ -406,15 +402,13 @@ function create_static_divs()                //Create static buttons like upload
       $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div id="settings" onclick="location.hash=\'#settings/email\'"><i id="gear" class="fa fa-cog"></i>Subscription Settings</div><div style="clear:both"></div></div>');
     //console.log("switched_to_notices_create : static divs created");
     $('#more').bind("click", bind_unbind_tooltip);
-    $('#main_check').tooltip({position: {at: "right+5 top-20"}});
-    $('#select_bars').tooltip({position: {at: "right+5 top-20"}});
 }
 
 function get_total_notices_no()       //This function is only meant for general notice display(categories other than All, All)
 {
       $.ajax({
         type: 'get',
-        url : 'notices/temp_max_notices/' + sub_mode + '/' + m_category + '/' + sub_category,
+        url : 'notices/temp_max_notices/' + sub_mode + '/' + m_category + '/' + sub_category + '/',
         success: function (data)
         {
           temp_last_page_notices = data.total_notices%10;
@@ -495,7 +489,7 @@ function gap_filler(llim, hlim, temp)
 {
         $.ajax({
         type: 'get',
-        url : 'notices/list_notices/' + sub_mode + '/' + m_category + '/' + sub_category + '/' + llim + '/' + hlim + '/' + temp,
+        url : 'notices/list_notices/' + sub_mode + '/' + m_category + '/' + sub_category + '/' + llim + '/' + hlim + '/' + temp + '/',
         success: function (data)
         {
             //console.log("entered gap_filler");
@@ -655,7 +649,7 @@ function display_notice(id)
   read_notice(id);
   $.ajax({
     type: 'get',
-    url : 'notices/get_notice/' + id,
+    url : 'notices/get_notice/' + id + '/',
     success: function(data)
     {
       $('#content').append(display_notice_html(data));
@@ -800,13 +794,13 @@ function star_notice(id, e)
               break;
           }
 
-        url = 'notices/read_star_notice/'+id+'/'+'remove_starred';
+        url = 'notices/read_star_notice/'+id+'/'+'remove_starred/';
         delete check_star_array[id];
           $("#star_shape_" + id).attr({style : "color:#AAA"});
       }
       else
       {
-        url = 'notices/read_star_notice/'+id+'/'+'add_starred';
+        url = 'notices/read_star_notice/'+id+'/'+'add_starred/';
 
         len = store_to_use.length;
         for(var i=0; i<len; i++)
@@ -835,7 +829,7 @@ function read_notice(id)
 {
 	if(!(id in read_array))
 	{
-		url = 'notices/read_star_notice/'+id+'/'+'add_read';
+		url = 'notices/read_star_notice/'+id+'/'+'add_read/';
 		read_array[id]=1;
     $.ajax({
     type: 'post',
@@ -1522,11 +1516,11 @@ function gap_filler_first_time(bring_what)
 {
 
         if(bring_what=="new")
-          url = 'notices/list_notices/new/All/All/0/49/0';
+          url = 'notices/list_notices/new/All/All/0/49/0/';
         else if(bring_what=="old")
-          url = 'notices/list_notices/old/All/All/0/49/0';
+          url = 'notices/list_notices/old/All/All/0/49/0/';
         else
-          url = 'notices/list_notices/' + sub_mode + '/' + m_category + '/' + sub_category + '/0/49/0';
+          url = 'notices/list_notices/' + sub_mode + '/' + m_category + '/' + sub_category + '/0/49/0/';
 
         $.ajax({
         type: 'get',
@@ -1574,12 +1568,12 @@ function bring_content_first_time_notices()               //If the mode is conte
         //console.log("entered bring_content_first_time_notices");
         $.ajax({
         type: 'get',
-        url : 'notices/content_first_time_notices1/' + id,
+        url : 'notices/content_first_time_notices1/' + id + '/',
         success: function (data)
         {
             $.ajax({
             type: 'get',
-            url : 'notices/content_first_time_notices2',
+            url : 'notices/content_first_time_notices2/',
             success: function (set1)
             {
               var begin = set1["begin"];

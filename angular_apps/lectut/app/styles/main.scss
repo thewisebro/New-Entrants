@@ -175,7 +175,7 @@ body {
    color: #c0c0c0;
 }
 .anonUser{
-  display:none;
+  //display:none;
   font-size: 45px;
   color: rgb(174, 174, 174);
   text-align: center;
@@ -267,9 +267,11 @@ body {
     //padding: 10px;
     margin-left: 250px;
     border-radius: 5px;
-    margin-top: 4px;
+    margin-top: -9px;
     border: 1px solid #DADADA;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+    max-height:550px;
+    overflow-y:scroll;
     .noResults{
       padding: 8px 8px;
     }
@@ -295,6 +297,19 @@ body {
       padding: 2px 8px;
     }
     .subSearchContent{
+
+        >a{
+          text-decoration: blink;
+        }
+      .courseSearchIndi{
+        color: #848484;
+        border-bottom: 1px solid #EEE;
+        padding: 10px 8px;
+        &:hover{
+          color: white;
+          background: #3498db;
+        }
+      }
       >div{
       padding: 5px 8px;
       cursor: pointer;
@@ -306,10 +321,15 @@ body {
       }
       .sImageDiv{
         float:left;
+        font-size: 36px;
         width: 50px;
         height: 50px;
+        background:#FFF;
         overflow: hidden;
-        border: 1px solid #D6D6D6;
+        border-radius: 2px;
+        text-align:center;
+        margin-top:8px; 
+        //border: 1px solid #D6D6D6;
         >img{
           width: inherit;
           height: inherit;
@@ -318,12 +338,14 @@ body {
       .sFileData{
         margin-left: 60px;
         width: calc(100% - 97px);
-        height: 47px;
+        height: 60px;
         .sImageName{
          font-family: $osSB;
          margin-top:6px;
          word-break: normal;
          overflow: hidden;
+         text-overflow: ellipsis;
+         white-space: nowrap;
         }
         .sImagePostedBy{
          font-size: 11px;
@@ -1536,7 +1558,7 @@ table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border t
         width:70px;
         height:70px;
         overflow:hidden;
-        border-radius:10px; 
+        border-radius:60px; 
         margin-bottom: 10px; 
         >img{
           width:inherit;
@@ -1581,7 +1603,7 @@ table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border t
         width:60px;
         height:60px;
         overflow:hidden;
-        border-radius:10px;  
+        border-radius:60px;  
         >img{
           width:inherit;
           height:inherit;
