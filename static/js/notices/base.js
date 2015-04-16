@@ -1701,5 +1701,3 @@ function create_breadcrumb_html(tag, code)
 {
     return Handlebars.notices_templates.create_breadcrumb({tag : tag, code : code});
 }
-
-);
