@@ -30,8 +30,9 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
             //console.log("-----------------------");
             //console.log(d);
             //alert(d.batch);
-            $scope.courseName = d.course_name;
-            $scope.courseCode = d.code;
+            console.log(d);
+            $scope.courseName = d.batch_info.course_name;
+            $scope.courseCode = d.batch_info.code;
             $scope.courseid = id;
           });
     }
@@ -298,7 +299,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
            $scope.toggled = true;
           },10);
         }
-        console.log($scope.toggled);
+        //console.log($scope.toggled);
     }
     
     angular.element(document).on('click', function(e){ 
@@ -353,7 +354,12 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
             //console.log('progress: ' + progressPercentage + '% ' +
             //evt.config.file.name);
-            $(".postOverlay").html( progressPercentage + '% <div class="waitingFor">Uploading. Please wait...</div>');
+            if($scope.filesAdded){
+            $(".postOverlay").html( progressPercentage + '% <div class="waitingFor">Upload in progress. Please wait...</div>');
+            }
+            else{
+            $(".postOverlay").html('<div class="waitingFor">Posting ...</div>');
+            }
         }).success(function (data, status, headers, config) {
             //console.log('file ' + config.file.name + 'uploaded. Response: ' +
             //JSON.stringify(data));
@@ -392,6 +398,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
   $scope.thing = {'content':'','data':''};
 
   $scope.finalSend = function(){
+        
          var things =  [];
          var typeData = [];
          var temp = $scope.fileArray.Lecture.length;
@@ -428,6 +435,12 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
              });
           }
           else{
+            if(things.length !=0){
+              $scope.filesAdded = true;
+            }
+            else{
+              $scope.filesAdded = false;
+            }
             $(".postOverlay").show();
             upload(things,typeData,$scope.thing.content);
           }
