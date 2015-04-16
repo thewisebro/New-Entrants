@@ -30,7 +30,7 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
             //console.log("-----------------------");
             //console.log(d);
             //alert(d.batch);
-            //console.log(d);
+            console.log(d);
             $scope.courseName = d.batch_info.course_name;
             $scope.courseCode = d.batch_info.code;
             $scope.courseid = id;
