@@ -1702,10 +1702,4 @@ function create_breadcrumb_html(tag, code)
     return Handlebars.notices_templates.create_breadcrumb({tag : tag, code : code});
 }
 
-$(window).load(function(){
-
-$(".notice_date").each(function() {
-        $(this).text($(this).text().substr(0,10));
-        });
-}
 );
