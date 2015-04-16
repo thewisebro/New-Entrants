@@ -21,5 +21,5 @@ urlpatterns = patterns('',
     url(r'^content_first_time_notices1/(?P<nid>\w+)/$', ContentFirstTimeBringNotices1.as_view(), name = 'getnotice'),
     url(r'^content_first_time_notices2/$', ContentFirstTimeBringNotices2.as_view(), name = 'getnotice'),
     url(r'^list_notices/(?P<mode>\w+)/(?P<mc>[\w\ ]+)/(?P<subc>[\w\ ]+)/(?P<llim>\d+)/(?P<hlim>\d+)/(?P<id>\d+)/$', NoticeListView.as_view(), name='noticelist'),
-    url(r'^browse/(?P<category_name>\w+)/$'+path_end,'notices.views.browse'),
+    url(r'^browse/(?P<category_name>[\w\ ]+)/$'+path_end,'notices.views.browse'),
 )
