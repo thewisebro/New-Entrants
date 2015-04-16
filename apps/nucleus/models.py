@@ -66,6 +66,9 @@ class UserPhoto(CropImage):
   def get_instance(cls, request, pk):
     if request.user.is_superuser:
       return User.objects.get(pk=pk)
+    elif User.objects.get(pk=pk).in_group('Student Group'):
+      if User.objects.get(pk=pk).group.admin.user == request.user:
+        return User.objects.get(pk=pk)
     else:
       return request.user
 
