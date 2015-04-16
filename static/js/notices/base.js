@@ -1049,11 +1049,17 @@ function read_star_checklist(t)
       {
         read_array[a[i]]=1;
         $("#notice_"+a[i]).attr({class : "notice_info read"});
+        $(".notice_date").attr({class : "notice_date read"});
+        $(".notice_source").attr({class : "notice_source read"});
+        $(".notice_subject").attr({class : "notice_subject read"});
       }
       else
       {
         delete read_array[a[i]];
         $("#notice_"+a[i]).attr({class : "notice_info unread"});
+        $(".notice_date").attr({class : "notice_date unread"});
+        $(".notice_source").attr({class : "notice_source unread"});
+        $(".notice_subject").attr({class : "notice_subject unread"});
       }
     }
     q=q.substring(0,q.length-1);
