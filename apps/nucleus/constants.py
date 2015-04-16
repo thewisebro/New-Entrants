@@ -46,9 +46,9 @@ channeli_apps = {
   'dc++' : {'name':'DC++', 'url':'/dc++/'},
 }
 
-student_apps = ['acad','jukebox','dc++','lectut','placement',
+student_apps = ['acad','lectut','yaadein','jukebox','dc++','placement',
                 'buysell','grades', 'thinktank','lostfound','softwares',
-                'peoplesearch','messmenu','research','yaadein']
+                'peoplesearch','messmenu','research']
 
 faculty_apps = ['facapp','lectut','placement',
                 'thinktank','lostfound','softwares','peoplesearch']
