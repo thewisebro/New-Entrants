@@ -467,6 +467,7 @@ function gap_scanner()                 // Fills the appropriate gaps with notice
             else if(i == b)
 	    {
 		    console.log("enter1");
+		    console.log($("#page_numbers ul")[0]==undefined);
               gap_end = i;
 	      gap_filler(gap_begin, gap_end, temp_store[0].id);
 	      gap_begin = 0;
@@ -588,6 +589,7 @@ function search_change_page(page_no)
 function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t here stands for temp, representing the local variables
 {
       console.log("removed no_border")
+      console.log($("#page_numbers ul")[0]==undefined)
       $("#notice_list").removeClass("no_border");
       console.log("entered list_notices : " + page_no);
       $('div#notice_list').empty();
@@ -643,6 +645,9 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
       $(".notice_date").each(function() {
               $(this).text($(this).text().substr(0,10));
               });
+      console.log("reh gya bhai")
+      if($("#page_numbers ul")[0]==undefined)
+          load_numbers_bar(ttotal_pages,sub_mode + "_");
 }
 
 function display_notice(id)
@@ -1696,11 +1701,3 @@ function create_breadcrumb_html(tag, code)
 {
     return Handlebars.notices_templates.create_breadcrumb({tag : tag, code : code});
 }
-
-$(window).load(function(){
-
-$(".notice_date").each(function() {
-        $(this).text($(this).text().substr(0,10));
-        });
-}
-);
