@@ -762,7 +762,7 @@ function bring_search_results()
       //console.log(url);
       $.ajax({
           type: 'get',
-          url : 'notices/search/' + sub_mode + '/' + m_category + '/' + sub_category + '/?q=' + url + '/',
+          url : 'notices/search/' + sub_mode + '/' + m_category + '/' + sub_category + '/?q=' + url,
           success: function (data)
           {
             len=Object.keys(data).length;
