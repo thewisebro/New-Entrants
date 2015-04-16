@@ -393,7 +393,8 @@ function create_static_divs()                //Create static buttons like upload
     if(star_perm==1)
       $('#additional').append(additional_features_html());
     $('#content').append('<div id="notice_list"></div><br>');
-    $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div id="settings" onclick="location.hash=\'#settings/email\'"><i id="gear" class="fa fa-cog"></i>Subscription Settings</div><div style="clear:both"></div></div>');
+    if(star_perm==1)
+      $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div id="settings" onclick="location.hash=\'#settings/email\'"><i id="gear" class="fa fa-cog"></i>Subscription Settings</div><div style="clear:both"></div></div>');
     console.log("switched_to_notices_create : static divs created");
     $('#more').bind("click", bind_unbind_tooltip);
     $('#main_check').tooltip({position: {at: "right+5 top-20"}});
