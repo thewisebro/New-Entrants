@@ -622,6 +622,8 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
             else
               context["star"] = 0;
 
+            console.log("there you go")
+            console.log(context)
             $('#notice_list').append(list_notices_html(context));
 
       }

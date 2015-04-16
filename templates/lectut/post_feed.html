@@ -10,7 +10,7 @@
 
 {% block feed_detail %}
 {% if instance.count == 1 %}
-  Added a post in {{ instance.batch.course.name|title }} <span style ="float:right"><i class='fa fa-file-o'></i> {{ instance.count }} file</span>
+  Added a post in {{ instance.batch.course.name|title }} ( {{instance.batch.course.code}} )<span style ="float:right"><i class='fa fa-file-o'></i> {{ instance.count }} file</span>
 {% else %}
   Added a post in {{ instance.batch.course.name|title }}<span style ="float:right"><i class='fa fa-file-o'></i> {{ instance.count }} files</span>
 {% endif %}
