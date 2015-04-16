@@ -604,7 +604,6 @@ def getReminder(request):
 @CORS_allow
 def search(request):
   value = request.GET.get('q')
-  value = str(value)
   filter_model = request.GET.get('model')
 #  import pdb;pdb.set_trace()
   if filter_model == None:
