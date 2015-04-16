@@ -35,8 +35,22 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
             $scope.courseid = id;
           });
     }
-    
+
+    function updateCourseName(){
+      if($routeParams.courseId){
+         //console.log($routeParams.courseId);
+         $scope.updateCourseId($routeParams.courseId);
+      }
+      else{
+        setTimeout(function(){ updateCourseName(); }, 500);
+      }
+    }
+  
+    updateCourseName();
+
+    //$scope.updateCourseId($routeParams.courseId);
     $scope.selectedCourse = $routeParams.courseId;
+    console.log($scope.courseId);
     
     // Check if a particular link is active
     // Is active
