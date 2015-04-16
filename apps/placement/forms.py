@@ -16,6 +16,10 @@ class Place(forms.ModelForm):
     exclude = ('student', 'no_of_companies_placed', 'status', 'placed_company_category','is_debarred' )
 
 class CompanyForm(forms.ModelForm) :
+  def __init__(self, *args, **kwargs):
+    super(CompanyForm, self).__init__(*args, **kwargs)
+    self.auto_id = '%s'
+
   #Search for a better method
   contact_person = forms.ModelChoiceField(queryset = models.CPTMember.objects.filter(year = current_session_year()), required=False)
   open_for_disciplines = forms.ModelMultipleChoiceField(queryset=Branch.objects.all().order_by('degree','department'), widget=forms.CheckboxSelectMultiple)

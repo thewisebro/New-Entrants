@@ -85,7 +85,6 @@ def company_search(request):
 
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def edit_slot(request, slot_id):
-  import ipdb; ipdb.set_trace()
   message = ''
   if slot_id:
     try:

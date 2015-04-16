@@ -6,6 +6,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django.conf.settings")
 from django.conf import settings
 '''
 import xlrd
+import logging
 from nucleus.models import Course
 
 workbook = xlrd.open_workbook('apps/lectut/scripts/courses_all.xlsx')
@@ -30,6 +31,7 @@ while curr_row < num_rows:
     success_counter +=1
   except Exception as e:
     print str(curr_row)+' Error here'+str(e)
+    logging.warning('Line number: '+str(curr_row)+' Course code: '+str(code))
     fail_counter +=1
 
   curr_row +=1

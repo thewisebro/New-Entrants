@@ -124,7 +124,7 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
             console.log(d);
             $scope.courseName = d.course_name;
             $scope.courseCode = d.code;
-            $scope.courseid= id;
+            $scope.courseid= $routeParams.courseId;
           });
         }
     });
@@ -610,20 +610,20 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                  <i ng-show='file.file_type == "other"' class="fa fa-file"></i>
                   */
                  if(full.file_type == "image"){
-                   html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a download ng-href="{[base_domain]}/'+ full.filepath+'">'+full.description+'</a></span>';
+                   html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a download ng-href="{[base_domain]}/lectut_api/download/'+ full.id+'">'+full.description+'</a></span>';
                  } 
                  else if(full.file_type == "ppt"){
-                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
                  }
                  else if(full.file_type == "zip"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
                  }
 
                  else if(full.file_type == "pdf"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
                  }
                  else{
-                   html += '<i class="fa fa-file" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/'+full.filepath+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
                  }
                 html += '<span class="fileShowUser">by: '+full.username+'</span>';
                 html += '<span class="fileShowDownloads">Downloads: '+full.download_count+'</span>';
@@ -671,6 +671,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
               });
             });
           */
+          /*
          var table = $(".dataTable").DataTable();
          console.log(table);
          //table.column(0).visible('false'); 
@@ -682,7 +683,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
              .on( 'change', function () {
               /*var val = $.fn.dataTable.util.escapeRegex(
                   $(this).val()
-              );*/
+              );
               var val;
               var temp = $(this).val();
               if(temp == "Lecture"){
@@ -703,7 +704,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                column.data().unique().sort().each( function ( d, j ) {
                  select.append( '<option value="'+d+'">'+d+'</option>' )
                });
-         } });
+         } });*/
      });
 
        // Table Upload Type implementation
@@ -719,7 +720,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
          table.columns().indexes().flatten().each( function ( i ) {
              if(i==1){
              var column = table.column( i );
-             var select = $('<select id="fileFilterType"><option value="">All Files</option></select><span id="fileFilterArrow">&#x25BC;</span>')
+             var select = $('<select id="fileFilterType"><option value="">All Files</option></select><div id="fileFilterArrow">&#x25BC;</div>')
              .appendTo( $(".dataTables_wrapper") )
              .on( 'change', function () {
                var val = $.fn.dataTable.util.escapeRegex(
@@ -732,10 +733,11 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                } );
 
               //column.data().unique().sort().each( function ( d, j ) {
-               select.append( '<option value="lec">Lectures</option>' );
-               select.append( '<option value="tut">Tutorial</option>' );
-               select.append( '<option value="exp">Exam Papers</option>' );
-               select.append( '<option value="sol">Solution</option>' );
+               select = $("#fileFilterType");
+               select.append( '<option value="Lecture">Lectures</option>' );
+               select.append( '<option value="Tutorial">Tutorials</option>' );
+               select.append( '<option value="Exam Paper">Exam Papers</option>' );
+               select.append( '<option value="Solution">Solutions</option>' );
                //select.append( '<option value="que">'+Question+'</option>' );
               // } );
          } });
