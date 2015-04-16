@@ -9,7 +9,7 @@ import simplejson
 from notices.constants import *
 
 class AbstractNotice(models.Model):
-  subject = models.CharField(max_length=100)
+  subject = models.CharField(max_length=200)
   reference = models.CharField(max_length=100, blank=True)
   expire_date = models.DateField()
   content = CKEditorField()
