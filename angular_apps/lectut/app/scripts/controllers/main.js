@@ -42,7 +42,10 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
          $scope.updateCourseId($routeParams.courseId);
       }
       else{
-        setTimeout(function(){ updateCourseName(); }, 500);
+        //console.log("asd");
+        if( $rootScope.whichView != "CourseHomeCtrl"){
+          setTimeout(function(){ updateCourseName(); }, 100);
+        }
       }
     }
   
