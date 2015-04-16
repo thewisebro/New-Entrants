@@ -41,12 +41,12 @@
         <div class="linksRight">
         <ul>
           <li>
-            <a href="http://channeli.in/" class="logOut">
+            <a href="/" class="logOut">
             Channeli
             </a>
           </li>
           <li>
-            <a href="/logout/" class="logOut">
+            <a ng-show="logIn" href="/logout/" class="logOut">
             Logout
             </a>
           </li>
@@ -59,7 +59,8 @@
         <span class="searchIconTop"><i class="fa fa-search"></i></span>
         <div class="crossTop" ng-click="clearSearch()" ng-show="queryString.length != 0"><i class="fa fa-times-circle"></i></div>
         <input class="mainSearch" type="text" placeholder="Search for courses, files and posts..." ng-model="queryString"  ng-change="searchFunc(queryString)"></input>
-        <a ng-href="#/" ng-class="{activeHome:isHome('/')}"><div class="homeTab">Home</div></a>
+        <a ng-href="#/" ng-class="{activeHome:isHome('/')}" ng-show="logIn"><div class="homeTab">Home</div></a>
+        <a ng-href="#/" ng-class="{activeHome:isHome('/')}" ng-show="!logIn" ><div style="margin-right:-131px"class="homeTab">Home</div></a>
         </div>
         <div class="searchResult" ng-show="queryString.length != 0">
            <div style="padding:10px;" ng-show="(searchResults.files.length == 0 && searchResults.courses.length == 0 && searchResults.posts.length == 0 )&& queryString.length != 0"> No results found
@@ -260,7 +261,9 @@
     <!-- build:include production.html -->
       <script type="text/javascript" src='scripts/development.js'></script>
     <!-- /build -->
-
+    <script type="text/javascript">
+      $( window ).load($(body).show();alert("s");});
+    </script>
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/main.services.js"></script>
