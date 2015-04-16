@@ -29,13 +29,13 @@ class BaseUpload(models.Model):
           self.__class__.objects.all().update(featured = False)
      super(Model, self).save(*args, **kwargs)"""
 
-Act_Types = (
-            ('lec' , 'Lecture'),
-            ('tut' , 'Tutorial'),
-            ('sol' , 'Solution'),
-            ('que' , 'Question'),
-            ('exm' , 'Exam Papers'),
-            )
+Act_Types = {
+            'lec' : 'Lecture',
+            'tut' : 'Tutorial',
+            'sol' : 'Solution',
+            'que' : 'Question',
+            'exm' : 'Exam Papers',
+}
 
 class DeleteManager(models.Manager):
   def get_query_set(self):
@@ -65,7 +65,7 @@ class Post(models.Model):
       students = currentBatch.students.all()
       users = map(lambda x:x.user, students)
       noti_text = str(self.upload_user.name) + " has added a post on Lectut"
-      Notification.save_notification('lectut',noti_text,'#/course/'+str(currentBatch.id)+'/posts/'+str(post.id)+'/',users,self)
+      Notification.save_notification('lectut',noti_text,'/lectut/#/course/'+str(currentBatch.id)+'/feeds/'+str(post.id)+'/',users,self)
     else:
       post = super(Post , self).save(*args, **kwargs)
     return post
@@ -132,11 +132,15 @@ class Uploadedfile(BaseUpload):
   def as_dict(self):
         filepath = str(self.upload_file)
         filename = filepath.split("/")[2]
+        if self.file_type == 'image':
+          filepath = 'media/'+filepath
+        else:
+          filepath = ''
         fileData={
            'id':self.id,
            'post':self.post.id,
            'upload_file':filename,
-           'filepath':'media/'+filepath,
+           'filepath':filepath,
            'username':str(self.post.upload_user.name),
            'datetime_created':str(self.datetime_created),
            'description':self.description,

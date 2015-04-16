@@ -15,7 +15,7 @@
 
 {% block content %}
   {% if not already_replied %}
-    <form action='' method='POST'>
+    <form action='' method='POST' style='margin-top:10px'>
     {% csrf_token %}
     <textarea class='textarea-field' id="birthday-msg" name="msg" autofocus="true"></textarea>
     <input class='input-button' type="submit" name="submit" value="reply"/>

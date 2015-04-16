@@ -115,7 +115,7 @@
                     <div class="postButton" ng-click="finalSend()">
                       Post
                     </div>
-                    <div class="profPrivacy">
+                    <div class="profPrivacy" ng-show='auth.user.role == "Faculty"'>
                       <div class="onoffswitch">
                           <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked ng-model="privacy">
                           <label class="onoffswitch-label" for="myonoffswitch">
@@ -123,6 +123,7 @@
                            <!-- <span class="onoffswitch-switch"></span>-->
                           </label>
                       </div>
+                      <div style="float: right; font-size: 13px; color: #999; padding-right: 10px; line-height: 27px;">Only students in this batch can see private post.</div>
                     </div>
                     <div>
                        <span ng-click="changeToggle()" ng-class="{'addFiles': !toggled, 'addFilesWhite': toggled}">
@@ -138,6 +139,10 @@
       </div>
           </div>
   </div>
+   </div>
+
+   <div class="noPosts" ng-show="posts.length == 0">
+      No posts here.
    </div>
    <div class="postDiv" ng-repeat="post in posts">
 
@@ -198,6 +203,8 @@
           </div>
         </div>
 </div>
+
+
 <!--
             <div class="postComments">
               <div class="commentTextDiv">

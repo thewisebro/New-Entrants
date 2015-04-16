@@ -15,7 +15,8 @@ function load_handler(e){
   }
   else
     show_links(tab);
-  show_default_right_column();
+  if(['apps','games','links','tools'].some(function(x){return x==tab;}))
+    show_default_right_column();
 }
 
 function unload_handler(e){
