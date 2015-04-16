@@ -103,3 +103,5 @@ pip install elasticsearch
 # Image optimizing tools
 apt-get install -y optipng
 apt-get install -y libjpeg-progs
+
+pip install requests

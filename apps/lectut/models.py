@@ -34,7 +34,8 @@ Act_Types = {
             'tut' : 'Tutorial',
             'sol' : 'Solution',
             'que' : 'Question',
-            'exm' : 'Exam Papers',
+            'exp' : 'Exam Papers',
+            'other':'other'
 }
 
 class DeleteManager(models.Manager):
@@ -145,7 +146,7 @@ class Uploadedfile(BaseUpload):
            'datetime_created':str(self.datetime_created),
            'description':self.description,
            'file_type':self.file_type,
-           'upload_type':self.upload_type,
+           'upload_type':Act_Types[self.upload_type],
            'download_count':self.download_count,
         }
         return fileData
