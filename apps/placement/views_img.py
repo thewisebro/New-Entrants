@@ -419,7 +419,6 @@ def company_coordinator_today_view(request):
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
 def add_company_coordinator(request):
-  import ipdb; ipdb.set_trace()
   if request.method == 'POST':
     form = AddCoordinatorForm(request.POST)
     if form.is_valid():
