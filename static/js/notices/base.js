@@ -100,6 +100,7 @@ $(document).on("login", function(){
     initialize_global_variables();
     first_time_visit=0;
     hashtags = [h1, h2, h3, h4, h5];
+
     $(document).trigger("load_app_notices", hashtags);
   }
 });
@@ -220,6 +221,11 @@ function redirection()            //The main controller function which defines t
             create_static_divs();
             static_divs_created=1;            //made 1, so that switched_to_notices is not called again, 4 lines later
           }
+        }
+        if($("#notices-header")[0]==undefined)
+        {
+            create_static_divs();
+            static_divs_created=1;            //made 1, so that switched_to_notices is not called again, 4 lines later
         }
 
         static_divs_created=0;            //made 0, so that switched_to_notices is not called again. Whichever function creates the static divs makes sure that the value of this variable is non-zero, so that the other reasons don't create them again.
