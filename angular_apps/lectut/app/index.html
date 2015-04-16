@@ -89,7 +89,13 @@
                <div ng-repeat="file in searchResults.files | limitTo: 5">
                 <a download="" ng-href="{[base_domain]}/lectut_api/download/{[file.id]}">
                   <div class="sImageDiv">
-                    <img ng-src="{[base_domain]}/{[file.filepath]}"></img>
+                    <img ng-show='file.file_type == "image"' ng-src="{[base_domain]}/{[file.filepath]}"></img>
+                    <i ng-show='file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>  
+                    <i ng-show='file.file_type == "ppt"' class="fa fa-file-powerpoint-o"></i> 
+                    <i ng-show='file.file_type == "zip"' class="fa fa-file-archive-o"></i> 
+                    <i ng-show='file.file_type == "sheet"' class="fa fa-file-excel-o"></i>
+                    <i ng-show='file.file_type == "doc"' class="fa fa-file-word-o"></i>
+                    <i ng-show='file.file_type == "other"' class="fa fa-file-o"></i>
                   </div>
                   <div class="sFileData">
                     <div class="sImageName">

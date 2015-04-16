@@ -35,8 +35,25 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
             $scope.courseid = id;
           });
     }
-    
+
+    function updateCourseName(){
+      if($routeParams.courseId){
+         //console.log($routeParams.courseId);
+         $scope.updateCourseId($routeParams.courseId);
+      }
+      else{
+        //console.log("asd");
+        if( $rootScope.whichView != "CourseHomeCtrl"){
+          setTimeout(function(){ updateCourseName(); }, 100);
+        }
+      }
+    }
+  
+    updateCourseName();
+
+    //$scope.updateCourseId($routeParams.courseId);
     $scope.selectedCourse = $routeParams.courseId;
+    console.log($scope.courseId);
     
     // Check if a particular link is active
     // Is active
@@ -78,7 +95,7 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
            window.location = redirect_url;
        }
        else{
-        alert("asd");
+        //alert("asd");
        }
     }
 
@@ -234,7 +251,7 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
                  //console.log("Deleted this file man"+ id);
                  $rootScope.commonPosts[parentIndex].files.splice(index,1);
                  sweetAlert("Deleted!", "File has been deleted.", "success");
-                 alert("sd");
+                 //alert("sd");
                  if($rootScope.commonPosts[parentIndex].files.length == 0 && $rootScope.commonPosts[parentIndex].post.content == ""){
                       $rootScope.commonPosts.splice(parentIndex,1)
                  }
@@ -399,9 +416,9 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
           things = things.concat(myfile.ExamPaper);
           things = things.concat(myfile.Solution);
 
-          console.log("Things dajlksdjsa ld");
-          console.log(things);
-          console.log(!$scope.privacy);
+          //console.log("Things dajlksdjsa ld");
+          //console.log(things);
+          //console.log(!$scope.privacy);
           if(things.length == 0 && $scope.thing.content == ""){
             //alert("Post cannot be empty");
             ngNotify.set('Empty post is not allowed.', {
@@ -420,7 +437,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 
   $scope.deleteItem = function(item, type){
         $scope.fileArray[type].splice(item,1);
-        console.log($scope.fileArray[type]);
+        //console.log($scope.fileArray[type]);
   }
 
   // ------------------------- Comments -----------------------
@@ -433,7 +450,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
       $('#postComments_'+id).addClass("open");
       var promiseComments = Comments.getComments(id);
             promiseComments.then(function(x){
-            console.log("------Common fgeed commne-----------");
+            //console.log("------Common fgeed commne-----------");
             //console.log(id);
             $('#postComments_'+id).append(x);
       });
@@ -623,8 +640,14 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                  else if(full.file_type == "pdf"){
                    html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
                  }
+                  else if(full.file_type == "sheet"){
+                   html += '<i class="fa fa-file-excel-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                 }
+                else if(full.file_type == "doc"){
+                   html += '<i class="fa fa-file-word-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                 }
                  else{
-                   html += '<i class="fa fa-file" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
                  }
                 html += '<span class="fileShowUser">by: '+full.username+'</span>';
                 html += '<span class="fileShowDownloads">Downloads: '+full.download_count+'</span>';
