@@ -1,4 +1,4 @@
-#from notices.models import *
+from notices.models import *
 
 import psycopg2
 import MySQLdb
