@@ -914,7 +914,7 @@ function select_all()
         }
         for(var i=0; i<k; i++)
         {
-            id = $('.checkboxes')[i].id[6]+$('.checkboxes')[i].id[7];
+            id = $('.checkboxes')[i].id.substr(6);
             checklist[parseInt(id)]=1;
         }
     }
