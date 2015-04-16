@@ -2,7 +2,7 @@
 <html class="no-js">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Lectut</title>
     <!-- build:[href] /lectut/ -->
     <base href="/" />
     <!-- /build -->
@@ -75,13 +75,12 @@
             <div class="subSearchHeading">Courses</div>
             <div class="noResults" ng-hide="searchResults.courses.length != 0">No Results</div>
             <div class="subSearchContent" ng-show="searchResults.courses.length != 0">
-                <div ng-repeat="course in searchResults.courses |limitTo: 5" ng-click="updateCourseId(course.id);clearSearch();">
-                  <a ng-href="#/course/{[course.id]}/feeds">
-                    {[course.course_name]}
-                    <span class="courseCodeSearchTop">{[course.code]}</span>
+                  <a ng-href="#/course/{[course.id]}/feeds" ng-repeat="course in searchResults.courses |limitTo: 5">
+                    <div  ng-click="updateCourseId(course.id);clearSearch();" class="courseSearchIndi">
+                      {[course.course_name]}
+                      <span class="courseCodeSearchTop" style="float:right;">{[course.code]}</span>
+                    </div>
                   </a>
-                </div>
-              </a>
             </div>
             <div class="subSearchHeading">Files</div>
             <div class="noResults" ng-hide="searchResults.files.length != 0">No Results</div>
