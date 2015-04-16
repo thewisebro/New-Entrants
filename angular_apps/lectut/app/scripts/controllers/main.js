@@ -30,8 +30,9 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
             //console.log("-----------------------");
             //console.log(d);
             //alert(d.batch);
-            $scope.courseName = d.course_name;
-            $scope.courseCode = d.code;
+            console.log(d);
+            $scope.courseName = d.batch_info.course_name;
+            $scope.courseCode = d.batch_info.code;
             $scope.courseid = id;
           });
     }
@@ -53,7 +54,7 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
 
     //$scope.updateCourseId($routeParams.courseId);
     $scope.selectedCourse = $routeParams.courseId;
-    console.log($scope.courseId);
+   // console.log($scope.courseId);
     
     // Check if a particular link is active
     // Is active
@@ -90,7 +91,7 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
 
     // ------------------- Sign Up --------------------
     $scope.signUp = function(){
-      console.log($scope.logIn);
+      //console.log($scope.logIn);
        if ($scope.logIn === false) {
            window.location = redirect_url;
        }
@@ -106,10 +107,10 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
     var promiseInitialSetup = InitialSetup.getInitialData();
     promiseInitialSetup.then(function(d){
          // console.log(d);
-         console.log(d);
+         //console.log(d);
          $scope.auth = d;
          $rootScope.commonPosts = d.posts;
-         console.log("this is auth");
+         //console.log("this is auth");
          //console.log($scope.auth.userType == "2");
          if($scope.auth.userType == "0" || $scope.auth.userType == "1"){
             $scope.logIn = true;
@@ -123,12 +124,12 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
         }
         else{
           //anon user
-          console.log("-------------------anon--------------------");
+          //console.log("-------------------anon--------------------");
           $scope.logIn = false;
           
           var promiseCourseDataById = CourseDataById.getCourseDataById($routeParams.courseId);
           promiseCourseDataById.then(function(d){
-            console.log(d);
+            //console.log(d);
             $scope.courseName = d.course_name;
             $scope.courseCode = d.code;
             $scope.courseid= $routeParams.courseId;
@@ -141,12 +142,12 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
    // Search Global
    $scope.queryString = "";
    $scope.searchFunc = function(str){
-    console.log(str);
+    //console.log(str);
     if(str){
       var searchData = SearchService.getSearchData(str);
       searchData.then(function (d) {
          $scope.searchResults = d;
-         console.log(d);
+         //console.log(d);
       });
      }
     }
@@ -169,7 +170,7 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
 
     promiseCourseData.then(function (d) {
        $scope.posts = d.posts;
-       console.log(d);
+       //console.log(d);
     });
   }
 }]);
@@ -189,7 +190,7 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
       $('#postComments_'+id).addClass("open");
       var promiseComments = Comments.getComments(id);
             promiseComments.then(function(x){
-            console.log("------Course Home Co-----------");
+            //console.log("------Course Home Co-----------");
             //console.log(id);
             $('#postComments_'+id).append(x);
       });
@@ -298,7 +299,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
            $scope.toggled = true;
           },10);
         }
-        console.log($scope.toggled);
+        //console.log($scope.toggled);
     }
     
     angular.element(document).on('click', function(e){ 
@@ -351,20 +352,25 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
       //and all other angular $http() options could be used here.
   }).progress(function (evt) {
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-            console.log('progress: ' + progressPercentage + '% ' +
-            evt.config.file.name);
-            $(".postOverlay").html( progressPercentage + '% <div class="waitingFor">Uploading. Please wait...</div>');
+            //console.log('progress: ' + progressPercentage + '% ' +
+            //evt.config.file.name);
+            if($scope.filesAdded){
+            $(".postOverlay").html( progressPercentage + '% <div class="waitingFor">Upload in progress. Please wait...</div>');
+            }
+            else{
+            $(".postOverlay").html('<div class="waitingFor">Posting ...</div>');
+            }
         }).success(function (data, status, headers, config) {
-            console.log('file ' + config.file.name + 'uploaded. Response: ' +
-            JSON.stringify(data));
-            console.log("data");
+            //console.log('file ' + config.file.name + 'uploaded. Response: ' +
+            //JSON.stringify(data));
+            //console.log("data");
             var result = JSON.stringify(data);
             //console.log($scope.posts);
             $scope.posts.unshift(data.complete_post);
-            console.log("data");
-            console.log(data);
-            console.log("-------------------------");
-            console.log($scope.posts);
+            //console.log("data");
+            //console.log(data);
+            //console.log("-------------------------");
+            //console.log($scope.posts);
             // null the top box 
             $scope.thing.content = "";
             $scope.fileArray={
@@ -386,12 +392,13 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 
   $scope.update = function(files,type){
      $scope.fileArray[type] = $scope.fileArray[type].concat(files);
-     console.log(files);
+     //console.log(files);
   }
 
   $scope.thing = {'content':'','data':''};
 
   $scope.finalSend = function(){
+        
          var things =  [];
          var typeData = [];
          var temp = $scope.fileArray.Lecture.length;
@@ -428,6 +435,12 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
              });
           }
           else{
+            if(things.length !=0){
+              $scope.filesAdded = true;
+            }
+            else{
+              $scope.filesAdded = false;
+            }
             $(".postOverlay").show();
             upload(things,typeData,$scope.thing.content);
           }
@@ -591,7 +604,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
    $scope.dtOptions = DTOptionsBuilder.fromFnPromise(
      promiseCourseData.then(
       function(d){
-        console.log(d);
+        //console.log(d);
         var allFiles = [];
         allFiles = allFiles.concat(d.archiveFiles.Tutorial);
         allFiles = allFiles.concat(d.archiveFiles.Lecture);

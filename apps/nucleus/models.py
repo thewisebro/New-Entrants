@@ -509,7 +509,7 @@ class Alumni(Role('Alumni')):
 
 ########################## Other useful Models ########################
 
-class PHPSession(models.Model):
+class PHPSession(django_models.Model):
   session_key = models.CharField(max_length=40, primary_key=True)
   session_data = models.TextField()
   expire_date = models.DateTimeField(db_index=True)
