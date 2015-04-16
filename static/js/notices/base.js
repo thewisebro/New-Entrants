@@ -231,6 +231,7 @@ function redirection()            //The main controller function which defines t
         static_divs_created=0;            //made 0, so that switched_to_notices is not called again. Whichever function creates the static divs makes sure that the value of this variable is non-zero, so that the other reasons don't create them again.
         main_mode=h1;                                                //Setting global variables equal to the ones just arrived
         sub_mode=h2;
+        console.log("idhar hua tha")
         m_category=h3;
         sub_category=h4;
         cur_page_no=h5;
@@ -500,7 +501,7 @@ function gap_filler(llim, hlim, temp)
             for(var i = llim; i<=hlim; i++)
               temp_store[i] = data[i-llim];
             store_to_use = temp_store;
-            if(m_category="All" && sub_category=="All")
+            if(m_category=="All" && sub_category=="All")
             {
               if(sub_mode=="new")
                 store = temp_store;
