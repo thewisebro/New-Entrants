@@ -20,7 +20,7 @@ with open('apps/lectut/scripts/batch.json') as json_data:
       try:
         batchToAdd = Batch(name = course.id , course = course)
         batchToAdd.save()
-      except Exception as e:
+      ecept Exception as e:
         logging.warning('Batch:'+str(code))
         print str(code)+' Batch error '+str(e)
         fail+=1
