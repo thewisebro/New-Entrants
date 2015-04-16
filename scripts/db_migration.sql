@@ -27,6 +27,39 @@ INSERT INTO nci.nucleus_studentinfo (student_id,fathers_name,fathers_occupation,
 INSERT INTO nci.nucleus_faculty (user_id,department,resume,designation,address,employee_code,date_of_joining,home_page) SELECT user_id,department,resume,designation,address,employee_code,date_of_joining,home_page FROM channeli_dump.facapp_faculty;
 
 
+#jukebox
+
+insert into nci.jukebox_album select * from channeli_dump.jukebox_album;
+
+insert into nci.jukebox_artist select * from channeli_dump.jukebox_artist;
+
+insert into nci.jukebox_genre select * from channeli_dump.jukebox_genre;
+
+insert into nci.jukebox_song(id,datetime_created,id_no,song,file_name,album_id,language,count,score) select id,datetime_created,id_no,song,file_name,album_id,language,count,score from channeli_dump.jukebox_song;
+
+insert into nci.jukebox_album_artists select * from channeli_dump.jukebox_album_artists;
+
+insert into nci.jukebox_song_artists select * from channeli_dump.jukebox_song_artists;
+
+insert into nci.jukebox_song_genres select * from channeli_dump.jukebox_song_genres;
+
+insert into nci.jukebox_jukebox_person(id,datetime_created,songs_listen,person_id) select id,datetime_created,songs_listen,person_id from channeli_dump.jukebox_jukebox_person;
+
+insert into nci.jukebox_playlist(id,datetime_created,name,songs,private,public_count,person_id) select id,datetime_created,name,songs,private,public_count,person_id from channeli_dump.jukebox_playlist;
+
+insert into nci.jukebox_playlist_liked_by select * from channeli_dump.jukebox_playlist_liked_by;
+
+# lostfound
+
+insert into nci.lostfound_founditems(id,user_id,item_found,category,datetime_created,place,status,other_details,contact,address,email,trashed) select *,0 from channeli_dump.lostfound_founditems;
+
+insert into nci.lostfound_lostitems(id,user_id,item_lost,category,datetime_created,place,status,other_details,contact,address,email,trashed) select *,0 from channeli_dump.lostfound_lostitems;
+
+
+
+
+
+
 
 
 
