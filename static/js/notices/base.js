@@ -1659,7 +1659,14 @@ function display_sub_categories_html(initi, finali, main_category)
     {
       sub_categories[i] = constants[main_category][i];
     }
-    return Handlebars.notices_templates.display_sub_categories({ sub_categories : sub_categories , main_category : main_category});
+    html='';
+    for(var i=initi;i<finali;i++)
+    {
+	html+='<div id=' + main_category + '_' + i + ' class="sub_categories" onclick="change_category_bar_name("' + main_category + '", "' + sub_categories[i] + '")>' + sub_categories[i] + '</div>';
+    }
+   console.log("yele html");
+	console.log(html)
+    return html;
 }
 
 function list_notices_html()
