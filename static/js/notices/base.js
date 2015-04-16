@@ -293,12 +293,14 @@ function redirection()            //The main controller function which defines t
               }
               else
               {
+	          console.log("here it is1");
                   first_time_check();
                   var check1;
                   for(check1=(cur_page_no-1)*10;check1<cur_page_no*10;check1++)
                   {
-                    if(!(check1 in temp_store))
+                    if(!(check1 in temp_store) || temp_store[check1]==undefined)
                     {
+		      console.log("here it is");
                       gap_scanner();                            //Checking for gaps. First 50 notices are already present in temp_array
                       console.log("yes" + check1);
                       break;
@@ -434,10 +436,9 @@ function gap_scanner()                 // Fills the appropriate gaps with notice
     var b = bundle_no*50 -1;
     var i = b - 49;
     var gap_begin = 0, gap_end = 0, temp=0;
-    console.log("enter");
     while(i!=b+1)
     {
-        if(!(i in temp_store) && temp==0)
+        if((!(i in temp_store) || temp_store[i]==undefined) && temp==0)
         {
           gap_begin = i;
           gap_end = 0;
@@ -445,18 +446,27 @@ function gap_scanner()                 // Fills the appropriate gaps with notice
         }
         if(temp)
         {
-            if(i in temp_store)
+            if(i in temp_store && temp_store[i]!=undefined)
+	    {
+		    console.log("enter");
               gap_end = i - 1;
+	      gap_filler(gap_begin, gap_end, temp_store[0].id);
+	      gap_begin = 0;
+	      temp=0;
+	    }
             else if(i == b)
+	    {
+		    console.log("enter1");
               gap_end = i;
+	      gap_filler(gap_begin, gap_end, temp_store[0].id);
+	      gap_begin = 0;
+	      temp=0;
+	    }
             else
             {
               i++;
               continue;
             }
-            gap_filler(gap_begin, gap_end, temp_store[0].id);
-            gap_begin = 0;
-            temp=0;
           }
           i++;
     }
