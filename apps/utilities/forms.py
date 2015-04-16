@@ -141,7 +141,7 @@ def EventsSubscribeFormGen(user):
   return EventsSubscribeForm
 
 class NoticesSubscribeForm(forms.ModelForm):
-  categories = forms.MultipleChoiceField(choices=MAIN_CATEGORIES_CHOICES, widget=forms.CheckboxSelectMultiple)
+  categories = forms.MultipleChoiceField(choices=MAIN_CATEGORIES_CHOICES, widget=forms.CheckboxSelectMultiple, required=False)
   class Meta:
     model = NoticeUser
     fields = ('subscribed',)
