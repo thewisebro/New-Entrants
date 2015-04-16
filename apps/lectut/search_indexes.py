@@ -4,7 +4,7 @@ from nucleus.models import Faculty, Course
 #import datetime
 
 class PostIndex(indexes.SearchIndex, indexes.Indexable):
-  text = indexes.CharField(document = True,use_template = True)
+  text = indexes.EdgeNgramField(document = True,use_template = True)
   post_id = indexes.CharField(model_attr='id')
   content = indexes.CharField(model_attr='content')
   content_auto = indexes.EdgeNgramField(model_attr='content')
@@ -18,17 +18,20 @@ class PostIndex(indexes.SearchIndex, indexes.Indexable):
 
 
 class FileIndex(indexes.SearchIndex, indexes.Indexable):
-  text = indexes.CharField(document = True,use_template = True)
+  text = indexes.EdgeNgramField(document = True,use_template = True)
   image_id = indexes.CharField(model_attr='id')
   upload_file = indexes.CharField(model_attr='upload_file')
   description = indexes.CharField(model_attr='description')
-  filename_auto = indexes.EdgeNgramField(model_attr='upload_file')
+  upload_file_auto = indexes.EdgeNgramField(model_attr='upload_file')
   description_auto = indexes.EdgeNgramField(model_attr='description')
 #  file_type = indexes.CharField(model_attr='file_type')
 #  upload_type = indexes.CharField(model_attr='upload_type')
 
   def get_model(self):
     return Uploadedfile
+
+  def prepare_filename_auto(self, obj):
+    return obj.upload_file.name.lower()
 
   def index_queryset(self, using=None):
     return Uploadedfile.objects.all()
