@@ -9,6 +9,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="shortcut icon" href="favicon.ico">
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
@@ -29,7 +30,11 @@
     <!-- /build -->
   </head>
   <body ng-app="lectutApp" ng-controller="MainCtrl" ng-cloak class="ng-cloak">
-    <div growl></div>
+    <div class="bodyOverlay">
+      <div class="loader"></div>
+      <div class="loaderText">Loading ...</div>
+    </div>
+  
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -41,7 +46,7 @@
         <div class="linksRight">
         <ul>
           <li>
-            <a href="http://channeli.in/" class="logOut">
+            <a href="/" class="logOut">
             Channeli
             </a>
           </li>
@@ -84,7 +89,13 @@
                <div ng-repeat="file in searchResults.files | limitTo: 5">
                 <a download="" ng-href="{[base_domain]}/lectut_api/download/{[file.id]}">
                   <div class="sImageDiv">
-                    <img ng-src="{[base_domain]}/{[file.filepath]}"></img>
+                    <img ng-show='file.file_type == "image"' ng-src="{[base_domain]}/{[file.filepath]}"></img>
+                    <i ng-show='file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>  
+                    <i ng-show='file.file_type == "ppt"' class="fa fa-file-powerpoint-o"></i> 
+                    <i ng-show='file.file_type == "zip"' class="fa fa-file-archive-o"></i> 
+                    <i ng-show='file.file_type == "sheet"' class="fa fa-file-excel-o"></i>
+                    <i ng-show='file.file_type == "doc"' class="fa fa-file-word-o"></i>
+                    <i ng-show='file.file_type == "other"' class="fa fa-file-o"></i>
                   </div>
                   <div class="sFileData">
                     <div class="sImageName">
@@ -261,7 +272,7 @@
     <!-- build:include production.html -->
       <script type="text/javascript" src='scripts/development.js'></script>
     <!-- /build -->
-
+ 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/main.services.js"></script>
