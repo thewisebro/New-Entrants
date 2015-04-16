@@ -83,7 +83,7 @@ def dispbatch(request):
       batches = student.batch_set.all()
       courses = map(lambda x: x.course, batches)
       batches_info = map(lambda x: batch_dict(x),batches)
-      userPosts = Post.post_objects.all().filter(batch__in = batches).order_by('-datetime_created')
+      userPosts = Post.post_objects.all().order_by('-datetime_created')
 #      index = settings.PROJECT_ROOT + '/apps/lectut/static/lectut-front/dist/index.html'
 #      with open(index,'r') as f:
 #       response =  HttpResponse(f.read())
@@ -94,7 +94,7 @@ def dispbatch(request):
       batches = faculty.batch_set.all()
       courses = map(lambda x: x.course, batches)
       batches_info = map(lambda x: batch_dict(x),batches)
-      userPosts = Post.post_objects.all().filter(batch__in = batches).order_by('-datetime_created')
+      userPosts = Post.post_objects.all().order_by('-datetime_created')
 
     else:
       userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')
