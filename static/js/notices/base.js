@@ -500,10 +500,13 @@ function gap_filler(llim, hlim, temp)
             for(var i = llim; i<=hlim; i++)
               temp_store[i] = data[i-llim];
             store_to_use = temp_store;
-            if(sub_mode=="new")
-              store = temp_store;
-            else
-              old_store = temp_store;
+            if(m_category="All" && sub_category=="All")
+            {
+              if(sub_mode=="new")
+                store = temp_store;
+              else
+                old_store = temp_store;
+            }
             if(main_mode!="content")            //This function is also called, while clicking next in content mode
               list_notices(parseInt(cur_page_no), temp_store, temp_total_pages, temp_last_page_notices);
             else
