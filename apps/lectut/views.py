@@ -289,12 +289,14 @@ def getFileType(file_name):
       file_type="image"
     elif extension=='pdf':
       file_type="pdf"
-    elif extension=='ppt':
+    elif extension in ['ppt', 'pptx' , 'pot','pptm','potx','potm','ppsx']:
       file_type="ppt"
     elif extension in ['dv', 'mov', 'mp4', 'avi', 'wmv', 'mkv', 'webm']:
       file_type="video"
     elif extension in ['gz','tar','iso','lbr','zip']:
       file_type="zip"
+    elif extension in ['xlsx','xlsv','xls','ods']:
+      file_type="sheet"
     else:
       file_type="other"
   except:
