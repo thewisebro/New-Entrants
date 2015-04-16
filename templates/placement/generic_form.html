@@ -38,11 +38,14 @@
     {% csrf_token %}
     {% if isFormSet %}
       {{ form.management_form }}
-      {% for frm in form %}
-        {{ frm.uniform }}
+{% for frm in form %}
+{{ frm.as_p }}
         {{ frm.id }}
           <hr>
       {% endfor %}
+{% comment %}
+      {{ form.as_p }}
+{% endcomment %}
     {% else %}
       {{ form.uniform }}
     {% endif %}
