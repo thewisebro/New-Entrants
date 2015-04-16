@@ -59,7 +59,7 @@
     /*src: url('../fonts/proximanova-semibold.eot');*/
     src: /*url('../fonts/proximanova-semibold.eot?#iefix') format('embedded-opentype'),
          url('../fonts/proximanova-semibold.woff') format('woff'),*/
-         url('../fonts/OpenSans-Italic.ttf') format('truetype'),
+         url('../fonts/OpenSans-Italic.ttf') format('truetype');
          /*url('../fonts/proximanova-semibold.svg#proxima_novasemibold') format('svg');*/
     font-weight: normal;
     font-style: normal;
