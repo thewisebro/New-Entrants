@@ -231,6 +231,7 @@ function redirection()            //The main controller function which defines t
         static_divs_created=0;            //made 0, so that switched_to_notices is not called again. Whichever function creates the static divs makes sure that the value of this variable is non-zero, so that the other reasons don't create them again.
         main_mode=h1;                                                //Setting global variables equal to the ones just arrived
         sub_mode=h2;
+        console.log("idhar hua tha")
         m_category=h3;
         sub_category=h4;
         cur_page_no=h5;
@@ -466,6 +467,7 @@ function gap_scanner()                 // Fills the appropriate gaps with notice
             else if(i == b)
 	    {
 		    console.log("enter1");
+		    console.log($("#page_numbers ul")[0]==undefined);
               gap_end = i;
 	      gap_filler(gap_begin, gap_end, temp_store[0].id);
 	      gap_begin = 0;
@@ -500,10 +502,13 @@ function gap_filler(llim, hlim, temp)
             for(var i = llim; i<=hlim; i++)
               temp_store[i] = data[i-llim];
             store_to_use = temp_store;
-            if(sub_mode=="new")
-              store = temp_store;
-            else
-              old_store = temp_store;
+            if(m_category=="All" && sub_category=="All")
+            {
+              if(sub_mode=="new")
+                store = temp_store;
+              else
+                old_store = temp_store;
+            }
             if(main_mode!="content")            //This function is also called, while clicking next in content mode
               list_notices(parseInt(cur_page_no), temp_store, temp_total_pages, temp_last_page_notices);
             else
@@ -584,6 +589,7 @@ function search_change_page(page_no)
 function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t here stands for temp, representing the local variables
 {
       console.log("removed no_border")
+      console.log($("#page_numbers ul")[0]==undefined)
       $("#notice_list").removeClass("no_border");
       console.log("entered list_notices : " + page_no);
       $('div#notice_list').empty();
@@ -639,6 +645,9 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
       $(".notice_date").each(function() {
               $(this).text($(this).text().substr(0,10));
               });
+      console.log("reh gya bhai")
+      if($("#page_numbers ul")[0]==undefined)
+          load_numbers_bar(ttotal_pages,sub_mode + "_");
 }
 
 function display_notice(id)
@@ -1692,11 +1701,3 @@ function create_breadcrumb_html(tag, code)
 {
     return Handlebars.notices_templates.create_breadcrumb({tag : tag, code : code});
 }
-
-$(window).load(function(){
-
-$(".notice_date").each(function() {
-        $(this).text($(this).text().substr(0,10));
-        });
-}
-);
