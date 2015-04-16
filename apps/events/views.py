@@ -167,7 +167,7 @@ def duration(event):
         if mins!= '00':
           duration_str += ', '+mins+' Minutes'
     elif td.days > 0:
-      duration_str = str(td.days+1)+(' Day' if td.days == 1 else ' Days')
+      duration_str = str(td.days+1)+(' Day' if td.days == 0 else ' Days')
     return duration_str
   else:
     return ''
