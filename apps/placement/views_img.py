@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.forms.models import modelformset_factory
+from django.forms.models import modelformset_factory, inlineformset_factory
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
@@ -509,12 +509,12 @@ def add_manual(request):#, company_id):
     pass
   import ipdb; ipdb.set_trace()
   companyform = AddCompanyInfoForm()
-  contactpersonformset = modelformset_factory(ContactPerson, form=forms.ModelForm, formset = ContactPersonFormSet, can_delete=False)
-  campuscontactformset = modelformset_factory(CampusContact, form=forms.ModelForm, formset=CampusContactFormSet, can_delete=False)
+  campusContactformset = inlineformset_factory(ContactPerson, CampusContact, form=forms.ModelForm, can_delete=False)
+#  contactpersonformset = modelformset_factory(ContactPerson, form=forms.ModelForm, formset = ContactPersonFormSet, can_delete=False)
+#  campuscontactformset = modelformset_factory(CampusContact, form=forms.ModelForm, formset=CampusContactFormSet, can_delete=False)
   return render_to_response('placement/plcmgr_manual.html',{
       'companyform' : companyform,
-      'contactpersonformset' : contactpersonformset,
-      'campuscontactformset' : campuscontactformset,
+      'campuscontactformset' : campusContactformset,
       }, context_instance = RequestContext(request))
 
 
@@ -562,3 +562,5 @@ def person_search(request):
     data = 'fail'
   return HttpResponse(data,'application/json')
 
+def assign_company_coordinator(request):
+  pass

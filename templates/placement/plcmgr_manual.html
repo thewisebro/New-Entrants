@@ -11,7 +11,6 @@
     <script src="{{ STATIC_URL }}jquery/jquery-1.10.2.js"></script>
     <script src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>
 {{ companyform.media }}
-{{ contactpersonformset.media }}
 {{ campuscontactformset.media }}
     <script>
     $(function() {
@@ -42,15 +41,9 @@
       </div>
       <div class="manual-form">
         <form method="post" action="">{% csrf_token %}
-        
 {{ companyform.uniform }}
 
-{% for contactPersonfrm,campusContactfrm in %}
-  {{ contactPersonfrm.uniform }}
-  {{ contactPersonfrm.id }}
-  {{ campusContactfrm.uniform }}
-  {{ campusContactfrm.id }}
-{% endfor %}
+{{ campusContactformset }}
 
 
 
@@ -70,13 +63,13 @@
               </div>
             </div>
           {% endkwacro %}
-{% endcomment %}
 
           {% for  group in user.groups.all %}
             {% if group.name == 'Placement Manager' %}
                 {% usekwacro editable_field_div assignform.company_coordinator %}
             {% endif %}
           {% endfor %}
+{% endcomment %}
 
           <div class="edit-row">
             <div class="dabba">

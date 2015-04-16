@@ -72,8 +72,8 @@
         </table>
       </div>
       <div id="companies">
-        <form class="form" enctype="multipart/form-data" method="post">{% comment %} action="{% url 'placement.views_img.assign_company_coordinator' %}"> {% endcomment %}
-            {% csrf_token %}
+        <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_img.assign_company_coordinator' %}">
+        {% csrf_token %}
         <table id ="company" class="table table-striped table-bordered display compact">
           <thead>
             <tr>
