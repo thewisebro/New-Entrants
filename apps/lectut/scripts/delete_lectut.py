@@ -4,4 +4,4 @@ DownloadLog.objects.all().delete()
 Uploadedfile.objects.all().delete()
 Post.objects.all().delete()
 
-Print 'Time for a clean slate'
+print 'Time for a clean slate'
