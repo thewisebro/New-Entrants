@@ -155,9 +155,6 @@ def email(request):
   events_subscribe_form = EventsSubscribeForm(instance=events_user)
   notices_subscribe_form = NoticesSubscribeForm(instance=notice_user)
   if request.method == 'POST':
-    print "here"
-    print request.POST
-    print request.POST.get("onoffswitch")
     emailform = EmailForm(request.POST)
     if emailform.is_valid():
       if not request.user.email:
@@ -167,8 +164,6 @@ def email(request):
                                                   instance=events_user)
       events_subscribe_form.save()
       clicked_categories = request.POST.getlist('categories')
-      print "clicked_categories:"
-      print clicked_categories
       for main_cat in clicked_categories:
         target_categories = Category.objects.filter(main_category=main_cat)
         for sub_cat in target_categories:
@@ -176,7 +171,6 @@ def email(request):
       all_categories=[a[0] for a in MAIN_CATEGORIES_CHOICES]
       for main_cat in all_categories:
           if main_cat not in clicked_categories:
-            print main_cat
             target_categories = Category.objects.filter(main_category=main_cat)
             for sub_cat in target_categories:
               notice_user.categories.remove(sub_cat)
@@ -192,7 +186,6 @@ def email(request):
   for category in categories:
     if category.main_category not in main_categories:
       main_categories.append(category.main_category)
-  print main_categories
 
   return render(request, 'utilities/pagelets/email.html', {
       'events_subscribe_form': events_subscribe_form,

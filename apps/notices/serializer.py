@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from notices.models import *
+from django.conf import settings
 
 class NoticeListViewSerializer(serializers.ModelSerializer):
   username = serializers.SerializerMethodField('get_username')
@@ -20,6 +21,7 @@ class NoticeListViewSerializer(serializers.ModelSerializer):
 class GetNoticeSerializer(serializers.ModelSerializer):
   username = serializers.SerializerMethodField('get_username')
   category = serializers.SerializerMethodField('get_category')
+  content = serializers.SerializerMethodField('get_content')
   class Meta:
     model = Notice
     fields = ('id', 'reference', 'subject', 'username', 'category' , 'content', 'datetime_modified')
@@ -29,3 +31,8 @@ class GetNoticeSerializer(serializers.ModelSerializer):
     return obj.uploader.user.username
   def get_category(self, obj):
     return obj.uploader.category.name
+  def get_content(self, obj):
+    content=obj.content
+    if(settings.SITE=="INTRANET"):
+      content=content.replace("http://people.iitr.ernet.in/Notices","/notices")
+    return content

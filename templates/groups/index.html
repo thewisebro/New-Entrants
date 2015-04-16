@@ -54,17 +54,17 @@
         <div class="content-specification">
             <div class="left-field">Phone</div>
             <div class="right-field">
-              {% if group.groupinfo.phone_no %}
-                {{group.groupinfo.phone_no}}
+              {% if group.user.contact_no %}
+                {{group.user.contact_no}}
               {% endif %}
             </div>
         </div>
         <div class="content-specification">
             <div class="left-field">E-mail</div>
             <div class="right-field">
-              {% if group.groupinfo.email %}
-                {{group.groupinfo.email}}
-              {% endif %}  
+              {% if group.user.email %}
+                {{group.user.email}}
+              {% endif %}
             </div>
         </div>
         <div class="content-specification">

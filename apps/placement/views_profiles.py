@@ -42,14 +42,17 @@ def photo(request):
       # Form has been submitted.
       form = plac_forms.Place(request.POST, request.FILES, instance = plac_person)
       if form.is_valid():
-        name = request.FILES['photo'].name
-        extension = name[-3:]
-        if extension.lower() not in ['jpg','gif','png','bmp']:
-          l.info(request.user.username + ': Invalid image type added')
-          messages.error(request, 'Invalid Image type')
-          return HttpResponseRedirect(reverse('placement.views_profiles.photo'))
-        request.FILES['photo'].name = student.user.username+'.'+extension
-        form = plac_forms.Place(request.POST, request.FILES, instance = plac_person)
+        try:
+          name = request.FILES['photo'].name
+          extension = name[-3:]
+          if extension.lower() not in ['jpg','gif','png','bmp']:
+            l.info(request.user.username + ': Invalid image type added')
+            messages.error(request, 'Invalid Image type')
+            return HttpResponseRedirect(reverse('placement.views_profiles.photo'))
+#            request.FILES['photo'].name = student.user.username+'.'+extension
+#            form = plac_forms.Place(request.POST, request.FILES, instance = plac_person)
+        except Exception as e:
+          pass
         form.save()
         l.info(request.user.username + ': successfully added/updated photo')
         messages.success(request, 'Photo updated successfully.')
@@ -59,9 +62,9 @@ def photo(request):
     else:
       # Form has not been submitted.
       form = plac_forms.Place(instance = plac_person)
-      if plac_person.photo:
+#      if plac_person.photo:
         # Change the url of photo
-        plac_person.photo.name = u'placement/photo/'
+#        plac_person.photo.name = u'placement/photo/'
     return render_to_response('placement/basic_form.html', {
         'form':form,
         'title':'Photo',
