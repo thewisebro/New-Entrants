@@ -33,7 +33,7 @@
               <i class="fa fa-star" id="star_shape_{{ notice.id }}" {{#if star}} style="color:#F1C40F;"{{else}} style="color:#AAA;"{{/if}}></i>&nbsp
       </div>
 
-        <div id="date_source_subject_wrap" {{#if edit}} class="star_check_present_with_edit" {{else}} class="star_check_present" {{/if}}>
+        <div id="date_source_subject_wrap" {{#if edit}} class="star_check_present_with_edit {{#if read}}read{{/if}}" {{else}} class="star_check_present" {{/if}}>
           <div class="notice_date">{{ notice_date }}</div>
           <div class="notice_source">{{ notice.category }}</div>
           <div class="subject_wrap">
