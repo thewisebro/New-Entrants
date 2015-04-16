@@ -8,30 +8,33 @@ logging.basicConfig(filename="batch_error.log", format='%(asctime)s %(message)s'
 
 with open('apps/lectut/scripts/batch.json') as json_data:
   values = json.load(json_data)
+  total_len = len(values)
   json_data.close()
 #  pprint(values)
+  fail = 0
 
   for batch in values:
-#    print batch
     code = batch['course_code']
     if Course.objects.filter(code = code).exists():
-      course =  Course.objects.get(code = code)
+    course =  Course.objects.get(code = code)
       try:
         batchToAdd = Batch(name = course.id , course = course)
         batchToAdd.save()
       except Exception as e:
+        logging.warning('Batch:'+str(code))
         print str(code)+' Batch error '+str(e)
+        fail+=1
+
       users = batch['users']
       for user in users:
         try:
           user_object = User.objects.get(username = user)
           student = user_object.student
           batchToAdd.students.add(student)
-          batchToAdd.save()
+#        batchToAdd.save()
           print 'Successfully added student'
         except Exception as e:
           logging.warning('Student: '+str(user)+'Batch:'+str(code))
-          print str(e) + ' student' + str(user)
 
       faculties = batch['faculties']
       for faculty in faculties:
@@ -39,7 +42,6 @@ with open('apps/lectut/scripts/batch.json') as json_data:
           user_object = User.objects.get(username = faculty)
           facultyToAdd = user_object.faculty
           batchToAdd.faculties.add(facultyToAdd)
-          batchToAdd.save()
           print 'Successfully added Faculty'
         except Exception as e:
           logging.warning('Faculty:'+str(user)+'batch:'+code)
@@ -47,5 +49,7 @@ with open('apps/lectut/scripts/batch.json') as json_data:
 
     else:
       print 'Error in ' + str(code)
+      logging.warning('Course not exists: '+str(code))
     print 'completed batch ' +str(code)
   print 'Over'
+
