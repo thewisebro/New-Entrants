@@ -297,10 +297,18 @@ body {
       padding: 2px 8px;
     }
     .subSearchContent{
+
+        >a{
+          text-decoration: blink;
+        }
       .courseSearchIndi{
         color: #848484;
         border-bottom: 1px solid #EEE;
         padding: 10px 8px;
+        &:hover{
+          color: white;
+          background: #3498db;
+        }
       }
       >div{
       padding: 5px 8px;
