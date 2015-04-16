@@ -25,25 +25,15 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
     // To get feed data.
     $scope.courseId = $routeParams;
     $scope.updateCourseId = function(id){
-        if($scope.logIn){
-           for(var i=0;i<$scope.auth.batches.length;i++){
-              if($scope.auth.batches[i].id == id){
-                $scope.courseCode = $scope.auth.batches[i].code;
-                //alert($scope.courseCode);
-                $scope.courseName = $scope.auth.batches[i].course_name;
-                $scope.courseid = id;
-              }
-            }
-        }
-        else{
           var promiseCourseDataById = CourseDataById.getCourseDataById(id);
           promiseCourseDataById.then(function(d){
-            console.log(d);
+            //console.log("-----------------------");
+            //console.log(d);
+            //alert(d.batch);
             $scope.courseName = d.course_name;
             $scope.courseCode = d.code;
             $scope.courseid = id;
           });
-        }
     }
     
     $scope.selectedCourse = $routeParams.courseId;
@@ -226,7 +216,7 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
  $scope.removeFeedFile = function(id, parentIndex, index){
     //console.log("This is to be deleted.. "+id);
     //console.log($scope.posts);
-
+    //common
     sweetAlert({
         title: "Are you sure?",
         text: "Your will not be able to recover this file!",
@@ -244,6 +234,11 @@ lectutApp.controller('CourseHomeCtrl', ['$routeParams','$scope','$rootScope','Re
                  //console.log("Deleted this file man"+ id);
                  $rootScope.commonPosts[parentIndex].files.splice(index,1);
                  sweetAlert("Deleted!", "File has been deleted.", "success");
+                 alert("sd");
+                 if($rootScope.commonPosts[parentIndex].files.length == 0 && $rootScope.commonPosts[parentIndex].post.content == ""){
+                      $rootScope.commonPosts.splice(parentIndex,1)
+                 }
+
                },
                function(reason){
                  sweetAlert("Cancelled!", reason, "error");
@@ -348,7 +343,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
             console.log("data");
             var result = JSON.stringify(data);
             //console.log($scope.posts);
-              $scope.posts.unshift(data.complete_post);
+            $scope.posts.unshift(data.complete_post);
             console.log("data");
             console.log(data);
             console.log("-------------------------");
@@ -532,6 +527,10 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
                promiseRemoveFeedFile.then(function(d){
                  //console.log("Deleted this file man"+ id);
                  $scope.posts[parentIndex].files.splice(index,1);
+                 //console.log($scope.posts[parentIndex]);
+                 if($scope.posts[parentIndex].files.length == 0 && $scope.posts[parentIndex].post.content == ""){
+                      $scope.posts.splice(parentIndex,1)
+                 }
                  sweetAlert("Deleted!", "File has been deleted.", "success");
                },
                function(reason){
@@ -871,7 +870,7 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
 
  $scope.removeFeedFile = function(id, parentIndex, index){
     //console.log("This is to be deleted.. "+id);
-    
+    // one 
     sweetAlert({
         title: "Are you sure?",
         text: "Your will not be able to recover this file!",
@@ -916,7 +915,7 @@ lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams'
 
    $scope.removeFeedFile = function(id, parentIndex, index){
     //console.log("This is to be deleted.. "+id);
-
+    // one file
     sweetAlert({
         title: "Are you sure?",
         text: "Your will not be able to recover this file!",
