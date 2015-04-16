@@ -182,8 +182,6 @@ function redirection()            //The main controller function which defines t
             $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
           //console.log("6starred_uploads_yes");
             $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
-            $('#select_bars').tooltip("destroy");
-            $('#select_bars').tooltip({content: "Go Back", position: {at: "right+5 top-20"}});
             $("#filters").slideUp(400);
           //console.log("7starred_uploads_yes");
             same_except_page_no=0;
@@ -200,8 +198,6 @@ function redirection()            //The main controller function which defines t
             $("#select_bars").removeAttr("onclick");
             $("#select_bars").attr("onclick", "display_categories(event);");
             $("#back").hide("fade", 200, function(){$("#bars").show("fade", 200);});
-            $('#select_bars').tooltip("destroy");
-            $('#select_bars').tooltip({content: "Display category menu", position: {at: "right+5 top-20"}});
             $("#filters").slideDown(400);
             same_except_page_no=0;
           }
@@ -407,7 +403,6 @@ function create_static_divs()                //Create static buttons like upload
     //console.log("switched_to_notices_create : static divs created");
     $('#more').bind("click", bind_unbind_tooltip);
     $('#main_check').tooltip({position: {at: "right+5 top-20"}});
-    $('#select_bars').tooltip({position: {at: "right+5 top-20"}});
 }
 
 function get_total_notices_no()       //This function is only meant for general notice display(categories other than All, All)
