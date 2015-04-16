@@ -87,6 +87,7 @@
 }
 
 body {
+  display:none;
   font-family: $osR;
   background: #f5f7fa;
   overflow-y:scroll;	
@@ -106,6 +107,7 @@ body {
    color: #c0c0c0;
 }
 .anonUser{
+  display:none;
   font-size: 45px;
   color: rgb(174, 174, 174);
   text-align: center;
@@ -189,6 +191,7 @@ body {
         }
   }
   .searchResult{
+    //display:none;
     background: #FFF;
     width: 400px;
     color: #666;
@@ -448,6 +451,7 @@ body {
 }
 .myCourse{
   .signInBox{
+     display:none;
      padding: 20px;
      color: #ACACAC;
      font-size: 13px;

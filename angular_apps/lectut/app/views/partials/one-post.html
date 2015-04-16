@@ -51,7 +51,7 @@
    </div>
           <div class="commentsBlock" ng-show="logIn">
             <div ng-click="loadCommentsFunc(onePost.post.id)" class="showHideComments">
-            Comments <span class="commentsCount">{[onePost.post.count]}</span>
+            Comments <span class="commentsCount" ng-show="onePost.post.count != 0">{[onePost.post.count]}</span>
             </div>
             <div id="postComments_{[onePost.post.id]}" class="loadComments">
             </div>
