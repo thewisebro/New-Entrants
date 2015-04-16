@@ -19,11 +19,15 @@
       onclick="open_notice({{ notice.id }})">
 
       <div id="check_wrap" class="check" onclick="stop_propagation(event)">
+      <div class="squaredFour">
         <input
           type="checkbox"
+          name="check"
           class="checkboxes"
           onclick="add_to_checklist({{notice.id}}, event)"
-          id="check-{{ notice.id }}">
+          id="check-{{ notice.id }}" value="None" style="display:none">
+          <label for="check-{{ notice.id }}"></label>
+          </div>
       </div>
 
       <div
