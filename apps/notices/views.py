@@ -63,7 +63,7 @@ def upload(request):
 class PrivelegeJsonView(TemplateView):
   def get(self, request):
     try:
-      privelege = request.user.uploader_set.all().exists()
+      privelege = Uploader.objects.filter(user=request.user).exists()
       print "privelege1 " + str(privelege)
       privelege1 = {'privelege' : privelege}
     except:
