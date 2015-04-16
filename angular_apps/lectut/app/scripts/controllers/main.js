@@ -124,7 +124,7 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
             console.log(d);
             $scope.courseName = d.course_name;
             $scope.courseCode = d.code;
-            $scope.courseid= id;
+            $scope.courseid= $routeParams.courseId;
           });
         }
     });

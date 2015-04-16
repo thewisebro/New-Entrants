@@ -456,3 +456,8 @@ body
 {
   margin-left:45px;
 }
+
+.ui-icon-closethick
+{
+  margin:-8px !important;
+}
