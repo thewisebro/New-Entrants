@@ -83,7 +83,6 @@ def personal_information(request):
     l.info(request.user.username + ': Opened view to update StudentInfo')
     student = request.user.student
     try:
-#      import ipdb; ipdb.set_trace()
       info = StudentInfo.objects.get(student = student)
     except StudentInfo.DoesNotExist as e:
       # create a default entry
