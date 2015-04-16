@@ -1662,10 +1662,8 @@ function display_sub_categories_html(initi, finali, main_category)
     html='';
     for(var i=initi;i<finali;i++)
     {
-	html+='<div id=' + main_category + '_' + i + ' class="sub_categories" onclick="change_category_bar_name("' + main_category + '", "' + sub_categories[i] + '")>' + sub_categories[i] + '</div>';
+	html+='<div id=' + main_category + '_' + i + ' class="sub_categories" onclick="change_category_bar_name(\'' + main_category + '\', \'' + sub_categories[i] + '\')">' + sub_categories[i] + '</div>';
     }
-   console.log("yele html");
-	console.log(html)
     return html;
 }
 
