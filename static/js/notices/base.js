@@ -57,7 +57,7 @@ function initialize_global_variables()
 function first_time_functions()                 //This function is responsible for calling 6 important basic functions to store necessary data
 {
     $("#search-inp").val("");
-    $("#search-inp").attr('placeholder', 'Search notices (eg. any string, 30 apr, today)');
+    $("#search-inp").attr('placeholder', 'Search notices');
     get_privelege();                            //First time function 1
 }
 
@@ -79,7 +79,7 @@ $(document).on("load_app_notices", function(e, hash1, hash2, hash3, hash4, hash5
 $(document).on("unload_app_notices", function(e, hash1, hash2, hash3, hash4, hash5){
 
     $("#container").removeAttr("class")
-    $("#search-inp").attr('placeholder', 'Search notices (eg. any string, 30 apr, today)');
+    $("#search-inp").attr('placeholder', 'Search notices');
     $("#content").empty();
 });
 
@@ -262,7 +262,7 @@ function redirection()            //The main controller function which defines t
           $("#category_name").text(m_category);
         else
           $("#category_name").text(sub_category);
-        $("#search-inp").attr('placeholder', 'Search notices (eg. any string, 30 apr, today)');
+        $("#search-inp").attr('placeholder', 'Search notices');
 
       
         if(main_mode=="display")
