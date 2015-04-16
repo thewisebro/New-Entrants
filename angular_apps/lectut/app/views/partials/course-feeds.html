@@ -36,7 +36,7 @@
                         <ul class="itemDisplay" ng-show="fileArray.Lecture.length != 0 || fileArray.Tutorial.length != 0 || fileArray.ExamPaper.length != 0 || fileArray.Solution.length != 0">
                         <!--LECTURE -->
                            <li style="font:smaller">
-                              <div ng-show="fileArray.Lecture.length" class="headerTypeUpload"><i class="fa fa-circle c_lec" style="padding-right:5px;"></i>Lectures</div>
+                              <div ng-show="fileArray.Lecture.length" class="headerTypeUpload"><i class="fa fa-circle c_Lecture" style="padding-right:5px;"></i>Lectures</div>
                               <ul>
                                 <li ng-repeat="f in fileArray.Lecture">
                                   <span class="fileIcon">
@@ -53,7 +53,7 @@
                            </li>
                         <!--TUTORIAL -->
                            <li style="font:smaller">
-                              <div ng-show="fileArray.Tutorial.length" class="headerTypeUpload"><i class="fa fa-circle c_tut" style="padding-right:5px;"></i>Tutorial</div>
+                              <div ng-show="fileArray.Tutorial.length" class="headerTypeUpload"><i class="fa fa-circle c_Tutorial" style="padding-right:5px;"></i>Tutorial</div>
                               <ul>
                                 <li ng-repeat="f in fileArray.Tutorial">
                                   <span class="fileIcon">
@@ -70,7 +70,7 @@
                            </li>
                         <!--EXAMPAPAER -->
                            <li style="font:smaller">
-                              <div ng-show="fileArray.ExamPaper.length" class="headerTypeUpload"><i class="fa fa-circle c_exp" style="padding-right:5px;"></i>Exam Paper</div>
+                              <div ng-show="fileArray.ExamPaper.length" class="headerTypeUpload"><i class="fa fa-circle c_Exam" style="padding-right:5px;"></i>Exam Paper</div>
                               <ul>
                                 <li ng-repeat="f in fileArray.ExamPaper">
                                   <span class="fileIcon">
@@ -87,7 +87,7 @@
                            </li>
                         <!--SOLUTION -->
                            <li style="font:smaller">
-                              <div ng-show="fileArray.Solution.length" class="headerTypeUpload"><i class="fa fa-circle c_sol" style="padding-right:5px;"></i>Solution</div>
+                              <div ng-show="fileArray.Solution.length" class="headerTypeUpload"><i class="fa fa-circle c_Solution" style="padding-right:5px;"></i>Solution</div>
                               <ul>
                                 <li ng-repeat="f in fileArray.Solution">
                                   <span class="fileIcon">
@@ -196,7 +196,7 @@
         </div>
         <div class="commentsBlock" ng-show="logIn">
           <div ng-click="loadCommentsFunc(post.post.id)" class="showHideComments">
-            Comments <span class="commentsCount">{[post.post.count]}</span>
+            Comments <span class="commentsCount" ng-show="post.post.count != 0">{[post.post.count]}</span>
           </div>
           <div id="postComments_{[post.post.id]}" class="loadComments">
             
