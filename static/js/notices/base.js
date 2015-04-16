@@ -100,6 +100,7 @@ $(document).on("login", function(){
     initialize_global_variables();
     first_time_visit=0;
     hashtags = [h1, h2, h3, h4, h5];
+
     $(document).trigger("load_app_notices", hashtags);
   }
 });
@@ -221,10 +222,16 @@ function redirection()            //The main controller function which defines t
             static_divs_created=1;            //made 1, so that switched_to_notices is not called again, 4 lines later
           }
         }
+        if($("#notices-header")[0]==undefined)
+        {
+            create_static_divs();
+            static_divs_created=1;            //made 1, so that switched_to_notices is not called again, 4 lines later
+        }
 
         static_divs_created=0;            //made 0, so that switched_to_notices is not called again. Whichever function creates the static divs makes sure that the value of this variable is non-zero, so that the other reasons don't create them again.
         main_mode=h1;                                                //Setting global variables equal to the ones just arrived
         sub_mode=h2;
+        console.log("idhar hua tha")
         m_category=h3;
         sub_category=h4;
         cur_page_no=h5;
@@ -293,12 +300,14 @@ function redirection()            //The main controller function which defines t
               }
               else
               {
+	          console.log("here it is1");
                   first_time_check();
                   var check1;
                   for(check1=(cur_page_no-1)*10;check1<cur_page_no*10;check1++)
                   {
-                    if(!(check1 in temp_store))
+                    if(!(check1 in temp_store) || temp_store[check1]==undefined)
                     {
+		      console.log("here it is");
                       gap_scanner();                            //Checking for gaps. First 50 notices are already present in temp_array
                       console.log("yes" + check1);
                       break;
@@ -391,7 +400,10 @@ function create_static_divs()                //Create static buttons like upload
     if(star_perm==1)
       $('#additional').append(additional_features_html());
     $('#content').append('<div id="notice_list"></div><br>');
-    $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div id="settings" onclick="location.hash=\'#settings/email\'"><i id="gear" class="fa fa-cog"></i>Subscription Settings</div><div style="clear:both"></div></div>');
+    if(star_perm!=1)
+      $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div style="clear:both"></div></div>');
+    else
+      $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div id="settings" onclick="location.hash=\'#settings/email\'"><i id="gear" class="fa fa-cog"></i>Subscription Settings</div><div style="clear:both"></div></div>');
     console.log("switched_to_notices_create : static divs created");
     $('#more').bind("click", bind_unbind_tooltip);
     $('#main_check').tooltip({position: {at: "right+5 top-20"}});
@@ -434,10 +446,9 @@ function gap_scanner()                 // Fills the appropriate gaps with notice
     var b = bundle_no*50 -1;
     var i = b - 49;
     var gap_begin = 0, gap_end = 0, temp=0;
-    console.log("enter");
     while(i!=b+1)
     {
-        if(!(i in temp_store) && temp==0)
+        if((!(i in temp_store) || temp_store[i]==undefined) && temp==0)
         {
           gap_begin = i;
           gap_end = 0;
@@ -445,18 +456,27 @@ function gap_scanner()                 // Fills the appropriate gaps with notice
         }
         if(temp)
         {
-            if(i in temp_store)
+            if(i in temp_store && temp_store[i]!=undefined)
+	    {
+		    console.log("enter");
               gap_end = i - 1;
+	      gap_filler(gap_begin, gap_end, temp_store[0].id);
+	      gap_begin = 0;
+	      temp=0;
+	    }
             else if(i == b)
+	    {
+		    console.log("enter1");
               gap_end = i;
+	      gap_filler(gap_begin, gap_end, temp_store[0].id);
+	      gap_begin = 0;
+	      temp=0;
+	    }
             else
             {
               i++;
               continue;
             }
-            gap_filler(gap_begin, gap_end, temp_store[0].id);
-            gap_begin = 0;
-            temp=0;
           }
           i++;
     }
@@ -481,10 +501,13 @@ function gap_filler(llim, hlim, temp)
             for(var i = llim; i<=hlim; i++)
               temp_store[i] = data[i-llim];
             store_to_use = temp_store;
-            if(sub_mode=="new")
-              store = temp_store;
-            else
-              old_store = temp_store;
+            if(m_category=="All" && sub_category=="All")
+            {
+              if(sub_mode=="new")
+                store = temp_store;
+              else
+                old_store = temp_store;
+            }
             if(main_mode!="content")            //This function is also called, while clicking next in content mode
               list_notices(parseInt(cur_page_no), temp_store, temp_total_pages, temp_last_page_notices);
             else
@@ -612,6 +635,8 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
             else
               context["star"] = 0;
 
+            console.log("there you go")
+            console.log(context)
             $('#notice_list').append(list_notices_html(context));
 
       }
@@ -893,7 +918,7 @@ function select_all()
         }
         for(var i=0; i<k; i++)
         {
-            id = $('.checkboxes')[i].id[6]+$('.checkboxes')[i].id[7];
+            id = $('.checkboxes')[i].id.substr(6);
             checklist[parseInt(id)]=1;
         }
     }
@@ -1649,7 +1674,12 @@ function display_sub_categories_html(initi, finali, main_category)
     {
       sub_categories[i] = constants[main_category][i];
     }
-    return Handlebars.notices_templates.display_sub_categories({ sub_categories : sub_categories , main_category : main_category});
+    html='';
+    for(var i=initi;i<finali;i++)
+    {
+	html+='<div id=' + main_category + '_' + i + ' class="sub_categories" onclick="change_category_bar_name(\'' + main_category + '\', \'' + sub_categories[i] + '\')">' + sub_categories[i] + '</div>';
+    }
+    return html;
 }
 
 function list_notices_html()

@@ -29,7 +29,11 @@
     <!-- /build -->
   </head>
   <body ng-app="lectutApp" ng-controller="MainCtrl" ng-cloak class="ng-cloak">
-    <div growl></div>
+    <div class="bodyOverlay">
+      <div class="loader"></div>
+      <div class="loaderText">Loading ...</div>
+    </div>
+  
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -41,7 +45,7 @@
         <div class="linksRight">
         <ul>
           <li>
-            <a href="http://channeli.in/" class="logOut">
+            <a href="/" class="logOut">
             Channeli
             </a>
           </li>
@@ -261,7 +265,7 @@
     <!-- build:include production.html -->
       <script type="text/javascript" src='scripts/development.js'></script>
     <!-- /build -->
-
+ 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/main.services.js"></script>
