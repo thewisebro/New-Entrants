@@ -52,6 +52,8 @@ function load_groups_tab(hash1, hash2){
   //$('#right-column .content').html(settings_links_html(tab));
   //$('.settings-label').removeClass('active-label');
   //$('#settings-label-'+tab).addClass('active-label');
-  load_pagelet('content-pagelet');
+  load_pagelet('content-pagelet', function(){
+    $('#groups-content').pickify_users();
+  });
 }
 
