@@ -54,7 +54,7 @@ faculty_apps = ['responses','acad_course_students','facapp','lectut','placement'
                 'thinktank','lostfound','softwares','peoplesearch']
 
 other_apps = ['lectut','yaadein','jukebox','dc++','thinktank',
-              'lostfound','softwares','peoplesearch']
+              'lostfound','softwares','peoplesearch','placement']
 
 external_links = {
   'imglink' : {'name':'Information Management Group', 'url':'http://img.channeli.in'},
