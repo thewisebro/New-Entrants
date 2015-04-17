@@ -1187,9 +1187,9 @@ function evaluate_breadcrumbs()
       sub_categor=sub_category;
     }
     if(sub_mod=="new")
-      notice_prefix = "Current"
+      notice_prefix = "Current "
     if(sub_mod=="old")
-      notice_prefix = "Expired"
+      notice_prefix = "Expired "
 
     if(main_mod=="display")
     {
