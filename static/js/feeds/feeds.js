@@ -22,7 +22,8 @@ function load_feeds_page(){
 function feeds_on_login_logout() {
   feeds = Array();
   more_feeds = true;
-  load_feeds_page();
+  if(nucleus.get_current_app()=='home')
+    load_feeds_page();
 }
 
 $(document).on("login", feeds_on_login_logout);
