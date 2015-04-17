@@ -600,7 +600,7 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
       for(var i=a; i<b; i++)
       {
             context["notice"] = tstore[i];
-            var d = context.notice.datetime_modified.split('T')[0];
+            var d = context.notice.datetime_created.split('T')[0];
             d = Date.parse(d);
             if(d.getTime() == Date.parse("today").getTime())
               context["notice_date"] = "Today";
@@ -967,21 +967,21 @@ function insert_and_maintain_datesort(notice)
        starred_array.push(notice);
      else if(len==1)
      {
-         if(notice.datetime_modified>=starred_array[0].datetime_modified)
+         if(notice.datetime_created>=starred_array[0].datetime_created)
           starred_array.splice(0, 0, notice);
          else
           starred_array.splice(1, 0, notice);
      }  
      else
      {
-       if(notice.datetime_modified>=starred_array[0].datetime_modified)
+       if(notice.datetime_created>=starred_array[0].datetime_created)
         starred_array.splice(0, 0, notice);
-       else if(notice.datetime_modified<=starred_array[len-1].datetime_modified)
+       else if(notice.datetime_created<=starred_array[len-1].datetime_created)
         starred_array.splice(len, 0, notice);
        else
        {
          for(var i=1;i<len;i++)
-           if(notice.datetime_modified<=starred_array[i-1].datetime_modified && notice.datetime_modified>=starred_array[i].datetime_modified)
+           if(notice.datetime_created<=starred_array[i-1].datetime_created && notice.datetime_created>=starred_array[i].datetime_created)
            {
              starred_array.splice(i, 0, notice);
              break;
@@ -1509,7 +1509,7 @@ function bring_uploads()
           check_upload_array[data[i].id]=1;
         }
         upload_array.sort(function(a, b){
-           var dateA=new Date(a.datetime_modified), dateB=new Date(b.datetime_modified);
+           var dateA=new Date(a.datetime_created), dateB=new Date(b.datetime_created);
             return dateB-dateA; //sort by date descending
         })
         //console.log("loaded : bring_uploads");
