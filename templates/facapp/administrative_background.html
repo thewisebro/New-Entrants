@@ -1,0 +1,15 @@
+{% extends "facapp/base.html" %}
+
+{% block model_details %}
+      {% if l.from_year and l.to_year and l.at_level %}
+	    <li>{{ l.designation }} at {{ l.organisation }} from {{ l.from_year}} to {{ l.to_year }} at {{ l.at_level }} level, Priority : {{ l.priority }}</li>
+
+      {% else %}
+	    <li>{{ l.designation }} at {{ l.organisation }}, Priority : {{ l.priority }}</li>
+      {% endif %}
+     
+{% endblock %}
+
+{% block model_details_to_delete %}
+	    {{model_to_delete.designation }} at {{ model_to_delete.organisation }} from {{ model_to_delete.from_year}} to {{ model_to_delete.to_year }} at {{ model_to_delete.at_level }} level
+{% endblock %}

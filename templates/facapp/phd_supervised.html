@@ -1,0 +1,15 @@
+{% extends "facapp/base.html" %}
+
+{% block model_details %}
+	    <li>Topic: {{ l.topic }}</li>
+      {% if name_of_other_supervisor %}<li>Name of other supervisor: {{ l.name_of_other_supervisor }}</li>{% endif %}
+      <li>Registration year: {{ l.registration_year }}</li>
+      <li>Status of phd: {{ l.status_of_phd }}</li>
+      <li>Phd type: {{ l.phd_type }}</li>
+      <li>Scholar name: {{ l.scholar_name }}</li>      
+
+{% endblock %}
+
+{% block model_details_to_delete %}
+	    {{ model_to_delete.scholar_name }}
+{% endblock %}

@@ -78,6 +78,7 @@ pip install reportlab
 pip install python-dateutil
 pip install simplejson
 pip install pytz
+pip install pika
 
 # fuzzy wuzzy
 pip install -e git+https://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy
@@ -102,3 +103,5 @@ pip install elasticsearch
 # Image optimizing tools
 apt-get install -y optipng
 apt-get install -y libjpeg-progs
+
+pip install requests

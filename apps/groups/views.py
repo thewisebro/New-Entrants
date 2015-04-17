@@ -49,7 +49,9 @@ def group_edit(request,username):
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   if group.is_active == True or group.admin == student or group.user == user:
     count = group.groupinfo.members.count()
     if group.user == user or group.admin == student:
@@ -236,7 +238,9 @@ def member_add(request, username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   MemberAddForm = forms.MemberAddFormGen(groupinfo)
   page_info = 'Add a Member'
@@ -296,7 +300,9 @@ def member_delete(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   choices = groupinfo.members.all()
   form = forms.MemberDeleteForm(choices)
@@ -340,7 +346,9 @@ def member_add_multiple(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   page_info="Add Multiple Members"
   if group.user == user or group.admin == student:
@@ -411,7 +419,9 @@ def admin_change(request, username):
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   form = forms.AdminChangeFormGen(groupinfo)
   page_info = 'Change Admin'
@@ -460,7 +470,9 @@ def post_add(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   page_info = 'Add a Post'
   if group.user == user or group.admin == student:
@@ -502,7 +514,9 @@ def post_delete(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   page_info = 'Delete Posts'
   choices = groupinfo.posts.all().exclude(post_name="Member")
@@ -541,7 +555,9 @@ def post_change(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   page_info = 'Change Post'
   form = forms.PostChangeFormGen(groupinfo)
@@ -588,7 +604,9 @@ def subscriber(request,username):
         }, context_instance=RequestContext(request))
   if request.is_ajax() and request.method == 'POST' and group.is_active:
     user = request.user
-    student = user.student
+    student = None
+    if user.is_authenticated() and user.in_group('Student'):
+      student = user.student
     subscribed = request.POST['subscribed']
     msg='filler'
     if subscribed == 'False':
@@ -620,7 +638,9 @@ def activate(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   if group.user == user or group.admin == student:
     group.is_active = True
     group.save()

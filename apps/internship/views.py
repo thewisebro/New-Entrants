@@ -37,8 +37,9 @@ def index(request):
   """
   try:
     l.info(request.user.username +': tried to view Home page')
-    student = request.user.student
-    if not student :
+    try:
+      student = request.user.student
+    except:
       if request.user.groups.filter(name = 'Placement Admin').exists() :
         #In case of Placement Admin, who is not a student 
         user = request.user

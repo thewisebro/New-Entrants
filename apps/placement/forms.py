@@ -16,6 +16,10 @@ class Place(forms.ModelForm):
     exclude = ('student', 'no_of_companies_placed', 'status', 'placed_company_category','is_debarred' )
 
 class CompanyForm(forms.ModelForm) :
+  def __init__(self, *args, **kwargs):
+    super(CompanyForm, self).__init__(*args, **kwargs)
+    self.auto_id = '%s'
+
   #Search for a better method
   contact_person = forms.ModelChoiceField(queryset = models.CPTMember.objects.filter(year = current_session_year()), required=False)
   open_for_disciplines = forms.ModelMultipleChoiceField(queryset=Branch.objects.all().order_by('degree','department'), widget=forms.CheckboxSelectMultiple)
@@ -96,8 +100,8 @@ class Profile(forms.ModelForm):
                'bank_account_no', 'height', 'blood_group', 'weight',
                'passport_no', 'nearest_station', 'local_guardian_name',
                'local_guardian_address', 'local_guardian_contact_no',
-               'physically_handicapped', 'fulltime', 'resident', 'license_no',
-               'category', 'home_contact_no')
+               'physically_disabled', 'fulltime', 'resident', 'license_no',
+               'category', 'home_contact_no', 'birth_date')
   birth_date = forms.DateField(required = True, widget=forms.DateInput(attrs={'class':'iDateField'}))
 
 class EducationalFormset(BaseModelFormSet):

@@ -66,6 +66,9 @@ class UserPhoto(CropImage):
   def get_instance(cls, request, pk):
     if request.user.is_superuser:
       return User.objects.get(pk=pk)
+    elif User.objects.get(pk=pk).in_group('Student Group'):
+      if User.objects.get(pk=pk).group.admin.user == request.user:
+        return User.objects.get(pk=pk)
     else:
       return request.user
 
@@ -136,10 +139,13 @@ class User(AbstractUser, models.Model):
     if self.in_group('Student'):
       student = self.student
       string = MC.SIMPLIFIED_DEGREE[student.branch.degree]+' '+\
-               (student.branch.name if len(student.branch.name)<20\
-                else student.branch.code)
-      if student.semester > 0:
-        string += ' ' + int2roman(student.year) + ' Year'
+            (student.branch.name if len(student.branch.name)<20\
+            else student.branch.code)
+      if not student.passout_year:
+        if student.semester > 0:
+          string += ' ' + int2roman(student.year) + ' Year'
+      else:
+        string += ' (%s Batch)' % student.passout_year
       return string
     elif self.in_group('Faculty'):
       return dict(FC.DESIGNATION_CHOICES)[self.faculty.designation]+\
@@ -430,8 +436,8 @@ class StudentUserInfo(StudentUser, AbstractStudentInfo):
 
 
 class Course(models.Model):
-  id = models.CharField(primary_key=True, max_length=15)
-  code = models.CharField(max_length=MC.CODE_LENGTH)
+  id = models.CharField(primary_key=True, max_length=60)
+  code = models.CharField(max_length=50)
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   credits = models.IntegerField()
   subject_area = models.CharField(max_length=MC.CODE_LENGTH)
@@ -503,7 +509,7 @@ class Alumni(Role('Alumni')):
 
 ########################## Other useful Models ########################
 
-class PHPSession(models.Model):
+class PHPSession(django_models.Model):
   session_key = models.CharField(max_length=40, primary_key=True)
   session_data = models.TextField()
   expire_date = models.DateTimeField(db_index=True)

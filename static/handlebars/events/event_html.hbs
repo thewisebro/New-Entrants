@@ -4,7 +4,7 @@
       onmouseout='event_container_mouse_out({{Event.id}});'>
   <div class='event'>
     <div class='event-time-title'>
-      <div class='event-time'>
+      <div class='event-time{{#if color}} {{color}}-time{{/if}}'>
         <div class='event-date'>{{Event.day}}</div>
         <div class='event-monthyear'>{{Event.monthyear}}</div>
       </div>

@@ -15,7 +15,7 @@ parent.birthday_wish_dialog.dialog('close');
 
 {% block content %}
 {% if not already_wished %}
-<form action="" method="POST">{% csrf_token %}
+<form action="" method="POST" style="margin-top:10px">{% csrf_token %}
   <textarea class='textarea-field' id="birthday-msg" name="msg" autofocus="true"></textarea>
   <input class='input-button' type="submit" name="submit" value="Wish"/>
 </form>

@@ -1,13 +1,3 @@
-<div id="_notices-header">
-    <div id="_source_wrap">
-      <div id="_next" class="button4 button-div" onclick="prev_next_clicked(1)">Next</div>
-      <div id="_prev" class="button4 button-div" onclick="prev_next_clicked(0)">Prev</div>
-      <div id="_back" class="button4 button-div" onclick="location.hash = prev_content_url"><i id="back" class="fa fa-angle-left categories" style="display: inline"></i></div>
-      <div style="clear:both"></div>
-    </div>
-  <div id="_home" class="button4 button-div" onclick="location.hash = '#notices'">Home</div>
-  <div style="clear:both"></div>
-</div>
 <div id="_info">
   <div id="_subject_wrap">
     <div id="_subject" class="_details_heading">Subject : </div>
@@ -25,7 +15,7 @@
 
     <div id="_date_wrap" {{#if ref_exist}}class="ref_yes"{{else}}class="ref_no"{{/if}}>
       <div id="_date" class="_details_heading">Posted On : </div>
-      <div id="_date_value" class="_details">{{ data.datetime_modified }} </div>
+      <div id="_date_value" class="_details">{{ data.datetime_created }} </div>
       <div style="clear:both"></div>
     </div>
 
@@ -40,5 +30,7 @@
     <div style="clear:both"></div>
   </div>
 
-  <div id="_content">{{{ data.content }}}</div>
+  <div id="_content">{{{ data.content }}}
+    <div style="clear:both"></div>
+  </div>
 </div>

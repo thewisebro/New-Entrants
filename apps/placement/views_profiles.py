@@ -42,14 +42,17 @@ def photo(request):
       # Form has been submitted.
       form = plac_forms.Place(request.POST, request.FILES, instance = plac_person)
       if form.is_valid():
-        name = request.FILES['photo'].name
-        extension = name[-3:]
-        if extension.lower() not in ['jpg','gif','png','bmp']:
-          l.info(request.user.username + ': Invalid image type added')
-          messages.error(request, 'Invalid Image type')
-          return HttpResponseRedirect(reverse('placement.views_profiles.photo'))
-        request.FILES['photo'].name = student.user.username+'.'+extension
-        form = plac_forms.Place(request.POST, request.FILES, instance = plac_person)
+        try:
+          name = request.FILES['photo'].name
+          extension = name[-3:]
+          if extension.lower() not in ['jpg','gif','png','bmp']:
+            l.info(request.user.username + ': Invalid image type added')
+            messages.error(request, 'Invalid Image type')
+            return HttpResponseRedirect(reverse('placement.views_profiles.photo'))
+#            request.FILES['photo'].name = student.user.username+'.'+extension
+#            form = plac_forms.Place(request.POST, request.FILES, instance = plac_person)
+        except Exception as e:
+          pass
         form.save()
         l.info(request.user.username + ': successfully added/updated photo')
         messages.success(request, 'Photo updated successfully.')
@@ -59,9 +62,9 @@ def photo(request):
     else:
       # Form has not been submitted.
       form = plac_forms.Place(instance = plac_person)
-      if plac_person.photo:
+#      if plac_person.photo:
         # Change the url of photo
-        plac_person.photo.name = u'placement/photo/'
+#        plac_person.photo.name = u'placement/photo/'
     return render_to_response('placement/basic_form.html', {
         'form':form,
         'title':'Photo',
@@ -92,6 +95,9 @@ def personal_information(request):
       l.info(request.user.username + ': created a default entry in personinfo.')
     if request.method == 'POST':
       form = plac_forms.Profile(request.POST, instance = info)
+      birth_date = datetime.datetime.strptime(request.POST['birth_date'], '%d-%m-%Y').strftime('%Y-%m-%d')
+      request.user.birth_date = birth_date
+      request.user.save()
       form.student = student
       if form.is_valid() :
         form.student = student
@@ -102,7 +108,17 @@ def personal_information(request):
       else:
         messages.error(request, form.errors, extra_tags='form_error')
     else :
-      form = plac_forms.Profile(instance = info)
+      initial = {'city': info.city,
+                'mothers_name': info.mothers_name,
+                'fathers_office_address': info.fathers_office_address,
+                'state': info.state,
+                'pincode': info.pincode ,
+                'fathers_office_phone_no': info.fathers_office_phone_no,
+                'fathers_name': info.fathers_name,
+                'birth_date': request.user.birth_date.strftime('%d-%m-%Y'),
+                'permanent_address': info.permanent_address,
+                'fathers_occupation': info.fathers_occupation}
+      form = plac_forms.Profile(initial=initial)
     return render_to_response('placement/basic_form.html', {
         'form': form,
         'title': 'Personal Information',
@@ -131,12 +147,13 @@ def contact(request):
       # TODO : Use cleaned values from the form
       # this may lead to sql insertion!
       student.user.email = request.POST['email_id']
-      student.personal_contact_no = request.POST['personal_contact_no']
+      student.user.contact_no = request.POST['personal_contact_no']
       student.bhawan = request.POST['bhawan']
       student.room_no = request.POST['room_no']
       info.home_contact_no = request.POST['permanent_contact_no']
       info.save()
       student.save()
+      student.user.save()
       l.info(request.user.username + ': Updated Student successfully. Redirecting to home.')
       messages.success(request, 'Profile saved successfully')
       return HttpResponseRedirect(reverse('placement.views_profiles.contact'))
@@ -341,10 +358,10 @@ def editset(request, model_name):
 
     model_type = globals()[model_name]
     if plac_person.status in ('LCK', 'VRF') :
-      FormSetFactory = modelformset_factory(model_type, form=forms.ModelForm,
+      FormSetFactory = modelformset_factory(model_type, formset=forms.BaseModelFormSet,
                                             extra = 0, exclude = ('student', ))
     else :
-      FormSetFactory = modelformset_factory(model_type, form=forms.ModelForm,
+      FormSetFactory = modelformset_factory(model_type, formset=forms.BaseModelFormSet,
                                             can_delete = True, exclude = ('student', ))
     # Details which will be editable even if the student is locked or verified.
     # To make a field editable, just add the field name to the ediatbles tuple
@@ -387,6 +404,8 @@ def editset(request, model_name):
         if len(instances) > 0 :
           instances[-1].student = student
         # Save each instance individually as formset.save will throw exception if a form is marked as to be deleted.
+        for obj in formset.deleted_objects:
+          obj.delete()
         for instance in instances :
           instance.save()
         l.info (request.user.username + ': Update successfully- '+ model_name_spaced + '. Redirecting to home.')

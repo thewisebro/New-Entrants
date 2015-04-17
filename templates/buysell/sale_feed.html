@@ -10,4 +10,9 @@
 
 {% block feed_detail %}
 Added {{ instance.item_name }} for sale.
+<div style='clear:both'></div>
+  {% ifnotequal instance.item_image None %}
+    <img src='/media/{{ instance.item_image}}'/>
+  {% endifnotequal %}
 {% endblock %}
+

@@ -20,8 +20,7 @@ var lectutApp = angular.module('lectutApp', [
     'angular-loading-bar',
     'infinite-scroll',
     'oitozero.ngSweetAlert',
-    'angular-growl',
-    'angucomplete-alt'
+    'ngNotify'
   ]);
 
 
@@ -79,10 +78,10 @@ lectutApp.config(['$locationProvider','$routeProvider',
         templateUrl: 'views/partials/common-course-home.html',
         controller: 'CourseHomeCtrl'
       }).
-      when('/course/:courseId/', {
+      /*when('/course/:courseId/', {
         templateUrl: 'views/partials/course-detail.html',
         controller: 'CourseDetailCtrl'
-      }).
+      }).*/
       when('/course/:courseId/feeds', {
         templateUrl: 'views/partials/course-feeds.html',
         controller: 'CourseDetailCtrl'

@@ -6,6 +6,8 @@
        <img ng-src="{[base_domain]}{[auth.user.photo]}"></img> 
     </div>
     <div class="cPContent" ng-init="tab=1">
+      <div class="postOverlay">
+      </div>
       <div class="postType">
           <ul>
           <!--
@@ -34,7 +36,7 @@
                         <ul class="itemDisplay" ng-show="fileArray.Lecture.length != 0 || fileArray.Tutorial.length != 0 || fileArray.ExamPaper.length != 0 || fileArray.Solution.length != 0">
                         <!--LECTURE -->
                            <li style="font:smaller">
-                              <div ng-show="fileArray.Lecture.length" class="headerTypeUpload"><i class="fa fa-circle c_lec" style="padding-right:5px;"></i>Lectures</div>
+                              <div ng-show="fileArray.Lecture.length" class="headerTypeUpload"><i class="fa fa-circle c_Lecture" style="padding-right:5px;"></i>Lectures</div>
                               <ul>
                                 <li ng-repeat="f in fileArray.Lecture">
                                   <span class="fileIcon">
@@ -51,7 +53,7 @@
                            </li>
                         <!--TUTORIAL -->
                            <li style="font:smaller">
-                              <div ng-show="fileArray.Tutorial.length" class="headerTypeUpload"><i class="fa fa-circle c_tut" style="padding-right:5px;"></i>Tutorial</div>
+                              <div ng-show="fileArray.Tutorial.length" class="headerTypeUpload"><i class="fa fa-circle c_Tutorial" style="padding-right:5px;"></i>Tutorial</div>
                               <ul>
                                 <li ng-repeat="f in fileArray.Tutorial">
                                   <span class="fileIcon">
@@ -68,7 +70,7 @@
                            </li>
                         <!--EXAMPAPAER -->
                            <li style="font:smaller">
-                              <div ng-show="fileArray.ExamPaper.length" class="headerTypeUpload"><i class="fa fa-circle c_exp" style="padding-right:5px;"></i>Exam Paper</div>
+                              <div ng-show="fileArray.ExamPaper.length" class="headerTypeUpload"><i class="fa fa-circle c_Exam" style="padding-right:5px;"></i>Exam Paper</div>
                               <ul>
                                 <li ng-repeat="f in fileArray.ExamPaper">
                                   <span class="fileIcon">
@@ -85,7 +87,7 @@
                            </li>
                         <!--SOLUTION -->
                            <li style="font:smaller">
-                              <div ng-show="fileArray.Solution.length" class="headerTypeUpload"><i class="fa fa-circle c_sol" style="padding-right:5px;"></i>Solution</div>
+                              <div ng-show="fileArray.Solution.length" class="headerTypeUpload"><i class="fa fa-circle c_Solution" style="padding-right:5px;"></i>Solution</div>
                               <ul>
                                 <li ng-repeat="f in fileArray.Solution">
                                   <span class="fileIcon">
@@ -113,7 +115,7 @@
                     <div class="postButton" ng-click="finalSend()">
                       Post
                     </div>
-                    <div class="profPrivacy">
+                    <div class="profPrivacy" ng-show='auth.user.role == "Faculty"'>
                       <div class="onoffswitch">
                           <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked ng-model="privacy">
                           <label class="onoffswitch-label" for="myonoffswitch">
@@ -121,6 +123,7 @@
                            <!-- <span class="onoffswitch-switch"></span>-->
                           </label>
                       </div>
+                      <div style="float: right; font-size: 13px; color: #999; padding-right: 10px; line-height: 27px;">Only students in this batch can see private post.</div>
                     </div>
                     <div>
                        <span ng-click="changeToggle()" ng-class="{'addFiles': !toggled, 'addFilesWhite': toggled}">
@@ -136,6 +139,10 @@
       </div>
           </div>
   </div>
+   </div>
+
+   <div class="noPosts" ng-show="posts.length == 0">
+      No posts here.
    </div>
    <div class="postDiv" ng-repeat="post in posts">
 
@@ -169,14 +176,16 @@
                     </div>
                     <div class="fileImage">
                        <img ng-show='file.file_type == "image"' ng-src="{[base_domain]}/{[file.filepath]}"></img>
-                       <i ng-hide='file.file_type == "image"' class="fa fa-file-{[file.file_type]}-o"></i>
+                       <i ng-show='file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>
                        <i ng-show='file.file_type == "ppt"' class="fa fa-file-powerpoint-o"></i>
-                       <i ng-hide='file.file_type == "zip"' class="fa fa-file-archive-o"></i>
-                       <i ng-show='file.file_type == "other"' class="fa fa-file"></i> 
+                       <i ng-show='file.file_type == "zip"' class="fa fa-file-archive-o"></i>
+                       <i ng-show='file.file_type == "sheet"' class="fa fa-file-excel-o"></i>
+                       <i ng-show='file.file_type == "doc"' class="fa fa-file-word-o"></i>
+                       <i ng-show='file.file_type == "other"' class="fa fa-file-o"></i> 
                     </div>
                     <div class="fileData">
                        <div class="filename">
-                          <a ng-href="#/course/{[coId.courseId]}/files/{[file.id]}">{[file.upload_file]}</a>
+                          <a ng-href="#/course/{[coId.courseId]}/files/{[file.id]}" ng-click="updateCourseId(post.post.batch.id)">{[file.upload_file]}</a>
                        </div>
                        <div class="fileType">
                             <i class="fa fa-circle c_{[file.upload_type]}" style="padding-right: 3px;"></i>
@@ -189,13 +198,15 @@
         </div>
         <div class="commentsBlock" ng-show="logIn">
           <div ng-click="loadCommentsFunc(post.post.id)" class="showHideComments">
-            Comments <span class="commentsCount">3</span>
+            Comments <span class="commentsCount" ng-show="post.post.count != 0">{[post.post.count]}</span>
           </div>
           <div id="postComments_{[post.post.id]}" class="loadComments">
             
           </div>
         </div>
 </div>
+
+
 <!--
             <div class="postComments">
               <div class="commentTextDiv">

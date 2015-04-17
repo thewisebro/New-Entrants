@@ -7,18 +7,17 @@ from django.core.cache import cache, get_cache
 import simplejson
 
 from notices.constants import *
-from notices.constants import *
 
 class AbstractNotice(models.Model):
-  subject = models.CharField(max_length=100)
+  subject = models.CharField(max_length=200)
   reference = models.CharField(max_length=100, blank=True)
   expire_date = models.DateField()
   content = CKEditorField()
   uploader = models.ForeignKey('Uploader')
   emailsend = models.BooleanField(default=False)
   re_edited = models.BooleanField(default=False)
-  expired_status = models.BooleanField(default=False)
-  datetime_modified = models.DateTimeField(auto_now=True)
+  expired_status = models.BooleanField(db_index=True, default=False)
+  datetime_modified = models.DateTimeField(db_index=True, auto_now=True)
 
   class Meta:
     abstract = True

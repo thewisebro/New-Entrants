@@ -19,21 +19,51 @@
 //}
 
 //Dynamic Columns Layout
+//.gallery-image-container {
+//	column-width: 33%;
+//	column-gap: 8px;
+//	width: inherit;
+//	max-width: 1200px;
+//	margin: 0 auto;
+//	* {
+//		-webkit-column-break-inside: avoid;
+//		display: inline-block;
+//		border-radius: 3px;
+//		margin-bottom: 2px;
+//	}
+//  * img {
+//		width: 100%;
+//		height: auto;
+//		border-radius: 3px;
+//	}
+//}
+
 .gallery-image-container {
-	column-width: 275px;
-	column-gap: 8px;
-	width: inherit;
-	max-width: 1200px;
-	margin: 0 auto;
-	* {
-		-webkit-column-break-inside: avoid;
-		display: inline-block;
-		border-radius: 3px;
-		margin-bottom: 2px;
-	}
-	* img {
-		width: 100%;
-		height: auto;
-		border-radius: 3px;
-	}
+  width: 100%;
+  margin: 0 auto;
+  div {
+    position: relative;
+    width: 100%;
+    max-width: 850px;
+    height: 100px;
+    border-radius: 3px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    & > div {
+      background-color: $white;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: 50% 50%;
+      p {
+        position: absolute;
+        left: 33px;
+        top: 33px;
+        margin: 0;
+        font-size: $huge;
+        color: $white;
+			  text-shadow: 0 1px 1px #333;
+			  font-weight: 700;
+      }
+    }
+  }
 }
