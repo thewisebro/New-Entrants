@@ -50,7 +50,7 @@ student_apps = ['acad','lectut','yaadein','jukebox','dc++','placement',
                 'buysell', 'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research']
 
-faculty_apps = ['facapp','lectut','placement', 'research',
+faculty_apps = ['responses','acad_course_students','facapp','lectut','placement', 'research',
                 'thinktank','lostfound','softwares','peoplesearch']
 
 other_apps = ['lectut','yaadein','jukebox','dc++','thinktank',
