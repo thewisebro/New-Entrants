@@ -47,12 +47,13 @@ channeli_apps = {
 }
 
 student_apps = ['acad','lectut','yaadein','jukebox','dc++','placement',
-                'buysell','grades', 'thinktank','lostfound','softwares',
+                'buysell', 'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research']
 
-faculty_apps = ['facapp','lectut','placement',
+faculty_apps = ['responses','acad_course_students','facapp','lectut','placement', 'research',
                 'thinktank','lostfound','softwares','peoplesearch']
-other_apps = ['lectut','placement','thinktank',
+
+other_apps = ['lectut','yaadein','jukebox','dc++','thinktank',
               'lostfound','softwares','peoplesearch']
 
 external_links = {

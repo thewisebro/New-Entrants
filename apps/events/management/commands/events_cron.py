@@ -1,15 +1,8 @@
-#!/usr/bin/python
-import os, sys
-sys.path.append(os.getcwd())
-try:
-  from apache import override as settings
-except:
-  import settings
-from django.core.management import setup_environ
-setup_environ(settings)
+from django.core.management.base import BaseCommand, CommandError
+from django.test import Client
+from django.conf import settings
 import time as ptime
 from BeautifulSoup import BeautifulSoup
-from utilities.models import EmailAuthUser
 from events.models import *
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -73,29 +66,33 @@ def get_subject_content(event):
   content = render_to_string('events/email.html',{'PeopleProxyUrl':PeopleProxyUrl,'event':event_dict_for_email(event)})
   return subject,content
 
-if __name__ == '__main__':
-  events = Event.objects.extra(
+class Command(BaseCommand):
+  args = ''
+  help = 'Generates cached pages for production'
+
+  def handle(self, *args, **options):
+    events = Event.objects.extra(
       where = [
         "NOT event_type = 'NOEMAIL'",
         "email_sent = 0",
         "NOT ((event_type = 'REMINDER') AND (DATE_ADD(NOW(),INTERVAL 6 HOUR) < IF(time,ADDTIME(date,time),date)))"]
-  )
-  for event in events:
-    event.email_sent = True
-    event.save()
-    event_users = event.calendar.eventsuser_set.all()
-    subject,content = get_subject_content(event)
-    email_ids = []
-    for event_user in event_users:
-      if event_user.email_subscribed:
-        email_ids.append(event_user.user.get_email())
-    while email_ids:
-      first_100_email_ids = email_ids[:100]
-      email_ids = email_ids[100:]
-      try:
-        msg = EmailMessage(subject,content,'Event',first_100_email_ids)
-        msg.content_subtype = "html"
-        msg.send()
-      except Exception as e:
-        print "Exception",e
-      ptime.sleep(30)
+    )
+    for event in events:
+      event.email_sent = True
+      event.save()
+      event_users = event.calendar.eventsuser_set.all().filter(user__username=10311025)
+      subject,content = get_subject_content(event)
+      email_ids = []
+      for event_user in event_users:
+        if event_user.email_subscribed:
+          email_ids.append(event_user.user.email)
+      while email_ids:
+        first_100_email_ids = email_ids[:100]
+        email_ids = email_ids[100:]
+        try:
+          msg = EmailMessage(subject,content,'Event',first_100_email_ids)
+          msg.content_subtype = "html"
+          msg.send()
+        except Exception as e:
+          print "Exception",e
+        ptime.sleep(30)

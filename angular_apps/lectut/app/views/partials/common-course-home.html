@@ -13,7 +13,7 @@
                   <i class="fa fa-times-circle-o"></i>
               </span>
             </div>
-            <div class="postTime">
+            <div class="postTime" ng-click="updateCourseId(post.post.batch.id)">
               <a am-time-ago="post.post.datetime_created" ng-href="#/course/{[post.post.batch.id]}/feeds/{[post.post.id]}"></a>
             </div>
           </div>
@@ -32,6 +32,7 @@
                     <div class="fileImage">
                        <img ng-show='file.file_type == "image"' ng-src="{[base_domain]}/{[file.filepath]}"></img>
                        <i ng-show='file.file_type == "ppt"' class="fa fa-file-powerpoint-o"></i>
+                       <i ng-show='file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>
                        <i ng-show='file.file_type == "zip"' class="fa fa-file-archive-o"></i>
                        <i ng-show='file.file_type == "sheet"' class="fa fa-file-excel-o"></i>
                        <i ng-show='file.file_type == "doc"' class="fa fa-file-word-o"></i>
@@ -39,7 +40,7 @@
                     </div>
                     <div class="fileData">
                        <div class="filename">
-                          <a ng-href="#/course/{[post.post.batch.id]}/files/{[file.id]}">{[file.upload_file]}</a>
+                          <a ng-href="#/course/{[post.post.batch.id]}/files/{[file.id]}" ng-click="updateCourseId(post.post.batch.id)">{[file.upload_file]}</a>
                        </div>
                        <div class="fileType">
                             <i class="fa fa-circle c_{[file.upload_type]}" style="padding-right: 3px;"></i>

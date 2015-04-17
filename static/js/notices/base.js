@@ -182,8 +182,6 @@ function redirection()            //The main controller function which defines t
             $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
           //console.log("6starred_uploads_yes");
             $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
-            $('#select_bars').tooltip("destroy");
-            $('#select_bars').tooltip({content: "Go Back", position: {at: "right+5 top-20"}});
             $("#filters").slideUp(400);
           //console.log("7starred_uploads_yes");
             same_except_page_no=0;
@@ -200,8 +198,6 @@ function redirection()            //The main controller function which defines t
             $("#select_bars").removeAttr("onclick");
             $("#select_bars").attr("onclick", "display_categories(event);");
             $("#back").hide("fade", 200, function(){$("#bars").show("fade", 200);});
-            $('#select_bars').tooltip("destroy");
-            $('#select_bars').tooltip({content: "Display category menu", position: {at: "right+5 top-20"}});
             $("#filters").slideDown(400);
             same_except_page_no=0;
           }
@@ -406,8 +402,6 @@ function create_static_divs()                //Create static buttons like upload
       $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div id="settings" onclick="location.hash=\'#settings/email\'"><i id="gear" class="fa fa-cog"></i>Subscription Settings</div><div style="clear:both"></div></div>');
     //console.log("switched_to_notices_create : static divs created");
     $('#more').bind("click", bind_unbind_tooltip);
-    $('#main_check').tooltip({position: {at: "right+5 top-20"}});
-    $('#select_bars').tooltip({position: {at: "right+5 top-20"}});
 }
 
 function get_total_notices_no()       //This function is only meant for general notice display(categories other than All, All)
@@ -606,7 +600,7 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
       for(var i=a; i<b; i++)
       {
             context["notice"] = tstore[i];
-            var d = context.notice.datetime_modified.split('T')[0];
+            var d = context.notice.datetime_created.split('T')[0];
             d = Date.parse(d);
             if(d.getTime() == Date.parse("today").getTime())
               context["notice_date"] = "Today";
@@ -973,21 +967,21 @@ function insert_and_maintain_datesort(notice)
        starred_array.push(notice);
      else if(len==1)
      {
-         if(notice.datetime_modified>=starred_array[0].datetime_modified)
+         if(notice.datetime_created>=starred_array[0].datetime_created)
           starred_array.splice(0, 0, notice);
          else
           starred_array.splice(1, 0, notice);
      }  
      else
      {
-       if(notice.datetime_modified>=starred_array[0].datetime_modified)
+       if(notice.datetime_created>=starred_array[0].datetime_created)
         starred_array.splice(0, 0, notice);
-       else if(notice.datetime_modified<=starred_array[len-1].datetime_modified)
+       else if(notice.datetime_created<=starred_array[len-1].datetime_created)
         starred_array.splice(len, 0, notice);
        else
        {
          for(var i=1;i<len;i++)
-           if(notice.datetime_modified<=starred_array[i-1].datetime_modified && notice.datetime_modified>=starred_array[i].datetime_modified)
+           if(notice.datetime_created<=starred_array[i-1].datetime_created && notice.datetime_created>=starred_array[i].datetime_created)
            {
              starred_array.splice(i, 0, notice);
              break;
@@ -1055,11 +1049,17 @@ function read_star_checklist(t)
       {
         read_array[a[i]]=1;
         $("#notice_"+a[i]).attr({class : "notice_info read"});
+        $(".notice_date").attr({class : "notice_date read"});
+        $(".notice_source").attr({class : "notice_source read"});
+        $(".notice_subject").attr({class : "notice_subject read"});
       }
       else
       {
         delete read_array[a[i]];
         $("#notice_"+a[i]).attr({class : "notice_info unread"});
+        $(".notice_date").attr({class : "notice_date unread"});
+        $(".notice_source").attr({class : "notice_source unread"});
+        $(".notice_subject").attr({class : "notice_subject unread"});
       }
     }
     q=q.substring(0,q.length-1);
@@ -1374,7 +1374,7 @@ function open_upload_dialog()
     dialog_iframe({
       name:'notice_upload_dialog',
       title:'Upload a notice',
-      width:900,
+      width:1000,
       height:650,
       src:'/notices/upload',
   });
@@ -1509,7 +1509,7 @@ function bring_uploads()
           check_upload_array[data[i].id]=1;
         }
         upload_array.sort(function(a, b){
-           var dateA=new Date(a.datetime_modified), dateB=new Date(b.datetime_modified);
+           var dateA=new Date(a.datetime_created), dateB=new Date(b.datetime_created);
             return dateB-dateA; //sort by date descending
         })
         //console.log("loaded : bring_uploads");
@@ -1655,7 +1655,7 @@ function load_numbers_bar_html(tp23, mode1)
 function display_notice_html(data)
 {
     //console.log(data);
-    data['datetime_modified']=data['datetime_modified'].replace("T", " ")
+    data['datetime_created']=data['datetime_created'].replace("T", " ")
     var ref_exist = 0;
     if(data.reference!="")
       ref_exist = 1;

@@ -7,7 +7,7 @@ class SessionRouter(object):
         """
         Attempts to read auth models go to auth_db.
         """
-        if model._meta.app_label == 'sessions':
+        if model._meta.app_label == 'sessions' or model.__name__ == 'PHPSession':
             return 'sessions_db'
         return None
 
@@ -15,7 +15,7 @@ class SessionRouter(object):
         """
         Attempts to write auth models go to auth_db.
         """
-        if model._meta.app_label == 'sessions':
+        if model._meta.app_label == 'sessions' or model.__name__ == 'PHPSession':
             return 'sessions_db'
         return None
 
@@ -31,8 +31,8 @@ class SessionRouter(object):
         database.
         """
         if db == 'sessions_db':
-            return model._meta.app_label == 'sessions'
-        elif model._meta.app_label == 'sessions':
+            return model._meta.app_label == 'sessions' or model.__name__ == 'PHPSession'
+        elif model._meta.app_label == 'sessions' or model.__name__ == 'PHPSession':
             return False
         return None
 

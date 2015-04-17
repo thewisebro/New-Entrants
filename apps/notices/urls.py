@@ -4,6 +4,7 @@ from filemanager import path_end
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = patterns('',
+    url(r'^$', 'notices.views.redirect_index', name='notices_redirect_index'),
     url(r'^upload/$', 'notices.views.upload', name='upload'),
     url(r'^edit_notice/(?P<pk>\d+)/$', 'notices.views.edit', name = 'edit'),
     url(r'^delete_notice/(?P<pk>\d+)/$', 'notices.views.delete', name = 'delete'),

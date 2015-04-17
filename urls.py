@@ -6,6 +6,7 @@ admin.autodiscover()
 
 actual_urlpatterns = patterns('',
   url(r'', include('nucleus.urls')),
+  url(r'^nucleus/', include('nucleus.urls')),
   url(r'^feeds/', include('feeds.urls')),
   url(r'^notifications/', include('notifications.urls')),
   url(r'^moderation/', include('moderation.urls')),
