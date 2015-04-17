@@ -6,9 +6,12 @@
 {% endblock %}
 {% block styles %}
     <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/base.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/input_styles.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/dataTables.bootstrap.css" type="text/css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/jquery.dataTables.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
 {% endblock %}
 {% block body %}
 <div class="content">
@@ -38,6 +41,24 @@
               <button class="btn btn-primary" type="submit">Export</button>
         </form>  {% endcomment %}
       </div>
+       {% if messages %}
+       {% for message in messages %}
+       {% if message.tags == 'form_error error' %}
+         {# As form errors already have html p tag and class='error_field', we need to do this. #}
+         {% autoescape off %}
+           {{ message|safe }}
+         {% endautoescape %}
+       {% else %}
+         {# For those messages that have a tag, the tag name equals the class name. #}
+         {% if message.tags %}
+           <p class="{{ message.tags }}">{{ message|safe }}</p>
+         {% else %}
+           {# For those messages that don't have a tag, class name is 'unknown_message'. #}
+           <p class="unknown_message">{{ message|safe }}</p>
+         {% endif %}
+       {% endif %}
+       {% endfor %}  {# End message for #}
+       {% endif %}  {# End messages if #}
 
       <div class="uploader">
         <table class="table">
@@ -72,7 +93,7 @@
         </table>
       </div>
       <div id="companies">
-        <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_img.assign_company_coordinator' %}">
+        <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_img.assign_campus_contact' %}">
         {% csrf_token %}
         <table id ="company" class="table table-striped table-bordered display compact">
           <thead>

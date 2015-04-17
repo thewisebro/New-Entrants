@@ -563,11 +563,13 @@ def person_search(request):
   return HttpResponse(data,'application/json')
 
 def assign_campus_contact(request):
-  import ipdb; ipdb.set_trace()
   if request.method == 'POST':
     form = AssignCoordinatorForm(request.POST)
     if form.is_valid():
       company_coordinator = form.cleaned_data['company_coordinator']
+      if not company_coordinator:
+        messages.error(request, 'Please select Company Coordinator to assign companies')
+        return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
       if company_coordinator not in Group.objects.get(name='Company Coordinator').user_set.all():
         messages.error(request, 'Given person is not Company Coordinator. You can add using Add Company Coordinator Form')
         return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
@@ -585,3 +587,36 @@ def assign_campus_contact(request):
         messages.error(request, 'Invalid Company')
         return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
     return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists() , login_url=login_url)
+def contactmanager_delete(request, campus_contact_id):
+  try:
+    campus_contact = CampusContact.objects.get(id=campus_contact_id)
+    if not request.user.groups.filter(name='Placement Manager'):
+      if campus_contact.student != request.user.student:
+        messages.error(request, 'You are not allowed to delete campus contact that you are not assigned. Contact Placement Manager for access')
+        return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
+
+  except ObjectDoesNotExist:
+    messages.error(request, 'The company contact has been already deleted')
+    if not request.user.groups.filter(name="Placement Manager"):
+      return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
+    return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+
+  contact_person = campus_contact.contact_person
+  company = contact_person.company_contact
+  was_primary = contact_person.is_primary
+  campus_contact.delete()
+  contact_person.delete()
+  contact_person_list = ContactPerson.objects.filter(company_contact = company)
+  if not contact_person_list:
+    company.delete()
+  if was_primary:
+    messages.warning(request, 'Primary Campus Contact Deleted')
+  else:
+    messages.success(request, 'Campus Contact Deleted')
+
+  if not request.user.groups.filter(name="Placement Manager"):
+    return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
+  return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
