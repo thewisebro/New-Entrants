@@ -24,7 +24,7 @@ class GetNoticeSerializer(serializers.ModelSerializer):
   content = serializers.SerializerMethodField('get_content')
   class Meta:
     model = Notice
-    fields = ('id', 'reference', 'subject', 'username', 'category' , 'content', 'datetime_modified')
+    fields = ('id', 'reference', 'subject', 'username', 'category' , 'content', 'datetime_created')
     depth = 1
 
   def get_username(self, obj):

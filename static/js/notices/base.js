@@ -1655,7 +1655,7 @@ function load_numbers_bar_html(tp23, mode1)
 function display_notice_html(data)
 {
     //console.log(data);
-    data['datetime_modified']=data['datetime_modified'].replace("T", " ")
+    data['datetime_created']=data['datetime_created'].replace("T", " ")
     var ref_exist = 0;
     if(data.reference!="")
       ref_exist = 1;
