@@ -17,7 +17,7 @@ import logging, os
 import xlrd
 import xlwt
 import datetime
-from nucleus.models import Student, WebmailAccount, User
+from nucleus.models import Student, WebmailAccount, User, Group
 from placement import policy, forms
 from placement.policy import current_session_year
 from placement.models import *
@@ -562,5 +562,26 @@ def person_search(request):
     data = 'fail'
   return HttpResponse(data,'application/json')
 
-def assign_company_coordinator(request):
-  pass
+def assign_campus_contact(request):
+  import ipdb; ipdb.set_trace()
+  if request.method == 'POST':
+    form = AssignCoordinatorForm(request.POST)
+    if form.is_valid():
+      company_coordinator = form.cleaned_data['company_coordinator']
+      if company_coordinator not in Group.objects.get(name='Company Coordinator').user_set.all():
+        messages.error(request, 'Given person is not Company Coordinator. You can add using Add Company Coordinator Form')
+        return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+      try:
+        assigns = form.data['assigns']
+      except KeyError as e:
+        messages.error(request, 'Please select comapny to assign')
+        return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+      try:
+        for assign in assigns:
+          campus_contact = CampusContact.objects.get(id=assign)
+          campus_contact.student = company_coordinator.student
+          campus_contact.save()
+      except:
+        messages.error(request, 'Invalid Company')
+        return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+    return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))

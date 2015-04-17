@@ -200,7 +200,7 @@ def BaseModelFormFunction(model_type, exclude_list=None, data=None,**kwargs):
 # Following are the forms for new contact manager app
 
 class AssignCoordinatorForm(forms.Form):
-  company_coordinator = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label="None", required=False)  #Check This
+  company_coordinator = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label="None", required=False)
 
 class AddCoordinatorForm(forms.Form):
   student = forms.CharField(widget=forms.TextInput)

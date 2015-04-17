@@ -32,8 +32,6 @@ urlpatterns += patterns('placement.views_slots',
                        (r'^company_search/','company_search'),
     )
 
-
-
 # IMG urls
 urlpatterns += patterns('placement.views_img',
                        (r'^update/$','update_status'),
@@ -43,12 +41,12 @@ urlpatterns += patterns('placement.views_img',
                        (r'^company_coordinator/$', 'company_coordinator_view'),
                        (r'^company_coordinator/today/$', 'company_coordinator_today_view'),
                        (r'^contactmanager_manual/$','add_manual'),
-#                       (r'^contact_manager/edit/(?P<company_id>\d+)/$','contactmanager_edit'),
-#                       (r'^contact_manager/remove/(?P<company_id>\d+)/$','contactmanager_delete'),
-                       (r'^contact_manager/assign','assign_company_coordinator'),
+ #                      (r'^contact_manager/edit/(?P<company_id>\d+)/$','contactmanager_edit'),
+ #                      (r'^contact_manager/remove/(?P<company_id>\d+)/$','contactmanager_delete'),
+                       (r'^contact_manager/assign','assign_campus_contact'),
                        (r'^contact_manager/add/$', 'add_company_coordinator'),
                        (r'^contact_manager/person_search/$', 'person_search'),
-#                       (r'^contact_manager/generate_xls/$', 'generate_company_contact_xls'),
+ #                      (r'^contact_manager/generate_xls/$', 'generate_company_contact_xls'),
     )
 
 # Admin urls
