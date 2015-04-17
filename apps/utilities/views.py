@@ -16,7 +16,7 @@ from django.core.mail import send_mail
 from nucleus.models import StudentUserInfo, StudentInfo, WebmailAccount, User
 from nucleus.session import SessionStore
 from events.models import EventsUser
-from notices.models import NoticeUser
+from notices.models import NoticeUser, Category
 from notices.constants import MAIN_CATEGORIES_CHOICES
 from api.utils import pagelet_login_required, dialog_login_required
 from utilities.models import UserSession, PasswordCheck, UserEmail, PasswordReset

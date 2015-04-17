@@ -10,7 +10,7 @@ from notices.serializer import *
 from django.db.models import Q
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from django.views.generic import TemplateView
-import simplejson
+import json as simplejson
 from django.conf import settings
 from django.contrib import messages
 
@@ -20,6 +20,7 @@ from notices.forms import *
 from notices.utils import *
 import pytz
 from datetime import datetime
+from nucleus.models import GlobalVar
 
 PeopleProxyUrl = "http://people.iitr.ernet.in/"
 
@@ -32,6 +33,9 @@ def index(request):
     return render(request, 'notices/notice_list.html', context)
   context = { 'notice_list' : notice_list }
   return render(request, 'notices/notice_list.html', context)
+
+def redirect_index(request):
+  return HttpResponseRedirect("/#notices")
 
 @login_required
 def upload(request):
@@ -63,7 +67,7 @@ def upload(request):
 class PrivelegeJsonView(TemplateView):
   def get(self, request):
     try:
-      privelege = request.user.uploader_set.all().exists()
+      privelege = Uploader.objects.filter(user=request.user).exists()
       print "privelege1 " + str(privelege)
       privelege1 = {'privelege' : privelege}
     except:
@@ -129,8 +133,7 @@ class ContentFirstTimeBringNotices1(ListAPIView):              #Brings 50 notice
       if notice.id == int(nid):
         break
       i=i+1
-    global set1
-    if i!=len(notice_list):
+    if i!=notice_list.count():
       begin = i-i%50
       end = begin + 50
       page_no = i/10 + 1
@@ -141,8 +144,8 @@ class ContentFirstTimeBringNotices1(ListAPIView):              #Brings 50 notice
       set1["mode"] = "new"
       set1["page_no"] = page_no
       set1["status"] = "500"
+      GlobalVar["notices_set1"]=set1
       return queryset
-
     notice_list = Notice.objects.filter(expired_status=True).order_by('datetime_modified')       #Check in old notices
     i=0
     for notice in notice_list:
@@ -150,7 +153,7 @@ class ContentFirstTimeBringNotices1(ListAPIView):              #Brings 50 notice
       if notice.id == int(nid):
         break
       i=i+1
-    if i!=len(notice_list):
+    if i!=notice_list.count():
       begin = i-i%50
       end = begin + 50
       page_no = i/10 + 1
@@ -161,16 +164,18 @@ class ContentFirstTimeBringNotices1(ListAPIView):              #Brings 50 notice
       set1["mode"] = "old"
       set1["page_no"] = page_no
       set1["status"] = "500"
+      GlobalVar["notices_set1"]=set1
       return queryset
 
 class ContentFirstTimeBringNotices2(TemplateView):              #Brings 50 notices corresponding to the id in the url, when first opened in content mode
   def get(self, request):
+    set1 = GlobalVar["notices_set1"]
     set2 = simplejson.dumps(set1)
     return HttpResponse(set2, content_type="application/json")
 
 class Maxnumber(TemplateView):
   def get(self, request):
-    number_json = simplejson.dumps({'total_new_notices' : len(Notice.objects.filter(expired_status=False)),'total_old_notices' : len(Notice.objects.filter(expired_status=True)) })
+    number_json = simplejson.dumps({'total_new_notices' : Notice.objects.filter(expired_status=False).count(),'total_old_notices' : Notice.objects.filter(expired_status=True).count() })
     return HttpResponse(number_json, content_type="application/json")
 
 class TempMaxNotice(TemplateView):
@@ -180,9 +185,9 @@ class TempMaxNotice(TemplateView):
     else:
       queryset = Notice.objects.filter(expired_status=True)
     if(subc=="All"):
-      number_json = simplejson.dumps({'total_notices' : len(queryset.filter(uploader__category__main_category=mc))})
+      number_json = simplejson.dumps({'total_notices' : queryset.filter(uploader__category__main_category=mc).count()})
     else:
-      number_json = simplejson.dumps({'total_notices' : len(queryset.filter(uploader__category__name=subc))})
+      number_json = simplejson.dumps({'total_notices' : queryset.filter(uploader__category__name=subc).count()})
     return HttpResponse(number_json, content_type="application/json")
 
 class GetNotice(RetrieveAPIView):
@@ -279,13 +284,11 @@ class Show_Starred(ListAPIView):
 class Read_notice_list(TemplateView):
   def get(self, request):
     user = NoticeUser.objects.get_or_create(user=request.user)[0]
-    notices = user.read_notices.all().order_by('-datetime_modified')
-    dictionary = {}
-    t=0
-    for i in notices:
-      dictionary[t] = i.id
-      t=t+1
-    d_json = simplejson.dumps(dictionary)
+    id_list = list(user.read_notices.all().values_list('id', flat=True))
+    d = {}
+    for i, idee in enumerate(id_list):
+        d[i] = idee
+    d_json = simplejson.dumps(d)
     return HttpResponse(d_json, content_type="application/json")
 
 class Show_Uploads(ListAPIView):

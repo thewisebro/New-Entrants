@@ -15,7 +15,7 @@
 
     <div id="_date_wrap" {{#if ref_exist}}class="ref_yes"{{else}}class="ref_no"{{/if}}>
       <div id="_date" class="_details_heading">Posted On : </div>
-      <div id="_date_value" class="_details">{{ data.datetime_modified }} </div>
+      <div id="_date_value" class="_details">{{ data.datetime_created }} </div>
       <div style="clear:both"></div>
     </div>
 
@@ -30,5 +30,7 @@
     <div style="clear:both"></div>
   </div>
 
-  <div id="_content">{{{ data.content }}}</div>
+  <div id="_content">{{{ data.content }}}
+    <div style="clear:both"></div>
+  </div>
 </div>

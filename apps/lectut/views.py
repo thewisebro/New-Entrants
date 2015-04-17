@@ -16,6 +16,7 @@ from django.contrib.sessions.models import Session
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
+from operator import itemgetter
 import mimetypes, os
 import json
 
@@ -83,7 +84,7 @@ def dispbatch(request):
       batches = student.batch_set.all()
       courses = map(lambda x: x.course, batches)
       batches_info = map(lambda x: batch_dict(x),batches)
-      userPosts = Post.post_objects.all().filter(batch__in = batches).order_by('-datetime_created')
+      userPosts = Post.post_objects.all().order_by('-datetime_created')
 #      index = settings.PROJECT_ROOT + '/apps/lectut/static/lectut-front/dist/index.html'
 #      with open(index,'r') as f:
 #       response =  HttpResponse(f.read())
@@ -94,7 +95,7 @@ def dispbatch(request):
       batches = faculty.batch_set.all()
       courses = map(lambda x: x.course, batches)
       batches_info = map(lambda x: batch_dict(x),batches)
-      userPosts = Post.post_objects.all().filter(batch__in = batches).order_by('-datetime_created')
+      userPosts = Post.post_objects.all().order_by('-datetime_created')
 
     else:
       userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')
@@ -108,7 +109,7 @@ def dispbatch(request):
 
     return HttpResponse (json.dumps(data),content_type='application/json')
 
-  latest_posts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created') #[number:(number+post_count)]
+  latest_posts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')[:20] #[number:(number+post_count)]
   for post in latest_posts:
     complete_post = get_post_dict(post)
     posts.append(complete_post)
@@ -118,7 +119,7 @@ def dispbatch(request):
 @CORS_allow
 def latest_feeds(request):
   userType = getUserType(request.user)
-  latest_posts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created')
+  latest_posts = Post.post_objects.all().filter(privacy = True).order_by('-datetime_created')[:20]
   posts = []
   for post in latest_posts:
     posts.append(get_post_dict(post))
@@ -143,20 +144,20 @@ def coursepage(request, batch_id):
 
     if userType == "0":
       if user.student in userBatch.students.all():
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
+        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created')[:20] #[number:(number+post_count)]
         in_batch = True
       else:
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
+        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')[:20]
         in_batch = False
     elif userType == "1":
       if user.faculty in userBatch.faculties.all():
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created') #[number:(number+post_count)]
+        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created')[:20] #[number:(number+post_count)]
         in_batch = True
       else:
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
+        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')[:20]
         in_batch = False
     else:
-      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')
+      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')[:20]
       in_batch = False
 
     for post in previous_posts:
@@ -283,11 +284,11 @@ def getFileType(file_name):
 #file_type = mime.from_file(file_name)
   file_name = str(file_name)
   try:
-    extension = file_name.split(".")[1]
+    extension = file_name.split(".")[-1]
     extension = extension.lower()
     if extension in ['jpg','png','jpeg','gif','exif','tiff']:
       file_type="image"
-    elif extension=='pdf':
+    elif extension in ['pdf']:
       file_type="pdf"
     elif extension in ['ppt', 'pptx' , 'pot','pptm','potx','potm','ppsx']:
       file_type="ppt"
@@ -297,6 +298,8 @@ def getFileType(file_name):
       file_type="zip"
     elif extension in ['xlsx','xlsv','xls','ods']:
       file_type="sheet"
+    elif extension in ['doc','docx','odt','rtf']:
+      file_type="doc"
     else:
       file_type="other"
   except:
@@ -345,7 +348,7 @@ def batch_dict(Batch):
   batch_info = {
                 'id':Batch.id,
                 'credits':Batch.course.credits,
-                'name': Batch.name,
+                'name': Batch.name.split(':')[0],
                 'course_name':Batch.course.name,
                 'code':Batch.course.code,
                 'subject_area':Batch.course.subject_area,
@@ -355,12 +358,15 @@ def batch_dict(Batch):
   return batch_info
 
 
-@csrf_exempt  
+@csrf_exempt
 @CORS_allow
 def batch_data(request , batch_id):
-  batch = Batch.objects.get(id = batch_id)
-  batch_info = batch_dict(batch)
-  response = HttpResponse(json.dumps(batch_info), content_type='application/json')
+  if Batch.objects.filter(id = batch_id).exists():
+    batch = Batch.objects.get(id = batch_id)
+    batch_info = batch_dict(batch)
+    response = HttpResponse(json.dumps({'batch_info':batch_info , 'status':100}), content_type='application/json')
+  else:
+    response = HttpResponse(json.dumps({'msg':'The batch doesnot exist' , 'status':101}), content_type='application/json')  
   return response
 
 ''' Show a particular post '''
@@ -607,31 +613,69 @@ def search(request):
   filter_model = request.GET.get('model')
 #  import pdb;pdb.set_trace()
   if filter_model == None:
-    query_post = SearchQuerySet().all().autocomplete(content_auto = value).models(Post)
-    query_uploadfile = SearchQuerySet().all().autocomplete(filename_auto = value).models(Uploadedfile)
-    query_courses_name =  SearchQuerySet().all().autocomplete(name_auto = value).models(Course)
-    query_courses_code =  SearchQuerySet().all().autocomplete(code_auto = value).models(Course)
+    query_post = SearchQuerySet().models(Post).autocomplete(content_auto = value)[:5] #.models(Post)
+    query_uploadfile = SearchQuerySet().models(Uploadedfile).autocomplete(description_auto = value)[:5] #.models(Uploadedfile)
+    query_courses_name =  SearchQuerySet().models(Course).autocomplete(name_auto = value)[:5] #.models(Course)
+    query_courses_code =  SearchQuerySet().models(Course).autocomplete(code_auto = value)[:5] #.models(Course)
+    query_total_courses = query_courses_name + query_courses_code
+    query_courses = sorted(query_total_courses, key=lambda obj: obj.score)
   else:
     query = SearchQuerySet().autocomplete(content_auto = value).models(filter_model)
 
   final_posts , final_files ,posts , upload_files , batches , final_batches = [],[],[],[],[],[]
+  print query_uploadfile
   try:
     posts = map(lambda result:Post.objects.get(id = result.pk) if Post.objects.filter(id=result.pk).exists() else None,query_post)
     upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk) if Uploadedfile.objects.filter(id=result.pk).exists() else None,query_uploadfile)
-    courses = map(lambda result:Course.objects.get(id = result.pk),query_courses_name+query_courses_code)
-    for course in courses:
-      batches.append(Batch.objects.filter(course = course).all())
+    for course in query_courses:
+      course_jagan = Course.objects.get(id = course.pk)
+      map(lambda x: batches.append(x),Batch.objects.filter(course = course_jagan))
   except:
     pass
 
   final_posts = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,posts)
   final_files = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,upload_files)
-  final_batches = map(lambda result:result.batch_dict() ,batches)
+  final_batches = map(lambda result:batch_dict(result) ,batches)
 
   results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'status':100}
   return HttpResponse(json.dumps(results), content_type="application/json")
 
 
+"""
+@csrf_exempt
+@CORS_allow
+def search(request):
+  value = request.GET.get('q')
+  filter_model = request.GET.get('model')
+#import pdb;pdb.set_trace()
+  if filter_model == None:
+    query_post = Post.objects.filter(content__icontains=value) #.models(Post)
+    query_uploadfile = Uploadedfile.objects.filter(description__icontains=value) 
+    query_courses_code = Course.objects.filter(code__icontains=value)
+    query_courses_name = Course.objects.filter(name__icontains=value)
+  else:
+    query = SearchQuerySet().autocomplete(content_auto = value).models(filter_model)
+
+  final_posts , final_files ,posts , upload_files , batches , final_batches = [],[],[],[],[],[]
+  print query_courses_code
+  try:
+    posts = map(lambda result:Post.objects.get(id = result.pk) if Post.objects.filter(id=result.pk).exists() else None,query_post)
+    upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk) if Uploadedfile.objects.filter(id=result.pk).exists() else None,query_uploadfile)
+    for course in query_courses_code:
+      map(lambda x: batches.append(x),Batch.objects.filter(course = course))
+    for course in query_courses_name:
+      map(lambda x: batches.append(x),Batch.objects.filter(course = course))
+  except:
+    pass
+
+  print batches
+  final_posts = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,posts)
+  final_files = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,upload_files)
+  final_batches = map(lambda result:batch_dict(result) ,batches)
+
+  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'status':100}
+  return HttpResponse(json.dumps(results), content_type="application/json")
+"""
 # VIEWS FOR INITIAL REGISTRATION
 
 def create_batch(request):

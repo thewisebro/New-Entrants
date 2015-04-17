@@ -74,13 +74,13 @@ DEPARTMENTS_LIST = ["All", "Alternative Hydro Energy Centre", "Architecture and 
 
 MAIN_CATEGORIES = {
   'All' : [],
-  'Placement' : [],
+  'Placement Office' : [],
   'Authorities' : AUTHORITIES_LIST,
   'Departments': DEPARTMENTS_LIST
 }
 
 MAIN_CATEGORIES_CHOICES = (
-  ('Placement', 'Placement'),
+  ('Placement Office', 'Placement Office'),
   ('Authorities', 'Authorities'),
   ('Departments', 'Departments'),
 )

@@ -873,7 +873,7 @@ function display_artist(id){
       $("#artist_view").empty();
       $("#artist_view").append('<div id="artist_banner" style="background:url(\/songsmedia\/' + artist.cover_pic +  '); background-size:cover; "></div>');
   //    debugger;
-      $("#artist_banner").append('<div id="layer" style="background:url(\'\/static_jb/images/jukebox/gradientCover.png\'); " ></div>');
+      $("#artist_banner").append('<div id="layer" style="background:url(\'\/static/images/jukebox/gradientCover.png\'); " ></div>');
       if (artist.album_set.length==1)
           $("#artist_banner").append('<div id="artistInfo"><div id="artistName">'+artist.artist+'</div><div id="artistAlbumCount">'+artist.album_set.length+' Album</div></div>');
       else
@@ -883,7 +883,7 @@ function display_artist(id){
       { if(artist.album_set[j].album_art=="") artist.album_set[j].album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
         html = '<div class="artist_album">'
                 + '<div class="artist_album_pic draggable"><div class="album_play_icon"></div>'+
-                '<div class="album_play_icon_image" ><img id="play_'+ artist.album_set[j].id +'"  src="/static_jb/images/jukebox/icon_new_play.png" width="50px" height="50px"></div>'+
+                '<div class="album_play_icon_image" ><img id="play_'+ artist.album_set[j].id +'"  src="/static/images/jukebox/icon_new_play.png" width="50px" height="50px"></div>'+
                 //'<div class="album_play_text">Play Album</div>'+
                 '<img src="/songsmedia/'+ artist.album_set[j].album_art +'"></img></div>'
                 + '<div id="popular_heading"> '+artist.album_set[j].album+' </div>'
@@ -994,13 +994,13 @@ function display_artist(id){
       $("#artist_view").empty();
       $("#artist_view").append('<div id="artist_banner" style="background:url(\/songsmedia\/' + artist.cover_pic +  '); background-size:cover; "></div>');
   //    debugger;
-      $("#artist_banner").append('<div id="layer" style="background:url(\'\/static_jb/images/jukebox/gradientCover.png\'); " ></div>');
+      $("#artist_banner").append('<div id="layer" style="background:url(\'\/static/images/jukebox/gradientCover.png\'); " ></div>');
       $("#artist_banner").append('<div id="artistInfo"><div id="artistName">'+artist.artist+'</div><div id="artistAlbumCount">'+artist.album_set.length+' Albums</div></div>');
       $("#artist_view").append('<div id="artist_body"></div>');
       for(var j=0; j<artist.album_set.length; j++)
       { if(artist.album_set[j].album_art=="") artist.album_set[j].album_art = 'albumart/default_'+Math.floor((Math.random() * 12) + 1)+'.jpg';
         html = '<div class="artist_album">'
-                + '<div class="artist_album_pic draggable"><div class="album_play_icon"></div><div class="album_play_icon_image"><img src="/static_jb/images/jukebox/icon_new_play.png" width="50px" height="50px"></div>'+
+                + '<div class="artist_album_pic draggable"><div class="album_play_icon"></div><div class="album_play_icon_image"><img src="/static/images/jukebox/icon_new_play.png" width="50px" height="50px"></div>'+
                 //'<div class="album_play_text">Play Album</div>'+
                 '<img src="/songsmedia/'+ artist.album_set[j].album_art +'"></img></div>'
                 + '<div id="popular_heading"> '+artist.album_set[j].album+' </div>'
@@ -1334,7 +1334,7 @@ function display_playlist(id){
 
       $("#playlist_view").append('<div id="playlistBanner"></div>');
   //    debugger;
-      $("#playlistBanner").append('<div id="layerBanner" style="background:url(\'\/static_jb/images/jukebox/gradientCover.png\'); " >');
+      $("#playlistBanner").append('<div id="layerBanner" style="background:url(\'\/static/images/jukebox/gradientCover.png\'); " >');
       $("#playlistBanner").append('<ul><li></li><li></li><li></li><li></li><li></li></ul></div>');
       $("#playlistBanner").append(html);
       $("#playlist_view").append('<div id="viewPlaylist"><div id="playlistContentFull"></div></div>');
@@ -1421,7 +1421,7 @@ function get_song_html(song)
    '<li class="song_div options_add_to_playlist" id="add_'+k+'">Add to Playlist</li>'+
    '</div></div>'+
    ' <div class="faint"></div>'+
-   ' <a class="play_icon"><img src="/static_jb/images/jukebox/icon_new_play.png" width="50px" height="50px"></a>'+
+   ' <a class="play_icon"><img src="/static/images/jukebox/icon_new_play.png" width="50px" height="50px"></a>'+
    ' </div>' +
    ' <div class="artist_data">' +
    ' <div class="details">' +
@@ -1507,7 +1507,7 @@ function get_new_album_html(album_id){
    '<li class="song_div options_add_to_playlist_album" id="add_'+k+'">Add to Playlist</li>'+
    '</div></div>'+
    ' <div class="faint"></div>'+
-   ' <a class="play_icon" id="albumplay_'+album.id+'"><img src="/static_jb/images/jukebox/icon_new_play.png" width="50px" height="50px"></a>'+
+   ' <a class="play_icon" id="albumplay_'+album.id+'"><img src="/static/images/jukebox/icon_new_play.png" width="50px" height="50px"></a>'+
    ' </div>' +
    ' <div class="artist_data">' +
    ' <div class="details">' +

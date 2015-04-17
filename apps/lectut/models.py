@@ -34,7 +34,7 @@ Act_Types = {
             'tut' : 'Tutorial',
             'sol' : 'Solution',
             'que' : 'Question',
-            'exp' : 'Exam Papers',
+            'exp' : 'Exam Paper',
             'other':'other'
 }
 
@@ -106,14 +106,14 @@ class Post(models.Model):
 
 #  Gives path where uploaded file is saved
 def upload_path(instance , filename ):
-  return ('lectut/'+instance.file_type+'/'+filename)
+  return ('lectut/'+instance.post.batch.name+'/'+instance.file_type+'/'+filename)
 #  return os.path.join('lectut/',instance.file_type,'/')
 
 
 ''' Each file attributes '''
 class Uploadedfile(BaseUpload):
   post = models.ForeignKey(Post)
-  upload_file=models.FileField(upload_to= upload_path)
+  upload_file=models.FileField(upload_to= upload_path , max_length = 250)
   description=models.CharField(max_length=100 , null=False)
   file_type=models.CharField(max_length=10 , null=False)
   upload_type=models.CharField(max_length=3 , default='tut')
@@ -132,7 +132,7 @@ class Uploadedfile(BaseUpload):
 
   def as_dict(self):
         filepath = str(self.upload_file)
-        filename = filepath.split("/")[2]
+        filename = filepath.split("/")[3]
         if self.file_type == 'image':
           filepath = 'media/'+filepath
         else:

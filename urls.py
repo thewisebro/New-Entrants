@@ -6,6 +6,7 @@ admin.autodiscover()
 
 actual_urlpatterns = patterns('',
   url(r'', include('nucleus.urls')),
+  url(r'^nucleus/', include('nucleus.urls')),
   url(r'^feeds/', include('feeds.urls')),
   url(r'^notifications/', include('notifications.urls')),
   url(r'^moderation/', include('moderation.urls')),
@@ -39,7 +40,6 @@ actual_urlpatterns = patterns('',
   url(r'^placement/', include('placement.urls')),
   url(r'^internship/', include('internship.urls')),
   url(r'^scholarships/', include('mcm.urls')),
-  url(r'^static_jb/(.*)$', 'django.views.static.serve', {'document_root': settings.STATICFILES_DIRS[0]}),
   url(r'^songs/(.*)$', 'django.views.static.serve', {'document_root': settings.JUKEBOX_MEDIA_ROOT+'songs/'}),
   url(r'^yaadein_api/', include('yaadein.urls')),
 )
