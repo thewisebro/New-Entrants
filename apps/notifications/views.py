@@ -58,3 +58,16 @@ def mark_read(request):
         'not_viewed': not_viewed
       })
       return HttpResponse(data, content_type='application/json')
+
+@ajax_login_required
+def mark_all_read(request):
+  if request.method == 'POST':
+    usernotifications = UserNotification.objects.filter(user=request.user, viewed=False)
+    for usernotification in usernotifications:
+      usernotification.viewed = True
+      usernotification.save()
+    not_viewed = 0
+    data = json.dumps({
+      'not_viewed': not_viewed
+    })
+    return HttpResponse(data, content_type='application/json')
