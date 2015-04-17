@@ -93,7 +93,6 @@ class Command(BaseCommand):
           msg = EmailMessage(subject,content,'Event',first_100_email_ids)
           msg.content_subtype = "html"
           msg.send()
-          print 'sent'
         except Exception as e:
           print "Exception",e
-        #ptime.sleep(30)
+        ptime.sleep(30)
