@@ -26,7 +26,7 @@ def send_mails():
     notice.emailsend = True
     notice.save()
     print "emailsend=True set of notice with id : " + str(notice.id)
-    notice_users = notice.uploader.category.noticeuser_set.all()
+    notice_users = notice.uploader.category.noticeuser_set.all().filter(subscribed=True)
     subject,content = get_subject_content(notice)
     email_ids = []
     for notice_user in notice_users:
