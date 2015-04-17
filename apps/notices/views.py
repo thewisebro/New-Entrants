@@ -34,6 +34,9 @@ def index(request):
   context = { 'notice_list' : notice_list }
   return render(request, 'notices/notice_list.html', context)
 
+def redirect_index(request):
+  return HttpResponseRedirect("/#notices")
+
 @login_required
 def upload(request):
   category = None
