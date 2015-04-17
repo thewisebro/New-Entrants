@@ -32,8 +32,8 @@ def fetch(request):
       pk = request.GET['id']
       json = None
       feeds = Feed.objects.filter(shown_feed=None)
-      #if not user.is_authenticated or not request.user.in_group('Student'):
-        #feeds = feeds.exclude(app__in=['vle','buysell'])
+      if not request.user.is_authenticated() or not request.user.in_group('Student'):
+        feeds = feeds.exclude(app__in=['buysell'])
       if not action == 'previous':
         number = int(request.GET['number'])
         if action == 'first':

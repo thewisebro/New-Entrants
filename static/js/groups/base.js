@@ -19,6 +19,7 @@ function show_groups(hash1){
   console.log(hash1);
   if(!hash1){
     $('#content').html(Handlebars.groups_templates.groups_list(groups));
+    $('#content').pickify_users();
   }
 }
 

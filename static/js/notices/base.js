@@ -1374,7 +1374,7 @@ function open_upload_dialog()
     dialog_iframe({
       name:'notice_upload_dialog',
       title:'Upload a notice',
-      width:900,
+      width:1000,
       height:650,
       src:'/notices/upload',
   });

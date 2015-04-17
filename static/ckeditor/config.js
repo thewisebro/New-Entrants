@@ -10,6 +10,34 @@ CKEDITOR.editorConfig = function( config ) {
 config.toolbar_Standard =
 [
 
+        { name: 'document',             items : [ 'Source','-','NewPage','Preview','DocProps',,'Print','-','Templates' ] },
+
+        { name: 'clipboard',    items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+
+        { name: 'editing',              items : [ 'Find','Replace','-','SelectAll'] },
+
+        { name: 'links',                items : [ 'Link','Unlink'] },
+
+        { name: 'paragraph',    items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','-',
+                                            'JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'] },
+
+        '/',
+
+        { name: 'styles',               items : [ 'Styles','Format','Font','FontSize' ] },
+
+        { name: 'colors',               items : [ 'TextColor','BGColor' ] },
+
+        { name: 'basicstyles',  items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+
+        { name: 'insert',               items : [ 'Image','Table','HorizontalRule','SpecialChar','PageBreak'] },
+
+        { name: 'tools',       items : [ 'Maximize'] }
+
+];
+
+/*
+[
+
 	{ name: 'document',     items : [ 'NewPage','Preview','DocProps','Print','-','Templates' ] },
 
 	{ name: 'clipboard',	items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
@@ -34,6 +62,7 @@ config.toolbar_Standard =
         { name: 'tools',        items : [ 'Maximize'] }
 
 ];
+*/
 
 config.toolbar_BasicWithImage =
 [
