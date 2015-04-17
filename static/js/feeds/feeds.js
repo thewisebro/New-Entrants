@@ -19,6 +19,15 @@ function load_feeds_page(){
   show_default_right_column();
 }
 
+function feeds_on_login_logout() {
+  feeds = Array();
+  more_feeds = true;
+  load_feeds_page();
+}
+
+$(document).on("login", feeds_on_login_logout);
+$(document).on("logout", feeds_on_login_logout);
+
 function update_feeds(action,number){
   if(action == 'previous'){
     if(feeds.length === 0)
