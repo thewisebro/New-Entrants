@@ -571,6 +571,8 @@ def edit_company_manual(request, company_id):
         contactperson.delete()
       for instance in formset:
         if instance.cleaned_data:
+          if instance.cleaned_data['DELETE']:
+            continue
           contactperson = ContactPerson()
           campuscontact = CampusContact()
           contactperson.name = instance.cleaned_data['name']

@@ -45,6 +45,7 @@
 {% csrf_token %}
 {{ companyform.uniform }}
 <hr>
+{{ contactpersonformset.management_form }}
 {% for form in contactpersonformset %}
  {{ form.as_p }}
  {{ form.id }}
