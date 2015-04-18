@@ -210,22 +210,18 @@ class AddCompanyInfoForm(forms.ModelForm):
   class Meta:
     model = models.CompanyContactInfo
 
-class ContactPersonFormSet(BaseModelFormSet):
-
-  class Meta:
-    model = models.ContactPerson
-    exclude = {'company_contact',}
-
-class CampusContactFormSet(BaseModelFormSet):
-
-  when_to_contact = forms.DateField(widget=AdminDateWidget, required=False)
-
-  class Meta:
-    model = models.CampusContact
-    exclude = {'contact_person',}
-
 class CommentsForm(forms.ModelForm):
 
   class Meta:
     model = models.CompanyContactComments
     exclude = {'date_created', 'campus_contact'}
+
+class ContactPersonForm(forms.Form):
+    name = forms.CharField(required=True)
+    designation = forms.CharField(required=False)
+    phone_no = forms.CharField(required=False)
+    email = forms.CharField(required=False)
+    is_primary = forms.BooleanField(initial=False, required=False)
+    student = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label='None', required=True)
+    last_contact = forms.CharField(required=False)
+    when_to_contact = forms.DateField(required=False, input_formats=['%Y-%m-%d','%d-%m-%Y'])

@@ -11,7 +11,7 @@
     <script src="{{ STATIC_URL }}jquery/jquery-1.10.2.js"></script>
     <script src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>
 {{ companyform.media }}
-{{ campuscontactformset.media }}
+{{ contactpersonformset.media }}
     <script>
     $(function() {
       $( "#id_when_to_contact" ).datepicker({ dateFormat: "dd-mm-yy" }).val();
@@ -43,7 +43,7 @@
         <form method="post" action="">{% csrf_token %}
 {{ companyform.uniform }}
 
-{{ campusContactformset }}
+{{ contactpersonformset.as_p }}
 
 
 
@@ -71,14 +71,14 @@
           {% endfor %}
 {% endcomment %}
 
-          <div class="edit-row">
+{% comment %}          <div class="edit-row">
             <div class="dabba">
               <div class="field-label-big">Change Last Contact</div>
                 <div class="field">
                   <input type="checkbox" name="changelastcontact" value="1" checked />
                 </div>
             </div>
-          </div>
+          </div> {% endcomment %}
           <div class="edit-row">
             <div class="dabba">
               <input class="input-button" type="submit" value="Submit" />
