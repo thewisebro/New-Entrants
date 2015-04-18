@@ -1,19 +1,20 @@
-from feeds.helper import ModelFeed,Feeds
+from feeds.helper import ModelFeed
 from groups.models import GroupActivity
+from django.template.loader import render_to_string
 from django.template.defaultfilters import urlize
 from django.utils.html import escape
 
 class GroupActivityFeed(ModelFeed):
-  def content (self, instance, created):
-    html = urlize(escape(instance.text).replace('\n','<br>'))
-    tags = {
-      'userwise':'true',
-      'username':instance.group.user.username
-    }
-    return html, tags
-
   class Meta:
     model = GroupActivity
     app = 'groups'
 
-Feeds.register(GroupActivityFeed)
+  def save (self, instance, created):
+    html = urlize(escape(instance.text)).replace('\n','<br>')
+    return {
+            'content':render_to_string('groups/groups_feed.html', {
+                'instance':instance,
+                'text':html
+              }),
+            'user':instance.group.user
+    }

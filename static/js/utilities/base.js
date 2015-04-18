@@ -60,8 +60,8 @@ function load_settings_tab(tab){
       settings_tabs.filter(function(a){return a.name==tab;})[0].show + "</div><div "+
       "id='content-pagelet' class='pagelet' pagelet-url='/settings/"+pagelet_url+"'></div>");
   $('#right-column .content').html(settings_links_html(tab));
-  $('.settings-label').removeClass('active-label');
-  $('#settings-label-'+tab).addClass('active-label');
+  $('.settings-label').removeClass('settings-active-label');
+  $('#settings-label-'+tab).addClass('settings-active-label');
   function afterload(){
     if(tab=='email_auth' && pagelet_url.indexOf('?')!=-1){
       nucleus.redirect_to_hash('settings/email_auth');

@@ -61,7 +61,7 @@ class Event(models.Model):
     return self.title
 
   def clean(self):
-    if self.date and self.date < date.today():
+    if not ((self.date and self.date >= date.today()) or (self.upto_date and self.upto_date >= date.today())):
       raise ValidationError("Please enter today's date or upcoming date.")
     if self.upto_date and self.date:
       upto_dt = datetime.combine(self.upto_date, self.upto_time if self.upto_time else time())

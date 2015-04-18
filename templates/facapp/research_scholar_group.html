@@ -1,0 +1,12 @@
+{% extends "facapp/base.html" %}
+
+{% block model_details %}
+	    <li>Scholar name : {{ l.scholar_name }}</li>
+      <li>Interest : {{ l.interest }}</li>
+      <li>Home page : {{ l.home_page }}</li>
+
+{% endblock %}
+
+{% block model_details_to_delete %}
+	    {{ model_to_delete.scholar_name }}
+{% endblock %}

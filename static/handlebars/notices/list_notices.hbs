@@ -19,11 +19,15 @@
       onclick="open_notice({{ notice.id }})">
 
       <div id="check_wrap" class="check" onclick="stop_propagation(event)">
+      <div class="squaredFour">
         <input
           type="checkbox"
+          name="check"
           class="checkboxes"
           onclick="add_to_checklist({{notice.id}}, event)"
-          id="check-{{ notice.id }}">
+          id="check-{{ notice.id }}" value="None" style="display:none">
+          <label for="check-{{ notice.id }}"></label>
+          </div>
       </div>
 
       <div
@@ -34,28 +38,28 @@
       </div>
 
         <div id="date_source_subject_wrap" {{#if edit}} class="star_check_present_with_edit" {{else}} class="star_check_present" {{/if}}>
-          <div class="notice_date">{{ notice_date }}</div>
-          <div class="notice_source">{{ notice.category }}</div>
+          <div class="notice_date {{#if read}}read{{else}}unread{{/if}}">{{ notice_date }}</div>
+          <div class="notice_source {{#if read}}read{{else}}unread{{/if}}">{{ notice.category }}</div>
           <div class="subject_wrap">
-            <div class="notice_subject">{{ notice.subject }}</div>
+            <div class="notice_subject {{#if read}}read{{else}}unread{{/if}}">{{ notice.subject }}</div>
           </div>
         </div>
 
-        <div id="edit_delete" class="star_check_present">
-          {{#if edit}}
-            <span
-              class="delete"
-              onclick="delete_notice({{ notice.id }}, event)">
-              &nbsp&nbspDelete
-            </span>
+        {{#if edit}}
+          <div id="edit_delete" class="star_check_present">
+              <span
+                class="delete"
+                onclick="delete_notice({{ notice.id }}, event)">
+                &nbsp&nbspDelete
+              </span>
 
-            <span
-              class="edit"
-              onclick="edit_notice({{ notice.id }}, event)">
-                Edit
-            </span>
-          {{/if}}
-        </div>
+              <span
+                class="edit"
+                onclick="edit_notice({{ notice.id }}, event)">
+                  Edit
+              </span>
+          </div>
+        {{/if}}
 
     <div style="clear:both"></div>
 

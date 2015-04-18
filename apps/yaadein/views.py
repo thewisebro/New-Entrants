@@ -474,7 +474,6 @@ def invite(request):
         sent_users.append(student_related.user.username)
     if len(user_tagged)>0: 
       Notification.save_notification(app,notif_msg1,url,tagged_users,student)
-#requests.post("/notifications/add/",data={'channeli':True,'app':app,'text':notif_msg1,'users':sent_users,'url':url})
       return HttpResponse("True")
     else:
       return HttpResponse("False")

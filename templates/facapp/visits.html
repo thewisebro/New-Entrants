@@ -1,0 +1,13 @@
+{% extends "facapp/base.html" %}
+
+{% block model_details %}
+	    <li>Institute visited : {{ l.institute_visited }}</li>
+      <li>Purpose of visit : {{ l.purpose_of_visit }}</li>
+      <li>Date : {{ l.date }}</li>
+
+
+{% endblock %}
+
+{% block model_details_to_delete %}
+	    {{ model_to_delete.institute_visited }} for {{ model_to_delete.purpose_of_visit }}
+{% endblock %}

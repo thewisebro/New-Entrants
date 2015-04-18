@@ -11,9 +11,10 @@ def GenerateNoticeForm(category):
       fields = ['subject','expire_date','reference', 'content']
       widgets = {
         'content': forms.CKEditorWidget(config={
-        'width': 800,
+        'width': 900,
         'height': 250,
-        'forcePasteAsPlainText': 'true'
+        'forcePasteAsPlainText': 'true',
+        'toolbar': 'Standard',
         },filemanager_url=filemanager_url)
       }
   return NoticeForm

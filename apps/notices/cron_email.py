@@ -20,12 +20,13 @@ def get_subject_content(notice):
   return subject,content
 
 def send_mails():
-  notices = Notice.objects.filter(subject="t11")
+  notices = Notice.objects.filter(emailsend=False)
   for notice in notices:
     print notice
     notice.emailsend = True
     notice.save()
-    notice_users = notice.uploader.category.noticeuser_set.all()
+    print "emailsend=True set of notice with id : " + str(notice.id)
+    notice_users = notice.uploader.category.noticeuser_set.all().filter(subscribed=True)
     subject,content = get_subject_content(notice)
     email_ids = []
     for notice_user in notice_users:

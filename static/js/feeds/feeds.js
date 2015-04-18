@@ -19,6 +19,16 @@ function load_feeds_page(){
   show_default_right_column();
 }
 
+function feeds_on_login_logout() {
+  feeds = Array();
+  more_feeds = true;
+  if(nucleus.get_current_app()=='home')
+    load_feeds_page();
+}
+
+$(document).on("login", feeds_on_login_logout);
+$(document).on("logout", feeds_on_login_logout);
+
 function update_feeds(action,number){
   if(action == 'previous'){
     if(feeds.length === 0)
@@ -89,6 +99,10 @@ function display_add_feeds(position,feeds){
 //   }
  }
  $('#feeds').pickify_users();
+ $('.event-right').find('img').click(function(){
+     $.fancybox($(this).attr('src'));
+   }
+ );
  if(more_feeds && $('#see-more-feeds').length === 0){
    $('#content').append("<div id='see-more-feeds' class='see-more'><span class='button2' onclick='see_more_feeds();'>See More</span></div>");
  }

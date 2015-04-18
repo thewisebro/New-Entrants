@@ -291,10 +291,10 @@ def make_user_logged_in(user, request, next_page, dialog,
   if dialog:
       return HttpResponseRedirect('/close_dialog/login_dialog/')
 
-  about_intro = IntroAd.objects.get_or_create(name = 'channeli_about')[0]
-  if not about_intro.visited_users.filter(pk=user.pk).exists():
-    about_intro.visited_users.add(user)
-    return HttpResponseRedirect(reverse('nucleus.views.about'))
+#  about_intro = IntroAd.objects.get_or_create(name = 'channeli_about')[0]
+#  if not about_intro.visited_users.filter(pk=user.pk).exists():
+#    about_intro.visited_users.add(user)
+#    return HttpResponseRedirect(reverse('nucleus.views.about'))
 
   if next_page == None:
     return HttpResponseRedirect('/')

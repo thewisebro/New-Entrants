@@ -4,3 +4,10 @@
 *~
 .sass-cache/*
 trash/*
+node_modules
+dist
+.tmp
+.sass-cache
+bower_components
+.swp
+media/

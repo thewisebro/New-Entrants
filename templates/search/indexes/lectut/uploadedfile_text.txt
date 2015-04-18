@@ -1,2 +1,2 @@
-{{object.filename}}
+{{object.upload_file.name}}
 {{object.description}}

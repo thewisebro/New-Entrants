@@ -1,0 +1,18 @@
+{% extends "facapp/base.html" %}
+
+{% block model_details %}
+	    {% if l.particulars_of_course %}<li> Particulars of Course : {{ l.particulars_of_course }}</li>{% endif %}
+      {% if l.innovation_in_teaching %}<li> Innovation in teaching : {{ l.innovation_in_teaching }}</li>{% endif %}
+      {% if l.instructional_tasks %}<li> Instructional tasks : {{ l.instructional_tasks }}</li>{% endif %}
+      {% if l.process_development %}<li> Process development : {{ l.process_development }}</li>{% endif %}
+      {% if l.extension_tasks %}<li> Extension tasks : {{ l.extension_tasks }}</li>{% endif %}
+      {% if l.other_work %}<li> Other work : {{ l.other_work }}</li>{% endif %}
+      {% if l.self_appraisal %}<li> Self appraisal : {{ l.self_appraisal }}</li>{% endif %}
+      {% if l.comments %}<li> Comments : {{ l.comments }}</li>{% endif %}
+      {% if l.separate_summary %}<li> Separate summary : {{ l.separate_summary }}</li>{% endif %}
+
+{% endblock %}
+
+{% block model_details_to_delete %}
+	    
+{% endblock %}
