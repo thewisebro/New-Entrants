@@ -364,7 +364,7 @@ def sendmail(request, type_of_mail, id_pk):
   contact = request.user.contact_no
   app='buysell'
   if type_of_mail == 'buy':
-    buy_mail_list=BuyMailsSent.items.filter(by_user__username=user,item__pk=id_pk)
+    buy_mail_list=BuyMailsSent.filter(by_user__username=user,item__pk=id_pk)
     qryst = ItemsForSale.items.filter(pk = id_pk)
     if buy_mail_list:
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")

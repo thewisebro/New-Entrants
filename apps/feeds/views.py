@@ -26,24 +26,20 @@ def feed_dict(feed):
   return dictionary
 
 def fetch(request):
-  if request.is_ajax() and request.method == 'GET':
-#    try:
-      action = request.GET['action']
-      pk = request.GET['id']
-      json = None
-      feeds = Feed.objects.filter(shown_feed=None)
-      if not request.user.is_authenticated() or not request.user.in_group('Student'):
-        feeds = feeds.exclude(app__in=['buysell'])
-      if not action == 'previous':
-        number = int(request.GET['number'])
-        if action == 'first':
-          pass
-        elif action == 'next':
-          feeds = feeds.filter(pk__lt = pk)
-        json = simplejson.dumps({'feeds':map(feed_dict,feeds[:number]),'more':int(feeds.count()>number)})
-      else:
-        feeds = feeds.filter(pk__gt = pk)
-        json = simplejson.dumps({'feeds':map(feed_dict,feeds)})
-      return HttpResponse(json, content_type='application/json')
-#    except Exception as e:
-#      return HttpResponse('')
+  action = request.GET['action']
+  pk = request.GET['id']
+  json = None
+  feeds = Feed.objects.filter(shown_feed=None)
+  if not request.user.is_authenticated() or not request.user.in_group('Student'):
+    feeds = feeds.exclude(app__in=['buysell'])
+  if not action == 'previous':
+    number = int(request.GET['number'])
+    if action == 'first':
+      pass
+    elif action == 'next':
+      feeds = feeds.filter(pk__lt = pk)
+    json = simplejson.dumps({'feeds':map(feed_dict,feeds[:number]),'more':int(feeds.count()>number)})
+  else:
+    feeds = feeds.filter(pk__gt = pk)
+    json = simplejson.dumps({'feeds':map(feed_dict,feeds)})
+  return HttpResponse(json, content_type='application/json')
