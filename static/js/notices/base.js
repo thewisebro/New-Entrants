@@ -927,7 +927,7 @@ function select_all()
         $('.checkboxes').prop('checked', false);
         for(var i=0; i<k; i++)
         {
-            id = $('.checkboxes')[i].id[6]+$('.checkboxes')[i].id[7];
+            id = $('.checkboxes')[i].id.substring(6);
             delete checklist[parseInt(id)];
         }
         if(Object.keys(checklist).length===0)
