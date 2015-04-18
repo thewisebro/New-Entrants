@@ -11,7 +11,7 @@ def feed_dict(feed):
   dictionary = {
     'id' : feed.pk,
     'app' : feed.app,
-    'datetime' : feed.last_modified.strftime('%Y-%m-%d %H:%M:%S'),
+    'datetime' : feed.datetime_created.strftime('%Y-%m-%d %H:%M:%S'),
     'content' : feed.content,
     'link' : feed.link,
     'reportable': issubclass(feed.instance_type.model_class(), Reportable),
@@ -21,6 +21,7 @@ def feed_dict(feed):
   if feed.user:
     dictionary.update({
       'username': feed.user.username,
+      'user_photo': feed.user.photo_url,
       'html_name': feed.user.html_name,
     })
   return dictionary

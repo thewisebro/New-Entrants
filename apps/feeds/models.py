@@ -22,7 +22,7 @@ class Feed(models.Model):
     return self.content[:250]
 
   class Meta:
-    ordering = ['-pk']
+    ordering = ['-datetime_created']
 
 class FeedTag(models.Model):
   key = models.CharField(max_length=MC.CODE_LENGTH)

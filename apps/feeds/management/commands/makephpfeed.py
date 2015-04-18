@@ -11,7 +11,7 @@ class Command(BaseCommand):
      event, table, pk = args
      for modelfeed in ModelFeedMeta.modelfeeds:
        model = modelfeed.Meta.model
-       if model._meta.db_table == table:
+       if model.__name__ == table:
          kwargs = {}
          if event == 'INSERT' or event == 'UPDATE':
            kwargs['instance'] = model.objects.get(pk=int(pk))
