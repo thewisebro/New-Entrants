@@ -13,6 +13,9 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEBase import MIMEBase
 from email import Encoders
 from datetime import datetime
+from notices.models import *
+from BeautifulSoup import BeautifulSoup
+from django.template.loader import render_to_string
 #from include import *
 #from constant import *
 
@@ -52,7 +55,7 @@ def email_html_parser(html):
 
 def send_mails():
   sender="eNotice"
-  notices = Notice.objects.filter(subject="Basketball Proficiency Test")
+  notices = Notice.objects.filter(emailsend=False)
   for notice in notices:
     print notice
     notice.emailsend = True
@@ -79,22 +82,18 @@ def send_mails():
       msg['Precedence'] = 'bulk'
       notice_subject = notice.subject.replace('&amp;','&')
       if notice.re_edited == True:
-         msg['Subject'] = notice.uploader.category + " : (Notice changed)  " + notice_subject
+         msg['Subject'] = notice.uploader.category.name + " : (Notice changed)  " + notice_subject
       else:
-         msg['Subject'] = notice.uploader.category + " : " + notice_subject
+         msg['Subject'] = notice.uploader.category.name + " : " + notice_subject
       msg.attach(part)
-
-      while email_ids:
-        first_100_email_ids = email_ids[:100]
-        email_ids = email_ids[100:]
-        try:
-          server = smtplib.SMTP('192.168.180.11')
-          server.set_debuglevel(1)
-          server.sendmail(sender, first_100_email_ids, msg.as_string())
-          server.quit()
-          time.sleep(30)
-        except Exception,e:
-          pass
-        #msg = EmailMessage(subject,content,'eNotice',first_100_email_ids)
-        #msg.content_subtype = "html"
-        #msg.send()
+      print "here1"
+      try:
+	  print "here1"
+	  server = smtplib.SMTP('192.168.180.11')
+	  server.set_debuglevel(1)
+	  server.sendmail(sender, first_100_email_ids, msg.as_string())
+	  server.quit()
+	  print "sent"
+      except Exception,e:
+	  print "not sent"
+	  pass
