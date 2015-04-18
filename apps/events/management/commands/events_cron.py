@@ -80,7 +80,7 @@ class Command(BaseCommand):
     for event in events:
       event.email_sent = True
       event.save()
-      event_users = event.calendar.eventsuser_set.all().filter(user__username=10311025)
+      event_users = event.calendar.eventsuser_set.all()
       subject,content = get_subject_content(event)
       email_ids = []
       for event_user in event_users:

@@ -162,8 +162,7 @@ def index(request,enrno=None):
         notif_users.append(s.user)
         sent_users.append(s.user.username)
       Notification.save_notification(app,notif_msg1,url,notif_users,post)
-      r=requests.post("https://channeli.in/notifications/add/",data={'channeli':True,'app':app,'text':notif_msg1,'users':sent_users,'url':url})
-      print r
+#  requests.post("/notifications/add/",data={'channeli':True,'app':app,'text':notif_msg1,'users':sent_users,'url':url})
       print post.wall_user
       if len(imgs)>0:
         for key in imgs:
@@ -180,7 +179,7 @@ def index(request,enrno=None):
           post.user_tags.add(student_related)
       if len(user_tagged)>0: 
         Notification.save_notification(app,notif_msg,url,tagged_users,post)
-        requests.post("https://channeli.in/notifications/add/",data={'channeli':True,'app':app,'text':notif_msg,'users':sent_users,'url':url})
+#       requests.post("/notifications/add/",data={'channeli':True,'app':app,'text':notif_msg,'users':sent_users,'url':url})
       posts_data=[{'post_id':str(post.pk)}]  
       data = {'posts_data':posts_data}
 # return  HttpResponse("post added")
@@ -461,9 +460,9 @@ def invite(request):
     app = 'Yaadein'
     student = Student.objects.get(user__username=request.user.username)
     if student.user.gender=='M':
-      notif_msg1 = ' '+student.user.name+' invited you to cherrish memories with him.'
+      notif_msg1 = ' '+student.user.html_name+' invited you to cherrish memories with him.'
     else:
-      notif_msg1 = ' '+student.user.name+' invited you to cherrish memories with her.' 
+      notif_msg1 = ' '+student.user.html_name+' invited you to cherrish memories with her.' 
     user_tagged = simplejson.loads(request.body)['user_tags']
     url = '/yaadein/#/profile/'+student.user.username
     tagged_users = []
@@ -475,7 +474,6 @@ def invite(request):
         sent_users.append(student_related.user.username)
     if len(user_tagged)>0: 
       Notification.save_notification(app,notif_msg1,url,tagged_users,student)
-      requests.post("https://channeli.in/notifications/add/",data={'channeli':True,'app':app,'text':notif_msg1,'users':sent_users,'url':url})
       return HttpResponse("True")
     else:
       return HttpResponse("False")

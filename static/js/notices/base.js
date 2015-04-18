@@ -147,6 +147,7 @@ function redirection()            //The main controller function which defines t
         $("#select_bars").removeAttr("onclick");
         $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
         $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
+        checklist={};
         evaluate_breadcrumbs();
         display_notice(parseInt(h2));
     }
@@ -240,6 +241,9 @@ function redirection()            //The main controller function which defines t
 
         if(same_except_page_no==0)
           evaluate_breadcrumbs();
+        $('#more').unbind("click", show_menu);
+        $('#more').bind("click", bind_unbind_tooltip);
+        binding_done=0;
 
         if(sub_mode=="new")                             //coloring the appropriate new old filter
           not_sub_mode="old";
@@ -401,7 +405,9 @@ function create_static_divs()                //Create static buttons like upload
     else
       $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div id="settings" onclick="location.hash=\'#settings/email\'"><i id="gear" class="fa fa-cog"></i>Subscription Settings</div><div style="clear:both"></div></div>');
     //console.log("switched_to_notices_create : static divs created");
+    $('#more').unbind("click", show_menu);
     $('#more').bind("click", bind_unbind_tooltip);
+    binding_done=0;
 }
 
 function get_total_notices_no()       //This function is only meant for general notice display(categories other than All, All)
@@ -667,7 +673,7 @@ function display_notice(id)
               //console.log($('#_content a')[j].href);
               href1 = $('#_content a')[j].href.replace(window.location.origin,'').replace(/\%20/g, ' ');
               $('#_content a')[j].a;
-              $('a[href="' + href1 + '"]').replaceWith('<div class="button4 button-div" onclick="window.location=\''+ href1 +'\'">Download pdf</div>');
+              $('a[href="' + href1 + '"]').replaceWith('<div class="button4 button-div notice-download" onclick="window.location=\''+ href1 +'\'">Download pdf</div>');
             }
         }
       }
@@ -868,8 +874,11 @@ function add_to_checklist(id, e)
     delete checklist[id];
   else
     checklist[id]=1;
+  //console.log("gaind10");
   if(Object.keys(checklist).length===0)
   {
+    //console.log("gaind9");
+    $("#all_select")[0].checked=false;
     $('#more').unbind("click", show_menu);
     $('#more').bind("click", bind_unbind_tooltip);
     binding_done=0;
@@ -878,10 +887,25 @@ function add_to_checklist(id, e)
   {
     if(binding_done===0)
     {
+    //console.log("gaind8");
       $('#more').unbind("click", bind_unbind_tooltip);
       $('#more').bind("click", show_menu);
       binding_done=1;
     }
+    if(main_mode=="display")
+        mode_prefix="temp";
+    else if(main_mode=="uploads")
+        mode_prefix="upload";
+    else if(main_mode=="search")
+        mode_prefix="search";
+    else if(main_mode=="starred")
+        mode_prefix="starred";
+    if(parseInt(cur_page_no)<window[mode_prefix + "_total_pages"]||window[mode_prefix + "_last_page_notices"]===0)
+        k=10;
+    else
+        k=window[mode_prefix + "_last_page_notices"];
+    if(Object.keys(checklist).length===k) 
+      $("#all_select")[0].checked=true;
   }
 }
 
@@ -904,7 +928,7 @@ function select_all()
       k=10;
     else
       k=window[mode_prefix + "_last_page_notices"];
-    //console.log(x);
+   // console.log(x);
     if(x)
     {
         //console.log("11");
@@ -923,11 +947,11 @@ function select_all()
     }
     else
     {
-        //console.log("22");
+       // console.log("22");
         $('.checkboxes').prop('checked', false);
         for(var i=0; i<k; i++)
         {
-            id = $('.checkboxes')[i].id[6]+$('.checkboxes')[i].id[7];
+            id = $('.checkboxes')[i].id.substring(6);
             delete checklist[parseInt(id)];
         }
         if(Object.keys(checklist).length===0)
@@ -1049,17 +1073,17 @@ function read_star_checklist(t)
       {
         read_array[a[i]]=1;
         $("#notice_"+a[i]).attr({class : "notice_info read"});
-        $(".notice_date").attr({class : "notice_date read"});
-        $(".notice_source").attr({class : "notice_source read"});
-        $(".notice_subject").attr({class : "notice_subject read"});
+        $("#notice_"+a[i]+" .notice_date").attr({class : "notice_date read"});
+        $("#notice_"+a[i]+" .notice_source").attr({class : "notice_source read"});
+        $("#notice_"+a[i]+" .notice_subject").attr({class : "notice_subject read"});
       }
       else
       {
         delete read_array[a[i]];
         $("#notice_"+a[i]).attr({class : "notice_info unread"});
-        $(".notice_date").attr({class : "notice_date unread"});
-        $(".notice_source").attr({class : "notice_source unread"});
-        $(".notice_subject").attr({class : "notice_subject unread"});
+        $("#notice_"+a[i]+" .notice_date").attr({class : "notice_date unread"});
+        $("#notice_"+a[i]+" .notice_source").attr({class : "notice_source unread"});
+        $("#notice_"+a[i]+" .notice_subject").attr({class : "notice_subject unread"});
       }
     }
     q=q.substring(0,q.length-1);
@@ -1187,9 +1211,9 @@ function evaluate_breadcrumbs()
       sub_categor=sub_category;
     }
     if(sub_mod=="new")
-      notice_prefix = "Current"
+      notice_prefix = "Current "
     if(sub_mod=="old")
-      notice_prefix = "Expired"
+      notice_prefix = "Expired "
 
     if(main_mod=="display")
     {
