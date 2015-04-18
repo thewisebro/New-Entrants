@@ -357,7 +357,7 @@ def sendmail(request, type_of_mail, id_pk):
   logger.info(request.user.username + ': entered sendmail.')
   user = request.user
   username = request.user.username
-  sex=request.user.person.gender
+  sex=request.user.gender
   pronoun = "him"
   if sex=="F":
     pronoun="her"
