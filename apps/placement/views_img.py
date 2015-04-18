@@ -696,3 +696,17 @@ def contactmanager_delete(request, company_id):
   if not request.user.groups.filter(name="Placement Manager"):
     return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
   return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists() , login_url=login_url)
+def company_details(request, company_id):
+  try:
+    company = CompanyContactInfo.objects.get(id=company_id)
+  except ObjectDoesNotExist:
+    messages.error(request, 'Company is either removed or invalid')
+    return HttpRequestRedirect(reverse('placement.views_img.placement_manager_view'))
+  contactpersons = company.contactperson_set.all().order_by('is_primary')
+  return render_to_response('placement/placement_mgr_details.html',{
+      'contactpersons': contactpersons,
+      'company': company,
+      }, context_instance = RequestContext(request))

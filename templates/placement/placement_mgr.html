@@ -150,6 +150,7 @@
                           "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
                            {
                                  $('td:eq(0)', nRow).html("<input type='checkbox' class='largerCheckbox' name='assigns' value='{0}'/>".format(aData[0]));
+                                 $('td:eq(1)', nRow).html("<a href='/placement/contact_manager/details/{0}'>{1}</a>".format(aData[0],aData[1]));
                                  $('td:eq(12)', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
                                                               <a href='/placement/contact_manager/edit/{0}/'>\
