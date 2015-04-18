@@ -1058,17 +1058,17 @@ function read_star_checklist(t)
       {
         read_array[a[i]]=1;
         $("#notice_"+a[i]).attr({class : "notice_info read"});
-        $("#notice_"+a[i]).attr({class : "notice_date read"});
-        $("#notice_"+a[i]).attr({class : "notice_source read"});
-        $("#notice_"+a[i]).attr({class : "notice_subject read"});
+        $("#notice_"+a[i]+" .notice_date").attr({class : "notice_date read"});
+        $("#notice_"+a[i]+" .notice_source").attr({class : "notice_source read"});
+        $("#notice_"+a[i]+" .notice_subject").attr({class : "notice_subject read"});
       }
       else
       {
         delete read_array[a[i]];
         $("#notice_"+a[i]).attr({class : "notice_info unread"});
-        $("#notice_"+a[i]).attr({class : "notice_date unread"});
-        $("#notice_"+a[i]).attr({class : "notice_source unread"});
-        $("#notice_"+a[i]).attr({class : "notice_subject unread"});
+        $("#notice_"+a[i]+" .notice_date").attr({class : "notice_date unread"});
+        $("#notice_"+a[i]+" .notice_source").attr({class : "notice_source unread"});
+        $("#notice_"+a[i]+" .notice_subject").attr({class : "notice_subject unread"});
       }
     }
     q=q.substring(0,q.length-1);
