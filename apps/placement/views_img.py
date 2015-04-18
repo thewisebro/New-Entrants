@@ -315,6 +315,7 @@ def generate_missing_resumes(request, company_id):
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
 def company_coordinator_view(request):
+#TODO: Comments edition to be added in this, view written
   user =  request.user
   if user.groups.filter(name='Company Coordinator'):
     student = user.student
@@ -696,3 +697,23 @@ def contactmanager_delete(request, company_id):
   if not request.user.groups.filter(name="Placement Manager"):
     return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
   return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator']).exists() , login_url=login_url)
+def edit_comments(request, company_id):
+#TODO: Add edit form only for coordinator and just save the companycomment object
+
+  student = request.user.student
+  comments = CompanyContactComments.objects.filter(campus_contact__student=student, campus_contact__contact_person__company_contact__id=company_id)
+
+  if request.POST:
+    form = CommentsForm(request.POST)
+    form.save()
+
+  else:
+    formset = CommentForm()
+
+  return render_to_response('placement/edit_comments.html',{
+      'form': form,
+      'comments': comments,
+      }, context_instance = RequestContext(request))

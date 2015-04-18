@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+{% extends "placement/nucleus/base_old.html" %}
+{% load kwacros %}
+{% block title %}
+      Contact Manager
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/base.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/input_styles.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/dataTables.bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/jquery.dataTables.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+{% endblock %}
+{% block body %}
+<div class="content">
+      <div class="header">
+        <div class="tittle">
+          <h2 >Contact Manager</h2>
+        </div>
+        <div class="links">
+          <div class="sub-links">
+            <a href="{% url 'nucleus.views.index' %}" target="_blank">Channel-i</a>
+          </div>
+          <div class="sub-links">
+            <a href="{% url 'placement.views.index' %}" target="_blank">Placement Online</a>
+          </div>
+          <div class="sub-links">
+            <a href = "{% url 'placement.views_img.add_company_coordinator' %}" target="_blank">Add Company Coordinator</a>
+          </div>
+          <div class="sub-links">
+            <a href="/logout" target="_blank">Logout</a>
+          </div>
+        </div>
+      </div>
+
+<div class='commentform'>
+<form method="post" action="">{% csrf_token %}
+  {{form}}
+<div class="edit-row">
+  <div class="dabba">
+        <input class="input-button" type="submit" value="Submit" />
+  </div>
+</div>
+</form>
+{{comments}}
+
+</div>
+{%endblock%}
