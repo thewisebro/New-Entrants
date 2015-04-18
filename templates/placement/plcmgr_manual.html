@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/nucleus/style.css" type="text/css">
     <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
     <script src="{{ STATIC_URL }}jquery/jquery-1.10.2.js"></script>
     <script src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>
 {{ companyform.media }}
@@ -40,11 +41,15 @@
         </div>
       </div>
       <div class="manual-form">
-        <form method="post" action="">{% csrf_token %}
+        <form method="post" action="">
+{% csrf_token %}
 {{ companyform.uniform }}
-
-{{ contactpersonformset.as_p }}
-
+<hr>
+{% for form in contactpersonformset %}
+ {{ form.as_p }}
+ {{ form.id }}
+ <hr>
+{% endfor %}
 
 
 {% comment %}          {% kwacro editable_field_div field %}
