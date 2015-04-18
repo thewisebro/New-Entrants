@@ -878,6 +878,7 @@ function add_to_checklist(id, e)
   if(Object.keys(checklist).length===0)
   {
     //console.log("gaind9");
+    $("#all_select")[0].checked=false;
     $('#more').unbind("click", show_menu);
     $('#more').bind("click", bind_unbind_tooltip);
     binding_done=0;
@@ -891,6 +892,20 @@ function add_to_checklist(id, e)
       $('#more').bind("click", show_menu);
       binding_done=1;
     }
+    if(main_mode=="display")
+        mode_prefix="temp";
+    else if(main_mode=="uploads")
+        mode_prefix="upload";
+    else if(main_mode=="search")
+        mode_prefix="search";
+    else if(main_mode=="starred")
+        mode_prefix="starred";
+    if(parseInt(cur_page_no)<window[mode_prefix + "_total_pages"]||window[mode_prefix + "_last_page_notices"]===0)
+        k=10;
+    else
+        k=window[mode_prefix + "_last_page_notices"];
+    if(Object.keys(checklist).length===k) 
+      $("#all_select")[0].checked=true;
   }
 }
 
