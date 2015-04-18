@@ -1593,7 +1593,7 @@ function play(id)
 //   $("#musicPlayerPic").append('<img src="\/songsmedia\/' + song.album.album_art +  '" style="width: 32px; height: 32px;" >');
 //   Jukebox.play_url('song_'+id,'http://192.168.121.5/songs/english/'+song.file_name)
  $("#ilSong").html('<b>'+song.song+'</b>');
- $('#download_option > a').attr('href', '/songsmedia/download/songs/english/'+song.file_name);
+ $('#download_option > a').attr('href', '/songsmedia/songs/english/'+song.file_name);
  $('#download_option > a').attr('download', song.song+'.mp3');
  $('#download_option').show();
   var art = [];

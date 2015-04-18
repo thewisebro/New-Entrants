@@ -19,6 +19,27 @@ def get_subject_content(notice):
   content = render_to_string('notices/email.html',{'PeopleProxyUrl':PeopleProxyUrl,'notice':notice_dict_for_email(notice)})
   return subject,content
 
+def email_html_parser(html):
+  soup = BeautifulSoup(html)
+  links = soup('a')
+  for link in links:
+    if link.has_key('href'):
+      link['href'] = link['href'].replace(' ','%20')
+      link_href_splits = link['href'].split('/')
+      if link_href_splits[0] == '':
+        link['href'] = PeopleProxyUrl+'media/notices/'+'/'.join(link_href_splits[3:])
+  images = soup('img')
+  for image in images:
+    if image.has_key('src'):
+      image['src'] = image['src'].replace(' ','%20')
+  imgs = soup('img')
+  for img in imgs:
+    img_src_splits = img['src'].split('/')
+    if img_src_splits[0] == '':
+      img['src'] = PeopleProxyUrl+'media/notices/'+'/'.join(img_src_splits[3:])
+  return str(soup)
+
+
 def send_mails():
   notices = Notice.objects.filter(emailsend=False)
   for notice in notices:
