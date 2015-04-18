@@ -673,7 +673,7 @@ function display_notice(id)
               //console.log($('#_content a')[j].href);
               href1 = $('#_content a')[j].href.replace(window.location.origin,'').replace(/\%20/g, ' ');
               $('#_content a')[j].a;
-              $('a[href="' + href1 + '"]').replaceWith('<div class="button4 button-div" onclick="window.location=\''+ href1 +'\'">Download pdf</div>');
+              $('a[href="' + href1 + '"]').replaceWith('<div class="button4 button-div notice-download" onclick="window.location=\''+ href1 +'\'">Download pdf</div>');
             }
         }
       }
