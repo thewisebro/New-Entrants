@@ -389,7 +389,7 @@ def sendmail(request, type_of_mail, id_pk):
 
   if type_of_mail == 'request':
     qryst = ItemsRequested.items.filter(pk = id_pk)
-    buy_mail_list=RequestMailsSent.items.filter(by_user__username=user,item__pk=id_pk)
+    buy_mail_list=RequestMailsSent.objects.filter(by_user__username=user,item__pk=id_pk)
     if buy_mail_list:
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       return HttpResponseRedirect('/buysell/requested_item_details/'+id_pk+'/')
