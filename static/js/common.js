@@ -350,9 +350,17 @@ $(document).ready(function(){
             $('body').append("<div class='pickdiv'></div>");
           }
           $('.pickdiv').show();
+          var _top, _left;
+          if(window.mouseYPos < 200) {
+            _top = window.mouseYPos+12;
+            _left = window.mouseXPos-10;
+          } else {
+            _top = window.mouseYPos-95;
+            _left = window.mouseXPos-10;
+          }
           $('.pickdiv').css({
-            top:window.mouseYPos-95,
-            left:window.mouseXPos-10
+            top:_top,
+            left:_left
           }).html(
             "<div class='name-info-div'>"+
               "<div class='name-div'>"+($(elem).data().shortname?
