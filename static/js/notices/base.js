@@ -642,9 +642,6 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
             $('#notice_list').append(list_notices_html(context));
 
       }
-      $(".notice_date").each(function() {
-              $(this).text($(this).text().substr(0,10));
-              });
       //console.log("reh gya bhai")
       if($("#page_numbers ul")[0]==undefined)
           load_numbers_bar(ttotal_pages,sub_mode + "_");
