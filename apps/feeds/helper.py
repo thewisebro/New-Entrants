@@ -43,13 +43,10 @@ class ModelFeed(object):
     if content:
       if not Feed.objects.filter(instance_type=instance_type, instance_id=instance.id).exists():
         try:
-	  print 'here'
           feed = Feed(app=app, instance_type=instance_type, instance_id=instance.id, content=content)
-          print 'there'
           feed.user = user
           feed.link = link
           feed.save()
-          print 'wow'
           self.add_tags(feed, tags)
         except Exception as e:
           print "Exception : ",e
