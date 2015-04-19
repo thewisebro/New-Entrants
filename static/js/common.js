@@ -351,7 +351,7 @@ $(document).ready(function(){
           }
           $('.pickdiv').show();
           var _top, _left;
-          if(window.mouseYPos < 160) {
+          if((window.mouseYPos-window.scrollY) < 160) {
             _top = window.mouseYPos+12;
             _left = window.mouseXPos-10;
           } else {
