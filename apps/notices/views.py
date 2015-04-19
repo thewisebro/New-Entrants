@@ -53,6 +53,7 @@ def upload(request):
         notice = form.save(commit=False)
         notice.content = html_parsing_while_uploading(notice.content)
         notice.uploader = uploader
+        notice.datetime_modified = datetime.now()
         notice.save()
         messages.success(request,'Your notice has been successfully uploaded.')
         return HttpResponseRedirect(reverse('close_dialog', kwargs={
@@ -311,15 +312,16 @@ def edit(request, pk):
     form = EditForm(request.POST)
     if form.is_valid():
       if n.datetime_modified==n.datetime_created:
-        tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created)
+        tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created, datetime_modified = datetime.now())
       else:
         new_edit_no = max(map(lambda a:a.editing_no,TrashNotice.objects.filter(notice_id=n.pk)))+1
-        tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no = new_edit_no, datetime_created=n.datetime_modified, original_datetime = n.datetime_created)
+        tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no = new_edit_no, datetime_created=n.datetime_modified, original_datetime = n.datetime_created, datetime_modified = datetime.now())
       notice = form.save(commit=False)
       n.subject = notice.subject
       n.reference = notice.reference
       n.content = html_parsing_while_uploading(notice.content)
       n.expire_date = notice.expire_date
+      n.datetime_modified = datetime.now()
       for user in n.read_noticeuser_set.all():
         n.read_noticeuser_set.remove(user)
       n.re_edited = True
@@ -341,7 +343,7 @@ def delete(request, pk):
   n = Notice.objects.get(id=pk)
   privelege = request.user.uploader_set.all().exists()
   if privelege:
-    tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=-1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created)
+    tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=-1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created, datetime_modified = datetime.now())
     tnotice.save()
     n.delete()
   return HttpResponseRedirect('/#notices')
