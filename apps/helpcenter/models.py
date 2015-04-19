@@ -74,7 +74,8 @@ class Reply(models.Model):
 
   def save(self, *args, **kwargs):
     self.number = self.response.no_of_replies()+1
-    self.by_img = self.user.in_group('Helpcenter Admin') and not self.response.user.in_group('Helpcenter Admin')
+    self.by_img = self.user.in_group('Helpcenter Admin') and ((
+        not self.response.user) or (not self.response.user.in_group('Helpcenter Admin')))
     result = super(Reply, self).save(*args, **kwargs)
     if self.user.in_group('Helpcenter Admin'):
       if self.response.user:
