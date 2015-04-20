@@ -151,6 +151,7 @@ def get_resume_binary(context, student, resume_type, verification_resume = False
                              'achievements' : achievements,
                              'publications' : publications,
                              'verification_resume' : verification_resume,
+                             'category_required': category_required,
                              'ug_name' : ug_name,
                              'registration_no' : registration_no,
                              'photo_required' : photo_required,
