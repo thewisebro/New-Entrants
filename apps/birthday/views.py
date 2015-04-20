@@ -60,7 +60,7 @@ def get_users(user):
         Q(birth_date__month = datetime.now().month))
   if group == 'Faculty':
     users = users.filter(faculty__department=user.faculty.department)
-    users = users.filter(birth_date_day=datetime.now().day, birth_date__month=datetime.now().month)
+    users = users.filter(birth_date__day=datetime.now().day, birth_date__month=datetime.now().month)
   return users
 
 @login_required
