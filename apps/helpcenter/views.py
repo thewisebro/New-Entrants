@@ -45,6 +45,8 @@ def reply_dict(reply):
   if reply.by_img:
     username = 'img'
     user_photo = '/static/images/nucleus/img_dp.png'
+  elif reply.response.user.in_group('Helpcenter Admin'):
+    user_photo = reply.user.photo_url
   else:
     user_photo = reply.response.user.photo_url
   return {

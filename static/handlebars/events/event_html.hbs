@@ -36,10 +36,10 @@
       <div class='event-name'>{{{Event.title}}}</div>
       <div style='clear:both'></div>
     </div>
-    {{#if Event.duration }}
+    {{#if Event.uptotime }}
       <div class='event-duration'>
         <div class='event-left'><i class="fa fa-clock-o"></i></div>
-        <div class='event-right'>{{Event.uptotime}} ({{Event.duration}})</div>
+        <div class='event-right'>{{Event.uptotime}}{{#if Event.duration}} ({{Event.duration}}){{/if}}</div>
         <div style='clear:both'></div>
       </div>
     {{/if}}

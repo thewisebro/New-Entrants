@@ -77,9 +77,10 @@ function feed_html(feed){
     return ""+
     "<div class='feed-box'>"+
       ('username' in feed?
-        "<img class='feed-propic' src='/photo/"+feed.username+"/'/>"
+        "<img class='feed-propic' src='"+feed.user_photo+"'/>"
         :("<a target='_blank' href="+channeli_apps[feed.app].url+">"+
-          "<img class='feed-propic' src='"+get_app_icon_url(feed.app)+"'/>"+
+          "<img class='feed-propic' src='"+get_app_icon_url(feed.app)+
+            "' onerror='this.style.display = \"none\"'/>"+
           "</a>")
       )+
       "<div class='feed-text'>"+feed.content+"</div>"+
