@@ -17,7 +17,7 @@ class AbstractNotice(models.Model):
   emailsend = models.BooleanField(default=False)
   re_edited = models.BooleanField(default=False)
   expired_status = models.BooleanField(db_index=True, default=False)
-  datetime_modified = models.DateTimeField(db_index=True, auto_now=True)
+  datetime_modified = models.DateTimeField(db_index=True)
 
   class Meta:
     abstract = True

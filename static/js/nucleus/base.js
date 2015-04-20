@@ -194,4 +194,8 @@
     hashchangeCallback(true);
   }
 
+  $(document).ready(function(){
+    document.cookie='messages=;expires='+(new Date()).toUTCString();
+  });
+
 })();
