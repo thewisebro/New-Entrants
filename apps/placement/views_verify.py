@@ -83,7 +83,6 @@ def unverified_list(request) :
   Returns a XLS file containing the list of unverified students.
   """
   try :
-    import pdb;pdb.set_trace()
     l.info(request.user.username + ': downloading xls list for unverified students')
     plac_persons = PlacementPerson.objects.filter(status__in = ('LCK', ))
     response = HttpResponse(content_type='application/ms-excel')

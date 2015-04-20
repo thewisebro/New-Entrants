@@ -460,9 +460,9 @@ def invite(request):
     app = 'Yaadein'
     student = Student.objects.get(user__username=request.user.username)
     if student.user.gender=='M':
-      notif_msg1 = ' '+student.user.html_name+' invited you to cherrish memories with him.'
+      notif_msg1 = ' '+student.user.html_name+' invited you to cherish memories with him.'
     else:
-      notif_msg1 = ' '+student.user.html_name+' invited you to cherrish memories with her.' 
+      notif_msg1 = ' '+student.user.html_name+' invited you to cherish memories with her.' 
     user_tagged = simplejson.loads(request.body)['user_tags']
     url = '/yaadein/#/profile/'+student.user.username
     tagged_users = []

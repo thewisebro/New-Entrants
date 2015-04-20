@@ -16,6 +16,7 @@ tabs = [
 channeli_apps = {
   'forum': {'name': 'Forum', 'url': '/#forum/'},
   'events': {'name': 'Events', 'url':'/#events'},
+  'groups': {'name': 'Groups', 'url':'/#groups'},
   'lectut' : {'name':'Lectures & Tutorials', 'url':'/lectut/'},
   'placement' : {'name':'Placement Online', 'url':'/placement/'},
   'internship' : {'name':'Internship', 'url':'/internship/'},
