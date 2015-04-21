@@ -52,6 +52,7 @@
               <th>Person in Contact</th>
               <th>Comments</th>
               <th>When to contact</th>
+              <th>Edit Comments</th>
               <th>Edit</th>
               <th>Remove</th>
             </tr>
@@ -85,16 +86,22 @@
                            {
                                  $('td:eq(11)', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
-                                                              <a href='/placement/contact_manager/edit/{0}/'>\
+                                                              <a href='/placement/contact_manager/edit/comments/{0}/'>\
                                                               <span class='icon icon-pencil'></span></a>\
                                                               </div>\
                                                               </div>".format(aData[11]));
                                  $('td:eq(12)', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
+                                                              <a href='/placement/contact_manager/edit/{0}/'>\
+                                                              <span class='icon icon-pencil'></span></a>\
+                                                              </div>\
+                                                              </div>".format(aData[12]));
+                                 $('td:eq(13)', nRow).html( " <div class='glyphs'>\
+                                                              <div class='glyph'>\
                                                               <a>\
                                                               <span id='remove' style='cursor:pointer;' onclick='confirmfn({0})' class='icon icon-remove'></span></a>\
                                                               </div>\
-                                                              </div>".format(aData[12]));
+                                                              </div>".format(aData[13]));
  
                            }
                           }

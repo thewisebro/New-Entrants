@@ -42,7 +42,7 @@ urlpatterns += patterns('placement.views_img',
                        (r'^company_coordinator/today/$', 'company_coordinator_today_view'), #TODO
                        (r'^contactmanager_manual/$','add_company_manual'),
                        (r'^contact_manager/edit/(?P<company_id>\d+)/$','edit_company_manual'),
-                       (r'^contact_manager/edit/comments/(?P<company_id>\d+)/$','edit_comments'),
+                       (r'^contact_manager/edit/comments/(?P<campus_contact_id>\d+)/$','edit_comments'),
                        (r'^contact_manager/remove/(?P<company_id>\d+)/$','contactmanager_delete'),
                        (r'^contact_manager/details/(?P<company_id>\d+)/$','company_details'),
                        (r'^contact_manager/assign','assign_campus_contact'),

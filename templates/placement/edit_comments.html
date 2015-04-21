@@ -44,7 +44,19 @@
   </div>
 </div>
 </form>
-{{comments}}
-
+{% if comments %}
+<table class="table table-striped table-bordered display compact">
+<tr>
+  <th>Date</th>
+  <th>Comment</th>
+</tr>
+{% for comment in comments %}
+<tr>
+<td>{{comment.date_created}}</td>
+<td>{{comment.comment}}</td>
+</tr>
+{% endfor %}
+</table>
+{%endif %}
 </div>
 {%endblock%}

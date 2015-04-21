@@ -315,7 +315,7 @@ def generate_missing_resumes(request, company_id):
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
 def company_coordinator_view(request):
-#TODO: Comments edition to be added in this, view written
+#TODO: Edit Company Remaining
   user =  request.user
   if user.groups.filter(name='Company Coordinator'):
     student = user.student
@@ -335,13 +335,14 @@ def company_coordinator_view(request):
     values.append(contactPerson.company_contact.status)
     values.append(campus_contact_inst.last_contact)
     values.append(campus_contact_inst.student.user.name)
-    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('date_created')
+    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('-date_created')
     if comment:
       comment=comment[0].comment
     else:
-      comment=""
+      comment="None"
     values.append(comment)
     values.append(campus_contact_inst.when_to_contact)
+    values.append(campus_contact_inst.id)
     values.append(campus_contact_inst.id)
     values.append(campus_contact_inst.id)
     lst.append(values[:])
@@ -430,7 +431,7 @@ def placement_manager_view(request):
     values.append(contactPerson.company_contact.status)
     values.append(campus_contact_inst.last_contact)
     values.append(campus_contact_inst.student.user.name)
-    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('date_created')
+    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('-date_created')
     if comment:
       comment=comment[0].comment
     else:
@@ -464,26 +465,35 @@ def placement_manager_view(request):
         },context_instance = RequestContext(request))
 
 @login_required
-@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
+@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator']).exists() , login_url=login_url)
 def company_coordinator_today_view(request):
   user =  request.user
   if user.groups.filter(name='Company Coordinator'):
     student = user.student
-    campus_contact = CampusContact.objects.filter(student=student, when_to_contact__lte=datetime.date.today())
-  elif user.groups.filter(name='Placement Manager'):
-    campus_contact = CampusContact.objects.filter(when_to_contact__lte=datetime.date.today())
+    campus_contact = CampusContact.objects.filter(student = student, when_to_contact__lte = datetime.date.today())
   lst = []
   for campus_contact_inst in campus_contact:
     contactPerson = campus_contact_inst.contact_person
-    values = [contactPerson.company_contact.name, contactPerson.company_contact.cluster,]
-    values.append(contactPerson.name, contactPerson.designation, contactPerson.phone_no, contactPerson.email)
+    values=[]
+    values.append(contactPerson.company_contact.name)
+    values.append(contactPerson.company_contact.cluster)
+    values.append(contactPerson.name)
+    values.append(contactPerson.designation)
+    values.append(contactPerson.phone_no)
+    values.append(contactPerson.email)
     values.append(contactPerson.company_contact.status)
     values.append(campus_contact_inst.last_contact)
-    comment = CompanyContactComments.objects.filter(campus_contact = camous_contact_inst).order_by('date_created')[0]
-    values.append(comment.comment)
+    values.append(campus_contact_inst.student.user.name)
+    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('-date_created')
+    if comment:
+      comment=comment[0].comment
+    else:
+      comment="None"
+    values.append(comment)
     values.append(campus_contact_inst.when_to_contact)
-    values.append('pk')
-    values.append('pk')
+    values.append(campus_contact_inst.id)
+    values.append(campus_contact_inst.id)
+    values.append(campus_contact_inst.id)
     lst.append(values[:])
 
   data_to_send = []
@@ -492,7 +502,12 @@ def company_coordinator_today_view(request):
       a = []
       for x in list(item):
          try:
-            a.append(str(x))
+            if isinstance(x , datetime.date):
+               df = DateFormat(x)
+               dl = df.format(get_format('DATE_FORMAT'))
+               a.append(str(dl))
+            else:
+               a.append(str(x))
          except UnicodeEncodeError:
             a.append('')
       data_to_send.append(a)
@@ -701,18 +716,18 @@ def contactmanager_delete(request, company_id):
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator']).exists() , login_url=login_url)
-def edit_comments(request, company_id):
+def edit_comments(request, campus_contact_id):
 #TODO: Add edit form only for coordinator and just save the companycomment object
-
   student = request.user.student
-  comments = CompanyContactComments.objects.filter(campus_contact__student=student, campus_contact__contact_person__company_contact__id=company_id)
-
+  comments = CompanyContactComments.objects.filter(campus_contact__id=campus_contact_id).order_by('-date_created')
   if request.POST:
     form = CommentsForm(request.POST)
-    form.save()
+    comment_inst = form.save(commit=False)
+    comment_inst.campus_contact = CampusContact.objects.get(id=campus_contact_id)
+    comment_inst.save()
 
   else:
-    formset = CommentForm()
+    form = CommentsForm()
 
   return render_to_response('placement/edit_comments.html',{
       'form': form,

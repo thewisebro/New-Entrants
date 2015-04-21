@@ -73,16 +73,25 @@
             <td>When to Contact:</td>
             <td>{{ contactperson.when_to_contact }}</td>
           </tr>
+{% if contactperson.campuscontact.companycontactcomments %}
           <tr>
             <td>Comments:</td>
-            <td></td>
-          </tr>
+            <td>
+              <table>
+                <tr>
+                  <th>Date:</th>
+                  <th>Comment</th>
+                </tr>
             {% for comment in contactperson.campuscontact.companycontactcomments %}
-          <tr>
-            <td>{{ comment.date_created }}</td>
-            <td>{{ comment.comment }}</td>
-          </tr>
+                <tr>
+                  <td>{{ comment.date_created }}</td>
+                  <td>{{ comment.comment }}</td>
+                </tr>
             {% endfor %}
+              </table>
+            </td>
+          </tr>
+{% endif %}
         </table>
       {% endfor %}
 
