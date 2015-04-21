@@ -434,7 +434,7 @@ def placement_manager_view(request):
     if comment:
       comment=comment[0].comment
     else:
-      comment=""
+      comment="None"
     values.append(comment)
     values.append(campus_contact_inst.when_to_contact)
     values.append(company.id)
@@ -644,7 +644,6 @@ def person_search(request):
   return HttpResponse(data,'application/json')
 
 def assign_campus_contact(request):
-#TODO: No Use, Remove this form later
   if request.method == 'POST':
     form = AssignCoordinatorForm(request.POST)
     if form.is_valid():
@@ -656,7 +655,7 @@ def assign_campus_contact(request):
         messages.error(request, 'Given person is not Company Coordinator. You can add using Add Company Coordinator Form')
         return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
       try:
-        assigns = form.data['assigns']
+        assigns = form.data.getlist('assigns')
       except KeyError as e:
         messages.error(request, 'Please select comapny to assign')
         return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
