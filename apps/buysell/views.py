@@ -585,7 +585,7 @@ def deleteEntry(request, category, pk_id):
       try:
         Notification.delete_notification('buysell', item)
         item.delete()
-      except:
+      except Exception as e:
         messages.error(request, 'An error occured. The error has been reported.')
         logger.info(request.user.username + ': error in deleting items for sale with pk ' + pk_id+ '.')
         logger.info(e)
