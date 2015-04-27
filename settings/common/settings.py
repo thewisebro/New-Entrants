@@ -390,6 +390,14 @@ LOGGING = {
       'when'     : 'midnight',
       'backupCount':365
     },
+    'placement_file_logger': {
+      'level':'DEBUG',
+      'class':'logging.handlers.TimedRotatingFileHandler',
+      'formatter': 'verbose',
+      'filename' : os.path.join(PROJECT_ROOT, 'logs/placement'),
+      'when'     : 'midnight',
+      'backupCount':365
+    },
 
   },
   'loggers': {
@@ -410,6 +418,11 @@ LOGGING = {
       'handlers':['console'],
       'level':'INFO'
     },
+    'placement': {
+      'handlers':['console'],
+      'level':'INFO'
+    },
+
   }
 }
 
