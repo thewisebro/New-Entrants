@@ -281,6 +281,7 @@ CHANNELI_APPS = (
   'mcm',
   'phpapps',
   'genforms',
+  'application_form',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
