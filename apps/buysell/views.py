@@ -579,7 +579,7 @@ def editsave(request, category, itemReqId):
 def deleteEntry(request, category, pk_id):
   logger.info(request.user.username + ': entered deleteEntry with category ' + category + '.')
   if category == "item":
-    item = ItemsForSale.items.get(pk = pk_id)
+    item = ItemsForSale.objects.get(pk = pk_id)
     imgPath = MEDIA_ROOT + str(item.item_image)
     if request.user.username == item.user.username:
       try:
