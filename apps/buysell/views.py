@@ -591,7 +591,10 @@ def deleteEntry(request, category, pk_id):
         logger.info(e)
         return HttpResponseRedirect('/buysell/my-account/')
       else:
-        os.remove(imgPath)
+        try:
+          os.remove(imgPath)
+        except Exception:
+          pass
         messages.success(request, 'Item successfully deleted.')
         logger.info(request.user.username + ': item deleted with pk ' + pk_id + '.')
         return HttpResponseRedirect('/buysell/my-account/')
