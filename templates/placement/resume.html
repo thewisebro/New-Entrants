@@ -182,7 +182,7 @@
               <p>
               {% endif %}
               <p class="top_rows">
-              Email: {{ plac_person.student.user.email_id }}
+              Email: {{ plac_person.student.user.email }}
               </p>
             </div>  
             <!-- Area of interest and CGPA -->
@@ -191,7 +191,7 @@
             {% if verification_resume %}
             Master resume, {% now "M j, P" %}
             {% endif %}
-            <img id='logo' src="{{ STATIC_URL }}images/iitrlogo.png"/>
+            <img id='logo' src="{{ STATIC_URL }}images/placement/iitrlogo.png"/>
             <br> <b>Indian Institute of Technology Roorkee</b>
           </td>
         </tr>
@@ -283,7 +283,7 @@
      {% if plac_info.achievements %}
        <tr>
         <td style="width:30%;" class="bring_td_up">
-          <div class='skill bold_first'>Academic Achievements</div>
+          <div class='skill bold_first'>Academics</div>
         </td> 
         <td style="width:70%;">
           <div>{{ achievements|linebreaksbr }}</div>
@@ -333,10 +333,12 @@
         <td style="width:50%;">
           <div>
           <b>Father's Name:</b> {{ info.fathers_name }}<br />
-          <b>Date of Birth:</b> {{ info.birth_date }}<br />
-          <b>Gender:</b> {{ plac_person.student.get_gender_display }}<br />
-          <b>Contact No:</b> {{ plac_person.student.personal_contact_no }}<br />
-          <b>Category:</b> {{ info.get_category_display }}<br />
+          <b>Date of Birth:</b> {{ plac_person.student.user.birth_date }}<br />
+          <b>Gender:</b> {{ plac_person.student.user.gender }}<br />
+          <b>Contact No:</b> {{ plac_person.student.user.contact_no }}<br />
+          {% if category_required %}
+          <b>Category:</b> {{ info.category }}<br />
+          {% endif %}
         </td>
         <td style="width:50%;">
           <b>Permanent Address:</b> {{ info.permanent_address }}, {{ info.city }} - {{ info.pincode }}<br />

@@ -1,11 +1,11 @@
-import settings
 import utils
 import datetime
 
-from core import models
 from django.core.files.storage import FileSystemStorage
-from api import model_constants as MC
+from django.conf import settings
 
+from core import models
+from api import model_constants as MC
 from jukebox import constants as JC
 from nucleus.models import User
 

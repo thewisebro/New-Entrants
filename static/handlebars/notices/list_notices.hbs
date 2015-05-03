@@ -1,55 +1,67 @@
 {{#if anonymous}}
   <div class="notice_info" onclick="open_notice({{ notice.id }})">
-    <div class="notice_date">{{ notice.datetime_modified }}</div>
-    <div class="notice_source">{{ notice.category_name }}</div>
-    <div class="subject_wrap">
-      <div class="notice_subject">{{ notice.subject }}</div>
-      <div style="clear:both"><div>
+    <div id="date_source_subject_wrap" class="star_check_absent">
+        <div class="notice_date">{{ notice_date }}</div>
+            <div class="notice_source">{{ notice.category }}</div>
+            <div class="subject_wrap">
+              <div class="notice_subject">{{ notice.subject }}</div>
+              <div style="clear:both"></div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div style="clear:both"></div>
     </div>
-    <div style="clear:both"><div>
   </div>
 {{else}}
-  <div 
+  <div
       class='notice_info {{#if read}}read{{else}}unread {{/if}}'
       id="notice_{{ notice.id }}"
       onclick="open_notice({{ notice.id }})">
 
-    <input 
-      type="checkbox" 
-      class="check" 
-      id="check-{{ notice.id }}" 
-      onclick="add_to_checklist({{notice.id}}, event)">
-   
-      <span 
-        class="starred" 
+      <div id="check_wrap" class="check" onclick="stop_propagation(event)">
+      <div class="squaredFour">
+        <input
+          type="checkbox"
+          name="check"
+          class="checkboxes"
+          onclick="add_to_checklist({{notice.id}}, event)"
+          id="check-{{ notice.id }}" value="None" style="display:none">
+          <label for="check-{{ notice.id }}"></label>
+          </div>
+      </div>
+
+      <div
+        class="starred"
         onclick="star_notice({{ notice.id }}, event)">
-      
+
               <i class="fa fa-star" id="star_shape_{{ notice.id }}" {{#if star}} style="color:#F1C40F;"{{else}} style="color:#AAA;"{{/if}}></i>&nbsp
-      </span>
+      </div>
 
-      <div class="notice_date">{{ notice.datetime_modified }}</div>
-      <div class="notice_source">{{ notice.category_name }}</div>
-      <div class="subject_wrap">
+        <div id="date_source_subject_wrap" {{#if edit}} class="star_check_present_with_edit" {{else}} class="star_check_present" {{/if}}>
+          <div class="notice_date {{#if read}}read{{else}}unread{{/if}}">{{ notice_date }}</div>
+          <div class="notice_source {{#if read}}read{{else}}unread{{/if}}">{{ notice.category }}</div>
+          <div class="subject_wrap">
+            <div class="notice_subject {{#if read}}read{{else}}unread{{/if}}">{{ notice.subject }}</div>
+          </div>
+        </div>
 
-        {{#if edit}} 
-          <span 
-            class="delete" 
-            onclick="delete_notice({{ notice.id }}, event)">
-            &nbsp&nbspDelete
-          </span>
-         
-          <span 
-            class="edit" 
-            onclick="edit_notice({{ notice.id }}, event)">
-              &nbsp&nbspEdit
-          </span>
+        {{#if edit}}
+          <div id="edit_delete" class="star_check_present">
+              <span
+                class="delete"
+                onclick="delete_notice({{ notice.id }}, event)">
+                &nbsp&nbspDelete
+              </span>
+
+              <span
+                class="edit"
+                onclick="edit_notice({{ notice.id }}, event)">
+                  Edit
+              </span>
+          </div>
         {{/if}}
 
-          <div class="notice_subject">{{ notice.subject }}</div>
-
-        <div style="clear:both"><div>
-      </div>
-    <div style="clear:both"><div>
+    <div style="clear:both"></div>
 
   </div>
 {{/if}}

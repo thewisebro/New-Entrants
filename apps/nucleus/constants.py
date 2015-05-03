@@ -16,6 +16,7 @@ tabs = [
 channeli_apps = {
   'forum': {'name': 'Forum', 'url': '/#forum/'},
   'events': {'name': 'Events', 'url':'/#events'},
+  'groups': {'name': 'Groups', 'url':'/#groups'},
   'lectut' : {'name':'Lectures & Tutorials', 'url':'/lectut/'},
   'placement' : {'name':'Placement Online', 'url':'/placement/'},
   'internship' : {'name':'Internship', 'url':'/internship/'},
@@ -35,9 +36,7 @@ channeli_apps = {
   'softwares':{'name':'Download Softwares', 'url':'/softwares/'},
   'messmenu' : {'name':'Mess Menu', 'url':'/messmenu/'},
   'helpcenter' : {'name':'Help Center', 'url':'/#helpcenter/'},
-  'peoplesearch' : {'name':'People Search',
-    'url':'http://people.iitr.ernet.in/PeopleSearch/'
-  },
+  'peoplesearch' : {'name':'People Search', 'url':'/peoplesearch/'},
   'research' : {'name':'Research Assistant', 'url':'/research_assistant/'},
   'facultyfilemanager' : {'name':'File Manager', 'url':'/settings/filemanager/'},
   'acad' : {'name':'Academics', 'url':'/acad/'},
@@ -48,14 +47,15 @@ channeli_apps = {
   'dc++' : {'name':'DC++', 'url':'/dc++/'},
 }
 
-student_apps = ['events', 'acad','jukebox','dc++','lectut','notices','placement',
-                'buysell','vle','grades', 'thinktank','lostfound','softwares',
+student_apps = ['acad','lectut','yaadein','jukebox','dc++','placement',
+                'buysell', 'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research']
 
-faculty_apps = ['facapp','events','lectut','notices','placement',
+faculty_apps = ['responses','acad_course_students','facapp','lectut','placement', 'research',
                 'thinktank','lostfound','softwares','peoplesearch']
-other_apps = ['events', 'lectut','notices','placement','thinktank',
-              'lostfound','softwares','peoplesearch']
+
+other_apps = ['lectut','yaadein','jukebox','dc++','thinktank',
+              'lostfound','softwares','peoplesearch','placement']
 
 external_links = {
   'imglink' : {'name':'Information Management Group', 'url':'http://img.channeli.in'},
@@ -75,7 +75,7 @@ channeli_links = [
   {'name':'Smart Card Registration','url':'/genforms/'},
   {'name':'Print Scholarship Form','url':'/scholarships/mcm_print_pdf/'},
   {'name':'LAN Registration','url':'/wifi/'},
-  {'name':'Telephone Directory','url':'/static/pdfs/teldir-oct2013.pdf'},
+  {'name':'Telephone Directory','url':'/static/pdfs/directoryeng15022015.pdf'},
   {'name':'Meeting Section','url':'/meeting_minutes/'},
   {'name':'Dairy Reports','url':'/meeting_minutes/dairy.php'},
   {'name':'Forms','url':'/forms/'},

@@ -1,0 +1,63 @@
+{% extends "softwares/base.html" %}
+{% load extra_tags %}
+{% block content %}
+<nav id="navbar1" class="g3">
+  <div class="row-fluid">
+    <div id="menu" class="default">
+      <div class="span3 offset1">
+        <div id="w">
+			    <img id="winsign" src="{{STATIC_URL}}images/softwares/windows-logo_03.png"/>
+          <p>Windows</p>
+			    <ul id ="nav">
+            <li><a href="{% url 'download'  %}#page1">Internet</a></li>
+            <li><a href="{% url 'download'  %}#page2">Anti-Malware</a></li>
+            <li><a href="{% url 'download'  %}#page3">Mutimedia</a></li>
+            <li><a href="{% url 'download'  %}#page4">File-Sharing</a></li>
+            <li><a href="{% url 'download'  %}#page5">Security</a></li>
+            <li><a href="{% url 'download'  %}#page6">DVD Tools</a></li>
+            <li><a href="{% url 'download'  %}#page7">Messaging</a></li>
+            <li><a href="{% url 'download'  %}#page8">System Tuning</a></li>
+            <li><a href="{% url 'download'  %}#page9">Desktop</a></li>
+            <li><a href="{% url 'download'  %}#page10">File Transfer</a></li>
+            <li><a href="{% url 'download'  %}#page11">Archiving</a></li>			
+            <li><a href="{% url 'download'  %}#page12">Photos & Images</a></li>
+            <li><a href="{% url 'download'  %}#page13">Office & News</a></li>
+            <li><a href="{% url 'download'  %}#page14">Networking</a></li>
+            <li><a href="{% url 'download'  %}#page15">Drivers</a></li>
+            <li><a href="{% url 'download'  %}#page16">Developer Tools</a></li>
+ 		      </ul>
+		    </div>
+      </div>
+		  <div class="span3 offset5">
+        <div id ="l">
+		      <a href="{% url 'download' %}linux/"><img id="linsign" src="{{STATIC_URL}}images/softwares/linux-logo_03.png"/></a>
+          <p>Linux</p>
+		    </div>
+		  </div>
+    </div>
+  </div>
+</nav>
+<div id="content" class="g3">
+{% for software in softwares %}
+  {% if software.soft_file|is_exists %}
+    <hr style="width:100%"/>
+    <div class="row-fluid" style="margin-top:25px">
+      <div class="span2 offset1 font-b"> 
+        <img id="span12"  src="{{MEDIA_URL}}{{software.image}}"/>
+        <p style="margin-left:47px;margin-top:-7px">
+            <strong>{{software.soft_name}}</strong><br/>{{software.version }}
+        </p>
+      </div>
+      <div class="span5 font" style="margin-top:-7px;margin-left:5px">
+        <p class="offset2">{{ software.description}}</p>
+      </div>
+      <div class="span1 font-s"><p class="offset4" style="margin-top:-28px"><br/>{{ software.soft_file.size|div}}</p></div>
+      <div class="span1 " style="margin-top:-10px"><a href = "{{MEDIA_URL}}{{ software.soft_file }}"  ><img  src="{{STATIC_URL}}images/softwares/arrowsign_03.png" class="offset9" alt="Download"/></a></div>
+    </div> 
+  {% endif %}
+  {% if not check %}
+    <p style="text-align:center">No Softwares found in this category</p>
+  {% endif %}
+{% endfor %}
+<div style="margin-top:15px;"></div>
+{% endblock %}

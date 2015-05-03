@@ -1,8 +1,10 @@
+@import '../base'
+
 #notifications-count
   margin-right: 10px
   margin-top: 8px
-  width: 23px
   height: 23px
+  padding: 0px 4px
   line-height: 23px
   font-size: 15px
   float: right
@@ -13,6 +15,7 @@
   text-shadow: 0px 0px #fff
   text-align: center
   cursor: pointer
+  min-width: 16px
 
 .notifications-count-inact
   background: #b6b6b6 !important
@@ -27,15 +30,18 @@
 .notification-box
   min-height: 20px
   padding: 10px
-  background: #fafafa
+  background: #fff
   border-bottom: 1px solid #d0d0d0
   &:hover
     background: #f3f3f3
 
 .notification-box-not-viewed
-  background: #F4F8FF
+  //background: #F4F8FF
+  background: #ECF3FF
   &:hover
-    background: #FAFCFF
+    background: #D8E6FD
+    .notification-mark-read
+      color: #333
 
 .notification-text
   min-width: 250px
@@ -50,7 +56,19 @@
     color: #0072dc
     text-decoration: none
 
-.notification-time
+.notification-time, .notification-mark-read
   float: right
   font-size: 12px
   color: #797979
+  margin-left: 20px
+
+.notification-mark-read:hover
+  color: $blue-link !important
+
+#all-read-button
+  display: inline
+  float: right
+  width: 100px
+
+#notifications-heading
+  display: inline

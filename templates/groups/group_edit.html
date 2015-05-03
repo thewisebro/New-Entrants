@@ -4,13 +4,15 @@
 
 {% block app_styles %}
 {{ block.super }}
+{{ form1.media.css }}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/utilities/edit_profile.css"/>
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/smoothness/jquery-ui.css"/>
+<!--link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/smoothness/jquery-ui.css"/-->
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/smoothness/custom-jquery-ui.css"/>
 
 {% endblock %}
 
 {% block app_scripts %}
+  {{ form1.media.js }}
   <script type="text/javascript" src="{{ STATIC_URL }}js/groups/subscribe.js"></script>
   <script type="text/javascript">
     function iframe(url){
@@ -25,6 +27,14 @@
   </script>
 {% endblock %}
 {% block group_content %}
+  <div class="edit-member">
+    <div class="button2 button-div" onclick="upload_image('user_photo', {{ group.user.pk }});">Edit Group Logo</div>
+  </div>
+  <div class="edit-member">
+    <div class="button2 button-div" onclick="iframe('/groups/{{group.user.username}}/add_member/');">Edit Members </div>
+  </div>
+
+  <div class="app-heading"> Edit Group </div>
   {% if form1.errors or form2.errors %}
   <div class="errors">
     <p style = "color: red;">
@@ -32,9 +42,9 @@
     </p>
   </div>
   {% endif %}
-  <form action = "" method = "post" class="uniForm">
+  <form action = "" method = "post" class="uniForm" id="edit_group">
     {% csrf_token %}
-    <div class="edit-categories">
+    <div class="edit-groups-categories">
       {{ form1.uniform }}
       {{ form2.uniform }}
       <input class="input-button" type = "submit" name ="submit_button" value = "Save Changes">
@@ -55,11 +65,3 @@
     {% endif %}
   </form>
 {% endblock group_content %}
-{% block edit-member %}
-<div class="edit-member">
-  <div class="button2 button-div" onclick="edit_profile_pic('{{group.user.username}}');">Edit Group Logo</div>
-</div>
-<div class="edit-member">
-  <div class="button2 button-div" onclick="iframe('/groups/{{group.user.username}}/add_member/');">Edit Members </div>
-</div>
-{% endblock %}

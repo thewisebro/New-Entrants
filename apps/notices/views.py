@@ -10,15 +10,18 @@ from notices.serializer import *
 from django.db.models import Q
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from django.views.generic import TemplateView
-import simplejson
+import json as simplejson
 from django.conf import settings
+from django.contrib import messages
 
 from filemanager import FileManager
 from notices.models import *
 from notices.forms import *
 from notices.utils import *
+import pytz
+from datetime import datetime
+from nucleus.models import GlobalVar
 
-privelege=0
 PeopleProxyUrl = "http://people.iitr.ernet.in/"
 
 def index(request):
@@ -31,9 +34,13 @@ def index(request):
   context = { 'notice_list' : notice_list }
   return render(request, 'notices/notice_list.html', context)
 
+def redirect_index(request):
+  return HttpResponseRedirect("/#notices")
+
 @login_required
 def upload(request):
   category = None
+  privelege = request.user.uploader_set.all().exists()
   categories = request.user.category_set.all()
   form = DummyForm()
   if (privelege and request.method == 'POST' and request.POST.has_key('category_name') and request.POST['category_name']):
@@ -46,8 +53,13 @@ def upload(request):
         notice = form.save(commit=False)
         notice.content = html_parsing_while_uploading(notice.content)
         notice.uploader = uploader
+        notice.datetime_modified = datetime.now()
         notice.save()
-        return HttpResponseRedirect('/#notices')
+        messages.success(request,'Your notice has been successfully uploaded.')
+        return HttpResponseRedirect(reverse('close_dialog', kwargs={
+                           'dialog_name': 'notice_upload_dialog'
+                               }))
+
     else:
       form =  NoticeForm()
   context = {'category' : category, 'categories' : categories, 'form' : form, 'privelege' : privelege}
@@ -55,9 +67,12 @@ def upload(request):
 
 class PrivelegeJsonView(TemplateView):
   def get(self, request):
-    global privelege
-    privelege = request.user.uploader_set.all().exists()
-    privelege1 = {'privelege' : privelege}
+    try:
+      privelege = Uploader.objects.filter(user=request.user).exists()
+      print "privelege1 " + str(privelege)
+      privelege1 = {'privelege' : privelege}
+    except:
+      privelege1 = {'privelege' : False}
     privelege_json = simplejson.dumps(privelege1)
     return HttpResponse(privelege_json, content_type="application/json")
 
@@ -108,9 +123,60 @@ class NoticeListView(ListAPIView):
        queryset = queryset.filter(uploader__category__name=subc).order_by('-datetime_modified')[llim:hlim]
     return queryset
 
+class ContentFirstTimeBringNotices1(ListAPIView):              #Brings 50 notices corresponding to the id in the url, when first opened in content mode
+  serializer_class = NoticeListViewSerializer
+  def get_queryset(self):
+    nid = self.kwargs['nid']
+    notice_list = Notice.objects.filter(expired_status=False).order_by('datetime_modified')         #Check in new notices
+    i=0
+    for notice in notice_list:
+      print notice.id, nid
+      if notice.id == int(nid):
+        break
+      i=i+1
+    if i!=notice_list.count():
+      begin = i-i%50
+      end = begin + 50
+      page_no = i/10 + 1
+      queryset = notice_list[begin:end]
+      set1 = {}
+      set1["begin"] = begin
+      set1["end"] = end-1
+      set1["mode"] = "new"
+      set1["page_no"] = page_no
+      set1["status"] = "500"
+      GlobalVar["notices_set1"]=set1
+      return queryset
+    notice_list = Notice.objects.filter(expired_status=True).order_by('datetime_modified')       #Check in old notices
+    i=0
+    for notice in notice_list:
+      print notice.id, nid
+      if notice.id == int(nid):
+        break
+      i=i+1
+    if i!=notice_list.count():
+      begin = i-i%50
+      end = begin + 50
+      page_no = i/10 + 1
+      queryset = notice_list[begin:end]
+      set1 = {}
+      set1["begin"] = begin
+      set1["end"] = end-1
+      set1["mode"] = "old"
+      set1["page_no"] = page_no
+      set1["status"] = "500"
+      GlobalVar["notices_set1"]=set1
+      return queryset
+
+class ContentFirstTimeBringNotices2(TemplateView):              #Brings 50 notices corresponding to the id in the url, when first opened in content mode
+  def get(self, request):
+    set1 = GlobalVar["notices_set1"]
+    set2 = simplejson.dumps(set1)
+    return HttpResponse(set2, content_type="application/json")
+
 class Maxnumber(TemplateView):
   def get(self, request):
-    number_json = simplejson.dumps({'total_new_notices' : len(Notice.objects.filter(expired_status=False)),'total_old_notices' : len(Notice.objects.filter(expired_status=True)) })
+    number_json = simplejson.dumps({'total_new_notices' : Notice.objects.filter(expired_status=False).count(),'total_old_notices' : Notice.objects.filter(expired_status=True).count() })
     return HttpResponse(number_json, content_type="application/json")
 
 class TempMaxNotice(TemplateView):
@@ -120,9 +186,9 @@ class TempMaxNotice(TemplateView):
     else:
       queryset = Notice.objects.filter(expired_status=True)
     if(subc=="All"):
-      number_json = simplejson.dumps({'total_notices' : len(queryset.filter(uploader__category__main_category=mc))})
+      number_json = simplejson.dumps({'total_notices' : queryset.filter(uploader__category__main_category=mc).count()})
     else:
-      number_json = simplejson.dumps({'total_notices' : len(queryset.filter(uploader__category__name=subc))})
+      number_json = simplejson.dumps({'total_notices' : queryset.filter(uploader__category__name=subc).count()})
     return HttpResponse(number_json, content_type="application/json")
 
 class GetNotice(RetrieveAPIView):
@@ -150,7 +216,9 @@ class NoticeSearch(ListAPIView):
     if query[:2]==">>":
       print "abcd"
       query=query[2:].split("-")
-      queryset = query1.filter(datetime_modified__gt=datetime.fromtimestamp(int(query[0])/1000.0)).filter(datetime_modified__lt=datetime.fromtimestamp(int(query[1])/1000.0))
+      init_date = datetime.fromtimestamp(int(query[0])/1000.0)     #make the object aware from unaware
+      final_date = datetime.fromtimestamp(int(query[1])/1000.0)
+      queryset = query1.filter(datetime_modified__gt=init_date).filter(datetime_modified__lt=final_date)
 
     else:
       words = query.split(' ')
@@ -209,7 +277,7 @@ def mul_read_star_notice(request, action):              #action determines wheth
 
 class Show_Starred(ListAPIView):
   def get_queryset(self):
-    user = NoticeUser.objects.get_or_create(user=self.request.user)[0]
+    user = NoticeUser.objects.get_or_create(user=self.request.rest_user)[0]
     queryset = user.starred_notices.all().order_by('-datetime_modified')
     return queryset
   serializer_class = NoticeListViewSerializer
@@ -217,20 +285,19 @@ class Show_Starred(ListAPIView):
 class Read_notice_list(TemplateView):
   def get(self, request):
     user = NoticeUser.objects.get_or_create(user=request.user)[0]
-    notices = user.read_notices.all().order_by('-datetime_modified')
-    dictionary = {}
-    t=0
-    for i in notices:
-      dictionary[t] = i.id
-      t=t+1
-    d_json = simplejson.dumps(dictionary)
+    id_list = list(user.read_notices.all().values_list('id', flat=True))
+    d = {}
+    for i, idee in enumerate(id_list):
+        d[i] = idee
+    d_json = simplejson.dumps(d)
     return HttpResponse(d_json, content_type="application/json")
 
 class Show_Uploads(ListAPIView):
   def get_queryset(self):
     queryset = []
+    privelege = self.request.rest_user.uploader_set.all().exists()
     if privelege:
-      uploaders = self.request.user.uploader_set.all()
+      uploaders = self.request.rest_user.uploader_set.all()
       for i in uploaders:
         queryset += i.notice_set.all().order_by('-datetime_modified')
     return queryset
@@ -240,19 +307,21 @@ class Show_Uploads(ListAPIView):
 def edit(request, pk):
   NoticeForm = EditForm()
   n = Notice.objects.get(id=pk)
+  privelege = request.user.uploader_set.all().exists()
   if request.method == 'POST' and privelege:
     form = EditForm(request.POST)
     if form.is_valid():
       if n.datetime_modified==n.datetime_created:
-        tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created)
+        tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created, datetime_modified = datetime.now())
       else:
         new_edit_no = max(map(lambda a:a.editing_no,TrashNotice.objects.filter(notice_id=n.pk)))+1
-        tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no = new_edit_no, datetime_created=n.datetime_modified, original_datetime = n.datetime_created)
+        tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no = new_edit_no, datetime_created=n.datetime_modified, original_datetime = n.datetime_created, datetime_modified = datetime.now())
       notice = form.save(commit=False)
       n.subject = notice.subject
       n.reference = notice.reference
       n.content = html_parsing_while_uploading(notice.content)
       n.expire_date = notice.expire_date
+      n.datetime_modified = datetime.now()
       for user in n.read_noticeuser_set.all():
         n.read_noticeuser_set.remove(user)
       n.re_edited = True
@@ -272,8 +341,9 @@ def edit(request, pk):
 @login_required
 def delete(request, pk):
   n = Notice.objects.get(id=pk)
+  privelege = request.user.uploader_set.all().exists()
   if privelege:
-    tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=-1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created)
+    tnotice = TrashNotice(subject=n.subject, reference=n.reference, expire_date=n.expire_date, content=n.content, uploader=n.uploader, emailsend=n.emailsend, re_edited=n.re_edited, expired_status=n.expired_status, notice_id=n.pk, editing_no=-1, datetime_created=n.datetime_modified, original_datetime = n.datetime_created, datetime_modified = datetime.now())
     tnotice.save()
     n.delete()
   return HttpResponseRedirect('/#notices')

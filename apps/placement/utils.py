@@ -43,7 +43,7 @@ def sanitise_for_download(string):
   """
   return string.replace(' ', '-').replace(',','_').replace(':', '_')
 
-def get_resume_binary(context, student, resume_type, verification_resume = False, is_reduced = False, photo_required = False) :
+def get_resume_binary(context, student, resume_type, verification_resume = False, is_reduced = False, photo_required = False, category_required=False):
   """
   Returns dictionary of the resume for the specified student.
   Keys of the dictionary are 'err' and 'content'.
@@ -151,6 +151,7 @@ def get_resume_binary(context, student, resume_type, verification_resume = False
                              'achievements' : achievements,
                              'publications' : publications,
                              'verification_resume' : verification_resume,
+                             'category_required': category_required,
                              'ug_name' : ug_name,
                              'registration_no' : registration_no,
                              'photo_required' : photo_required,

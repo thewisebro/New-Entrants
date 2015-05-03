@@ -10,21 +10,26 @@
     body {
       margin-top: 15px;
     }
-    label {
+    .report-form {
+       margin: 15px;
+    }
+    .report-form label {
       margin: 10px;
     }
-    #id_reason label{
+    .report-form #id_reason label{
       margin-left: 5px;
     }
-    ul {
+    .report-form ul {
       list-style: none;
       list-style-type: none;
-      padding: 0px
+      padding: 0px;
+      margin-top: 10px;
+      margin-left: 5px
     }
-    li {
+    .report-form li {
       height: 25px;
     }
-    input[type=radio]{
+    .report-form input[type=radio]{
       vertical-align: middle;
       margin-bottom: 3px;
     }
@@ -34,7 +39,7 @@
 {% endblock %}
 
 {% block body %}
-   <form action="" method="POST" class="uniForm">{% csrf_token %}
+   <form class="report-form" action="" method="POST" class="uniForm">{% csrf_token %}
      {{ form }}
      <input type="submit" class="input-button" name="submit" style="margin-left:10px; margin-top:0px" value="Submit"/>
    </form>

@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 from groups import forms
 from groups.models import *
 from nucleus.models import Student
+from api.utils import pagelet_login_required, dialog_login_required
 
 import json
 
@@ -35,7 +36,7 @@ def get_groups(request):
   }
   return HttpResponse(json.dumps(data), content_type='application/json')
 
-@login_required
+@pagelet_login_required
 def group_edit(request,username):
   """
     Editing Group Details
@@ -48,7 +49,9 @@ def group_edit(request,username):
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   if group.is_active == True or group.admin == student or group.user == user:
     count = group.groupinfo.members.count()
     if group.user == user or group.admin == student:
@@ -125,7 +128,6 @@ def get_subscribers_no(group):
 def is_user_subscribed(user,group):
   return group.groupinfo.subscribers.filter(username = user.username).exists()
 
-@login_required
 def group_details(request,username):
   try:
     group = Group.objects.get(user__username = username)
@@ -135,7 +137,7 @@ def group_details(request,username):
         }, context_instance=RequestContext(request))
   user = request.user
   student = None
-  if user.in_group('Student'):
+  if user.is_authenticated() and user.in_group('Student'):
     student = user.student
   if group.is_active == True or group.user == user or group.admin == student:
     can_edit = False
@@ -158,7 +160,6 @@ def group_details(request,username):
   else:
     return HttpResponseRedirect('/')
 
-@login_required
 def group_events(request,username):
   try:
     group = Group.objects.get(user__username = username)
@@ -167,7 +168,9 @@ def group_events(request,username):
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   if group.is_active == True or group.user == user or group.admin == student:
     can_edit = False
     subscribers = get_subscribers_no(group)
@@ -189,7 +192,6 @@ def group_events(request,username):
   else:
     return HttpResponseRedirect('/')
 
-@login_required
 def group_members(request,username):
   try:
     group = Group.objects.get(user__username = username)
@@ -197,8 +199,10 @@ def group_members(request,username):
     return render_to_response('groups/group_members.html', {
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
-  student = request.session.get('student')
   user = request.user
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   if group.is_active == True or group.user == user or group.admin == student:
     can_edit = False
     subscribers = get_subscribers_no(group)
@@ -221,7 +225,7 @@ def group_members(request,username):
     return HttpResponseRedirect('/')
 
 
-@login_required
+@dialog_login_required
 def member_add(request, username):
   """
   Adds a member to the group.
@@ -234,7 +238,9 @@ def member_add(request, username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   MemberAddForm = forms.MemberAddFormGen(groupinfo)
   page_info = 'Add a Member'
@@ -281,7 +287,7 @@ def member_add(request, username):
   else:
     return HttpResponseRedirect('/groups/'+username)
 
-@login_required
+@dialog_login_required
 def member_delete(request,username):
   """
   Remove members
@@ -294,7 +300,9 @@ def member_delete(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   choices = groupinfo.members.all()
   form = forms.MemberDeleteForm(choices)
@@ -325,7 +333,7 @@ def member_delete(request,username):
   else:
     return HttpResponseRedirect('/groups/'+username)
 
-@login_required
+@dialog_login_required
 def member_add_multiple(request,username):
   """
   Adds multiple members by assigning them default post..
@@ -338,7 +346,9 @@ def member_add_multiple(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   page_info="Add Multiple Members"
   if group.user == user or group.admin == student:
@@ -397,7 +407,7 @@ def member_add_multiple(request,username):
   else:
     return HttpResponseRedirect('/groups/'+username)
 
-@login_required
+@dialog_login_required
 def admin_change(request, username):
   """
     Changes Admin of a Group
@@ -409,7 +419,9 @@ def admin_change(request, username):
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   form = forms.AdminChangeFormGen(groupinfo)
   page_info = 'Change Admin'
@@ -445,7 +457,7 @@ def admin_change(request, username):
   return HttpResponseRedirect('/groups/'+username)
 
 
-@login_required
+@dialog_login_required
 def post_add(request,username):
   """
   Adds a post available for a particular group
@@ -458,7 +470,9 @@ def post_add(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   page_info = 'Add a Post'
   if group.user == user or group.admin == student:
@@ -487,7 +501,7 @@ def post_add(request,username):
   else:
     return HttpResponseRedirect('/groups/'+username)
 
-@login_required
+@dialog_login_required
 def post_delete(request,username):
   """
   Deletes a post and defaults the post of the affected members.
@@ -500,7 +514,9 @@ def post_delete(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   page_info = 'Delete Posts'
   choices = groupinfo.posts.all().exclude(post_name="Member")
@@ -526,7 +542,7 @@ def post_delete(request,username):
   else:
     return HttpResponseRedirect('/groups/'+username)
 
-@login_required
+@dialog_login_required
 def post_change(request,username):
   """
   Changes the post of the selected member
@@ -539,7 +555,9 @@ def post_change(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   groupinfo = GroupInfo.objects.get(group=group)
   page_info = 'Change Post'
   form = forms.PostChangeFormGen(groupinfo)
@@ -572,7 +590,7 @@ def post_change(request,username):
   else:
     return HttpResponseRedirect('/groups/'+username)
 
-@login_required
+@pagelet_login_required
 def subscriber(request,username):
   """
     Subscribe/Unscubscribes a student to a group.
@@ -586,7 +604,9 @@ def subscriber(request,username):
         }, context_instance=RequestContext(request))
   if request.is_ajax() and request.method == 'POST' and group.is_active:
     user = request.user
-    student = user.student
+    student = None
+    if user.is_authenticated() and user.in_group('Student'):
+      student = user.student
     subscribed = request.POST['subscribed']
     msg='filler'
     if subscribed == 'False':
@@ -605,7 +625,7 @@ def subscriber(request,username):
   else:
     return HttpResponseRedirect('/groups/'+username)
 
-@login_required
+@pagelet_login_required
 def activate(request,username):
   """
     Activates the group's account
@@ -618,7 +638,9 @@ def activate(request,username):
         'group' : group,
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   if group.user == user or group.admin == student:
     group.is_active = True
     group.save()
@@ -635,7 +657,6 @@ def activate(request,username):
   else:
     return HttpResponseRedirect('/groups/'+username)
 
-@login_required
 def group_activity(request,username):
   try:
     group = Group.objects.get(user__username = username)
@@ -644,7 +665,9 @@ def group_activity(request,username):
         'error_msg': 'No group found',
         }, context_instance=RequestContext(request))
   user = request.user
-  student = user.student
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
   if group.is_active == True or group.user == user or group.admin == student:
     can_edit = False
     subscribers = get_subscribers_no(group)
@@ -674,22 +697,20 @@ def activity_dict(activity):
   return {
     'id' : activity.pk,
     'datetime' : activity.datetime_created.strftime('%Y-%m-%d %H:%M:%S'),
-    'text' : urlize(escape(activity.text).replace('\n','<br>')),
+    'text' : urlize(escape(activity.text)).replace('\n','<br>'),
   }
 
-@login_required
 def fetch_activities(request):
-  if request.is_ajax() and request.method == 'POST':
-    action = request.POST['action']
-    group_username = request.POST['group_username']
-    pk = request.POST['id']
-    json_data = None
-    number = int(request.POST['number'])
-    group = Group.objects.get(user__username = group_username)
-    if action == 'first':
-      activities = group.groupactivity_set.all()
-    elif action == 'next':
-      activities = group.groupactivity_set.filter(pk__lt = pk)
-    json_data = json.dumps({'activities':map(activity_dict,activities[:number]),'more':int(activities.count()>number)})
-    return HttpResponse(json_data,content_type='application/json')
+  action = request.GET['action']
+  group_username = request.GET['group_username']
+  pk = request.GET['id']
+  json_data = None
+  number = int(request.GET['number'])
+  group = Group.objects.get(user__username = group_username)
+  if action == 'first':
+    activities = group.groupactivity_set.all()
+  elif action == 'next':
+    activities = group.groupactivity_set.filter(pk__lt = pk)
+  json_data = json.dumps({'activities':map(activity_dict,activities[:number]),'more':int(activities.count()>number)})
+  return HttpResponse(json_data,content_type='application/json')
 

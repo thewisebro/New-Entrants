@@ -208,11 +208,13 @@ function fill_data_in_pagelet(pagelet_name, html){
   forms = $elem.find('form');
   for(i=0; i<forms.length; i++){
     var $form = $(forms[i]);
-    if($form.attr('action') === '')
-      $form.attr('action',$elem.attr('pagelet-url'));
-    $form.ajaxForm({
-      success: ajaxform_success
-    });
+    if(!$form.attr('data-ajax-action')){
+      if($form.attr('action') === '')
+        $form.attr('action',$elem.attr('pagelet-url'));
+      $form.ajaxForm({
+        success: ajaxform_success
+      });
+    }
   }
   load_pagelets($elem);
 }
@@ -348,9 +350,17 @@ $(document).ready(function(){
             $('body').append("<div class='pickdiv'></div>");
           }
           $('.pickdiv').show();
+          var _top, _left;
+          if((window.mouseYPos-window.scrollY) < 160) {
+            _top = window.mouseYPos+12;
+            _left = window.mouseXPos-10;
+          } else {
+            _top = window.mouseYPos-95;
+            _left = window.mouseXPos-10;
+          }
           $('.pickdiv').css({
-            top:window.mouseYPos-95,
-            left:window.mouseXPos-10
+            top:_top,
+            left:_left
           }).html(
             "<div class='name-info-div'>"+
               "<div class='name-div'>"+($(elem).data().shortname?

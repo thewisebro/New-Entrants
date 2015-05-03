@@ -3,4 +3,11 @@
 *.pyc
 *~
 .sass-cache/*
-settings/local_settings.py
+trash/*
+node_modules
+dist
+.tmp
+.sass-cache
+bower_components
+.swp
+media/

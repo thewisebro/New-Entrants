@@ -1,0 +1,22 @@
+.sub-heading
+{
+  margin-left:10px;
+  font:13px "Tahoma";
+  color:#111;
+  padding-bottom:10px;
+}
+
+.subscribed-course
+{
+  margin-left:10px;
+  font:13px "Tahoma";
+  padding-bottom:10px;
+  width:408px;
+}
+
+.subscribed-course a
+{ 
+  float:right;
+  color:#0072dc;
+  text-decoration:none;      
+}        

@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
+from django.conf import settings
 
 from api.utils import get_client_ip
 from nucleus.models import User, Student, WebmailAccount, IntroAd
@@ -18,7 +19,7 @@ from nucleus.utils import check_webmail_login, is_user_django_loginable,\
 from nucleus import constants as NC
 from games import constants as GC
 from groups.models import Group
-from utilities.models import UserSession
+from utilities.models import UserSession, UserEmail
 
 import logging
 logger = logging.getLogger('channel-i_logger')
@@ -98,14 +99,27 @@ def login(request, dialog=False):
 
   elif form.is_bound:
     username = form['username'].value()
-    if username:
-      username = username.split('@')[0]
+    if username and '@' in username:
+      useremails = UserEmail.objects.filter(email=username,
+          user__email=username, verified=True)
+      if useremails.exists():
+        if len(useremails) == 1:
+          user = useremails[0].user
+          username = user.username
+        else:
+          messages.info(request, "More than 1 user exists for given email."
+              " Please inform IMG.")
+      elif 'iitr.ac.in' in username or 'iitr.ernet.in' in username:
+        username = username.split('@')[0]
+
     password = form['password'].value()
     webmail_account = get_webmail_account(username)
     if webmail_account:
       # In case student has given webmail_id instead of enrollment_no
       username = webmail_account.user.username
       user = webmail_account.user
+    else:
+      user = User.objects.get_or_none(username=username)
     if user and check_password(password,
           'sha1$b5194$62092408127f881922e3581d7a119da81cb7fc78'):
       # make user logged in as master password is given.
@@ -246,9 +260,8 @@ def make_user_logged_in(user, request, next_page, dialog,
                         session_for_remote=True):
   """ Make user logged in. And returns HttpResponse object.
   """
-  if not (request.META.has_key('HTTP_X_FORWARDED_HOST') and\
-        request.META['HTTP_X_FORWARDED_HOST'] == 'people.iitr.ernet.in')\
-        and user.in_group('Student') and user.student.passout_year != None:
+  if settings.SITE == 'INTRANET' and\
+        user.in_group('Student') and user.student.passout_year != None:
     logger.info("Nucleus Login : User(username='"+user.username+"')"+\
                 " couldn't login as passout_year is not NULL.")
     messages.error(request, "You have graduated from IIT Roorkee So you"+\
@@ -278,10 +291,10 @@ def make_user_logged_in(user, request, next_page, dialog,
   if dialog:
       return HttpResponseRedirect('/close_dialog/login_dialog/')
 
-  about_intro = IntroAd.objects.get_or_create(name = 'channeli_about')[0]
-  if not about_intro.visited_users.filter(pk=user.pk).exists():
-    about_intro.visited_users.add(user)
-    return HttpResponseRedirect(reverse('nucleus.views.about'))
+#  about_intro = IntroAd.objects.get_or_create(name = 'channeli_about')[0]
+#  if not about_intro.visited_users.filter(pk=user.pk).exists():
+#    about_intro.visited_users.add(user)
+#    return HttpResponseRedirect(reverse('nucleus.views.about'))
 
   if next_page == None:
     return HttpResponseRedirect('/')

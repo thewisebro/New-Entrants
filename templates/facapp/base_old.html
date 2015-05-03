@@ -1,0 +1,142 @@
+<!doctype html>
+<!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+         More info: h5bp.com/i/378 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    {# TODO : change the title back to channel-i after merging back to channel-i #}
+    <title>{% block title %}Channel I{% endblock %}</title>
+    <meta name="description" content="">
+
+    <!-- Mobile viewport optimized: h5bp.com/viewport -->
+    <meta name="viewport" content="width=device-width">
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/facapp/normalize-min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/facapp/base.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/facapp/style.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/facapp/input_styles.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/facapp/tabs.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/facapp/button.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/smoothness/jquery-ui.css">
+    {# App specific css files here #}
+    {% block styles %} {% endblock %}
+
+    <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
+
+    <!-- All JavaScript at the bottom, except this Modernizr build.
+         Modernizr enables HTML5 elements & feature detects for optimal performance.
+         Create your own custom Modernizr build: www.modernizr.com/download/ -->
+    <script src="{{ STATIC_URL }}js/libs/modernizr.js"></script>
+  </head>
+  <body>
+    <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
+         chromium.org/developers/how-tos/chrome-frame-getting-started -->
+    <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+    <header>
+
+      {% block global_header %}
+
+      <div id="header_parent">
+        <div id="header">
+	        <div id="header_text">
+            {% block header_text %}
+              Channel-I
+            {% endblock %}
+          </div>
+
+
+          {% block header_links %}
+          {% endblock %}
+
+        </div>
+      </div>
+      
+      <div id="header_shadow">
+      </div>
+
+      {% endblock %}     {# End global_header block #}
+
+    </header>
+    <div class="shadow">&nbsp;</div>
+    <div role="main" id="main">
+      {% block header %} {% endblock %}
+      <div class="clear">&nbsp;</div>
+      <div id="main_content">
+        {% block left_sidebar %} {% endblock %}
+        <div id="content_middle">
+
+          {% if messages %}
+          {% for message in messages %}
+          {% if message.tags == 'form_error error' %}
+            {# As form errors already have html p tag and class='error_field', we need to do this. #}
+            {% autoescape off %}
+              {{ message|safe }}
+            {% endautoescape %}
+          {% else %}
+            {# For those messages that have a tag, the tag name equals the class name. #}
+            {% if message.tags %}
+              <p class="{{ message.tags }}">{{ message|safe }}</p>
+            {% else %}
+              {# For those messages that don't have a tag, class name is 'unknown_message'. #}
+              <p class="unknown_message">{{ message|safe }}</p>
+            {% endif %}
+          {% endif %}
+          {% endfor %}  {# End message for #}
+          {% endif %}  {# End messages if #}
+
+          {% block app_content %}{% endblock %}
+
+        </div>
+        <!--=====================Right side gadgets =========================-->
+        <div id="content_right">
+          {% block content_right %} {% endblock %}
+        </div>
+        <div style="clear:both">      </div>
+
+      </div>
+    </div>
+    <footer>
+
+      {% block footer %}
+      <div id="footer">
+        &copy; {% now "Y" %} Information Management Group
+      </div> {# End footer div #}
+      {% endblock %}
+
+    </footer>
+
+
+    <!-- JavaScript at the bottom for fast page loading -->
+
+    <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+    <!--  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+    <!--<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>-->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/common.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery-ui.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery-datetimepicker.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery-init.js"></script>
+    <!-- scripts concatenated and minified via build script -->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/facapp/login-action.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/facapp/plugins.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/facapp/tabbed.layout.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/facapp/sortable.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/piwik.js"></script>
+    <!-- end scripts -->
+    {# application specific scripts #}
+    {% block app_scripts %} {% endblock %}
+    {# view specific scripts #}
+    {% block scripts %} {% endblock %}
+  </body>
+</html>

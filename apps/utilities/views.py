@@ -16,11 +16,13 @@ from django.core.mail import send_mail
 from nucleus.models import StudentUserInfo, StudentInfo, WebmailAccount, User
 from nucleus.session import SessionStore
 from events.models import EventsUser
+from notices.models import NoticeUser, Category
+from notices.constants import MAIN_CATEGORIES_CHOICES
 from api.utils import pagelet_login_required, dialog_login_required
 from utilities.models import UserSession, PasswordCheck, UserEmail, PasswordReset
 from utilities.forms import ProfileFormPrimary, ProfileFormGuardian,\
     ProfileFormExtra, ChangePasswordForm, ChangePasswordFirstYearForm,\
-    EmailForm, EventsSubscribeFormGen, GenProfileForm, PasswordCheckForm,\
+    EmailForm, EventsSubscribeFormGen,NoticesSubscribeForm, GenProfileForm, PasswordCheckForm,\
     UserEmailForm, PasswordResetRequestForm, PasswordResetForm
 from utilities.utils import *
 
@@ -146,23 +148,52 @@ def person_sessions(request):
 def email(request):
   emailform = EmailForm(instance=request.user)
   events_user, created = EventsUser.objects.get_or_create(user=request.user)
+  notice_user = NoticeUser.objects.get_or_create(user=request.user)[0]
   if created:
     events_user.subscribe_to_calendars()
   EventsSubscribeForm = EventsSubscribeFormGen(request.user)
   events_subscribe_form = EventsSubscribeForm(instance=events_user)
+  notices_subscribe_form = NoticesSubscribeForm(instance=notice_user)
   if request.method == 'POST':
     emailform = EmailForm(request.POST)
     if emailform.is_valid():
-      request.user.email = emailform.cleaned_data['email']
-      request.user.save()
+      if not request.user.email:
+        request.user.email = emailform.cleaned_data['email']
+        request.user.save()
       events_subscribe_form = EventsSubscribeForm(request.POST,
                                                   instance=events_user)
       events_subscribe_form.save()
+      clicked_categories = request.POST.getlist('categories')
+      for main_cat in clicked_categories:
+        target_categories = Category.objects.filter(main_category=main_cat)
+        for sub_cat in target_categories:
+          notice_user.categories.add(sub_cat)
+      all_categories=[a[0] for a in MAIN_CATEGORIES_CHOICES]
+      for main_cat in all_categories:
+          if main_cat not in clicked_categories:
+            target_categories = Category.objects.filter(main_category=main_cat)
+            for sub_cat in target_categories:
+              notice_user.categories.remove(sub_cat)
+
+      notice_user.save()
+      notices_subscribe_form = NoticesSubscribeForm(request.POST,
+                                                  instance=notice_user)
+      notices_subscribe_form.save()
       messages.success(request, 'Your preferences have been saved.')
+
+  categories = notice_user.categories.all()
+  main_categories=[]
+  for category in categories:
+    if category.main_category not in main_categories:
+      main_categories.append(category.main_category)
+
   return render(request, 'utilities/pagelets/email.html', {
       'events_subscribe_form': events_subscribe_form,
       'emailform': emailform,
       'email_subscribed': events_user.email_subscribed,
+      'noticeform': notices_subscribe_form,
+      'notice_subscribed': notice_user.subscribed,
+      'notice_subscribed_categories' : main_categories,
   })
 
 @pagelet_login_required
@@ -243,6 +274,10 @@ def email_verify(request):
           request.user).get(confirmation_key=confirmation_key)
       if email_profile.last_datetime_created + datetime.timedelta(2) < timezone.now():
         messages.error(request,"The verification-key expired.")
+      elif UserEmail.objects.filter(email=email_profile.email,
+          verified=True).exclude(user=email_profile.user).exists():
+        messages.error("This email can not be verified as another user has already"
+            " verified it as his/her email address.")
       else:
         email_profile.verified = True
         email_profile.save()
@@ -390,3 +425,18 @@ def password_reset(request):
       'form': form,
   })
 
+@login_required
+def person_search(request):
+  if request.is_ajax():
+    q = request.GET.get('term','')
+    persons = Person.objects.filter(Q(name__icontains = q)|Q(user__username__icontains = q)).order_by('-user__username')[:10]
+    def person_dict(person):
+      return {
+        'id':person.user.username,
+        'label':str(person)+" ("+str(person.branch.code)+")",
+        'value':person.user.username
+      }
+    data = simplejson.dumps(map(person_dict,persons))
+  else:
+    data = 'fail'
+  return HttpResponse(data,'application/json') 

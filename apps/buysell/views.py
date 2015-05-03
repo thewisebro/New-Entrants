@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from core.forms import ModelForm
 from django.http import HttpResponse, Http404
 from django.http import HttpResponseRedirect
@@ -34,6 +34,7 @@ import collections
 logger = logging.getLogger('buysell')
 
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url='/login/')
 def buysell(request):
   logger.info(request.user.username+": in homepage.")
   return HttpResponseRedirect('/buysell/buy/')
@@ -306,7 +307,7 @@ def buy(request, mc=None, sc=None):
 
 @login_required
 def search(request):
-  query=request.GET['query']
+  query=request.GET.get('query','')
   searchIn='buy'
   try:
     searchIn=request.GET['qtype']
@@ -322,6 +323,11 @@ def search(request):
     qryst = ItemsRequested.items.filter(item_name__icontains = query)
     qt_flag=1
   number_rows=qryst.count()
+
+  queries_without_page=request.GET.copy()                      #this is for preserving the query parameter on pagination
+  if queries_without_page.has_key('page'):
+    del queries_without_page['page']
+
   paginator = Paginator(qryst, 10)
   page = request.GET.get('page', 1)
   try:
@@ -332,29 +338,34 @@ def search(request):
   except EmptyPage:
     logger.info(request.user.username + ': pagination error on buy - EmptyPage.' )
     pageTableData = paginator.page(paginator.num_pages)
+  pages = range(1,(qryst.count()+19)/10)
+  # If only a single page, do not show paging                                |
+  if len(pages) == 1 :
+    pages = None
+
   if qryst:
     if number_rows==1:
       messages.success(request,'1 result found!')
     else:
       messages.success(request, ''+str(number_rows)+' results found!')
   if searchIn == 'buy':
-    return render_to_response('buysell/buy.html',{'table_data':pageTableData,'searchflag':srchflag},context_instance=RequestContext(request))
+    return render_to_response('buysell/buy.html',{'table_data':pageTableData,'pages':pages,'searchflag':srchflag,'queries':queries_without_page},context_instance=RequestContext(request))
   elif searchIn == 'request':
-    return render_to_response('buysell/view-requests.html',{'table_data':pageTableData,'searchflag':srchflag},context_instance=RequestContext(request))
+    return render_to_response('buysell/view-requests.html',{'table_data':pageTableData,'pages':pages,'searchflag':srchflag,'queries':queries_without_page},context_instance=RequestContext(request))
 
 @login_required
 def sendmail(request, type_of_mail, id_pk):
   logger.info(request.user.username + ': entered sendmail.')
   user = request.user
   username = request.user.username
-  sex=request.user.person.gender
+  sex=request.user.gender
   pronoun = "him"
   if sex=="F":
     pronoun="her"
   contact = request.user.contact_no
   app='buysell'
   if type_of_mail == 'buy':
-    buy_mail_list=BuyMailsSent.items.filter(by_user__username=user,item__pk=id_pk)
+    buy_mail_list=BuyMailsSent.objects.filter(by_user__username=user,item__pk=id_pk)
     qryst = ItemsForSale.items.filter(pk = id_pk)
     if buy_mail_list:
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
@@ -378,7 +389,7 @@ def sendmail(request, type_of_mail, id_pk):
 
   if type_of_mail == 'request':
     qryst = ItemsRequested.items.filter(pk = id_pk)
-    buy_mail_list=RequestMailsSent.items.filter(by_user__username=user,item__pk=id_pk)
+    buy_mail_list=RequestMailsSent.objects.filter(by_user__username=user,item__pk=id_pk)
     if buy_mail_list:
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       return HttpResponseRedirect('/buysell/requested_item_details/'+id_pk+'/')
@@ -568,19 +579,22 @@ def editsave(request, category, itemReqId):
 def deleteEntry(request, category, pk_id):
   logger.info(request.user.username + ': entered deleteEntry with category ' + category + '.')
   if category == "item":
-    item = ItemsForSale.items.get(pk = pk_id)
+    item = ItemsForSale.objects.get(pk = pk_id)
     imgPath = MEDIA_ROOT + str(item.item_image)
     if request.user.username == item.user.username:
       try:
         Notification.delete_notification('buysell', item)
         item.delete()
-      except:
+      except Exception as e:
         messages.error(request, 'An error occured. The error has been reported.')
         logger.info(request.user.username + ': error in deleting items for sale with pk ' + pk_id+ '.')
         logger.info(e)
         return HttpResponseRedirect('/buysell/my-account/')
       else:
-        os.remove(imgPath)
+        try:
+          os.remove(imgPath)
+        except Exception:
+          pass
         messages.success(request, 'Item successfully deleted.')
         logger.info(request.user.username + ': item deleted with pk ' + pk_id + '.')
         return HttpResponseRedirect('/buysell/my-account/')

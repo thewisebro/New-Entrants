@@ -29,12 +29,12 @@ class Response(models.Model):
     if not Notification.filter(app='helpcenter', instance=self).exists():
       if flag:
         Notification.save_notification('helpcenter', "A user "+escape(self.text[0].lower()+self.text[1:]).replace('\n','<br>'),
-            '#helpcenter/queries/'+str(self.pk), Group.objects.get(name='Helpcenter Admin').user_set.all(), self)
+            '#helpcenter/exact/'+str(self.pk), Group.objects.get(name='Helpcenter Admin').user_set.all(), self)
       else:
         Notification.save_notification('helpcenter', self.user.html_name+(' gave a feedback: ' if\
             self.response_type=='feedback' else ' asked for help: ')+\
             "<div class='sub-text'>"+escape(self.text).replace('\n','<br>')+"</div>",
-            '#helpcenter/queries/'+str(self.pk),
+            '#helpcenter/exact/'+str(self.pk),
             Group.objects.get(name='Helpcenter Admin').user_set.all(), self)
     return result
 
@@ -74,16 +74,17 @@ class Reply(models.Model):
 
   def save(self, *args, **kwargs):
     self.number = self.response.no_of_replies()+1
-    self.by_img = self.user.in_group('Helpcenter Admin')
+    self.by_img = self.user.in_group('Helpcenter Admin') and ((
+        not self.response.user) or (not self.response.user.in_group('Helpcenter Admin')))
     result = super(Reply, self).save(*args, **kwargs)
     if self.user.in_group('Helpcenter Admin'):
       if self.response.user:
         Notification.save_notification('helpcenter', "IMG replied on your query :<div class='sub-text'>"+\
             escape(self.text).replace('\n','<br>')+"</div>",
-            '#helpcenter/queries/'+str(self.response.pk), [self.response.user], self)
+            '#helpcenter/exact/'+str(self.response.pk), [self.response.user], self)
     else:
       Notification.save_notification('helpcenter', self.user.html_name + " replied on query :<div class='sub-text'>"+\
-          escape(self.text).replace('\n','<br>')+"</div>", '#helpcenter/queries/'+str(self.response.pk),
+          escape(self.text).replace('\n','<br>')+"</div>", '#helpcenter/exact/'+str(self.response.pk),
           Group.objects.get(name='Helpcenter Admin').user_set.all(), self)
     return result
 

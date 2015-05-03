@@ -1,0 +1,127 @@
+body
+{
+  margin-top: 0px;
+}
+#parent
+{
+  margin-right: auto;
+  margin-left: auto;
+  width: 960px;
+  background-color: #f5f5f5;
+}
+#header
+{
+  font-family: segoe ui;
+  font-size: 2em; 
+  padding-left: 10px;
+  padding-top: 5px;
+  height: 50px;
+  border-bottom: 1px solid rgb(223, 223, 223);
+  background-color: rgb(223, 223, 223);
+}
+#iitr
+{
+  width: 45px;
+  padding-left: 28%;
+  float: left;
+}
+
+#iitr_text
+{
+  float: left;
+  padding: 12px;
+  font-family: segoe ui;
+  font-size: 20px;
+
+}
+#heading
+{
+  float: left;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  margin-top: 14px;
+  height: 50px;
+  margin-left: auto;
+
+}
+#logout
+{
+  float: right;
+  margin-right: 26px;
+  margin-top: 5px;
+}
+#upper-half
+{
+  width: 600px;
+  margin: 0 auto;
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 07px;
+  height: 160px;
+  padding-top: 60px;
+}
+#photo_div
+{
+  margin-left: 10px;
+  float:left;
+}
+#genform_pic-img
+{
+  border-radius: 6px !important;
+  height : 100px !important;
+  width : 100px !important;
+}
+#sign_div
+{
+  float:right;
+}
+div[role=dialog]
+{
+  top: 70px !important;
+}
+#upload
+{
+  margin-left: 2px;
+}
+#sign
+{
+  width: 167px;
+  height: 100px;
+  border-radius: 6px;
+  border: 1px solid rgb(219, 219, 219);
+}
+#id_blood_group
+{
+  width: 230px;
+}
+h3
+{
+  text-align: center;
+  font-size: 16px;
+  line-height: 25px;
+  font-family: segoe ui;
+}
+#lower-half
+{
+  width: auto;
+  margin-left: 170px;
+  padding-top: 25px;
+  margin-right: 170px;
+}
+
+#first_time
+{
+  font-size : 16px;
+  padding-left: 10px;
+  margin-bottom: 9px;
+}
+input[type=submit]
+{
+  margin-left: 9px !important;
+}
+#footer
+{
+  border-top: 1px solid #e8e8e8;
+  padding: 10px;
+  height: 20px;
+}

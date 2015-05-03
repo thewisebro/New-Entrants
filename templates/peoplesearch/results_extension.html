@@ -1,0 +1,75 @@
+{% extends "peoplesearch/results_new.html" %}
+{% block results %}
+
+{% if role == "stud" or role == "all"%}
+{% if data.stud %}
+  STUDENT RESULTS<br>
+  <table cellspacing='0' class='table_result'>
+    <tr class='table_head'>
+      <td>USER ID</td>
+      <td>NAME</td>
+      <td>BRANCH</td>
+      <td>YEAR</td>
+    </tr>
+{% for result in data.stud %}
+    <tr>
+      <td>{{result.enrollment_no}}</td>
+      <td>{{result.name}}</td>
+      <td>{{result.branch}}</td>
+      <td>{{result.year}}</td>
+    </tr>
+{% endfor %}
+  </table>
+
+{% endif %}
+{% endif %}
+
+{% if role == "fac" or role == "all"%}
+{% if data.fac %}
+  FACULTY RESULTS<br>
+  <table cellspacing='0' class='table_result'>
+    <tr class='table_head'>
+      <td>USER ID</td>
+      <td>NAME</td>
+      <td>DEPARTMENT</td>
+      <td>DESIGNATION</td>
+    </tr>
+{% for result in data.fac %}
+    <tr>
+      <td>{{result.username}}</td>
+      <td>{{result.name}}</td>
+      <td>{{result.department}}</td>
+      <td>{{result.designation}}</td>
+    </tr>
+{% endfor %}
+  </table>
+
+{% endif %}
+{% endif %}
+
+{% if role == "serv" or role == "all"%}
+{% if data.serv %}
+  SERVICE RESULTS<br>
+  <table cellspacing='0' class='table_result'>
+    <tr class='table_head'>
+      <td>NAME</td>
+      <td>OFFICE NUMBER</td>
+      <td>SERVICE</td>
+    </tr>
+{% for result in data.serv %}
+    <tr>
+      <td>{{result.name}}</td>
+      <td>{{result.office_no}}</td>
+      <td>{{result.service}}</td>
+    </tr>
+{% endfor %}
+  </table>
+
+{% endif %}
+{% endif %}
+
+{% if count == 0 %}
+  No results found<br>
+{% endif %}
+
+{% endblock %}

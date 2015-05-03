@@ -18,8 +18,9 @@ def custom(request):
     'channeli_apps': mark_safe(channeli_apps),
     'channeli_games': channeli_games,
     'channeli_links': channeli_links,
-    'login_page_links':login_page_links,
-    'django_messages':mark_safe(django_messages),
+    'login_page_links': login_page_links,
+    'django_messages': mark_safe(django_messages),
+    'jb_user': getattr(request, 'jb_user', None),
   }
   context.update({
     'owner': request.owner if hasattr(request, 'owner') else None,

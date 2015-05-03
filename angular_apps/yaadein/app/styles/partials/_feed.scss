@@ -1,0 +1,185 @@
+/*======= Feed/post styles =======*/
+//begin -- .feed-container
+.feed-container {
+	position: relative;
+	width: 100%;
+	max-width: 850px;
+	overflow: hidden;
+	margin: 20px auto;
+	border-radius: 3px;
+	background: $white;
+	box-shadow: 0 1px 1px 0 #ccc;
+	@include transition(300ms ease-out all);
+	/*&:hover {
+		box-shadow: 0 1px 8px 0 #aaa;
+	}*/
+	//For padding in % width containers
+	& > div {
+		padding: 19px;
+		border: 1px solid $white;
+		overflow: hidden;
+		border-radius: 3px;
+		//Stars of post
+		p.stars {
+			position: absolute;
+			right: 20px;
+			bottom: 15px;
+			color: #ffd700;
+			font-size: $big;
+			cursor: pointer;
+			& > i {
+			color: #ffd700;
+			}
+		}
+		//begin -- .user-data
+		.user-data {
+			position: relative;
+			width: 30%;
+			overflow: hidden;
+			background: $white;
+			//For padding in % width containers
+			& > div {
+				padding-right: 15px;
+				//User's profile pic
+         a {
+          display: table;
+          margin: 0 auto;
+          &:hover p {
+            text-decoration: underline;
+          }
+         }
+				 a div.user-image {
+					width: 70px;
+					height: 70px;
+					margin: 0 auto;
+					background: $dark-grey;
+					background-repeat: no-repeat !important;
+					background-position: 50% 50% !important;
+					background-size: cover !important;
+					border-radius: 50%;
+				}
+				//Extra info style
+				p.info {
+          margin: 0;
+					margin-top: 5px;
+					text-align: center;
+					font-weight: normal;
+					font-size: $tiny;
+					color: $dark-grey;
+					//Give extra margin to topmost element
+					&:nth-of-type(1) {
+						margin-top: 20px;
+					}
+				}
+			}
+		}//end -- .user-data
+		//begin -- .post-data
+		.post-data {
+			width: 70%;
+			overflow: hidden;
+			background: $white;
+			//For padding in % width containers
+			& > div {
+				padding-left: 20px;
+				border-left: 1px solid $grey; //Divider
+				position: relative;
+        .delete-post-bttn {
+          position: absolute;
+          top: 0;
+          right: 0;
+          background: $white;
+          &:hover i.fa {
+            color: $danger;
+          }
+        }
+        & > a {
+          display: table;
+          margin: 0;
+        }
+				//Common typographic styles
+				* {
+					text-align: left;
+					font-weight: normal;
+					color: $black;
+				}
+				h1 {
+					font-size: $big;
+					margin: 0;
+					//text-shadow: 0 1px 1px #ccc;
+					font-weight: 500;
+				}
+				h2 {
+					font-size: $small;
+					color: $dark-grey;
+          margin: 0;
+          margin-top: 5px;
+					span {
+						color: inherit;
+						font-size: inherit;
+					}
+					//Users link
+					a {
+						font-size: inherit;
+						color: inherit;
+						&:hover {
+							text-decoration: underline;
+						}
+					}
+				}
+				p {
+					margin-top: 20px;
+					font-size: 16px;
+					white-space: pre-wrap;
+					a {
+						color: $primary;
+						border-bottom: 0;
+						&:hover {
+							border-bottom: 1px dotted $primary;
+						}
+						&.hash {
+							color: $hashtag;
+							&:hover {
+								border-bottom: 1px dotted $hashtag;
+							}
+						}
+					}
+				}
+				//FlexBox Images Layout
+				.images-container {
+					font-size: 0;
+					display: flex;
+					flex-flow: row wrap;
+					overflow: hidden;
+					text-align: center;
+					margin-top: 20px;
+					* {
+						flex: auto;
+						width: 32%;
+						margin: 0.5%;
+						border-radius: 3px;
+						//Support for full size single image in post
+						&.single-image {
+							width: 100% !important;
+							overflow: hidden !important;
+							margin: 0 !important;
+							img {
+								//width: 100% !important;
+                max-width: 100% !important;
+								height: auto !important;
+								margin: 0.5% 0 !important;
+							}
+						}
+					}
+					* div {
+						width: 100%;
+						height: 120px;
+						background-color: #ddd;
+						background-position: center !important;
+						background-repeat: no-repeat !important;
+						background-size: cover !important;
+					}
+				}//end -- .images-container
+			}
+		}//end -- .post-data
+	}
+}//end -- .feed-container

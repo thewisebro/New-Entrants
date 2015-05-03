@@ -66,6 +66,9 @@ class UserPhoto(CropImage):
   def get_instance(cls, request, pk):
     if request.user.is_superuser:
       return User.objects.get(pk=pk)
+    elif User.objects.get(pk=pk).in_group('Student Group'):
+      if User.objects.get(pk=pk).group.admin.user == request.user:
+        return User.objects.get(pk=pk)
     else:
       return request.user
 
@@ -82,7 +85,10 @@ class UserPhoto(CropImage):
     if image_field and os.path.exists(image_field.path):
       filename = save_count = image_field.name.split('/')[-1].split('.')[0]
       if len(filename.split('_')) > 1:
-        save_count = int(filename.split('_')[-1]) + 1
+        try:
+          save_count = int(filename.split('_')[-1]) + 1
+        except Exception:
+          save_count = 0
     fname = image_field.instance.username + '_' + str(save_count) + \
              '.' + fname.split('.')[-1]
     return fname
@@ -133,10 +139,13 @@ class User(AbstractUser, models.Model):
     if self.in_group('Student'):
       student = self.student
       string = MC.SIMPLIFIED_DEGREE[student.branch.degree]+' '+\
-               (student.branch.name if len(student.branch.name)<20\
-                else student.branch.code)
-      if student.semester > 0:
-        string += ' ' + int2roman(student.year) + ' Year'
+            (student.branch.name if len(student.branch.name)<20\
+            else student.branch.code)
+      if not student.passout_year:
+        if student.semester > 0:
+          string += ' ' + int2roman(student.year) + ' Year'
+      else:
+        string += ' (%s Batch)' % student.passout_year
       return string
     elif self.in_group('Faculty'):
       return dict(FC.DESIGNATION_CHOICES)[self.faculty.designation]+\
@@ -196,7 +205,14 @@ class User(AbstractUser, models.Model):
       to_user = user,
       status = 1
     )
-    to_user__user_info = {'user_id': user.pk,'name': user.name, 'username': user.username, 'status': 0, 'is_chat_on': 0, 'photo': user.photo_url}
+    to_user__user_info = {
+      'user_id': user.pk,
+      'name': user.name,
+      'username': user.username,
+      'status': 0,
+      'is_chat_on': 0,
+      'photo': user.photo_url
+    }
     client.hmset('user:'+str(user.pk), to_user__user_info)
     client.sadd('friends:'+str(self.pk), user.pk)
     if symmetric:
@@ -240,7 +256,7 @@ class User(AbstractUser, models.Model):
     )
 
 class WebmailAccount(models.Model):
-  webmail_id = models.CharField(max_length=15, primary_key=True)
+  webmail_id = models.CharField(max_length=20, primary_key=True)
   user = models.ForeignKey(User)
 
 
@@ -296,7 +312,7 @@ class Branch(models.Model):
 
 class AbstractStudentBase(django_models.Model):
   # semester field for backward compatibility, never change it's value
-  # directly.
+  # directly. Use semester_no instead.
   semester = models.CharField(max_length=MC.CODE_LENGTH,
                               choices=MC.SEMESTER_CHOICES)
   semester_no = models.IntegerField()
@@ -318,7 +334,8 @@ class AbstractStudentBase(django_models.Model):
 
   def save(self, *args, **kwargs):
     # Change semester value automatically on save.
-    if self.semester_no > 0:
+    if self.semester_no > 0 and (self.semester[:2] in ['UG','PG'] or
+            self.semester[:3] == 'PHD'):
       year = (self.semester_no + 1)/2
       semtype_int = (self.semester_no + 1)%2
       self.semester = self.branch.graduation + str(year) + str(semtype_int)
@@ -419,8 +436,8 @@ class StudentUserInfo(StudentUser, AbstractStudentInfo):
 
 
 class Course(models.Model):
-  id = models.CharField(primary_key=True, max_length=15)
-  code = models.CharField(max_length=MC.CODE_LENGTH)
+  id = models.CharField(primary_key=True, max_length=60)
+  code = models.CharField(max_length=50)
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   credits = models.IntegerField()
   subject_area = models.CharField(max_length=MC.CODE_LENGTH)
@@ -492,7 +509,7 @@ class Alumni(Role('Alumni')):
 
 ########################## Other useful Models ########################
 
-class PHPSession(models.Model):
+class PHPSession(django_models.Model):
   session_key = models.CharField(max_length=40, primary_key=True)
   session_data = models.TextField()
   expire_date = models.DateTimeField(db_index=True)

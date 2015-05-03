@@ -1,0 +1,117 @@
+{% extends "messmenu/menu_table.html" %}
+{% load mess_tags %}
+
+{% block title %}
+    Update Menu
+{% endblock %}
+
+{% block time_of_day_1 %}
+    {% for menu_lst in menu|slice:":7" %}
+        <td>
+            <textarea class="content" 
+                      name="content_{{ forloop.counter0 }}_1" 
+                      cols="10" rows="6">{{ menu_lst.content }}</textarea>
+        </td>
+    {% endfor %}
+{% endblock %}
+
+{% block time_of_day_2 %}
+    {% for menu_lst in menu|slice:"7:14" %}
+        <td>
+            <textarea class="content" 
+                      name="content_{{ forloop.counter0 }}_2" 
+                      cols="10" rows="6">{{ menu_lst.content }}</textarea>
+        </td>
+    {% endfor %}
+{% endblock %}
+
+{% block time_of_day_3 %}
+    {% for menu_lst in menu|slice:"14:21" %}
+        <td>
+            <textarea class="content" 
+                      name="content_{{ forloop.counter0 }}_3" 
+                      cols="10" rows="6">{{ menu_lst.content }}</textarea>
+        </td>
+    {% endfor %}
+{% endblock %}
+
+{% block above_menu_table %}
+    <div id="bhawan_pdf">
+        <select class="dropdown" name="weeks">
+            {% for week in 0|get_range:3 %}
+                {% with current_date|get_date_1_week:week as desired_date %}
+                <option 
+                    {% if date == desired_date %}
+                        selected="selected" class="selected" 
+                    {% else %}
+                        class="not_selected"
+                    {% endif %}
+                    value="{% url 'update_menu' bhawan week %}">
+                    {{ desired_date|get_date_1:0 }} - {{ desired_date|get_date_1:6 }}
+                </option>
+                {% endwith %}
+            {% endfor %}
+        </select>
+        <span class="message">
+            {% if last_filled_week != 0 %}
+                This is the menu filled by you for the last week
+            {% endif %}
+
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </span>
+    </div>
+
+    <div id="previous_next">
+        <div id="previous">
+            <div style="margin-right:4px"><img src="{{ IMAGES_URL }}messbox_tlu.gif" class="left"/></div>
+        </div>
+        <div id="next">
+            <div><img src="{{ IMAGES_URL }}messbox_tru.gif" class="right"/></div>
+        </div>
+      
+        <div id="presentbhawan_date">
+            <b>
+            <div id="presentbhawan">
+                {{ user.student.bhawan_name|upper }} BHAWAN MESS TIME TABLE
+            </div>
+            <div id="date"> 
+                ({{ date|get_date_1:0 }} - {{ date|get_date_1:6 }})
+            </div>
+            </b>
+        </div>
+    </div>
+    <form method="POST" action="" name="menu" save_url="{% url 'save_menu' %}">
+    {% csrf_token %}
+
+{% endblock %}
+
+{% block below_menu_table %}
+    <div id="changemenu">
+        <div id="left_buttons">
+            <input type="submit" value="Submit" class="button_1 button_1_format_input" />
+        <a href="{% url 'display_menu' user.student.bhawan week %}" class="button_1 button_1_format_a back_btn">
+            Back
+        </a>
+        </div>
+        <div id="right_buttons">
+            <input type="button" class="button_1 button_1_format_input" value="Reset" name="reset_menu" />
+            <input type="button" class="button_1 button_1_format_input" value="Clear All" name="clear_menu" />
+        </div>
+    </div>
+    <input type="hidden" name="bhawan" value="{{ user.student.bhawan }}" />
+    <input type="hidden" name="date" value="{{ date_str }}" />
+    </form>
+{% endblock %}
+
+{% block specific_scripts %}
+    {#		specific js			#}
+    <script src="{{ STATIC_URL }}js/commons/ajaxify.js"></script>
+    <script src="{{ STATIC_URL }}js/messmenu/messmenuManager.js"></script>
+    <script>
+        $(document).ready(function() {
+            var messmenuManager = new messmenuManagerClass($('form[name=menu]'), $('.message'));
+        });
+    </script>
+{% endblock %}
