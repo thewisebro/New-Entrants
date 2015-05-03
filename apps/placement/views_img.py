@@ -316,6 +316,8 @@ def generate_missing_resumes(request, company_id):
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
 def company_coordinator_view(request):
 #TODO: Edit Company Remaining
+  #TODO: Add Company to render
+
   user =  request.user
   if user.groups.filter(name='Company Coordinator'):
     student = user.student
@@ -415,31 +417,48 @@ def placement_manager_view(request):
 #
   else:
     form=ExcelForm()
-  campus_contact = CampusContact.objects.filter(contact_person__is_primary=True)
+  company = CompanyContactInfo.objects.all()
   lst = []
-  for campus_contact_inst in campus_contact:
-    contactPerson = campus_contact_inst.contact_person
-    company = contactPerson.company_contact
+  import ipdb; ipdb.set_trace()
+  for company_inst in company:
+    if ContactPerson.objects.filter(company_contact=company_inst):
+      contact_exist = True
+      try:
+        contactPerson = ContactPerson.objects.get(company_contact=company_inst, is_primary = True)
+      except:
+        contactPerson = ContactPerson.objects.filter(company_contact=company_inst).order_by('name')[0]
+    else:
+      contact_exist = False
+      contactPerson = ContactPerson()
+      contactPerson.name = "Not Defined"
+      contactPerson.designation = ""
+      contactPerson.phone_no = ""
+      contactPerson.email = ""
     values = []
-    values.append(contactPerson.company_contact.id)
-    values.append(contactPerson.company_contact.name)
-    values.append(contactPerson.company_contact.cluster)
+    values.append(company_inst.id)
+    values.append(company_inst.name)
+    values.append(company_inst.cluster)
     values.append(contactPerson.name)
     values.append(contactPerson.designation)
     values.append(contactPerson.phone_no)
     values.append(contactPerson.email)
-    values.append(contactPerson.company_contact.status)
-    values.append(campus_contact_inst.last_contact)
-    values.append(campus_contact_inst.student.user.name)
-    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('-date_created')
-    if comment:
-      comment=comment[0].comment
+    values.append(company_inst.status)
+    if contact_exist:
+      values.append(contactPerson.campuscontact.last_contact)
+      values.append(contactPerson.campuscontact.student.user.name)
+      comment = CompanyContactComments.objects.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
+      if comment:
+        comment=comment[0].comment
+      else:
+        comment="None"
     else:
-      comment="None"
+      values.append("")
+      values.append("")
+      comment=""
     values.append(comment)
-    values.append(campus_contact_inst.when_to_contact)
-    values.append(company.id)
-    values.append(company.id)
+    values.append(contactPerson.campuscontact.when_to_contact if contact_exist else "")
+    values.append(company_inst.id)
+    values.append(company_inst.id)
     lst.append(values[:])
 
   data_to_send = []
@@ -519,6 +538,8 @@ def company_coordinator_today_view(request):
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists(), login_url=login_url)
 def add_company_manual(request):
+#TODO: Throw error when Atleast one contact person is not defiend
+#TOD: Throw error when contact person is defined but campus contact is not
   contactpersonformset = formset_factory(ContactPersonForm, extra=2, can_delete=True)
   formset = contactpersonformset()
   companyform = AddCompanyInfoForm()
