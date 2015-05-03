@@ -85,7 +85,6 @@ def saveTimeTable(request,username):
    try:
      student = Student.objects.get(user__username=username)
      TimeTable.objects.filter(student__user__username=username).delete()
-     
      if request.method == 'POST':
        try:
         json_data = json.loads(request.body)
@@ -108,14 +107,33 @@ def saveTimeTable(request,username):
 def saveBunks(request,username):
   try:
     student = Student.objects.get(user__username=username)
-    Bunk.objects.filter(student__user__username=username).delete()
-    courses = RegisteredCourse.objects.filter(student__user__username=username)
-    try:
-      json_data = json.loads(request.body)
-      for i in range(len(courses)):
-        Bunk.objects.create(student=student,subject=courses[i].course.code,lec_bunk=json_data[[courses[i].course.code]]['lec'],tut_bunk=json_data[courses[i].course.code]['tut'],prac_bunk=json_data[courses[i].course.code]['prac'])
-    except KeyError:
-      return HttpResponseServerError('Malformed data!')
-  except ObjectDoesNotExist:
-    return HttpResponse('Student or bunk data for student %s not found'%username)
+    Bunk.objects.filter(student=student).delete()
+    jsondata = json.loads(request.body)
+    print jsondata
+    subjects = jsondata.keys()
+    print subjects
+    for sub in subjects:
+      Bunk.objects.create(student=student,subject=sub,lec_bunk=jsondata[sub]['lec'],tut_bunk=jsondata[sub]['tut'],prac_bunk=jsondata[sub]['prac'])
+  except (ObjectDoesNotExist,KeyError):
+    return HttpResponse("Student %s not found"%username)
+  return HttpResponse('Saved the bunks.')
 
+def getTimeTable(request,username):
+  try:
+    student = Student.objects.get(user__username=username)
+    json = {}
+    time_table = TimeTable.objects.filter(student=student)
+#print time_table
+    for i in range(5):
+      day_schedule={}
+      for j in range(10):
+        cell = time_table.get(day=day(i),time=times(j)) 
+        day_schedule['%d'%j] = {'code':cell.subject,'class_type':cell.class_type}
+      json['%d'%i] = day_schedule
+    for i in range(5):
+      for j in range(10):  
+        cell = json['%d'%i]['%d'%j]
+        print cell['code'],cell['class_type']
+  except (ObjectDoesNotExist): 
+    return HttpResponse('Invalid student %s, or KeyError in timetable.'%username)
+  return JsonResponse(json)

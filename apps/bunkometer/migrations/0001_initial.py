@@ -30,9 +30,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('day', models.CharField(max_length=9)),
-                ('time', models.TimeField()),
+                ('time', models.CharField(max_length=7)),
                 ('subject', models.CharField(max_length=40)),
-                ('class_type', models.CharField(max_length=3)),
+                ('class_type', models.CharField(max_length=4)),
                 ('student', models.ForeignKey(to='nucleus.Student', null=True)),
             ],
             options={

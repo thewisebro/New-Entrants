@@ -9,7 +9,7 @@ class Bunk(models.Model):
   tut_bunk = models.IntegerField(default=0)
   prac_bunk = models.IntegerField(default=0)
   def __unicode__(self):
-    return self.student
+    return self.student.user.username
 
 
 
@@ -20,4 +20,4 @@ class TimeTable(models.Model):
   subject = models.CharField(max_length=40)
   class_type = models.CharField(max_length=4)
   def __unicode__(self):
-    return self.student
+    return self.student.user.username
