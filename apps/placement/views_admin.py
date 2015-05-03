@@ -241,7 +241,7 @@ def selected_students(request, company_id) :
     sheet.set_horz_split_pos(3)
     sheet.set_remove_splits(True)
     sheet.write_merge(0, 1, 0, 11, 'Students finalized for \'' + company.name + '\' as on ' + datetime.datetime.now().strftime('%b. %d, %Y, %I:%M %p'), heading_xf)
-    headers = ('S.No.', 'Enrollment No', 'Name', 'Course', 'Year', 'Discipline', 'Date of Birth', 'Category', 'CGPA', 'Tenth Marks', 'Twelfth Marks', 'Graduation Marks', 'Discipline(UG)', 'College(UG)','Contact No', 'Email ID', 'Permanent Address')
+    headers = ('S.No.', 'Enrollment No', 'Name', 'Course', 'Year','Gender', 'Date of Birth', 'Discipline', 'CGPA', 'Tenth Marks', 'Twelfth Marks', 'Graduation Marks', 'Discipline(UG)', 'College(UG)','Contact No', 'Email ID', 'Permanent Address')
     for (col, heading) in enumerate(headers) :
       sheet.write(2, col, heading, heading_xf)
     for (row, application) in enumerate(applications) :
@@ -256,18 +256,18 @@ def selected_students(request, company_id) :
       sheet.write(row, 2, student.name, style)
       sheet.write(row, 3, student.branch.degree, style)
       sheet.write(row, 4, student.semester[-2:][0:1], style)
-      sheet.write(row, 5, student.branch.name, style)
-      sheet.write(row, 6, student.user.get_gender_display(), style)
+      sheet.write(row, 5, student.user.get_gender_display(), style)
+      sheet.write(row, 7, student.branch.name, style)
       try :
         info = StudentInfo.objects.get(student = student)
         try:
-          sheet.write(row, 7, student.user.birth_date.strftime('%b. %d, %Y'), style)
+          sheet.write(row, 6, student.user.birth_date.strftime('%b. %d, %Y'), style)
         except Exception as e:
-          sheet.write(row, 7, '-', style)
+          sheet.write(row, 6, '-', style)
 #        sheet.write(row, 8, info.get_category_display(), style)
         sheet.write(row, 16, info.permanent_address, style)
       except StudentInfo.DoesNotExist :
-        sheet.write(row, 7, '-', style)
+        sheet.write(row, 6, '-', style)
 #        sheet.write(row, 8, '-', style)
         sheet.write(row, 16, '-', style)
       sheet.write(row, 8, student.cgpa, style)
