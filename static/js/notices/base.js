@@ -145,7 +145,7 @@ function redirection()            //The main controller function which defines t
         //console.log("display content");
         main_mode = "content";
         $("#select_bars").removeAttr("onclick");
-        $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
+        $("#select_bars").attr("onclick", "location.hash = '" + prev_content_url + "'");
         $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
         checklist={};
         evaluate_breadcrumbs();
@@ -180,7 +180,7 @@ function redirection()            //The main controller function which defines t
               $("#app_name").text("Uploaded Notices");
           //console.log("5starred_uploads_yes");
             $("#select_bars").removeAttr("onclick");
-            $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
+            $("#select_bars").attr("onclick", "location.hash = '" + prev_content_url + "'");
           //console.log("6starred_uploads_yes");
             $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
             $("#filters").slideUp(400);
@@ -547,10 +547,10 @@ function change_page(number)
 
 function open_notice(id)
 {
-  if(main_mode!="content")
+ // if(main_mode!="content")
     prev_content_url = location.hash;
-  if(prev_content_url=="#notices")
-    prev_content_url = '#notices/display/new/All/All/1';
+ // if(prev_content_url=="#notices")
+  //  prev_content_url = '#notices/display/new/All/All/1';
   location.hash = '#notices/content/' + id;
 }
 
@@ -1248,7 +1248,6 @@ function breadcrumb_clicked(tag_type)
   //console.log(tag_type);
   if(main_mode=="content")
   {
-    //console.log("abcasd");
     temp_arr = prev_content_url.split("/");
     main_mod=temp_arr[1];
     sub_mod=temp_arr[2];
@@ -1275,8 +1274,6 @@ function breadcrumb_clicked(tag_type)
 
 function prev_next_clicked(state)                                         //Previous or next buttons clicked in content mode
 {
-  //console.log("prev_next_clicked entered : " + state);
-  //console.log("prev_content_url_begin" + prev_content_url);
   url_split = prev_content_url.split('/');
   leng = url_split.length;
   prev_page_no = url_split[leng-1];
@@ -1284,17 +1281,13 @@ function prev_next_clicked(state)                                         //Prev
   id = location.hash.split('/')[2];
   len = store_to_use.length;
   var i=0;
-//  //console.log("bazooka" + state);
 
   if(prev_mode=="display")                  //Since temp_store is currently the only one managed in bundles, so different analysis than upload_array
   {
     for(i; i<len; i++)
     {
-//      //console.log(i);
-//      //console.log(id);
       if(store_to_use[i].id==id)
       {
-//      //console.log(id);
           if(state===-1)
           {
             cur_page_no = Math.floor(i/10) + 1;
@@ -1304,8 +1297,6 @@ function prev_next_clicked(state)                                         //Prev
             cur_page_no = Math.floor((i-1)/10) + 1;
           else
             cur_page_no = Math.floor((i+1)/10) + 1;
-//  //console.log("exception" + cur_page_no);
-//      //console.log(i + "state : " + state + " page_no : " + cur_page_no );
           if(state===0 && store_to_use[i-1]!=undefined)
             location.hash = '#notices/content/' + store_to_use[i-1].id;
           else if(state===1 && store_to_use[i+1]!=undefined)
@@ -1321,7 +1312,6 @@ function prev_next_clicked(state)                                         //Prev
     }
     url_split[leng-1] = cur_page_no;
     prev_content_url = url_split.join().replace(/,/g, '/');
-//      //console.log(prev_content_url + "prev_content_url");
   }
   else
   {
