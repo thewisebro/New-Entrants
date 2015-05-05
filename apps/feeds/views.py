@@ -3,6 +3,7 @@ import json as simplejson
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.db.models import Q
+from django.core.cache import cache
 
 from moderation.models import Reportable
 from feeds.models import *
@@ -31,16 +32,30 @@ def fetch(request):
   pk = request.GET['id']
   json = None
   feeds = Feed.objects.filter(shown_feed=None)
+  cache_key = 'feeds_student'
+  save_json = False
   if not request.user.is_authenticated() or not request.user.in_group('Student'):
     feeds = feeds.exclude(app__in=['buysell'])
+    cache_key = 'feeds_nonstudent'
   if not action == 'previous':
     number = int(request.GET['number'])
     if action == 'first':
-      pass
+      try:
+        json = cache.get(cache_key)
+        if not json:
+          save_json = True
+      except Exception as e:
+        pass
     elif action == 'next':
       feeds = feeds.filter(pk__lt = pk)
-    json = simplejson.dumps({'feeds':map(feed_dict,feeds[:number]),'more':int(feeds.count()>number)})
+    if not json:
+      json = simplejson.dumps({'feeds':map(feed_dict,feeds[:number]),'more':int(feeds.count()>number)})
   else:
     feeds = feeds.filter(pk__gt = pk)
     json = simplejson.dumps({'feeds':map(feed_dict,feeds)})
+  if save_json:
+    try:
+      cache.set(cache_key, json)
+    except Exception as e:
+      pass
   return HttpResponse(json, content_type='application/json')

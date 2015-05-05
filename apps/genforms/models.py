@@ -32,7 +32,10 @@ class MemberPhoto(CropImage):
     previous_name = url_image.split(".")[0]
     prev_name = previous_name.split("/")[-1]
     if "_" in prev_name:
-      new_number = str(int(prev_name.split("_")[-1]) + 1)
+      try:
+        new_number = str(int(prev_name.split("_")[-1]) + 1)
+      except Exception:
+        new_number = "1"
     else:
       new_number = "1"
     fname = image_field.instance.person.user.username + '_' + new_number + '.' +fname.split('.')[-1]

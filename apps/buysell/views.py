@@ -579,19 +579,22 @@ def editsave(request, category, itemReqId):
 def deleteEntry(request, category, pk_id):
   logger.info(request.user.username + ': entered deleteEntry with category ' + category + '.')
   if category == "item":
-    item = ItemsForSale.items.get(pk = pk_id)
+    item = ItemsForSale.objects.get(pk = pk_id)
     imgPath = MEDIA_ROOT + str(item.item_image)
     if request.user.username == item.user.username:
       try:
         Notification.delete_notification('buysell', item)
         item.delete()
-      except:
+      except Exception as e:
         messages.error(request, 'An error occured. The error has been reported.')
         logger.info(request.user.username + ': error in deleting items for sale with pk ' + pk_id+ '.')
         logger.info(e)
         return HttpResponseRedirect('/buysell/my-account/')
       else:
-        os.remove(imgPath)
+        try:
+          os.remove(imgPath)
+        except Exception:
+          pass
         messages.success(request, 'Item successfully deleted.')
         logger.info(request.user.username + ': item deleted with pk ' + pk_id + '.')
         return HttpResponseRedirect('/buysell/my-account/')

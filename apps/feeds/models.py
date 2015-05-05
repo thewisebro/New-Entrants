@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.core.cache import cache
 
 from core import models
 from nucleus.models import User
@@ -20,6 +21,16 @@ class Feed(models.Model):
 
   def __unicode__(self):
     return self.content[:250]
+
+  def save(self, *args, **kwargs):
+    super(Feed, self).save(*args, **kwargs)
+    cache.set('feeds_student', None)
+    cache.set('feeds_nonstudent', None)
+
+  def delete(self, *args, **kwargs):
+    super(Feed, self).delete(*args, **kwargs)
+    cache.set('feeds_student', None)
+    cache.set('feeds_nonstudent', None)
 
   class Meta:
     ordering = ['-pk']

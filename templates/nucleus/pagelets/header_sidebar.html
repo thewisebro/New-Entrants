@@ -39,6 +39,9 @@
           <div id="notifications-count">{{ not_viewed_notifications_count }}</div>
         {% endif %}
         <div id="user-name">{{ user.name }}</div>
+        {% if user.username == "admin" %}
+          <div class='header-option'><a href='/admin/'>Admin portal</a></div>
+        {% endif %}
       {% else %}
         <div id="login" class="header-option div-button" onclick="open_login_dialog();">Sign In</div>
       {% endif %}
