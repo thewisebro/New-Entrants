@@ -31,12 +31,14 @@
           </div>
         </div>
       </div>
+      {% if not today %}
       <div class="right-div">
                 <h4>
                    <a href="{% url 'placement.views_img.company_coordinator_today_view' %}"
                     target="_blank">Contact(s) due today</a>
                 </h4>
       </div>
+      {% endif %}
       <div id="companies">
         <table id ="company"class="table table-striped table-bordered compact">
           <thead>
@@ -52,9 +54,12 @@
               <th>Person in Contact</th>
               <th>Comments</th>
               <th>When to contact</th>
+              {% if not today %}
+              <th>No. of Contact Persons</th>
+              {% endif %}
               <th>Edit Comments</th>
-              <th>Edit</th>
-              <th>Remove</th>
+              <th>Edit Company</th>
+              <th>Remove Contact</th>
             </tr>
           </thead>
         </table>
@@ -79,29 +84,35 @@
 
     $(document).ready( function() {
         var dataset ={{ contactperson_data|safe }};
+        {% if today %}
+        var value = 11;
+        {% else %}
+        var value = 12;
+        {% endif %}
         $('#company').DataTable( {
                           "data": dataset,
                           stateSave: true,
                           "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
                            {
-                                 $('td:eq(11)', nRow).html( " <div class='glyphs'>\
+                                 $('td:eq(0)', nRow).html("<a href='/placement/contact_manager/details/{0}'>{1}</a>".format(aData[13],aData[0]));
+                                 $('td:eq('+(value)+')', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
                                                               <a href='/placement/contact_manager/edit/comments/{0}/'>\
                                                               <span class='icon icon-pencil'></span></a>\
                                                               </div>\
-                                                              </div>".format(aData[11]));
-                                 $('td:eq(12)', nRow).html( " <div class='glyphs'>\
+                                                              </div>".format(aData[value]));
+                                 $('td:eq('+(value+1)+')', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
                                                               <a href='/placement/contact_manager/edit/{0}/'>\
                                                               <span class='icon icon-pencil'></span></a>\
                                                               </div>\
-                                                              </div>".format(aData[12]));
-                                 $('td:eq(13)', nRow).html( " <div class='glyphs'>\
+                                                              </div>".format(aData[value+1]));
+                                 $('td:eq('+(value+2)+')', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
                                                               <a>\
                                                               <span id='remove' style='cursor:pointer;' onclick='confirmfn({0})' class='icon icon-remove'></span></a>\
                                                               </div>\
-                                                              </div>".format(aData[13]));
+                                                              </div>".format(aData[value+2]));
  
                            }
                           }

@@ -166,117 +166,6 @@ def generate_missing_resumes(request, company_id):
 
 
 #@login_required
-#@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists() , login_url=login_url)
-#def contactmanager_edit(request, company_id=None):
-#  if company_id:
-#    try:
-#      company = CompanyContact.objects.get(pk = company_id)
-#    except ObjectDoesNotExist:
-#      messages.error(request, 'The company has been deleted or removed')
-#
-#    companydata = {'company_name':company.company_name,
-#      'status':company.status,
-#      'comments':company.comments,
-#      'cluster':company.cluster,
-#      'last_contact':company.last_contact,
-#      'person_in_contact':company.person_in_contact,
-#      'when_to_contact':company.when_to_contact}
-#
-#    companyform = CompanycontactForm(initial = companydata)
-#
-#    contactperson = ContactPerson.objects.get(pk = company.contactperson_id)
-#
-#    contactpersondata = {'email':contactperson.email,
-#      'contact_person':contactperson.contact_person,
-#      'phone_no':contactperson.phone_no,
-#      'designation':contactperson.designation}
-#    contactpersonform = ContactpersonForm(initial = contactpersondata)
-#    try:
-#      companycoordi = CompanyCoordi.objects.get(student__user__name=company.person_in_contact)
-#    except ObjectDoesNotExist:
-#      companycoordi = None
-#    company_coordidata = {'company_coordinator': companycoordi}
-#    assignform = AssignCoordinatorForm(initial = company_coordidata)
-#
-#  else:
-#    companyform = CompanycontactForm()
-#    contactpersonform = ContactpersonForm()
-#    company = CompanyContact()
-#    contactperson = ContactPerson()
-#    companycoordi = CompanyCoordi()
-#    assignform = AssignCoordinatorForm()
-#
-#  if request.method == 'POST' :
-#     companyform = CompanycontactForm(request.POST)
-#     contactpersonform = ContactpersonForm(request.POST)
-#     assignform = AssignCoordinatorForm(request.POST)
-#
-#     if companyform.is_valid() and contactpersonform.is_valid() and assignform.is_valid():
-#
-#       contactperson.contact_person=contactpersonform.cleaned_data['contact_person']
-#       contactperson.phone_no=contactpersonform.cleaned_data['phone_no']
-#       contactperson.email=contactpersonform.cleaned_data['email']
-#       contactperson.designation=contactpersonform.cleaned_data['designation']
-#       contactperson.save()
-#
-#       company, created = CompanyContact.objects.get_or_create(contactperson=contactperson)
-#
-#       company.company_name=companyform.cleaned_data['company_name']
-#       company.cluster=companyform.cleaned_data['cluster']
-#       company.status=companyform.cleaned_data['status']
-#       company.comments=companyform.cleaned_data['comments']
-#       if request.POST.get('changelastcontact'):
-#         company.last_contact = datetime.date.today()
-#       company.when_to_contact=companyform.cleaned_data['when_to_contact']
-#       try:
-#        if request.user.groups.filter(name="Company Coordinator"):
-#          companycoordi = CompanyCoordi.objects.get(student__user__name=company.person_in_contact)
-#        else:
-#          companycoordi = CompanyCoordi.objects.get(student__user__name=assignform.cleaned_data['company_coordinator'])
-#        company.person_in_contact = companycoordi.student.name
-#       except ObjectDoesNotExist:
-#        company.person_in_contact = None
-#       company.save()
-#       if not request.user.groups.filter(name="Placement Manager"):
-#          return HttpResponseRedirect('/placement/company_coordinator/')
-#       return HttpResponseRedirect('/placement/contact_manager/')
-#
-#  return render_to_response('placement/plcmgr_manual.html',{
-#       'companyform': companyform,
-#       'contactpersonform':contactpersonform,
-#       'assignform': assignform,
-#       },context_instance  =RequestContext(request))
-#
-#@login_required
-#@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
-#def assign_company_coordinator(request):
-#  if request.method == 'POST':
-#    company_id_list = request.POST.getlist('assigns')
-#    company_coordinator = request.POST.get('company_coordinator')
-#    company_coordinator = CompanyCoordi.objects.get(id=company_coordinator)
-#    for company_id in company_id_list:
-#        company = CompanyContact.objects.get(pk = company_id)
-#        company.person_in_contact = company_coordinator.student.name
-#        company.save()
-#    return HttpResponseRedirect('/placement/contact_manager/')
-#
-#@login_required
-#@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists() , login_url=login_url)
-#def contactmanager_delete(request, company_id):
-#  try:
-#    company = CompanyContact.objects.get(pk = company_id)
-#    company.delete()
-#    contactperson = ContactPerson.objects.get(pk = company.contactperson_id)
-#    contactperson.delete()
-#  except ObjectDoesNotExist:
-#    messages.error(request, 'The company contact has been already deleted')
-#
-#  if not request.user.groups.filter(name="Placement Manager"):
-#    return HttpResponseRedirect('/placement/company_coordinator/')
-#  return HttpResponseRedirect('/placement/contact_manager/')
-#
-#
-#@login_required
 #@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
 #def generate_company_contact_xls(request):
 #  if request.method == 'POST':
@@ -310,64 +199,6 @@ def generate_missing_resumes(request, company_id):
 #    wb.save(response)
 #    return response
 #
-
-
-@login_required
-@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
-def company_coordinator_view(request):
-#TODO: Edit Company Remaining
-  #TODO: Add Company to render
-
-  user =  request.user
-  if user.groups.filter(name='Company Coordinator'):
-    student = user.student
-    campus_contact = CampusContact.objects.filter(student = student)
-  elif user.groups.filter(name='Placement Manager'):
-    campus_contact = CampusContact.objects.all()
-  lst = []
-  for campus_contact_inst in campus_contact:
-    contactPerson = campus_contact_inst.contact_person
-    values=[]
-    values.append(contactPerson.company_contact.name)
-    values.append(contactPerson.company_contact.cluster)
-    values.append(contactPerson.name)
-    values.append(contactPerson.designation)
-    values.append(contactPerson.phone_no)
-    values.append(contactPerson.email)
-    values.append(contactPerson.company_contact.status)
-    values.append(campus_contact_inst.last_contact)
-    values.append(campus_contact_inst.student.user.name)
-    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('-date_created')
-    if comment:
-      comment=comment[0].comment
-    else:
-      comment="None"
-    values.append(comment)
-    values.append(campus_contact_inst.when_to_contact)
-    values.append(campus_contact_inst.id)
-    values.append(campus_contact_inst.id)
-    values.append(campus_contact_inst.id)
-    lst.append(values[:])
-
-  data_to_send = []
-
-  for item in lst:
-      a = []
-      for x in list(item):
-         try:
-            if isinstance(x , datetime.date):
-               df = DateFormat(x)
-               dl = df.format(get_format('DATE_FORMAT'))
-               a.append(str(dl))
-            else:
-               a.append(str(x))
-         except UnicodeEncodeError:
-            a.append('')
-      data_to_send.append(a)
-
-  return render_to_response('placement/company_coordi.html',{
-        'contactperson_data' : data_to_send,
-        }, context_instance = RequestContext(request))
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
@@ -419,7 +250,6 @@ def placement_manager_view(request):
     form=ExcelForm()
   company = CompanyContactInfo.objects.all()
   lst = []
-  import ipdb; ipdb.set_trace()
   for company_inst in company:
     if ContactPerson.objects.filter(company_contact=company_inst):
       contact_exist = True
@@ -457,6 +287,7 @@ def placement_manager_view(request):
       comment=""
     values.append(comment)
     values.append(contactPerson.campuscontact.when_to_contact if contact_exist else "")
+    values.append(ContactPerson.objects.filter(company_contact=company_inst).count())
     values.append(company_inst.id)
     values.append(company_inst.id)
     lst.append(values[:])
@@ -484,14 +315,82 @@ def placement_manager_view(request):
         },context_instance = RequestContext(request))
 
 @login_required
+@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
+def company_coordinator_view(request):
+#TODO: Edit Company Remaining
+#TODO: Add Company to render
+
+  user =  request.user
+  if user.groups.filter(name='Company Coordinator'):
+    student = user.student
+    campus_contacts = CampusContact.objects.filter(student = student)
+  elif user.groups.filter(name='Placement Manager'):
+    messages.error(request, "Redirected to contact manager")
+    return HttpResponseRedirect(reverse('placement.views_img.placement_manager_views'))
+  try:
+    contactPersons_lst = CampusContact.objects.get(student=student, is_primary=True).values('contact_person')
+  except:
+    contactPersons_lst = CampusContact.objects.filter(student=student).values('contact_person')
+  companies_ids = CampusContact.objects.filter(student = student).values_list('contact_person__company_contact')
+  companies = CompanyContactInfo.objects.filter(id__in = companies_ids)
+  lst = []
+  for company_inst in companies:
+    contactPerson = ContactPerson.objects.get(company_contact=company_inst, id__in=contactPersons_lst)
+    values = []
+    values.append(company_inst.name)
+    values.append(company_inst.cluster)
+    values.append(contactPerson.name)
+    values.append(contactPerson.designation)
+    values.append(contactPerson.phone_no)
+    values.append(contactPerson.email)
+    values.append(company_inst.status)
+    values.append(contactPerson.campuscontact.last_contact)
+    values.append(contactPerson.campuscontact.student.user.name)
+    comment = CompanyContactComments.objects.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
+    if comment:
+      comment=comment[0].comment
+    else:
+      comment="None"
+    values.append(comment)
+    values.append(contactPerson.campuscontact.when_to_contact)
+    values.append(ContactPerson.objects.filter(company_contact=company_inst).count())
+    values.append(company_inst.id)
+    values.append(company_inst.id)
+    values.append(company_inst.id)
+    lst.append(values[:])
+
+  data_to_send = []
+
+  for item in lst:
+      a = []
+      for x in list(item):
+         try:
+            if isinstance(x , datetime.date):
+               df = DateFormat(x)
+               dl = df.format(get_format('DATE_FORMAT'))
+               a.append(str(dl))
+            else:
+               a.append(str(x))
+         except UnicodeEncodeError:
+            a.append('')
+      data_to_send.append(a)
+
+  return render_to_response('placement/company_coordi.html',{
+          'contactperson_data': data_to_send
+        },context_instance = RequestContext(request))
+
+@login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator']).exists() , login_url=login_url)
 def company_coordinator_today_view(request):
   user =  request.user
   if user.groups.filter(name='Company Coordinator'):
     student = user.student
-    campus_contact = CampusContact.objects.filter(student = student, when_to_contact__lte = datetime.date.today())
+  elif user.groups.filter(name='Placement Manager'):
+    messages.error(request, "Redirected to contact manager")
+    return HttpResponseRedirect(reverse('placement.views_img.placement_manager_views'))
+  campusContact_lst = CampusContact.objects.filter(student=student, when_to_contact__lte=datetime.datetime.today()).order_by('-contact_person__company_contact','-contact_person__is_primary')
   lst = []
-  for campus_contact_inst in campus_contact:
+  for campus_contact_inst in campusContact_lst:
     contactPerson = campus_contact_inst.contact_person
     values=[]
     values.append(contactPerson.company_contact.name)
@@ -510,8 +409,8 @@ def company_coordinator_today_view(request):
       comment="None"
     values.append(comment)
     values.append(campus_contact_inst.when_to_contact)
-    values.append(campus_contact_inst.id)
-    values.append(campus_contact_inst.id)
+    values.append(contactPerson.company_contact.id)
+    values.append(contactPerson.company_contact.id)
     values.append(campus_contact_inst.id)
     lst.append(values[:])
 
@@ -532,6 +431,7 @@ def company_coordinator_today_view(request):
       data_to_send.append(a)
 
   return render_to_response('placement/company_coordi.html',{
+        'today' : True,
         'contactperson_data' : data_to_send,
         }, context_instance = RequestContext(request))
 
@@ -539,7 +439,7 @@ def company_coordinator_today_view(request):
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists(), login_url=login_url)
 def add_company_manual(request):
 #TODO: Throw error when Atleast one contact person is not defiend
-#TOD: Throw error when contact person is defined but campus contact is not
+#TODO: Throw error when contact person is defined but campus contact is not
   contactpersonformset = formset_factory(ContactPersonForm, extra=2, can_delete=True)
   formset = contactpersonformset()
   companyform = AddCompanyInfoForm()
@@ -547,7 +447,9 @@ def add_company_manual(request):
     companyform = AddCompanyInfoForm(request.POST)
     formset = contactpersonformset(request.POST)
     if companyform.is_valid() and formset.is_valid():
-      company = companyform.save()
+      company = companyform.save(commit=False)
+      contactPersons = []
+      campusContacts = []
       for instance in formset:
         if instance.cleaned_data:
           contactperson = ContactPerson()
@@ -557,16 +459,29 @@ def add_company_manual(request):
           contactperson.phone_no = instance.cleaned_data['phone_no']
           contactperson.email = instance.cleaned_data['email']
           contactperson.company_contact = company
-          if not company.contactperson_set.filter(is_primary=True):
-            contactperson.is_primary = instance.cleaned_data['is_primary']
-          else:
-            contactperson.is_primary = False
-          contactperson.save()
+          contactperson.is_primary = instance.cleaned_data['is_primary']
+          contactPersons.append(contactperson)
           campuscontact.contact_person = contactperson
           campuscontact.student = instance.cleaned_data['student'].student
           campuscontact.when_to_contact = instance.cleaned_data['when_to_contact']
           campuscontact.last_contact = instance.cleaned_data['last_contact']
-          campuscontact.save()
+          campusContacts.append(campuscontact)
+      ## To check whether multiple primary added or not
+      is_primary_add = False
+      for contactPerson in contactPersons:
+        if contactPerson.is_primary and is_primary_add:
+          messages.error(request, "Multiple Primary persons added")
+          return HttpResponseRedirect(reverse('placement.views_img.add_company_manual'))
+        elif contactPerson.is_primary and not is_primary_add:
+          is_primary_add = True
+
+      # Everything is good. Commit all contact persons and campus contacts
+      company.save()
+      for contactPerson in contactPersons:
+        contactPerson.save()
+      for campuscontact in campusContacts:
+        campuscontact.save()
+
       messages.success(request, 'Contact Person successfully added')
       return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
 
@@ -576,12 +491,15 @@ def add_company_manual(request):
       }, context_instance = RequestContext(request))
 
 @login_required
-@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists(), login_url=login_url)
+@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager','Company Coordinator']).exists(), login_url=login_url)
 def edit_company_manual(request, company_id):
+  if request.user.groups.filter(name='Company Coordinator') and (not CampusContact.objects.filter(student=request.user.student, contact_person__company_contact__id=company_id)):
+    messages.error(request, "You don't have permission to edit this company")
+    return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
   contactpersonformset = formset_factory(ContactPersonForm, extra=2, can_delete=True)
   formset = contactpersonformset()
   companyform = AddCompanyInfoForm()
-  # Add functions definition to edit
+  #Add functions definition to edit
   contactpersonformset = formset_factory(ContactPersonForm, extra=1, can_delete=True)
   company = CompanyContactInfo.objects.get(id=company_id)
   companyform = AddCompanyInfoForm(instance=company)
@@ -628,8 +546,9 @@ def edit_company_manual(request, company_id):
           campuscontact.last_contact = instance.cleaned_data['last_contact']
           campuscontact.save()
       messages.success(request, 'Contact Person successfully added')
-      return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))
-  
+#      return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))
+      return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+
   return render_to_response('placement/plcmgr_manual.html',{
       'companyform' : companyform,
       'contactpersonformset' : formset,
@@ -756,14 +675,16 @@ def edit_comments(request, campus_contact_id):
       }, context_instance = RequestContext(request))
 
 @login_required
-@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists() , login_url=login_url)
+@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator','Placement Manager']).exists() , login_url=login_url)
 def company_details(request, company_id):
   try:
     company = CompanyContactInfo.objects.get(id=company_id)
   except ObjectDoesNotExist:
     messages.error(request, 'Company is either removed or invalid')
+    if request.user.groups.filter(name='Company Coordinator'):
+      return HttpRequestRedirect(reverse('placement.views_img.company_coordinator_view'))
     return HttpRequestRedirect(reverse('placement.views_img.placement_manager_view'))
-  contactpersons = company.contactperson_set.all().order_by('is_primary')
+  contactpersons = company.contactperson_set.all().order_by('-is_primary')
   return render_to_response('placement/placement_mgr_details.html',{
       'contactpersons': contactpersons,
       'company': company,

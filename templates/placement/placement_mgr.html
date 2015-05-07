@@ -110,6 +110,7 @@
               <th>Person in Contact</th>
               <th>Comments</th>
               <th>When to Contact</th>
+              <th>No. of Contact Persons</th>
               <th>Edit</th>
               <th>Remove</th>
             </tr>
@@ -151,15 +152,15 @@
                            {
                                  $('td:eq(0)', nRow).html("<input type='checkbox' class='largerCheckbox' name='assigns' value='{0}'/>".format(aData[0]));
                                  $('td:eq(1)', nRow).html("<a href='/placement/contact_manager/details/{0}'>{1}</a>".format(aData[0],aData[1]));
-                                 $('td:eq(12)', nRow).html( " <div class='glyphs'>\
+                                 $('td:eq(13)', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
                                                               <a href='/placement/contact_manager/edit/{0}/'>\
                                                               <span class='icon icon-pencil' id='edit'></span></a>\
-                                                              </div>".format(aData[12]));
-                                $('td:eq(13)', nRow).html("  <div class='glyph'>\
+                                                              </div>".format(aData[13]));
+                                 $('td:eq(14)', nRow).html("  <div class='glyph'>\
                                                               <a><span class='icon icon-remove' id='remove' style='cursor:pointer;' onclick='confirmfn({0})'></span></a>\
                                                               </div>\
-                                                              </div>".format(aData[13]));
+                                                              </div>".format(aData[14]));
                            }
                           }
                         }).columnFilter();
@@ -171,5 +172,4 @@ function confirmfn(id){
   if (a==true) {window.location="/placement/contact_manager/remove/{0}".format(id)}
 }
 </script>
-
 {% endblock %} {# Scripts #}
