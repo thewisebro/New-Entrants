@@ -283,7 +283,7 @@
      {% if plac_info.achievements %}
        <tr>
         <td style="width:30%;" class="bring_td_up">
-          <div class='skill bold_first'>Academic Achievements</div>
+          <div class='skill bold_first'>Academics</div>
         </td> 
         <td style="width:70%;">
           <div>{{ achievements|linebreaksbr }}</div>
@@ -336,7 +336,9 @@
           <b>Date of Birth:</b> {{ plac_person.student.user.birth_date }}<br />
           <b>Gender:</b> {{ plac_person.student.user.gender }}<br />
           <b>Contact No:</b> {{ plac_person.student.user.contact_no }}<br />
+          {% if category_required %}
           <b>Category:</b> {{ info.category }}<br />
+          {% endif %}
         </td>
         <td style="width:50%;">
           <b>Permanent Address:</b> {{ info.permanent_address }}, {{ info.city }} - {{ info.pincode }}<br />

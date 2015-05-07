@@ -75,7 +75,7 @@ channeli_links = [
   {'name':'Smart Card Registration','url':'/genforms/'},
   {'name':'Print Scholarship Form','url':'/scholarships/mcm_print_pdf/'},
   {'name':'LAN Registration','url':'/wifi/'},
-  {'name':'Telephone Directory','url':'/static/pdfs/teldir-oct2013.pdf'},
+  {'name':'Telephone Directory','url':'/static/pdfs/directoryeng15022015.pdf'},
   {'name':'Meeting Section','url':'/meeting_minutes/'},
   {'name':'Dairy Reports','url':'/meeting_minutes/dairy.php'},
   {'name':'Forms','url':'/forms/'},

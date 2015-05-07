@@ -1,7 +1,7 @@
 {{#if anonymous}}
   <div class="notice_info" onclick="open_notice({{ notice.id }})">
     <div id="date_source_subject_wrap" class="star_check_absent">
-        <div class="notice_date">{{ notice_date }}</div>
+        <div class="notice_date">{{ notice_date }} at {{ notice_time }}</div>
             <div class="notice_source">{{ notice.category }}</div>
             <div class="subject_wrap">
               <div class="notice_subject">{{ notice.subject }}</div>
@@ -38,7 +38,7 @@
       </div>
 
         <div id="date_source_subject_wrap" {{#if edit}} class="star_check_present_with_edit" {{else}} class="star_check_present" {{/if}}>
-          <div class="notice_date {{#if read}}read{{else}}unread{{/if}}">{{ notice_date }}</div>
+          <div class="notice_date {{#if read}}read{{else}}unread{{/if}}">{{ notice_date }} at {{ notice_time }}</div>
           <div class="notice_source {{#if read}}read{{else}}unread{{/if}}">{{ notice.category }}</div>
           <div class="subject_wrap">
             <div class="notice_subject {{#if read}}read{{else}}unread{{/if}}">{{ notice.subject }}</div>
