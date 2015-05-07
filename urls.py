@@ -41,6 +41,8 @@ actual_urlpatterns = patterns('',
   url(r'^scholarships/', include('mcm.urls')),
   url(r'^songs/(.*)$', 'django.views.static.serve', {'document_root': settings.JUKEBOX_MEDIA_ROOT+'songs/'}),
   url(r'^yaadein_api/', include('yaadein.urls')),
+  url(r'^redactor/', include('redactor.urls')),
+  url(r'^img_website/', include('img_website.urls')),
 )
 
 urlpatterns = patterns('',

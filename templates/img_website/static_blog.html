@@ -1,0 +1,142 @@
+{% extends "img_website/base.html" %}
+
+{% block head %}
+	<meta name="author" content="">
+
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{% endblock head %}
+
+{% block styles %}
+  {{ block.super }}
+{% endblock styles %}
+
+{% block scripts %}
+  {{ block.super }}
+{% endblock scripts %}
+
+{% block links %}
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/"> HOME </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/works/"> WORKS </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/blog/"><span class="active"> BLOG </span></a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/about/"> ABOUT </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/status/"> STATUS </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/team/"> TEAM </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/contact/"> CONTACT </a> </li>
+{% endblock links %}
+
+{% block body %}
+	<div class="row blog">
+
+		<div class="container blog_container fadediv">
+
+			<div class="row">
+
+				<div class="span7 offset1 articles_list shadow2">
+
+          {% for post in post_list_paged.object_list %}
+					<div class="span7 article">
+
+						<div class="article_title">
+							<div class="article_title_text">
+              {% block blog_post_title %}
+								<a href="{{ IMG_WEBSITE_BASE_URL }}/blog/{{ post.slug|urlencode }}/" class="read_more"> <h3> {{ post.title }}</h3></a>
+              {% endblock blog_post_title %}
+                <span class="date"> {{ post.date|date:"F jS, Y" }} , by</span>
+								<span class="author">{{ post.author.first_name }} </span>
+							</div>
+						</div> <!-- end artcle_title -->
+
+						<div class="article_content">
+
+							<div class="article_content_text">
+					    {{ post.short_description|safe|slice:":400" }}
+							<br/>
+             {% block readmore %}
+							<a href="{{ IMG_WEBSITE_BASE_URL }}/blog/{{ post.slug|urlencode }}/" class="read_more"> Read more </a>
+						 {% endblock readmore %}
+             {% block pub %}
+             {% endblock pub %}
+							</div>
+
+							<!--<div class="article_content_image">
+
+								</div> -->
+
+						</div> <!-- end article_content -->
+
+					</div> <!-- end article -->
+					<hr />
+         {% endfor %}
+				 <div class="next-previous">
+				    {% if post_list_paged.has_previous %}
+						  <a href="?page={{ post_list_paged.previous_page_number }}" class="previous"> Previous Page </a>
+            {% endif %}
+
+						{% if post_list_paged.has_next %}
+						  <a href="?page={{ post_list_paged.next_page_number }}" class="nextpost"> Next Page </a>
+            {% endif %}
+
+					</div>
+
+				</div> <!-- end span8 articles_list -->
+
+				<div class="span2 sidebar">
+
+<!--					<div class="search">
+
+					<h4> Search
+          {% block create_post %}
+          {% endblock create_post %}
+          </h4>
+
+						<form class="search" action='{{ IMG_WEBSITE_BASE_URL }}/blog/search' method="get">
+							 <input type="text" class="input-medium search-query" name="post" id="post">
+							<button type="submit" class="search-btn">
+               </button>
+						</form>
+					</div>
+
+					<hr />
+-->
+					<div class="span2 archives_list">
+						<span class="archives_heading">ARCHIVES</span>
+						<span class="current_year_container"><img src="{{ STATIC_URL }}images/img_website/arrow_right2.png" alt=""><span class="current_year">{{ post_list.0.date.year }}</span> </span>
+						<ul class="year_list">
+              {% for post in post_list %}
+                {% ifchanged post.date.year %}
+							    <li class="year_list_item" id="archives_content_{{ post.date.year }}">{{ post.date.year }}</li>
+						    {% endifchanged %}
+              {% endfor %}
+            </ul>
+
+						<div class="year_content">
+            {% regroup post_list by date|date:"Y" as order_year_list %}
+            {% for year in order_year_list %}
+              <div class="archives_content tab" id="archives_content_{{ year.grouper }}">
+              {% regroup year.list by date|date:"F" as order_month_list %}
+						  <ul class="archives_list">
+              {% for month in order_month_list %}
+								<li class="expand expand-{{ forloop.counter }}">{{ month.grouper }}	<a href="#">	<i class="icon-chevron-down"></i>	</a>
+							  <ul class="content content-{{ forloop.counter }}">
+                  {% for post in month.list %}
+										<li><a href="{{ IMG_WEBSITE_BASE_URL }}/blog/{{ post.slug }}/"> {{ post.title }} </a></li>
+                  {% endfor %}
+								</ul>
+							  </li>
+              {% endfor %}
+							</ul>
+							</div> <!-- end archives_content tab -->
+            {% endfor %}
+						</div> <!-- end year_content -->
+
+					</div> <!-- end span2 archive_list -->
+
+				</div> <!-- end span2 sidebar -->
+
+			</div> <!-- end row -->
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row blog -->
+{% endblock body %}

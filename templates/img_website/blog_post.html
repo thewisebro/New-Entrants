@@ -1,0 +1,10 @@
+{% extends "img_website/static_blog_post.html" %}
+{% block next-prev %}
+  {% ifnotequal post_prev "" %}
+	  <a href="/img_website/dynamic_blog/{{ post_prev.slug }}/" class="previous"> Previous Post </a>
+  {% endifnotequal %}
+  {% ifnotequal post_next "" %}
+	  <a href="/img_website/dynamic_blog/{{ post_next.slug }}/" class="nextpost"> Next Post </a>
+  {% endifnotequal %}
+{% endblock next-prev %}
+

@@ -1,0 +1,186 @@
+{% extends "img_website/base.html" %}
+{% block title %}
+  IMG!
+{% endblock title %}
+
+{% block head %}
+{% endblock head %}
+
+{% block styles %}
+  {{ block.super }}
+{% endblock styles %}
+
+{% block scripts %}
+  {{ block.super }}
+{% endblock scripts %}
+
+{% block links %}
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/"> HOME </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/works/"> WORKS </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/blog/"><span class="active"> BLOG </span></a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/about/"> ABOUT </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/status/"> STATUS </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/team/"> TEAM </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/contact/"> CONTACT </a> </li>
+{% endblock links %}
+
+{% block body %}
+<div class="row blog">
+
+		<div class="container blog_container">
+
+			<div class="row">
+
+				<div class="span7 offset1 articles_list shadow">
+
+					<div class="span7 article">
+
+						<div class="article_title">
+							<div class="article_title_text">
+								<h3>{{ post.title }} </h3>
+                <span class="date"> {{ post.date|date:"F jS, Y" }} , by</span>
+								<span class="author">{{ post.author.first_name }} </span>
+							</div>
+						</div> <!-- end artcle_title -->
+
+						<!--<div class="article_image">
+							<img src="images/article_image1.jpg" />
+
+						</div>-->
+
+						<div class="article_content">
+
+							<div class="article_content_text" style="width:100%;word-wrap:break-word;">
+						  {{ post.content|safe }}
+							<br/>
+              <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fimg.channeli.in/blog/{{ post.slug|urlencode }}/&amp;layout=button_count&amp;show_faces=true&amp;width=450&amp;action=like&amp;colorscheme=light&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px; float:left;" allowTransparency="true"></iframe><style>.fbook{position: absolute; font-color:#ddd; top:-1668px; font-size:10;}</style></style><a href="http://www.howtoaddlikebutton.com" class="fbook">http://www.howtoaddlikebutton.com</a> <a href="http://www.druckerverwaltung.de" class="fbook">Drucker Test</a> <a href="http://www.profistaubsauger.de" class="fbook">Staubsauger Test</a><style>.fbook-style_map:initreaction=10false_attempt10-border</style><style>closemap"init"if=fb_connect-start="25"check_bandwith</style>
+              <iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html" style="width:130px; height:20px; float:left;"></iframe>
+              <hr>
+              <div class="written-by">
+                <div class="author-image"><img src="{{ MEDIA_URL }}{{ author.member_pic }}"/></div>
+								<p>written by</p>
+								<h3>{{ author.member_name.name }}</h3>
+
+								<ul class="social-icons social-author">
+                {% for link in author.memberlinks_set.all %}
+                  {% ifequal link.website "facebook" %}
+									<li> <a target="_blank"href="{{ link.link }}" class="facebook"></a> </li>
+                  {% endifequal %}
+                  {% ifequal link.website "quora" %}
+									<li><a target="_blank"href="{{ link.link }}" class="quora"></a> </li>
+                  {% endifequal %}
+                  {% ifequal link.website "twitter" %}
+									<li> <a target="_blank"href="{{ link.link }}" class="twitter"></a> </li>
+                  {% endifequal %}
+                  {% ifequal link.website "googleplus" %}
+									<li> <a target="_blank"href="{{ link.link }}" class="googleplus"></a> </li>
+                  {% endifequal %}
+                {% endfor %}
+                </ul>
+							</div>
+
+							<div class="blog_post_nav">
+								<!-- <a href="" class="previous_page"> previous page </a>
+
+								<a href="" class="next_page"> next page </a> -->
+							</div>
+
+							</div>
+
+							<!--<div class="article_content_image">
+
+								</div> -->
+
+
+						</div> <!-- end article_content -->
+
+
+					</div> <!-- end article -->
+
+
+					<div class="next-previous">
+					 {% block next-prev %}
+            {% ifnotequal post_prev "" %}
+						  <a href="{{ IMG_WEBSITE_BASE_URL }}/blog/{{ post_prev.slug }}/" class="previous"> Previous Post </a>
+            {% endifnotequal %}
+            {% ifnotequal post_next "" %}
+						  <a href="{{ IMG_WEBSITE_BASE_URL }}/blog/{{ post_next.slug }}/" class="nextpost"> Next Post </a>
+					  {% endifnotequal %}
+           {% endblock next-prev %}
+					</div>
+
+				</div> <!-- end span8 articles_list -->
+
+
+        <div class="span2 sidebar">
+<!--
+					<div class="search">
+
+					<h4> Search </h4>
+
+						<form class="search" action='{{ IMG_WEBSITE_BASE_URL }}/blog/search' method="get">
+							 <input type="text" class="input-medium search-query" name="post" id="post">
+							<button type="submit" class="search-btn">
+               </button>
+						</form>
+					</div>
+
+					<hr />
+-->
+					<div class="span2 archives_list">
+						<span class="archives_heading">ARCHIVES</span>
+						<span class="current_year_container"><img src="{{ STATIC_URL }}images/img_website/arrow_right2.png" alt=""><span class="current_year">{{ post_list.0.date.year }}</span> </span>
+						<ul class="year_list">
+              {% for post in post_list %}
+                {% ifchanged post.date.year %}
+							    <li class="year_list_item" id="archives_content_{{ post.date.year }}">{{ post.date.year }}</li>
+						    {% endifchanged %}
+              {% endfor %}
+            </ul>
+
+						<div class="year_content">
+            {% regroup post_list by date|date:"Y" as order_year_list %}
+            {% for year in order_year_list %}
+              <div class="archives_content tab" id="archives_content_{{ year.grouper }}">
+              {% regroup year.list by date|date:"F" as order_month_list %}
+						  <ul class="archives_list">
+              {% for month in order_month_list %}
+								<li class="expand expand-{{ forloop.counter }}">{{ month.grouper }}	<a href="#">	<i class="icon-chevron-down"></i>	</a>
+							  <ul class="content content-{{ forloop.counter }}">
+                  {% for post in month.list %}
+										<li><a href="{{ IMG_WEBSITE_BASE_URL }}/blog/{{ post.slug }}/"> {{ post.title }} </a></li>
+
+                  {% endfor %}
+								</ul>
+							  </li>
+              {% endfor %}
+							</ul>
+							</div> <!-- end archives_content tab -->
+            {% endfor %}
+						</div> <!-- end year_content -->
+
+					</div> <!-- end span2 archive_list -->
+
+				</div> <!-- end span2 sidebar -->
+
+				<div id="disqus_thread" style="margin-left: 82px; width: 768px; padding-left: 48px; float: left; margin-top: 50px;"></div>
+            <script type="text/javascript">
+                    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+                    var disqus_shortname = 'imgiitr'; // required: replace example with your forum shortname
+
+                            /* * * DON'T EDIT BELOW THIS LINE * * */
+                            (function() {
+                                         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                                                     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                                                                 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                                                         })();
+    </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+			</div> <!-- end row -->
+
+		</div> <!-- end container -->
+	</div> <!-- end row blog -->
+{% endblock body %}
+
+

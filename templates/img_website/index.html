@@ -1,0 +1,241 @@
+{% extends "img_website/base.html" %}
+{% block head %}
+	<meta name="author" content="">
+
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{% endblock head %}
+
+{% block styles %}
+  {{ block.super }}
+{% endblock styles %}
+
+{% block scripts %}
+  {{ block.super }}
+{% endblock scripts %}
+
+{% block links %}
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/"><span class="active"> HOME </span></a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/works/"> WORKS </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/blog/"> BLOG </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/about/"> ABOUT </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/status/"> STATUS </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/team/"> TEAM </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/contact/"> CONTACT </a> </li>
+{% endblock links %}
+
+{% block body %}
+	<!-- CONTENT: IMAGE AND QUOTE -->
+	<div class="row content content1">
+		<div class="row quote_container">
+			<div class="container">
+				<div class="row quote fadediv">
+					<div class="span10 offset1">
+						<div class="quote1">
+							HELLO!
+						</div>
+					</div>
+
+					<div class="span10 offset1">
+						<div class="quote2">
+							WE ARE A STUDENT GROUP
+						</div>
+					</div>
+
+					<div class="span10 offset1">
+						<div class="quote3">
+							AND WE TURN AWESOME IDEAS
+						</div>
+					</div>
+
+					<div class="span10 offset1">
+						<div class="quote4">
+							INTO EVEN MORE AWESOME APPS
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<a href="#whatsnew" class="swoosh">
+				<div class="downstrip">
+					<div class="container">
+						<div class="row">
+
+							<div class="span1 arrow offset6"> <img src="{{ STATIC_URL }}images/img_website/arrow.png" /> </div>
+
+							<div class="span2 offset2 arrow">  </div>
+						</div>
+					</div>
+				</div> <!-- end row strip -->
+			</a>
+
+
+		</div> <!-- end container-->
+
+	</div> <!-- end row content1 -->
+
+	<!-- CONTENT: WHAT'S NEW -->
+	<div id="whatsnew" class="row strip">
+
+		<div class="container">
+
+			<div class="row">
+
+				<div class="span2 offset1 blackstrip" style="width:153px;">
+
+				</div>
+
+			</div>
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row stripwhatsnew -->
+
+	<div class="row heading">
+
+		<div class="container">
+
+				<div class="row">
+
+					<div class="strip_heading offset1  homeoffset1">
+					<span>What's new!</span>
+					<br/>
+					<span style="font-size:14px; color:gray; font-weight:normal;">Have a look at our recent <a href="{{ IMG_WEBSITE_BASE_URL }}/works/">works</a> </span>
+					</div>
+
+				</div>
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row headingwhatsnew -->
+
+	<div class="row whatsnewslideshow">
+
+		<div class="container">
+
+			<div class="row">
+
+				<div class="span8 offset1 homeoffset1 slideshow_container">
+
+					<ul class="tabs tabs-3">
+            {% for work in work_list %}
+						<li>
+							<div class="tab-select shadow_darker">
+								<h3>{{ work.title }}</h3>
+								<p>{{ work.short_description|safe|slice:":200" }}</p>
+							</div>
+							<div class="tab-content" id="tab{{ forloop.counter }}">
+                <a href="{{ IMG_WEBSITE_BASE_URL }}/works/{{ work.slug|urlencode }}/" target="_blank" class="btn1"> Visit project </a>
+								<img src="{{ MEDIA_URL }}{{ work.image }}" alt="Tab 1" />
+             </div>
+						</li>
+            {% endfor %}
+
+					</ul> <!-- end tabs tabs-3 -->
+
+				</div> <!-- end span10 offset1 -->
+
+			</div> <!-- end row -->
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row -->
+
+<!-- CONTENT: RECENT BLOG POSTS -->
+
+	<div class="row strip">
+
+		<div class="container">
+
+				<div class="row">
+
+					<div class="span3 offset1 blackstrip" style="width:230px;">
+
+					</div>
+
+				</div>
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row strip recentblogposts -->
+
+
+
+	<div class="row heading">
+
+		<div class="container">
+
+				<div class="row">
+
+					<div class="strip_heading offset1 homeoffset1">
+					<span>Recent Blog Posts</span>
+					<br>
+					<span style="font-size:14px; color:gray; font-weight:normal; ">Visit our <a href="{{ IMG_WEBSITE_BASE_URL }}/blog/">blog</a> to know more about us! </span>
+
+				</div>
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row heading recentblogposts -->
+
+	<div class="row recentblogposts">
+	<hr class="timeline" />
+		<div class="container recentblogpostcontainer">
+
+			<div class="row">
+
+				<div class="span8 offset1 homeoffset1 slideshow_container">
+
+					<div id="plug-and-play">
+					  {% with x=0 %}
+            {% for post in post_list %}
+              {% if forloop.counter0 == 0 %}
+                <div class="slide">
+              {% endif %}
+              {% if forloop.counter0 < 3 %}
+                <div class="box">
+              {% endif %}
+              {% if forloop.counter0 == 3 %}
+                </div>
+                <div class="slide">
+                <div class="box box{{ x|add:'2' }}">
+              {% endif %}
+              {% if forloop.counter0|divisibleby:"3" and forloop.counter0 > 3 %}
+						    </div>
+                <div class="slide" >
+                <div class="box box{{ x|add:'1' }}">
+              {% endif %}
+              {% if forloop.counter0 > 3 and not forloop.counter0|divisibleby:"3" %}
+                <div class="box box{{ x }}">
+              {% endif %}
+								<div class="box_title">
+									<div class="box_bubble">
+										<div class="box_bubble_text">
+											<span class="month">{{ post.date|date:"M" }}</span>
+											<span class="date">{{ post.date|date:"j" }}</span>
+										</div>
+									</div>
+
+								</div>
+
+								<div class="box_content">
+
+									<a href="{{ IMG_WEBSITE_BASE_URL }}/blog/{{ post.slug|urlencode }}/" class="read_more">
+										<div class="box_heading">
+											{{ post.title }}
+										</div>
+									</a>
+								</div>
+							</div>
+            {% endfor %}
+            {% endwith %}
+						</div>
+
+					</div> <!-- end plug-and-play -->
+
+				</div>
+
+			</div>
+		</div>
+	</div> <!-- end row recentblogposts -->
+{% endblock body %}
