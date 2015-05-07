@@ -7,6 +7,7 @@ class NoticeAdmin(admin.ModelAdmin):
     formfield_overrides = {
           models.TextField: {'widget': forms.CKEditorWidget(config={'toolbar':'BasicWithImage'})},
     }
+    search_fields = ['subject', 'uploader__user','uploader__user__username']
 
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(TrashNotice)
