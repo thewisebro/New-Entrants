@@ -443,14 +443,14 @@ li
 
 #search-info
   position: relative
-  left: -23px
-  font-size: 15px
+  left: -24px
+  font-size: 16px
   top: 1px
   color: #B9B5B5
   cursor: pointer
   transition: all 0.40s ease-out
   &:hover
-    color: #333
+    color: rgba(85, 61, 61, 0.95)
 
 .tooltip
   display: inline
@@ -477,8 +477,9 @@ li
   position: absolute
   z-index: 9999
   width: 300px
-  left: 50%
-  font-size: 20px
+  top: 30px
+  left: -128%
+  font-size: 15px
   line-height: 1.4
   text-align: center
   font-weight: 400
@@ -488,7 +489,8 @@ li
   margin: 0 0 20px -150px
   cursor: default
   pointer-events: none
-  font-family: 'Satisfy', cursive
+  font-family: "Arial", sans-serif
+  font-family: Pacifico
   -webkit-font-smoothing: antialiased
   -webkit-transition: opacity 0.3s 0.3s
   transition: opacity 0.3s 0.3s
@@ -503,7 +505,7 @@ li
   display: block
 
 .tooltip-text
-  border-bottom: 10px solid #fffaf0
+  border-top: 10px solid #fffaf0
   overflow: hidden
   -webkit-transform: scale3d(0, 1, 1)
   transform: scale3d(0, 1, 1)
@@ -518,9 +520,9 @@ li
 
 .tooltip-inner
   background: rgba(85, 61, 61, 0.95)
-  padding: 40px
-  -webkit-transform: translate3d(0, 100%, 0)
-  transform: translate3d(0, 100%, 0)
+  padding: 25px
+  -webkit-transform: translate3d(0, -100%, 0)
+  transform: translate3d(0, -100%, 0)
   webkit-transition: -webkit-transform 0.3s
   transition: transform 0.3s
 
@@ -534,7 +536,7 @@ li
 
 .tooltip-content::after
   content: ''
-  bottom: -20px
+  top: -20px
   left: 50%
   border: solid transparent
   height: 0
@@ -542,6 +544,13 @@ li
   position: absolute
   pointer-events: none
   border-color: transparent
-  border-top-color: #fffaf0
+  border-bottom-color: #fffaf0
   border-width: 10px
   margin-left: -10px
+
+#search-info-1
+  font-size: 18px
+
+#search-info-2
+  font-size: 17px
+  margin-top: 5px
