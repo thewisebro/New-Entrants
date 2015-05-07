@@ -7,7 +7,7 @@ var temp_total_pages, temp_last_page_notices;		//variables for general notice di
 var store, temp_store, old_store;    //store stands for new store or the store of new notices.
 var emptyarray;
 
-var main_mode, sub_mode, m_category, sub_category, cur_page_no, store_to_use, more, name_to_display, all, same_except_page_no, search_string, search_string_changed, prev_content_url, content_button_state, no_notices, binding_done;
+var main_mode, sub_mode, m_category, sub_category, cur_page_no, store_to_use, more, name_to_display, all, same_except_page_no, search_string, search_string_changed, prev_content_url, content_button_state, no_notices, binding_done, login;
 var h1,h2,h3,h4,h5;
 /*
   1.Values of sub_mode can be either new or old
@@ -40,6 +40,7 @@ function initialize_global_variables()
   all=1;
   no_notices=0;
   binding_done=0;
+  login=0;
 //  same_except_page_no=1;
   main_mode="display";
   sub_mode="";
@@ -98,10 +99,17 @@ $(document).on("login", function(){
   if(nucleus.get_current_app()=="notices")
   {
     initialize_global_variables();
+    login=1;
     first_time_visit=0;
     hashtags = [h1, h2, h3, h4, h5];
 
     $(document).trigger("load_app_notices", hashtags);
+  }
+  else
+  {
+    initialize_global_variables();
+    login=1;
+    first_time_visit=0;
   }
 });
 
@@ -109,17 +117,15 @@ $(document).on("logout", function(){
     //console.log("logout entered");
   if(nucleus.get_current_app()=="notices")
   {
-    same_except_page_no=1;
-    check_upload_array={}; check_star_array={}; read_array={};
-    privelege=0; star_perm=0;
-    if(h1!="content")
-    {
-       create_static_divs();
-       static_divs_created=1;
-    }
-    evaluate_breadcrumbs();
+    initialize_global_variables();
+    first_time_visit=0;
     hashtags = [h1, h2, h3, h4, h5];
     $(document).trigger("load_app_notices", hashtags);
+  }
+  else
+  {
+    initialize_global_variables();
+    first_time_visit=0;
   }
 });
 
@@ -190,8 +196,7 @@ function redirection()            //The main controller function which defines t
         }
         else
         {
-          //console.log("2332starred_uploads_yes");
-          if(h1==main_mode && h2==sub_mode && h3==m_category && h4==sub_category)     //Setting the value of the same_except_page_no variable
+          if(login==0 && h1==main_mode && h2==sub_mode && h3==m_category && h4==sub_category)     //Setting the value of the same_except_page_no variable
             same_except_page_no=1;
           else
           {
@@ -201,6 +206,10 @@ function redirection()            //The main controller function which defines t
             $("#back").hide("fade", 200, function(){$("#bars").show("fade", 200);});
             $("#filters").slideDown(400);
             same_except_page_no=0;
+            if(login==-2)
+              login=0;
+            if(login==1)
+              login=-2;
           }
         }
 
@@ -369,7 +378,9 @@ function redirection()            //The main controller function which defines t
             }
         }
         if($("#breadcrumbs")[0].innerHTML=="")
+        {
           evaluate_breadcrumbs();
+        }
     }
 }
 
