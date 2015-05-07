@@ -624,10 +624,11 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
             else if(d.getTime() == Date.parse("yesterday").getTime())
               context["notice_date"] = "Yesterday";
             else if(d.getYear() == Date.parse("today").getYear())
-              context["notice_date"] = d.toString('dd MMM');
+              context["notice_date"] = d.toString('MMM dd');
             else
-              context["notice_date"] = d.toString('dd MMM yyyy');
+              context["notice_date"] = d.toString('MMM dd, yyyy');
 
+            context["notice_time"] = moment(context.notice.datetime_modified).format('h:mm a');
             if(star_perm==1)
               context["anonymous"] = 0;
             else
