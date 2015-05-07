@@ -87,7 +87,6 @@ def company_open_to(request, company_id) :
   Displays the name of branches for which a company is open.
   """
   try:
-    import ipdb; ipdb.set_trace()
     try:
       company = Company.objects.get(id = company_id, year = current_session_year())
     except Company.DoesNotExist as e:
@@ -135,7 +134,6 @@ def resume(request) :
   """
   Current resume of the user.
   """
-  import ipdb; ipdb.set_trace()
   try:
     l.info(request.user.username +': Tried to view his resume')
     student = request.user.student 

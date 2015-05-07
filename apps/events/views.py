@@ -179,7 +179,7 @@ def date_str(date):
   return "%s %s" % (date.day, date.strftime("%b"))
 
 def uptotime(event):
-  if event.upto_time:
+  if event.upto_time and event.time:
     if not event.upto_date:
       event.upto_date = event.date
     if event.upto_date == event.date:

@@ -49,6 +49,7 @@ class CompanyForm(forms.ModelForm) :
               'website',
               'brochure',
               'sector',
+              'category_required',
               'open_for_disciplines']
     exclude = ('year', )
     widgets = {#'open_for_disciplines' : forms.CheckboxSelectMultiple(),

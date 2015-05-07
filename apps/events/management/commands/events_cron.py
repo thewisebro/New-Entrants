@@ -80,7 +80,7 @@ class Command(BaseCommand):
     for event in events:
       event.email_sent = True
       event.save()
-      event_users = event.calendar.eventsuser_set.all().filter(user__username=10311025)
+      event_users = event.calendar.eventsuser_set.all()
       subject,content = get_subject_content(event)
       email_ids = []
       for event_user in event_users:
@@ -93,7 +93,6 @@ class Command(BaseCommand):
           msg = EmailMessage(subject,content,'Event',first_100_email_ids)
           msg.content_subtype = "html"
           msg.send()
-          print 'sent'
         except Exception as e:
           print "Exception",e
-        #ptime.sleep(30)
+        ptime.sleep(30)

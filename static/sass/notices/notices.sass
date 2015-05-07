@@ -278,8 +278,15 @@ li
 #_ref_wrap, #_date_wrap, #_source_wrap
   float: left
 
-#_content
+.notice_content_wrapper
   margin: 10px
+  #_content
+    margin: 10px auto
+    max-width: 900px
+
+.notice-download
+  margin: 10px
+  margin-left: 0px
 
 #_subject_wrap
   border-bottom: solid 1px #e0e0e0
@@ -300,9 +307,6 @@ li
 
 #_reference_value
   max-width: calc(100% - 124px)
-
-img
-  max-width: 100%
 
 .ref_yes
   width: 33.33%
@@ -348,10 +352,13 @@ img
   color: silver
   font-size: 27px
   width: 225px
-  margin-top: 75px
+  margin-top: 67px
 
 #_content img
   margin-bottom: 10px
+  margin-left: auto
+  margin-right: auto
+  display: block
 
 #edit_delete
   padding: 10px
@@ -394,6 +401,19 @@ img
 
 #gear
   margin-right: 3px
+  font-size: 14px
+  -webkit-transition : all 0.25s ease-out
+  -moz-transition: all 0.25s ease-out
+  -ms-transition: all 0.25s ease-out
+  -o-transition: all 0.25s ease-out
+  transition: all 0.30s ease-out
+
+#settings:hover #gear
+  -webkit-transform: rotate(90deg)
+  -moz-transform: rotate(90deg)
+  -ms-transform: rotate(90deg)
+  -o-transform: rotate(90deg)
+  transform: rotate(90deg)
 
 .squaredFour
   width: 20px

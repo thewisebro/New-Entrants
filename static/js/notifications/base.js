@@ -1,6 +1,6 @@
 (function() {
 
-namespace("notifications_app", notification_clicked, see_more_notifications, mark_read);
+namespace("notifications_app", notification_clicked, see_more_notifications, mark_read, mark_all_read);
 
 var notifications = Array();
 var notifications_per_request = 20;
@@ -31,7 +31,13 @@ $(document).on("logout", function(){
 });
 
 function load_notifications_page(){
-  $('#content').html("<div class='app-heading'>Notifications</div><div id='notifications'></div>");
+  $('#content').html(
+        "<div class='app-heading'>" +
+          "<div class='app-heading' id='notifications-heading'>Notifications</div>" +
+          "<div class='button2' id='all-read-button' onclick='notifications_app.mark_all_read()'>Mark all as read</div>" +
+        "</div>"+
+        "<div id='notifications'></div>"
+      );
   if(notifications.length === 0){
     update_notifications('first');
     setInterval(function(){
@@ -141,7 +147,7 @@ function mark_read(notification_id) {
     $.post("/notifications/mark_read",{
       'id': notification_id
       }, function(data){
-        if(data.not_viewed){
+        if(!(data.not_viewed===undefined)){
           show_not_viewed_count(data.not_viewed);
           notification.viewed = 1;
           $('#notification'+notification_id).removeClass('notification-box-not-viewed');
@@ -149,6 +155,15 @@ function mark_read(notification_id) {
     });
   }
   event.stopPropagation();
+}
+
+function mark_all_read() {
+    $.post("/notifications/mark_all_read", function(data){
+        if(!(data.not_viewed===undefined)){
+          show_not_viewed_count(data.not_viewed);
+          $('.notification-box').removeClass('notification-box-not-viewed');
+        }
+    });
 }
 
 function birthday_wish_reply(url){
