@@ -21,9 +21,12 @@ from jukebox.serializers import *
 from jukebox.permissions import *
 from jukebox import constants as JC
 
-songs = open(JC.SONGS_JSON_FILE,'r+')
-albums = open(JC.ALBUMS_JSON_FILE,'r+')
-artists = open(JC.ARTISTS_JSON_FILE,'r+')
+#songs = open(JC.SONGS_JSON_FILE,'r+')
+#albums = open(JC.ALBUMS_JSON_FILE,'r+')
+#artists = open(JC.ARTISTS_JSON_FILE,'r+')
+songs = open(JC.SONGS_JSON_FILE,'r')
+albums = open(JC.ALBUMS_JSON_FILE,'r')
+artists = open(JC.ARTISTS_JSON_FILE,'r')
 
 songs = songs.readline()
 albums = albums.readline()
@@ -47,8 +50,10 @@ for key in artists.keys():
   artists_search[artists[key]['artist'].lower()]=key
 
 
-all_albums = open(JC.ALBUMS_JSON_FILE,'r+')
-all_artists = open(JC.ALL_ARTISTS_JSON_FILE,'r+')
+#all_albums = open(JC.ALBUMS_JSON_FILE,'r+')
+#all_artists = open(JC.ALL_ARTISTS_JSON_FILE,'r+')
+all_albums = open(JC.ALBUMS_JSON_FILE,'r')
+all_artists = open(JC.ALL_ARTISTS_JSON_FILE,'r')
 all_albums = json.loads(all_albums.readline())
 all_artists = json.loads(all_artists.readline())
 
