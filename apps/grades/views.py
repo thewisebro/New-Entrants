@@ -51,7 +51,7 @@ def index(request):
   grades = []
   for course in courses:
     course_details.append(str(course.course_details.course_code) + " - " + (course.course_details.course_name.upper()))
-    obj = Grade.objects.filter(person=person,course = course.course_details)
+    obj = Grade.objects.filter(student=student,course = course.course_details)
     if obj:
       grades.append(obj[0].grade)
       try:

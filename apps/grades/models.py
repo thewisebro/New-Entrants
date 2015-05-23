@@ -5,7 +5,7 @@ from constants import SEMESTER_CHOICES
 from constants import SEASON_CHOICES
 
 class Grade(models.Model):
-  person = models.ForeignKey(Student)
+  student = models.ForeignKey(Student)
   course = models.ForeignKey(CourseDetails,related_name='Grade_course')
   semester = models.CharField(max_length=5)
   grade = models.CharField(max_length=2)
