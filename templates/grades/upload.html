@@ -1,0 +1,19 @@
+<html>
+  <body>
+    {% if msg %}
+      {{msg}}
+    {% endif %} 
+    {% if form.errors %}
+      <p style = "color: red;">
+        Please Correct the error below.
+      </p>
+    {% endif %}
+    <p><b>Note : </b> Uploaded file name must be the exact course code. Eg : EC-102.xls </p>  
+    <form action = "" method = "post" enctype="multipart/form-data" >
+      {% csrf_token %}
+      {{form}}
+      <input type = "submit" name ="submit_button" value = "Submit">
+    </form>
+  </body>
+</html>  
+
