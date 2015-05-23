@@ -11,7 +11,7 @@
     <p><b>Note : </b> Uploaded file name must be the exact course code. Eg : EC-102.xls </p>  
     <form action = "" method = "post" enctype="multipart/form-data" >
       {% csrf_token %}
-      {{form}}
+      {{ form.uniform }}
       <input type = "submit" name ="submit_button" value = "Submit">
     </form>
   </body>

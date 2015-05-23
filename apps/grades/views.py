@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from grades.models import *
-from nucleus.models import Person
+from nucleus.models import Student
 from regol.models import RegisteredCourses
 from django.contrib.auth.models import User
 from django.template import RequestContext
@@ -12,9 +12,10 @@ import xlrd
 
 @login_required
 def upload(request):
-  person = request.session.get('person')
+  student = request.user.student
   user = request.user
   if user.in_group('IMG Admin'):
+    form = forms.UploadForm()
     if request.method == 'POST':
       form = forms.UploadForm(request.POST,request.FILES)
       print form
@@ -27,7 +28,6 @@ def upload(request):
       else:
         return HttpResponse('Successfully asd')
     else:
-      form = forms.UploadForm()
       msg = 'Welcome Admin'
       return render_to_response('grades/upload.html',{
           'form' : form,
@@ -38,9 +38,9 @@ def upload(request):
 
 @login_required
 def index(request):
-  person = request.session.get('person')
+  student = request.user.student
   user = request.user
-  courses = RegisteredCourses.objects.filter(person=person,cleared_status = "CUR")
+  courses = RegisteredCourses.objects.filter(student=student,cleared_status = "CUR")
   course_details = []
   is_admin = False
   grade_exists = True

@@ -1,6 +1,6 @@
-from django import forms
+from core import forms
 from grades import models
-from api.forms import BaseModelForm
+from core.forms import BaseModelForm
 
 class UploadForm(BaseModelForm):
   class Meta:

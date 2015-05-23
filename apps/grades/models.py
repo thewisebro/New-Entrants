@@ -1,4 +1,4 @@
-from django.db import models
+from core import models
 from nucleus.models import Student
 from regol.models import CourseDetails
 from constants import SEMESTER_CHOICES

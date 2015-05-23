@@ -1,8 +1,8 @@
 <html>
   <head>
     <title>Grades Online</title>
-		<link href="{{STATIC_URL}}/css/softwares/bootstrap.min.css" rel="stylesheet" />
-		<link href="{{STATIC_URL}}/css/grades/style.css" rel="stylesheet" />
+		<link href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="{{STATIC_URL}}css/grades/style.css" rel="stylesheet" />
   </head>
   <body>
     <div id="container">
@@ -14,7 +14,7 @@
         {% endif %}
       </div>
       <div class="grades">
-        Welcome {{ user.person.name }}
+        Welcome {{ user.name }}
         <div class="score">
           <table class = "table table-striped marks">
             {% for course,score in grades %}
@@ -34,7 +34,7 @@
         </div>
         <div id="footer">
           <div id="footer-copyright">
-            &copy; 2013 <a href="http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html" target="_blank" title="Information Management Group">IMG, IIT Roorkee</a>
+            &copy; 2015 <a href="http://www.iitr.ac.in/campus_life/pages/Groups_and_Societies+IMG.html" target="_blank" title="Information Management Group">IMG, IIT Roorkee</a>
           </div>
           <div class="fb-like"
           data-href="http://www.facebook.com/IMGIITRoorkee?ref=hl"
