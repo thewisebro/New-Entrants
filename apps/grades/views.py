@@ -10,31 +10,31 @@ from grades import forms
 from grades.constants import *
 import xlrd
 
-@login_required
-def upload(request):
-  student = request.user.student
-  user = request.user
-  if user.in_group('IMG Admin'):
-    form = forms.UploadForm()
-    if request.method == 'POST':
-      form = forms.UploadForm(request.POST,request.FILES)
-      print form
-      if form.is_valid():
-        File = request.FILES['data']
-        semester = request.POST['semester']
-        form.save()
-        transfer_to_database(File,semester)
-        return HttpResponse('Successfully Uploaded')
-      else:
-        return HttpResponse('Successfully asd')
-    else:
-      msg = 'Welcome Admin'
-      return render_to_response('grades/upload.html',{
-          'form' : form,
-          'msg' : msg,
-          },context_instance = RequestContext(request))
-  else:
-    return HttpResponse("Admin only!!")
+#@login_required
+#def upload(request):
+#  student = request.user.student
+#  user = request.user
+#  if user.in_group('IMG Admin'):
+#    form = forms.UploadForm()
+#    if request.method == 'POST':
+#      form = forms.UploadForm(request.POST,request.FILES)
+#      print form
+#      if form.is_valid():
+#        File = request.FILES['data']
+#        semester = request.POST['semester']
+#        form.save()
+#        transfer_to_database(File,semester)
+#        return HttpResponse('Successfully Uploaded')
+#      else:
+#        return HttpResponse('Successfully asd')
+#    else:
+#      msg = 'Welcome Admin'
+#      return render_to_response('grades/upload.html',{
+#          'form' : form,
+#          'msg' : msg,
+#          },context_instance = RequestContext(request))
+#  else:
+#    return HttpResponse("Admin only!!")
 
 @login_required
 def index(request):

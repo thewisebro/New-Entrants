@@ -2,7 +2,6 @@ from core import models
 from nucleus.models import Student
 from regol.models import CourseDetails
 from constants import SEMESTER_CHOICES
-from constants import SEASON_CHOICES
 
 class Grade(models.Model):
   student = models.ForeignKey(Student)

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os, sys
 sys.path.append(os.getcwd())
-import settings  
+import settings
 from django.core.management import setup_environ
 setup_environ(settings)
 
@@ -34,21 +34,21 @@ def transfer_to_database(way,file_xls):
       curr_cell = -1
     enrollment_no = int(worksheet.cell_value(curr_row,1))
     try:
-      person = Person.objects.get(user__username = enrollment_no)
+      student = Student.objects.get(user__username = enrollment_no)
       course_code = str(file_xls).split('.')[0]
       course = CourseDetails.objects.get(course_code = course_code)
-      registered_courses = RegisteredCourses.objects.filter(person=person,course_details=course)[0]
+      registered_courses = RegisteredCourses.objects.filter(student=student,course_details=course)[0]
       semester = registered_courses.semester
       if semester == "A":
-        semester = person.semester
+        semester = student.semester
       grade = worksheet.cell_value(curr_row,6)
-      obj = Grade.objects.get_or_create(person = person,course=course)[0]
+      obj = Grade.objects.get_or_create(student=student,course=course)[0]
       obj.semester = semester
       obj.course = course
       obj.grade = grade
       obj.save()
     except Exception as e:
-      print 'Escaped following person : '+str(enrollment_no)+" error : "+str(e)
+      print 'Escaped following student : '+str(enrollment_no)+" error : "+str(e)
       pass
 
 
