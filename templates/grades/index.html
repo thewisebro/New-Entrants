@@ -9,9 +9,10 @@
       <div class="well page-header">
         <h1 class="Banner"><span class="logo">Grades Online </span><small>Your grades for the current semester</small></h1>
         <button class="signout_button btn btn-inverse btn-medium" type="button" onclick="window.open('','_new').location='/logout/';" value ="Redirect">Sign Out</button>
-        {% if is_admin%}
+{% comment %}        {% if is_admin%}
           <button class="upload_button btn btn-inverse btn-medium" type="button" onclick="window.open('','_new').location='/grades/upload/';" value ="Redirect">Upload</button>
         {% endif %}
+{% endcomment %}
       </div>
       <div class="grades">
         Welcome {{ user.name }}
