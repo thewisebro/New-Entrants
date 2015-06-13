@@ -18,8 +18,9 @@
         Welcome {{ user.name }}
         <div class="score">
           <table class = "table table-striped marks">
-            {% for course,score in grades %}
-              <tr class="row"><td>{{ course }}</td><td>{{ score }}</td></tr>
+              <tr class="row" style="font-weight:bold;"><td>Course</td><td>Grade</td><td>Credits</td></tr>
+            {% for course,score,credits in grades %}
+              <tr class="row"><td>{{ course }}</td><td>{{ score }}</td><td>{{ credits }}</td></tr>
             {% endfor %}
           </table>
           <div>

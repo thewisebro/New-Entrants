@@ -42,6 +42,7 @@ def index(request):
   user = request.user
   courses = RegisteredCourses.objects.filter(student=student,cleared_status = "CUR")
   course_details = []
+  credits = []
   is_admin = False
   grade_exists = True
   sum_of_credits = 0
@@ -66,22 +67,27 @@ def index(request):
       try:
         marks_scored = marks_scored + course.credits*int(GRADE_CHOICES[obj[0].grade])
         sum_of_credits = sum_of_credits + course.credits
+        credits.append(course.credits)
       except ValueError:
+        credits.append(0)
         pass
     else:
       grade_exists = False
       grades.append('-')
+      credits.append(0)
   disp = CourseDetails.objects.get(course_code='DISP')
   course_details.append(str(disp.course_code) + " : " + (disp.course_name.upper()))
   obj = Grade.objects.filter(student=student,course = disp)
+  course=disp
   if obj:
     grades.append(obj[0].grade)
     try:
       marks_scored = marks_scored + course.credits*int(GRADE_CHOICES[obj[0].grade])
       sum_of_credits = sum_of_credits + course.credits
+      credits.append(course.credits)
     except ValueError:
-      pass
-  grades = zip(course_details,grades)
+      credits.append(0)
+  grades = zip(course_details,grades,credits)
   if grade_exists and sum_of_credits!=0:
     sgpa = round(float(marks_scored)/float(sum_of_credits),2)
   else:
