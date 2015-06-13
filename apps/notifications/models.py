@@ -41,9 +41,10 @@ class Notification(models.Model):
   @staticmethod
   def delete_notification(app, instance):
     content_type = ContentType.objects.get_for_model(instance)
-    notification = Notification.objects.get_or_none(app=app, object_id=instance.pk, content_type=content_type)
-    if notification:
-      notification.delete()
+    notifications = Notification.objects.filter(app=app, object_id=instance.pk, content_type=content_type)
+    if notifications.exists():
+      for notification in notifications:
+        notification.delete()
 
 class UserNotification(models.Model):
   user = models.ForeignKey(User)

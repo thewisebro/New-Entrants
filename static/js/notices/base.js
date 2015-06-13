@@ -7,7 +7,7 @@ var temp_total_pages, temp_last_page_notices;		//variables for general notice di
 var store, temp_store, old_store;    //store stands for new store or the store of new notices.
 var emptyarray;
 
-var main_mode, sub_mode, m_category, sub_category, cur_page_no, store_to_use, more, name_to_display, all, same_except_page_no, search_string, search_string_changed, prev_content_url, content_button_state, no_notices, binding_done;
+var main_mode, sub_mode, m_category, sub_category, cur_page_no, store_to_use, more, name_to_display, all, same_except_page_no, search_string, search_string_changed, prev_content_url, content_button_state, no_notices, binding_done, login;
 var h1,h2,h3,h4,h5;
 /*
   1.Values of sub_mode can be either new or old
@@ -40,6 +40,7 @@ function initialize_global_variables()
   all=1;
   no_notices=0;
   binding_done=0;
+  login=0;
 //  same_except_page_no=1;
   main_mode="display";
   sub_mode="";
@@ -98,10 +99,17 @@ $(document).on("login", function(){
   if(nucleus.get_current_app()=="notices")
   {
     initialize_global_variables();
+    login=1;
     first_time_visit=0;
     hashtags = [h1, h2, h3, h4, h5];
 
     $(document).trigger("load_app_notices", hashtags);
+  }
+  else
+  {
+    initialize_global_variables();
+    login=1;
+    first_time_visit=0;
   }
 });
 
@@ -109,17 +117,15 @@ $(document).on("logout", function(){
     //console.log("logout entered");
   if(nucleus.get_current_app()=="notices")
   {
-    same_except_page_no=1;
-    check_upload_array={}; check_star_array={}; read_array={};
-    privelege=0; star_perm=0;
-    if(h1!="content")
-    {
-       create_static_divs();
-       static_divs_created=1;
-    }
-    evaluate_breadcrumbs();
+    initialize_global_variables();
+    first_time_visit=0;
     hashtags = [h1, h2, h3, h4, h5];
     $(document).trigger("load_app_notices", hashtags);
+  }
+  else
+  {
+    initialize_global_variables();
+    first_time_visit=0;
   }
 });
 
@@ -145,7 +151,7 @@ function redirection()            //The main controller function which defines t
         //console.log("display content");
         main_mode = "content";
         $("#select_bars").removeAttr("onclick");
-        $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
+        $("#select_bars").attr("onclick", "location.hash = '" + prev_content_url + "'");
         $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
         checklist={};
         evaluate_breadcrumbs();
@@ -180,7 +186,7 @@ function redirection()            //The main controller function which defines t
               $("#app_name").text("Uploaded Notices");
           //console.log("5starred_uploads_yes");
             $("#select_bars").removeAttr("onclick");
-            $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
+            $("#select_bars").attr("onclick", "location.hash = '" + prev_content_url + "'");
           //console.log("6starred_uploads_yes");
             $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
             $("#filters").slideUp(400);
@@ -190,8 +196,7 @@ function redirection()            //The main controller function which defines t
         }
         else
         {
-          //console.log("2332starred_uploads_yes");
-          if(h1==main_mode && h2==sub_mode && h3==m_category && h4==sub_category)     //Setting the value of the same_except_page_no variable
+          if(login==0 && h1==main_mode && h2==sub_mode && h3==m_category && h4==sub_category)     //Setting the value of the same_except_page_no variable
             same_except_page_no=1;
           else
           {
@@ -201,6 +206,10 @@ function redirection()            //The main controller function which defines t
             $("#back").hide("fade", 200, function(){$("#bars").show("fade", 200);});
             $("#filters").slideDown(400);
             same_except_page_no=0;
+            if(login==-2)
+              login=0;
+            if(login==1)
+              login=-2;
           }
         }
 
@@ -369,7 +378,9 @@ function redirection()            //The main controller function which defines t
             }
         }
         if($("#breadcrumbs")[0].innerHTML=="")
+        {
           evaluate_breadcrumbs();
+        }
     }
 }
 
@@ -547,10 +558,10 @@ function change_page(number)
 
 function open_notice(id)
 {
-  if(main_mode!="content")
+ // if(main_mode!="content")
     prev_content_url = location.hash;
-  if(prev_content_url=="#notices")
-    prev_content_url = '#notices/display/new/All/All/1';
+ // if(prev_content_url=="#notices")
+  //  prev_content_url = '#notices/display/new/All/All/1';
   location.hash = '#notices/content/' + id;
 }
 
@@ -613,10 +624,11 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
             else if(d.getTime() == Date.parse("yesterday").getTime())
               context["notice_date"] = "Yesterday";
             else if(d.getYear() == Date.parse("today").getYear())
-              context["notice_date"] = d.toString('dd MMM');
+              context["notice_date"] = d.toString('MMM dd');
             else
-              context["notice_date"] = d.toString('dd MMM yyyy');
+              context["notice_date"] = d.toString('MMM dd, yyyy');
 
+            context["notice_time"] = moment(context.notice.datetime_modified).format('h:mm a');
             if(star_perm==1)
               context["anonymous"] = 0;
             else
@@ -1248,7 +1260,6 @@ function breadcrumb_clicked(tag_type)
   //console.log(tag_type);
   if(main_mode=="content")
   {
-    //console.log("abcasd");
     temp_arr = prev_content_url.split("/");
     main_mod=temp_arr[1];
     sub_mod=temp_arr[2];
@@ -1275,8 +1286,6 @@ function breadcrumb_clicked(tag_type)
 
 function prev_next_clicked(state)                                         //Previous or next buttons clicked in content mode
 {
-  //console.log("prev_next_clicked entered : " + state);
-  //console.log("prev_content_url_begin" + prev_content_url);
   url_split = prev_content_url.split('/');
   leng = url_split.length;
   prev_page_no = url_split[leng-1];
@@ -1284,17 +1293,13 @@ function prev_next_clicked(state)                                         //Prev
   id = location.hash.split('/')[2];
   len = store_to_use.length;
   var i=0;
-//  //console.log("bazooka" + state);
 
   if(prev_mode=="display")                  //Since temp_store is currently the only one managed in bundles, so different analysis than upload_array
   {
     for(i; i<len; i++)
     {
-//      //console.log(i);
-//      //console.log(id);
       if(store_to_use[i].id==id)
       {
-//      //console.log(id);
           if(state===-1)
           {
             cur_page_no = Math.floor(i/10) + 1;
@@ -1304,8 +1309,6 @@ function prev_next_clicked(state)                                         //Prev
             cur_page_no = Math.floor((i-1)/10) + 1;
           else
             cur_page_no = Math.floor((i+1)/10) + 1;
-//  //console.log("exception" + cur_page_no);
-//      //console.log(i + "state : " + state + " page_no : " + cur_page_no );
           if(state===0 && store_to_use[i-1]!=undefined)
             location.hash = '#notices/content/' + store_to_use[i-1].id;
           else if(state===1 && store_to_use[i+1]!=undefined)
@@ -1321,7 +1324,6 @@ function prev_next_clicked(state)                                         //Prev
     }
     url_split[leng-1] = cur_page_no;
     prev_content_url = url_split.join().replace(/,/g, '/');
-//      //console.log(prev_content_url + "prev_content_url");
   }
   else
   {
