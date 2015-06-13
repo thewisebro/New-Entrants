@@ -50,7 +50,7 @@ def index(request):
     is_admin = True
   grades = []
   for course in courses:
-    code1 = course.course_details.course_code.split('-')[0][:2]
+    code1 = course.course_details.course_code.split('-')[0]
     code2 = ''
     if len(course.course_details.course_code.split('-'))==2:
       code2 = course.course_details.course_code.split('-')[1]
