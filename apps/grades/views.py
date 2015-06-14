@@ -65,9 +65,9 @@ def index(request):
     if obj:
       grades.append(obj[0].grade)
       try:
-        marks_scored = marks_scored + course.credits*int(GRADE_CHOICES[obj[0].grade])
-        sum_of_credits = sum_of_credits + course.credits
-        credits.append(course.credits)
+        marks_scored = marks_scored + course.course_details.credits*int(GRADE_CHOICES[obj[0].grade])
+        sum_of_credits = sum_of_credits + course.course_details.credits
+        credits.append(course.course_details.credits)
       except ValueError:
         credits.append(0)
         pass
