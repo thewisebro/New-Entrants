@@ -218,7 +218,6 @@ def placement_manager_view(request):
 
 
 #  data_to_send = [[str(x) for x in list(item)] for item in lst]
-
   data_to_send = []
 
   for item in lst:
@@ -227,8 +226,15 @@ def placement_manager_view(request):
          try:
             if isinstance(x , datetime.date):
                df = DateFormat(x)
-               dl = df.format(get_format('DATE_FORMAT'))
+               dl = df.format('d/m/Y')
                a.append(str(dl))
+            elif list(item).index(x)==8:
+               import ipdb; ipdb.set_trace()
+               x = x.split('-')
+               x = [int(i) for i in x]
+               date = datetime.date(x[0],x[1],x[2])
+               date = date.strftime('%d/%m/%Y')
+               a.append(date)
             else:
                a.append(str(x))
          except UnicodeEncodeError:
@@ -374,8 +380,13 @@ def company_coordinator_view(request):
          try:
             if isinstance(x , datetime.date):
                df = DateFormat(x)
-               dl = df.format(get_format('DATE_FORMAT'))
+               dl = df.format('d/m/Y')
                a.append(str(dl))
+            elif list(item).index(x)==8:
+               x = x.split('-')
+               date = datetime.date(x[0],x[1],x[2])
+               date = date.strftime('%d/%m/%Y')
+               a.append(date)
             else:
                a.append(str(x))
          except UnicodeEncodeError:
