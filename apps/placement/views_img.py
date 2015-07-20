@@ -229,7 +229,6 @@ def placement_manager_view(request):
                dl = df.format('d/m/Y')
                a.append(str(dl))
             elif list(item).index(x)==8:
-               import ipdb; ipdb.set_trace()
                x = x.split('-')
                x = [int(i) for i in x]
                date = datetime.date(x[0],x[1],x[2])
@@ -382,9 +381,9 @@ def company_coordinator_view(request):
                df = DateFormat(x)
                dl = df.format('d/m/Y')
                a.append(str(dl))
-            elif list(item).index(x)==8:
+            elif list(item).index(x)==7:
                x = x.split('-')
-               date = datetime.date(x[0],x[1],x[2])
+               date = datetime.date(int(x[0]),int(x[1]),int(x[2]))
                date = date.strftime('%d/%m/%Y')
                a.append(date)
             else:
