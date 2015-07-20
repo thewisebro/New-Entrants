@@ -42,6 +42,7 @@ actual_urlpatterns = patterns('',
   url(r'^yaadein_api/', include('yaadein.urls')),
   url(r'^grades/', include('grades.urls')),
   url(r'^genforms/', include('genforms.urls')),
+  url(r'^app_form/', include('application_form.urls')),
 )
 
 urlpatterns = patterns('',

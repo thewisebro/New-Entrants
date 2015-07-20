@@ -281,6 +281,7 @@ CHANNELI_APPS = (
   'mcm',
   'phpapps',
   'genforms',
+  'application_form',
   'grades',
 )
 
