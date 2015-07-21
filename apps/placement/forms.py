@@ -212,7 +212,17 @@ class AddCompanyInfoForm(forms.ModelForm):
     model = models.CompanyContactInfo
 
 class CommentsForm(forms.ModelForm):
+  class ContactPersonModelChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+      return obj.name+'; '+obj.designation
 
+  def __init__(self, *args, **kwargs):
+    company_contact = kwargs.pop('company_contact')
+    super(CommentsForm, self).__init__(*args, **kwargs)
+    if company_contact:
+      self.fields['contact_person'].queryset = models.ContactPerson.objects.filter(company_contact = company_contact).order_by('is_primary')
+
+  contact_person = ContactPersonModelChoiceField(queryset=models.ContactPerson.objects.none() ,required =True, empty_label=None)
   class Meta:
     model = models.CompanyContactComments
     exclude = {'date_created', 'campus_contact'}

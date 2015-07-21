@@ -111,7 +111,8 @@
               <th>Comments</th>
               <th>When to Contact</th>
               <th>No. of Contact Persons</th>
-              <th>Edit</th>
+              <th>Edit Comments</th>
+              <th>Edit Company</th>
               <th>Remove</th>
             </tr>
           </thead>
@@ -154,13 +155,18 @@
                                  $('td:eq(1)', nRow).html("<a href='/placement/contact_manager/details/{0}'>{1}</a>".format(aData[0],aData[1]));
                                  $('td:eq(13)', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
-                                                              <a href='/placement/contact_manager/edit/{0}/'>\
+                                                              <a href='/placement/contact_manager/edit/comments/{0}/'>\
                                                               <span class='icon icon-pencil' id='edit'></span></a>\
                                                               </div>".format(aData[13]));
-                                 $('td:eq(14)', nRow).html("  <div class='glyph'>\
+                                 $('td:eq(14)', nRow).html( " <div class='glyphs'>\
+                                                              <div class='glyph'>\
+                                                              <a href='/placement/contact_manager/edit/{0}/'>\
+                                                              <span class='icon icon-pencil' id='edit'></span></a>\
+                                                              </div>".format(aData[14]));
+                                 $('td:eq(15)', nRow).html("  <div class='glyph'>\
                                                               <a><span class='icon icon-remove' id='remove' style='cursor:pointer;' onclick='confirmfn({0})'></span></a>\
                                                               </div>\
-                                                              </div>".format(aData[14]));
+                                                              </div>".format(aData[15]));
                            }
                           }
                         }).columnFilter();

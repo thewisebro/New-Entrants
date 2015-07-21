@@ -290,6 +290,7 @@ def placement_manager_view(request):
     values.append(ContactPerson.objects.filter(company_contact=company_inst).count())
     values.append(company_inst.id)
     values.append(company_inst.id)
+    values.append(company_inst.id)
     lst.append(values[:])
 
   data_to_send = []
@@ -319,23 +320,17 @@ def placement_manager_view(request):
 def company_coordinator_view(request):
 #TODO: Edit Company Remaining
 #TODO: Add Company to render
-
   user =  request.user
   if user.groups.filter(name='Company Coordinator'):
     student = user.student
-    campus_contacts = CampusContact.objects.filter(student = student)
+    campus_contacts = CampusContact.objects.filter(student = student).order_by('contact_person__company_contact','-contact_person__is_primary')
   elif user.groups.filter(name='Placement Manager'):
     messages.error(request, "Redirected to contact manager")
     return HttpResponseRedirect(reverse('placement.views_img.placement_manager_views'))
-  try:
-    contactPersons_lst = CampusContact.objects.get(student=student, is_primary=True).values('contact_person')
-  except:
-    contactPersons_lst = CampusContact.objects.filter(student=student).values('contact_person')
-  companies_ids = CampusContact.objects.filter(student = student).values_list('contact_person__company_contact')
-  companies = CompanyContactInfo.objects.filter(id__in = companies_ids)
   lst = []
-  for company_inst in companies:
-    contactPerson = ContactPerson.objects.get(company_contact=company_inst, id__in=contactPersons_lst)
+  for campus_contact in campus_contacts:
+    contactPerson = campus_contact.contact_person
+    company_inst = contactPerson.company_contact
     values = []
     values.append(company_inst.name)
     values.append(company_inst.cluster)
@@ -344,19 +339,18 @@ def company_coordinator_view(request):
     values.append(contactPerson.phone_no)
     values.append(contactPerson.email)
     values.append(company_inst.status)
-    values.append(contactPerson.campuscontact.last_contact)
-    values.append(contactPerson.campuscontact.student.user.name)
-    comment = CompanyContactComments.objects.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
+    values.append(campus_contact.last_contact)
+    values.append(campus_contact.student.user.name)
+    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact).order_by('-date_created')
     if comment:
       comment=comment[0].comment
     else:
       comment="None"
     values.append(comment)
-    values.append(contactPerson.campuscontact.when_to_contact)
-    values.append(ContactPerson.objects.filter(company_contact=company_inst).count())
+    values.append(campus_contact.when_to_contact)
     values.append(company_inst.id)
     values.append(company_inst.id)
-    values.append(company_inst.id)
+    values.append(campus_contact.id)
     lst.append(values[:])
 
   data_to_send = []
@@ -436,12 +430,20 @@ def company_coordinator_today_view(request):
         }, context_instance = RequestContext(request))
 
 @login_required
-@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists(), login_url=login_url)
+@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator','Placement Manager']).exists(), login_url=login_url)
 def add_company_manual(request):
 #TODO: Throw error when Atleast one contact person is not defiend
 #TODO: Throw error when contact person is defined but campus contact is not
-  contactpersonformset = formset_factory(ContactPersonForm, extra=2, can_delete=True)
-  formset = contactpersonformset()
+#TODO_Before production: Add first contact as Primary Contact if none defined
+  import ipdb; ipdb.set_trace()
+
+  a = request.user.groups.filter(name='Placement Manager')
+  if not a:
+    contactpersonformset = formset_factory(ContactPersonForm, extra=1, can_delete=True)
+    formset = contactpersonformset(initial=[{'student':request.user}])
+  else:
+    contactpersonformset = formset_factory(ContactPersonForm, extra=2, can_delete=True)
+    formset = contactpersonformset()
   companyform = AddCompanyInfoForm()
   if request.method == "POST":
     companyform = AddCompanyInfoForm(request.POST)
@@ -462,7 +464,10 @@ def add_company_manual(request):
           contactperson.is_primary = instance.cleaned_data['is_primary']
           contactPersons.append(contactperson)
           campuscontact.contact_person = contactperson
-          campuscontact.student = instance.cleaned_data['student'].student
+          if not a:
+            campuscontact.student = request.user.student
+          else:
+            campuscontact.student = instance.cleaned_data['student'].student
           campuscontact.when_to_contact = instance.cleaned_data['when_to_contact']
           campuscontact.last_contact = instance.cleaned_data['last_contact']
           campusContacts.append(campuscontact)
@@ -474,15 +479,20 @@ def add_company_manual(request):
           return HttpResponseRedirect(reverse('placement.views_img.add_company_manual'))
         elif contactPerson.is_primary and not is_primary_add:
           is_primary_add = True
-
+      if not is_primary_add:
+        messages.error(request, "Please select at least one primary contact")
+        return HttpResponseRedirect(reverse('placement.views_img.add_company_manual'))
       # Everything is good. Commit all contact persons and campus contacts
       company.save()
-      for contactPerson in contactPersons:
-        contactPerson.save()
-      for campuscontact in campusContacts:
-        campuscontact.save()
+      for i in range(len(contactPersons)):
+        contactPersons[i].company_contact = company
+        contactPersons[i].save()
+        campusContacts[i].contact_person = contactPersons[i]
+        campusContacts[i].save()
 
-      messages.success(request, 'Contact Person successfully added')
+      messages.success(request, 'Company successfully added')
+      if not a:
+        return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
       return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
 
   return render_to_response('placement/plcmgr_manual.html',{
@@ -496,8 +506,13 @@ def edit_company_manual(request, company_id):
   if request.user.groups.filter(name='Company Coordinator') and (not CampusContact.objects.filter(student=request.user.student, contact_person__company_contact__id=company_id)):
     messages.error(request, "You don't have permission to edit this company")
     return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
-  contactpersonformset = formset_factory(ContactPersonForm, extra=2, can_delete=True)
-  formset = contactpersonformset()
+  a = request.user.groups.filter(name='Placement Manager')
+  if not a:
+    contactpersonformset = formset_factory(ContactPersonForm, extra=1, can_delete=True)
+    formset = contactpersonformset(initial=[{'student':request.user},{'student':request.user},])
+  else:
+    contactpersonformset = formset_factory(ContactPersonForm, extra=2, can_delete=True)
+    formset = contactpersonformset()
   companyform = AddCompanyInfoForm()
   #Add functions definition to edit
   contactpersonformset = formset_factory(ContactPersonForm, extra=1, can_delete=True)
@@ -534,20 +549,27 @@ def edit_company_manual(request, company_id):
           contactperson.designation = instance.cleaned_data['designation']
           contactperson.phone_no = instance.cleaned_data['phone_no']
           contactperson.email = instance.cleaned_data['email']
-          contactperson.company_contact = company
+          contactperson.company_contact_id = company.id
           if not company.contactperson_set.filter(is_primary=True):
             contactperson.is_primary = instance.cleaned_data['is_primary']
           else:
             contactperson.is_primary = False
           contactperson.save()
           campuscontact.contact_person = contactperson
-          campuscontact.student = instance.cleaned_data['student'].student
+          if not a:
+            campuscontact.student = instance.cleaned_data['student'].student
+          else:
+            campuscontact.student = request.user.student
+
           campuscontact.when_to_contact = instance.cleaned_data['when_to_contact']
           campuscontact.last_contact = instance.cleaned_data['last_contact']
           campuscontact.save()
-      messages.success(request, 'Contact Person successfully added')
+      messages.success(request, 'Contact Person successfully updated')
 #      return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))
-      return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+      if not request.user.groups.filter(name='Placement Manager').exists():
+        return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
+      else:
+        return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
 
   return render_to_response('placement/plcmgr_manual.html',{
       'companyform' : companyform,
@@ -616,7 +638,7 @@ def assign_campus_contact(request):
         return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
       try:
         for assign in assigns:
-          company = Company.objects.get(id=assign)
+          company = CompanyContactInfo.objects.get(id=assign)
           campus_contact_list = CampusContact.objects.filter(contact_person__company_contact=company)
           for campus_contact in campus_contact_list:
             campus_contact.student = company_coordinator.student
@@ -655,23 +677,64 @@ def contactmanager_delete(request, company_id):
   return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
 
 @login_required
-@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator']).exists() , login_url=login_url)
-def edit_comments(request, campus_contact_id):
-#TODO: Add edit form only for coordinator and just save the companycomment object
-  student = request.user.student
-  comments = CompanyContactComments.objects.filter(campus_contact__id=campus_contact_id).order_by('-date_created')
+@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists() , login_url=login_url)
+def campuscontact_delete(request, campuscontact_id):
+  try:
+    campus_contact = CampusContact.objects.get(id=campuscontact_id)
+    if not request.user.groups.filter(name='Placement Manager'):
+      if campus_contact.student != request.user.student:
+        messages.error(request, 'You are not allowed to delete campus contact that you are not assigned. Contact Placement Manager for access')
+        return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
+
+  except ObjectDoesNotExist:
+    messages.error(request, 'The contact has already been deleted')
+    if not request.user.groups.filter(name="Placement Manager"):
+      return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
+    return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+
+  if campus_contact.contact_person.is_primary:
+    if len(ContactPerson.objects.filter(company_contact = campus_contact.contact_person.company_contact))==1:
+      return contactmanager_delete(request, campus_contact.contact_person.compan_contact.id)
+    else:
+      messages.error(request, 'Can not delete primary contact.')
+  else:
+    contactperson = campus_contact.contact_person
+    campus_contact.delete()
+    contactperson.delete()
+    messages.success(request, 'Contact successfully deleted')
+  if not request.user.groups.filter(name="Placement Manager"):
+    return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
+  return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager','Company Coordinator']).exists() , login_url=login_url)
+def edit_comments(request, company_id):
+#TODO: Edit comments for company coordinators as well as placement managers. Don't know how to map comments to Placement Manager
+  user = request.user
+  company_contact = CompanyContactInfo.objects.get(id=company_id)
+  a = user.groups.filter(name=['Placement Manager']).exists()
+  if not a:
+    campus_contact_lst = CampusContact.objects.filter(student=user.student, contact_person__company_contact=company_contact).order_by('contact_person__is_primary')
+  else:
+    campus_contact_lst = CampusContact.objects.filter(contact_person__company_contact = company_contact).order_by('contact_person__is_primary')
+
+  comments = CompanyContactComments.objects.filter(campus_contact__in = campus_contact_lst).order_by('-date_created')
+
   if request.POST:
-    form = CommentsForm(request.POST)
-    comment_inst = form.save(commit=False)
-    comment_inst.campus_contact = CampusContact.objects.get(id=campus_contact_id)
-    comment_inst.save()
+    form = CommentsForm(request.POST, company_contact=company_contact)
+    if not a:
+      comment_inst = form.save(commit=False)
+      comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']), student=user.student)
+      comment_inst.save()
 
   else:
-    form = CommentsForm()
+    form = CommentsForm(company_contact=company_contact)
 
   return render_to_response('placement/edit_comments.html',{
       'form': form,
+      'company':company_contact,
       'comments': comments,
+      'campus_contacts':campus_contact_lst,
       }, context_instance = RequestContext(request))
 
 @login_required
