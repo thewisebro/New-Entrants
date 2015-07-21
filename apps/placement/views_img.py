@@ -435,7 +435,6 @@ def add_company_manual(request):
 #TODO: Throw error when Atleast one contact person is not defiend
 #TODO: Throw error when contact person is defined but campus contact is not
 #TODO_Before production: Add first contact as Primary Contact if none defined
-  import ipdb; ipdb.set_trace()
 
   a = request.user.groups.filter(name='Placement Manager')
   if not a:
