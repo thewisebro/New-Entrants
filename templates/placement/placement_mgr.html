@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" type="text/css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/base.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/input_styles.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/dataTables.bootstrap.css" type="text/css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/jquery.dataTables.css" type="text/css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/custom.css">
 {% endblock %}
 {% block body %}
 <div class="content">
@@ -83,9 +84,7 @@
             <td class="col-md-6">
               <div class="right-div">
                 <h4>
-                 <a href="{% url 'placement.views_img.add_company_manual' %}"
-                    target="_blank">Enter
-                    company manually</a>
+                  <a onclick=open_frame('Edit&nbsp;Company','{% url 'placement.views_img.add_company_manual' %}',800)>Enter company manually</a>
                 </h4>
               </div>
             </td>
@@ -146,29 +145,28 @@
 
     $(document).ready( function() {
         var dataset ={{ contactperson_data|safe }};
-        $('#company').DataTable( {
+        $('#company').DataTable({
                           "data": dataset,
                           stateSave: true,
                           "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-                           {
                                  $('td:eq(0)', nRow).html("<input type='checkbox' class='largerCheckbox' name='assigns' value='{0}'/>".format(aData[0]));
-                                 $('td:eq(1)', nRow).html("<a href='/placement/contact_manager/details/{0}'>{1}</a>".format(aData[0],aData[1]));
+                                 $('td:eq(1)', nRow).html("<a onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800)>{1}</a>".format(aData[0],aData[1]));
+                                 $('td:eq(10)', nRow).html("<a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800)>{1}</a>".format(aData[0],aData[10]));
                                  $('td:eq(13)', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
-                                                              <a href='/placement/contact_manager/edit/comments/{0}/'>\
+                                                              <a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800)>\
                                                               <span class='icon icon-pencil' id='edit'></span></a>\
                                                               </div>".format(aData[13]));
                                  $('td:eq(14)', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
-                                                              <a href='/placement/contact_manager/edit/{0}/'>\
+                                                              <a onclick=open_frame('Edit&nbsp;Company','/placement/contact_manager/edit/{0}/',800)>\
                                                               <span class='icon icon-pencil' id='edit'></span></a>\
                                                               </div>".format(aData[14]));
                                  $('td:eq(15)', nRow).html("  <div class='glyph'>\
                                                               <a><span class='icon icon-remove' id='remove' style='cursor:pointer;' onclick='confirmfn({0})'></span></a>\
                                                               </div>\
                                                               </div>".format(aData[15]));
-                           }
-                          }
+                          },
                         }).columnFilter();
        });
 </script>
@@ -176,6 +174,88 @@
 function confirmfn(id){
   var a = confirm("Are you sure?");
   if (a==true) {window.location="/placement/contact_manager/remove/{0}".format(id)}
+}
+</script>
+<script>
+function autoResize(obj){
+  var newheight;
+  var newwidth;
+  if(document.getElementById){
+    newheight=obj.contentWindow.document.body.scrollHeight;
+    newwidth=obj.contentWindow.document.body.scrollWidth;
+  }
+  obj.height=(newheight) + "px";
+  obj.width=(newwidth) + "px"; 
+}
+
+function resizeIframe(obj) {
+  obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+}
+
+function dialog_iframe(data){
+    var $dialog;
+    try {
+        $dialog = eval(data.name);
+    }catch(e){}
+
+    if(!$dialog){
+      var height,margin;
+      var related_window_height = $(window).height();
+      related_window_height -= (1-data.height/related_window_height)*150;
+      if(related_window_height > data.height){
+        height = data.height;
+        margin = (related_window_height-height)/2;
+      }
+      else{
+        margin = 50;
+        height = $(window).height()-2*margin;
+      }
+      $('body').append("<div id='"+data.name+"-div'></div>");
+      dialog_options = {
+        autoOpen: false,
+        dialogClass: 'dialog-class',
+        title: data.title,
+        position: ['center',margin],
+        width: data.width,
+        height: height,
+        draggable: false,
+        resizable: false,
+        sticky: true,
+        close: function(event, ui){
+          eval('delete '+data.name);
+          $('#'+data.name+'-div').remove();
+          },
+        open: function(event, ui){
+          $('#'+data.name+'-div').html(""+
+            "<iframe id='"+data.name+"-iframe' src='"+data.src+
+            "' width='100%' height='98%' frameborder=0 onload='javascript:autoResize(this);'></iframe>"
+          );
+        }
+      };
+      if('close' in data)
+        dialog_options.beforeClose = data.close;
+      $dialog = $('#'+data.name+'-div')
+                .html('<p>Loading...</p>')
+                .dialog(dialog_options);
+    }
+    $('.dialog-class').css({position:'fixed'});
+    $dialog.dialog('open');
+    eval(data.name+'=$dialog;');
+    current_dialog = $dialog;
+}
+
+function open_frame(company_name,url,width){
+  dialog_iframe({
+  name: 'company_details_dialog',
+  title: company_name,
+  width: width,
+  src: url
+  });
+}
+
+function close_dialog(dialog_name){
+  eval(dialog_name).dialog('close');
+    current_dialog = null;
 }
 </script>
 {% endblock %} {# Scripts #}

@@ -18,6 +18,7 @@ urlpatterns = patterns('placement.views',
   (r'^sample/resumes/$',login_required(TemplateView.as_view(template_name='placement/samples.html'))),
 # Forum urls
   (r'^forum/$', 'forum_post'),
+  (r'^close_dialog/(?P<dialog_name>\w+)/$', 'close_dialog'),
   (r'^forum/(?P<forum_type>(T|P))/$', 'forum'),
   (r'^forum/(?P<forum_type>(T|P))/(?P<page_no>\d+)/$', 'forum'),
 )
@@ -49,6 +50,7 @@ urlpatterns += patterns('placement.views_img',
                        (r'^contact_manager/assign','assign_campus_contact'),
                        (r'^contact_manager/add/$', 'add_company_coordinator'),
                        (r'^contact_manager/person_search/$', 'person_search'),
+                       (r'^contact_manager/company_search/$', 'company_search'),
  #                      (r'^contact_manager/generate_xls/$', 'generate_company_contact_xls'),
     )
 

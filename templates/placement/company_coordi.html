@@ -59,6 +59,7 @@
               <th>Person in Contact</th>
               <th>Comments</th>
               <th>When to contact</th>
+              <th>No. of Contact Persons</th>
               <th>Edit Comments</th>
               <th>Edit Company</th>
               <th>Remove Contact</th>
@@ -86,7 +87,7 @@
 
     $(document).ready( function() {
         var dataset ={{ contactperson_data|safe }};
-        var value = 11;
+        var value = 12;
         $('#company').DataTable( {
                           "data": dataset,
                           stateSave: true,
@@ -120,7 +121,7 @@
 <script>
 function confirmfn(id){
   var a = confirm("Are you sure?");
-  if (a==true){window.location='/placement/contact_manager/remove_campuscontact/{0}'.format(id)}
+  if (a==true){window.location='/placement/contact_manager/remove/{0}'.format(id)}
 }
 </script>
 </html>

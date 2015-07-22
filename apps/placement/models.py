@@ -380,7 +380,7 @@ class CompanyContactInfo(models.Model):
         Company info which links to a primary contact person, i.e, the HR or manager
         whom one should contact as a primary designated identity of that company.
     """
-    name = models.CharField(max_length=250, unique=True)
+    name = models.CharField(max_length=250, unique=True, help_text="Should be unique")
     cluster = models.IntegerField(choices=PC.CLUSTER_CHOICES, null=True, blank=True)
     status = models.CharField(max_length=40, choices=PC.STATUS_CHOICES, null=True, blank=True)
 

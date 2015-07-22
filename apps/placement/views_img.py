@@ -323,14 +323,28 @@ def company_coordinator_view(request):
   user =  request.user
   if user.groups.filter(name='Company Coordinator'):
     student = user.student
-    campus_contacts = CampusContact.objects.filter(student = student).order_by('contact_person__company_contact','-contact_person__is_primary')
+    campus_contacts = CampusContact.objects.filter(student = student, contact_person__is_primary=True).order_by('contact_person__company_contact','-contact_person__is_primary')
   elif user.groups.filter(name='Placement Manager'):
     messages.error(request, "Redirected to contact manager")
     return HttpResponseRedirect(reverse('placement.views_img.placement_manager_views'))
+  contact_persons = [cc.contact_person for cc in campus_contacts]
+  company = [cp.company_contact for cp in contact_persons]
+
   lst = []
-  for campus_contact in campus_contacts:
-    contactPerson = campus_contact.contact_person
-    company_inst = contactPerson.company_contact
+  for company_inst in company:
+    if ContactPerson.objects.filter(company_contact=company_inst):
+      contact_exist = True
+      try:
+        contactPerson = ContactPerson.objects.get(company_contact=company_inst, is_primary = True)
+      except:
+        contactPerson = ContactPerson.objects.filter(company_contact=company_inst).order_by('name')[0]
+    else:
+      contact_exist = False
+      contactPerson = ContactPerson()
+      contactPerson.name = "Not Defined"
+      contactPerson.designation = ""
+      contactPerson.phone_no = ""
+      contactPerson.email = ""
     values = []
     values.append(company_inst.name)
     values.append(company_inst.cluster)
@@ -339,18 +353,24 @@ def company_coordinator_view(request):
     values.append(contactPerson.phone_no)
     values.append(contactPerson.email)
     values.append(company_inst.status)
-    values.append(campus_contact.last_contact)
-    values.append(campus_contact.student.user.name)
-    comment = CompanyContactComments.objects.filter(campus_contact = campus_contact).order_by('-date_created')
-    if comment:
-      comment=comment[0].comment
+    if contact_exist:
+      values.append(contactPerson.campuscontact.last_contact)
+      values.append(contactPerson.campuscontact.student.user.name)
+      comment = CompanyContactComments.objects.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
+      if comment:
+        comment=comment[0].comment
+      else:
+        comment="None"
     else:
-      comment="None"
+      values.append("")
+      values.append("")
+      comment=""
     values.append(comment)
-    values.append(campus_contact.when_to_contact)
+    values.append(contactPerson.campuscontact.when_to_contact if contact_exist else "")
+    values.append(ContactPerson.objects.filter(company_contact=company_inst).count())
     values.append(company_inst.id)
     values.append(company_inst.id)
-    values.append(campus_contact.id)
+    values.append(company_inst.id)
     lst.append(values[:])
 
   data_to_send = []
@@ -490,9 +510,7 @@ def add_company_manual(request):
         campusContacts[i].save()
 
       messages.success(request, 'Company successfully added')
-      if not a:
-        return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
-      return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+      return HttpResponseRedirect(reverse('nucleus.views.close_dialog',kwargs={'dialog_name':'company_details_dialog'}))
 
   return render_to_response('placement/plcmgr_manual.html',{
       'companyform' : companyform,
@@ -565,12 +583,10 @@ def edit_company_manual(request, company_id):
           campuscontact.save()
       messages.success(request, 'Contact Person successfully updated')
 #      return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))
-      if not request.user.groups.filter(name='Placement Manager').exists():
-        return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
-      else:
-        return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+      return HttpResponseRedirect(reverse('nucleus.views.close_dialog',kwargs={'dialog_name':'company_details_dialog'}))
 
   return render_to_response('placement/plcmgr_manual.html',{
+      'edit_company_page': True,
       'companyform' : companyform,
       'contactpersonformset' : formset,
       }, context_instance = RequestContext(request))
@@ -615,6 +631,30 @@ def person_search(request):
         'value':str(student.user.name),
       }
     data = simplejson.dumps(map(person_dict,persons))
+  else:
+    data = 'fail'
+  return HttpResponse(data,'application/json')
+
+def company_search(request):
+  if request.is_ajax():
+    q = request.GET.get('term','')
+    print q
+    company = CompanyContactInfo.objects.filter(name__icontains = q).order_by('name')[:50]
+    if not company:
+      obj = [{
+        'id':'0',
+        'label':'Company Not available',
+        'value':q,
+      }]
+      data = simplejson.dumps(obj)
+      return HttpResponse(data,'application/json')
+    def company_dict(company):
+      return {
+        'id':str(company.id),
+        'label':str(company.name)+" ( "+str(company.contactperson_set.get(is_primary=True).campuscontact.student.name)+" )",
+        'value':str(company.name),
+      }
+    data = simplejson.dumps(map(company_dict,company))
   else:
     data = 'fail'
   return HttpResponse(data,'application/json')
@@ -713,9 +753,9 @@ def edit_comments(request, company_id):
   company_contact = CompanyContactInfo.objects.get(id=company_id)
   a = user.groups.filter(name=['Placement Manager']).exists()
   if not a:
-    campus_contact_lst = CampusContact.objects.filter(student=user.student, contact_person__company_contact=company_contact).order_by('contact_person__is_primary')
+    campus_contact_lst = CampusContact.objects.filter(student=user.student, contact_person__company_contact=company_contact).order_by('-contact_person__is_primary')
   else:
-    campus_contact_lst = CampusContact.objects.filter(contact_person__company_contact = company_contact).order_by('contact_person__is_primary')
+    campus_contact_lst = CampusContact.objects.filter(contact_person__company_contact = company_contact).order_by('-contact_person__is_primary')
 
   comments = CompanyContactComments.objects.filter(campus_contact__in = campus_contact_lst).order_by('-date_created')
 

@@ -82,6 +82,9 @@ def index(request):
     messages.error(request, 'Unknown error has occured. Please try again later. The issue has beeen reported.')
     return render_to_response('placement/error.html', context_instance=RequestContext(request))
 
+def close_dialog(request, dialog_name): 
+    return render(request, 'placement/close_dialog.html', {'dialog_name': dialog_name})
+
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
 def resume(request) :
