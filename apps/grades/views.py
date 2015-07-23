@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from grades.models import *
 from nucleus.models import Student
 from regol.models import RegisteredCourses
@@ -37,6 +37,7 @@ import xlrd
 #    return HttpResponse("Admin only!!")
 
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url='/',redirect_field_name=None)
 def index(request):
   student = request.user.student
   user = request.user
