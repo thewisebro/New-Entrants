@@ -463,10 +463,15 @@ def add_company_manual(request):
   a = request.user.groups.filter(name='Placement Manager')
   if not a:
     contactpersonformset = formset_factory(ContactPersonForm, extra=1, can_delete=True)
-    formset = contactpersonformset(initial=[{'student':request.user}])
+    formset = contactpersonformset(initial=[{'student':request.user} for x in contactpersonformset])
   else:
     contactpersonformset = formset_factory(ContactPersonForm, extra=2, can_delete=True)
     formset = contactpersonformset()
+
+  for form in formset:
+    if not a:
+      form.fields['student'].widget.attrs['disabled'] = True
+
   companyform = AddCompanyInfoForm()
   if request.method == "POST":
     companyform = AddCompanyInfoForm(request.POST)
@@ -545,46 +550,67 @@ def edit_company_manual(request, company_id):
        'designation': x.designation,
        'phone_no': x.phone_no,
        'email': x.email,
+       'contact_id': x.id,
        'is_primary': x.is_primary,
        'student': x.campuscontact.student,
        'last_contact': x.campuscontact.last_contact,
        'when_to_contact': x.campuscontact.when_to_contact,
       } for x in contact_persons])
+  for form in formset:
+    if not a:
+      form.fields['student'].widget.attrs['disabled'] = True
 
   if request.method == "POST":
+    import ipdb; ipdb.set_trace()
     companyform = AddCompanyInfoForm(request.POST, instance=company)
     formset = contactpersonformset(request.POST)
     if companyform.is_valid() and formset.is_valid():
       company = companyform.save()
-####      contactpersons = ContactPerson.objects.filter(company_contact=company)
-####      for contactperson in contactpersons:
-####        contactperson.campuscontact.delete()
-####        contactperson.delete()
-####      for instance in formset:
-####        if instance.cleaned_data:
-####          if instance.cleaned_data['DELETE']:
-####            continue
-####          contactperson = ContactPerson()
-####          campuscontact = CampusContact()
-####          contactperson.name = instance.cleaned_data['name']
-####          contactperson.designation = instance.cleaned_data['designation']
-####          contactperson.phone_no = instance.cleaned_data['phone_no']
-####          contactperson.email = instance.cleaned_data['email']
-####          contactperson.company_contact_id = company.id
-####          if not company.contactperson_set.filter(is_primary=True):
-####            contactperson.is_primary = instance.cleaned_data['is_primary']
-####          else:
-####            contactperson.is_primary = False
-####          contactperson.save()
-####          campuscontact.contact_person = contactperson
-####          if not a:
-####            campuscontact.student = instance.cleaned_data['student'].student
-####          else:
-####            campuscontact.student = request.user.student
-####
-####          campuscontact.when_to_contact = instance.cleaned_data['when_to_contact']
-####          campuscontact.last_contact = instance.cleaned_data['last_contact']
-####          campuscontact.save()
+      for instance in formset:
+        if 'contact_id' in instance.changed_data:
+          messages.error(request, 'Invalid Contact to change')
+          return HttpResponseRedirect(reverse('nucleus.views.close_dialog',kwargs={'dialog_name':'company_details_dialog'}))
+        if 'is_primary' in instance.changed_data:
+          is_primary_changed = True
+
+      if is_primary_changed:
+        is_primary_add = False
+        for instance in formset:
+          if instance.cleaned_data:
+            if is_primary_add and instance.cleaned_data['is_primary']:
+              messages.error(request, "Multiple primary contacts are added")
+              return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))
+            elif instance.cleaned_data['is_primary'] and not is_primary_add:
+              is_primary_add = True
+
+        if not is_primary_add:
+          messages.error(request, "Please select at least one primary contact")
+          return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))
+      # Everything is good. Commit all contact persons and campus contacts
+
+      for instance in formset:
+        if instance.cleaned_data:
+          contactperson = ContactPerson.objects.get(id = instance.cleaned_data['contact_id'])
+          campuscontact = contactperson.campuscontact
+          if instance.cleaned_data['DELETE']:
+            campuscontact.delete()
+            contactperson.delete()
+            continue
+          contactperson.name = instance.cleaned_data['name']
+          contactperson.designation = instance.cleaned_data['designation']
+          contactperson.phone_no = instance.cleaned_data['phone_no']
+          contactperson.email = instance.cleaned_data['email']
+          contactperson.company_contact_id = company.id
+          contactperson.is_primary = instance.cleaned_data['is_primary']
+          contactperson.save()
+          if not a:
+            campuscontact.student = instance.cleaned_data['student'].student
+          else:
+            campuscontact.student = request.user.student
+
+          campuscontact.when_to_contact = instance.cleaned_data['when_to_contact']
+          campuscontact.last_contact = instance.cleaned_data['last_contact']
+          campuscontact.save()
       messages.success(request, 'Contact Person successfully updated')
 #      return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))
       return HttpResponseRedirect(reverse('nucleus.views.close_dialog',kwargs={'dialog_name':'company_details_dialog'}))
