@@ -1,19 +1,20 @@
 <!DOCTYPE HTML>
+{% extends "placement/nucleus/base_old.html" %}
 {% load kwacros %}
-<html>
-  <head>
-    <title>
+{% block title %}
       Company Coordinator
-    </title>
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/jquery.dataTables.css" type="text/css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/dataTables.bootstrap.css" type="text/css">
+{% endblock %}
+{% block styles %}
     <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/base.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/input_styles.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/dataTables.bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/jquery.dataTables.css" type="text/css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
-    <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/placement/jquery.dataTables.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/placement/dataTables.bootstrap.js"></script>
-  </head>
-  <body>
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/custom.css">
+{% endblock %}
+{% block body %}
     <div class="content">
       <div class="header">
         <div class="tittle">
@@ -33,10 +34,10 @@
       </div>
       {% if not today %}
       <div class="right-div">
-                <h4>
-                   <a href="{% url 'placement.views_img.company_coordinator_today_view' %}"
-                    target="_blank">Contact(s) due today</a>
-                </h4>
+        <h4>
+          <a href="{% url 'placement.views_img.company_coordinator_today_view' %}"
+                   target="_blank">Contact(s) due today</a>
+        </h4>
       </div>
       <div class="right-div">
         <h4>
@@ -68,7 +69,8 @@
         </table>
       </div>
     </div>
-  </body>
+{% endblock %}
+{% block app_scripts %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/placement/jquery.dataTables.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/placement/dataTables.bootstrap.js"></script>
@@ -86,36 +88,35 @@
     }
 
     $(document).ready( function() {
-        var dataset ={{ contactperson_data|safe }};
         var value = 12;
         $('#company').DataTable( {
-                          "data": dataset,
-                          stateSave: true,
-                          "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-                           {
-                                 $('td:eq(0)', nRow).html("<a href='/placement/contact_manager/details/{0}'>{1}</a>".format(aData[13],aData[0]));
-                                 $('td:eq('+(value)+')', nRow).html( " <div class='glyphs'>\
-                                                              <div class='glyph'>\
-                                                              <a href='/placement/contact_manager/edit/comments/{0}/'>\
-                                                              <span class='icon icon-pencil'></span></a>\
-                                                              </div>\
-                                                              </div>".format(aData[value]));
-                                 $('td:eq('+(value+1)+')', nRow).html( " <div class='glyphs'>\
-                                                              <div class='glyph'>\
-                                                              <a href='/placement/contact_manager/edit/{0}/'>\
-                                                              <span class='icon icon-pencil'></span></a>\
-                                                              </div>\
-                                                              </div>".format(aData[value+1]));
-                                 $('td:eq('+(value+2)+')', nRow).html( " <div class='glyphs'>\
-                                                              <div class='glyph'>\
-                                                              <a>\
-                                                              <span id='remove' style='cursor:pointer;' onclick='confirmfn({0})' class='icon icon-remove'></span></a>\
-                                                              </div>\
-                                                              </div>".format(aData[value+2]));
- 
-                           }
-                          }
-                        });
+          "ajax": {
+            {% if today %}
+            "url":'/placement/company_coordinator/contactperson_data/today/',
+            {% else %}
+            "url":'/placement/company_coordinator/contactperson_data/',
+            {% endif %}
+           },
+           stateSave: true,
+           "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+              $('td:eq(0)', nRow).html("<a onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[14],aData[0]));
+              $('td:eq(9)', nRow).html("<a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>{1}</a>".format(aData[14],aData[9]));
+              $('td:eq(12)', nRow).html( " <div class='glyphs'>\
+                                           <div class='glyph'>\
+                                           <a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>\
+                                           <span class='icon icon-pencil' id='edit'></span></a>\
+                                           </div>".format(aData[12]));
+              $('td:eq(13)', nRow).html( " <div class='glyphs'>\
+                                           <div class='glyph'>\
+                                           <a onclick=open_frame('Edit&nbsp;Company','/placement/contact_manager/edit/{0}/',800,true)>\
+                                           <span class='icon icon-pencil' id='edit'></span></a>\
+                                           </div>".format(aData[13]));
+              $('td:eq(14)', nRow).html("  <div class='glyph'>\
+                                           <a><span class='icon icon-remove' id='remove' style='cursor:pointer;' onclick='confirmfn({0})'></span></a>\
+                                           </div>\
+                                           </div>".format(aData[14]));
+            },
+          }).columnFilter();
        });
 </script>
 <script>
@@ -124,4 +125,99 @@ function confirmfn(id){
   if (a==true){window.location='/placement/contact_manager/remove/{0}'.format(id)}
 }
 </script>
-</html>
+<script>
+function autoResize(obj){
+  var newheight;
+  var newwidth;
+  if(document.getElementById){
+    newheight=obj.contentWindow.document.body.scrollHeight;
+    newwidth=obj.contentWindow.document.body.scrollWidth;
+  }
+  obj.height=(newheight) + "px";
+  obj.width=(newwidth) + "px"; 
+}
+
+function resizeIframe(obj) {
+  obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+}
+
+function dialog_iframe(data){
+    var $dialog;
+    try {
+        $dialog = eval(data.name);
+    }catch(e){}
+
+    if(!$dialog){
+      var height,margin;
+      var related_window_height = $(window).height();
+      related_window_height -= (1-data.height/related_window_height)*150;
+      if(related_window_height > data.height){
+        height = data.height;
+        margin = (related_window_height-height)/2;
+      }
+      else{
+        margin = 50;
+        height = $(window).height()-2*margin;
+      }
+      $('body').append("<div id='"+data.name+"-div'></div>");
+      dialog_options = {
+        autoOpen: false,
+        dialogClass: 'dialog-class',
+        title: data.title,
+        position: ['center',margin],
+        width: data.width,
+        height: height,
+        draggable: false,
+        resizable: false,
+        sticky: true,
+        close: function(event, ui){
+          eval('delete '+data.name);
+          $('#'+data.name+'-div').remove();
+          },
+        open: function(event, ui){
+          $('#'+data.name+'-div').html(""+
+            "<iframe id='"+data.name+"-iframe' src='"+data.src+
+            "' width='100%' height='98%' frameborder=0 onload='javascript:autoResize(this);'></iframe>"
+          );
+        }
+      };
+      if('close' in data)
+        dialog_options.beforeClose = data.close;
+      $dialog = $('#'+data.name+'-div')
+                .html('<p>Loading...</p>')
+                .dialog(dialog_options);
+    }
+    $('.dialog-class').css({position:'fixed'});
+    $dialog.dialog('open');
+    eval(data.name+'=$dialog;');
+    current_dialog = $dialog;
+}
+
+function open_frame(company_name,url,width,refresh){
+  if(refresh){
+    dialog_iframe({
+    name: 'company_details_dialog',
+    title: company_name,
+    width: width,
+    src: url,
+    close: function(){
+      $('#company').DataTable().ajax.reload();
+      },
+    });
+  } else {
+    dialog_iframe({
+    name: 'company_details_dialog',
+    title: company_name,
+    width: width,
+    src: url,
+    });
+  }
+}
+
+function close_dialog(dialog_name){
+  eval(dialog_name).dialog('close');
+  $('#company').DataTable().ajax.reload();
+  current_dialog = null;
+}
+</script>
+{% endblock %} {# Scripts #}

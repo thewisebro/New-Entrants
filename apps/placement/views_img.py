@@ -316,22 +316,20 @@ def placement_manager_contact_person_data(request):
          except UnicodeEncodeError:
             a.append('')
       data_to_send.append(a)
-  print data_to_send
   data_to_send = {'data':data_to_send}
   return HttpResponse(simplejson.dumps(data_to_send),'application/json')
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
 def company_coordinator_view(request):
-#TODO: Edit Company Remaining
-#TODO: Add Company to render
+  return render_to_response('placement/company_coordi.html',context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name='Company Coordinator').exists(), login_url=login_url)
+def company_coordinator_contact_person_data(request):
   user =  request.user
-  if user.groups.filter(name='Company Coordinator'):
-    student = user.student
-    campus_contacts = CampusContact.objects.filter(student = student, contact_person__is_primary=True).order_by('contact_person__company_contact','-contact_person__is_primary')
-  elif user.groups.filter(name='Placement Manager'):
-    messages.error(request, "Redirected to contact manager")
-    return HttpResponseRedirect(reverse('placement.views_img.placement_manager_views'))
+  student = user.student
+  campus_contacts = CampusContact.objects.filter(student = student, contact_person__is_primary=True).order_by('contact_person__company_contact','-contact_person__is_primary')
   contact_persons = [cc.contact_person for cc in campus_contacts]
   company = [cp.company_contact for cp in contact_persons]
 
@@ -393,20 +391,21 @@ def company_coordinator_view(request):
          except UnicodeEncodeError:
             a.append('')
       data_to_send.append(a)
-
-  return render_to_response('placement/company_coordi.html',{
-          'contactperson_data': data_to_send
-        },context_instance = RequestContext(request))
+  data_to_send = {'data':data_to_send}
+  return HttpResponse(simplejson.dumps(data_to_send),'application/json')
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator']).exists() , login_url=login_url)
 def company_coordinator_today_view(request):
+  return render_to_response('placement/company_coordi.html',{
+        'today' : True,
+        }, context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator']).exists() , login_url=login_url)
+def company_coordinator_contact_person_data_today(request):
   user =  request.user
-  if user.groups.filter(name='Company Coordinator'):
-    student = user.student
-  elif user.groups.filter(name='Placement Manager'):
-    messages.error(request, "Redirected to contact manager")
-    return HttpResponseRedirect(reverse('placement.views_img.placement_manager_views'))
+  student = user.student
   campusContact_lst = CampusContact.objects.filter(student=student, when_to_contact__lte=datetime.datetime.today()).order_by('-contact_person__company_contact','-contact_person__is_primary')
   lst = []
   for campus_contact_inst in campusContact_lst:
@@ -448,11 +447,11 @@ def company_coordinator_today_view(request):
          except UnicodeEncodeError:
             a.append('')
       data_to_send.append(a)
+  data_to_send = {'data':data_to_send}
+  return HttpResponse(simplejson.dumps(data_to_send),'application/json')
 
-  return render_to_response('placement/company_coordi.html',{
-        'today' : True,
-        'contactperson_data' : data_to_send,
-        }, context_instance = RequestContext(request))
+
+
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator','Placement Manager']).exists(), login_url=login_url)
@@ -557,35 +556,35 @@ def edit_company_manual(request, company_id):
     formset = contactpersonformset(request.POST)
     if companyform.is_valid() and formset.is_valid():
       company = companyform.save()
-      contactpersons = ContactPerson.objects.filter(company_contact=company)
-      for contactperson in contactpersons:
-        contactperson.campuscontact.delete()
-        contactperson.delete()
-      for instance in formset:
-        if instance.cleaned_data:
-          if instance.cleaned_data['DELETE']:
-            continue
-          contactperson = ContactPerson()
-          campuscontact = CampusContact()
-          contactperson.name = instance.cleaned_data['name']
-          contactperson.designation = instance.cleaned_data['designation']
-          contactperson.phone_no = instance.cleaned_data['phone_no']
-          contactperson.email = instance.cleaned_data['email']
-          contactperson.company_contact_id = company.id
-          if not company.contactperson_set.filter(is_primary=True):
-            contactperson.is_primary = instance.cleaned_data['is_primary']
-          else:
-            contactperson.is_primary = False
-          contactperson.save()
-          campuscontact.contact_person = contactperson
-          if not a:
-            campuscontact.student = instance.cleaned_data['student'].student
-          else:
-            campuscontact.student = request.user.student
-
-          campuscontact.when_to_contact = instance.cleaned_data['when_to_contact']
-          campuscontact.last_contact = instance.cleaned_data['last_contact']
-          campuscontact.save()
+####      contactpersons = ContactPerson.objects.filter(company_contact=company)
+####      for contactperson in contactpersons:
+####        contactperson.campuscontact.delete()
+####        contactperson.delete()
+####      for instance in formset:
+####        if instance.cleaned_data:
+####          if instance.cleaned_data['DELETE']:
+####            continue
+####          contactperson = ContactPerson()
+####          campuscontact = CampusContact()
+####          contactperson.name = instance.cleaned_data['name']
+####          contactperson.designation = instance.cleaned_data['designation']
+####          contactperson.phone_no = instance.cleaned_data['phone_no']
+####          contactperson.email = instance.cleaned_data['email']
+####          contactperson.company_contact_id = company.id
+####          if not company.contactperson_set.filter(is_primary=True):
+####            contactperson.is_primary = instance.cleaned_data['is_primary']
+####          else:
+####            contactperson.is_primary = False
+####          contactperson.save()
+####          campuscontact.contact_person = contactperson
+####          if not a:
+####            campuscontact.student = instance.cleaned_data['student'].student
+####          else:
+####            campuscontact.student = request.user.student
+####
+####          campuscontact.when_to_contact = instance.cleaned_data['when_to_contact']
+####          campuscontact.last_contact = instance.cleaned_data['last_contact']
+####          campuscontact.save()
       messages.success(request, 'Contact Person successfully updated')
 #      return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))
       return HttpResponseRedirect(reverse('nucleus.views.close_dialog',kwargs={'dialog_name':'company_details_dialog'}))
