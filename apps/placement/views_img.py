@@ -248,6 +248,14 @@ def placement_manager_view(request):
 #
   else:
     form=ExcelForm()
+  return render_to_response('placement/placement_mgr.html',{
+          'excel_form' : form,
+          'assign_form' : assign_form,
+        },context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
+def placement_manager_contact_person_data(request):
   company = CompanyContactInfo.objects.all()
   lst = []
   for company_inst in company:
@@ -308,12 +316,9 @@ def placement_manager_view(request):
          except UnicodeEncodeError:
             a.append('')
       data_to_send.append(a)
-
-  return render_to_response('placement/placement_mgr.html',{
-          'excel_form' : form,
-          'assign_form' : assign_form,
-          'contactperson_data': data_to_send
-        },context_instance = RequestContext(request))
+  print data_to_send
+  data_to_send = {'data':data_to_send}
+  return HttpResponse(simplejson.dumps(data_to_send),'application/json')
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)

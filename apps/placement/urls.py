@@ -18,7 +18,6 @@ urlpatterns = patterns('placement.views',
   (r'^sample/resumes/$',login_required(TemplateView.as_view(template_name='placement/samples.html'))),
 # Forum urls
   (r'^forum/$', 'forum_post'),
-  (r'^close_dialog/(?P<dialog_name>\w+)/$', 'close_dialog'),
   (r'^forum/(?P<forum_type>(T|P))/$', 'forum'),
   (r'^forum/(?P<forum_type>(T|P))/(?P<page_no>\d+)/$', 'forum'),
 )
@@ -39,6 +38,7 @@ urlpatterns += patterns('placement.views_img',
                        (r'^generate/(?P<company_id>\d+)/$','generate_missing_resumes'), #No link available; do it directly in emergency
                        (r'^registration/$','generate_registration_no'),
                        (r'^contact_manager/$','placement_manager_view'),
+                       (r'^contact_manager/contactperson_data/$','placement_manager_contact_person_data'),
                        (r'^company_coordinator/$', 'company_coordinator_view'), #TODO
                        (r'^company_coordinator/today/$', 'company_coordinator_today_view'), #TODO
                        (r'^contactmanager_manual/$','add_company_manual'),

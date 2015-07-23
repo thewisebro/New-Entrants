@@ -144,22 +144,25 @@
     }
 
     $(document).ready( function() {
-        var dataset ={{ contactperson_data|safe }};
+//        var dataset ={{ contactperson_data|safe }};
         $('#company').DataTable({
-                          "data": dataset,
+//                          "data": dataset,
+                          "ajax": {
+                            "url":'/placement/contact_manager/contactperson_data/',
+                          },
                           stateSave: true,
                           "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
                                  $('td:eq(0)', nRow).html("<input type='checkbox' class='largerCheckbox' name='assigns' value='{0}'/>".format(aData[0]));
-                                 $('td:eq(1)', nRow).html("<a onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800)>{1}</a>".format(aData[0],aData[1]));
-                                 $('td:eq(10)', nRow).html("<a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800)>{1}</a>".format(aData[0],aData[10]));
+                                 $('td:eq(1)', nRow).html("<a onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[0],aData[1]));
+                                 $('td:eq(10)', nRow).html("<a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>{1}</a>".format(aData[0],aData[10]));
                                  $('td:eq(13)', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
-                                                              <a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800)>\
+                                                              <a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>\
                                                               <span class='icon icon-pencil' id='edit'></span></a>\
                                                               </div>".format(aData[13]));
                                  $('td:eq(14)', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
-                                                              <a onclick=open_frame('Edit&nbsp;Company','/placement/contact_manager/edit/{0}/',800)>\
+                                                              <a onclick=open_frame('Edit&nbsp;Company','/placement/contact_manager/edit/{0}/',800,true)>\
                                                               <span class='icon icon-pencil' id='edit'></span></a>\
                                                               </div>".format(aData[14]));
                                  $('td:eq(15)', nRow).html("  <div class='glyph'>\
@@ -244,18 +247,31 @@ function dialog_iframe(data){
     current_dialog = $dialog;
 }
 
-function open_frame(company_name,url,width){
-  dialog_iframe({
-  name: 'company_details_dialog',
-  title: company_name,
-  width: width,
-  src: url
-  });
+function open_frame(company_name,url,width,refresh){
+  if(refresh){
+    dialog_iframe({
+    name: 'company_details_dialog',
+    title: company_name,
+    width: width,
+    src: url,
+    close: function(){
+      $('#company').DataTable().ajax.reload();
+      },
+    });
+  } else {
+    dialog_iframe({
+    name: 'company_details_dialog',
+    title: company_name,
+    width: width,
+    src: url,
+    });
+  }
 }
 
 function close_dialog(dialog_name){
   eval(dialog_name).dialog('close');
-    current_dialog = null;
+  $('#company').DataTable().ajax.reload();
+  current_dialog = null;
 }
 </script>
 {% endblock %} {# Scripts #}
