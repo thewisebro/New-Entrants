@@ -152,7 +152,7 @@
                           "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
                                  $('td:eq(0)', nRow).html("<input type='checkbox' class='largerCheckbox' name='assigns' value='{0}'/>".format(aData[0]));
                                  $('td:eq(1)', nRow).html("<a onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[0],aData[1]));
-                                 $('td:eq(10)', nRow).html("<a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>{1}</a>".format(aData[0],aData[10]));
+                                 $('td:eq(10)', nRow).html("<a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)><span>{1}</span></a>".format(aData[0],aData[10]));
                                  $('td:eq(13)', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
                                                               <a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>\
