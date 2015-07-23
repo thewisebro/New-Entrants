@@ -309,7 +309,7 @@ def placement_manager_contact_person_data(request):
          try:
             if isinstance(x , datetime.date):
                df = DateFormat(x)
-               dl = df.format(get_format('DATE_FORMAT'))
+               dl = df.format('d/m/Y')
                a.append(str(dl))
             else:
                a.append(str(x))
@@ -384,7 +384,7 @@ def company_coordinator_contact_person_data(request):
          try:
             if isinstance(x , datetime.date):
                df = DateFormat(x)
-               dl = df.format(get_format('DATE_FORMAT'))
+               dl = df.format('d/m/Y')
                a.append(str(dl))
             else:
                a.append(str(x))
@@ -440,7 +440,7 @@ def company_coordinator_contact_person_data_today(request):
          try:
             if isinstance(x , datetime.date):
                df = DateFormat(x)
-               dl = df.format(get_format('DATE_FORMAT'))
+               dl = df.format('d/m/Y')
                a.append(str(dl))
             else:
                a.append(str(x))
@@ -468,8 +468,8 @@ def add_company_manual(request):
     contactpersonformset = formset_factory(ContactPersonForm, extra=2, can_delete=True)
     formset = contactpersonformset()
 
-  for form in formset:
-    if not a:
+  if not a:
+    for form in formset:
       form.fields['student'].widget.attrs['disabled'] = True
 
   companyform = AddCompanyInfoForm()
@@ -495,8 +495,7 @@ def add_company_manual(request):
           if not a:
             campuscontact.student = request.user.student
           else:
-            campuscontact.student = instance.cleaned_data['student'].student
-          campuscontact.when_to_contact = instance.cleaned_data['when_to_contact']
+            campuscontact.student = instance.cleaned_data['student']
           campuscontact.last_contact = instance.cleaned_data['last_contact']
           campusContacts.append(campuscontact)
       ## To check whether multiple primary added or not
@@ -556,12 +555,11 @@ def edit_company_manual(request, company_id):
        'last_contact': x.campuscontact.last_contact,
        'when_to_contact': x.campuscontact.when_to_contact,
       } for x in contact_persons])
-  for form in formset:
-    if not a:
+  if not a:
+    for form in formset:
       form.fields['student'].widget.attrs['disabled'] = True
 
   if request.method == "POST":
-    import ipdb; ipdb.set_trace()
     companyform = AddCompanyInfoForm(request.POST, instance=company)
     formset = contactpersonformset(request.POST)
     if companyform.is_valid() and formset.is_valid():
@@ -590,8 +588,12 @@ def edit_company_manual(request, company_id):
 
       for instance in formset:
         if instance.cleaned_data:
-          contactperson = ContactPerson.objects.get(id = instance.cleaned_data['contact_id'])
-          campuscontact = contactperson.campuscontact
+          try:
+            contactperson = ContactPerson.objects.get(id = instance.cleaned_data['contact_id'])
+            campuscontact = contactperson.campuscontact
+          except:
+            contactperson = ContactPerson()
+            campuscontact = CampusContact()
           if instance.cleaned_data['DELETE']:
             campuscontact.delete()
             contactperson.delete()
@@ -600,9 +602,10 @@ def edit_company_manual(request, company_id):
           contactperson.designation = instance.cleaned_data['designation']
           contactperson.phone_no = instance.cleaned_data['phone_no']
           contactperson.email = instance.cleaned_data['email']
-          contactperson.company_contact_id = company.id
+          contactperson.company_contact = company
           contactperson.is_primary = instance.cleaned_data['is_primary']
           contactperson.save()
+          campuscontact.contact_person = contactperson
           if not a:
             campuscontact.student = instance.cleaned_data['student'].student
           else:
@@ -814,8 +817,8 @@ def company_details(request, company_id):
   except ObjectDoesNotExist:
     messages.error(request, 'Company is either removed or invalid')
     if request.user.groups.filter(name='Company Coordinator'):
-      return HttpRequestRedirect(reverse('placement.views_img.company_coordinator_view'))
-    return HttpRequestRedirect(reverse('placement.views_img.placement_manager_view'))
+      return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
+    return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
   contactpersons = company.contactperson_set.all().order_by('-is_primary')
   return render_to_response('placement/placement_mgr_details.html',{
       'contactpersons': contactpersons,

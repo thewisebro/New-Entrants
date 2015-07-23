@@ -235,7 +235,7 @@ class ContactPersonForm(forms.Form):
     designation = forms.CharField(required=False)
     phone_no = forms.CharField(required=False)
     email = forms.CharField(required=False)
-    contact_id = forms.CharField(widget=forms.HiddenInput(), show_hidden_initial=True)
+    contact_id = forms.CharField(widget=forms.HiddenInput(), show_hidden_initial=True, required=False)
     is_primary = forms.BooleanField(initial=False, required=False)
     student = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label='None', required=True)
     last_contact = forms.CharField(required=False)

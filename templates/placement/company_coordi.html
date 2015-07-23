@@ -60,10 +60,12 @@
               <th>Person in Contact</th>
               <th>Comments</th>
               <th>When to contact</th>
+              {% if not today %}
               <th>No. of Contact Persons</th>
+              {% endif %}
               <th>Edit Comments</th>
               <th>Edit Company</th>
-              <th>Remove Contact</th>
+              <th>Remove Company</th>
             </tr>
           </thead>
         </table>
@@ -88,7 +90,6 @@
     }
 
     $(document).ready( function() {
-        var value = 12;
         $('#company').DataTable( {
           "ajax": {
             {% if today %}
@@ -99,7 +100,27 @@
            },
            stateSave: true,
            "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-              $('td:eq(0)', nRow).html("<a onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[14],aData[0]));
+              {% if today %}
+              $('td:eq(0)', nRow).html("<a onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[11],aData[0]));
+
+              $('td:eq(9)', nRow).html("<a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>{1}</a>".format(aData[11],aData[9]));
+              $('td:eq(11)', nRow).html( " <div class='glyphs'>\
+                                           <div class='glyph'>\
+                                           <a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>\
+                                           <span class='icon icon-pencil' id='edit'></span></a>\
+                                           </div>".format(aData[11]));
+              $('td:eq(12)', nRow).html( " <div class='glyphs'>\
+                                           <div class='glyph'>\
+                                           <a onclick=open_frame('Edit&nbsp;Company','/placement/contact_manager/edit/{0}/',800,true)>\
+                                           <span class='icon icon-pencil' id='edit'></span></a>\
+                                           </div>".format(aData[11]));
+              $('td:eq(13)', nRow).html("  <div class='glyph'>\
+                                           <a><span class='icon icon-remove' id='remove' style='cursor:pointer;' onclick='confirmfn({0})'></span></a>\
+                                           </div>\
+                                           </div>".format(aData[11]));
+              {% else %}
+
+              $('td:eq(0)', nRow).html("<a onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[13],aData[0]));
               $('td:eq(9)', nRow).html("<a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>{1}</a>".format(aData[14],aData[9]));
               $('td:eq(12)', nRow).html( " <div class='glyphs'>\
                                            <div class='glyph'>\
@@ -115,7 +136,9 @@
                                            <a><span class='icon icon-remove' id='remove' style='cursor:pointer;' onclick='confirmfn({0})'></span></a>\
                                            </div>\
                                            </div>".format(aData[14]));
-            },
+
+              {% endif %}
+           },
           }).columnFilter();
        });
 </script>
