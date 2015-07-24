@@ -60,10 +60,6 @@
               <th>Person in Contact</th>
               <th>Comments</th>
               <th>When to contact</th>
-              {% if not today %}
-              <th>No. of Contact Persons</th>
-              {% endif %}
-              <th>Edit Comments</th>
               <th>Edit Company</th>
               <th>Remove Company</th>
             </tr>
@@ -101,41 +97,31 @@
            stateSave: true,
            "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
               {% if today %}
-              $('td:eq(0)', nRow).html("<a onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[11],aData[0]));
+              $('td:eq(0)', nRow).html("<a style='cursor:pointer;' onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[11],aData[0]));
 
-              $('td:eq(9)', nRow).html("<a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>{1}</a>".format(aData[11],aData[9]));
+              $('td:eq(9)', nRow).html("<a style='cursor:pointer;' onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>{1}</a>".format(aData[11],aData[9]));
               $('td:eq(11)', nRow).html( " <div class='glyphs'>\
                                            <div class='glyph'>\
-                                           <a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>\
-                                           <span class='icon icon-pencil' id='edit'></span></a>\
-                                           </div>".format(aData[11]));
-              $('td:eq(12)', nRow).html( " <div class='glyphs'>\
-                                           <div class='glyph'>\
                                            <a onclick=open_frame('Edit&nbsp;Company','/placement/contact_manager/edit/{0}/',800,true)>\
-                                           <span class='icon icon-pencil' id='edit'></span></a>\
+                                           <span class='icon icon-pencil' style='cursor:pointer;' id='edit'></span></a>\
                                            </div>".format(aData[11]));
-              $('td:eq(13)', nRow).html("  <div class='glyph'>\
+              $('td:eq(12)', nRow).html("  <div class='glyph'>\
                                            <a><span class='icon icon-remove' id='remove' style='cursor:pointer;' onclick='confirmfn({0})'></span></a>\
                                            </div>\
-                                           </div>".format(aData[11]));
+                                           </div>".format(aData[12]));
               {% else %}
 
-              $('td:eq(0)', nRow).html("<a onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[13],aData[0]));
-              $('td:eq(9)', nRow).html("<a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>{1}</a>".format(aData[14],aData[9]));
-              $('td:eq(12)', nRow).html( " <div class='glyphs'>\
-                                           <div class='glyph'>\
-                                           <a onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>\
-                                           <span class='icon icon-pencil' id='edit'></span></a>\
-                                           </div>".format(aData[12]));
-              $('td:eq(13)', nRow).html( " <div class='glyphs'>\
+              $('td:eq(0)', nRow).html("<a style='cursor:pointer;' onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[13],aData[0]));
+              $('td:eq(9)', nRow).html("<a style='cursor:pointer;' onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>{1}</a>".format(aData[14],aData[9]));
+              $('td:eq(11)', nRow).html( " <div class='glyphs'>\
                                            <div class='glyph'>\
                                            <a onclick=open_frame('Edit&nbsp;Company','/placement/contact_manager/edit/{0}/',800,true)>\
-                                           <span class='icon icon-pencil' id='edit'></span></a>\
-                                           </div>".format(aData[13]));
-              $('td:eq(14)', nRow).html("  <div class='glyph'>\
+                                           <span style='cursor:pointer;' class='icon icon-pencil' id='edit'></span></a>\
+                                           </div>".format(aData[11]));
+              $('td:eq(12)', nRow).html("  <div class='glyph'>\
                                            <a><span class='icon icon-remove' id='remove' style='cursor:pointer;' onclick='confirmfn({0})'></span></a>\
                                            </div>\
-                                           </div>".format(aData[14]));
+                                           </div>".format(aData[12]));
 
               {% endif %}
            },

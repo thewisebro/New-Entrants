@@ -57,7 +57,7 @@ $('body').ready(function(){
 <hr>
 {{ contactpersonformset.management_form }}
 {% for form in contactpersonformset %}
-<div style="display:inline-block;margin-left:10px;margin-right:10px;float:left;width:45%;">
+<div style="display:inline-block;margin-left:10px;margin-right:10px;float:left;width:45%;border-bottom:1px solid black;margin-bottom:20px;">
  {{ form.as_table }}
  {{ form.id }}
 </div>

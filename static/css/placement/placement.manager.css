@@ -113,9 +113,7 @@ table.dataTable.compact tbody th,
   table.dataTable.compact tbody td {
       padding: 4px 5px;
   }
-table.dataTable.compact {
-  table-layout:fixed;
-}
+
 table.dataTable.compact td {
   overflow:hidden;
   text-overflow: ellipsis;
