@@ -213,7 +213,7 @@ def search_post(request):
 
 def member_list(request):
   ''' Team page '''
-  members = TeamMember.objects.filter(member_name__passout_year__isnull=True).order_by("member_name__name")
+  members = TeamMember.objects.filter(member_name__passout_year__isnull=True).order_by("member_name__user__name")
   return render(request, 'img_website/team2.html', {"members":members,})
 
 @login_required()

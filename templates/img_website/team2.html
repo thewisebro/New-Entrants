@@ -59,7 +59,7 @@ $('.lightboxTrigger').click(function(e) {
           var $href = $(this).attr('href');
           $('#slideshow').append(
           '<img src="'+$href+'">' +
-          '<div class="desc"><h3> {{ member.member_name.name }}</h3><div class="desc-text">{% autoescape on %}{{ member.member_about.strip }}{% endautoescape %}</div><div class="social-cont"><ul class="social-icons">{% for link in member.memberlinks_set.all %}{% ifequal link.website "facebook" %}<li> <a target="_blank"href="{{ link.link }}" class="facebook"></a> </li>{% endifequal %}{% ifequal link.website "quora" %} <li> <a target="_blank"href="{{ link.link }}" class="quora"></a> </li>{% endifequal %}{% ifequal link.website "twitter" %} <li> <a target="_blank"href="{{ link.link }}" class="twitter"></a> </li>{% endifequal %}{% ifequal link.website "googleplus" %} <li> <a target="_blank"href="{{ link.link }}" class="googleplus"></a> </li>{% endifequal %}{% ifequal link.website "github" %}<li> <a target="_blank"href="{{ link.link }}" class="github"></a> </li>{% endifequal %}{% ifequal link.website "linkedin" %}<li> <a target="_blank"href="{{ link.link }}" class="linkedin"></a> </li>{% endifequal %}{% endfor %}</ul></div></div>'
+          '<div class="desc"><h3> {{ member.member_name.user.name }}</h3><div class="desc-text">{% autoescape on %}{{ member.member_about.strip }}{% endautoescape %}</div><div class="social-cont"><ul class="social-icons">{% for link in member.memberlinks_set.all %}{% ifequal link.website "facebook" %}<li> <a target="_blank"href="{{ link.link }}" class="facebook"></a> </li>{% endifequal %}{% ifequal link.website "quora" %} <li> <a target="_blank"href="{{ link.link }}" class="quora"></a> </li>{% endifequal %}{% ifequal link.website "twitter" %} <li> <a target="_blank"href="{{ link.link }}" class="twitter"></a> </li>{% endifequal %}{% ifequal link.website "googleplus" %} <li> <a target="_blank"href="{{ link.link }}" class="googleplus"></a> </li>{% endifequal %}{% ifequal link.website "github" %}<li> <a target="_blank"href="{{ link.link }}" class="github"></a> </li>{% endifequal %}{% ifequal link.website "linkedin" %}<li> <a target="_blank"href="{{ link.link }}" class="linkedin"></a> </li>{% endifequal %}{% endfor %}</ul></div></div>'
           );
           }
           {% endfor %}
@@ -245,7 +245,7 @@ $(document).keydown(function(e){
           {% endif %}
           {% endif %}
           {% endif %}
-              <a href="{{ MEDIA_URL }}{{ member.member_pic }}" id="{{ member.member_name.name }}" class="lightboxTrigger"><img style="width:114px;height:138px;" src="{{ MEDIA_URL }}{{ member.member_pic }}"></a>
+              <a href="{{ MEDIA_URL }}{{ member.member_pic }}" id="{{ member.member_name.user.name }}" class="lightboxTrigger"><img style="width:114px;height:138px;" src="{{ MEDIA_URL }}{{ member.member_pic }}"></a>
               <div class="work_box_image">
                 <ul class="social-icons">
                 {% for link in member.memberlinks_set.all %}
@@ -254,7 +254,7 @@ $(document).keydown(function(e){
                 </ul>
               </div>
               <div class="work_box_text">
-                <span class="work_box_text_title">{{ member.member_name.name }}</span> <br/>
+                <span class="work_box_text_title">{{ member.member_name.user.name }}</span> <br/>
                 {{ member.member_post }}
               </div>
 
