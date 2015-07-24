@@ -39,9 +39,9 @@ urlpatterns += patterns('placement.views_img',
                        (r'^registration/$','generate_registration_no'),
                        (r'^contact_manager/$','placement_manager_view'),
                        (r'^contact_manager/contactperson_data/$','placement_manager_contact_person_data'),
-                       (r'^company_coordinator/$', 'company_coordinator_view'), #TODO
+                       (r'^company_coordinator/$', 'company_coordinator_view'),
                        (r'^company_coordinator/contactperson_data/$','company_coordinator_contact_person_data'),
-                       (r'^company_coordinator/today/$', 'company_coordinator_today_view'), #TODO
+                       (r'^company_coordinator/today/$', 'company_coordinator_today_view'),
                        (r'^company_coordinator/contactperson_data/today/$','company_coordinator_contact_person_data_today'),
                        (r'^contactmanager_manual/$','add_company_manual'),
                        (r'^contact_manager/edit/(?P<company_id>\d+)/$','edit_company_manual'),

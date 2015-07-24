@@ -295,7 +295,6 @@ def placement_manager_contact_person_data(request):
       comment=""
     values.append(comment)
     values.append(contactPerson.campuscontact.when_to_contact if contact_exist else "")
-    values.append(ContactPerson.objects.filter(company_contact=company_inst).count())
     values.append(company_inst.id)
     values.append(company_inst.id)
     values.append(company_inst.id)
@@ -370,7 +369,6 @@ def company_coordinator_contact_person_data(request):
       comment=""
     values.append(comment)
     values.append(contactPerson.campuscontact.when_to_contact if contact_exist else "")
-    values.append(ContactPerson.objects.filter(company_contact=company_inst).count())
     values.append(company_inst.id)
     values.append(company_inst.id)
     values.append(company_inst.id)
@@ -528,7 +526,7 @@ def add_company_manual(request):
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager','Company Coordinator']).exists(), login_url=login_url)
 def edit_company_manual(request, company_id):
-  if request.user.groups.filter(name='Company Coordinator') and (not CampusContact.objects.filter(student=request.user.student, contact_person__company_contact__id=company_id)):
+  if not request.user.groups.filter(name="Placement Manager") and (not CampusContact.objects.filter(student=request.user.student, contact_person__company_contact__id=company_id)):
     messages.error(request, "You don't have permission to edit this company")
     return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
   a = request.user.groups.filter(name='Placement Manager')
