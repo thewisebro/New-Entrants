@@ -38,7 +38,7 @@
 						<div class="article_title">
 							<div class="article_title_text">
 								<h3>{{ post.title }} </h3>
-                <span class="date"> {{ post.date|date:"F jS, Y" }} , by</span>
+                <span class="date"> {{ post.datetime_created|date:"F jS, Y" }} , by</span>
 								<span class="author">{{ post.author.first_name }} </span>
 							</div>
 						</div> <!-- end artcle_title -->
@@ -129,20 +129,20 @@
 -->
 					<div class="span2 archives_list">
 						<span class="archives_heading">ARCHIVES</span>
-						<span class="current_year_container"><img src="{{ STATIC_URL }}images/img_website/arrow_right2.png" alt=""><span class="current_year">{{ post_list.0.date.year }}</span> </span>
+						<span class="current_year_container"><img src="{{ STATIC_URL }}images/img_website/arrow_right2.png" alt=""><span class="current_year">{{ post_list.0.datetime_created.year }}</span> </span>
 						<ul class="year_list">
               {% for post in post_list %}
-                {% ifchanged post.date.year %}
-							    <li class="year_list_item" id="archives_content_{{ post.date.year }}">{{ post.date.year }}</li>
+                {% ifchanged post.datetime_created.year %}
+							    <li class="year_list_item" id="archives_content_{{ post.datetime_created.year }}">{{ post.datetime_created.year }}</li>
 						    {% endifchanged %}
               {% endfor %}
             </ul>
 
 						<div class="year_content">
-            {% regroup post_list by date|date:"Y" as order_year_list %}
+            {% regroup post_list by datetime_created|date:"Y" as order_year_list %}
             {% for year in order_year_list %}
               <div class="archives_content tab" id="archives_content_{{ year.grouper }}">
-              {% regroup year.list by date|date:"F" as order_month_list %}
+              {% regroup year.list by datetime_created|date:"F" as order_month_list %}
 						  <ul class="archives_list">
               {% for month in order_month_list %}
 								<li class="expand expand-{{ forloop.counter }}">{{ month.grouper }}	<a href="#">	<i class="icon-chevron-down"></i>	</a>

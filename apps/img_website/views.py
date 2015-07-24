@@ -33,8 +33,8 @@ def user_team_member(user):
 
 def index(request):
   ''' Home '''
-  works=RecentWorks.objects.filter(state='Published').order_by('-date')[:3]
-  posts=BlogPost.objects.filter(state='Published').order_by('-date')
+  works=RecentWorks.objects.filter(state='Published').order_by('-datetime_created')[:3]
+  posts=BlogPost.objects.filter(state='Published').order_by('-datetime_created')
   return render(request, 'img_website/index.html', {'work_list':works,'post_list':posts,})
 
 def about(request):
@@ -64,7 +64,7 @@ def contact(request):
 
 def post_list(request):
   ''' list of posts view for all users '''
-  posts=BlogPost.objects.filter(state='Published').order_by('-date')
+  posts=BlogPost.objects.filter(state='Published').order_by('-datetime_created')
   paginator = Paginator(posts, 10)
   page = request.GET.get('page', '1')
   try:
@@ -80,7 +80,7 @@ def post_list(request):
 @user_passes_test(lambda u: u.groups.filter(name='IMG Member').count() != 0)
 def post_list_dynamic(request):
   ''' list of posts view for IMG Members and Alumni '''
-  posts = BlogPost.objects.all().order_by('-date')
+  posts = BlogPost.objects.all().order_by('-datetime_created')
   paginator = Paginator(posts, 10)
   page = request.GET.get('page', '1')
   try:
@@ -107,7 +107,7 @@ def edit(request):
 def post_detail(request, slug):
   ''' view for a single post for all users '''
   post = get_object_or_404(BlogPost, slug = slug, state='Published')
-  posts = BlogPost.objects.filter(state='Published').order_by('-date')
+  posts = BlogPost.objects.filter(state='Published').order_by('-datetime_created')
   user = post.author
   student = get_object_or_404(Student, pk = user.pk)
   author = get_object_or_404(TeamMember, member_name = student)
@@ -137,7 +137,7 @@ def post_detail_dynamic(request, slug):
   user = post.author
   student = get_object_or_404(Student, pk = user.pk)
   author = get_object_or_404(TeamMember, member_name = student)
-  posts = BlogPost.objects.all().order_by('-date')
+  posts = BlogPost.objects.all().order_by('-datetime_created')
   index=0
   for current_post in posts:
     if current_post.slug == slug:
@@ -198,8 +198,8 @@ def delete_post(request, slug):
 
 def search_post(request):
   ''' view to search for a blog post '''
-  posts_search = BlogPost.objects.filter(title__icontains=request.GET['post'], state='Published').order_by('-date')
-  posts=BlogPost.objects.filter(state='Published').order_by('-date')
+  posts_search = BlogPost.objects.filter(title__icontains=request.GET['post'], state='Published').order_by('-datetime_created')
+  posts=BlogPost.objects.filter(state='Published').order_by('-datetime_created')
   paginator = Paginator(posts_search, 4)
   page = request.GET.get('page', '1')
   try:
@@ -262,7 +262,7 @@ def add_member(request):
 
 def work_list(request, page='1'):
   ''' list of works view for all users '''
-  works=RecentWorks.objects.filter(state='Published').order_by('-date')
+  works=RecentWorks.objects.filter(state='Published').order_by('-datetime_created')
   paginator = Paginator(works, 5)
 #page = request.GET.get('page', '1')
   try:
@@ -278,7 +278,7 @@ def work_list(request, page='1'):
 @user_passes_test(lambda u: u.groups.filter(name='IMG Member').count() != 0)
 def work_list_dynamic(request):
   ''' list of works view for IMG Members and Alumni '''
-  works = RecentWorks.objects.all().order_by('-date')
+  works = RecentWorks.objects.all().order_by('-datetime_created')
   paginator = Paginator(works, 5)
   page = request.GET.get('page', '1')
   try:
@@ -293,7 +293,7 @@ def work_list_dynamic(request):
 def work_detail(request, slug):
   ''' detailed view for a particular work for all users '''
   work = get_object_or_404(RecentWorks, slug = slug,state='Published')
-  works = RecentWorks.objects.filter(state='Published').order_by('-date')
+  works = RecentWorks.objects.filter(state='Published').order_by('-datetime_created')
   user = work.author
   student = get_object_or_404(Student, pk = user.pk)
   author = get_object_or_404(TeamMember, member_name = student)
@@ -320,7 +320,7 @@ def work_detail(request, slug):
 def work_detail_dynamic(request, slug):
   ''' detailed view for a particular work for IMG Members and Alumni '''
   work = get_object_or_404(RecentWorks, slug = slug)
-  works = RecentWorks.objects.all().order_by('-date')
+  works = RecentWorks.objects.all().order_by('-datetime_created')
   user = work.author
   student = get_object_or_404(Student, pk = user.pk)
   author = get_object_or_404(TeamMember, member_name = student)
@@ -391,7 +391,7 @@ def delete_post(request, slug):
   return redirect(settings.IMG_WEBSITE_BASE_URL + '/dynamic_blog/')
 
 def status_post_list(request):
-  status_posts=StatusPost.objects.filter(state='Published').order_by('-date')
+  status_posts=StatusPost.objects.filter(state='Published').order_by('-datetime_created')
   if settings.PRODUCTION:
     status_ajax_url = 'http://web.channeli.in/img_website/status_ajax/'
   else:
@@ -406,7 +406,7 @@ def status_post_list_dynamic(request):
   user = request.user
   if user.in_group('IMG Member') is False:
     return render(request, 'img_website/restricted.html')
-  status_posts = StatusPost.objects.all().order_by('-date')
+  status_posts = StatusPost.objects.all().order_by('-datetime_created')
   return render(request, 'img_website/status.html', {'status_post_list':status_posts,})
 
 def status_dict(status_post):
@@ -414,11 +414,11 @@ def status_dict(status_post):
     'pk': status_post.pk,
     'app': status_post.app,
     'content': status_post.content,
-    'date': datetime.datetime.strftime(status_post.date, "%B %d, %Y"),
+    'date': datetime.datetime.strftime(status_post.datetime_created, "%B %d, %Y"),
   }
 
 def status_ajax(request):
-  status_posts = StatusPost.objects.filter(state='Published').order_by('-date')
+  status_posts = StatusPost.objects.filter(state='Published').order_by('-datetime_created')
   data = json.dumps(map(status_dict, status_posts))
   response = HttpResponse(data, content_type='application/json')
   response['Access-Control-Allow-Origin'] = '*'
@@ -426,7 +426,7 @@ def status_ajax(request):
 
 def status_post_detail(request, pk):
   status_post = StatusPost.objects.get(pk = pk,state='Published')
-#works = RecentWorks.objects.filter(state='Published').order_by('-date')
+#works = RecentWorks.objects.filter(state='Published').order_by('-datetime_created')
 #user = work.author
 #student = Student.objects.get(pk = user.pk)
 #author = TeamMember.objects.get(member_name = student)
@@ -439,7 +439,7 @@ def status_post_detail_dynamic(request, pk):
   if user_logged.in_group('IMG Member') is False:
     return render(request, 'img_website/restricted.html')
   status_post = StatusPost.objects.get(pk = pk)
-#works = RecentWorks.objects.all().order_by('-date')
+#works = RecentWorks.objects.all().order_by('-datetime_created')
 #user = work.author
 #student = Student.objects.get(pk = user.pk)
 #author = TeamMember.objects.get(member_name = student)
@@ -482,7 +482,7 @@ def status_post_update(request, pk):
 def publish_blog_post(request, slug):
   ''' Publish a blogpost '''
   if BlogPost.objects.filter(slug=slug).exists():
-    BlogPost.objects.filter(slug=slug).update(state='Published', date=datetime.datetime.now())
+    BlogPost.objects.filter(slug=slug).update(state='Published', datetime_created=datetime.datetime.now())
     return redirect(settings.IMG_WEBSITE_BASE_URL+'/dynamic_blog/')
 
 @login_required
@@ -490,7 +490,7 @@ def publish_blog_post(request, slug):
 def publish_works(request, slug):
   ''' Publish a work post '''
   if RecentWorks.objects.filter(slug=slug).exists():
-    RecentWorks.objects.filter(slug=slug).update(state='Published', date=datetime.datetime.now())
+    RecentWorks.objects.filter(slug=slug).update(state='Published', datetime_created=datetime.datetime.now())
     return redirect(settings.IMG_WEBSITE_BASE_URL+'/dynamic_works/')
 
 @login_required
@@ -498,7 +498,7 @@ def publish_works(request, slug):
 def publish_status_post(request, pk):
   ''' Publish a status post '''
   if StatusPost.objects.filter(pk=pk).exists():
-    StatusPost.objects.filter(pk=pk).update(state='Published', date=datetime.datetime.now())
+    StatusPost.objects.filter(pk=pk).update(state='Published', datetime_created=datetime.datetime.now())
     return redirect(settings.IMG_WEBSITE_BASE_URL+'/dynamic_status/')
 
 @login_required
@@ -507,7 +507,7 @@ def unpublish_blog_post(request, slug):
   ''' Unpublish a blog post '''
   if BlogPost.objects.filter(slug=slug).exists():
     BlogPost.objects.filter(slug=slug).update(state='Unpublished')
-    blogs = BlogPost.objects.filter(state='Published').order_by('-date')
+    blogs = BlogPost.objects.filter(state='Published').order_by('-datetime_created')
     return redirect(settings.IMG_WEBSITE_BASE_URL+'/dynamic_blog/')
 
 @login_required
@@ -515,7 +515,7 @@ def unpublish_blog_post(request, slug):
 def unpublish_works(request, slug):
   ''' Unpublish a work post '''
   if RecentWorks.objects.filter(slug=slug).exists():
-    RecentWorks.objects.filter(slug=slug).update(state='Unpublished', date=datetime.datetime.now())
+    RecentWorks.objects.filter(slug=slug).update(state='Unpublished', datetime_created=datetime.datetime.now())
     return redirect(settings.IMG_WEBSITE_BASE_URL+'/dynamic_works/')
 
 @login_required
@@ -523,7 +523,7 @@ def unpublish_works(request, slug):
 def unpublish_status_post(request, pk):
   ''' Unpublish a status post '''
   if StatusPost.objects.filter(pk=pk).exists():
-    StatusPost.objects.filter(pk=pk).update(state='Unpublished', date=datetime.datetime.now())
+    StatusPost.objects.filter(pk=pk).update(state='Unpublished', datetime_created=datetime.datetime.now())
     return redirect(settings.IMG_WEBSITE_BASE_URL+'/dynamic_status/')
 
 @login_required
