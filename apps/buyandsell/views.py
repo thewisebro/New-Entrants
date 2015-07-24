@@ -13,7 +13,7 @@ from notifications.models import Notification
 from buyandsell.forms import *
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.contrib.auth.decorators import login_required
 def buy(request,mc=None,c=None):
   
   qdata=''
@@ -147,6 +147,7 @@ def viewrequests(request,mc=None,c=None):
           }
   return render(request,'buyandsell/show_requests.html',context)
 
+@login_required
 def sell(request):
   post_date=timezone.now()
   user=request.user
@@ -194,6 +195,7 @@ def sell(request):
   form=SellForm(initial=init_dict)
   return render(request,'buyandsell/form.html',{'form':form})
 
+@login_required
 def requestitem(request):
   post_date=timezone.now()
   user=request.user
@@ -241,6 +243,7 @@ def requestitem(request):
   form=RequestForm(initial=init_dict)
   return render(request,'buyandsell/form.html',{'form':form})
 
+@login_required  
 def watch(request,mc=None,c=None):
 
   user=request.user
@@ -259,6 +262,7 @@ def watch(request,mc=None,c=None):
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
 
+@login_required
 def selldetails(request,pk):
   show_contact=1
   item=SaleItems.objects.get(pk=pk)
@@ -289,6 +293,7 @@ def selldetails(request,pk):
   print show_contact
   return render(request,'buyandsell/selldetails.html',context)
 
+@login_required
 def requestdetails(request,pk):
   show_contact=1
   item=RequestedItems.objects.get(pk=pk)
@@ -598,6 +603,7 @@ def seeall(request,search_type):
     }
     return render(request,'buyandsell/buy.html',context)
 
+@login_required
 def edit(request,form_type,pk):
   user=request.user
   post_date=date.today()
@@ -688,6 +694,7 @@ def edit(request,form_type,pk):
     form=RequestForm(instance=instance)
     return render(request,'buyandsell/form.html',{'form':form})
 
+@login_required
 def my_account(request):
   show_contact=1
   user=request.user
@@ -720,6 +727,7 @@ def get_category_dictionary():
     cat_dict[mcat]=sub_cat
   return cat_dict
 
+@login_required
 def trash_item(request,item_type,pk):
   if item_type=="request":
     item=RequestedItems.items.get(pk=pk)
@@ -733,6 +741,7 @@ def trash_item(request,item_type,pk):
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
 
+@login_required
 def transaction(request,item_type,pk):
   user=request.user
   if item_type=="sell":
@@ -740,25 +749,20 @@ def transaction(request,item_type,pk):
       itm=SaleItems.items.get(pk=pk)
     except:
       messages.error(request,"This item has been deleted or does not exist")
+      return HttpResponseRedirect('/buyandsell/my-account/')
 
     itm_user=itm.user
     if itm_user != user:
       messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.You can only fill the form for the items in your account below")
       return HttpResponseRedirect('/buyandsell/my-account/')
-    try:
-      filled_form=SuccessfulTransaction.objects.get(sell_item=itm)
-      if filled_form:
-        messages.error(request,"oops!This item is already sold !!")
-        return HttpResponseRedirect('/buyandsell/my-account/')
-    except:
-      pass
 
     if request.method=="POST":
       try:
         filled_form=SuccessfulTransaction.objects.get(sell_item=itm)
         if filled_form:
           messages.error(request,"oops!This item is already sold,you cant submit the form again!!")
-          return HttpResponseRedirect('/buyandsell/my-account/')
+          return HttpResponseRedirect('/buyandsell/succ_trans/sell/'+pk+'/')
+
       except:
         pass
 
@@ -795,29 +799,24 @@ def transaction(request,item_type,pk):
     return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list,'type':item_type})
 
   if item_type=="request":
-    itm=RequestedItems.items.get(pk=pk)
     try:
-      itm=SaleItems.items.get(pk=pk)
+      itm=RequestedItems.items.get(pk=pk)
     except:
       messages.error(request,"This item has been deleted or does not exist")
+      return HttpResponseRedirect('/buyandsell/my-account/')
 
+    itm_user=itm.user
     if itm_user != user:
       messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.You can only fill the form for the items in your account below")
       return HttpResponseRedirect('/buyandsell/my-account/')
-    try:
-      filled_form=SuccessfulTransaction.objects.get(request_item=itm)
-      if filled_form:
-        messages.error(request,"oops!This request is already fulfilled!!")
-        return HttpResponseRedirect('/buyandsell/my-account/')
-    except:
-      pass
+
 
     if request.method=="POST":
       try:
         filled_form=SuccessfulTransaction.objects.get(request_item=itm)
         if filled_form:
           messages.error(request,"oops!This request is already fulfilled,you cant submit the form again!!")
-          return HttpResponseRedirect('/buyandsell/my-account/')
+          return HttpResponseRedirect('/buyandsell/succ_trans/request/'+pk+'/')
       except:
         pass
 
@@ -874,6 +873,7 @@ def  get_watched_categories(request):
   print sub_watched_cat
   return main_watched_cat,sub_watched_cat
 
+@login_required
 def show_contact(request,response):
   user=request.user
   if response=="yes":
@@ -898,6 +898,7 @@ def show_contact(request,response):
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
 
+@login_required
 def manage(request):
   user=request.user
   cat_dict=get_category_dictionary()
