@@ -804,14 +804,14 @@ def edit_comments(request, company_id):
 
   if request.POST:
     form = CommentsForm(request.POST, company_contact=company_contact)
-    if not a:
-      comment_inst = form.save(commit=False)
-      comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']), student=user.student)
-      comment_inst.save()
-    if a and not user.groups.filter(name='Company Coordinator').exists():
+    if a and not CampusContact.objects.filter(contact_person__id=int(form.data['contact_person']), student=user.student).exists():
       comment_inst = form.save(commit=False)
       comment_inst.comment = "<span name="+request.user.username+" style='color:red;'>"+form.cleaned_data['comment']+"</span>"
       comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']))
+      comment_inst.save()
+    else:
+      comment_inst = form.save(commit=False)
+      comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']), student=user.student)
       comment_inst.save()
 
   else:
