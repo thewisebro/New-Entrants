@@ -301,7 +301,6 @@ def placement_manager_contact_person_data(request):
     lst.append(values[:])
 
   data_to_send = []
-
   for item in lst:
       a = []
       for x in list(item):
@@ -310,6 +309,18 @@ def placement_manager_contact_person_data(request):
                df = DateFormat(x)
                dl = df.format('d/m/Y')
                a.append(str(dl))
+            elif list(item).index(x) == 8:
+               try:
+                 y = x.split("-")
+                 if len(y)==3:
+                   z = [int(i) for i in y]
+                   date=datetime.date(z[0],z[1],z[2])
+                   string_date=date.strftime("%d/%m/%Y")
+                   a.append(string_date)
+                 else:
+                   a.append(x)
+               except ValueError:
+                 a.append(x)
             else:
                a.append(str(x))
          except UnicodeEncodeError:
@@ -454,7 +465,6 @@ def company_coordinator_contact_person_data_today(request):
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator','Placement Manager']).exists(), login_url=login_url)
 def add_company_manual(request):
-#TODO: Throw error when Atleast one contact person is not defiend
 #TODO: Throw error when contact person is defined but campus contact is not
 #TODO_Before production: Add first contact as Primary Contact if none defined
 
@@ -493,8 +503,10 @@ def add_company_manual(request):
           if not a:
             campuscontact.student = request.user.student
           else:
-            campuscontact.student = instance.cleaned_data['student']
-          campuscontact.last_contact = instance.cleaned_data['last_contact']
+            campuscontact.student = instance.cleaned_data['student'].student
+          if instance.cleaned_data['last_contact']:
+            campuscontact.last_contact = datetime.date.today()
+          campuscontact.when_to_contact = instance.cleaned_data['when_to_contact']
           campusContacts.append(campuscontact)
       ## To check whether multiple primary added or not
       is_primary_add = False
@@ -550,7 +562,6 @@ def edit_company_manual(request, company_id):
        'contact_id': x.id,
        'is_primary': x.is_primary,
        'student': x.campuscontact.student,
-       'last_contact': x.campuscontact.last_contact,
        'when_to_contact': x.campuscontact.when_to_contact,
       } for x in contact_persons])
   if not a:
@@ -610,7 +621,8 @@ def edit_company_manual(request, company_id):
             campuscontact.student = request.user.student
 
           campuscontact.when_to_contact = instance.cleaned_data['when_to_contact']
-          campuscontact.last_contact = instance.cleaned_data['last_contact']
+          if instance.cleaned_data['last_contact']:
+            campuscontact.last_contact = datetime.date.today()
           campuscontact.save()
       messages.success(request, 'Contact Person successfully updated')
 #      return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))

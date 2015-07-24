@@ -46,7 +46,7 @@
           </tr>
           <tr>
             <td>Assigned to:</td>
-            <td>{{ contactperson.campuscontact.name }}</td>
+            <td>{{ contactperson.campuscontact.student.user.name }}</td>
           </tr>
           <tr>
             <td>Last Contact:</td>
@@ -54,7 +54,7 @@
           </tr>
           <tr>
             <td>When to Contact:</td>
-            <td>{{ contactperson.when_to_contact }}</td>
+            <td>{{ contactperson.campuscontact.when_to_contact }}</td>
           </tr>
 {% if contactperson.campuscontact.companycontactcomments %}
           <tr>

@@ -238,5 +238,5 @@ class ContactPersonForm(forms.Form):
     contact_id = forms.CharField(widget=forms.HiddenInput(), show_hidden_initial=True, required=False)
     is_primary = forms.BooleanField(initial=False, required=False)
     student = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label='None', required=True)
-    last_contact = forms.CharField(required=False)
+    last_contact = forms.BooleanField(required=False, label="Change Last Contact")
     when_to_contact = forms.DateField(required=False, input_formats=['%Y-%m-%d','%d-%m-%Y'])
