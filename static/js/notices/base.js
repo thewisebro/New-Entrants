@@ -7,7 +7,7 @@ var temp_total_pages, temp_last_page_notices;		//variables for general notice di
 var store, temp_store, old_store;    //store stands for new store or the store of new notices.
 var emptyarray;
 
-var main_mode, sub_mode, m_category, sub_category, cur_page_no, store_to_use, more, name_to_display, all, same_except_page_no, search_string, search_string_changed, prev_content_url, content_button_state, no_notices, binding_done;
+var main_mode, sub_mode, m_category, sub_category, cur_page_no, store_to_use, more, name_to_display, all, same_except_page_no, search_string, search_string_changed, prev_content_url, content_button_state, no_notices, binding_done, login;
 var h1,h2,h3,h4,h5;
 /*
   1.Values of sub_mode can be either new or old
@@ -40,6 +40,7 @@ function initialize_global_variables()
   all=1;
   no_notices=0;
   binding_done=0;
+  login=0;
 //  same_except_page_no=1;
   main_mode="display";
   sub_mode="";
@@ -98,10 +99,17 @@ $(document).on("login", function(){
   if(nucleus.get_current_app()=="notices")
   {
     initialize_global_variables();
+    login=1;
     first_time_visit=0;
     hashtags = [h1, h2, h3, h4, h5];
 
     $(document).trigger("load_app_notices", hashtags);
+  }
+  else
+  {
+    initialize_global_variables();
+    login=1;
+    first_time_visit=0;
   }
 });
 
@@ -109,17 +117,15 @@ $(document).on("logout", function(){
     //console.log("logout entered");
   if(nucleus.get_current_app()=="notices")
   {
-    same_except_page_no=1;
-    check_upload_array={}; check_star_array={}; read_array={};
-    privelege=0; star_perm=0;
-    if(h1!="content")
-    {
-       create_static_divs();
-       static_divs_created=1;
-    }
-    evaluate_breadcrumbs();
+    initialize_global_variables();
+    first_time_visit=0;
     hashtags = [h1, h2, h3, h4, h5];
     $(document).trigger("load_app_notices", hashtags);
+  }
+  else
+  {
+    initialize_global_variables();
+    first_time_visit=0;
   }
 });
 
@@ -145,8 +151,9 @@ function redirection()            //The main controller function which defines t
         //console.log("display content");
         main_mode = "content";
         $("#select_bars").removeAttr("onclick");
-        $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
+        $("#select_bars").attr("onclick", "location.hash = '" + prev_content_url + "'");
         $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
+        checklist={};
         evaluate_breadcrumbs();
         display_notice(parseInt(h2));
     }
@@ -179,7 +186,7 @@ function redirection()            //The main controller function which defines t
               $("#app_name").text("Uploaded Notices");
           //console.log("5starred_uploads_yes");
             $("#select_bars").removeAttr("onclick");
-            $("#select_bars").attr("onclick", "location.hash = '" + prev_url + "'");
+            $("#select_bars").attr("onclick", "location.hash = '" + prev_content_url + "'");
           //console.log("6starred_uploads_yes");
             $("#bars").hide("fade", 200, function(){$("#back").show("fade", 200);});
             $("#filters").slideUp(400);
@@ -189,8 +196,7 @@ function redirection()            //The main controller function which defines t
         }
         else
         {
-          //console.log("2332starred_uploads_yes");
-          if(h1==main_mode && h2==sub_mode && h3==m_category && h4==sub_category)     //Setting the value of the same_except_page_no variable
+          if(login==0 && h1==main_mode && h2==sub_mode && h3==m_category && h4==sub_category)     //Setting the value of the same_except_page_no variable
             same_except_page_no=1;
           else
           {
@@ -200,6 +206,10 @@ function redirection()            //The main controller function which defines t
             $("#back").hide("fade", 200, function(){$("#bars").show("fade", 200);});
             $("#filters").slideDown(400);
             same_except_page_no=0;
+            if(login==-2)
+              login=0;
+            if(login==1)
+              login=-2;
           }
         }
 
@@ -240,6 +250,9 @@ function redirection()            //The main controller function which defines t
 
         if(same_except_page_no==0)
           evaluate_breadcrumbs();
+        $('#more').unbind("click", show_menu);
+        $('#more').bind("click", bind_unbind_tooltip);
+        binding_done=0;
 
         if(sub_mode=="new")                             //coloring the appropriate new old filter
           not_sub_mode="old";
@@ -365,7 +378,9 @@ function redirection()            //The main controller function which defines t
             }
         }
         if($("#breadcrumbs")[0].innerHTML=="")
+        {
           evaluate_breadcrumbs();
+        }
     }
 }
 
@@ -401,7 +416,9 @@ function create_static_divs()                //Create static buttons like upload
     else
       $('#content').append('<div id="page_numbers-subscription-wrap"><div id="page_numbers"></div><div id="settings" onclick="location.hash=\'#settings/email\'"><i id="gear" class="fa fa-cog"></i>Subscription Settings</div><div style="clear:both"></div></div>');
     //console.log("switched_to_notices_create : static divs created");
+    $('#more').unbind("click", show_menu);
     $('#more').bind("click", bind_unbind_tooltip);
+    binding_done=0;
 }
 
 function get_total_notices_no()       //This function is only meant for general notice display(categories other than All, All)
@@ -541,10 +558,10 @@ function change_page(number)
 
 function open_notice(id)
 {
-  if(main_mode!="content")
+ // if(main_mode!="content")
     prev_content_url = location.hash;
-  if(prev_content_url=="#notices")
-    prev_content_url = '#notices/display/new/All/All/1';
+ // if(prev_content_url=="#notices")
+  //  prev_content_url = '#notices/display/new/All/All/1';
   location.hash = '#notices/content/' + id;
 }
 
@@ -607,10 +624,11 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
             else if(d.getTime() == Date.parse("yesterday").getTime())
               context["notice_date"] = "Yesterday";
             else if(d.getYear() == Date.parse("today").getYear())
-              context["notice_date"] = d.toString('dd MMM');
+              context["notice_date"] = d.toString('MMM dd');
             else
-              context["notice_date"] = d.toString('dd MMM yyyy');
+              context["notice_date"] = d.toString('MMM dd, yyyy');
 
+            context["notice_time"] = moment(context.notice.datetime_modified).format('h:mm a');
             if(star_perm==1)
               context["anonymous"] = 0;
             else
@@ -636,9 +654,6 @@ function list_notices(page_no, tstore, ttotal_pages, tlast_page_notices)    //t 
             $('#notice_list').append(list_notices_html(context));
 
       }
-      $(".notice_date").each(function() {
-              $(this).text($(this).text().substr(0,10));
-              });
       //console.log("reh gya bhai")
       if($("#page_numbers ul")[0]==undefined)
           load_numbers_bar(ttotal_pages,sub_mode + "_");
@@ -667,7 +682,7 @@ function display_notice(id)
               //console.log($('#_content a')[j].href);
               href1 = $('#_content a')[j].href.replace(window.location.origin,'').replace(/\%20/g, ' ');
               $('#_content a')[j].a;
-              $('a[href="' + href1 + '"]').replaceWith('<div class="button4 button-div" onclick="window.location=\''+ href1 +'\'">Download pdf</div>');
+              $('a[href="' + href1 + '"]').replaceWith('<div class="button4 button-div notice-download" onclick="window.location=\''+ href1 +'\'">Download pdf</div>');
             }
         }
       }
@@ -868,8 +883,11 @@ function add_to_checklist(id, e)
     delete checklist[id];
   else
     checklist[id]=1;
+  //console.log("gaind10");
   if(Object.keys(checklist).length===0)
   {
+    //console.log("gaind9");
+    $("#all_select")[0].checked=false;
     $('#more').unbind("click", show_menu);
     $('#more').bind("click", bind_unbind_tooltip);
     binding_done=0;
@@ -878,10 +896,25 @@ function add_to_checklist(id, e)
   {
     if(binding_done===0)
     {
+    //console.log("gaind8");
       $('#more').unbind("click", bind_unbind_tooltip);
       $('#more').bind("click", show_menu);
       binding_done=1;
     }
+    if(main_mode=="display")
+        mode_prefix="temp";
+    else if(main_mode=="uploads")
+        mode_prefix="upload";
+    else if(main_mode=="search")
+        mode_prefix="search";
+    else if(main_mode=="starred")
+        mode_prefix="starred";
+    if(parseInt(cur_page_no)<window[mode_prefix + "_total_pages"]||window[mode_prefix + "_last_page_notices"]===0)
+        k=10;
+    else
+        k=window[mode_prefix + "_last_page_notices"];
+    if(Object.keys(checklist).length===k) 
+      $("#all_select")[0].checked=true;
   }
 }
 
@@ -904,7 +937,7 @@ function select_all()
       k=10;
     else
       k=window[mode_prefix + "_last_page_notices"];
-    //console.log(x);
+   // console.log(x);
     if(x)
     {
         //console.log("11");
@@ -923,11 +956,11 @@ function select_all()
     }
     else
     {
-        //console.log("22");
+       // console.log("22");
         $('.checkboxes').prop('checked', false);
         for(var i=0; i<k; i++)
         {
-            id = $('.checkboxes')[i].id[6]+$('.checkboxes')[i].id[7];
+            id = $('.checkboxes')[i].id.substring(6);
             delete checklist[parseInt(id)];
         }
         if(Object.keys(checklist).length===0)
@@ -1049,11 +1082,17 @@ function read_star_checklist(t)
       {
         read_array[a[i]]=1;
         $("#notice_"+a[i]).attr({class : "notice_info read"});
+        $("#notice_"+a[i]+" .notice_date").attr({class : "notice_date read"});
+        $("#notice_"+a[i]+" .notice_source").attr({class : "notice_source read"});
+        $("#notice_"+a[i]+" .notice_subject").attr({class : "notice_subject read"});
       }
       else
       {
         delete read_array[a[i]];
         $("#notice_"+a[i]).attr({class : "notice_info unread"});
+        $("#notice_"+a[i]+" .notice_date").attr({class : "notice_date unread"});
+        $("#notice_"+a[i]+" .notice_source").attr({class : "notice_source unread"});
+        $("#notice_"+a[i]+" .notice_subject").attr({class : "notice_subject unread"});
       }
     }
     q=q.substring(0,q.length-1);
@@ -1181,9 +1220,9 @@ function evaluate_breadcrumbs()
       sub_categor=sub_category;
     }
     if(sub_mod=="new")
-      notice_prefix = "Current"
+      notice_prefix = "Current "
     if(sub_mod=="old")
-      notice_prefix = "Expired"
+      notice_prefix = "Expired "
 
     if(main_mod=="display")
     {
@@ -1221,7 +1260,6 @@ function breadcrumb_clicked(tag_type)
   //console.log(tag_type);
   if(main_mode=="content")
   {
-    //console.log("abcasd");
     temp_arr = prev_content_url.split("/");
     main_mod=temp_arr[1];
     sub_mod=temp_arr[2];
@@ -1248,8 +1286,6 @@ function breadcrumb_clicked(tag_type)
 
 function prev_next_clicked(state)                                         //Previous or next buttons clicked in content mode
 {
-  //console.log("prev_next_clicked entered : " + state);
-  //console.log("prev_content_url_begin" + prev_content_url);
   url_split = prev_content_url.split('/');
   leng = url_split.length;
   prev_page_no = url_split[leng-1];
@@ -1257,17 +1293,13 @@ function prev_next_clicked(state)                                         //Prev
   id = location.hash.split('/')[2];
   len = store_to_use.length;
   var i=0;
-//  //console.log("bazooka" + state);
 
   if(prev_mode=="display")                  //Since temp_store is currently the only one managed in bundles, so different analysis than upload_array
   {
     for(i; i<len; i++)
     {
-//      //console.log(i);
-//      //console.log(id);
       if(store_to_use[i].id==id)
       {
-//      //console.log(id);
           if(state===-1)
           {
             cur_page_no = Math.floor(i/10) + 1;
@@ -1277,8 +1309,6 @@ function prev_next_clicked(state)                                         //Prev
             cur_page_no = Math.floor((i-1)/10) + 1;
           else
             cur_page_no = Math.floor((i+1)/10) + 1;
-//  //console.log("exception" + cur_page_no);
-//      //console.log(i + "state : " + state + " page_no : " + cur_page_no );
           if(state===0 && store_to_use[i-1]!=undefined)
             location.hash = '#notices/content/' + store_to_use[i-1].id;
           else if(state===1 && store_to_use[i+1]!=undefined)
@@ -1294,7 +1324,6 @@ function prev_next_clicked(state)                                         //Prev
     }
     url_split[leng-1] = cur_page_no;
     prev_content_url = url_split.join().replace(/,/g, '/');
-//      //console.log(prev_content_url + "prev_content_url");
   }
   else
   {
@@ -1368,7 +1397,7 @@ function open_upload_dialog()
     dialog_iframe({
       name:'notice_upload_dialog',
       title:'Upload a notice',
-      width:900,
+      width:1000,
       height:650,
       src:'/notices/upload',
   });

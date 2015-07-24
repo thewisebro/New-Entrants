@@ -9,6 +9,8 @@ class ForSaleFeed(ModelFeed):
 
   def save(self, instance, created):
     instance.link = '/buysell/buy_item_details/' + str(instance.pk)
+    if 'images/buysell/default' in str(instance.item_image):
+      instance.item_image = None
     return {
       'content': render_to_string('buysell/sale_feed.html', {
         'instance': instance,

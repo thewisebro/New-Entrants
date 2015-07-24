@@ -57,7 +57,7 @@
         {{ noticeform.categories }}
         <script>
           {% for mc in notice_subscribed_categories %}
-            $("input[value={{mc}}]")[0].checked=true;
+            $("input[value='{{mc}}']")[0].checked=true;
           {% endfor %}
         </script>
       </div>

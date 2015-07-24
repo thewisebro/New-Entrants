@@ -163,6 +163,11 @@ function ts_resortTable(lnk, clid) {
 	}		
 	span.innerHTML = ARROW;
 	alternate(t);
+  if (clid!=0) {
+    for(var i=0;i<t.tBodies.item().children.length;i++){
+      t.tBodies.item().children[i].children[0].innerText = i+1;
+    }
+  }
 }
 
 function getParent(el, pTagName) {

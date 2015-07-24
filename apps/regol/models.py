@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from nucleus.models import Student, Branch, Faculty
 from api import model_constants as MC
@@ -74,6 +76,11 @@ class RegisteredCourses(models.Model):
   cleared_status = models.CharField(max_length=MC.CODE_LENGTH, choices=RC.REGISTERED_COURSES_CLEARED_STATUS, default='NXT') # TODO set default based on choices
   grade = models.CharField(max_length=2, choices=MC.GRADE_CHOICES, default='-')
   group_code = models.CharField(max_length = MC.CODE_LENGTH, default='-1')
+  semester_type = models.CharField(max_length=MC.CODE_LENGTH, default='A')
+  year = models.IntegerField(default=datetime.date.today().year)
+  def __unicode__(self):
+    return self.student.user.username + ': ' + self.course_details.course_code + \
+      ': ' + dict(RC.REGISTERED_COURSES_CLEARED_STATUS)[self.cleared_status]
 
 
 class JeeEntrants(models.Model):

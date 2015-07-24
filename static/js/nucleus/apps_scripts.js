@@ -17,6 +17,7 @@ var apps_scripts = {
     '/static/js/notices/jquery.simplePagination.js',
     '/static/js/notices/base.js',
     '/static/js/notices/date.js',
+    '/static/js/notices/moment.js',
   ],
   'events':[
     '/static/handlebars/events/templates.js',

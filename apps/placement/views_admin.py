@@ -241,7 +241,11 @@ def selected_students(request, company_id) :
     sheet.set_horz_split_pos(3)
     sheet.set_remove_splits(True)
     sheet.write_merge(0, 1, 0, 11, 'Students finalized for \'' + company.name + '\' as on ' + datetime.datetime.now().strftime('%b. %d, %Y, %I:%M %p'), heading_xf)
-    headers = ('S.No.', 'Enrollment No', 'Name', 'Course', 'Year', 'Discipline', 'Date of Birth', 'Category', 'CGPA', 'Tenth Marks', 'Twelfth Marks', 'Graduation Marks', 'Discipline(UG)', 'College(UG)','Contact No', 'Email ID', 'Permanent Address')
+    category_required = company.category_required
+    if category_required:
+      headers = ('S.No.', 'Enrollment No', 'Name', 'Course', 'Year', 'Gender', 'Category', 'Date of Birth', 'Discipline', 'CGPA', 'Tenth Marks', 'Twelfth Marks', 'Graduation Marks', 'Discipline(UG)', 'College(UG)','Contact No', 'Email ID', 'Permanent Address')
+    else:
+      headers = ('S.No.', 'Enrollment No', 'Name', 'Course', 'Year','Gender', 'Date of Birth', 'Discipline', 'CGPA', 'Tenth Marks', 'Twelfth Marks', 'Graduation Marks', 'Discipline(UG)', 'College(UG)','Contact No', 'Email ID', 'Permanent Address')
     for (col, heading) in enumerate(headers) :
       sheet.write(2, col, heading, heading_xf)
     for (row, application) in enumerate(applications) :
@@ -256,37 +260,42 @@ def selected_students(request, company_id) :
       sheet.write(row, 2, student.name, style)
       sheet.write(row, 3, student.branch.degree, style)
       sheet.write(row, 4, student.semester[-2:][0:1], style)
-      sheet.write(row, 5, student.branch.name, style)
-      sheet.write(row, 6, student.user.get_gender_display(), style)
-      try :
+      sheet.write(row, 5, student.user.get_gender_display(), style)
+      if category_required:
+        sheet.write(row,6, student.studentinfo.get_category_display(), style)
+        column_ind = 7
+      else:
+        column_ind = 6
+      sheet.write(row,column_ind+1, student.branch.name, style)
+      try:
         info = StudentInfo.objects.get(student = student)
         try:
-          sheet.write(row, 7, student.user.birth_date.strftime('%b. %d, %Y'), style)
+          sheet.write(row, column_ind, student.user.birth_date.strftime('%b. %d, %Y'), style)
         except Exception as e:
-          sheet.write(row, 7, '-', style)
+          sheet.write(row, column_ind, '-', style)
 #        sheet.write(row, 8, info.get_category_display(), style)
-        sheet.write(row, 16, info.permanent_address, style)
+        sheet.write(row, column_ind+10, info.permanent_address, style)
       except StudentInfo.DoesNotExist :
-        sheet.write(row, 7, '-', style)
+        sheet.write(row, column_ind, '-', style)
 #        sheet.write(row, 8, '-', style)
-        sheet.write(row, 16, '-', style)
-      sheet.write(row, 8, student.cgpa, style)
+        sheet.write(row, column_ind+10, '-', style)
+      sheet.write(row, column_ind+2, student.cgpa, style)
       try :
         tenth_marks = EducationalDetails.objects.get(student = student, course = '10TH')
-        sheet.write(row, 9, tenth_marks.cgpa, style)
+        sheet.write(row, column_ind+3, tenth_marks.cgpa, style)
       except:
-        sheet.write(row, 9, '-', style)
+        sheet.write(row, column_ind+3, '-', style)
       try :
         twelfth_marks = EducationalDetails.objects.get(student = student, course = '12TH')
-        sheet.write(row, 10, twelfth_marks.cgpa, style)
+        sheet.write(row,column_ind+4, twelfth_marks.cgpa, style)
       except:
-        sheet.write(row, 10, '-', style)
+        sheet.write(row,column_ind+4 , '-', style)
       try :
         try:
           graduation_marks = EducationalDetails.objects.get(student = student, course = 'UG0')
         except:
           graduation_marks = EducationalDetails.objects.filter(student = student, course = 'UG0')[0]
-        sheet.write(row, 11, graduation_marks.cgpa, style)
+        sheet.write(row,column_ind+5 , graduation_marks.cgpa, style)
         if graduation_marks.discipline == 'NOT':
           grad_disc = graduation_marks.discipline_provided
         elif graduation_marks.discipline == 'NA':
@@ -294,14 +303,14 @@ def selected_students(request, company_id) :
         else :
           branch = Branch.objects.filter(pk = graduation_marks.discipline)[0]
           grad_disc = branch.name
-        sheet.write(row, 12, grad_disc, style)
-        sheet.write(row, 13, graduation_marks.institution, style)
+        sheet.write(row,column_ind+6 , grad_disc, style)
+        sheet.write(row,column_ind+7, graduation_marks.institution, style)
       except:
-        sheet.write(row, 11, '-', style)
-        sheet.write(row, 12, '-', style)
-        sheet.write(row, 13, '-', style)
-      sheet.write(row, 14, student.user.contact_no,style)
-      sheet.write(row, 15, student.user.email, style)
+        sheet.write(row, column_ind+5, '-', style)
+        sheet.write(row, column_ind+6, '-', style)
+        sheet.write(row, column_ind+7, '-', style)
+      sheet.write(row, column_ind+8, student.user.contact_no,style)
+      sheet.write(row, column_ind+9, student.user.email, style)
     wbk.save(response)
     return response
   except Exception as e:

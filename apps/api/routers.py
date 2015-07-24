@@ -3,11 +3,13 @@ class SessionRouter(object):
     A router to control all database operations on models in the
     auth application.
     """
+    old_db_apps = ['sessions', 'phpapps']
+
     def db_for_read(self, model, **hints):
         """
         Attempts to read auth models go to auth_db.
         """
-        if model._meta.app_label == 'sessions':
+        if model._meta.app_label in self.old_db_apps or model.__name__ == 'PHPSession':
             return 'sessions_db'
         return None
 
@@ -15,7 +17,7 @@ class SessionRouter(object):
         """
         Attempts to write auth models go to auth_db.
         """
-        if model._meta.app_label == 'sessions':
+        if model._meta.app_label in self.old_db_apps or model.__name__ == 'PHPSession':
             return 'sessions_db'
         return None
 
@@ -31,8 +33,8 @@ class SessionRouter(object):
         database.
         """
         if db == 'sessions_db':
-            return model._meta.app_label == 'sessions'
-        elif model._meta.app_label == 'sessions':
+            return model._meta.app_label in self.old_db_apps or model.__name__ == 'PHPSession'
+        elif model._meta.app_label in self.old_db_apps or model.__name__ == 'PHPSession':
             return False
         return None
 

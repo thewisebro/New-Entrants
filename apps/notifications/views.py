@@ -19,30 +19,29 @@ def notification_dict(usernotification):
 
 @ajax_login_required
 def fetch(request):
-  if request.is_ajax() and request.method == 'GET':
-    usernotifications = request.user.usernotification_set.all()
-    not_viewed = usernotifications.filter(viewed=False).count()
-    action = request.GET['action']
-    pk = request.GET['id']
-    if not action == 'previous':
-      number = int(request.GET['number'])
-      if action == 'first':
-        pass
-      elif action == 'next':
-        usernotifications = usernotifications.filter(pk__lt=pk)
-        print usernotifications.count()
-      data = json.dumps({
-          'notifications': map(notification_dict,
-            usernotifications[:number]),
-          'more': int(usernotifications.count() > number),
+  usernotifications = request.user.usernotification_set.all()
+  not_viewed = usernotifications.filter(viewed=False).count()
+  action = request.GET['action']
+  pk = request.GET['id']
+  if not action == 'previous':
+    number = int(request.GET['number'])
+    if action == 'first':
+      pass
+    elif action == 'next':
+      usernotifications = usernotifications.filter(pk__lt=pk)
+      print usernotifications.count()
+    data = json.dumps({
+      'notifications': map(notification_dict,
+          usernotifications[:number]),
+      'more': int(usernotifications.count() > number),
+      'not_viewed': not_viewed,
+    })
+  else:
+    usernotifications = usernotifications.filter(pk__gt=pk)
+    data = json.dumps({
+        'notifications': map(notification_dict, usernotifications),
           'not_viewed': not_viewed,
-      })
-    else:
-      usernotifications = usernotifications.filter(pk__gt=pk)
-      data = json.dumps({
-          'notifications': map(notification_dict, usernotifications),
-          'not_viewed': not_viewed,
-      })
+    })
   return HttpResponse(data, content_type='application/json')
 
 @ajax_login_required
@@ -58,3 +57,16 @@ def mark_read(request):
         'not_viewed': not_viewed
       })
       return HttpResponse(data, content_type='application/json')
+
+@ajax_login_required
+def mark_all_read(request):
+  if request.method == 'POST':
+    usernotifications = UserNotification.objects.filter(user=request.user, viewed=False)
+    for usernotification in usernotifications:
+      usernotification.viewed = True
+      usernotification.save()
+    not_viewed = 0
+    data = json.dumps({
+      'not_viewed': not_viewed
+    })
+    return HttpResponse(data, content_type='application/json')

@@ -58,7 +58,9 @@ def index(request):
         return HttpResponseRedirect(reverse('placement.views_results.company_list'))
       else :
         messages.error(request, 'You are not alloted any placement group. If you are elligible to visit this portal, contact IMG.')
-        return render_to_response('placement/error.html', context_instance=RequestContext(request))
+        l.info(request.user.username+': Redirected to Channeli')
+        return HttpResponseRedirect(reverse('nucleus.views.index'))
+#        render_to_response('placement/error.html', context_instance=RequestContext(request))
     else:
     # XXX : Do not take student from session, at least home page should reflect the changes.
       student = Student.objects.get(user = request.user)
@@ -172,7 +174,11 @@ def apply(request, company_id) :
       company_req = float(company.cgpa_requirement)
     except:
       company_req = 0
-    student_cgpa = EducationalDetails.objects.filter(student = student, course__startswith = student.branch.graduation).order_by('-course')[0].cgpa
+    student_cgpa_queryset = EducationalDetails.objects.filter(student = student, course__startswith = student.branch.graduation)
+    if not student_cgpa_queryset:
+      student_cgpa = 0
+    else:
+      student_cgpa = student_cgpa_queryset.order_by('-course')[0].cgpa
     if company_req > float(student_cgpa):
       l.info(request.user.username +' applying to company having higher CGPA requirements.')
       return HttpResponse("You can not apply to this company as it has higher CGPA requirements.")
