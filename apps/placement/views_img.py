@@ -794,7 +794,7 @@ def edit_comments(request, company_id):
 #TODO: Edit comments for company coordinators as well as placement managers. Don't know how to map comments to Placement Manager
   user = request.user
   company_contact = CompanyContactInfo.objects.get(id=company_id)
-  a = user.groups.filter(name=['Placement Manager']).exists()
+  a = user.groups.filter(name='Placement Manager').exists()
   if not a:
     campus_contact_lst = CampusContact.objects.filter(student=user.student, contact_person__company_contact=company_contact).order_by('-contact_person__is_primary')
   else:
@@ -807,6 +807,11 @@ def edit_comments(request, company_id):
     if not a:
       comment_inst = form.save(commit=False)
       comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']), student=user.student)
+      comment_inst.save()
+    if a and not user.groups.filter(name='Company Coordinator').exists():
+      comment_inst = form.save(commit=False)
+      comment_inst.comment = "<span name="+request.user.username+" style='color:red;'>"+form.cleaned_data['comment']+"</span>"
+      comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']))
       comment_inst.save()
 
   else:
