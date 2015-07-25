@@ -23,6 +23,7 @@ import subprocess
 import datetime
 import smtplib
 import json
+import requests
 
 def user_team_member(user):
   ''' returns true if a user is a team member '''
@@ -40,7 +41,12 @@ def index(request):
 def about(request):
   ''' About '''
   count_members = User.objects.filter(groups__name = 'IMG Member', student__passout_year__isnull = True).count()
-  return render(request, 'img_website/about.html', {'count':count_members})
+  facebook_page_id = "353701311987"
+  facebook_app_id = "904617832937960"
+  facebook_app_secret = "19a80c4a997da2c4c02441a3d11b22e3"
+  data = requests.get("https://graph.facebook.com/%s/?fields=engagement&access_token=%s|%s" %(facebook_page_id, facebook_app_id, facebook_app_secret))
+  page_likes = data.json()['engagement']['count']
+  return render(request, 'img_website/about.html', {'count':count_members, 'page_likes':page_likes})
 
 def contact(request):
   ''' Contact '''
