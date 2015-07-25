@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<style>
+input[type="text"]
+{
+  width : 300px;
+}
+</style>
+{% endblock styles %}
+
+{% block body %}
+  <form action="" method="post">
+  {% csrf_token %}
+  {{ linkset.as_p }}
+  <input type="submit" value="Submit">
+  </form>
+{% endblock body %}
+
+{% block scripts %}
+{% endblock scripts %}

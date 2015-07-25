@@ -1,0 +1,140 @@
+{% extends "img_website/base.html" %}
+
+{% block head %}
+ <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASm3CwaK9qtcZEWYa-iQwHaGi3gcosAJc&sensor=false"></script>
+
+	<meta name="author" content="">
+
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{% endblock head %}
+
+{% block styles %}
+  {{ block.super }}
+{% endblock styles %}
+
+{% block scripts %}
+  {{ block.super }}
+{% endblock scripts %}
+
+{% block links %}
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/"> HOME </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/works"> WORKS </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/blog"> BLOG </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/about"> ABOUT </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/status/"> STATUS </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/team"> TEAM </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/contact"><span class="active"> CONTACT </span></a> </li>
+{% endblock links %}
+
+{% block body %}
+
+<!-- CONTENT: CONTACT -->
+
+	<div id="contact" class="row strip">
+
+		<div class="container">
+
+			<div class="row">
+
+				<div class="span2 offset1 blackstrip" style="width:210px;">
+
+				</div>
+
+			</div>
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row strip -->
+	<div class="row heading">
+
+		<div class="container">
+
+				<div class="row">
+
+					<div class="span10 offset1">
+					Get in touch!
+						<p> got something to say?</p>
+					</div>
+
+				</div>
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row heading -->
+
+	<div class="row contact fadediv">
+
+		<div class="container">
+
+			<div class="row">
+
+				<div class="span4 offset1 contact_form">
+
+					<div>
+						<ul class="contact_details">
+							<li class="telephone">+91-1332-284521 </li>
+							<a href="mailto:img.iitr.img@gmail.com" target="_blank" style="text-decoration:none;"><li class="message"><span>Leave a message</span> </li></a>
+						</ul>
+					</div>
+
+          <form action="" method="post">
+           <!-- {{ contact_form.name }}
+            {{ contact_form.email }}
+            {{ contact_form.message }} 
+            <button type="submit" class="btn">Submit</button>-->
+		 {% if messages %}
+ 			 {% block messages %}
+  				 {% for message in messages %}
+   					  <div class="success_message">{{ message }}</div>
+  				 {% endfor %}
+ 			 {% endblock messages %}
+ 		 {% endif %}
+          </form>
+
+				</div>
+
+				<div class="span6 contact_image fadediv" id="map">
+
+				</div>
+
+			</div>
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row contact -->
+	        <script type="text/javascript">
+            // When the window has finished loading create our google map below
+            google.maps.event.addDomListener(window, 'load', init);
+         var myLatlng = new google.maps.LatLng(29.86262, 77.8965);
+            function init() {
+                // Basic options for a simple Google Map
+                // For more options see: https://developers.google.com/maps/documentation/javascript/reference#MapOptions
+                var mapOptions = {
+                    // How zoomed in you want the map to start at (always required)
+                    zoom: 19,
+
+                    // The latitude and longitude to center the map (always required)
+                    center: myLatlng, // New York
+
+                    // How you would like to style the map. 
+                    // This is where you would paste any style found on Snazzy Maps.
+                };
+
+                // Get the HTML DOM element that will contain your map 
+                // We are using a div with id="map" seen below in the <body>
+                var mapElement = document.getElementById('map');
+
+                // Create the Google Map using out element and options defined above
+                var map = new google.maps.Map(mapElement, mapOptions);
+				  var marker = new google.maps.Marker({
+				  position: myLatlng,
+				  map: map,
+				  title: 'Information Management Group'
+  });
+
+            }
+        </script>
+
+
+{% endblock body %}

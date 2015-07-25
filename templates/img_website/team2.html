@@ -1,0 +1,273 @@
+{% extends "img_website/base.html" %}
+
+{% block head %}
+	<meta name="author" content="">
+
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{% endblock head %}
+
+{% block styles %}
+  {{ block.super }}
+{% endblock styles %}
+
+{% block scripts %}
+{{ block.super }}
+<script type="text/javascript">
+//light box
+jQuery(document).ready(function($) {
+
+// global variables for script
+var current, size;
+
+$('.lightboxTrigger').click(function(e) {
+
+  // prevent default click event
+  e.preventDefault();
+
+  // grab href from clicked element
+  var image_href = $(this).attr("href");
+  // determine the index of clicked trigger
+  var slideNum = $('.lightboxTrigger').index(this);
+
+  // find out if #lightbox exists
+  if ($('#lightbox').length > 0) {
+    // #lightbox exists
+    $('#lightbox').fadeIn(300);
+    // #lightbox does not exist - create and insert (runs 1st time only)
+  } else {
+    // create HTML markup for lightbox window
+    var lightbox =
+        '<div id="lightbox">' +
+        '<p>Close X</p>' +
+        '<div id="slideshow">' +
+        '<div class="nav">' +
+        '<a class="prev slide-nav">prev</a>' +
+        '<a class="next slide-nav">next</a>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+
+    //insert lightbox HTML into page
+    $('body').append(lightbox);
+    // fill lightbox with .lightboxTrigger hrefs in #imageSet
+    $('#imageSet').find('.lightboxTrigger').each(function() {
+        var name_html = $(this).attr("id");
+        {% for member in members %}
+          var name_back = "{{ member.member_name.admission_semtype }}";
+          if(name_html == name_back){
+          var $href = $(this).attr('href');
+          $('#slideshow').append(
+          '<img src="'+$href+'">' +
+          '<div class="desc"><h3> {{ member.member_name.user.name }}</h3><div class="desc-text">{% autoescape on %}{{ member.member_about.strip }}{% endautoescape %}</div><div class="social-cont"><ul class="social-icons">{% for link in member.memberlinks_set.all %}{% ifequal link.website "facebook" %}<li> <a target="_blank"href="{{ link.link }}" class="facebook"></a> </li>{% endifequal %}{% ifequal link.website "quora" %} <li> <a target="_blank"href="{{ link.link }}" class="quora"></a> </li>{% endifequal %}{% ifequal link.website "twitter" %} <li> <a target="_blank"href="{{ link.link }}" class="twitter"></a> </li>{% endifequal %}{% ifequal link.website "googleplus" %} <li> <a target="_blank"href="{{ link.link }}" class="googleplus"></a> </li>{% endifequal %}{% ifequal link.website "github" %}<li> <a target="_blank"href="{{ link.link }}" class="github"></a> </li>{% endifequal %}{% ifequal link.website "linkedin" %}<li> <a target="_blank"href="{{ link.link }}" class="linkedin"></a> </li>{% endifequal %}{% endfor %}</ul></div></div>'
+          );
+          }
+          {% endfor %}
+      });
+  }
+
+  // setting size based on number of objects in slideshow
+  size = $('#slideshow img').length;
+
+  // hide all slide, then show the selected slide
+  $('#slideshow img').hide();
+  $('#slideshow img:eq(' + slideNum + ')').show();
+  $('.desc').hide();
+  $('.desc:eq(' + slideNum + ')').show();
+
+  // set current to selected slide
+  current = slideNum;
+});
+
+//Click anywhere on the page to get rid of lightbox window
+$('body').on('click', '#lightbox', function() { // using .on() instead of .live(). more modern, and fixes event bubbling issues
+  $('#lightbox').fadeOut(300);
+});
+$(document).keydown(function(e){
+    if (e.keyCode == 27) { 
+      $('#lightbox').fadeOut(300);
+    }
+});
+
+// show/hide navigation when hovering over #slideshow
+$('body').on(
+  { mouseenter: function() {
+    $('.nav').fadeIn(300);
+  },/* mouseleave: function() {
+    $('.nav').fadeOut(300);
+  }*/
+  },'#slideshow');
+
+// navigation prev/next
+$('body').on('click', '.slide-nav', function(e) {
+
+  // prevent default click event, and prevent event bubbling to prevent lightbox from closing
+  e.preventDefault();
+  e.stopPropagation();
+
+  var $this = $(this);
+  var dest;
+
+  // looking for .prev
+  if ($this.hasClass('prev')) {
+    dest = current - 1;
+    if (dest < 0) {
+      dest = size - 1;
+    }
+  } else {
+    // in absence of .prev, assume .next
+    dest = current + 1;
+    if (dest > size - 1) {
+      dest = 0;
+    }
+  }
+
+  // fadeOut curent slide, FadeIn next/prev slide
+  $('#slideshow img:eq(' + current + ')').fadeOut(0);
+  $('.desc:eq(' + current + ')').fadeOut(0);
+  $('#slideshow img:eq(' + dest + ')').fadeIn(300);
+  $('.desc:eq(' + dest + ')').fadeIn(300);
+
+  // update current slide
+  current = dest;
+});
+
+//left arrow key and right arrow key
+$(document).keydown(function(e){
+    if (e.keyCode == 37) { 
+      var dest;
+      dest = current - 1;
+      if (dest < 0) {
+        dest = size - 1;
+      }
+    }
+    else if (e.keyCode == 39) { 
+      var dest;
+      dest = current + 1;
+      if (dest > size - 1) {
+        dest = 0;
+      }
+    }
+
+    // fadeOut curent slide, FadeIn next/prev slide
+    $('#slideshow img:eq(' + current + ')').fadeOut(0);
+    $('.desc:eq(' + current + ')').fadeOut(0);
+    $('#slideshow img:eq(' + dest + ')').fadeIn(0);
+    $('.desc:eq(' + dest + ')').fadeIn(0);
+
+    // update current slide
+    current = dest;
+});
+
+
+});
+</script>
+{% endblock scripts %}
+
+{% block links %}
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/"> HOME </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/works/"> WORKS </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/blog/"> BLOG </span></a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/about/"> ABOUT </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/status/"> STATUS </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/team/"><span class="active"> TEAM </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/contact/"> CONTACT </a> </li>
+{% endblock links %}
+
+{% block body %}
+	<!-- CONTENT: TEAM -->
+
+	<!--------------------------------------------------- RECENT -->
+	<div id="team" class="row strip">
+
+		<div class="container">
+
+			<div class="row">
+
+				<div class="offset1 blackstrip" style="width:157px;">
+
+				</div>
+
+			</div>
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row strip -->
+
+	<div class="row heading">
+
+		<div class="container">
+
+				<div class="row">
+
+					<div class="label span2 offset1">
+						<span class="label-text">CURRENT TEAM</span>
+					</div>
+
+					<div class="team-nav1 fr">
+						<span class="team-tab active" id="all">All</span>
+						<span class="team-tab" id="V">V</span>
+						<span class="team-tab" id="IV">IV</span>
+						<span class="team-tab" id="III">III</span>
+						<span class="team-tab" id="II">II</span>
+						<span class="team-tab" id="I">I</span>
+					</div>
+
+				</div>
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row heading -->
+
+<div class="row teamcontent content-one" id="imageSet">
+		<div class="container">
+
+			<div class="row">
+
+				<div class="span11 offset1">
+        {% for member in members %}
+          {% if member.member_name.semester == "UG51" or member.member_name.semester == "UG50" %}
+					  <div class="work_box V">
+          {% else %}
+          {% if member.member_name.semester == "UG41" or member.member_name.semester == "UG40" %}
+            <div class="work_box IV">
+          {% else %}
+          {% if member.member_name.semester == "UG31" or member.member_name.semester == "UG30" %}
+            <div class="work_box III">
+          {% else %}
+          {% if member.member_name.semester == "UG21" or member.member_name.semester == "UG20" %}
+            <div class="work_box II">
+          {% else %}
+          {% if member.member_name.semester == "UG11" or member.member_name.semester == "UG10" %}
+            <div class="work_box I">
+          {% endif %}
+          {% endif %}
+          {% endif %}
+          {% endif %}
+          {% endif %}
+              <a href="{{ MEDIA_URL }}{{ member.member_pic }}" id="{{ member.member_name.user.name }}" class="lightboxTrigger"><img style="width:114px;height:138px;" src="{{ MEDIA_URL }}{{ member.member_pic }}"></a>
+              <div class="work_box_image">
+                <ul class="social-icons">
+                {% for link in member.memberlinks_set.all %}
+                    <a target="_blank"href="{{ link.link }}" class="{{ link.website }}"> </a>
+                {% endfor %}
+                </ul>
+              </div>
+              <div class="work_box_text">
+                <span class="work_box_text_title">{{ member.member_name.user.name }}</span> <br/>
+                {{ member.member_post }}
+              </div>
+
+            </div>
+        {% endfor %}
+
+				</div> <!-- end span10 offset1 -->
+
+			</div>
+
+		</div> <!-- end container -->
+</div> <!-- end row teamcontent content-one -->
+
+
+{% endblock body %}
+
