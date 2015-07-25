@@ -27,6 +27,39 @@ INSERT INTO nci.nucleus_studentinfo (student_id,fathers_name,fathers_occupation,
 INSERT INTO nci.nucleus_faculty (user_id,department,resume,designation,address,employee_code,date_of_joining,home_page) SELECT user_id,department,resume,designation,address,employee_code,date_of_joining,home_page FROM channeli_dump.facapp_faculty;
 
 
+#jukebox
+
+insert into nci.jukebox_album select * from channeli_dump.jukebox_album;
+
+insert into nci.jukebox_artist select * from channeli_dump.jukebox_artist;
+
+insert into nci.jukebox_genre select * from channeli_dump.jukebox_genre;
+
+insert into nci.jukebox_song(id,datetime_created,id_no,song,file_name,album_id,language,count,score) select id,datetime_created,id_no,song,file_name,album_id,language,count,score from channeli_dump.jukebox_song;
+
+insert into nci.jukebox_album_artists select * from channeli_dump.jukebox_album_artists;
+
+insert into nci.jukebox_song_artists select * from channeli_dump.jukebox_song_artists;
+
+insert into nci.jukebox_song_genres select * from channeli_dump.jukebox_song_genres;
+
+insert into nci.jukebox_jukebox_person(id,datetime_created,songs_listen,person_id) select id,datetime_created,songs_listen,person_id from channeli_dump.jukebox_jukebox_person;
+
+insert into nci.jukebox_playlist(id,datetime_created,name,songs,private,public_count,person_id) select id,datetime_created,name,songs,private,public_count,person_id from channeli_dump.jukebox_playlist;
+
+insert into nci.jukebox_playlist_liked_by select * from channeli_dump.jukebox_playlist_liked_by;
+
+# lostfound
+
+insert into nci.lostfound_founditems(id,user_id,item_found,category,datetime_created,place,status,other_details,contact,address,email,trashed) select *,0 from channeli_dump.lostfound_founditems;
+
+insert into nci.lostfound_lostitems(id,user_id,item_lost,category,datetime_created,place,status,other_details,contact,address,email,trashed) select *,0 from channeli_dump.lostfound_lostitems;
+
+
+
+
+
+
 
 
 
@@ -55,5 +88,160 @@ INSERT INTO nci.events_calendar (id,name,cal_type) SELECT id,name,cal_type FROM 
 INSERT INTO nci.events_calendar_users (id,calendar_id,user_id) SELECT id,calendar_id,user_id FROM channeli_dump.events_calendar_users;
 INSERT INTO nci.events_event (id,calendar_id,uploader_id,title,date,time,upto_date,upto_time,place,description,event_type,datetime_added,email_sent) SELECT id,calendar_id,uploader_id,title,date,time,upto_date,upto_time,place,description,event_type,datetime_added,email_sent FROM channeli_dump.events_event;
 
+#placement
+
+#checked
+INSERT INTO nci.placement_placementperson (id, placed_company_category, no_of_companies_placed, status, photo, is_debarred, student_id) SELECT  id, placed_company_category, no_of_companies_placed, status, photo, is_debarred, person_id FROM channeli_dump.placement_placementperson;
+
+#checked
+INSERT INTO nci.placement_internshipinformation (id, brief_description, industry, title, period, priority, visible, student_id) SELECT id, brief_description, industry, title, period, priority, visible, person_id FROM channeli_dump.placement_internshipinformation;
+
+#checked
+INSERT INTO nci.placement_projectinformation (id, brief_description, industry, title, period, priority, visible, student_id) SELECT id, brief_description, industry, title, period, priority, visible, person_id FROM channeli_dump.placement_projectinformation;
+
+#checked
+INSERT INTO nci.placement_extracurriculars (id, name_of_activity, year, achievement, priority, visible, student_id) SELECT id, name_of_activity, year, achievement, priority, visible, person_id from channeli_dump.placement_extracurriculars;
+
+#checked
+INSERT INTO nci.placement_jobexperiences (id, organisation, post, date_of_joining, date_of_leaving, brief_description, priority, visible, student_id) SELECT id, organisation, post, date_of_joining, date_of_leaving, brief_description, priority, visible, person_id from channeli_dump.placement_jobexperiences;
+
+#checked
+INSERT INTO nci.placement_languagesknown (id, language, proficiency, student_id) SELECT id, language, proficiency, person_id from channeli_dump.placement_languagesknown;
+
+#checked
+INSERT INTO nci.placement_researchpublications (id, author, title, publisher, year, priority, visible, student_id) SELECT id, author, title, publisher, year, priority, visible, person_id  from channeli_dump.placement_researchpublications;
+
+#checked
+INSERT INTO nci.placement_educationaldetails (id, year, sgpa, cgpa, course, institution, discipline, discipline_provided, student_id) SELECT id, year, sgpa, cgpa, course, institution, discipline, discipline_provided, person_id from channeli_dump.placement_educationaldetails;
+
+#checked
+INSERT INTO nci.placement_placementinformation (id, registration_no, area_of_interest, computer_languages, software_packages, achievements, course_taken, reference_1, designation_1, institute_1, email_1, phone_1, reference_2, designation_2, institute_2, email_2, phone_2, student_id) SELECT id, registration_no, area_of_interest, computer_languages, software_packages, achievements, course_taken, reference_1, designation_1, institute_1, email_1, phone_1, reference_2, designation_2, institute_2, email_2, phone_2, person_id from channeli_dump.placement_placementinformation;
+
+#checked
+INSERT INTO nci.placement_cptmember (id, name, contact_no, year, email, currently_a_member) SELECT id, name, contact_no, year, email, currently_a_member from channeli_dump.placement_cptmember;
+
+#checked
+INSERT INTO nci.placement_company (id, name, year, status, place_of_posting, category, latest_date_of_joining, package_ug, package_pg, package_phd, ctc_remark, cgpa_requirement, company_description, pre_placement_talk, shortlist_from_resumes, group_discussion, online_test, written_test, paper_based_test, interview_1, interview_2, interview_3, last_date_of_applying, name_of_post, description_of_post, other_requirements, total_vacancies_for_iitr, website, brochure, sector, contact_person_id) SELECT id, name, year, status, place_of_posting, category, latest_date_of_joining, package_ug, package_pg, package_phd, ctc_remark, cgpa_requirement, company_description, pre_placement_talk, shortlist_from_resumes, group_discussion, online_test, written_test, paper_based_test, interview_1, interview_2, interview_3, last_date_of_applying, name_of_post, description_of_post, other_requirements, total_vacancies_for_iitr, website, brochure, sector, contact_person_id from channeli_dump.placement_company;
+
+#checked
+INSERT INTO  nci.placement_companyapplicationmap (id, status, shortlisted, time_of_application, company_id, plac_person_id) SELECT id, status, shortlisted, time_of_application, company_id, plac_person_id from channeli_dump.placement_companyapplicationmap ;
+
+#checked
+INSERT INTO nci.placement_secondround (id, branch_id, year) SELECT id, branch_id, year from channeli_dump.placement_secondround;
+
+#checked
+INSERT INTO nci.placement_results (id, company_id, student_id) SELECT id, company_id, person_id from channeli_dump.placement_results;
+
+#checked
+INSERT INTO nci.placement_forumpost (id, enrollment_no, person_name, discipline_name, department_name, title, content, date, forum_type) SELECT id, enrollment_no, person_name, discipline_name, department_name, title, content, date, forum_type from channeli_dump.placement_forumpost;
+
+#checked
+INSERT INTO nci.placement_forumreply (id, enrollment_no, person_name, content, date, post_id) SELECT id, enrollment_no, person_name, content, date, post_id from channeli_dump.placement_forumreply ;
+
+#checked
+INSERT INTO nci.placement_feedback (id, feedback, date, company_id, student_id) SELECT id, feedback, date, company_id, person_id from channeli_dump.placement_feedback ;
+
+#checked
+INSERT INTO nci.placement_notices (id, notice, date_of_upload) SELECT id, notice, date_of_upload from channeli_dump.placement_notices;
+
+#checked
+INSERT INTO nci.placement_contactperson (id, contact_person, designation, phone_no, email) SELECT id, contact_person, designation, phone_no, email from channeli_dump.placement_contactperson;
+
+#checked
+INSERT INTO nci.placement_companycontact (id, company_name, cluster, status, last_contact, person_in_contact, comments, when_to_contact, contactperson_id) SELECT id, company_name, cluster, status, last_contact, person_in_contact, comments, when_to_contact, contactperson_id from channeli_dump.placement_companycontact;
+
+#checked
+INSERT INTO nci.placement_placementmgr (id, coordi_id, company_name_id) SELECT id, coordi_id, company_name_id from channeli_dump.placement_placementmgr;
+
+#checked
+INSERT INTO nci.placement_companycoordi (id, student_id) SELECT id, person_id from channeli_dump.placement_companycoordi;
+
+#checked
+INSERT INTO nci.placement_companyslot (id, visibility, status, start_date, end_date) SELECT id, visibility, status, start_date, end_date from channeli_dump.placement_companyslot;
+
+#checked
+INSERT INTO nci.placement_companyplacementpriority (id, priority, date_created, date_updated, company_id, slots_id, student_id) SELECT id, priority, date_created, date_updated, company_id, slots_id, person_id from channeli_dump.placement_companyplacementpriority ;
+
+#checked
+INSERT INTO nci.placement_workshoppriority (id, day1_priority, day2_priority, day3_priority, day4_priority, day5_priority, interview_application, student_id) SELECT id, day1_priority, day2_priority, day3_priority, day4_priority, day5_priority, interview_application, person_id from channeli_dump.placement_workshoppriority ;
+
 # Download Softwares
 INSERT INTO nci.softwares_software (id,soft_name,category,image,url,version,description,date_added,download_count,added_by,soft_file) SELECT id,soft_name,category,image,url,version,description,date_added,download_count,added_by,soft_file FROM channeli_dump.softwares_software;
+
+#MCM
+INSERT INTO nci.mcm_mcmperson (id, air, unfair_means, family_income, other_scholarship, date_time, student_id) SELECT id, air, unfair_means, family_income, other_scholarship, date_time, person_id from channeli_dump.mcm_mcmperson;
+
+INSERT INTO nci.mcm_studentloanaid (id, `check`, cgpa, sgpa, fathers_income, fathers_pan_no, mothers_pan_no, gaurdians_pan_no, guardians_name, guardians_occupation, guardians_income, guardians_address, mothers_occupation, mothers_income, other_scholarship_details, previous_aid_amount, previous_aid_session, work_bhawan_details, date_time, student_id) SELECT id, `check`, cgpa, sgpa, fathers_income, fathers_pan_no, mothers_pan_no, gaurdians_pan_no, guardians_name, guardians_occupation, guardians_income, guardians_address, mothers_occupation, mothers_income, other_scholarship_details, previous_aid_amount, previous_aid_session, work_bhawan_details, date_time, person_id from channeli_dump.mcm_studentloanaid;
+
+INSERT INTO nci.mcm_mcm (id, scholar_type, `check`, air, unfair_means, cgpa, sgpa, family_income, other_scholarship_details, datetime, payment_choice, student_id) SELECT id, scholar_type, `check`, air, unfair_means, cgpa, sgpa, family_income, other_scholarship_details, datetime, payment_choice, person_id from channeli_dump.mcm_mcm;
+
+#INTERNSHIP_ONLINE
+#all_checked
+
+INSERT INTO nci.internship_internshipperson (id, status, is_placed, student_id) SELECT id, status, is_placed, person_id from channeli_dump.internship_internshipperson;
+
+INSERT INTO nci.internship_company (id, name_of_company, status, year, address, latest_date_of_joining, stipend, stipend_remark, cgpa_requirements, description, designation_of_contact_person, email, fax, last_date_of_applying, name_of_contact_person, nature_of_duties, name_of_post, no_of_employees, other_requirements, telephone, pre_internship_talk, shortlist_from_resumes, group_discussion, online_test, written_test, paper_based_test, interview_1, interview_2, interview_3, probable_date_of_arrival, total_vacancies, training_period, turnover, website, brochure,sector) SELECT id, name_of_company, status, year, address, latest_date_of_joining, stipend, stipend_remark, cgpa_requirements, description, designation_of_contact_person, email, fax, last_date_of_applying, name_of_contact_person, nature_of_duties, name_of_post, no_of_employees, other_requirements, telephone, pre_internship_talk, shortlist_from_resumes, group_discussion, online_test, written_test, paper_based_test, interview_1, interview_2, interview_3, probable_date_of_arrival, total_vacancies, training_period, turnover, website, brochure,sector from channeli_dump.internship_company;
+
+INSERT INTO nci.internship_companyapplicationmap (id, status, company_id, student_id) SELECT id, status, company_id, person_id from channeli_dump.internship_companyapplicationmap;
+
+INSERT INTO nci.internship_forumpost (id, enrollment_no, person_name, discipline_name, department_name, title, content, date, forum_type) SELECT id, enrollment_no, person_name, discipline_name, department_name, title, content, date, forum_type from channeli_dump.internship_forumpost;
+
+INSERT INTO nci.internship_forumreply (id, enrollment_no, person_name, content, date, post_id) SELECT id, enrollment_no, person_name, content, date, post_id from channeli_dump.internship_forumreply ;
+
+INSERT INTO nci.internship_feedback (id, enrollment_no, person_name, discipline_name, department_name, company_name, feedback, date, year) SELECT id, enrollment_no, person_name, discipline_name, department_name, company_name, feedback, date, year from channeli_dump.internship_feedback;
+
+INSERT INTO nci.internship_results (enrollment_no, person_name, company_name, discipline_name, department_name, year, company_id) SELECT enrollment_no, person_name, company_name, discipline_name, department_name, year, company_id from channeli_dump.internship_results;
+
+INSERT INTO nci.internship_resultsnew (id, company_id, student_id) SELECT id, company_id, person_id from channeli_dump.internship_resultsnew;
+
+INSERT INTO nci.internship_notices (id, notice, date_of_upload) SELECT id, notice, date_of_upload from channeli_dump.internship_notices ;
+
+INSERT INTO nci.internship_companypriority (id, priority, company_id, student_id) SELECT id, priority, company_id, person_id from channeli_dump.internship_companypriority;
+
+#facapp
+
+INSERT INTO nci.facapp_honors(id,faculty_id, year, award, institute, priority, visibility, datetime_created) SELECT *,'2015-04-14 21:42:47' FROM channeli_dump.facapp_honors;
+
+INSERT INTO nci.facapp_participationseminar (id, faculty_id, name, place, sponsored_by, date, priority, visibility, datetime_created) SELECT *, '2015-04-14 21:42:47' FROM channeli_dump.facapp_participationseminar;
+
+INSERT INTO nci.facapp_membership(id, faculty_id, organisation, position, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_membership;
+
+INSERT INTO nci.facapp_administrativebackground(id, faculty_id, from_year, to_year, designation, organisation, at_level, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_administrativebackground;
+
+INSERT INTO nci.facapp_professionalbackground(id, faculty_id, from_year, to_year, designation, organisation, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_professionalbackground;
+
+INSERT INTO nci.facapp_miscellaneous(id, faculty_id, particulars_of_course, innovation_in_teaching, instructional_tasks, process_development, extension_tasks, other_work, self_appraisal, comments, separate_summary, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_miscellaneous;
+
+INSERT INTO nci.facapp_educationaldetails(id, faculty_id, subject, year, university, degree, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_educationaldetails;
+
+INSERT INTO nci.facapp_collaboration(id, faculty_id, topic, organisation, level, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_collaboration;
+
+INSERT INTO nci.facapp_booksauthored(faculty_id, books, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_booksauthored;  
+
+INSERT INTO nci.facapp_refereedjournalpapers(faculty_id, papers, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_refereedjournalpapers;
+
+INSERT INTO nci.facapp_invitations(id, faculty_id, topic, organisation, category, priority, year, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_invitations;
+
+INSERT INTO nci.facapp_multiplepost(id, post, faculty_id, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_multiplepost;
+
+INSERT INTO nci.facapp_teachingengagement(id, faculty_id, priority, class_name, semester, course_code, title, no_of_students, lecture_hours, practical_hours, tutorial_hours, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_teachingengagement;
+
+INSERT INTO nci.facapp_sponsoredresearchprojects(id, faculty_id, financial_outlay, funding_agency, period, other_investigating_officer, status_of_project, type_of_project, year, topic, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_sponsoredresearchprojects;
+
+INSERT INTO nci.facapp_projectandthesissupervision(id, faculty_id, title_of_project, names_of_students, name_of_other_supervisor, description, course, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_projectandthesissupervision;
+
+INSERT INTO nci.facapp_phdsupervised(id, faculty_id, topic, name_of_other_supervisor, registration_year, status_of_phd, phd_type, scholar_name, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_phdsupervised;
+
+INSERT INTO nci.facapp_researchscholargroup(id, faculty_id, scholar_name, interest, home_page, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_researchscholargroup;
+
+INSERT INTO nci.facapp_interests(id, faculty_id, general_topic, research_work_topic, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_interests;
+
+INSERT INTO nci.facapp_visits(id, faculty_id, purpose_of_visit, institute_visited, date, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_visits;
+
+INSERT INTO nci.facapp_participationinshorttermcourses(id, faculty_id, course_name, sponsored_by, date, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_participationinshorttermcourses;
+
+INSERT INTO nci.facapp_organisedconference(id, faculty_id, conference_name, sponsored_by, date, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_organisedconference;
+
+INSERT INTO nci.facapp_speciallecturesdelivered (id, faculty_id, title, place, description, date, priority, visibility, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_speciallecturesdelivered;
+
+INSERT INTO nci.facapp_facspace (user_id, space, datetime_created) SELECT *, NOW() FROM channeli_dump.facapp_facspace;

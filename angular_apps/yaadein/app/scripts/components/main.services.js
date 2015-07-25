@@ -55,20 +55,37 @@ app.service('HomeService', ['$http', '$q', function ($http, $q) {
 		return deferred.promise;
 	};
 
+  this.getSpots = function () {
+    var def = $q.defer();
+    var URL = baseURL + '/spots/';
+    $http.get(URL)
+      .success(function (d) {
+          def.resolve(d.results);
+          for(var i = 0; i < d.results.length; i += 1) {
+            d.results[i].profile_pic = originURL + d.results[i].profile_pic;
+            d.results[i].cover_pic = originURL + d.results[i].cover_pic;
+            d.results[i].isSpot = true;
+          }
+      });
+    return def.promise;
+  };
+
 }]);
 
 app.service('UserService', ['$http', '$q', function ($http, $q) {
 
 	this.getUser = function (enrolmentNo) {
-		var def = $q.defer(), url;
+		var def = $q.defer(), url, spot = false;
     if (!isNaN(enrolmentNo)) {
 		  url = baseURL + '/user/' + enrolmentNo.toString() + '/';
     } else {
       url = baseURL + '/spot/' + enrolmentNo.toString() + '/';
+      spot = true;
     }
     $http.get(url)
       .success(function (x) {
         def.resolve(x);
+        x.isSpot = spot;
     });
 		return def.promise;
 	};

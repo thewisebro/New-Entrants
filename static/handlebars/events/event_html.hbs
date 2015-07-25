@@ -1,0 +1,69 @@
+<div class='event-container'
+      id='event-container{{ Event.id }}'
+      onmouseover='event_container_mouse_over({{Event.id}});'
+      onmouseout='event_container_mouse_out({{Event.id}});'>
+  <div class='event'>
+    <div class='event-time-title'>
+      <div class='event-time{{#if color}} {{color}}-time{{/if}}'>
+        <div class='event-date'>{{Event.day}}</div>
+        <div class='event-monthyear'>{{Event.monthyear}}</div>
+      </div>
+        <!--{{#if Event.time}}{{ Event.time }}{{else}}Event Title{{/if}}</div-->
+        <div class='event-type-head'>
+          <div class='event-shown-calendar-name'>
+            <div class='event-options-icon-wrapper'>
+              {{#if Event.editable }}
+                <div class='event-options-icon-wrapper-inside' onclick='show_event_options(this,event);'>
+                  <div class='event-options-icon' id='event-options{{Event.id}}'>&#9660;</div>
+                </div>
+                <div style='clear:both'></div>
+                <div class='event-options-pop-up'>
+                  <div onclick='edit_event({{Event.id}},event);'>Edit</div>
+                  <div onclick='delete_event({{Event.id}},event);'>Delete</div>
+                </div>
+              {{/if}}
+            </div>
+            <!--
+            {{#ifCond (Cond calendar_name '==' 'all') '||'
+                      (Cond (Cond calendar_name '==' 'virtual_calendar') '&&' (Cond virtual_calendar.calendar_name '==' 'all'))}}
+              <div class='shown-cal-name' {{#ifCond Event.shown_calendar_name '==' 'Groups Calendar'}}style='color:#43b167'{{/ifCond}}>
+                {{Event.shown_calendar_name}}
+              </div>
+            {{/ifCond}}-->
+          </div>
+          {{#if Event.weekday}}<span class='event-weekday'>{{Event.weekday}}</span>{{/if}}
+        </div>
+      <div class='event-name'>{{{Event.title}}}</div>
+      <div style='clear:both'></div>
+    </div>
+    {{#if Event.uptotime }}
+      <div class='event-duration'>
+        <div class='event-left'><i class="fa fa-clock-o"></i></div>
+        <div class='event-right'>{{Event.uptotime}}{{#if Event.duration}} ({{Event.duration}}){{/if}}</div>
+        <div style='clear:both'></div>
+      </div>
+    {{/if}}
+    {{#if Event.place}}
+      <div class='event-place'>
+        <div class='event-left'><div title='Venue' class='fa fa-map-marker'></div></div>
+        <div class='event-right'>{{{Event.place}}}</div>
+        <div style='clear:both'></div>
+      </div>
+    {{/if}}
+    {{#if Event.added_by}}
+      <div class='event-by'>
+        <div class='event-left'>By</div>
+        <div class='event-right'>{{{Event.added_by}}}</div>
+        <div style='clear:both'></div>
+      </div>
+    {{/if}}
+    {{#if Event.description}}
+      <div class='event-short-description'>
+        <div class='event-left'><div title='Description' class='fa fa-navicon'></div></div>
+        <div class='event-right'>{{{Event.description}}}</div>
+        <div style='clear:both'></div>
+      </div>
+    {{/if}}
+  </div>
+</div>
+

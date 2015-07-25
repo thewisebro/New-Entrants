@@ -1,0 +1,44 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*Common*/
+table { font-family:Arial, Helvetica, sans-serif; font-size:12px; color: #2a3445; border: 0px; }
+td{	vertical-align:middle; height: 36px; text-align:center; padding:5px; border-right: solid #cbced2 1px; } /* border-bottom: solid #cbced2 1px; } */
+/*different colors to different rows*/
+.odd{ background-color:#e1e2e3; } .odd:hover { background-color:#d3d4d5;}
+.even{ background-color:#fff; } .even:hover { background-color:#f4f4f4;}
+/*ENDS*/
+.header { background-color:#2a3445; color: #fff;  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #383838), color-stop(100%, #484848)); background-image: -webkit-linear-gradient(top, #383838, #484848); background-image: -moz-linear-gradient(top, #383838, #484848); background-image: -ms-linear-gradient(top, #383838, #484848); background-image: -o-linear-gradient(top, #383838, #484848); background-image: linear-gradient(top, #383838, #484848); font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; font-weight:bold; font-size:16px; }
+.header td { /*border-right: solid #474747 1px;*/ border-bottom: solid #474747 1px; }
+.leftalign { text-align:left; 	padding: 0px 10px;}
+.colspan2{ }
+
+/*Specific button style*/
+.style_button { padding: 5px; background-color: #eeeeee; background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eeeeee), color-stop(100%, #cccccc)); background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc); background-image: -moz-linear-gradient(top, #eeeeee, #cccccc); background-image: -ms-linear-gradient(top, #eeeeee, #cccccc); background-image: -o-linear-gradient(top, #eeeeee, #cccccc); background-image: linear-gradient(top, #eeeeee, #cccccc); border: 1px solid #ccc; border-bottom: 1px solid #bbb; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; color: #333; font: bold 15px "Delicious","Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif; text-align: center; }
+.style_button:hover { background-color: #eeeeee; background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eeeeee), color-stop(100%, #cccccc)); background-image: -webkit-linear-gradient(top, #ddd, #bbb); background-image: -moz-linear-gradient(top, #ddd, #bbb); background-image: -ms-linear-gradient(top, #ddd, #bbb); background-image: -o-linear-gradient(top, #ddd, #bbb); background-image: linear-gradient(top, #ddd, #bbb); color: #333; }
+/*button styles ends */
+/*Width of the table eds*/
+.long_length { width: 245px; }
+.medium_length { width: 115px; }
+/*width ends */
+.lefttopcurve{ -webkit-border-radius: 6px 0px 0px 0px; -moz-border-radius: 6px 0px 0px 0px; }
+.righttopcurve{ -webkit-border-radius: 0px 6px 0px 0px; -moz-border-radius: 0px 6px 0px 0px; }
+.leftbottomcurve { -webkit-border-radius: 0px 0px 0px 6px; -moz-border-radius: 0px 0px 0px 6px; }
+.rightbottomcurve { -webkit-border-radius: 0px 0px 6px 0px; -moz-border-radius: 0px 0px 6px 0px; }
+.noborder{ border: 0px; }
+
+table tr 
+{
+  border-bottom:1px solid #cbced2; 
+}
+
+table tr:last-child
+{
+  border-bottom:none;
+  border-right:none;
+}
+
+table tr td:last-child
+{
+  border-right:none;
+}

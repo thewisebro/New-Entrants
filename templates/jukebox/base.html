@@ -20,7 +20,6 @@
    <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css">-->
     <script>
       var user = {% if jb_user.is_authenticated %}{{ jb_user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
-      var user1 = {% if jb_user1.is_authenticated %}{{ jb_user1.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
       var logged_in = user.is_authenticated;
     </script>
 

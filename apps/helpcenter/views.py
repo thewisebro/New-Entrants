@@ -45,6 +45,8 @@ def reply_dict(reply):
   if reply.by_img:
     username = 'img'
     user_photo = '/static/images/nucleus/img_dp.png'
+  elif reply.response.user.in_group('Helpcenter Admin'):
+    user_photo = reply.user.photo_url
   else:
     user_photo = reply.response.user.photo_url
   return {
@@ -56,11 +58,12 @@ def reply_dict(reply):
 
 def response_dict(response, user=None):
   replies = map(reply_dict, response.reply_set.all())
+  default_dp = '/static/images/nucleus/default_dp.png'
   res_dict = {
     'id' : response.pk,
     'username' : response.user.username if response.user else 'anonymous',
     'user_name' : response.user.html_name if response.user else 'Anonymous User',
-    'user_photo' : response.user.photo_url,
+    'user_photo' : response.user.photo_url if response.user else default_dp,
     'app' : response.app,
     'text' : urlize(escape(response.text)).replace('\n','<br>'),
     'replies' : replies,

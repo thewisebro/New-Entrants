@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from core.forms import ModelForm
 from django.http import HttpResponse, Http404
 from django.http import HttpResponseRedirect
@@ -34,6 +34,7 @@ import collections
 logger = logging.getLogger('buysell')
 
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url='/login/')
 def buysell(request):
   logger.info(request.user.username+": in homepage.")
   return HttpResponseRedirect('/buysell/buy/')
@@ -357,14 +358,14 @@ def sendmail(request, type_of_mail, id_pk):
   logger.info(request.user.username + ': entered sendmail.')
   user = request.user
   username = request.user.username
-  sex=request.user.person.gender
+  sex=request.user.gender
   pronoun = "him"
   if sex=="F":
     pronoun="her"
   contact = request.user.contact_no
   app='buysell'
   if type_of_mail == 'buy':
-    buy_mail_list=BuyMailsSent.items.filter(by_user__username=user,item__pk=id_pk)
+    buy_mail_list=BuyMailsSent.objects.filter(by_user__username=user,item__pk=id_pk)
     qryst = ItemsForSale.items.filter(pk = id_pk)
     if buy_mail_list:
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
@@ -388,7 +389,7 @@ def sendmail(request, type_of_mail, id_pk):
 
   if type_of_mail == 'request':
     qryst = ItemsRequested.items.filter(pk = id_pk)
-    buy_mail_list=RequestMailsSent.items.filter(by_user__username=user,item__pk=id_pk)
+    buy_mail_list=RequestMailsSent.objects.filter(by_user__username=user,item__pk=id_pk)
     if buy_mail_list:
       messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       return HttpResponseRedirect('/buysell/requested_item_details/'+id_pk+'/')
@@ -578,19 +579,22 @@ def editsave(request, category, itemReqId):
 def deleteEntry(request, category, pk_id):
   logger.info(request.user.username + ': entered deleteEntry with category ' + category + '.')
   if category == "item":
-    item = ItemsForSale.items.get(pk = pk_id)
+    item = ItemsForSale.objects.get(pk = pk_id)
     imgPath = MEDIA_ROOT + str(item.item_image)
     if request.user.username == item.user.username:
       try:
         Notification.delete_notification('buysell', item)
         item.delete()
-      except:
+      except Exception as e:
         messages.error(request, 'An error occured. The error has been reported.')
         logger.info(request.user.username + ': error in deleting items for sale with pk ' + pk_id+ '.')
         logger.info(e)
         return HttpResponseRedirect('/buysell/my-account/')
       else:
-        os.remove(imgPath)
+        try:
+          os.remove(imgPath)
+        except Exception:
+          pass
         messages.success(request, 'Item successfully deleted.')
         logger.info(request.user.username + ': item deleted with pk ' + pk_id + '.')
         return HttpResponseRedirect('/buysell/my-account/')

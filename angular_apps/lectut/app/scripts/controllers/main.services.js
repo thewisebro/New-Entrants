@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('lectutApp');
-app.service('CourseDetails', ['$http', '$q','$cookies',
-      function ($http, $q, $cookies) {
+app.service('CourseDetails', ['$http', '$q','$cookies','ngNotify',
+      function ($http, $q, $cookies, ngNotify) {
        var deferred;
        var csrf = $cookies.csrftoken;
         var channeli_sessid = $cookies.CHANNELI_SESSID;
@@ -28,18 +28,25 @@ app.service('CourseDetails', ['$http', '$q','$cookies',
 
          //$http.get(myUrl).success(function (d){
          $http.post(base_domain+'/lectut_api/feeds/'+id+'/').success(function (d) {
-             console.log("this is full content.");
-             console.log(d);
+             //console.log("this is full content.");
+             //console.log(d);
           deferred.resolve(d);
          }).error(function(d){
-            console.log("error");
+            //console.log("error");
+             ngNotify.set('Error fetching course details.', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+
          });
         return deferred.promise;
       };
 }]);
 
-app.service('FeedFileDownload', ['$http', '$q','$cookies',
-      function($http,$q,$cookies){
+app.service('FeedFileDownload', ['$http', '$q','$cookies','ngNotify',
+
+      function($http,$q,$cookies,ngNotify){
        var deferred;
        var csrf = $cookies.csrftoken;
 
@@ -47,20 +54,27 @@ app.service('FeedFileDownload', ['$http', '$q','$cookies',
           deferred = $q.defer();
           // Append / after the request because Shubham Sir has written this on django docs for security reasons.
           var urlSend = base_domain+'/lectut_api/download/'+id+'/';
-          console.log(urlSend);
+          //console.log(urlSend);
           $http.post(urlSend).success(function(d){
           //console.log(d);
           deferred.resolve(d);
          }).error(function(d){
-            console.log("error");
+            //console.log("error");
+             ngNotify.set('Error downloading file.', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+
          });
         return deferred.promise;
       };
 }]);
 
 
-app.service('RemoveFeedPost', ['$http', '$q','$cookies',
-      function($http,$q,$cookies){
+app.service('RemoveFeedPost', ['$http', '$q','$cookies','ngNotify',
+
+      function($http,$q,$cookies,ngNotify){
        var deferred;
        var csrf = $cookies.csrftoken;
 
@@ -68,19 +82,25 @@ app.service('RemoveFeedPost', ['$http', '$q','$cookies',
           deferred = $q.defer();
           // Append / after the request because Shubham Sir has written this on django docs for security reasons.
           var urlSend = base_domain+'/lectut_api/deletePost/'+id+'/';
-          console.log(urlSend);
+          //console.log(urlSend);
           $http.post(urlSend).success(function(d){
           //console.log(d);
           deferred.resolve(d);
          }).error(function(d){
-            console.log("error");
+           // console.log("error");
+             ngNotify.set('Error removing post.', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+
          });
         return deferred.promise;
       };
 }]);
 
-app.service('RemoveFeedFile', ['$http', '$q','$cookies',
-      function($http,$q,$cookies){
+app.service('RemoveFeedFile', ['$http', '$q','$cookies','ngNotify',
+      function($http,$q,$cookies,ngNotify){
        var deferred;
        var csrf = $cookies.csrftoken;
       
@@ -88,18 +108,24 @@ app.service('RemoveFeedFile', ['$http', '$q','$cookies',
           deferred = $q.defer();
           // Append / after the request because Shubham Sir has written this on django docs for security reasons.
           var urlSend = base_domain+'/lectut_api/deleteFile/'+id+'/';
-          console.log(urlSend);
+          //console.log(urlSend);
           $http.post(urlSend).success(function(d){
           //console.log(d);
           deferred.resolve(d);
          }).error(function(d){
-            console.log("error");
+            //console.log("error");
+           ngNotify.set('Error deleting file.', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+
          });
         return deferred.promise;
       };
 }]);
-app.service('DataTables', ['$http','$q',
-      function($http, $q){
+app.service('DataTables', ['$http','$q','ngNotify',
+      function($http, $q, ngNotify){
         var deferred;
           this.getTable = function(id){
           var urlSend = base_domain+'/lectut_api/files/'+id+'/'; 
@@ -109,76 +135,140 @@ app.service('DataTables', ['$http','$q',
          // console.log(d);
           deferred.resolve(d);
           }).error(function(d){
-            console.log("error");
+            //console.log("error");
+             ngNotify.set('Error getting files.', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+
           });
           return deferred.promise;
         };
 }]);
 
-app.service('Members', ['$http','$q',
-      function($http, $q){
+app.service('Members', ['$http','$q','ngNotify',
+      function($http, $q, ngNotify){
         var deferred;
           this.getMembers = function(id){
-          var urlSend = base_domain+'/lectut_api/members/'+3+'/'; 
+          var urlSend = base_domain+'/lectut_api/members/'+id+'/'; 
           deferred = $q.defer();
-           $http.post(urlSend).success(function(d){
+           $http.post(urlSend).success(function(d){  
           deferred.resolve(d);
           }).error(function(d){
-            console.log("error");
+             //console.log("error");
+             ngNotify.set('Error fetching members.', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
           });
           return deferred.promise;
         };
 }]);
 
-app.service('LoadFeed', ['$http','$q',
-      function($http, $q){
+app.service('LoadFeed', ['$http','$q','ngNotify',
+      function($http, $q, ngNotify){
         var deferred;
           this.loadFeed = function(id){
-          var urlSend = base_domain+'/lectut_api/feeds/'+id+'/'; 
+          var urlSend = base_domain+'/lectut_api/feeds/'+id+'/';
+          //console.log(urlSend);
           deferred = $q.defer();
           $http.post(urlSend, {dataId: id}).success(function(d){
               deferred.resolve(d);
           }).error(function(d){
-            console.log("error");
+            //console.log("error");
+             ngNotify.set('Error loading feed.', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+
           });
           return deferred.promise;
         };
 }]);
 
-app.service('LoadOnePost', ['$http','$q',
-      function($http, $q){
+app.service('LoadOnePost', ['$http','$q','ngNotify',
+      function($http, $q, ngNotify){
         var deferred;
-          this.getOnePost = function(postId){
-          var urlSend = base_domain+'/lectut_api/feeds/'+3+'/'+ postId+'/';
+          this.getOnePost = function(courseId,postId){
+          var urlSend = base_domain+'/lectut_api/feeds/'+courseId+'/'+ postId+'/';
           deferred = $q.defer();
           $http.post(urlSend).success(function(d){
               deferred.resolve(d);
           }).error(function(d){
-            console.log("error");
+            //console.log("error");
+             ngNotify.set('Error loading post.', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+
           });
           return deferred.promise;
         };
 }]);
 
-
-app.service('SearchService', ['$http','$q',
-      function($http, $q){
+app.service('LoadOneFile', ['$http','$q','ngNotify',
+      function($http, $q,ngNotify){
         var deferred;
-          console.log("s");
+          this.getOneFile = function(courseId,fileId){
+          var urlSend = base_domain+'/lectut_api/feeds/file/'+courseId+'/'+ fileId+'/';
+          deferred = $q.defer();
+          $http.post(urlSend).success(function(d){
+              deferred.resolve(d);
+          }).error(function(d){
+            //console.log("error");
+             ngNotify.set('Error loading file.', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+
+          });
+          return deferred.promise;
+        };
+}]);
+
+app.service('SearchService', ['$http','$q','ngNotify',
+      function($http, $q, ngNotify){
+        var deferred;
+          //console.log("s");
           this.getSearchData = function(qs){
           var urlSend = base_domain+'/lectut_api/search/?q='+qs;
           deferred = $q.defer();
           $http.post(urlSend).success(function(d){
               deferred.resolve(d);
           }).error(function(d){
-            console.log("error");
+            //console.log("error");
+             ngNotify.set('Search failed.', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+          });
+          return deferred.promise;
+        };
+}]);
+app.service('CourseDataById', ['$http','$q','ngNotify',
+      function($http, $q, ngNotify){
+        var deferred;
+          //console.log("s");
+          this.getCourseDataById = function(batchId){
+          var urlSend = base_domain+'/lectut_api/batchDetails/'+batchId+'/';
+          deferred = $q.defer();
+          $http.post(urlSend).success(function(d){
+              deferred.resolve(d);
+          }).error(function(d){
+            //console.log("error");
           });
           return deferred.promise;
         };
 }]);
 
-app.service('InitialSetup', ['$http','$q',
-      function($http, $q){
+app.service('InitialSetup', ['$http','$q','ngNotify',
+      function($http, $q, ngNotify){
         var deferred;
           //console.log("s");
           this.getInitialData = function(){
@@ -187,14 +277,20 @@ app.service('InitialSetup', ['$http','$q',
           $http.post(urlSend).success(function(d){
               deferred.resolve(d);
           }).error(function(d){
-            console.log("error");
+            //console.log("error");
+            ngNotify.set('Connection refused. We are looking into it.', {
+              position:'top',
+              type:'error',
+              duration: 200000
+             });
+
           });
           return deferred.promise;
         };
 }]);
 
-app.service('Comments', ['$http','$q',
-      function($http, $q){
+app.service('Comments', ['$http','$q','ngNotify',
+      function($http, $q, ngNotify){
         var deferred;
           //console.log("s");
           this.getComments = function(postId){
@@ -203,7 +299,13 @@ app.service('Comments', ['$http','$q',
           $http.post(urlSend).success(function(d){
               deferred.resolve(d);
           }).error(function(d){
-            console.log("error");
+            //console.log("error");
+             ngNotify.set('Error loading comment.', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+
           });
           return deferred.promise;
         };

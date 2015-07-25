@@ -1,6 +1,6 @@
 (function() {
 
-namespace("notifications", notification_clicked);
+namespace("notifications_app", notification_clicked, see_more_notifications, mark_read, mark_all_read);
 
 var notifications = Array();
 var notifications_per_request = 20;
@@ -31,7 +31,13 @@ $(document).on("logout", function(){
 });
 
 function load_notifications_page(){
-  $('#content').html("<div class='app-heading'>Notifications</div><div id='notifications'></div>");
+  $('#content').html(
+        "<div class='app-heading'>" +
+          "<div class='app-heading' id='notifications-heading'>Notifications</div>" +
+          "<div class='button2' id='all-read-button' onclick='notifications_app.mark_all_read()'>Mark all as read</div>" +
+        "</div>"+
+        "<div id='notifications'></div>"
+      );
   if(notifications.length === 0){
     update_notifications('first');
     setInterval(function(){
@@ -87,7 +93,7 @@ function display_add_notifications(position,notifications){
  }
  $('#notifications').pickify_users();
  if(more_notifications && $('#see-more-notifications').length === 0){
-   $('#content').append("<div id='see-more-notifications' class='see-more'><span class='button2' onclick='see_more_notifications();'>See More</span></div>");
+   $('#content').append("<div id='see-more-notifications' class='see-more'><span class='button2' onclick='notifications_app.see_more_notifications();'>See More</span></div>");
  }
  if(!more_notifications && $('#see-more-notifications').length==1){
   $('#see-more-notifications').css('display','none');
@@ -100,12 +106,15 @@ function see_more_notifications(){
 
 function notification_html(notification){
   return ""+
-    "<div class='notification-box"+(!notification.viewed?" notification-box-not-viewed":"")+"' "+(notification.url?"style='cursor:pointer;' ":"")+
-    "onclick='notifications.notification_clicked("+notification.id+");'>"+
+    "<div id='notification"+notification.id+"' class='notification-box"+(!notification.viewed?" notification-box-not-viewed":"")+"' "+(notification.url?"style='cursor:pointer;' ":"")+
+    "onclick='notifications_app.notification_clicked("+notification.id+");'>"+
       "<div class='notification-text'>"+(notification.app in channeli_apps?
         "<a target='_blank' href='"+channeli_apps[notification.app].url+"'>"+channeli_apps[notification.app].name+"</a>: ":"")+
         notification.content+"</div>"+
-      "<div class='notification-time'>"+prettyDate(notification.datetime)+"</div><div style='clear:both'></div>"+
+      "<div class='notification-mark-read' onclick='notifications_app.mark_read("+notification.id+")'>"+
+      "Mark read</div>"+
+      "<div class='notification-time'>"+prettyDate(notification.datetime)+"</div>"+
+      "<div style='clear:both'></div>"+
     "</div>";
 }
 
@@ -129,6 +138,32 @@ function notification_clicked(notification_id){
     else
       window.open(notification.url,'_blank');
   }
+  mark_read(notification_id);
+}
+
+function mark_read(notification_id) {
+  var notification = notifications.filter(function(ntfn){return ntfn.id == notification_id;})[0];
+  if(!notification.viewed){
+    $.post("/notifications/mark_read",{
+      'id': notification_id
+      }, function(data){
+        if(!(data.not_viewed===undefined)){
+          show_not_viewed_count(data.not_viewed);
+          notification.viewed = 1;
+          $('#notification'+notification_id).removeClass('notification-box-not-viewed');
+        }
+    });
+  }
+  event.stopPropagation();
+}
+
+function mark_all_read() {
+    $.post("/notifications/mark_all_read", function(data){
+        if(!(data.not_viewed===undefined)){
+          show_not_viewed_count(data.not_viewed);
+          $('.notification-box').removeClass('notification-box-not-viewed');
+        }
+    });
 }
 
 function birthday_wish_reply(url){

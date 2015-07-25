@@ -218,7 +218,6 @@ def placement_manager_view(request):
 
 
 #  data_to_send = [[str(x) for x in list(item)] for item in lst]
-
   data_to_send = []
 
   for item in lst:
@@ -227,7 +226,7 @@ def placement_manager_view(request):
          try:
             if isinstance(x , datetime.date):
                df = DateFormat(x)
-               dl = df.format(get_format('DATE_FORMAT'))
+               dl = df.format('d/m/Y')
                a.append(str(dl))
             else:
                a.append(str(x))
@@ -374,7 +373,7 @@ def company_coordinator_view(request):
          try:
             if isinstance(x , datetime.date):
                df = DateFormat(x)
-               dl = df.format(get_format('DATE_FORMAT'))
+               dl = df.format('d/m/Y')
                a.append(str(dl))
             else:
                a.append(str(x))
@@ -407,7 +406,12 @@ def company_coordinator_today_view(request):
       a = []
       for x in list(item):
          try:
-            a.append(str(x))
+            if isinstance(x , datetime.date):
+               df = DateFormat(x)
+               dl = df.format('d/m/Y')
+               a.append(str(dl))
+            else:
+               a.append(str(x))
          except UnicodeEncodeError:
             a.append('')
       data_to_send.append(a)
@@ -419,7 +423,6 @@ def company_coordinator_today_view(request):
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
 def add_company_coordinator(request):
-  import ipdb; ipdb.set_trace()
   if request.method == 'POST':
     form = AddCoordinatorForm(request.POST)
     if form.is_valid():

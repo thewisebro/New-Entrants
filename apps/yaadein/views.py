@@ -17,7 +17,7 @@ from collections import defaultdict, Counter
 from django.contrib.sessions.models import Session
 #from nucleus import get_info, html_name
 import json as simplejson
-
+import requests
 DEVELOPMENT = settings.DEVELOPMENT
 
 """
@@ -48,7 +48,7 @@ def CORS_allow(view):
 
     response = view(request, *args, **kwargs)
     if DEVELOPMENT:
-      response["Access-Control-Allow-Origin"] = "http://172.25.55.156:7000"
+      response["Access-Control-Allow-Origin"] = "http://172.25.55.156"
       response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
       response["Access-Control-Allow-Credentials"] = 'true'
 #     response["Access-Control-Max-Age"] = "1000"
@@ -64,7 +64,8 @@ def CORS_allow(view):
 def index(request,enrno=None):
   if request:
     if not request.user.is_authenticated():
-      return HttpResponse('Error')
+      data = {'logged':"false"}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
   if request.method == 'GET':
     print "HEre"
     print enrno
@@ -73,7 +74,7 @@ def index(request,enrno=None):
     print y_user
     y_user=y_user[0]
     if not y_user.coverpic or y_user.coverpic.name=='':
-      y_user.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
+      y_user.coverpic = 'yaadein/default.jpg'
 #user = User.objects.get(username ='13114068')
     s = Student.objects.get(user__username=enrno)#=enrno
     posts_usertagged = Post.objects.filter(user_tags=s).filter(status='A')#s.tagged_user.order_by('post_date').reverse() #posts in which user is tagged
@@ -121,10 +122,13 @@ def index(request,enrno=None):
     if request.method == 'POST':
       post_data = str(simplejson.loads(request.POST['data'])['post_text'])
       user_tagged = simplejson.loads(request.POST['data'])['user_tags']
-      spots = simplejson.loads(request.POST['data'])['spot']
+      spots_tag = simplejson.loads(request.POST['data'])['spot']
 # stat = simplejson.loads(request.POST['data'])['post_type']
-      if spots:
-        spot = Spot.objects.get(name=str(spots[0]['id']))
+      if spots_tag:
+        spot = Spot.objects.get_or_create(name=str(spots_tag[0]['value']))
+        if spot[1]==True:
+          spot[0].display = False
+          spot[0].save()
       hashed = [ word for word in post_data.split() if word.startswith("#") ]
       hash_tag = []
       for word in hashed:
@@ -144,18 +148,21 @@ def index(request,enrno=None):
       else:
         post = Post(text_content=post_data, post_date=timezone.now(), owner=student)
       post.save()
-      if spots:
-        post.spots.add(spot)
-      notif_msg = 'You were tagged in a memory by '+student.user.name+'.'
-      notif_msg1 = ''+student.user.name+' posted a memory on your wall'  
+      if spots_tag:
+        post.spots.add(spot[0])
+      notif_msg = 'You were tagged in a memory by '+student.user.html_name+'.'
+      notif_msg1 = ''+student.user.html_name+' posted a memory on your wall'  
       app = 'Yaadein'
       pk = str(post.pk)
-      url = 'http://172.25.55.156:7000/post/'+pk+'/'
+      url = '/yaadein/#/post/'+pk+'/'
       notif_users=[]
+      sent_users =[]
       tagged_users = []
       if s.user!=request.user:
         notif_users.append(s.user)
+        sent_users.append(s.user.username)
       Notification.save_notification(app,notif_msg1,url,notif_users,post)
+#  requests.post("/notifications/add/",data={'channeli':True,'app':app,'text':notif_msg1,'users':sent_users,'url':url})
       print post.wall_user
       if len(imgs)>0:
         for key in imgs:
@@ -172,6 +179,7 @@ def index(request,enrno=None):
           post.user_tags.add(student_related)
       if len(user_tagged)>0: 
         Notification.save_notification(app,notif_msg,url,tagged_users,post)
+#       requests.post("/notifications/add/",data={'channeli':True,'app':app,'text':notif_msg,'users':sent_users,'url':url})
       posts_data=[{'post_id':str(post.pk)}]  
       data = {'posts_data':posts_data}
 # return  HttpResponse("post added")
@@ -186,12 +194,13 @@ def index(request,enrno=None):
 def homePage(request):
 # import ipdb;ipdb.set_trace()
   if not request.user.is_authenticated():
-    return HttpResponse('Error')
+    data = {'logged':"false"}
+    return HttpResponse(simplejson.dumps(data),'application/json') 
   y_user = YaadeinUser.objects.get_or_create(user=request.user)[0]#user=request.user
 
   logged_user = y_user.user
   if not y_user.coverpic or y_user.coverpic.name=='':
-    y_user.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
+    y_user.coverpic = 'yaadein/default.jpg'
   s = Student.objects.get(user__username=request.user.username)#=enrno
 # posts_branch_year = Post.objects.filter(owner__branch_id=s.branch_id).filter(owner__semester_no=s.semester_no).filter(status='A').order_by('post_date').reverse()
 # posts_branch = Post.objects.filter(owner__branch_id=s.branch_id).filter(status='A').order_by('post_date').reverse()
@@ -304,7 +313,8 @@ def post(request,wall_user):
 def post_display(request,pk):
   if request:
     if not request.user.is_authenticated():
-      return HttpResponse('Error')
+      data = {'logged':"false"}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
     post = Post.objects.filter(pk=pk).filter(status="A")
     post = post[0]  
     spotlist = []
@@ -337,16 +347,20 @@ def post_display(request,pk):
   else:
     return HttpResponse('Hello')
 
-
+@csrf_exempt
 @CORS_allow
 def search(request,id):
    if request: #.is_ajax():
      if not request.user.is_authenticated():
-       return HttpResponse('Error')
+       data = {'logged':"false"}
+       return HttpResponse(simplejson.dumps(data),'application/json') 
      query = request.GET.get('q','')
-#   import ipdb;ipdb.set_trace()
-     students = Student.objects.filter(Q(user__name__icontains = query)).order_by('-user__name')[:10]
-     students_final = Student.objects.filter(Q(user__name__icontains = query)).filter(branch__no_of_semesters = F('semester_no')).order_by('-user__name')[:10]
+#     import pdb;pdb.set_trace()
+     students = Student.objects.filter(user__name__istartswith = query).order_by('-user__name')[:10]
+     print len(students)
+# students = prefix_filter(students,query)[:10]
+     students_final = Student.objects.filter(user__name__istartswith = query).filter(branch__no_of_semesters = F('semester_no')).order_by('-user__name')[:10]
+#  students_final = prefix_filter(students_final,query)[:10]
      def person_dict(student):
        return {
          'id':student.user.username,
@@ -354,7 +368,8 @@ def search(request,id):
          'value':student.user.name,
          'profile_pic':student.user.photo_url
         }
-     spots = Spot.objects.filter(Q(name__icontains = query)).order_by('-name')[:10]
+     spots = Spot.objects.filter(name__istartswith = query).order_by('-name')
+#  spots = prefix_filter(spots,query)[:10]
      def spot_dict(spot):
        return {
          'id':spot.name,
@@ -375,7 +390,7 @@ def search(request,id):
      data = 'fail'
    return HttpResponse(simplejson.dumps(search_data),'application/json')
 
-
+"""
 "View to return all the users as a list of json objects."
 @csrf_exempt
 @CORS_allow
@@ -409,8 +424,8 @@ def all_users(request):
   else:
     data = 'fail'
   return HttpResponse(simplejson.dumps(search_data),'application/json')
-
-
+"""
+"""
 "View to search for spots"
 @csrf_exempt
 @CORS_allow
@@ -420,7 +435,7 @@ def spot_search(request):
     spots = Spot.objects.filter(Q(name__icontains = query)).order_by('-name')[:10]
     def spot_dict(spot):
       if not spot.coverpic or spot.coverpic.name=='':
-        spot.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
+        spot.coverpic = ''
       return {
         'id':spot.name,
         'cover_pic':spot.coverpic.url,
@@ -431,7 +446,7 @@ def spot_search(request):
   else:
     data='fail'
   return HttpResponse(simplejson.dumps(search_data),'application/json')
-
+"""
 
 "Sending invite notification to users."
 @csrf_exempt
@@ -439,21 +454,24 @@ def spot_search(request):
 def invite(request):
   if request:
     if not request.user.is_authenticated():
-      return HttpResponse('Error')
+      data = {'logged':"false"}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
 #   import ipdb;ipdb.set_trace()
     app = 'Yaadein'
     student = Student.objects.get(user__username=request.user.username)
     if student.user.gender=='M':
-      notif_msg1 = ' '+student.user.name+' invited you to cherrish memories with him.'
+      notif_msg1 = ' '+student.user.html_name+' invited you to cherish memories with him.'
     else:
-      notif_msg1 = ' '+student.user.name+' invited you to cherrish memories with her.' 
+      notif_msg1 = ' '+student.user.html_name+' invited you to cherish memories with her.' 
     user_tagged = simplejson.loads(request.body)['user_tags']
-    url = 'http://172.25.55.156:7000/profile/'+student.user.username
+    url = '/yaadein/#/profile/'+student.user.username
     tagged_users = []
+    sent_users=[]
     for user in user_tagged:
       student_related = Student.objects.get(user__username=str(user['id']))
       if student_related.user!=request.user:
         tagged_users.append(student_related.user)
+        sent_users.append(student_related.user.username)
     if len(user_tagged)>0: 
       Notification.save_notification(app,notif_msg1,url,tagged_users,student)
       return HttpResponse("True")
@@ -468,7 +486,8 @@ def invite(request):
 def hashtag(request,slug):
   if request:
     if not request.user.is_authenticated():
-      return HttpResponse('Error')
+      data = {'logged':"false"}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
     posts_data = []
     posts = Post.objects.filter(tags__slug=slug).filter(status='A').order_by('post_date').reverse()
     for post in posts:
@@ -510,12 +529,17 @@ def hashtag(request,slug):
 def spot_page(request,name):
   if request:
     if not request.user.is_authenticated():
-      return HttpResponse('Error')
+      data = {'logged':"false"}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
 #  import ipdb;ipdb.set_trace()
     posts_data = []
     spot = Spot.objects.get(name=str(name))
     if not spot.coverpic or spot.coverpic.name=='':
-      spot.coverpic = 'http://i.ytimg.com/vi/dHNIQJZg3Sk/maxresdefault.jpg'
+      spot.coverpic = 'yaadein/default.jpg'
+    if not spot.profile_pic or spot.profile_pic.name=='':
+      spot.profile_pic = 'yaadein/default.jpg'
+    print spot.coverpic
+    print spot.profile_pic
     spotlist = []
     spotlist.append({'id':spot.name,'name':spot.name,'label':spot.tagline})
     posts = Post.objects.filter(spots__name=name).filter(status="A").order_by('post_date').reverse()
@@ -554,7 +578,8 @@ def spot_page(request,name):
 def delete(request,id):
   if request:
     if not request.user.is_authenticated():
-      return HttpResponse('Error')
+      data = {'logged':"false"}
+      return HttpResponse(simplejson.dumps(data),'application/json') 
     try:
       post = Post.objects.get(pk=id)
     except Post.DoesNotExist:
@@ -586,7 +611,8 @@ def private_posts(request,id):
 @CORS_allow
 def trending(request):
   if not request.user.is_authenticated():
-    return HttpResponse('Error')
+    data = {'logged':"false"}
+    return HttpResponse(simplejson.dumps(data),'application/json') 
   tag_frequency = defaultdict(int)
   for item in Post.objects.all().filter(status="A"):
     for tag in item.tags.all():
@@ -599,7 +625,35 @@ def trending(request):
   data = {'hashed':hash_list}
   return HttpResponse(simplejson.dumps(data),'application/json')
 
- 
+@csrf_exempt
+@CORS_allow
+def spots(request):
+  if not request.user.is_authenticated():
+    data = {'logged':"false"}
+    return HttpResponse(simplejson.dumps(data),'application/json') 
+  y_user = YaadeinUser.objects.get_or_create(user=request.user)[0]#user=request.user
+  logged_user = y_user.user
+  if not y_user.coverpic or y_user.coverpic.name=='':
+    y_user.coverpic = 'yaadein/default.jpg'
+  s = Student.objects.get(user__username=request.user.username)#=enrno
+  s_all = Spot.objects.filter(display=True)
+  print s_all
+  s_data = []
+  for spot in s_all:
+    if not spot.coverpic or spot.coverpic.name=='':
+      spot.coverpic = 'yaadein/default.jpg'
+    if not spot.profile_pic or spot.profile_pic.name=='':
+      spot.profile_pic = 'yaadein/default.jpg'
+    tmp = {
+           'name': spot.name,
+           'tagline':spot.tagline,
+           'profile_pic':spot.profile_pic.url,
+           'cover_pic':spot.coverpic.url,
+           }
+    s_data.append( tmp )
+  data ={'results':s_data,}
+  return HttpResponse(simplejson.dumps(data),'application/json') 
+
 "Utility function:bubble sorting"
 def bubble(bad_list):
   length = len(bad_list) - 1
@@ -611,7 +665,14 @@ def bubble(bad_list):
       if bad_list[i].post_date < bad_list[i+1].post_date:
         sorted = False
         bad_list[i], bad_list[i+1] = bad_list[i+1], bad_list[i]
-  return bad_list    
+  return bad_list
+
+def prefix_filter(bad_list,query):
+  x=[]
+  for i in bad_list:
+    if i.name.lower().startswith(query):
+      x.append(i)
+  return x
   """
 class TagIndexView(ListView):
 # template_name = 'yaadein/tagged.html'

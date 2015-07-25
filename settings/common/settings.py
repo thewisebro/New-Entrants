@@ -247,6 +247,7 @@ THIRD_PARTY_APPS = (
 CHANNELI_APPS = (
   'nucleus',
   'jukebox',
+  'facapp',
   'api',
   'moderation',
   'notices',
@@ -275,6 +276,10 @@ CHANNELI_APPS = (
   'yaadein',
   'softwares',
   'mcm',
+  'phpapps',
+  'genforms',
+  'application_form',
+  'grades',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
@@ -284,6 +289,7 @@ FEED_APPS = (
   'lostfound',
   'buysell',
   'lectut',
+  'phpapps',
 )
 
 FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
@@ -315,7 +321,7 @@ SHELL_PLUS = "ipython"
 SESSION_COOKIE_NAME = 'CHANNELI_SESSID'
 SESSION_COOKIE_HTTPONLY = False
 SESSION_ENGINE = 'nucleus.session'
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 CACHES = {
   'default': {
@@ -383,6 +389,14 @@ LOGGING = {
       'when'     : 'midnight',
       'backupCount':365
     },
+    'placement_file_logger': {
+      'level':'DEBUG',
+      'class':'logging.handlers.TimedRotatingFileHandler',
+      'formatter': 'verbose',
+      'filename' : os.path.join(PROJECT_ROOT, 'logs/placement'),
+      'when'     : 'midnight',
+      'backupCount':365
+    },
 
   },
   'loggers': {
@@ -403,6 +417,11 @@ LOGGING = {
       'handlers':['console'],
       'level':'INFO'
     },
+    'placement': {
+      'handlers':['console'],
+      'level':'INFO'
+    },
+
   }
 }
 

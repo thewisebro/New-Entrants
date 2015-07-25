@@ -1,0 +1,15 @@
+{% extends "facapp/base.html" %}
+
+{% block model_details %}
+	    <li>Title : {{ l.title }}</li>
+      <li>Place : {{ l.place }}</li>
+      <li>Description : {{ l.description }}</li>
+      <li>Date : {{ l.date }}</li>
+
+
+
+{% endblock %}
+
+{% block model_details_to_delete %}
+	    {{ model_to_delete.title }} at {{ model_to_delete.place }}
+{% endblock %}
