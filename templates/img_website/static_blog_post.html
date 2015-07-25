@@ -39,7 +39,7 @@
 							<div class="article_title_text">
 								<h3>{{ post.title }} </h3>
                 <span class="date"> {{ post.datetime_created|date:"F jS, Y" }} , by</span>
-								<span class="author">{{ post.author.first_name }} </span>
+								<span class="author">{{ post.author.name }} </span>
 							</div>
 						</div> <!-- end artcle_title -->
 
@@ -59,7 +59,7 @@
               <div class="written-by">
                 <div class="author-image"><img src="{{ MEDIA_URL }}{{ author.member_pic }}"/></div>
 								<p>written by</p>
-								<h3>{{ author.member_name.name }}</h3>
+								<h3>{{ author.member_name.user.name }}</h3>
 
 								<ul class="social-icons social-author">
                 {% for link in author.memberlinks_set.all %}
