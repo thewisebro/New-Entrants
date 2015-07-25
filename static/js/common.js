@@ -103,7 +103,7 @@ function dialog_iframe(data){
   current_dialog = $dialog;
 }
 
-function open_login_dialog(){
+function open_login_dialog(from_buyandsell){
   dialog_iframe({
     name: 'login_dialog',
     title: 'Sign In',
@@ -119,6 +119,8 @@ function open_login_dialog(){
       if(user.is_authenticated) {
         $(document).trigger("login");
       }
+      if ( typeof(from_buyandsell) != 'undefined' && from_buyandsell == true )
+       window.top.location.reload();
     }
   });
 }
@@ -261,13 +263,16 @@ function display_messages(messages){
     $('#messages-div').html('');
 }
 
-function logout(){
+function logout(from_buyandsell){
   $.get('/logout_ajax/',{
     },function(data){
       user = {
         is_authenticated: false
       };
       $(document).trigger("logout");
+      if ( typeof(from_buyandsell) != 'undefined' && from_buyandsell == true )
+       window.top.location.reload();
+
   });
 }
 

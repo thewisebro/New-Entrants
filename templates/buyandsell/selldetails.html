@@ -11,7 +11,7 @@
 <p> {{ item.contact }}</p>
 {% endif %}
 {% endif %}
-{% if not self_flag %}
+{% if not self_flag and login_flag %}
 <form action ="" method="POST">
 {% csrf_token %}
 <input type="password" name="password">

@@ -14,15 +14,21 @@ from buyandsell.forms import *
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
+
+
 def buy(request,mc=None,c=None):
-  
+  login_flag = False
+  if request.user is not None and request.user.is_authenticated():
+   login_flag = True
+
   qdata=''
   table_data=''
   price_valid=0
   maincategory=''
   category=''
   error_msg=''
-
+  print login_flag
+  print type(request.user)
   cat_dict=get_category_dictionary()
   if request.GET.get('ll') and request.GET.get('ul'):
     pl=int(request.GET.get('ll'))
@@ -42,15 +48,27 @@ def buy(request,mc=None,c=None):
     mcatlist=BuySellCategory.objects.filter(main_category=mc)
     maincategory=mcatlist[0].main_category
   if mc and c and price_valid:
-    qdata=SaleItems.items.filter(category__main_category=mc,category__code=c,cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
+    qdata=SaleItems.items.filter(category__main_category=mc,
+                                 category__code=c,
+                                 cost__gte=pl,
+                                 cost__lte=pu,
+                                 is_active=True).order_by('-pk')
   elif mc and c and not price_valid:
-    qdata=SaleItems.items.filter(category__main_category=mc,category__code=c,is_active=True).order_by('-pk')
+    qdata=SaleItems.items.filter(category__main_category=mc,
+                                 category__code=c,
+                                 is_active=True).order_by('-pk')
   elif mc and not c  and  price_valid:
-    qdata=SaleItems.items.filter(category__main_category=mc,cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
+    qdata=SaleItems.items.filter(category__main_category=mc,
+                                 cost__gte=pl,
+                                 cost__lte=pu,
+                                 is_active=True).order_by('-pk')
   elif mc and not c and not price_valid:
-    qdata=SaleItems.items.filter(category__main_category=mc,is_active=True).order_by('-pk')
+    qdata=SaleItems.items.filter(category__main_category=mc,
+                                 is_active=True).order_by('-pk')
   elif  price_valid:
-    qdata=SaleItems.items.filter(cost__gte=pl,cost__lte=pu,is_active=True).order_by('-pk')
+    qdata=SaleItems.items.filter(cost__gte=pl,
+                                 cost__lte=pu,
+                                 is_active=True).order_by('-pk')
   else:
     qdata=SaleItems.items.filter(is_active=True).order_by('-pk')
   if qdata:
@@ -75,6 +93,7 @@ def buy(request,mc=None,c=None):
     'table_data':table_data,
     'mc':mc,
     'c':c,
+    'login_flag':login_flag,
     'cat_dict':cat_dict,
     'paginator':paginator,
     'page_list':page_list
@@ -83,6 +102,10 @@ def buy(request,mc=None,c=None):
 
 
 def viewrequests(request,mc=None,c=None):
+  login_flag = False
+  if request.user is not None and request.user.is_authenticated():
+    login_flag = True
+
   qdata=''
   table_data=''
   price_valid=0
@@ -107,15 +130,27 @@ def viewrequests(request,mc=None,c=None):
     mcatlist=BuySellCategory.objects.filter(main_category=mc)
     maincategory=mcatlist[0].main_category
   if mc and c and price_valid:
-    qdata=RequestedItems.items.filter(category__main_category=mc,category__code=c,price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
+    qdata=RequestedItems.items.filter(category__main_category=mc,
+                                      category__code=c,
+                                      price_upper__gte=pl,
+                                      price_upper__lte=pu,
+                                      is_active=True).order_by('-pk')
   elif mc and c and not price_valid:
-    qdata=RequestedItems.items.filter(category__main_category=mc,category__code=c,is_active=True).order_by('-pk')
+    qdata=RequestedItems.items.filter(category__main_category=mc,
+                                      category__code=c,
+                                      is_active=True).order_by('-pk')
   elif mc and not c  and  price_valid:
-    qdata=RequestedItems.items.filter(category__main_category=mc,price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
+    qdata=RequestedItems.items.filter(category__main_category=mc,
+                                      price_upper__gte=pl,
+                                      price_upper__lte=pu,
+                                      is_active=True).order_by('-pk')
   elif mc and not c and not price_valid:
-    qdata=RequestedItems.items.filter(category__main_category=mc,is_active=True).order_by('-pk')
+    qdata=RequestedItems.items.filter(category__main_category=mc,
+                                      is_active=True).order_by('-pk')
   elif  price_valid:
-    qdata=RequestedItems.items.filter(price_upper__gte=pl,price_upper__lte=pu,is_active=True).order_by('-pk')
+    qdata=RequestedItems.items.filter(price_upper__gte=pl,
+                                      price_upper__lte=pu,
+                                      is_active=True).order_by('-pk')
   else:
     qdata=RequestedItems.items.filter(is_active=True).order_by('-pk')
   if qdata:
@@ -141,9 +176,10 @@ def viewrequests(request,mc=None,c=None):
     'table_data':table_data,
     'mc':mc,
     'c':c,
+    'login_flag':login_flag,
     'cat_dict':cat_dict,
     'paginator':paginator,
-    'page_list':page_list
+    'page_list':page_list,
           }
   return render(request,'buyandsell/show_requests.html',context)
 
@@ -243,7 +279,7 @@ def requestitem(request):
   form=RequestForm(initial=init_dict)
   return render(request,'buyandsell/form.html',{'form':form})
 
-@login_required  
+@login_required
 def watch(request,mc=None,c=None):
 
   user=request.user
@@ -262,8 +298,11 @@ def watch(request,mc=None,c=None):
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
 
-@login_required
 def selldetails(request,pk):
+  login_flag = False
+  if request.user is not None and request.user.is_authenticated():
+   login_flag = True
+
   show_contact=1
   item=SaleItems.objects.get(pk=pk)
   self_flag=0
@@ -281,20 +320,24 @@ def selldetails(request,pk):
 
     elif not user.check_password(password):
       messages.error(request, 'Incorrect password' )
-  if len(ShowContact.objects.filter(user=user))==1:
+  if login_flag and len(ShowContact.objects.filter(user=user))==1:
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
       show_contact=0
 
   context={
     'item':item,
     'self_flag':self_flag,
-    'show_contact':show_contact
+    'show_contact':show_contact,
+    'login_flag':login_flag
           }
   print show_contact
   return render(request,'buyandsell/selldetails.html',context)
 
-@login_required
 def requestdetails(request,pk):
+  login_flag = False
+  if request.user is not None and request.user.is_authenticated():
+   login_flag = True
+
   show_contact=1
   item=RequestedItems.objects.get(pk=pk)
   self_flag=0
@@ -312,14 +355,15 @@ def requestdetails(request,pk):
 
     elif not user.check_password(password):
       messages.error(request, 'Incorrect password' )
-  if len(ShowContact.objects.filter(user=user))==1:
+  if login_flag and len(ShowContact.objects.filter(user=user))==1:
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
       show_contact=0
 
   context={
     'item':item,
     'self_flag':self_flag,
-    'show_contact':show_contact
+    'show_contact':show_contact,
+    'login_flag':login_flag
           }
   return render(request,'buyandsell/requestdetails.html',context)
 
@@ -713,7 +757,7 @@ def my_account(request):
            'show_contact':show_contact
           }
 
-  return render(request,'buyandsell/myaccount.html',context) 
+  return render(request,'buyandsell/myaccount.html',context)
 
 def get_category_dictionary():
   cat_dict={}
@@ -744,7 +788,8 @@ def trash_item(request,item_type,pk):
 @login_required
 def transaction(request,item_type,pk):
   user=request.user
-  if item_type=="sell":
+
+  if item_type == "sell":
     try:
       itm=SaleItems.items.get(pk=pk)
     except:
@@ -753,12 +798,13 @@ def transaction(request,item_type,pk):
 
     itm_user=itm.user
     if itm_user != user:
-      messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.You can only fill the form for the items in your account below")
+      messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.\
+          You can only fill the form for the items in your account")
       return HttpResponseRedirect('/buyandsell/my-account/')
 
-    if request.method=="POST":
+    if request.method == "POST":
       try:
-        filled_form=SuccessfulTransaction.objects.get(sell_item=itm)
+        filled_form=SuccessfulTransaction.objects.get(sell_item = itm)
         if filled_form:
           messages.error(request,"oops!This item is already sold,you cant submit the form again!!")
           return HttpResponseRedirect('/buyandsell/succ_trans/sell/'+pk+'/')
@@ -807,7 +853,8 @@ def transaction(request,item_type,pk):
 
     itm_user=itm.user
     if itm_user != user:
-      messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.You can only fill the form for the items in your account below")
+      messages.error(request,"This item is not added by you,you you cannot fill it's transaction form\
+          .You can only fill the form for the items in your account")
       return HttpResponseRedirect('/buyandsell/my-account/')
 
 
