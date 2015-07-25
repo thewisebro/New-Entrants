@@ -395,6 +395,18 @@ def company_coordinator_contact_person_data(request):
                df = DateFormat(x)
                dl = df.format('d/m/Y')
                a.append(str(dl))
+            elif list(item).index(x) == 7:
+               try:
+                 y = x.split("-")
+                 if len(y)==3:
+                   z = [int(i) for i in y]
+                   date=datetime.date(z[0],z[1],z[2])
+                   string_date=date.strftime("%d/%m/%Y")
+                   a.append(string_date)
+                 else:
+                   a.append(x)
+               except ValueError:
+                 a.append(x)
             else:
                a.append(str(x))
          except UnicodeEncodeError:
@@ -451,6 +463,18 @@ def company_coordinator_contact_person_data_today(request):
                df = DateFormat(x)
                dl = df.format('d/m/Y')
                a.append(str(dl))
+            elif list(item).index(x) == 7:
+               try:
+                 y = x.split("-")
+                 if len(y)==3:
+                   z = [int(i) for i in y]
+                   date=datetime.date(z[0],z[1],z[2])
+                   string_date=date.strftime("%d/%m/%Y")
+                   a.append(string_date)
+                 else:
+                   a.append(x)
+               except ValueError:
+                 a.append(x)
             else:
                a.append(str(x))
          except UnicodeEncodeError:
@@ -678,6 +702,8 @@ def person_search(request):
     data = 'fail'
   return HttpResponse(data,'application/json')
 
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists() , login_url=login_url)
 def company_search(request):
   if request.is_ajax():
     q = request.GET.get('term','')
@@ -702,6 +728,8 @@ def company_search(request):
     data = 'fail'
   return HttpResponse(data,'application/json')
 
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
 def assign_campus_contact(request):
   if request.method == 'POST':
     form = AssignCoordinatorForm(request.POST)

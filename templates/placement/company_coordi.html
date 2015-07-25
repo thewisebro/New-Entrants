@@ -98,8 +98,9 @@
            "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
               {% if today %}
               $('td:eq(0)', nRow).html("<a style='cursor:pointer;' onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[11],aData[0]));
-
-              $('td:eq(9)', nRow).html("<a style='cursor:pointer;' onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>{1}</a>".format(aData[11],aData[9]));
+              $('td:eq(5)', nRow).html("<div style='width:50px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'>{0}</div>".format(aData[5]));
+              $('td:eq(6)', nRow).html("<div style='width:100px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'>{0}</div>".format(aData[6]));
+              $('td:eq(9)', nRow).html("<div style='width:160px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'><a style='cursor:pointer;' onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)><span>{1}</span></a></div>".format(aData[11],aData[9]));
               $('td:eq(11)', nRow).html( " <div class='glyphs'>\
                                            <div class='glyph'>\
                                            <a onclick=open_frame('Edit&nbsp;Company','/placement/contact_manager/edit/{0}/',800,true)>\
@@ -112,7 +113,9 @@
               {% else %}
 
               $('td:eq(0)', nRow).html("<a style='cursor:pointer;' onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[13],aData[0]));
-              $('td:eq(9)', nRow).html("<a style='cursor:pointer;' onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)>{1}</a>".format(aData[14],aData[9]));
+              $('td:eq(5)', nRow).html("<div style='width:50px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'>{0}</div>".format(aData[5]));
+              $('td:eq(6)', nRow).html("<div style='width:100px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'>{0}</div>".format(aData[6]));
+              $('td:eq(9)', nRow).html("<div style='width:160px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'><a style='cursor:pointer;' onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)><span>{1}</span></a></div>".format(aData[14],aData[9]));
               $('td:eq(11)', nRow).html( " <div class='glyphs'>\
                                            <div class='glyph'>\
                                            <a onclick=open_frame('Edit&nbsp;Company','/placement/contact_manager/edit/{0}/',800,true)>\
