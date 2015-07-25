@@ -48,14 +48,12 @@ MANAGERS = ADMINS
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-    'NAME': 'nci',                   # Or path to database file if using sqlite3.
+    'NAME': 'channeli',                   # Or path to database file if using sqlite3.
                                           # The following settings are not used with sqlite3:
     'USER': 'channeli',
     'PASSWORD': 'channeli',
 
-    'HOST': '172.25.55.156',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-
-    'HOST': '172.25.55.156',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+    'HOST': '192.168.121.187',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
 
     'PORT': '',                           # Set to empty string for default.
   }
@@ -108,6 +106,7 @@ DEVELOPMENT_SITES = {
   'IMGSITE': {'id': 3, 'domain': 'http://imgsite.goku.channeli.in'},
 }
 
+IMG_WEBSITE_BASE_URL = '/img_website'
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media') + os.sep
@@ -281,6 +280,10 @@ CHANNELI_APPS = (
   'mcm',
   'phpapps',
   'genforms',
+  'application_form',
+  'grades',
+  'img_website',
+  'redactor',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
@@ -292,6 +295,13 @@ FEED_APPS = (
   'lectut',
   'phpapps',
 )
+
+REDACTOR_OPTIONS = {
+      'lang': 'en',
+      'toolbar': 'default',
+      'imageUpload' : MEDIA_ROOT+'img_website/redactor/',
+}
+REDACTOR_UPLOADS = MEDIA_ROOT + 'img_website/redactor/'
 
 FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
 COMMENTS_APP = 'fluent_comments'
