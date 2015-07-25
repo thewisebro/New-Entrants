@@ -130,7 +130,6 @@
   <script type="text/javascript" src="{{ STATIC_URL }}js/placement/jquery.leanModal.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/placement/dataTables.bootstrap.js"></script>
   <script type="text/javascript">
-
     if (!String.prototype.format) {
       String.prototype.format = function() {
             var args = arguments;
@@ -152,7 +151,10 @@
                           "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
                                  $('td:eq(0)', nRow).html("<input type='checkbox' class='largerCheckbox' name='assigns' value='{0}'/>".format(aData[0]));
                                  $('td:eq(1)', nRow).html("<a style='cursor:pointer;' onclick=open_frame('{1}','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[0],aData[1]));
-                                 $('td:eq(10)', nRow).html("<a style='cursor:pointer;' onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)><span>{1}</span></a>".format(aData[0],aData[10]));
+                                 $('td:eq(5)', nRow).html("<div style='width:50px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'>{0}</div>".format(aData[5]));
+                                 $('td:eq(6)', nRow).html("<div style='width:100px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'>{0}</div>".format(aData[6]));
+
+                                 $('td:eq(10)', nRow).html("<div style='width:160px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'><a style='cursor:pointer;' onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)><span>{1}</span></a></div>".format(aData[0],aData[10]));
                                  $('td:eq(12)', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
                                                               <a onclick=open_frame('Edit&nbsp;Company','/placement/contact_manager/edit/{0}/',800,true)>\
@@ -165,6 +167,10 @@
                           },
                         }).columnFilter();
     });
+
+</script>
+<script>
+
 </script>
 <script type="text/javascript">
 function confirmfn(id){
