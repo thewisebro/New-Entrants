@@ -283,6 +283,8 @@ CHANNELI_APPS = (
   'genforms',
   'application_form',
   'grades',
+  'img_website',
+  'redactor',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
@@ -294,6 +296,13 @@ FEED_APPS = (
   'lectut',
   'phpapps',
 )
+
+REDACTOR_OPTIONS = {
+      'lang': 'en',
+      'toolbar': 'default',
+      'imageUpload' : MEDIA_ROOT+'img_website/redactor/',
+}
+REDACTOR_UPLOADS = MEDIA_ROOT + 'img_website/redactor/'
 
 FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
 COMMENTS_APP = 'fluent_comments'
