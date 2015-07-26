@@ -294,45 +294,6 @@ class Notices(models.Model):
     filename = '.'.join(filename.split('.')[:-1])
     return filename
 # Miscellaneous models start.
-
-class ContactPerson(models.Model):
-    """
-      Contains company contact student details
-    """
-    contact_person = models.CharField(max_length=100)
-    designation = models.CharField(max_length=100, null=True , blank=True)
-    phone_no = models.CharField(max_length=250, null=True , blank=True)
-    email = models.CharField(max_length=250 , null=True  , blank=True)
-
-class CompanyContact(models.Model):
-    """
-      Contains the contact of companies
-    """
-    company_name = models.CharField(max_length=250)
-    cluster = models.IntegerField(choices=PC.CLUSTER_CHOICES, null=True, blank=True)
-    contactperson = models.ForeignKey(ContactPerson, null=True, blank=True)
-    status = models.CharField(max_length=40, choices=PC.STATUS_CHOICES, null=True, blank=True)
-    last_contact = models.CharField(max_length=100, null=True, blank=True)
-    person_in_contact = models.CharField(max_length=100, null=True, blank=True)
-    comments = models.TextField(null=True, blank=True)
-    when_to_contact = models.DateField(null=True, blank=True)
-
-class PlacementMgr(models.Model):
-    """
-      Placement manager fields.
-    """
-    coordi=models.ForeignKey(Student)
-    company_name=models.ForeignKey(CompanyContact)
-
-class CompanyCoordi(models.Model):
-    """
-      Contains information about company coordinators
-    """
-    student = models.ForeignKey(Student)
-
-    def __unicode__(self):
-      return self.student.user.name
-
 class CompanySlot(models.Model):
     """
       Time slots for different companies
@@ -373,4 +334,91 @@ class WorkshopPriority(models.Model):
   def __unicode__(self):
      return str(self.student.user.name)+str(self.day1_priority)+str(self.day2_priority)+str(self.day3_priority)+str(self.day4_priority)+str(self.day5_priority)
 
+############NEW CONTACT MANAGER MODELS
 
+class CompanyContactInfo(models.Model):
+    """
+        Company info which links to a primary contact person, i.e, the HR or manager
+        whom one should contact as a primary designated identity of that company.
+    """
+    name = models.CharField(max_length=250, unique=True, help_text="Should be unique")
+    cluster = models.IntegerField(choices=PC.CLUSTER_CHOICES, null=True, blank=True)
+    status = models.CharField(max_length=40, choices=PC.STATUS_CHOICES, null=True, blank=True)
+
+    def __unicode__(self):
+        return str(self.name)+str(self.status)
+class ContactPerson(models.Model):
+    """
+        Details of person inside the company whom campus contact would be
+        contacting.
+    """
+    name = models.CharField(max_length=250)
+    designation = models.CharField(max_length=100, null=True , blank=True)
+    phone_no = models.CharField(max_length=250, null=True , blank=True)
+    email = models.CharField(max_length=250 , null=True  , blank=True)
+    company_contact = models.ForeignKey(CompanyContactInfo, null=True, blank=True)
+    is_primary = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return str(self.name)+' '+str(self.designation)+' '+str(self.is_primary)
+
+
+class CampusContact(models.Model):
+    """
+        Students in the campus who would be contacting different companies contact
+        F.K. to student field to get info about that student and extending info about
+        the contact person like when to contact, last contact.
+    """
+    student = models.ForeignKey(Student, null=True, blank=True)
+    last_contact = models.CharField(max_length=100, null=True, blank=True)
+    when_to_contact = models.DateField(null=True, blank=True)
+    contact_person =  models.OneToOneField(ContactPerson)
+
+    def __unicode__(self):
+        return str(self.student.user.name)+' '+str(self.contact_person)
+
+class CompanyContactComments(models.Model):
+    """
+        Comments to keep updated about contacts status
+    """
+    comment = models.CharField(max_length=500)
+    date_created = models.DateTimeField(auto_now_add=True)
+    campus_contact = models.ForeignKey(CampusContact)
+
+    def __unicode__(self):
+      return str(self.campus_contact)+' '+str(self.comment)
+
+###########COMMON CONTACT MANAGER MODELS
+
+
+#############################OLD CONTACT MANAGER MODELS
+
+
+class CompanyContact(models.Model):
+    """
+      Contains the contact of companies
+    """
+    company_name = models.CharField(max_length=250)
+    cluster = models.IntegerField(choices=PC.CLUSTER_CHOICES, null=True, blank=True)
+    contactperson = models.ForeignKey(ContactPerson, null=True, blank=True)
+    status = models.CharField(max_length=40, choices=PC.STATUS_CHOICES, null=True, blank=True)
+    last_contact = models.CharField(max_length=100, null=True, blank=True)
+    person_in_contact = models.CharField(max_length=100, null=True, blank=True)
+    comments = models.TextField(null=True, blank=True)
+    when_to_contact = models.DateField(null=True, blank=True)
+
+class PlacementMgr(models.Model):
+    """
+      Placement manager fields.
+    """
+    coordi=models.ForeignKey(Student)
+    company_name=models.ForeignKey(CompanyContact)
+
+class CompanyCoordi(models.Model):
+    """
+      Contains information about company coordinators
+    """
+    student = models.ForeignKey(Student)
+
+    def __unicode__(self):
+      return self.student.user.name

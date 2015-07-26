@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+{% extends "placement/nucleus/base_old.html" %}
+{% load kwacros %}
+{% block title %}
+      Contact Manager
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/base.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/nucleus/style.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/input_styles.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/dataTables.bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/jquery.dataTables.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+{% endblock %}
+{% block body %}
+<div class="content">
+      <div class="header">
+        <div class="tittle">
+          <h2>Comment Editor for {{ company.name }}</h2>
+        </div>
+      </div>
+
+<div class='commentform'>
+<form method="post" action="">{% csrf_token %}
+  {{form.uniform }}
+<div class="edit-row">
+  <div class="dabba">
+        <input class="input-button" type="submit" value="Submit" />
+  </div>
+</div>
+</form>
+<div>
+<h4><center>Comments in <span style="color:red;">red</span> are added by Placement Manager.</center></h4>
+</div>
+{% for campus_contact in campus_contacts %}
+<div style="display:inline-block;width:45%;margin-left:10px;margin-right:10px;float:left;">
+<table style="table-layout:fixed;" class="table table-striped table-bordered display compact">
+<tr><th colspan="2"><h4><center>{{ campus_contact.contact_person.name }}</center></h4></th></tr>
+{% if campus_contact.companycontactcomments_set.all %}
+<tr>
+  <th>Date</th>
+  <th>Comment</th>
+</tr>
+{% for comment in campus_contact.companycontactcomments_set.all|dictsortreversed:"date_created" %}
+<tr>
+<td>{{comment.date_created | date:"d/m/Y H:i" }}</td>
+<td style="word-wrap:break-word;">{{comment.comment|safe}}</td>
+</tr>
+{% endfor %}
+{% else %}
+<tr><th colspan="2"><H4><center>No comments</center></h4></th></tr>
+{% endif %}
+</table>
+</div>
+{% endfor %}
+</div>
+{%endblock%}
