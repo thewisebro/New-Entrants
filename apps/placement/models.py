@@ -369,7 +369,7 @@ class CampusContact(models.Model):
         F.K. to student field to get info about that student and extending info about
         the contact person like when to contact, last contact.
     """
-    student = models.ForeignKey(Student)
+    student = models.ForeignKey(Student, null=True, blank=True)
     last_contact = models.CharField(max_length=100, null=True, blank=True)
     when_to_contact = models.DateField(null=True, blank=True)
     contact_person =  models.OneToOneField(ContactPerson)

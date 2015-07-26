@@ -65,10 +65,9 @@ for old_company in old_company_lst:
       try:
         company_coordinator = CompanyCoordi.objects.get(student__user__name=old_company.person_in_contact)
         student = company_coordinator.student
+        campus_contact.student = student
       except CompanyCoordi.DoesNotExist:
-        student = None
-      campus_contact.student = student
-
+        pass
     contact_person.save()
     campus_contact.last_contact = old_company.last_contact
     campus_contact.when_to_contact = old_company.when_to_contact
@@ -95,10 +94,10 @@ for old_company in old_company_lst:
  except Exception as e:
   x = True
   f = open("errors.txt", 'a')
-  f.write(": ".join(unicode(str(old_company.id),errors='ignore'),unicode(str(e),errors='ignore'),"\n"))
+  f.write(": ".join((unicode(str(old_company.id),errors='ignore'),unicode(str(e),errors='ignore'),"\n")))
   f.close()
  except UnicodeEncodeError as e:
   x = True
   f = open("errors.txt", 'a')
-  f.write(": ".join(unicode(str(old_company.id),errors='ignore'),unicode(str(e),errors='ignore'),"\n"))
+  f.write(": ".join((unicode(str(old_company.id),errors='ignore'),unicode(str(e),errors='ignore'),"\n")))
   f.close()
