@@ -3,10 +3,10 @@ from placement.models import *
 import ipdb
 
 old_company_lst = CompanyContact.objects.all()
-new_company_names = list(CompanyContactInfo.objects.all().values_list('name',flat=True))
 length_of_lst = len(old_company_lst)
 i=1
 x=False
+empty_name = 0
 for old_company in old_company_lst:
  if x:
    ipdb.set_trace()
@@ -15,11 +15,14 @@ for old_company in old_company_lst:
   new_add = not CompanyContactInfo.objects.filter(name=old_company.company_name).exists()
   if new_add:
     new_company = CompanyContactInfo()
-    new_company.name = old_company.company_name
+    if old_company.company_name == "":
+      new_company.name = "NOT ADDED "+str(empty_name+1)
+      empty_name += 1
+    else:
+      new_company.name = old_company.company_name
     new_company.cluster = old_company.cluster
     new_company.status = old_company.status
     new_company.save()
-    new_company_names.append(new_company.name)
   else:
     new_company = CompanyContactInfo.objects.get(name=old_company.company_name)
 
