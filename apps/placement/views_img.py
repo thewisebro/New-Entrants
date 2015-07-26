@@ -283,7 +283,10 @@ def placement_manager_contact_person_data(request):
     values.append(company_inst.status)
     if contact_exist:
       values.append(contactPerson.campuscontact.last_contact)
-      values.append(contactPerson.campuscontact.student.user.name)
+      try:
+        values.append(contactPerson.campuscontact.student.user.name)
+      except:
+        values.append("None")
       comment = CompanyContactComments.objects.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
       if comment:
         comment=comment[0].comment
@@ -319,7 +322,7 @@ def placement_manager_contact_person_data(request):
                    a.append(string_date)
                  else:
                    a.append(x)
-               except ValueError:
+               except:
                  a.append(x)
             else:
                a.append(str(x))
@@ -368,7 +371,10 @@ def company_coordinator_contact_person_data(request):
     values.append(company_inst.status)
     if contact_exist:
       values.append(contactPerson.campuscontact.last_contact)
-      values.append(contactPerson.campuscontact.student.user.name)
+      try:
+        values.append(contactPerson.campuscontact.student.user.name)
+      except:
+        values.append("None")
       comment = CompanyContactComments.objects.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
       if comment:
         comment=comment[0].comment
@@ -405,7 +411,7 @@ def company_coordinator_contact_person_data(request):
                    a.append(string_date)
                  else:
                    a.append(x)
-               except ValueError:
+               except:
                  a.append(x)
             else:
                a.append(str(x))
@@ -440,7 +446,10 @@ def company_coordinator_contact_person_data_today(request):
     values.append(contactPerson.email)
     values.append(contactPerson.company_contact.status)
     values.append(campus_contact_inst.last_contact)
-    values.append(campus_contact_inst.student.user.name)
+    try:
+      values.append(campus_contact_inst.student.user.name)
+    except:
+      values.append("None")
     comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('-date_created')
     if comment:
       comment=comment[0].comment
@@ -473,7 +482,7 @@ def company_coordinator_contact_person_data_today(request):
                    a.append(string_date)
                  else:
                    a.append(x)
-               except ValueError:
+               except:
                  a.append(x)
             else:
                a.append(str(x))
@@ -718,11 +727,19 @@ def company_search(request):
       data = simplejson.dumps(obj)
       return HttpResponse(data,'application/json')
     def company_dict(company):
-      return {
-        'id':str(company.id),
-        'label':str(company.name)+" ( "+str(company.contactperson_set.get(is_primary=True).campuscontact.student.name)+" )",
-        'value':str(company.name),
-      }
+      try:
+        return {
+          'id':str(company.id),
+          'label':str(company.name)+" ( "+str(company.contactperson_set.get(is_primary=True).campuscontact.student.name)+" )",
+          'value':str(company.name),
+        }
+      except:
+        return {
+          'id':str(company.id),
+          'label':str(company.name)+" (Unallotted)",
+          'value':str(company.name),
+        }
+        
     data = simplejson.dumps(map(company_dict,company))
   else:
     data = 'fail'
