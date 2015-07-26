@@ -1,12 +1,19 @@
 from nucleus.models import *
 from placement.models import *
+import ipdb
 
-contact_person_lst = ContactPerson.objects.all()
-new_company_names = []
-for contact_person in contact_person_lst:
-
-  old_compay = old_contact_person.companycontact
-  if old_company.company_name not in new_company_names:
+old_company_lst = CompanyContact.objects.all()
+new_company_names = list(CompanyContactInfo.objects.all().values_list('name',flat=True))
+length_of_lst = len(old_company_lst)
+i=1
+x=False
+for old_company in old_company_lst:
+ if x:
+   ipdb.set_trace()
+ try:
+  print str(i)+" out of "+str(length_of_lst)
+  new_add = not CompanyContactInfo.objects.filter(name=old_company.company_name).exists()
+  if new_add:
     new_company = CompanyContactInfo()
     new_company.name = old_company.company_name
     new_company.cluster = old_company.cluster
@@ -14,28 +21,80 @@ for contact_person in contact_person_lst:
     new_company.save()
     new_company_names.append(new_company.name)
   else:
-    new_company = CompanyContactInfo(name=old_company_name)
+    new_company = CompanyContactInfo.objects.get(name=old_company.company_name)
 
-  contact_person.company_contact = new_company
-  campus_contact = CampusContact()
-  primary_contact_new_company = ContactPerson.objects.filter(company_contact = new_company, is_primary = True)
+  contact_person = old_company.contactperson 
+  if not new_add:
+    contact_person_lst = ContactPerson.objects.filter(company_contact = new_company)
+    if contact_person in list(contact_person_lst):
+      pass
+    else:
+      contact_person = old_company.contactperson
+      contact_person.company_contact = new_company
+      campus_contact = CampusContact()
+      primary_contact_new_company = ContactPerson.objects.filter(company_contact = new_company, is_primary = True)
 
-  if primary_contact_new_contact.exists():
-    contact_person.is_primary = False
-    campus_contact.student = primary_contact_new_company[0].campuscontact.student
+      if primary_contact_new_company.exists():
+        contact_person.is_primary = False
+        campus_contact.student = primary_contact_new_company[0].campuscontact.student
+      else:
+        contact_person.is_primary = True
+        student = Student.objects.get(user__name=old_company.person_in_contact)
+        campus_contact.student = student
+
+      contact_person.save()
+      campus_contact.last_contact = old_company.last_contact
+      campus_contact.when_to_contact = old_company.when_to_contact
+      campus_contact.contact_person = contact_person
+      campus_contact.save()
+  
   else:
-    contact_person.is_primary = True
-    student = Student.objects.get(user__name=old_company.person_in_contact)
-    campus_contact.student = student
+    contact_person = old_company.contactperson
+    contact_person.company_contact = new_company
+    campus_contact = CampusContact()
+    primary_contact_new_company = ContactPerson.objects.filter(company_contact = new_company, is_primary = True)
 
-  contact_person.save()
+    if primary_contact_new_company.exists():
+      contact_person.is_primary = False
+      campus_contact.student = primary_contact_new_company[0].campuscontact.student
+    else:
+      contact_person.is_primary = True
+      try:
+        company_coordinator = CompanyCoordi.objects.get(student__user__name=old_company.person_in_contact)
+        student = company_coordinator.student
+      except CompanyCoordi.DoesNotExist:
+        student = None 
+      campus_contact.student = student
 
-  campus_contact.last_contact = old_company.last_contact
-  campus_contact.when_to_contact = old_company.when_to_contact
-  campus_contact.contact_person = contact_person
-  campus_contact.save()
-
-  company_comment = CompanyContactComments()
-  company_comment.comment = old_company.comments
-  company_comment.campus_contact = campus_contact
-  company_comment.save()
+    contact_person.save()
+    campus_contact.last_contact = old_company.last_contact
+    campus_contact.when_to_contact = old_company.when_to_contact
+    campus_contact.contact_person = contact_person
+    campus_contact.save()
+ 
+  if new_add: 
+    company_comment = CompanyContactComments()
+    company_comment.comment = old_company.comments
+    company_comment.campus_contact = campus_contact
+    company_comment.save()
+  else:
+    if CompanyContactComments.objects.filter(comment=old_company.comments, campus_contact__contact_person = contact_person).exists():
+      pass
+    else:
+      company_comment = CompanyContactComments()
+      company_comment.comment = old_company.comments
+      company_comment.campus_contact = campus_contact
+      company_comment.save()
+  
+  i=i+1
+  x = False
+ except Exception as e:
+  x = True
+  f = open("errors.txt", 'a')
+  f.write(": ".join(unicode(str(old_company.id),errors='ignore'),unicode(str(e),errors='ignore'),"\n"))
+  f.close()
+ except UnicodeEncodeError as e:
+  x = True
+  f = open("errors.txt", 'a')
+  f.write(": ".join(unicode(str(old_company.id),errors='ignore'),unicode(str(e),errors='ignore'),"\n"))
+  f.close()

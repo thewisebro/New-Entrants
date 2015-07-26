@@ -356,7 +356,7 @@ class ContactPerson(models.Model):
     designation = models.CharField(max_length=100, null=True , blank=True)
     phone_no = models.CharField(max_length=250, null=True , blank=True)
     email = models.CharField(max_length=250 , null=True  , blank=True)
-    company_contact = models.ForeignKey(CompanyContactInfo)
+    company_contact = models.ForeignKey(CompanyContactInfo, null=True, blank=True)
     is_primary = models.BooleanField(default=False)
 
     def __unicode__(self):
@@ -381,7 +381,7 @@ class CompanyContactComments(models.Model):
     """
         Comments to keep updated about contacts status
     """
-    comment = models.CharField(max_length=300)
+    comment = models.CharField(max_length=500)
     date_created = models.DateTimeField(auto_now_add=True)
     campus_contact = models.ForeignKey(CampusContact)
 
