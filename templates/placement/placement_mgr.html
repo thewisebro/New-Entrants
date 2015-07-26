@@ -90,6 +90,9 @@
           </tr>
         </table>
       </div>
+      <h5>View Tasks of Company Coordinator</h5>
+        {{ coordinator_work.company_coordi_work }}
+        <button class="btn btn-primary" onclick="javascript:company_coordinator_work_dialog()">Go</button>
 
         <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_img.assign_campus_contact' %}">
         {% csrf_token %}
@@ -169,7 +172,11 @@
 
 </script>
 <script>
-
+function company_coordinator_work_dialog() {
+  coordi =  $("[name=company_coordi_work]").val();
+  var width = $('body').width()-20;
+  open_frame('Company Coordinator Details','/placement/contact_manager/'+coordi+'/',width,true);
+};
 </script>
 <script type="text/javascript">
 function confirmfn(id){
@@ -219,8 +226,8 @@ function dialog_iframe(data){
         position: ['center',margin],
         width: data.width,
         height: height,
-        draggable: false,
-        resizable: false,
+        draggable: true,
+        resizable: true,
         sticky: true,
         close: function(event, ui){
           eval('delete '+data.name);
@@ -229,7 +236,7 @@ function dialog_iframe(data){
         open: function(event, ui){
           $('#'+data.name+'-div').html(""+
             "<iframe id='"+data.name+"-iframe' src='"+data.src+
-            "' width='100%' height='98%' frameborder=0 onload='javascript:autoResize(this);'></iframe>"
+            "' width='100%' height='98%' frameborder=0></iframe>"
           );
         }
       };

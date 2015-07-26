@@ -203,6 +203,9 @@ def BaseModelFormFunction(model_type, exclude_list=None, data=None,**kwargs):
 class AssignCoordinatorForm(forms.Form):
   company_coordinator = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label="None", required=False)
 
+class ViewCoordinatorWorkForm(forms.Form):
+  company_coordi_work = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label="None", required=False)
+
 class AddCoordinatorForm(forms.Form):
   student = forms.CharField(widget=forms.TextInput)
   enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))

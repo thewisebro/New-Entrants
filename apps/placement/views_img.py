@@ -204,6 +204,7 @@ def generate_missing_resumes(request, company_id):
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
 def placement_manager_view(request):
   assign_form = AssignCoordinatorForm()
+  coordinator_work_form = ViewCoordinatorWorkForm()
   if request.method == 'POST' :
     pass
 #    form = ExcelForm(request.POST , request.FILES)
@@ -251,6 +252,7 @@ def placement_manager_view(request):
   return render_to_response('placement/placement_mgr.html',{
           'excel_form' : form,
           'assign_form' : assign_form,
+          'coordinator_work': coordinator_work_form,
         },context_instance = RequestContext(request))
 
 @login_required
@@ -336,13 +338,22 @@ def placement_manager_contact_person_data(request):
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
-def company_coordinator_view(request):
+def company_coordinator_view(request,user_id=None):
+  if user_id:
+    return render_to_response('placement/company_coordi.html',{'user_id':user_id},context_instance = RequestContext(request))
   return render_to_response('placement/company_coordi.html',context_instance = RequestContext(request))
 
 @login_required
-@user_passes_test(lambda u:u.groups.filter(name='Company Coordinator').exists(), login_url=login_url)
-def company_coordinator_contact_person_data(request):
-  user =  request.user
+@user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator','Placement Manager']).exists(), login_url=login_url)
+def company_coordinator_contact_person_data(request,user_id=None):
+  if request.user.groups.filter(name="Placement Manager").exists():
+    if user_id:
+      user = User.objects.get(id=user_id)
+    elif request.user.groups.filter(name="Company Coordinator").exists():
+      user = request.user
+  else:
+    user =  request.user
+
   student = user.student
   campus_contacts = CampusContact.objects.filter(student = student, contact_person__is_primary=True).order_by('contact_person__company_contact','-contact_person__is_primary')
   contact_persons = [cc.contact_person for cc in campus_contacts]
@@ -667,7 +678,7 @@ def edit_company_manual(request, company_id):
           contactperson.is_primary = instance.cleaned_data['is_primary']
           contactperson.save()
           campuscontact.contact_person = contactperson
-          if not a:
+          if a:
             campuscontact.student = instance.cleaned_data['student'].student
           else:
             campuscontact.student = request.user.student
@@ -758,7 +769,7 @@ def company_search(request):
           'label':str(company.name)+" (Unallotted)",
           'value':str(company.name),
         }
-        
+
     data = simplejson.dumps(map(company_dict,company))
   else:
     data = 'fail'
