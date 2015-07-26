@@ -222,7 +222,7 @@ class CommentsForm(forms.ModelForm):
     company_contact = kwargs.pop('company_contact')
     super(CommentsForm, self).__init__(*args, **kwargs)
     if company_contact:
-      self.fields['contact_person'].queryset = models.ContactPerson.objects.filter(company_contact = company_contact).order_by('-is_primary')
+      self.fields['contact_person'].queryset = models.ContactPerson.objects.filter(company_contact = company_contact).exclude(name="").order_by('-is_primary')
       self.fields['contact_person'].initial = {'contact_person':models.ContactPerson.objects.get(company_contact = company_contact, is_primary=True).id}
 
   contact_person = ContactPersonModelChoiceField(queryset=models.ContactPerson.objects.none() ,required=True, empty_label=None)

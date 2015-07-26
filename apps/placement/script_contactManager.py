@@ -23,7 +23,7 @@ for old_company in old_company_lst:
   else:
     new_company = CompanyContactInfo.objects.get(name=old_company.company_name)
 
-  contact_person = old_company.contactperson 
+  contact_person = old_company.contactperson
   if not new_add:
     contact_person_lst = ContactPerson.objects.filter(company_contact = new_company)
     if contact_person in list(contact_person_lst):
@@ -47,7 +47,7 @@ for old_company in old_company_lst:
       campus_contact.when_to_contact = old_company.when_to_contact
       campus_contact.contact_person = contact_person
       campus_contact.save()
-  
+
   else:
     contact_person = old_company.contactperson
     contact_person.company_contact = new_company
@@ -63,7 +63,7 @@ for old_company in old_company_lst:
         company_coordinator = CompanyCoordi.objects.get(student__user__name=old_company.person_in_contact)
         student = company_coordinator.student
       except CompanyCoordi.DoesNotExist:
-        student = None 
+        student = None
       campus_contact.student = student
 
     contact_person.save()
@@ -71,21 +71,22 @@ for old_company in old_company_lst:
     campus_contact.when_to_contact = old_company.when_to_contact
     campus_contact.contact_person = contact_person
     campus_contact.save()
- 
-  if new_add: 
-    company_comment = CompanyContactComments()
-    company_comment.comment = old_company.comments
-    company_comment.campus_contact = campus_contact
-    company_comment.save()
-  else:
-    if CompanyContactComments.objects.filter(comment=old_company.comments, campus_contact__contact_person = contact_person).exists():
-      pass
-    else:
+
+  if old_company.comments!="":
+    if new_add:
       company_comment = CompanyContactComments()
       company_comment.comment = old_company.comments
       company_comment.campus_contact = campus_contact
       company_comment.save()
-  
+    else:
+      if CompanyContactComments.objects.filter(comment=old_company.comments, campus_contact__contact_person = contact_person).exists():
+        pass
+      else:
+        company_comment = CompanyContactComments()
+        company_comment.comment = old_company.comments
+        company_comment.campus_contact = campus_contact
+        company_comment.save()
+
   i=i+1
   x = False
  except Exception as e:

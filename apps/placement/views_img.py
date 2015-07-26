@@ -289,14 +289,16 @@ def placement_manager_contact_person_data(request):
         values.append("None")
       comment = CompanyContactComments.objects.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
       if comment:
-        comment=comment[0].comment
+        comment_text=comment[0].comment
+        if comment_text == "":
+          comment_text = "None"
       else:
-        comment="None"
+        comment_text="None"
     else:
       values.append("")
       values.append("")
-      comment=""
-    values.append(comment)
+      comment_text=""
+    values.append(comment_text)
     values.append(contactPerson.campuscontact.when_to_contact if contact_exist else "")
     values.append(company_inst.id)
     values.append(company_inst.id)
@@ -377,14 +379,16 @@ def company_coordinator_contact_person_data(request):
         values.append("None")
       comment = CompanyContactComments.objects.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
       if comment:
-        comment=comment[0].comment
+        comment_text=comment[0].comment
+        if comment_text == "":
+          comment_text = "None"
       else:
-        comment="None"
+        comment_text="None"
     else:
       values.append("")
       values.append("")
-      comment=""
-    values.append(comment)
+      comment_text=""
+    values.append(comment_text)
     values.append(contactPerson.campuscontact.when_to_contact if contact_exist else "")
     values.append(company_inst.id)
     values.append(company_inst.id)
@@ -452,9 +456,11 @@ def company_coordinator_contact_person_data_today(request):
       values.append("None")
     comment = CompanyContactComments.objects.filter(campus_contact = campus_contact_inst).order_by('-date_created')
     if comment:
-      comment=comment[0].comment
+      comment_text=comment[0].comment
+      if comment_text=="":
+        comment_text = "None"
     else:
-      comment="None"
+      comment_text="None"
     values.append(comment)
     values.append(campus_contact_inst.when_to_contact)
     values.append(contactPerson.company_contact.id)
@@ -587,7 +593,8 @@ def edit_company_manual(request, company_id):
   company = CompanyContactInfo.objects.get(id=company_id)
   companyform = AddCompanyInfoForm(instance=company)
   contact_persons = ContactPerson.objects.filter(company_contact = company)
-  formset = contactpersonformset(initial=[
+  try:
+    formset = contactpersonformset(initial=[
       {'name': x.name,
        'designation': x.designation,
        'phone_no': x.phone_no,
@@ -597,6 +604,18 @@ def edit_company_manual(request, company_id):
        'student': x.campuscontact.student,
        'when_to_contact': x.campuscontact.when_to_contact,
       } for x in contact_persons])
+  except:
+    formset = contactpersonformset(initial=[
+      {'name': x.name,
+       'designation': x.designation,
+       'phone_no': x.phone_no,
+       'email': x.email,
+       'contact_id': x.id,
+       'is_primary': x.is_primary,
+       'student': "None",
+       'when_to_contact': x.campuscontact.when_to_contact,
+      } for x in contact_persons])
+
   if not a:
     for form in formset:
       form.fields['student'].widget.attrs['disabled'] = True
@@ -845,19 +864,18 @@ def edit_comments(request, company_id):
   else:
     campus_contact_lst = CampusContact.objects.filter(contact_person__company_contact = company_contact).order_by('-contact_person__is_primary')
 
-  comments = CompanyContactComments.objects.filter(campus_contact__in = campus_contact_lst).order_by('-date_created')
-
   if request.POST:
     form = CommentsForm(request.POST, company_contact=company_contact)
-    if a and not CampusContact.objects.filter(contact_person__id=int(form.data['contact_person']), student=user.student).exists():
-      comment_inst = form.save(commit=False)
-      comment_inst.comment = "<span name="+request.user.username+" style='color:red;'>"+form.cleaned_data['comment']+"</span>"
-      comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']))
-      comment_inst.save()
-    else:
-      comment_inst = form.save(commit=False)
-      comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']), student=user.student)
-      comment_inst.save()
+    if form.is_valid():
+      if a and not CampusContact.objects.filter(contact_person__id=int(form.data['contact_person']), student=user.student).exists():
+        comment_inst = form.save(commit=False)
+        comment_inst.comment = "<span name="+request.user.username+" style='color:red;'>"+form.cleaned_data['comment']+"</span>"
+        comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']))
+        comment_inst.save()
+      else:
+        comment_inst = form.save(commit=False)
+        comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']), student=user.student)
+        comment_inst.save()
 
   else:
     form = CommentsForm(company_contact=company_contact)
@@ -865,7 +883,6 @@ def edit_comments(request, company_id):
   return render_to_response('placement/edit_comments.html',{
       'form': form,
       'company':company_contact,
-      'comments': comments,
       'campus_contacts':campus_contact_lst,
       }, context_instance = RequestContext(request))
 
