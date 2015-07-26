@@ -8,7 +8,7 @@ import core.models.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('nucleus', '0007_merge'),
+#        ('nucleus', '0007_merge'),
         ('placement', '0001_initial'),
     ]
 
