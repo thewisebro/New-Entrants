@@ -16,8 +16,5 @@ class RequestForm(ModelForm):
 class TransactionForm(ModelForm):
   class Meta:
     model=SuccessfulTransaction
-    
-
-   
 
 

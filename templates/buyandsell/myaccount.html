@@ -16,18 +16,15 @@
     {% endfor %}
     {% endif %}
 <input type="checkbox" id="show_contact" name="contact"  {% if show_contact %} checked {% endif %}>Show contact</input>
-<h2>Main Watched Categories</h2>
-<div id="main_watched_cat">
-{% for item in main_watched_cat %}
-<p>{{item}}</p>
+<h1>Watched categories</h1>
+{% for main_cat,cat_list in watched_cat_dict.iteritems %}
+<ul>{{main_cat}}</ul>
+{% for cat in cat_list %}
+<li>{{ cat }}</li>
 {% endfor %}
-</div>
-<h2>Sub Watched Categories</h2>
-<div id ="sub_watched_cat">
-{% for item in sub_watched_cat %}
-<p>{{ item.name }}</p>
+</ul>
 {% endfor %}
-</div>
+
 <div id="manage" onclick="manage()"><h3>Manage Watched Categories</h3></div>
 <h2>Sell Items</h2>
 <div id="sell_items">
@@ -40,13 +37,31 @@
 <div id="edit_sell" onclick="edit_sell({{ row.pk }})">
   *Edit
 </div>
-<P> <img src="/media/{{row.item_image }}"></p>
+<div id ="ts_form" onclick = "transaction_form('sell',{{ row.pk }})">
+fill transaction form
+</div>
+
+<p> <img src="/media/{{row.item_image }}"></p>
 <p>Cost: {{ row.cost }}</p>
+{% if row.is_active %}
 <p>Expires after: {{ row.expiry_date|timeuntil }}</p>
+{% else %}
+<p>expired</p>
+{% endif %}
+
 </div>
 {% endfor %}
 {% endif %}
+
+{% if succ_sold_items %}
+{% for row in succ_sold_items %}
+<div id ="sold{{ row.pk }}">
+<p>Name: {{ row.item_name }}</p>
+<p> <img src="/media/{{row.item_image }}"></p>
+<p>sold</p>
 </div>
+{% endfor %}
+{% endif %}
 
 <h2>Request Items</h2>
 <div id="request_items">
@@ -60,11 +75,28 @@
   *Edit
 </div>
 <p>Price upper: {{ row.price_upper }}</p>
+{% if row.is_active %}
 <p>Expires after: {{ row.expiry_date|timeuntil }}</p>
+{% else %}
+<p>expired</p>
+{% endif %}
+<div id ="ts_form_req" onclick = "transaction_form('request',{{ row.pk }})">
+fill transaction form
+</div>
 </div>
 {% endfor %}
 {% endif %}
 </div>
+
+{% if succ_request_items %}
+{% for row in succ_request_items %}
+<div id ="sold_req{{ row.pk }}">
+<p>Name: {{ row.item_name }}</p>
+<p>sold</p>
+</div>
+{% endfor %}
+{% endif %}
+
 <script src="{{ STATIC_URL }}js/common.js"></script>
 <script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>
 </body>

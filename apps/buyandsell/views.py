@@ -383,7 +383,8 @@ def sendmail(request, type_of_mail, id_pk):
     qryst = SaleItems.objects.filter(pk = id_pk)
 
     if buy_mail_list:
-      messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
+      messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+\
+          " by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       already_sent=1
 
     if not already_sent:
@@ -392,7 +393,8 @@ def sendmail(request, type_of_mail, id_pk):
       subject = 'Your item ' + qryst[0].item_name + ' has a buyer on Buy and Sell!'
       msg = 'Your item ' + qryst[0].item_name + ' added by you on ' + str(qryst[0].post_date) + ' has a prospective buyer! '
       msg += user.first_name + ' wants to buy your item. You can contact '+pronoun+' at this number ' + contact
-      msg += ' or email '+pronoun+' at ' + str(user.email) + '\nNote: if there is no phone number or email id, that means that ' + user.first_name
+      msg += ' or email '+pronoun+' at ' + str(user.email) +\
+      '\nNote: if there is no phone number or email id, that means that ' + user.first_name
       msg += ' has not filled in his contact information in the channel-i database.'
       notif_text = user.first_name + ' wants to buy ' + qryst[0].item_name + ' added by you. '
       if contact:
@@ -408,7 +410,8 @@ def sendmail(request, type_of_mail, id_pk):
     qryst = RequestedItems.objects.filter(pk = id_pk)
     buy_mail_list=RequestMails.objects.filter(by_user__username=username,item__pk=id_pk)
     if buy_mail_list:
-      messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+" by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
+      messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+\
+          " by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       already_sent=1
 
     if not already_sent:
@@ -417,7 +420,8 @@ def sendmail(request, type_of_mail, id_pk):
       subject = 'Your request for ' + qryst[0].item_name + ' has been answered!'
       msg = 'Your request ' + qryst[0].item_name + ' added by you on ' + str(qryst[0].post_date) + ' has a prospective seller! \n'
       msg += user.first_name + ' has the item that you requested for. You can contact '+pronoun+' at this number ' + contact
-      msg += ' or email '+pronoun+' at ' + str(user.email) + '\n\n Note: if there is no phone number or email id, that means that ' + user.first_name
+      msg += ' or email '+pronoun+' at ' + str(user.email) +\
+      '\n\n Note: if there is no phone number or email id, that means that ' + user.first_name
       msg += ' has not filled in his contact information in the channel-i database.'
       notif_text = user.first_name + ' has an item(' + qryst[0].item_name + ') you requested for. '
       if contact:
@@ -432,7 +436,8 @@ def sendmail(request, type_of_mail, id_pk):
     receiver = [str(qryst[0].email),]
     try:
       send_mail(subject, msg, 'buysell@iitr.ernet.in', receiver, fail_silently = True)
-      email_sent_msg = qryst[0].user.first_name + ' has been sent a mail with your contact information. He may contact you shortly. If not, go ahead and contact '+pronoun+' youself!'
+      email_sent_msg = qryst[0].user.first_name +\
+  ' has been sent a mail with your contact information. He may contact you shortly. If not, go ahead and contact '+pronoun+' youself!'
       messages.success(request, email_sent_msg)
     except Exception as e:
       messages.error(request, 'Email has not been sent to ' + qryst[0].user.first_name + '. Error occured and reported.' )
@@ -648,7 +653,7 @@ def seeall(request,search_type):
     return render(request,'buyandsell/buy.html',context)
 
 @login_required
-def edit(request,form_type,pk):
+def edit(request,form_type,pk): #need to activate if item date  is renewed
   user=request.user
   post_date=date.today()
   if form_type=="sell":
@@ -744,7 +749,21 @@ def my_account(request):
   user=request.user
   sell_items=SaleItems.items.filter(user=user).order_by('-pk')
   request_items=RequestedItems.items.filter(user=user).order_by('-pk')
-  main_watched_cat,sub_watched_cat=get_watched_categories(request)
+  _ , _ , watched_cat_dict=get_watched_categories(request)
+
+  successful_transactions_sell = SuccessfulTransaction.objects.filter(seller = user,is_requested = False)
+  succ_sold_items = [trans.sell_item for trans in successful_transactions_sell]
+
+  successful_transactions_requests = SuccessfulTransaction.objects.filter(buyer = user,is_requested = True)
+  succ_request_items = [trans.request_item for trans in successful_transactions_requests]
+
+  for item in sell_items:
+    if item in succ_sold_items:
+      sell_items = sell_items.exclude(id = item.id)
+
+  for item in request_items:
+    if item in succ_request_items:
+      request_items = request_items.exclude(id = item.id)
 
   if len(ShowContact.objects.filter(user=user))==1:
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
@@ -752,9 +771,10 @@ def my_account(request):
 
   context={'sell_items':sell_items,
            'request_items':request_items,
-           'main_watched_cat':main_watched_cat,
-           'sub_watched_cat':sub_watched_cat,
-           'show_contact':show_contact
+           'watched_cat_dict':watched_cat_dict,
+           'show_contact':show_contact,
+           'succ_sold_items':succ_sold_items,
+           'succ_request_items':succ_request_items
           }
 
   return render(request,'buyandsell/myaccount.html',context)
@@ -840,6 +860,7 @@ def transaction(request,item_type,pk):
       new_item.sell_item=sell_item
       new_item.trasaction_date=timezone.now()
       new_item.save()
+      return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
     sell_item=SaleItems.items.get(pk=pk)
     mail_list=BuyMails.objects.filter(item=sell_item)
     return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list,'type':item_type})
@@ -874,13 +895,13 @@ def transaction(request,item_type,pk):
       print username_other
       if seller_username != "":
         seller=User.objects.get(username=seller_username)
-      elif seller_username=="" and ( not username_other.isspace() and username_other!=""):
+      elif seller_username=="" and ( not username_other.isspace() and username_other!="" ):
         tentative_seller=User.objects.get(username=username_other)
         if tentative_seller:
           seller=tentative_seller
         else:
           seller=None
-      elif seller_username=="" and ( username_other.isspace() or username_other==""):
+      elif seller_username=="" and ( username_other.isspace() or username_other=="" ):
         seller=None
 
       new_item=form.save(commit=False)
@@ -892,10 +913,11 @@ def transaction(request,item_type,pk):
       new_item.seller=seller
       new_item.buyer=user
       request_item=RequestedItems.items.get(pk=pk)
-      new_item.request_item=request_item        #need to redirect if already existing request item or sell item is present
+      new_item.request_item=request_item
       new_item.is_requested=True
       new_item.trasaction_date=timezone.now()
       new_item.save()
+      return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
     request_item=RequestedItems.items.get(pk=pk)
     mail_list=RequestMails.objects.filter(item=request_item)
     return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list})
@@ -905,20 +927,24 @@ def  get_watched_categories(request):
   cat_dict=get_category_dictionary()
   main_watched_cat=[]
   sub_watched_cat=[]
+  watched_cat_dict = {}
   for main_cat,cat_list in cat_dict.iteritems():
     count=0
     cat_len=len(cat_list)
+    watched_cat_dict[main_cat] = []
+
     for cat in cat_list:
       if user in cat.watch_users.all():
         sub_watched_cat.append(cat)
+        watched_cat_dict[main_cat].append(cat)
         count=count+1
-    if count==cat_len:
+
+    if not count:
+      del watched_cat_dict[main_cat]
+    elif count == cat_len:
       main_watched_cat.append(main_cat)
-  print "main"
-  print main_watched_cat
-  print "sub"
-  print sub_watched_cat
-  return main_watched_cat,sub_watched_cat
+
+  return main_watched_cat,sub_watched_cat,watched_cat_dict
 
 @login_required
 def show_contact(request,response):
@@ -949,12 +975,9 @@ def show_contact(request,response):
 def manage(request):
   user=request.user
   cat_dict=get_category_dictionary()
-  main_watched_cat,sub_watched_cat=get_watched_categories(request)
-  old_watched_list=[]
+  main_watched_cat,sub_watched_cat ,_ = get_watched_categories(request)
 
-  for cat in sub_watched_cat:
-    old_watched_list.append(cat.id)
-
+  old_watched_list = [cat.id for cat in sub_watched_cat]
   if request.method=='POST':
     new_watched_list=request.POST.getlist('watched_category')
     new_watched_list=[int(i) for i in new_watched_list]
@@ -968,9 +991,11 @@ def manage(request):
         cat=BuySellCategory.objects.get(pk=cat_id)
         cat.watch_users.remove(user)
         cat.save()
-    main_watched_cat,sub_watched_cat=get_watched_categories(request)
+
     return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
-  return render(request,'buyandsell/manage.html',{'cat_dict':cat_dict,'main_watched_cat':main_watched_cat,'sub_watched_cat':sub_watched_cat})
+  return render(request,'buyandsell/manage.html',{'cat_dict':cat_dict,
+               'main_watched_cat':main_watched_cat,
+               'sub_watched_cat':sub_watched_cat})
 
 def _get_page_list(page_no, pages, items_per_page):
   l = range(1, pages+1)

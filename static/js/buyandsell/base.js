@@ -171,7 +171,7 @@ function bring_search_url(val)
       return url;
 }
 function search_form()
- {    console.log("yo");
+ {
      var form=$("#search_form");
      console.log(form.attr("action"));
 
@@ -381,6 +381,7 @@ function edit_request(pk){
   });
  opened_dialog='edit_request_dialog';
 }
+
 function manage(){
  if(opened_dialog !=""){
   close_dialog(opened_dialog);
@@ -394,4 +395,19 @@ function manage(){
     close:function(){opened_dialog=""}
   });
  opened_dialog='manage_watched_categories';
+}
+
+function transaction_form(type,id){
+ if(opened_dialog !=""){
+  close_dialog(opened_dialog);
+  }
+ dialog_iframe({
+    name:'trans_form',
+    title:'transaction_form',
+    width:600,
+    height:600,
+    src:'/buyandsell/succ_trans/' + type + '/' + id,
+    close:function(){opened_dialog=""}
+  });
+ opened_dialog='trans_form';
 }
