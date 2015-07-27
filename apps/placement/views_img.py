@@ -636,6 +636,7 @@ def edit_company_manual(request, company_id):
     formset = contactpersonformset(request.POST)
     if companyform.is_valid() and formset.is_valid():
       company = companyform.save()
+      is_primary_changed = False
       for instance in formset:
         if 'contact_id' in instance.changed_data:
           messages.error(request, 'Invalid Contact to change')
