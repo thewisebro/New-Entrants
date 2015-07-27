@@ -6,8 +6,8 @@
 {% endblock %}
 {% block styles %}
     <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" type="text/css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/base.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/nucleus/style.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/base.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/input_styles.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/dataTables.bootstrap.css" type="text/css">
@@ -21,6 +21,24 @@
           <h2>Comment Editor for {{ company.name }}</h2>
         </div>
       </div>
+       {% if messages %}
+         {% for message in messages %}
+           {% if message.tags == 'form_error error' %}
+           {# As form errors already have html p tag and class='error_field', we need to do this. #}
+             {% autoescape off %}
+               {{ message|safe }}
+             {% endautoescape %}
+           {% else %}
+           {# For those messages that have a tag, the tag name equals the class name. #}
+             {% if message.tags %}
+               <p class="{{ message.tags }}">{{ message|safe }}</p>
+             {% else %}
+           {# For those messages that don't have a tag, class name is 'unknown_message'. #}
+               <p class="unknown_message">{{ message|safe }}</p>
+             {% endif %}
+           {% endif %}
+         {% endfor %}  {# End message for #}
+       {% endif %}  {# End messages if #}
 
 <div class='commentform'>
 <form method="post" action="">{% csrf_token %}
@@ -46,7 +64,7 @@
 {% for comment in campus_contact.companycontactcomments_set.all|dictsortreversed:"date_created" %}
 <tr>
 <td>{{comment.date_created | date:"d/m/Y H:i" }}</td>
-<td style="word-wrap:break-word;">{{comment.comment|safe}}</td>
+<td style="word-wrap:break-word;">{{comment.comment|safe}}<a><span id='remove' style='cursor:pointer;float:right;' onclick='confirmfn({{comment.id}})' class='icon icon-remove'></span><a></td>
 </tr>
 {% endfor %}
 {% else %}
@@ -57,3 +75,13 @@
 {% endfor %}
 </div>
 {%endblock%}
+{% block app_scripts %}
+  {{ block.super }}
+  <script type="text/javascript">
+function confirmfn(id){
+    var a = confirm("Are you sure?");
+    if (a==true) {window.location="/placement/contact_manager/remove/comments/"+id+"/"}
+  };
+  </script>
+{% endblock %}
+
