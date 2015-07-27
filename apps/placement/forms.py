@@ -226,7 +226,10 @@ class CommentsForm(forms.ModelForm):
     super(CommentsForm, self).__init__(*args, **kwargs)
     if company_contact:
       self.fields['contact_person'].queryset = models.ContactPerson.objects.filter(company_contact = company_contact).exclude(name="").order_by('-is_primary')
-      self.fields['contact_person'].initial = {'contact_person':models.ContactPerson.objects.get(company_contact = company_contact, is_primary=True).id}
+      try:
+        self.fields['contact_person'].initial = {'contact_person':models.ContactPerson.objects.get(company_contact = company_contact, is_primary=True).id}
+      except:
+        self.fields['contact_person'].initial = {'contact_person':models.ContactPerson.objects.filter(company_contact = company_contact)[0].id}
 
   contact_person = ContactPersonModelChoiceField(queryset=models.ContactPerson.objects.none() ,required=True, empty_label=None)
   class Meta:
