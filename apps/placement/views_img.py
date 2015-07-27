@@ -521,7 +521,7 @@ def add_company_manual(request):
   a = request.user.groups.filter(name='Placement Manager')
   if not a:
     contactpersonformset = formset_factory(ContactPersonForm, extra=1, can_delete=True)
-    formset = contactpersonformset(initial=[{'student':request.user} for x in contactpersonformset])
+    formset = contactpersonformset(initial=[{'student':request.user}])
   else:
     contactpersonformset = formset_factory(ContactPersonForm, extra=2, can_delete=True)
     formset = contactpersonformset()
