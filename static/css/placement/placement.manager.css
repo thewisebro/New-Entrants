@@ -174,3 +174,8 @@ float: left;
       background: #000;       
       display: none;
 }
+.errorlist, .error { background-color:#F2DEDE; color: #B94A48; border: 1px solid #EED3D7; border-radius: 4px 4px 4px 4px; padding: 8px 5px 8px 25px; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5); }
+
+.success { color: #468847; background-color: #dff0d8; padding: 8px 14px 8px 14px; margin: 18px; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5); border: 1px solid #dff0d8; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; }
+
+

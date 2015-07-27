@@ -901,10 +901,13 @@ def edit_comments(request, company_id):
         comment_inst.comment = "<span name="+request.user.username+" style='color:red;'>"+form.cleaned_data['comment']+"</span>"
         comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']))
         comment_inst.save()
-      else:
+      elif CampusContact.objects.filter(contact_person__id=int(form.data['contact_person']), student=user.student).exists():
         comment_inst = form.save(commit=False)
         comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']), student=user.student)
         comment_inst.save()
+      else:
+        messages.error(request, "You are not allowed to edit comments")
+        return HttpResponse("You are not allowed to edit comments")
 
   else:
     form = CommentsForm(company_contact=company_contact)
@@ -914,6 +917,42 @@ def edit_comments(request, company_id):
       'company':company_contact,
       'campus_contacts':campus_contact_lst,
       }, context_instance = RequestContext(request))
+
+@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager','Company Coordinator']).exists() , login_url=login_url)
+def delete_comments(request, comment_id):
+  try:
+    comment = CompanyContactComments.objects.get(id = comment_id)
+  except CompanyContactComments.DoesNotExist:
+    messages.error(request, "Comment does not exist")
+    return HttpResponse("Comment does not exist")
+  student = comment.campus_contact.student
+  PM_comment = '<span name=' in comment.comment
+  if request.user==student and not PM_comment:
+    comment.delete()
+    messages.success(request, "Comment deleted")
+    return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
+  elif request.user != student:
+    if request.user.groups.filter(name='Placement Manager').exists():
+      if PM_comment:
+        comment.delete()
+        messages.success(request, "Comment deleted")
+        return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
+      else:
+        messages.error(request, "Comment can not be deleted. Please contact Company Coordinator")
+        return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
+    else:
+      messages.error(request, "Access Denied")
+      return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
+  elif PM_comment:
+    if request.user.groups.filter(name='Placement Manager').exists():
+        comment.delete()
+        messages.success(request, "Comment deleted")
+        return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
+    else:
+      messages.error(request, "Access Denied")
+      return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
+
+
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator','Placement Manager']).exists() , login_url=login_url)
