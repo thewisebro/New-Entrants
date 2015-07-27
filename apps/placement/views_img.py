@@ -636,12 +636,22 @@ def edit_company_manual(request, company_id):
     formset = contactpersonformset(request.POST)
     if companyform.is_valid() and formset.is_valid():
       company = companyform.save()
+
+      is_primary_changed = False
+      is_primary_delete = False
       for instance in formset:
         if 'contact_id' in instance.changed_data:
           messages.error(request, 'Invalid Contact to change')
           return HttpResponseRedirect(reverse('nucleus.views.close_dialog',kwargs={'dialog_name':'company_details_dialog'}))
         if 'is_primary' in instance.changed_data:
           is_primary_changed = True
+          if instance.cleaned_data['is_primary'] and instance.cleaned_data['DELETE']:
+            is_primary_delete = True
+
+      if is_primary_delete:
+        messages.error(request, "Please change primary contact first to delete the contact")
+        return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))
+
 
       if is_primary_changed:
         is_primary_add = False
@@ -667,6 +677,9 @@ def edit_company_manual(request, company_id):
             contactperson = ContactPerson()
             campuscontact = CampusContact()
           if instance.cleaned_data['DELETE']:
+            if contactperson.is_primary:
+              messages.error(request, "Please change primary contact first to delete the contact")
+              return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))
             campuscontact.delete()
             contactperson.delete()
             continue
