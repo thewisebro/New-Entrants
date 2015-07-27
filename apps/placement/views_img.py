@@ -926,6 +926,10 @@ def delete_comments(request, comment_id):
     messages.error(request, "Comment does not exist")
     return HttpResponse("Comment does not exist")
   student = comment.campus_contact.student
+  if not comment.comment:
+    comment.delete()
+    messages.success(request, "Comment deleted")
+    return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
   PM_comment = '<span name=' in comment.comment
   if request.user==student and not PM_comment:
     comment.delete()
