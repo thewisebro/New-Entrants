@@ -878,7 +878,12 @@ def edit_comments(request, company_id):
   if request.POST:
     form = CommentsForm(request.POST, company_contact=company_contact)
     if form.is_valid():
-      if a and not CampusContact.objects.filter(contact_person__id=int(form.data['contact_person']), student=user.student).exists():
+      if not user.groups.filter(name='Company Coordinator'):
+        comment_inst = form.save(commit=False)
+        comment_inst.comment = "<span name="+request.user.username+" style='color:red;'>"+form.cleaned_data['comment']+"</span>"
+        comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']))
+        comment_inst.save()
+      elif a and not CampusContact.objects.filter(contact_person__id=int(form.data['contact_person']), student=user.student).exists():
         comment_inst = form.save(commit=False)
         comment_inst.comment = "<span name="+request.user.username+" style='color:red;'>"+form.cleaned_data['comment']+"</span>"
         comment_inst.campus_contact = CampusContact.objects.get(contact_person__id=int(form.data['contact_person']))
