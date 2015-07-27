@@ -375,7 +375,10 @@ class CampusContact(models.Model):
     contact_person =  models.OneToOneField(ContactPerson)
 
     def __unicode__(self):
+      try:
         return str(self.student.user.name)+' '+str(self.contact_person)
+      except:
+        return str(self.student)+' '+str(self.contact_person)
 
 class CompanyContactComments(models.Model):
     """
