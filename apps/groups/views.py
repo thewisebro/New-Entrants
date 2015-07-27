@@ -27,6 +27,7 @@ def get_group_data(group):
       'username': group.user.username,
       'name': group.short_name,
       'photo': group.user.photo_url,
+      'info' : group.description,
   }
 
 def get_groups(request):
