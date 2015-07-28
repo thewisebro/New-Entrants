@@ -22,9 +22,9 @@ ws.write(1,3,'Error')
 for course in courses:
   try:
 #    import pdb;pdb.set_trace()
-    os.mkdir(course.code+':'+course.name)
+    os.mkdir(course.code)
     success_count = success_count+1
-    os.chdir(course.code+':'+course.name)
+    os.chdir(course.code)
     os.mkdir('image')
     os.mkdir('video')
     os.mkdir('ppt')
@@ -40,7 +40,7 @@ for course in courses:
     ws.write(row,1,course.code)
     ws.write(row,2,course.name)
     ws.write(row,3,str(e))
-    
+
 wb.save('course_folder_errors.xlsx')
 
 print 'Success : '+ str(success_count)
