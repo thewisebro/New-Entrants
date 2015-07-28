@@ -259,14 +259,16 @@ def placement_manager_view(request):
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
 def placement_manager_contact_person_data(request):
   company = CompanyContactInfo.objects.all()
+  contactPerson_lst = ContactPerson.objects.all()
+  comment_lst = CompanyContactComments.objects.all()
   lst = []
   for company_inst in company:
     if ContactPerson.objects.filter(company_contact=company_inst):
       contact_exist = True
       try:
-        contactPerson = ContactPerson.objects.get(company_contact=company_inst, is_primary = True)
+       contactPerson = contactPerson_lst.get(company_contact=company_inst, is_primary = True)
       except:
-        contactPerson = ContactPerson.objects.filter(company_contact=company_inst).order_by('name')[0]
+       contactPerson = contactPerson_lst.filter(company_contact=company_inst).order_by('name')[0]
     else:
       contact_exist = False
       contactPerson = ContactPerson()
@@ -289,7 +291,7 @@ def placement_manager_contact_person_data(request):
         values.append(contactPerson.campuscontact.student.user.name)
       except:
         values.append("None")
-      comment = CompanyContactComments.objects.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
+      comment = comment_lst.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
       if comment:
         comment_text=comment[0].comment
         if comment_text == "":
@@ -306,7 +308,6 @@ def placement_manager_contact_person_data(request):
     values.append(company_inst.id)
     values.append(company_inst.id)
     lst.append(values[:])
-
   data_to_send = []
   for item in lst:
       a = []
@@ -931,11 +932,11 @@ def delete_comments(request, comment_id):
     messages.success(request, "Comment deleted")
     return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
   PM_comment = '<span name=' in comment.comment
-  if request.user==student and not PM_comment:
+  if request.user.student==student and not PM_comment:
     comment.delete()
     messages.success(request, "Comment deleted")
     return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
-  elif request.user != student:
+  elif request.user.student != student:
     if request.user.groups.filter(name='Placement Manager').exists():
       if PM_comment:
         comment.delete()
