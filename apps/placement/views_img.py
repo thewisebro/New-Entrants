@@ -262,6 +262,7 @@ def placement_manager_contact_person_data(request):
   contactPerson_lst = ContactPerson.objects.all()
   comment_lst = CompanyContactComments.objects.all()
   lst = []
+#  print "Hello"+str(datetime.datetime.now())
   for company_inst in company:
     if ContactPerson.objects.filter(company_contact=company_inst):
       contact_exist = True
@@ -309,6 +310,7 @@ def placement_manager_contact_person_data(request):
     values.append(company_inst.id)
     lst.append(values[:])
   data_to_send = []
+#  print "Bye"+str(datetime.datetime.now())
   for item in lst:
       a = []
       for x in list(item):
@@ -473,7 +475,7 @@ def company_coordinator_contact_person_data_today(request):
         comment_text = "None"
     else:
       comment_text="None"
-    values.append(comment)
+    values.append(comment_text)
     values.append(campus_contact_inst.when_to_contact)
     values.append(contactPerson.company_contact.id)
     values.append(contactPerson.company_contact.id)
