@@ -3,7 +3,7 @@
     the database '''
 
 from nucleus.models import Course
-course_list = ['HS-001BA','HS-001','CE-104WA','BT-204','CE-453','ICE-201','IHS-30','MT-332','EC-221','BT-202GE','ES-407HY','CE-202','IPH-102','EC-622','CE-202','PEC-1','HS-001AB','IHY-101','EC-324','CH-001EN','IC-102','MA-207','IMA-17',]
+course_list = ['HS-001BA','HS-001','CE-104WA','BT-204','CE-453','ICE-201','IHS-30','MT-332','EC-221','BT-202GE','ES-407HY','CE-202','IPH-102','EC-622','PEC-1','HS-001AB','IHY-101','EC-324','CH-001EN','IC-102','MA-207','IMA-17','CE-207','AS-103S','ES-201CI','CE-205','CE-206','MA-001QW','EC-102KR']
 
 success = 0
 course_len = len(course_list)
