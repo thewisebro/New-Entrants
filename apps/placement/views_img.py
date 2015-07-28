@@ -939,7 +939,6 @@ def delete_comments(request, comment_id):
     comment.delete()
     messages.success(request, "Comment deleted")
     return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
-  import ipdb; ipdb.set_trace()
   PM_comment = '<span name=' in comment.comment
   if isPM:
     comment.delete()
