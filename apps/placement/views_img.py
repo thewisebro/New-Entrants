@@ -674,15 +674,18 @@ def edit_company_manual(request, company_id):
           try:
             contactperson = ContactPerson.objects.get(id = instance.cleaned_data['contact_id'])
             campuscontact = contactperson.campuscontact
+            is_new = False
           except:
             contactperson = ContactPerson()
             campuscontact = CampusContact()
+            is_new = True
           if instance.cleaned_data['DELETE']:
             if contactperson.is_primary:
               messages.error(request, "Please change primary contact first to delete the contact")
               return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))
-            campuscontact.delete()
-            contactperson.delete()
+            if not is_new:
+              campuscontact.delete()
+              contactperson.delete()
             continue
           contactperson.name = instance.cleaned_data['name']
           contactperson.designation = instance.cleaned_data['designation']
