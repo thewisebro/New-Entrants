@@ -927,36 +927,30 @@ def delete_comments(request, comment_id):
     messages.error(request, "Comment does not exist")
     return HttpResponse("Comment does not exist")
   student = comment.campus_contact.student
+  try:
+    student_request = request.user.student
+    isPM = False
+  except AttributeError:
+    isPM = True
   if not comment.comment:
     comment.delete()
     messages.success(request, "Comment deleted")
     return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
+  import ipdb; ipdb.set_trace()
   PM_comment = '<span name=' in comment.comment
-  if request.user.student==student and not PM_comment:
+  if isPM:
     comment.delete()
     messages.success(request, "Comment deleted")
     return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
-  elif request.user.student != student:
-    if request.user.groups.filter(name='Placement Manager').exists():
-      if PM_comment:
-        comment.delete()
-        messages.success(request, "Comment deleted")
-        return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
-      else:
-        messages.error(request, "Comment can not be deleted. Please contact Company Coordinator")
-        return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
-    else:
-      messages.error(request, "Access Denied")
-      return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
-  elif PM_comment:
-    if request.user.groups.filter(name='Placement Manager').exists():
-        comment.delete()
-        messages.success(request, "Comment deleted")
-        return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
-    else:
-      messages.error(request, "Access Denied")
+
+  if request.user.student==student:
+    if not PM_comment:
+      comment.delete()
+      messages.success(request, "Comment deleted")
       return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
 
+  messages.error(request, "Access Denied")
+  return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
 
 
 @login_required
