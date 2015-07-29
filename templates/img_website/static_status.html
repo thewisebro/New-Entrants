@@ -1,0 +1,117 @@
+{% extends "img_website/base.html" %}
+
+{% block head %}
+	<meta name="author" content="">
+
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{% endblock head %}
+
+{% block styles %}
+  {{ block.super }}
+{% endblock styles %}
+
+{% block scripts %}
+  {{ block.super }}
+{% endblock scripts %}
+
+{% block links %}
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/"> HOME </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/works/"> WORKS </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/blog/"> BLOG </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/about/"> ABOUT </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/status/"><span class="active"> STATUS </span></a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/team/"> TEAM </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/contact/"> CONTACT </a> </li>
+{% endblock links %}
+
+{% block body %}
+					<div  class="row strip">
+						
+						<div class="container">
+								
+							<div class="row">
+								
+								<div class="span2 offset1 blackstrip" style="width:153px;">
+								
+								</div>
+							
+							</div>
+								
+						</div> <!-- end container -->
+					
+					</div> <!-- end row stripwhatsnew -->
+
+	<div class="row heading">
+		
+		<div class="container">
+				
+				<div class="row">
+					
+					<div class="label span5 offset1">
+						<span class="label-text">STATUS: </span> <span class="label-desc">A log of all our activities</span>
+          </div>
+				
+				</div>
+						  {% block create_post %}
+            {% endblock create_post %}
+			
+		</div> <!-- end container -->
+	
+	</div> <!-- end row heading -->					
+	
+	<div class="row blog">
+	
+		<div class="container blog_container fadediv">
+		
+			<div class="row">
+			
+				<div class="span9 offset1 articles_list shadow2" style=" margin-top: 24px; ">
+									
+        {% for post in status_post_list %}
+					<div class="span9 article">
+            <div class="article_title">
+                <span class="app_name">{{ post.app }}</span>
+							  <span class="date_status"> {{ post.date|date:"F jS, Y f a" }}</span>
+            </div>
+						<div class="article_content">
+							
+							<div class="article_content_text status_article_content">
+							  {{ post.content|safe }}
+							<br/>
+									
+							</div>
+              {% block pub %}
+              {% endblock pub %}
+							
+							<!--<div class="article_content_image">
+							
+								</div> -->
+							
+							
+						</div> <!-- end article_content -->
+						
+						
+					</div> <!-- end article -->
+					
+					<hr />
+				{% endfor %}
+					
+					<!--<div class="next-previous">
+					
+						<a href="" class="previous"> Show more posts </a>
+					
+					</div>-->
+				
+				</div> <!-- end span8 articles_list -->
+				
+			</div> <!-- end row -->
+
+		</div> <!-- end container -->
+		
+		
+	
+	</div> <!-- end row blog -->
+	
+{% endblock body %}
+

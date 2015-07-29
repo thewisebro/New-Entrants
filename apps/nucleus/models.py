@@ -99,11 +99,11 @@ class User(AbstractUser, models.Model):
   User = Channeli User
   """
   name = models.CharField(max_length=MC.TEXT_LENGTH)
-  photo = UserPhoto.ModelField(upload_to='nucleus/photo/', blank=True)
-  gender = models.CharField(max_length=1, choices=MC.GENDER_CHOICES, blank=True)
+  photo = UserPhoto.ModelField(upload_to='nucleus/photo/', null=True, blank=True)
+  gender = models.CharField(max_length=1, choices=MC.GENDER_CHOICES, null=True, blank=True)
   birth_date = models.DateField(blank=True, null=True,
                                 verbose_name='Date of Birth')
-  contact_no = models.CharField(max_length=12, blank=True,
+  contact_no = models.CharField(max_length=12, null=True, blank=True,
                                 verbose_name='Contact No')
   connections = models.ManyToManyField('self', through='Connection', symmetrical=False,
                                       related_name='related_to+', blank=True, null=True)
@@ -254,6 +254,11 @@ class User(AbstractUser, models.Model):
       to_people__status=status,
       to_people__from_user=self
     )
+
+User._meta.get_field('first_name').null=True
+User._meta.get_field('last_name').null=True
+User._meta.get_field('email').null=True
+User._meta.get_field('date_joined').null=True
 
 class WebmailAccount(models.Model):
   webmail_id = models.CharField(max_length=20, primary_key=True)

@@ -1,0 +1,19 @@
+{% extends 'img_website/contact.html' %}
+
+{% block messages %}
+  <table border="1">
+  <tr>
+    <th>Sender</th>
+    <th>Email Id</th>
+    <th>Message</th>
+  </tr>
+  {% for message in messages %}
+    <tr>
+      <td>{{ message.name }}</td>
+      <td>{{ message.email }}</td>
+      <td>{{ message.message }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+  <br><br><br><br><br><br><br><br>
+{% endblock messages %}
