@@ -1,5 +1,6 @@
 //watch("ELECTRONICS");
 var opened_dialog="";  //variable to keep check of the opened dialog
+
 function watch(main_category,category)
 {
    if (typeof category != "undefined")
@@ -275,6 +276,7 @@ function main_check(id_parent,id,len_sub)
 
 
  }
+
  $('body').ready(function(){
       $('#id_username').autocomplete({
         source:'/settings/person_search/',
