@@ -1,3 +1,4 @@
+import logging
 from django.shortcuts import render_to_response,render
 from core.forms import ModelForm
 from django.http import HttpResponseRedirect, HttpResponse
@@ -15,46 +16,53 @@ from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 
+logger = logging.getLogger('buyandsell')
 
-def buy(request,mc=None,c=None):
+
+def buy(request,mc = None,c = None):
   login_flag = False
   if request.user is not None and request.user.is_authenticated():
    login_flag = True
 
-  qdata=''
-  table_data=''
-  price_valid=0
-  maincategory=''
-  category=''
-  error_msg=''
+  qdata = ''
+  table_data = ''
+  price_valid = 0
+  maincategory = ''
+  category = ''
+  error_msg = ''
   print login_flag
   print type(request.user)
-  cat_dict=get_category_dictionary()
+  cat_dict = get_category_dictionary()
+
   if request.GET.get('ll') and request.GET.get('ul'):
-    pl=int(request.GET.get('ll'))
-    pu=int(request.GET.get('ul'))
-    if pu>=0 and pl >=0 and pu>pl:
-      price_valid=1
+    pl = int(request.GET.get('ll'))
+    pu = int(request.GET.get('ul'))
+    if pu >= 0 and pl >= 0 and pu > pl:
+      price_valid = 1
     else:
-      error_msg= "invalid price range"
-      return render(request,'buyandsell/buy.html',{'error_msg':error_msg,'table_data':table_data,'cat_dict':cat_dict})
+      error_msg = "invalid price range"
+      return render(request,'buyandsell/buy.html',
+          {'error_msg':error_msg,
+          'table_data':table_data,
+          'cat_dict':cat_dict
+          })
 
   if mc and c:
-    cat=BuySellCategory.objects.get(code=c)
-    category=cat.name
-    maincategory=cat.main_category
+    cat = BuySellCategory.objects.get(code=c)
+    category = cat.name
+    maincategory = cat.main_category
 
   if mc and not c:
-    mcatlist=BuySellCategory.objects.filter(main_category=mc)
-    maincategory=mcatlist[0].main_category
+    mcatlist = BuySellCategory.objects.filter(main_category=mc)
+    maincategory = mcatlist[0].main_category
   if mc and c and price_valid:
-    qdata=SaleItems.items.filter(category__main_category=mc,
+    qdata = SaleItems.items.filter(category__main_category=mc,
                                  category__code=c,
                                  cost__gte=pl,
                                  cost__lte=pu,
                                  is_active=True).order_by('-pk')
   elif mc and c and not price_valid:
-    qdata=SaleItems.items.filter(category__main_category=mc,
+    qdata = SaleItems.items.filter(category__main_category=mc,
                                  category__code=c,
                                  is_active=True).order_by('-pk')
   elif mc and not c  and  price_valid:
@@ -63,18 +71,18 @@ def buy(request,mc=None,c=None):
                                  cost__lte=pu,
                                  is_active=True).order_by('-pk')
   elif mc and not c and not price_valid:
-    qdata=SaleItems.items.filter(category__main_category=mc,
+    qdata = SaleItems.items.filter(category__main_category=mc,
                                  is_active=True).order_by('-pk')
   elif  price_valid:
-    qdata=SaleItems.items.filter(cost__gte=pl,
+    qdata = SaleItems.items.filter(cost__gte=pl,
                                  cost__lte=pu,
                                  is_active=True).order_by('-pk')
   else:
-    qdata=SaleItems.items.filter(is_active=True).order_by('-pk')
+    qdata = SaleItems.items.filter(is_active=True).order_by('-pk')
   if qdata:
-    table_data=qdata
+    table_data = qdata
   else:
-    error_msg='No items in database'
+    error_msg = 'No items in database'
 
   paginator = Paginator(table_data, 10)
   page = request.GET.get('page', 1)
@@ -106,57 +114,62 @@ def viewrequests(request,mc=None,c=None):
   if request.user is not None and request.user.is_authenticated():
     login_flag = True
 
-  qdata=''
-  table_data=''
-  price_valid=0
-  maincategory=''
-  category=''
-  error_msg=''
-  cat_dict=get_category_dictionary()
+  qdata = ''
+  table_data = ''
+  price_valid = 0
+  maincategory = ''
+  category = ''
+  error_msg = ''
+  cat_dict = get_category_dictionary()
 
   if request.GET.get('ll') and request.GET.get('ul'):
-    pl=int(request.GET.get('ll'))
-    pu=int(request.GET.get('ul'))
-    if pu>=0 and pl >=0 and pu>pl:
-      price_valid=1
+    pl = int(request.GET.get('ll'))
+    pu = int(request.GET.get('ul'))
+    if pu >= 0 and pl >= 0 and pu > pl:
+      price_valid = 1
     else:
-      error_msg= "invalid price range"
-      return render(request,'buyandsell/buy.html',{'error_msg':error_msg,'table_data':table_data,'cat_dict':cat_dict})
+      error_msg = "invalid price range"
+      return render(request,'buyandsell/buy.html',
+          {'error_msg':error_msg,
+          'table_data':table_data,
+          'cat_dict':cat_dict
+          })
+
   if mc and c:
-    cat=BuySellCategory.objects.get(code=c)
-    category=cat.name
-    maincategory=cat.main_category
+    cat = BuySellCategory.objects.get(code=c)
+    category = cat.name
+    maincategory = cat.main_category
   if mc and not c:
-    mcatlist=BuySellCategory.objects.filter(main_category=mc)
-    maincategory=mcatlist[0].main_category
+    mcatlist = BuySellCategory.objects.filter(main_category=mc)
+    maincategory = mcatlist[0].main_category
   if mc and c and price_valid:
-    qdata=RequestedItems.items.filter(category__main_category=mc,
+    qdata = RequestedItems.items.filter(category__main_category=mc,
                                       category__code=c,
                                       price_upper__gte=pl,
                                       price_upper__lte=pu,
                                       is_active=True).order_by('-pk')
   elif mc and c and not price_valid:
-    qdata=RequestedItems.items.filter(category__main_category=mc,
+    qdata = RequestedItems.items.filter(category__main_category=mc,
                                       category__code=c,
                                       is_active=True).order_by('-pk')
   elif mc and not c  and  price_valid:
-    qdata=RequestedItems.items.filter(category__main_category=mc,
+    qdata = RequestedItems.items.filter(category__main_category=mc,
                                       price_upper__gte=pl,
                                       price_upper__lte=pu,
                                       is_active=True).order_by('-pk')
   elif mc and not c and not price_valid:
-    qdata=RequestedItems.items.filter(category__main_category=mc,
+    qdata = RequestedItems.items.filter(category__main_category=mc,
                                       is_active=True).order_by('-pk')
   elif  price_valid:
-    qdata=RequestedItems.items.filter(price_upper__gte=pl,
+    qdata = RequestedItems.items.filter(price_upper__gte=pl,
                                       price_upper__lte=pu,
                                       is_active=True).order_by('-pk')
   else:
-    qdata=RequestedItems.items.filter(is_active=True).order_by('-pk')
+    qdata = RequestedItems.items.filter(is_active=True).order_by('-pk')
   if qdata:
-    table_data=qdata
+    table_data = qdata
   else:
-    error_msg='No items in database'
+    error_msg = 'No items in database'
 
   paginator = Paginator(table_data, 10)
   page = request.GET.get('page', 1)
@@ -185,38 +198,38 @@ def viewrequests(request,mc=None,c=None):
 
 @login_required
 def sell(request):
-  post_date=timezone.now()
-  user=request.user
-  contact=request.user.contact_no
-  if request.method=='POST':
-    form=SellForm(request.POST,request.FILES)
-    digcheck=0
-    negcheck=0
-    lencheck=0
-    zercheck=0
+  post_date = timezone.now()
+  user = request.user
+  contact = request.user.contact_no
+  if request.method == 'POST':
+    form = SellForm(request.POST,request.FILES)
+    digcheck = 0
+    negcheck = 0
+    lencheck = 0
+    zercheck = 0
     if form.is_valid():
-      phone=form.cleaned_data['contact']
-      cost=form.cleaned_data['cost']
+      phone = form.cleaned_data['contact']
+      cost = form.cleaned_data['cost']
       if phone.isdigit():
-        digcheck=1
-      if  len(phone)==len(str(int(phone))):
-        zercheck=1
+        digcheck = 1
+      if  len(phone) == len(str(int(phone))):
+        zercheck = 1
       if len(phone) == 10:
-        lencheck=1
+        lencheck = 1
       if cost>=0:
-        negcheck=1
+        negcheck = 1
       if digcheck and negcheck and zercheck and lencheck:
-        new_item=form.save(commit=False)
-        expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
-        new_item.post_date=post_date
-        new_item.expiry_date=expiry_date
-        new_item.user=user
+        new_item = form.save(commit=False)
+        expiry_date = post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
+        new_item.post_date = post_date
+        new_item.expiry_date = expiry_date
+        new_item.user = user
         new_item.save()
-        app='buyandsell'
-        watch_user_list=new_item.category.watch_users.all()
+        app = 'buyandsell'
+        watch_user_list = new_item.category.watch_users.all()
         print watch_user_list
-        notif_text=str(new_item.item_name)+"has been added to the category"+str(new_item.category.name)
-        notif_text+="that you have watched"
+        notif_text = str(new_item.item_name)+"has been added to the category"+str(new_item.category.name)
+        notif_text += "that you have watched"
         url = '/buyandsell/sell_details/' + str(new_item.pk)
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
         return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/buy/'})
@@ -251,7 +264,7 @@ def requestitem(request):
         zercheck=1
       if len(phone) == 10:
         lencheck=1
-      if price_upper>=0:
+      if price_upper >= 0:
         negcheck=1
       if digcheck and negcheck and zercheck and lencheck:
         new_item=form.save(commit=False)
@@ -284,7 +297,7 @@ def watch(request,mc=None,c=None):
 
   user=request.user
   if mc and not c:
-    cat_list=BuySellCategory.objects.filter(main_category=mc)
+    cat_list = BuySellCategory.objects.filter(main_category=mc)
     for cat in cat_list:
       cat.watch_users.add(user)
       cat.save()
@@ -304,11 +317,16 @@ def selldetails(request,pk):
    login_flag = True
 
   show_contact=1
-  item=SaleItems.objects.get(pk=pk)
-  self_flag=0
-  user=request.user
-  username=request.user.username
-  item_user=item.user.username
+  try:
+    item = SaleItems.objects.get(pk=pk)
+  except:
+    mesages.error(request , "OOps!, this item is either expired ,sold or deleted")
+    return render(request,'buyandsell/selldetails.html')
+
+  self_flag = 0
+  user = request.user
+  username = request.user.username
+  item_user = item.user.username
   if username == item_user:
     self_flag=1
   if request.method=='POST':
@@ -324,7 +342,7 @@ def selldetails(request,pk):
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
       show_contact=0
 
-  context={
+  context = {
     'item':item,
     'self_flag':self_flag,
     'show_contact':show_contact,
@@ -339,7 +357,12 @@ def requestdetails(request,pk):
    login_flag = True
 
   show_contact=1
-  item=RequestedItems.objects.get(pk=pk)
+  try:
+    item=RequestedItems.objects.get(pk=pk)
+  except:
+    mesages.error(request , "OOps!, this item is either expired ,sold or deleted")
+    return render(request,'buyandsell/requestdetails.html')
+
   self_flag=0
   user=request.user
   username=request.user.username
@@ -860,6 +883,8 @@ def transaction(request,item_type,pk):
       new_item.sell_item=sell_item
       new_item.trasaction_date=timezone.now()
       new_item.save()
+      sell_item.is_active = False
+      sell_item.save()
       return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
     sell_item=SaleItems.items.get(pk=pk)
     mail_list=BuyMails.objects.filter(item=sell_item)
@@ -917,7 +942,11 @@ def transaction(request,item_type,pk):
       new_item.is_requested=True
       new_item.trasaction_date=timezone.now()
       new_item.save()
-      return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
+      request_item.is_active = False
+      request_item.save()
+      return TemplateResponse(request, 'buyandsell/form.html',
+          {'redirect_url':'/buyandsell/my-account/'})
+
     request_item=RequestedItems.items.get(pk=pk)
     mail_list=RequestMails.objects.filter(item=request_item)
     return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list})
@@ -992,10 +1021,13 @@ def manage(request):
         cat.watch_users.remove(user)
         cat.save()
 
-    return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
-  return render(request,'buyandsell/manage.html',{'cat_dict':cat_dict,
-               'main_watched_cat':main_watched_cat,
-               'sub_watched_cat':sub_watched_cat})
+    return TemplateResponse(request, 'buyandsell/form.html',
+            {'redirect_url':'/buyandsell/my-account/'})
+
+  return render(request,'buyandsell/manage.html',
+              {'cat_dict':cat_dict,
+              'main_watched_cat':main_watched_cat,
+              'sub_watched_cat':sub_watched_cat})
 
 def _get_page_list(page_no, pages, items_per_page):
   l = range(1, pages+1)
