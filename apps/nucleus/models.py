@@ -103,7 +103,7 @@ class User(AbstractUser, models.Model):
   gender = models.CharField(max_length=1, choices=MC.GENDER_CHOICES, null=True, blank=True)
   birth_date = models.DateField(blank=True, null=True,
                                 verbose_name='Date of Birth')
-  contact_no = models.CharField(max_length=12, null=True, blank=True,
+  contact_no = models.CharField(max_length=20, null=True, blank=True,
                                 verbose_name='Contact No')
   connections = models.ManyToManyField('self', through='Connection', symmetrical=False,
                                       related_name='related_to+', blank=True, null=True)
@@ -376,13 +376,13 @@ class AbstractStudentInfo(django_models.Model):
                   verbose_name='Father\'s Occupation')
   fathers_office_address = models.CharField(max_length=MC.TEXT_LENGTH,
                   blank=True, verbose_name='Father\'s Office Address')
-  fathers_office_phone_no = models.CharField(max_length=12, blank=True,
+  fathers_office_phone_no = models.CharField(max_length=20, blank=True,
                   verbose_name='Father\'s Office Phone No')
   mothers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
                   verbose_name='Mother\'s Name')
   permanent_address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
                   verbose_name='Permanent Address')
-  home_contact_no = models.CharField(max_length=12, blank=True,
+  home_contact_no = models.CharField(max_length=20, blank=True,
                   verbose_name='Home Contact No')
   state = models.CharField(max_length=3, choices=MC.STATE_CHOICES, blank=True)
   city = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
@@ -399,7 +399,7 @@ class AbstractStudentInfo(django_models.Model):
                   verbose_name='Local Guardian\'s Name')
   local_guardian_address = models.CharField(max_length=MC.TEXT_LENGTH,
                   blank=True, verbose_name='Local Guardian\'s Address')
-  local_guardian_contact_no = models.CharField(max_length=12, blank=True,
+  local_guardian_contact_no = models.CharField(max_length=20, blank=True,
                   verbose_name='Local Guardian\'s Contact No')
   category = models.CharField(max_length=3, choices=MC.CATEGORY_CHOICES,
                   blank=True)
