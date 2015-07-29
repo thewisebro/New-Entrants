@@ -380,7 +380,7 @@ class AbstractStudentInfo(django_models.Model):
                   verbose_name='Father\'s Office Phone No')
   mothers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
                   verbose_name='Mother\'s Name')
-  permanent_address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+  permanent_address = models.CharField(max_length=250, blank=True,
                   verbose_name='Permanent Address')
   home_contact_no = models.CharField(max_length=12, blank=True,
                   verbose_name='Home Contact No')
