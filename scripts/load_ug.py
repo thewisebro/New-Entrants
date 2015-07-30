@@ -33,11 +33,10 @@ for i in range(1,sheet.nrows):
       gender = 'M'
     else :
       gender = 'F'
-    dob=str(row[8])
     try:
-      dob = datetime.datetime.strptime(dob,'%d/%m/%Y').date()
+      dob = datetime.datetime(*xlrd.xldate_as_tuple(sheet.cell(i,8),xl_book.datemode)).date()
     except:
-      dob = datetime.datetime.strptime('1/1/1996','%d/%m/%Y').date()
+      dob = None
     nationality = str(row[11])
     code = str(row[12])
     branch = Branch.objects.get(code = code)

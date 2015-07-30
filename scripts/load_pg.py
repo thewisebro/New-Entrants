@@ -26,11 +26,11 @@ for i in range(1,sheet.nrows):
     enr_no = str(row[0])
     name = str(row[1])
     gender = str(row[5])
-    dob=str(row[16])
+    print row[16]
     try:
-      dob = datetime.datetime.strptime(dob,'%d/%m/%Y').date()
+      dob = datetime.datetime(*xlrd.xldate_as_tuple(sheet.cell(i,16).value,xl_book.datemode)).date()
     except:
-      dob = datetime.datetime.strptime('1/1/1990','%d/%m/%Y').date()
+      dob = None
     nationality = str(row[17])
     code = str(row[8])
     branch = Branch.objects.get(code = code)
@@ -56,7 +56,7 @@ for i in range(1,sheet.nrows):
       print "email " + email
       print "address " + address
       print "pincode " + pincode
-      time.sleep(30)
+      time.sleep(10)
       ok = True
 
     user = User.objects.filter(username=enr_no)
