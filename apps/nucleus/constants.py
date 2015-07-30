@@ -73,7 +73,7 @@ channeli_links = [
   {'name':'Instruments Search','url':'/equipments/'},
   {'name':'Mess Feedback','url':'/messmenu/feedback/'},
   {'name':'Smart Card Registration','url':'/genforms/'},
-  {'name':'Print Scholarship Form','url':'/scholarships/mcm_print_pdf/'},
+  {'name':'Scholarship Form','url':'/scholarships/mcm/'},
   {'name':'LAN Registration','url':'/wifi/'},
   {'name':'Telephone Directory','url':'/static/pdfs/directoryeng15022015.pdf'},
   {'name':'Meeting Section','url':'/meeting_minutes/'},

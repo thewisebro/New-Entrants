@@ -259,14 +259,17 @@ def placement_manager_view(request):
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
 def placement_manager_contact_person_data(request):
   company = CompanyContactInfo.objects.all()
+  contactPerson_lst = ContactPerson.objects.all()
+  comment_lst = CompanyContactComments.objects.all()
   lst = []
+#  print "Hello"+str(datetime.datetime.now())
   for company_inst in company:
     if ContactPerson.objects.filter(company_contact=company_inst):
       contact_exist = True
       try:
-        contactPerson = ContactPerson.objects.get(company_contact=company_inst, is_primary = True)
+       contactPerson = contactPerson_lst.get(company_contact=company_inst, is_primary = True)
       except:
-        contactPerson = ContactPerson.objects.filter(company_contact=company_inst).order_by('name')[0]
+       contactPerson = contactPerson_lst.filter(company_contact=company_inst).order_by('name')[0]
     else:
       contact_exist = False
       contactPerson = ContactPerson()
@@ -289,7 +292,7 @@ def placement_manager_contact_person_data(request):
         values.append(contactPerson.campuscontact.student.user.name)
       except:
         values.append("None")
-      comment = CompanyContactComments.objects.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
+      comment = comment_lst.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
       if comment:
         comment_text=comment[0].comment
         if comment_text == "":
@@ -306,8 +309,8 @@ def placement_manager_contact_person_data(request):
     values.append(company_inst.id)
     values.append(company_inst.id)
     lst.append(values[:])
-
   data_to_send = []
+#  print "Bye"+str(datetime.datetime.now())
   for item in lst:
       a = []
       for x in list(item):
@@ -472,7 +475,7 @@ def company_coordinator_contact_person_data_today(request):
         comment_text = "None"
     else:
       comment_text="None"
-    values.append(comment)
+    values.append(comment_text)
     values.append(campus_contact_inst.when_to_contact)
     values.append(contactPerson.company_contact.id)
     values.append(contactPerson.company_contact.id)
@@ -673,15 +676,18 @@ def edit_company_manual(request, company_id):
           try:
             contactperson = ContactPerson.objects.get(id = instance.cleaned_data['contact_id'])
             campuscontact = contactperson.campuscontact
+            is_new = False
           except:
             contactperson = ContactPerson()
             campuscontact = CampusContact()
+            is_new = True
           if instance.cleaned_data['DELETE']:
             if contactperson.is_primary:
               messages.error(request, "Please change primary contact first to delete the contact")
               return HttpResponseRedirect(reverse('placement.views_img.edit_company_manual', kwargs={'company_id':company.id}))
-            campuscontact.delete()
-            contactperson.delete()
+            if not is_new:
+              campuscontact.delete()
+              contactperson.delete()
             continue
           contactperson.name = instance.cleaned_data['name']
           contactperson.designation = instance.cleaned_data['designation']
@@ -926,36 +932,29 @@ def delete_comments(request, comment_id):
     messages.error(request, "Comment does not exist")
     return HttpResponse("Comment does not exist")
   student = comment.campus_contact.student
+  try:
+    student_request = request.user.student
+    isPM = False
+  except AttributeError:
+    isPM = True
   if not comment.comment:
     comment.delete()
     messages.success(request, "Comment deleted")
     return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
   PM_comment = '<span name=' in comment.comment
-  if request.user==student and not PM_comment:
+  if isPM:
     comment.delete()
     messages.success(request, "Comment deleted")
     return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
-  elif request.user != student:
-    if request.user.groups.filter(name='Placement Manager').exists():
-      if PM_comment:
-        comment.delete()
-        messages.success(request, "Comment deleted")
-        return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
-      else:
-        messages.error(request, "Comment can not be deleted. Please contact Company Coordinator")
-        return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
-    else:
-      messages.error(request, "Access Denied")
-      return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
-  elif PM_comment:
-    if request.user.groups.filter(name='Placement Manager').exists():
-        comment.delete()
-        messages.success(request, "Comment deleted")
-        return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
-    else:
-      messages.error(request, "Access Denied")
+
+  if request.user.student==student:
+    if not PM_comment:
+      comment.delete()
+      messages.success(request, "Comment deleted")
       return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
 
+  messages.error(request, "Access Denied")
+  return HttpResponseRedirect(reverse('placement.views_img.edit_comments',kwargs={'company_id':comment.campus_contact.contact_person.company_contact.id}))
 
 
 @login_required

@@ -218,8 +218,8 @@ class CommentsForm(forms.ModelForm):
   class ContactPersonModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
       if obj.is_primary:
-        return obj.name+'; '+obj.designation+' (Primary Contact)'
-      return obj.name+'; '+obj.designation
+        return str(obj.name)+'; '+str(obj.designation)+' (Primary Contact)'
+      return str(obj.name)+'; '+str(obj.designation)
 
   def __init__(self, *args, **kwargs):
     company_contact = kwargs.pop('company_contact')

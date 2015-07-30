@@ -30,7 +30,7 @@
             <a href = "{% url 'placement.views_img.add_company_coordinator' %}" target="_blank">Add Company Coordinator</a>
           </div>
           <div class="sub-links">
-            <a href="/logout" target="_blank">Logout</a>
+            <a href="/logout">Logout</a>
           </div>
         </div>
       </div>
@@ -131,6 +131,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/placement/jquery.dataTables.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/placement/jquery.leanModal.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/placement/dataTables.bootstrap.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/placement/dataTable.api.fnReloadAjax.js"></script>
   <script type="text/javascript">
     if (!String.prototype.format) {
       String.prototype.format = function() {
@@ -260,7 +261,7 @@ function open_frame(company_name,url,width,refresh){
     width: width,
     src: url,
     close: function(){
-      $('#company').DataTable().ajax.reload();
+      $('#company').dataTable().fnReloadAjax(null,null,true);
       },
     });
   } else {
