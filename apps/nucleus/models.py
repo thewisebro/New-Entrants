@@ -93,13 +93,17 @@ class UserPhoto(CropImage):
              '.' + fname.split('.')[-1]
     return fname
 
+def user_photo_upload(instance,filename):
+  if hasattr(instance,'faculty'):
+    return 'faculty/photo/'+filename
+  return 'nucleus/photo/'+filename
 
 class User(AbstractUser, models.Model):
   """
   User = Channeli User
   """
   name = models.CharField(max_length=MC.TEXT_LENGTH)
-  photo = UserPhoto.ModelField(upload_to='nucleus/photo/', null=True, blank=True)
+  photo = UserPhoto.ModelField(upload_to=user_photo_upload, null=True, blank=True)
   gender = models.CharField(max_length=1, choices=MC.GENDER_CHOICES, null=True, blank=True)
   birth_date = models.DateField(blank=True, null=True,
                                 verbose_name='Date of Birth')
@@ -501,6 +505,7 @@ class Faculty(Role('Faculty')):
 
   class Meta:
     verbose_name_plural = 'Faculties'
+
 
 
 class Alumni(Role('Alumni')):
