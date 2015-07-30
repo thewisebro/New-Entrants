@@ -5,7 +5,7 @@ import os
 import shutil
 import xlwt
 
-file_types = ['exampapers','lectures','tutorials','solutions']
+file_types = ['exp','lec','tut','sol']
 os.chdir('media/old_files')
 
 for file_type in file_types:
