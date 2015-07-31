@@ -260,57 +260,38 @@ def placement_manager_view(request):
 def placement_manager_contact_person_data(request):
   company = CompanyContactInfo.objects.all()
   contactPerson_lst = ContactPerson.objects.all()
-  comment_lst = CompanyContactComments.objects.all()
+  contactPerson_company_lst = contactPerson_lst.values_list('company_contact__id',flat=True)
+  primaryContactPerson_lst = contactPerson_lst.filter(is_primary=True)
+  primaryContactPerson_company_lst = primaryContactPerson_lst.values_list('company_contact__id',flat=True)
+  otherContactPerson_company_lst = contactPerson_lst.exclude(company_contact__id__in = primaryContactPerson_company_lst).values_list('company_contact__id',flat=True).distinct()
+  comment_lst = CompanyContactComments.objects.filter(campus_contact__contact_person__in=contactPerson_lst)
   lst = []
-#  print "Hello"+str(datetime.datetime.now())
-  for company_inst in company:
-    if ContactPerson.objects.filter(company_contact=company_inst):
-      contact_exist = True
-      try:
-       contactPerson = contactPerson_lst.get(company_contact=company_inst, is_primary = True)
-      except:
-       contactPerson = contactPerson_lst.filter(company_contact=company_inst).order_by('name')[0]
-    else:
-      contact_exist = False
-      contactPerson = ContactPerson()
-      contactPerson.name = "Not Defined"
-      contactPerson.designation = ""
-      contactPerson.phone_no = ""
-      contactPerson.email = ""
-    values = []
-    values.append(company_inst.id)
-    values.append(company_inst.name)
-    values.append(company_inst.cluster)
-    values.append(contactPerson.name)
-    values.append(contactPerson.designation)
-    values.append(contactPerson.phone_no)
-    values.append(contactPerson.email)
-    values.append(company_inst.status)
-    if contact_exist:
-      values.append(contactPerson.campuscontact.last_contact)
-      try:
-        values.append(contactPerson.campuscontact.student.user.name)
-      except:
-        values.append("None")
-      comment = comment_lst.filter(campus_contact = contactPerson.campuscontact).order_by('-date_created')
-      if comment:
-        comment_text=comment[0].comment
-        if comment_text == "":
-          comment_text = "None"
-      else:
-        comment_text="None"
-    else:
-      values.append("")
-      values.append("")
-      comment_text=""
-    values.append(comment_text)
-    values.append(contactPerson.campuscontact.when_to_contact if contact_exist else "")
-    values.append(company_inst.id)
-    values.append(company_inst.id)
-    values.append(company_inst.id)
-    lst.append(values[:])
+
+
+  primaryContactPerson_values_lst = primaryContactPerson_lst.values_list('company_contact__id','company_contact__name','company_contact__cluster','company_contact__status',
+                                                                         'name','designation','phone_no','email','campuscontact__last_contact',
+                                                                         'campuscontact__student__user__name','campuscontact__when_to_contact','company_contact__id',
+                                                                         'company_contact__id','company_contact__id')
+
+  lst += primaryContactPerson_values_lst
+
+  for company_id_inst in otherContactPerson_company_lst:
+    company_inst = company.get(id=company_id_inst)
+    contactPerson_filter = contactPerson_lst.filter(company_contact__id = company_id_inst).order_by('name')
+    contactPerson_values = contactPerson_filter.values_list('name','designation','phone_no','email')[0]
+    contactPerson = contactPerson_values + (contactPerson_filter[0].campuscontact.last_contact,)
+    try:
+      contactPerson += (contactPerson_filter[0].campuscontact.student.user.name, )
+    except:
+      contactPerson += ("",)
+    contactPerson += (contactPerson_filter[0].campuscontact.when_to_contact,)
+    contactPerson += (company_inst.id,company_inst.id,company_inst.id)
+    lst.append((company_id_inst,company_inst.name, company_inst.cluster, company_inst.status)+contactPerson)
+
+  company_withoutContact = company.exclude(id__in = contactPerson_company_lst)
+  lst = lst+[(company_inst.id,company_inst.name,company_inst.cluster,company_inst.status,"","","","","","","",company_inst.id,company_inst.id,company_inst.id) for company_inst in company_withoutContact]
+
   data_to_send = []
-#  print "Bye"+str(datetime.datetime.now())
   for item in lst:
       a = []
       for x in list(item):
