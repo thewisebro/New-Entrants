@@ -70,7 +70,11 @@ class UserAdmin(AuthUserAdmin):
   )
   ordering = ('username',)
   filter_horizontal = ('groups', 'user_permissions',)
-  search_fields = ['username', 'name']
+  search_fields = ['username', 'name', 'email']
+
+class WebmailAdmin(ModelAdmin):
+  search_fields = ['webmail_id', 'user__username','user__name']
+  list_display = ['webmail_id', 'user']
 
 class BranchAdmin(ModelAdmin):
   search_fields = ['code', 'name', 'department']
@@ -91,9 +95,13 @@ class CourseAdmin(ModelAdmin):
   exclude = ['id']
   search_fields = ['code', 'name']
 
+class FacultyAdmin(ModelAdmin):
+  search_fields = ['user__username', 'user__name']
+  list_display = ['user', 'department', 'designation']
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Owner)
-admin.site.register(WebmailAccount)
+admin.site.register(WebmailAccount, WebmailAdmin)
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(StudentInfo)
@@ -102,6 +110,6 @@ admin.site.register(StudentUserInfo, StudentUserAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(RegisteredCourse)
 admin.site.register(Batch)
-admin.site.register(Faculty)
+admin.site.register(Faculty, FacultyAdmin)
 admin.site.register(GlobalVar)
 admin.site.register(Alumni)
