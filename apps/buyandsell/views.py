@@ -773,6 +773,7 @@ def my_account(request):
   sell_items=SaleItems.items.filter(user=user).order_by('-pk')
   request_items=RequestedItems.items.filter(user=user).order_by('-pk')
   _ , _ , watched_cat_dict=get_watched_categories(request)
+  cat_dict = get_category_dictionary()
 
   successful_transactions_sell = SuccessfulTransaction.objects.filter(seller = user,is_requested = False)
   succ_sold_items = [trans.sell_item for trans in successful_transactions_sell]
@@ -797,10 +798,11 @@ def my_account(request):
            'watched_cat_dict':watched_cat_dict,
            'show_contact':show_contact,
            'succ_sold_items':succ_sold_items,
-           'succ_request_items':succ_request_items
+           'succ_request_items':succ_request_items,
+           'cat_dict':cat_dict
           }
 
-  return render(request,'buyandsell/myaccount.html',context)
+  return render(request,'buyandsell/my-account.html',context)
 
 def get_category_dictionary():
   cat_dict={}

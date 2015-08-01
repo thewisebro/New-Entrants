@@ -13,7 +13,7 @@
 		<link rel="stylesheet" href="css/jquery-ui.css">
 		<link href="css/index.css" type= "text/css" rel="stylesheet">
 		
-		<script src="js/bootstrap.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>	
 		
 		<script src="js/sliderJquery.js"></script>
 		<script src="js/sliderJqueryUi.js"></script>
@@ -48,16 +48,15 @@
 					<div class="row">
 						<div class="col-md-3 col-xl-3">
 							<a href="#">
-								<h1 class="logo">buy & sell</h1>
+								<h1 class="logo">bazaar- i</h1>
 							</a>
 						</div>
-
                         <!--Search box HTML starts here-->
 
-						<div class="col-md-5 search-area">
-							<form action="#">
-								<input class="search-form" type="search" name="query" placeholder="What are you looking for... ">
-								<span class="glyphicon glyphicon-search global-search-icon"></span>
+                        <div class="col-md-5 search-area">
+                            <form action="#">
+                                <input class="search-form" type="search" name="query" placeholder="What are you looking for... ">
+                                <span class="glyphicon glyphicon-search global-search-icon"></span>
                                 <div class="search-result-box">
                                     <div class="search-result-categories">
                                         <a href="#">
@@ -206,14 +205,14 @@
                                         See all
                                     </a>
                                 </div>
-							</form>
-						</div>
+                            </form>
+                        </div>
 						<div class="col-md-1">
 							<div class="dropdown" style="display:inline">
 								<button type="button" class="btn dropdown-toggle global-browse" id="menu2" data-toggle="dropdown">Browse</button>
-								<ul class="dropdown-menu used-dropdown-menu" style="margin-top:42%; margin-left:-188%;" role="menu" aria-labelledby="menu2">
-									<div class="arrow-up-behind" style="margin-left:69.5%; margin-top:-11.5%"></div>
-									<div class="arrow-up-front" style="margin-left:70.5%; margin-top:-10.5%"></div>
+                                <ul class="dropdown-menu used-dropdown-menu" style="margin-top:42%; margin-left:-188%;" role="menu" aria-labelledby="menu2">
+                                    <div class="arrow-up-behind" style="margin-left:69.5%; margin-top:-11.5%"></div>
+                                    <div class="arrow-up-front" style="margin-left:70.5%; margin-top:-10.5%"></div>
 									<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Latest</a></li>
 									<li role="presentation" class="dropdown-submenu">
 										<a role="menuitem" tabindex="-1" href="#">Electronics</a>
@@ -245,27 +244,27 @@
 							
 						</div>
 
-						<div class="col-md-3">
-							<div class="dropdown" style="display:inline">
-								<button class="btn btn-default dropdown-toggle user-photo-button" type="button" id="menu1" data-toggle="dropdown">
-									<img src="designStuff/niteshSir.png" class="user-photo">
-									<span class="caret user-photo-caret"></span>
-								</button>
-								<ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu1">
-								  <div class="arrow-up-behind" style="margin-left:81.5%; margin-top:-11.5%"></div>
-								  <div class="arrow-up-front" style="margin-left:82%; margin-top:-10.5%"></div>
-								  <li role="presentation"><a role="menuitem" tabindex="-1" href="my-account.html">My Account</a></li>
-								  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Channel- i</a></li>
-								  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Logout</a></li>
-								</ul>
-							</div>
+                        <div class="col-md-3">
+                            <div class="dropdown" style="display:inline">
+                                <button class="btn btn-default dropdown-toggle user-photo-button" type="button" id="menu1" data-toggle="dropdown">
+                                    <img src="designStuff/niteshSir.png" class="user-photo">
+                                    <span class="caret user-photo-caret"></span>
+                                </button>
+                                <ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu1">
+                                    <div class="arrow-up-behind" style="margin-left:81.5%; margin-top:-11.5%"></div>
+                                    <div class="arrow-up-front" style="margin-left:82%; margin-top:-10.5%"></div>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="my-account.html">My Account</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Channel- i</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Logout</a></li>
+                                </ul>
+                            </div>
                             <button type="button" data-toggle="modal" data-target="#request-item-modal" class="btn global-button">
                                 Request
                             </button>
                             <button type="button" data-toggle="modal" data-target="#sell-item-modal" class="btn global-button" style="margin-left:60px">
                                 Sell
                             </button>
-						</div>
+                        </div>
 					</div>
 				</header>
 			</div>
@@ -299,27 +298,27 @@
 			<div class="row">
 				<div class="col-md-3">
 					<div class="left-box">
-						<div class="row">
-							<div class="col-md-12">
-								<form action="action_page.php" class="input-group-addon view-what">
-									<div>
-										<input type="radio" name="radio" id="items-for-sale" class="radio" checked>
-									<label for="items-for-sale">
-										<a href="buy-page.html"><div></div>Items for Sale</a>
-									</label>
-									</div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form action="action_page.php" class="input-group-addon view-what">
+                                    <div>
+                                        <input type="radio" name="radio" id="items-for-sale" class="radio">
+                                        <label for="items-for-sale">
+                                            <a href="buy-page.html"><div></div>Items for Sale</a>
+                                        </label>
+                                    </div>
 
-									<div>
-										<input type="radio" name="radio" id="requests" class="radio"/>
-										<label for="requests">
-											<a href="requests.html"><div></div>Requests</a>
-										</label>
-									</div>
-								</form>
-								<div class="left-division-line">
-								</div>
-							</div>
-						</div>
+                                    <div>
+                                        <input type="radio" name="radio" id="requests" class="radio" checked>
+                                        <label for="requests">
+                                            <a href="requests.html"><div></div>Requests</a>
+                                        </label>
+                                    </div>
+                                </form>
+                                <div class="left-division-line">
+                                </div>
+                            </div>
+                        </div>
 						<div class="row price-filter">
 							<div class="col-md-12">
 								<p>Price Range</p>
@@ -329,8 +328,8 @@
                                         <div class="slider-back"></div>
                                         <div id="slider-range"></div>
 										<div class="prices" style= "margin-top:20px;">
-											<input type="text" id="low" class="price-range-text-input" placeholder="Min">
-											<input type="text" id="high" class="price-range-text-input" placeholder="Max">
+											<input type="text" id="low" class="price-range-text-input">
+											<input type="text" id="high" class="price-range-text-input">
 											<button class="global-browse price-range-submit">
 												<span class="glyphicon glyphicon-menu-right"></span>
 											</button>
@@ -342,85 +341,88 @@
 						
 					</div>
 				</div>
-				<div class="col-md-9 pageContent">
-					<div class="row">
-						<div class="col-md-3 col-sm-6">
-							<a data-toggle="modal" data-target="#item-for-sale-modal" class="item">
-							  <div class="thumbnailBG">
-								  <div class="thumbnail">
-									 <img src="designStuff/appleMac.jpg" alt="Generic placeholder thumbnail">
-								  </div>
-								  <div class="caption">
-									 <span class="itemName">Apple imac ki photo</span>
-									 <span class="price">Rs. 200</span>
-									 <span class="expiresIn">Expires in 3 days</span>
-								  </div>
-							  </div>
-							</a>
-						</div>
-						<div class="col-md-3 col-sm-6">
-							<a data-toggle="modal" data-target="#item-for-sale-modal" class="item">
-							  <div class="thumbnailBG">
-								  <div class="thumbnail">
-									 <img src="designStuff/webcam.jpg" alt="Generic placeholder thumbnail">
-								  </div>
-								  <div class="caption">
-									 <span class="itemName">Webcam</span>
-									 <span class="price">Rs. 750</span>
-									 <span class="expiresIn">Expires in 3 days</span>
-								  </div>
-							  </div>
-							</a>
-						</div>
-						<div class="col-md-3 col-sm-6">
-						  <div class="thumbnailBG">
-							  <div class="thumbnail">
-								 <img src="designStuff/appleMac.jpg" alt="Generic placeholder thumbnail">
-							  </div>
-							  <div class="caption">
-								 <span class="itemName">Thumbnail label</span>
-								 <span class="price">Rs. 200</span>
-								 <span class="expiresIn">Expires in 3 days</span>
-							  </div>
-						  </div>
-						</div>
-						<div class="col-md-3 col-sm-6">
-						  <div class="thumbnailBG">
-							  <div class="thumbnail">
-								 <img src="designStuff/appleMac.jpg" alt="Generic placeholder thumbnail">
-							  </div>
-							  <div class="caption">
-								 <span class="itemName">Thumbnail label</span>
-								 <span class="price">Rs. 200</span>
-								 <span class="expiresIn">Expires in 3 days</span>
-							  </div>
-						  </div>
-						</div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="thumbnailBG">
-                                <div class="thumbnail">
-                                    <img src="designStuff/appleMac.jpg" alt="Generic placeholder thumbnail">
-                                </div>
-                                <div class="caption">
-                                    <span class="itemName">Thumbnail label</span>
-                                    <span class="price">Rs. 200</span>
-                                    <span class="expiresIn">Expires in 3 days</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="thumbnailBG">
-                                <div class="thumbnail">
-                                    <img src="designStuff/appleMac.jpg" alt="Generic placeholder thumbnail">
-                                </div>
-                                <div class="caption">
-                                    <span class="itemName">Thumbnail label</span>
-                                    <span class="price">Rs. 200</span>
-                                    <span class="expiresIn">Expires in 3 days</span>
-                                </div>
-                            </div>
-                        </div>
-					</div>
+                <div class="col-md-9 page-content">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Max Price (Rs)</th>
+                            <th>Expires in</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">Mouse</td>
+                            <td class="requested-item-price">130</td>
+                            <td>40 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">Apple Computer's Photo</td>
+                            <td class="requested-item-price">20000</td>
+                            <td>33 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">Hard Disk (2 TB)</td>
+                            <td class="requested-item-price">2000</td>
+                            <td>27 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">Macbook Photo</td>
+                            <td class="requested-item-price">50</td>
+                            <td>22 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">I phone's Photo</td>
+                            <td class="requested-item-price">230</td>
+                            <td>22 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">Apple Computer's Photo</td>
+                            <td class="requested-item-price">200</td>
+                            <td>19 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">Android Poster</td>
+                            <td class="requested-item-price">200</td>
+                            <td>14 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">Mouse</td>
+                            <td class="requested-item-price">130</td>
+                            <td>40 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">Apple Computer's Photo</td>
+                            <td class="requested-item-price">20000</td>
+                            <td>33 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">Hard Disk (2 TB)</td>
+                            <td class="requested-item-price">2000</td>
+                            <td>27 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">Macbook Photo</td>
+                            <td class="requested-item-price">50</td>
+                            <td>22 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">I phone's Photo</td>
+                            <td class="requested-item-price">230</td>
+                            <td>22 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">Apple Computer's Photo</td>
+                            <td class="requested-item-price">200</td>
+                            <td>19 days</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#request-modal" class="request">
+                            <td class="requested-item-name">Android Poster</td>
+                            <td class="requested-item-price">200</td>
+                            <td>14 days</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <nav>
                     <ul class="pagination pagination-customized">
@@ -441,61 +443,105 @@
                         </li>
                     </ul>
                 </nav>
-
 			</div>
 			
 		</div>
-		<!-- Modal -->
-		<div class="modal fade" id="item-for-sale-modal" tabindex="-1" role="dialog" aria-labelledby="item-for-sale-modalLabel" aria-hidden="true">
-		  <div class="modal-dialog" style="width:800px;">
-			<div class="modal-content">
-			  <div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color:white; width:20px; height:20px">&times;</span></button>
-				<h4 class="modal-title" id="modal-title">Modal title</h4>
-			  </div>
-			  <div class="modal-body">
-				<div class="row">
-					<div class="col-md-5 col-xl-5 col-xs-5 col-sm-5">
-						<img class="thumbnail modal-image" src="designStuff/appleMac.jpg">
-					</div>
-					<div class="col-md-7 col-xl-7 col-xs-7 col-sm-7">
-						<p class="description">
-							Lorem ipsum dolor sit amet, adipiscing ipsum sed sem, do enim imperdiet nullam libero. Nulla a odio elementum ut, sed arcu. Mauris tellus libero, est sed, donec eu habitant dui quis donec arcu, suscipit aenea
-						</p>
-						<div class="division-line">
-						</div>
-						<table class="table item-details">
-							<tbody>
-								<tr>
-									<td width="20%">Price:</td>
-									<td class="modal-price">Rs. 123</td>
-								</tr>
-								<tr>
-									<td width="20%">Owner:</td>
-									<td class="modal-owner">Chhota Bachcha</td>
-								</tr>
-								<tr>
-									<td width="20%">Phone:</td>
-									<td class="modal-phone">9999999999</td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="enquire-clicked">
-							<p><strong>Following mail will be sent to the Owner</strong></p>
-							<p class="mail-to-be-sent">
-								Lorem ipsum dolor sit amet, adipiscing ipsum sed sem, do enim imperdiet nullam libero. Nulla a odio elementum ut, sed arcu. Mauris tellus libero, est sed, donec eu habitant dui quis donec arcu, suscipit aenea
-							</p>
-						</div>
-					</div>
-				</div>
-			  </div>
-			  <div class="modal-footer">
-				<button type="button" class="btn btn-primary enquire" style="margin:0px auto">Enquire</button>
-				<button type="button" class="btn btn-primary send" data-dismiss="modal" style="margin:0px auto; display:none;">Send</button>
-			  </div>
-			</div>
-		  </div>
-		</div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="item-for-sale-modal" tabindex="-1" role="dialog" aria-labelledby="item-for-sale-modalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width:800px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color:white; width:20px; height:20px">&times;</span></button>
+                        <h4 class="modal-title" id="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-5 col-xl-5 col-xs-5 col-sm-5">
+                                <img class="thumbnail modal-image" src="designStuff/appleMac.jpg">
+                            </div>
+                            <div class="col-md-7 col-xl-7 col-xs-7 col-sm-7">
+                                <p class="description">
+                                    Lorem ipsum dolor sit amet, adipiscing ipsum sed sem, do enim imperdiet nullam libero. Nulla a odio elementum ut, sed arcu. Mauris tellus libero, est sed, donec eu habitant dui quis donec arcu, suscipit aenea
+                                </p>
+                                <div class="division-line">
+                                </div>
+                                <table class="table item-details">
+                                    <tbody>
+                                    <tr>
+                                        <td width="20%">Price:</td>
+                                        <td class="modal-price">Rs. 123</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%">Owner:</td>
+                                        <td class="modal-owner">Chhota Bachcha</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%">Phone:</td>
+                                        <td class="modal-phone">9999999999</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="enquire-clicked">
+                                    <p><strong>Following mail will be sent to the Owner</strong></p>
+                                    <p class="mail-to-be-sent">
+                                        Lorem ipsum dolor sit amet, adipiscing ipsum sed sem, do enim imperdiet nullam libero. Nulla a odio elementum ut, sed arcu. Mauris tellus libero, est sed, donec eu habitant dui quis donec arcu, suscipit aenea
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary enquire" style="margin:0px auto">Enquire</button>
+                        <button type="button" class="btn btn-primary send" data-dismiss="modal" style="margin:0px auto; display:none;">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="request-modal" tabindex="-1" role="dialog" aria-labelledby="request-modalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width:600px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color:white; width:20px; height:20px">&times;</span></button>
+                        <h4 class="modal-title" id="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-12 col-xs-12 col-sm-12">
+                                <table class="table item-details">
+                                    <tbody>
+                                    <tr>
+                                        <td width="20%">Max Price:</td>
+                                        <td>Rs. <span class="modal-max-price">123</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%">Requested by:</td>
+                                        <td class="modal-owner">Chhota Bachcha</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%">Phone:</td>
+                                        <td class="modal-phone">9999999999</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="enquire-clicked">
+                                    <p><strong>Following mail will be sent to the Owner</strong></p>
+                                    <p class="mail-to-be-sent">
+                                        Lorem ipsum dolor sit amet, adipiscing ipsum sed sem, do enim imperdiet nullam libero. Nulla a odio elementum ut, sed arcu. Mauris tellus libero, est sed, donec eu habitant dui quis donec arcu, suscipit aenea
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary enquire" style="margin:0px auto">Enquire</button>
+                        <button type="button" class="btn btn-primary send" data-dismiss="modal" style="margin:0px auto; display:none;">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="modal fade" id="sell-item-modal" tabindex="-1" role="dialog" aria-labelledby="sell-item-modalLabel" aria-hidden="true">
             <div class="modal-dialog" style="width:800px;">
@@ -509,73 +555,8 @@
                             <form class="form-horizontal" action="#">
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label" style="text-align: left" for="name">Item Name</label>
-                                    <div class="col-sm-10 sell-form-item-name-area">
-                                        <input type="text" class="form-control sell-form-item-name" id="name">
-                                        <div class="sell-form-search-result-box">
-                                            <div class="searched-items-for-sale">
-                                                <p class="search-results-heading">
-                                                    Similar entries in Requests
-                                                    <span class="max-price-heading">Max Price</span>
-
-                                                </p>
-
-                                                <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                                    <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                        <span class="rupee-logo">Rs&nbsp</span>
-                                                    </div>
-                                                </a>
-                                                <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                                    <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                        <span class="rupee-logo">Rs&nbsp</span>
-                                                    </div>
-                                                </a>
-                                                <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                                    <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                        <span class="rupee-logo">Rs&nbsp</span>
-                                                    </div>
-                                                </a>
-                                                <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                                    <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                        <span class="rupee-logo">Rs&nbsp</span>
-                                                    </div>
-                                                </a>
-                                                <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                                    <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                        <span class="rupee-logo">Rs&nbsp</span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="name" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -651,51 +632,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="request-modal" tabindex="-1" role="dialog" aria-labelledby="request-modalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="width:600px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color:white; width:20px; height:20px">&times;</span></button>
-                        <h4 class="modal-title" id="modal-title">Modal title</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12 col-xl-12 col-xs-12 col-sm-12">
-                                <table class="table item-details">
-                                    <tbody>
-                                    <tr>
-                                        <td width="20%">Max Price:</td>
-                                        <td>Rs. <span class="modal-max-price">123</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="20%">Requested by:</td>
-                                        <td class="modal-owner">Chhota Bachcha</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="20%">Phone:</td>
-                                        <td class="modal-phone">9999999999</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <div class="enquire-clicked">
-                                    <p><strong>Following mail will be sent to the Owner</strong></p>
-                                    <p class="mail-to-be-sent">
-                                        Lorem ipsum dolor sit amet, adipiscing ipsum sed sem, do enim imperdiet nullam libero. Nulla a odio elementum ut, sed arcu. Mauris tellus libero, est sed, donec eu habitant dui quis donec arcu, suscipit aenea
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary enquire" style="margin:0px auto">Enquire</button>
-                        <button type="button" class="btn btn-primary send" data-dismiss="modal" style="margin:0px auto; display:none;">Send</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="modal fade" id="request-item-modal" tabindex="-1" role="dialog" aria-labelledby="request-item-modalLabel" aria-hidden="true">
             <div class="modal-dialog" style="width:800px;">
                 <div class="modal-content">
@@ -707,103 +643,30 @@
                         <div class="sell-form-body">
                             <form class="form-horizontal" action="#">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label" style="text-align: left" for="name">Item Name</label>
-                                    <div class="col-sm-10 sell-form-item-name-area">
-                                        <input type="text" class="form-control sell-form-item-name" id="name">
-                                        <div class="sell-form-search-result-box">
-                                            <div class="searched-items-for-sale">
-                                                <p class="search-results-heading">
-                                                    Similar Items for Sale
-                                                    <span class="max-price-heading">Price</span>
-
-                                                </p>
-
-                                                <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                                    <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                        <span class="rupee-logo">Rs&nbsp</span>
-                                                    </div>
-                                                </a>
-                                                <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                                    <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                        <span class="rupee-logo">Rs&nbsp</span>
-                                                    </div>
-                                                </a>
-                                                <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                                    <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                        <span class="rupee-logo">Rs&nbsp</span>
-                                                    </div>
-                                                </a>
-                                                <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                                    <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                        <span class="rupee-logo">Rs&nbsp</span>
-                                                    </div>
-                                                </a>
-                                                <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                                    <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                        <span class="rupee-logo">Rs&nbsp</span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
+                                    <label class="col-sm-3 control-label" style="text-align: left" for="name">Item Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="name">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label" style="text-align: left" for="category">Category</label>
-                                    <div class="col-sm-4">
+                                    <label class="col-sm-3 control-label" style="text-align: left" for="category">Category</label>
+                                    <div class="col-sm-9">
                                         <select class="form-control" id="category" >
                                             <option>Electronics</option>
                                             <option>Books</option>
                                             <option>Miscellaneous</option>
                                         </select>
                                     </div>
-                                    <label class="col-sm-3 control-label" style="text-align: right" for="category">Sub-Category</label>
-                                    <div class="col-sm-3">
-                                        <select class="form-control" id="category" >
-                                            <option>All</option>
-                                            <option>Acadmeic</option>
-                                            <option>Course Books</option>
-                                        </select>
-                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label" style="text-align: left" for="name">Price</label>
-                                    <div class="col-sm-10">
+                                    <label class="col-sm-3 control-label" style="text-align: left" for="name">Price</label>
+                                    <div class="col-sm-9">
                                         <input type="text" class="form-control" id="name">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label" style="text-align: left" for="expiry">Expires In</label>
-                                    <div class="col-sm-10">
+                                    <label class="col-sm-3 control-label" style="text-align: left" for="expiry">Expires In</label>
+                                    <div class="col-sm-9">
                                         <select class="form-control" id="category" >
                                             <option>5 days</option>
                                             <option>10 days</option>
@@ -816,14 +679,14 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="email" style="text-align: left;">Your Email Id</label>
-                                    <div class="col-sm-10">
+                                    <label class="col-sm-3 control-label" for="email" style="text-align: left;">Your Email Id</label>
+                                    <div class="col-sm-9">
                                         <input type="email" class="form-control" id="email">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="phone" style="text-align: left;">Your Phone</label>
-                                    <div class="col-sm-10">
+                                    <label class="col-sm-3 control-label" for="phone" style="text-align: left;">Your Phone</label>
+                                    <div class="col-sm-9">
                                         <input type="text" class="form-control" id="phone">
                                     </div>
                                 </div>

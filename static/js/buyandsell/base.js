@@ -27,7 +27,7 @@ function watch_cat(url)
     		  url : url,
     		  success: function (data)
     		  {
-      		alert("done"+data['success']);
+      		console.log("done"+data['success']);
           }
           });
 }
@@ -41,7 +41,7 @@ function search() {
         var type= window.location.href.split("/")[4];
          timer = setTimeout(function() { lookup(val,type);}, ms);
          });
-        $("#search_main").keyup(function() {
+        $(".search-form").keyup(function() {
         clearTimeout(timer);
          var ms = 200;
          var val = this.value;
@@ -50,19 +50,20 @@ function search() {
          timer = setTimeout(function() { lookup(val,type);}, ms);
          });
         }
+
 function lookup(val,type)
 {
      search_url=bring_search_url(val);
 
-     if(search_url=="" && type!="main")
+/*     if(search_url=="" && type!="main")
      {
        $("#insert").html("");
        return;
      }
-
+*/
      if(search_url=="" && type=="main")
      {
-       $("#insert_main").html("");
+       $(".search-result-box").html("");
        return;
      }
 
@@ -91,34 +92,102 @@ function lookup(val,type)
          url:"/buyandsell/search/main/?keyword="+search_url,
          success:function(data){
              html="";
-             var html="<ul>";
+             html+="<div class = \"search-result-categories\">";
+
              for(var i=0;i<data['main_cat'].length;i++)
              {
-               html+="<a href=\"/buyandsell/buy/"+data['main_cat'][i].main_category+"\">"+data['main_cat'][i].main_category+"</a><br>";
+               html+="<a href=\"/buyandsell/buy/"+
+               data['main_cat'][i].main_category+"\">"+
+               "<div class = \"searched-category\">"+
+               data['main_cat'][i].main_category+
+               "</div></a>";
               }
-             html+="</ul>";
-             html+="<ul>";
+
+
              for(var i=0;i<data['sub_cat'].length;i++)
              {
-                 html+="<a href=\"/buyandsell/buy/"+data['sub_cat'][i].main_category+"/"+data['sub_cat'][i].code+"\">"+data['sub_cat'][i].name+"</a><br>";
+                 html+="<a href=\"/buyandsell/buy/"+
+                 data['sub_cat'][i].main_category+"/"+data['sub_cat'][i].code+"\">"+
+                 "<div class = \"searched-category\">"+
+                 data['sub_cat'][i].name+
+                 "</div></a>";
               }
-             html+="</ul>";
-              html+="<ul>";
-             for(var i=0;i<data['requests'].length;i++)
+
+              html+= "<div class = \"division-line\"></div>"+
+              "<div class = \"searched-items-for-sale\">";
+
+             if ( data['sell_items'].length )
              {
-                 html+="<li onclick=\"request_details("+data['requests'][i].id+")\">"+data['requests'][i].name+"</li>";
-              }
-             html+="</ul>";
-             html+="<div id=\"see_all_req\">See all requests</div>";
-               html+="<ul>";
+
+             html+="<p class=\"search-results-heading\">"+
+              "<span class=\"searched-query\">"+val+"</span>&nbsp"+
+              "in Items for Sale</p>";
+
              for(var i=0;i<data['sell_items'].length;i++)
              {
-                 html+="<li onclick=\"sell_details("+data['sell_items'][i].id+")\">"+data['sell_items'][i].name+"</li>";
+                  html+="<a class=\"searched-item instant-searched-item-for-sale\" onclick=\"sell_details("+data['sell_items'][i].id+")\">"+
+                 '<div>'+
+                  '<span class="searched-item-name">'+
+                       data['sell_items'][i].name+
+                 '</span>'+
+                 ' <span class="searched-item-price">'+
+                       data['sell_items'][i].cost+
+                 '</span>'+
+                ' <span class="rupee-logo">Rs&nbsp</span>'+
+                ' </div>'+
+                   "</a>";
+
               }
-             html+="</ul>";
-             html+="<div id=\"see_all_sell\">See all sale items</div>";
-             console.log(html);
-          $("#insert_main").html(html);
+
+             html+='</div>'+
+             '<a id="see_all_sell" class="see-all-items-for-sale">See all</a>';
+             }
+             else
+             {
+               html+="<p class=\"search-results-heading\">"+
+                        "No sell item matched</p>"+
+                        "</div>";
+             }
+
+             html += "</div>" +
+              "<div class = \"division-line\"></div>"+
+              "<div class = \"searched-items-for-sale\">";
+
+             if ( data['requests'].length )
+             {
+                 html+="<p class=\"search-results-heading\">"+
+                       "<span class=\"searched-query\">" + val +"</span>&nbsp"+
+                       '<span class="max-price-heading">Max Price</span>'+
+                        "in Requests</p>";
+
+             for(var i=0;i<data['requests'].length;i++)
+             {
+                 html+="<a class=\"searched-item instant-searched-request\" onclick=\"request_details("+data['requests'][i].id+")\">"+
+                 '<div>'+
+                  '<span class="searched-item-name">'+
+                       data['requests'][i].name+
+                 '</span>'+
+                 ' <span class="searched-item-price">'+
+                       data['requests'][i].price_upper+
+                 '</span>'+
+                ' <span class="rupee-logo">Rs&nbsp</span>'+
+                ' </div>'+
+                   "</a>";
+              }
+                html+='</div>'+
+                  '<a id="see_all_req" class="see-all-items-for-sale">See all</a>';
+             }
+             else
+             {
+
+              html+="<p class=\"search-results-heading\">"+
+                        "No request item matched</p>"+
+                        "</div>";
+             }
+
+
+                        console.log(html);
+          $(".search-result-box").html(html);
          }
             });
 
@@ -273,8 +342,6 @@ function main_check(id_parent,id,len_sub)
      $("#"+id_parent).prop("checked",true);
   }
   }
-
-
  }
 
  $('body').ready(function(){
