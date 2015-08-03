@@ -641,6 +641,62 @@ def search(request):
   return HttpResponse(json.dumps(results), content_type="application/json")
 
 
+@csrf_exempt
+@CORS_allow
+def join_batch(request , batch_id):
+  if request.user.is_authenticated():
+    import pdb;pdb.set_trace()
+    userType = getUserType(request.user)
+    if userType == "1":
+      faculty = request.faculty
+      batch = Batch.objects.get(id = batch_id)
+      batch.faculties.add(faculty)
+      return HttpResponse(json.dumps({'msg':'Faculty Added Successfully','status':102}), content_type="application/json")
+    else:
+      return HttpResponse(json.dumps({'msg':'User is not a faculty','status':100}), content_type="application/json")
+  else:
+    return HttpResponse(json.dumps({'msg':'Some problem occured','status':100}), content_type="application/json")
+
+
+@csrf_exempt
+@CORS_allow
+def leave_batch(request , batch_id):
+  if request.user.is_authenticated():
+    userType = getUserType(request.user)
+    if userType == "1":
+      faculty = request.faculty
+      batch = Batch.objects.get(id = batch_id)
+      batch.faculties.delete(faculty)
+      return HttpResponse(json.dumps({'msg':'Faculty Removed Successfully','status':102}), content_type="application/json")
+    else:
+      return HttpResponse(json.dumps({'msg':'User is not a faculty','status':100}), content_type="application/json")
+  else:
+    return HttpResponse(json.dumps({'msg':'Some problem occured','status':100}), content_type="application/json")
+
+@csrf_exempt
+@CORS_allow
+def faculty_files(request, faculty_id):
+  if not User.objects.filter(id = faculty_id).exists():
+    return HttpResponse(json.dumps({'msg':'Faculty Doesnot exist' , 'status':101}), content_type="application/json")
+  user = User.objects.get(id = faculty_id)
+  faculty = user.faculty
+  All_files = {}
+  uploaded_files = Uploadedfile.objects.all().filter(upload_user = user)
+  for someFile in uploaded_files:
+    post = Post.objects.get(id = someFile.post)
+    fileDetails = someFile.as_dict()
+    postData = post.as_dict()
+    course_name = postData['course_name']
+    if course_name in All_files:
+      All_files[course_name].append(fileDetails)
+    else:
+      All_files[course_name] = []
+      All_files[course_name].append(fileDetails)
+
+  return HttpResponse(json.dumps({'faculty':user.serialize , 'Files':All_files,'status':100}), content_type="application/json")
+
+
+    
 """
 @csrf_exempt
 @CORS_allow
@@ -708,7 +764,7 @@ def create_batch(request):
   return HttpResponse(json.dumps(batch.batch_dict()), content_type='appliaction/json')
 
 
-def join_batch(request , batch_id):
+def join_batch_old(request , batch_id):
   batch = Batch.objects.get(id = batch_id)
   user = request.user
   userType = getUserType(user)
