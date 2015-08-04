@@ -269,6 +269,7 @@ function trash(type,id)
       type="sell";
       trash_item(type,id);
      }
+
 }
 function trash_item(type,id)
 {

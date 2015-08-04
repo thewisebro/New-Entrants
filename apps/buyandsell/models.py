@@ -72,4 +72,4 @@ class SuccessfulTransaction(models.Model):
 
 class ShowContact(models.Model):
   user=models.OneToOneField(User)
-  contact_shown=models.BooleanField(default=True)  
+  contact_shown=models.BooleanField(default=True)
