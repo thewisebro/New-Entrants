@@ -679,21 +679,23 @@ def faculty_files(request, faculty_id):
   if not User.objects.filter(id = faculty_id).exists():
     return HttpResponse(json.dumps({'msg':'Faculty Doesnot exist' , 'status':101}), content_type="application/json")
   user = User.objects.get(id = faculty_id)
-  faculty = user.faculty
+  try:
+    faculty = user.faculty
+  except:
+    return HttpResponse(json.dumps({'msg':'User is not a faculty' , 'status':101}), content_type="application/json")  
   All_files = {}
   uploaded_files = Uploadedfile.objects.all().filter(post__upload_user = user)
   for someFile in uploaded_files:
     post = Post.objects.get(id = someFile.post_id)
     fileDetails = someFile.as_dict()
+#    import pdb;pdb.set_trace()
     postData = post.as_dict()
-    course_name = postData['course_name']
-    if course_name in All_files:
-      All_files[course_name].append(fileDetails)
-    else:
+    course_name = postData['batch']['course_name']
+    if course_name not in All_files:
       All_files[course_name] = []
-      All_files[course_name].append(fileDetails)
+    All_files[course_name].append(fileDetails)
 
-  return HttpResponse(json.dumps({'faculty':user.serialize , 'Files':All_files,'status':100}), content_type="application/json")
+  return HttpResponse(json.dumps({'faculty':user.serialize() , 'Files':All_files,'status':100}), content_type="application/json")
 
 
     
