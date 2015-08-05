@@ -34,15 +34,22 @@ rows = ExcelParser('CGPA_2015.xlsx')
 for l in rows:
   student = Student.objects.get(user__username=l['roll'])
   try:
+   edu = EducationalDetails.objects.get(student=student,course=previous_sem(student.semester))
+   edu.sgpa = l['sgpa']
+   edu.cgpa = l['cgpa']
+   print student
+   edu.save()
+  except EducationalDetails.DoesNotExist:
+   edu = EducationalDetails.objects.create(student=student, course=previous_sem(student.semester), sgpa=l['sgpa'], cgpa=l['cgpa'], year=2015, institution="Indian Institute of Technology, Roorkee", discipline=student.branch.code)
+   edu.save()
+  except:
    edu_lst = EducationalDetails.objects.filter(student=student,course=previous_sem(student.semester))
    for edu in edu_lst:
      edu.sgpa = l['sgpa']
      edu.cgpa = l['cgpa']
+     print student
      edu.save()
-  except EducationalDetails.DoesNotExist:
-   edu = EducationalDetails.objects.create(student=student, course=previous_sem(student.semester), sgpa=l['sgpa'], cgpa=l['cgpa'], year=2015, institution="Indian Institute of Technology, Roorkee", discipline=student.branch.code)
-   edu.save()
-  print student
+    
 #print previous_sem("UG10")
 #print previous_sem("UG11")
 #print previous_sem("UG20")

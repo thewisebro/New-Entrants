@@ -1,6 +1,5 @@
 import xlrd
 def ExcelParser(sheet_name):
-  import ipdb; ipdb.set_trace()
   workbook = xlrd.open_workbook(sheet_name)
   worksheet = workbook.sheet_by_name("Sheet1")
   num_rows = worksheet.nrows - 1
