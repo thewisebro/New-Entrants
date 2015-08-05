@@ -29,8 +29,9 @@ urlpatterns = patterns('',
         url(r'^createevent/$', views.createReminder, name='createReminder'),
         url(r'^search/$', views.search, name='search'),
         url(r'^joinBatch/(?P<batch_id>\w+)/$', views.join_batch, name='join_batch'),
-         url(r'^leaveBatch/(?P<batch_id>\w+)/$', views.leave_batch, name='leave_batch'),
- 
+        url(r'^leaveBatch/(?P<batch_id>\w+)/$', views.leave_batch, name='leave_batch'),
+        url(r'^facultyFiles/(?P<faculty_id>\w+)/$', views.faculty_files, name='faculty_files'),
+
         url(r'^events/$', views.getReminder, name='getReminder'),
         url(r'^comments/(?P<post_id>\w+)/$', views.post_comments, name='post_comments'),
 

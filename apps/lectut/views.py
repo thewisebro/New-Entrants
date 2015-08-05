@@ -681,9 +681,9 @@ def faculty_files(request, faculty_id):
   user = User.objects.get(id = faculty_id)
   faculty = user.faculty
   All_files = {}
-  uploaded_files = Uploadedfile.objects.all().filter(upload_user = user)
+  uploaded_files = Uploadedfile.objects.all().filter(post__upload_user = user)
   for someFile in uploaded_files:
-    post = Post.objects.get(id = someFile.post)
+    post = Post.objects.get(id = someFile.post_id)
     fileDetails = someFile.as_dict()
     postData = post.as_dict()
     course_name = postData['course_name']
