@@ -275,7 +275,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 
    $rootScope.whichView = "CourseDetailCtrl";
    this.params = $routeParams;
-   var csrf = $cookies.csrftoken;
+   // var csrf = $cookies.csrftoken;
    var y = $routeParams;
    $scope.coId = y;
 
