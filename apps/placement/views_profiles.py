@@ -200,13 +200,24 @@ def educational_details(request):
         messages.error(request, "You cannot edit educational details because your status is lock/verified")
         return HttpResponseRedirect(reverse('placement.views_profiles.educational_details')) 
       formset = EducationalDetailsFormSet(request.POST, queryset = EducationalDetails.objects.filter(student = student))
-
       if formset.is_valid() :
         instances = formset.save(commit = False)
         # Make sure that the last element has student attached to it as it may be a newly created instance
         if len(instances) > 0:
           instances[-1].student = student
+        # Delete deleted object
+        for instance in formset.deleted_objects:
+          instance.delete()
         # save each instance individually as formset.save() will throw an exception if a form is marked as to be deleted.
+        courses = []
+        for form in formset.forms:
+          if (not form.empty_permitted or form.cleaned_data) and not form.cleaned_data['DELETE']:
+            courseField = form.cleaned_data['course']
+            if not courseField in courses:
+              courses.append(courseField)
+            else:
+              messages.error(request, "Same courses are not allowed.")
+              return HttpResponseRedirect(reverse('placement.views_profiles.educational_details')) 
         for instance in instances :
           instance.save()
         # Update the Student.cgpa field
