@@ -3,6 +3,11 @@ from placement.models import *
 from placement.utils import previous_sem
 from upload_xls import ExcelParser
 
+
+# XXX Beware of the usage of ExcelParser from upload_xls file
+# The keys in row might change , for ex - in case of UG upload,
+# keys are different, and in case of PG, its different
+
 rows = ExcelParser('CGPA_2015.xlsx')
 
 for l in rows:
