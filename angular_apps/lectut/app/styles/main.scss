@@ -1313,7 +1313,38 @@ right: 20px;
        background-image: -webkit-linear-gradient(top, #E5E5E5, #F4F4F4);
        background-position: center right;
        background-repeat: no-repeat;
-border: 1px solid #AAA;
+        border: 1px solid #AAA;
+        border-radius: 2px;
+color: #555;
+       font-size: inherit;
+margin: 0;
+overflow: hidden;
+          padding-top: 3px;
+          padding-bottom: 2px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+outline: 0px;
+         font-family: $osSB;
+         font-size:13px;
+}
+
+#courseFilterType{
+position: absolute;
+top: 20px;
+right: 151px;
+       -webkit-appearance: button;
+       -moz-appearance: button;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -webkit-padding-end: 22px;
+       -moz-padding-end: 20px;
+       -webkit-padding-start: 7px;
+       -moz-padding-start: 2px;
+       background-color: #F7F7F7;
+       background-image: -webkit-linear-gradient(top, #E5E5E5, #F4F4F4);
+       background-position: center right;
+       background-repeat: no-repeat;
+        border: 1px solid #AAA;
         border-radius: 2px;
 color: #555;
        font-size: inherit;
@@ -1343,7 +1374,10 @@ outline: 0px;
   color: #BBBBBB;
   font-size: 13px;
 }
-
+.course_name_in_datatable{
+  font-size: 13px;
+  color: #BBBBBB;
+}
 .dt-loading{
   color: rgb(185, 185, 185);
   font-family: opensans_regular;
@@ -1355,7 +1389,7 @@ table.dataTable span a {
   font-size:13px;
   display: inline-block;
   white-space: nowrap;
-  width: 380px;
+  /*width: 380px;*/
   overflow: hidden;
   text-overflow: ellipsis;
     vertical-align: sub;
@@ -2118,3 +2152,23 @@ border: 1px solid #D9D9D9;
 .ngn-success{
   z-index: 12312312312;
 }
+
+
+// ------------------ Faculty Profile---------------------
+
+.facultyHeading{
+    height: 49px;
+    background: white;
+    font-size: 19px;
+    line-height: 50px;
+    padding: 0px 20px;
+    border: 1px solid #DDD;
+}
+
+.profHeadingName{
+    display: inline-block;
+    font-family: "opensans_regular";
+    color: #656565;
+    font-size: 18px;
+}
+
