@@ -45,7 +45,7 @@ def CORS_allow(view):
 
     response = view(request, *args, **kwargs)
     if DEVELOPMENT:
-      response["Access-Control-Allow-Origin"] = "http://172.25.55.156:9008"
+      response["Access-Control-Allow-Origin"] = "http://192.168.121.187:9008"
       response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
       response["Access-Control-Allow-Credentials"] = 'true'
 #      response["Access-Control-Max-Age"] = "1000"
@@ -84,7 +84,7 @@ def dispbatch(request):
       batches = student.batch_set.all()
       courses = map(lambda x: x.course, batches)
       batches_info = map(lambda x: batch_dict(x),batches)
-      userPosts = Post.post_objects.all().order_by('-datetime_created')
+      userPosts = Post.post_objects.all().order_by('-datetime_created')[:20]
 #      index = settings.PROJECT_ROOT + '/apps/lectut/static/lectut-front/dist/index.html'
 #      with open(index,'r') as f:
 #       response =  HttpResponse(f.read())
@@ -98,7 +98,7 @@ def dispbatch(request):
       userPosts = Post.post_objects.all().order_by('-datetime_created')
 
     else:
-      userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')
+      userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')[:20]
       user_info = 'Unknown'
     for post in userPosts:
       posts.append(get_post_dict(post))
@@ -317,8 +317,9 @@ def download_file(request, file_id):
 #mimetype = mimetypes.guess_type(filename)[0]
 
 #  user = User.objects.get(username = 'harshithere')
-  downloadlog = DownloadLog(uploadedfile=download_file , user = request.user)
-  downloadlog.save()
+  if request.user.is_authenticated():
+    downloadlog = DownloadLog(uploadedfile=download_file , user = request.user)
+    downloadlog.save()
 #  file_name = smart_str(download_file)
 
 #  response = HttpResponse(file_check.read(),content_type='application/force-download')
