@@ -91,7 +91,7 @@ def personal_information(request):
       # create a default entry
       b_d = datetime.date(1990,1,1)
       # TODO : find a better way to create default rown
-      info = StudentInfo.objects.create(student = student, birth_date = b_d, height = 180, weight = 60)
+      info = StudentInfo.objects.create(student = student)
       l.info(request.user.username + ': created a default entry in personinfo.')
     if request.method == 'POST':
       form = plac_forms.Profile(request.POST, instance = info)
@@ -108,6 +108,9 @@ def personal_information(request):
       else:
         messages.error(request, form.errors, extra_tags='form_error')
     else :
+      birth_date = request.user.birth_date
+      if birth_date:
+        birth_date = birth_date.strftime('%d-%m-%Y')
       initial = {'city': info.city,
                 'mothers_name': info.mothers_name,
                 'fathers_office_address': info.fathers_office_address,
@@ -115,10 +118,12 @@ def personal_information(request):
                 'pincode': info.pincode ,
                 'fathers_office_phone_no': info.fathers_office_phone_no,
                 'fathers_name': info.fathers_name,
-                'birth_date': request.user.birth_date.strftime('%d-%m-%Y'),
+                'birth_date': birth_date,
                 'permanent_address': info.permanent_address,
                 'fathers_occupation': info.fathers_occupation}
       form = plac_forms.Profile(initial=initial)
+      # Disable Birthdate
+      form.fields['birth_date'].widget.attrs['readonly'] = True
     return render_to_response('placement/basic_form.html', {
         'form': form,
         'title': 'Personal Information',
@@ -239,6 +244,13 @@ def educational_details(request):
     if student.semester[:-2] == 'PHD':
       for form in formset :
         form.fields['course'].choices = (('','---------'),) + MC.SEMESTER_CHOICES[:5]
+#    import ipdb; ipdb.set_trace()
+#    # Disable form of recent data
+#    for form in formset:
+#      if form.initial:
+#        if form.initial['course'] == previous_sem(student.semester):
+#          for key in form.fields.keys()[:6]:
+#            form.fields[key].widget.attrs['readonly'] = True
 
     # Insert courses not offered by our institute as these are missing in the branch.
     branches = get_branches_for_educational_details()

@@ -1,33 +1,7 @@
 from nucleus.models import *
 from placement.models import *
-
+from placement.utils import previous_sem
 from upload_xls import ExcelParser
-def previous_sem(curr_sem):
-  ''' curr_sem = "UG20" -> previous_sem = "UG11" '''
-  try:
-    disp = curr_sem[:2]
-    if disp not in ["UG","PG"]:
-        disp = "PHD"
-    current_sem_code = curr_sem[-2:]
-    current_sem_code_year = current_sem_code[0]
-    current_sem_code_sem = current_sem_code[1]
-    try:
-      if current_sem_code_sem == "1":
-        prev_sem_code_sem = "0"
-        prev_sem_code_year = current_sem_code_year
-      else:
-        prev_sem_code_year = str(int(current_sem_code_year)-1)
-        prev_sem_code_sem = "1"
-      if prev_sem_code_year == "0":
-        return ""
-      return disp+prev_sem_code_year+prev_sem_code_sem
-    except ValueError:
-      return curr_sem
-  except:
-    if curr_sem == "":
-      return curr_sem
-    if curr_sem == "0":
-      return curr_sem
 
 rows = ExcelParser('CGPA_2015.xlsx')
 
@@ -49,7 +23,7 @@ for l in rows:
      edu.cgpa = l['cgpa']
      print student
      edu.save()
-    
+
 #print previous_sem("UG10")
 #print previous_sem("UG11")
 #print previous_sem("UG20")
