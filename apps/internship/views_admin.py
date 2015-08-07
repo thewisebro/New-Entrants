@@ -284,16 +284,20 @@ def selected_students(request, company_id) :
         sheet.write(row, 7, '-')
         sheet.write(row, 8, '-')
         sheet.write(row, 14, '-')
-      sheet.write(row, 9, student.cgpa)
+      sheet.write(row, 9, EducationalDetails.objects.get(student = student, course = previous_sem(student.semester)).cgpa)
       try :
         tenth_marks = EducationalDetails.objects.get(student = student, course = '10TH')
         sheet.write(row, 10, tenth_marks.cgpa)
       except EducationalDetails.DoesNotExist :
         sheet.write(row, 10, '-')
+      except :
+        sheet.write(row, 10, '-')
       try :
         twelfth_marks = EducationalDetails.objects.get(student = student, course = '12TH')
         sheet.write(row, 11, twelfth_marks.cgpa)
       except EducationalDetails.DoesNotExist :
+        sheet.write(row, 11, '-')
+      except :
         sheet.write(row, 11, '-')
       sheet.write(row, 12, student.user.contact_no)
       sheet.write(row, 13, student.user.email)
