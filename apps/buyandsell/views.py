@@ -23,6 +23,8 @@ def buy(request,mc = None,c = None):
   login_flag = False
   if request.user is not None and request.user.is_authenticated():
    login_flag = True
+  main_watched_cat , sub_watched_cat , watched_cat_dict=get_watched_categories(request)
+  sub_watched_cat = [ cat.name for cat in sub_watched_cat ]
 
   qdata = ''
   table_data = ''
@@ -33,10 +35,32 @@ def buy(request,mc = None,c = None):
   print login_flag
   print type(request.user)
   cat_dict = get_category_dictionary()
+  if mc and c:
+    cat = BuySellCategory.objects.get(code=c)
+    category = cat.name
+    maincategory = cat.main_category
+
+  if mc and not c:
+    mcatlist = BuySellCategory.objects.filter(main_category=mc)
+    maincategory = mcatlist[0].main_category
 
   if request.GET.get('ll') and request.GET.get('ul'):
-    pl = int(request.GET.get('ll'))
-    pu = int(request.GET.get('ul'))
+    try:
+      pl = int(request.GET.get('ll'))
+      pu = int(request.GET.get('ul'))
+    except:
+      messages.error(request,"Please enter integer values")
+      context={
+      'table_data':table_data,
+      'mc':mc,
+      'c':c,
+      'login_flag':login_flag,
+      'cat_dict':cat_dict,
+      'category':category,
+      'main_watched':main_watched_cat,
+      'sub_watched':sub_watched_cat
+          }
+      return render(request,'buyandsell/buy-page.html',context)
     if pu >= 0 and pl >= 0 and pu > pl:
       price_valid = 1
     else:
@@ -47,14 +71,6 @@ def buy(request,mc = None,c = None):
           'cat_dict':cat_dict
           })
 
-  if mc and c:
-    cat = BuySellCategory.objects.get(code=c)
-    category = cat.name
-    maincategory = cat.main_category
-
-  if mc and not c:
-    mcatlist = BuySellCategory.objects.filter(main_category=mc)
-    maincategory = mcatlist[0].main_category
   if mc and c and price_valid:
     qdata = SaleItems.items.filter(category__main_category=mc,
                                  category__code=c,
@@ -84,9 +100,9 @@ def buy(request,mc = None,c = None):
   else:
     error_msg = 'No items in database'
 
-  paginator = Paginator(table_data, 10)
+  paginator = Paginator(table_data, 8)
   page = request.GET.get('page', 1)
-  page_list = _get_page_list(page, paginator.num_pages, 10)
+  page_list = _get_page_list(page, paginator.num_pages, 8)
   try:
     table_data = paginator.page(page)
   except PageNotAnInteger:
@@ -104,9 +120,14 @@ def buy(request,mc = None,c = None):
     'login_flag':login_flag,
     'cat_dict':cat_dict,
     'paginator':paginator,
-    'page_list':page_list
+    'page_list':page_list,
+    'category':category,
+    'main_watched':main_watched_cat,
+    'sub_watched':sub_watched_cat
           }
-  return render(request,'buyandsell/buy.html',context)
+  print main_watched_cat
+  print sub_watched_cat
+  return render(request,'buyandsell/buy-page.html',context)
 
 
 def viewrequests(request,mc=None,c=None):
@@ -193,8 +214,9 @@ def viewrequests(request,mc=None,c=None):
     'cat_dict':cat_dict,
     'paginator':paginator,
     'page_list':page_list,
+    'category':category
           }
-  return render(request,'buyandsell/show_requests.html',context)
+  return render(request,'buyandsell/requests.html',context)
 
 @login_required
 def sell(request):
@@ -259,7 +281,7 @@ def requestitem(request):
       phone=form.cleaned_data['contact']
       price_upper=form.cleaned_data['price_upper']
       if phone.isdigit():
-        digcheck=1
+        digcheck=1   # use try-except and disply message just after this
       if  len(phone)==len(str(int(phone))):
         zercheck=1
       if len(phone) == 10:
@@ -311,6 +333,24 @@ def watch(request,mc=None,c=None):
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
 
+@login_required
+def unwatch(request,mc=None,c=None):
+  user=request.user
+  if mc and not c:
+    cat_list = BuySellCategory.objects.filter(main_category=mc)
+    for cat in cat_list:
+      cat.watch_users.remove(user)
+      cat.save()
+
+  if mc and c:
+    catg=BuySellCategory.objects.get(code=c)
+    catg.watch_users.remove(user)
+    catg.save()
+
+  success = {'success' : 'true'}
+  success = simplejson.dumps(success)
+  return HttpResponse(success, content_type="application/json")
+
 def selldetails(request,pk):
   login_flag = False
   if request.user is not None and request.user.is_authenticated():
@@ -320,7 +360,7 @@ def selldetails(request,pk):
   try:
     item = SaleItems.objects.get(pk=pk)
   except:
-    mesages.error(request , "OOps!, this item is either expired ,sold or deleted")
+    messages.error(request , "OOps!, this item is either expired ,sold or deleted")
     return render(request,'buyandsell/selldetails.html')
 
   self_flag = 0
@@ -772,7 +812,7 @@ def my_account(request):
   user=request.user
   sell_items=SaleItems.items.filter(user=user).order_by('-pk')
   request_items=RequestedItems.items.filter(user=user).order_by('-pk')
-  _ , _ , watched_cat_dict=get_watched_categories(request)
+  main_watched_cat , sub_watched_cat , watched_cat_dict=get_watched_categories(request)
   cat_dict = get_category_dictionary()
 
   successful_transactions_sell = SuccessfulTransaction.objects.filter(seller = user,is_requested = False)
@@ -799,7 +839,7 @@ def my_account(request):
            'show_contact':show_contact,
            'succ_sold_items':succ_sold_items,
            'succ_request_items':succ_request_items,
-           'cat_dict':cat_dict
+           'cat_dict':cat_dict,
           }
 
   return render(request,'buyandsell/my-account.html',context)
@@ -974,7 +1014,7 @@ def  get_watched_categories(request):
       del watched_cat_dict[main_cat]
     elif count == cat_len:
       main_watched_cat.append(main_cat)
-
+  print watched_cat_dict
   return main_watched_cat,sub_watched_cat,watched_cat_dict
 
 @login_required

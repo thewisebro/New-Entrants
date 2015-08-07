@@ -1,26 +1,43 @@
 //watch("ELECTRONICS");
 var opened_dialog="";  //variable to keep check of the opened dialog
 
-function watch(main_category,category)
+function watch(item,main_category,category)
 {
-   if (typeof category != "undefined")
-   {
-     url="/buyandsell/watch/"+main_category+"/"+category+"/";
-     watch_cat(url);
-   }
-   else
-   {
-     url="/buyandsell/watch/"+main_category+"/";
-     watch_cat(url);
-   }
-}
-function create_div()
-{
-  $("<div id = \"insert\">").insertAfter("#id_item_name");
-  $("<div id = \"insert_main\">").insertAfter("#search_main");
-  console.log("yes");
+
+      if($(item).hasClass("watch-button-watching"))
+				{
+              if (category != "None")
+                  {
+                    url="/buyandsell/unwatch/"+main_category+"/"+category+"/";
+                    watch_cat(url);
+                  }
+              else
+                  {
+                    url="/buyandsell/unwatch/"+main_category+"/";
+                    watch_cat(url);
+                  }
+
+					$(item).removeClass("watch-button-watching");
+					$(item).text("Watch this Category");
+				}
+			else
+				{
+            if (category != "None")
+                {
+                  url="/buyandsell/watch/"+main_category+"/"+category+"/";
+                  watch_cat(url);
+                }
+            else
+                {
+                  url="/buyandsell/watch/"+main_category+"/";
+                  watch_cat(url);
+                }
+					$(item).addClass("watch-button-watching");
+					$(item).text("Watching");
+				}
 
 }
+
 function watch_cat(url)
 {
   		  $.ajax({
@@ -31,6 +48,7 @@ function watch_cat(url)
           }
           });
 }
+
 function search() {
       var timer;
         $("#id_item_name").keyup(function() {
@@ -356,10 +374,8 @@ function main_check(id_parent,id,len_sub)
       });
 
 show_contact();
-//trash("sell",4);
 search_form();
 search();
-create_div();
 
 function sell_form(){
  if(opened_dialog !=""){

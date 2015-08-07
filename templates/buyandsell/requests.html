@@ -1,247 +1,46 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		
-		
-		
-		
-		
-		<!-- Bootstrap -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="css/jquery-ui.css">
-		<link href="css/index.css" type= "text/css" rel="stylesheet">
-		
-		<script src="js/bootstrap.min.js"></script>	
-		
-		<script src="js/sliderJquery.js"></script>
-		<script src="js/sliderJqueryUi.js"></script>
-		
-		<script src="js/bootstrap.min.js"></script>
-		
-		<script src="js/main.js"></script>
-	<!--	
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-
-		
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-
-		
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-	-->
-		<!--jquery and css for price range selector -->
-		
-		
-		
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		
-		
-		
-		
-		
-	</head>
-	
+{% extends "buyandsell/base.html" %}
+{% block header %}
 	<body>
 		<div class="headerBackground">
 				<header class="header container">
 					<div class="row">
-						<div class="col-md-3 col-xl-3">
-							<a href="#">
-								<h1 class="logo">bazaar- i</h1>
+						<div class="col-md-3 col-xl-2">
+							<a href="buy-page.html">
+								<h1 class="logo">Buy & Sell</h1>
 							</a>
 						</div>
                         <!--Search box HTML starts here-->
 
                         <div class="col-md-5 search-area">
-                            <form action="#">
-                                <input class="search-form" type="search" name="query" placeholder="What are you looking for... ">
+                            <form action="#" id="search_form">
+                                <input class="search-form" type="search" name="keyword" placeholder="What are you looking for... " autocomplete="off">
                                 <span class="glyphicon glyphicon-search global-search-icon"></span>
                                 <div class="search-result-box">
-                                    <div class="search-result-categories">
-                                        <a href="#">
-                                            <div class="searched-category">
-                                                Electronics
-                                            </div>
-                                        </a>
-                                        <a href="#">
-                                            <div class="searched-category">
-                                                Elective Course Books
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="division-line"></div>
-                                    <div class="searched-items-for-sale">
-                                        <p class="search-results-heading">
-                                            <span class="searched-query">elec</span>
-                                            in Items for Sale
-                                        </p>
 
-                                        <a data-toggle="modal" data-target="#item-for-sale-modal"  class="searched-item instant-searched-item-for-sale" href="#">
-                                            <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                <span class="rupee-logo">Rs&nbsp</span>
-                                            </div>
-                                        </a>
-                                        <a data-toggle="modal" data-target="#item-for-sale-modal"  class="searched-item instant-searched-item-for-sale" href="#">
-                                            <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                <span class="rupee-logo">Rs&nbsp</span>
-                                            </div>
-                                        </a>
-                                        <a data-toggle="modal" data-target="#item-for-sale-modal"  class="searched-item instant-searched-item-for-sale" href="#">
-                                            <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                <span class="rupee-logo">Rs&nbsp</span>
-                                            </div>
-                                        </a>
-                                        <a data-toggle="modal" data-target="#item-for-sale-modal"  class="searched-item instant-searched-item-for-sale" href="#">
-                                            <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                <span class="rupee-logo">Rs&nbsp</span>
-                                            </div>
-                                        </a>
-                                        <a data-toggle="modal" data-target="#item-for-sale-modal"  class="searched-item instant-searched-item-for-sale" href="#">
-                                            <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                <span class="rupee-logo">Rs&nbsp</span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <a href="#" class="see-all-items-for-sale">
-                                        See all
-                                    </a>
-                                    <div class="division-line"></div>
-                                    <div class="searched-items-for-sale">
-                                        <p class="search-results-heading">
-                                            <span class="searched-query">elec</span>
-                                            in Requests
-                                            <span class="max-price-heading">Max Price</span>
-
-                                        </p>
-
-                                        <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                            <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                <span class="rupee-logo">Rs&nbsp</span>
-                                            </div>
-                                        </a>
-                                        <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                            <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                <span class="rupee-logo">Rs&nbsp</span>
-                                            </div>
-                                        </a>
-                                        <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                            <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                <span class="rupee-logo">Rs&nbsp</span>
-                                            </div>
-                                        </a>
-                                        <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                            <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                <span class="rupee-logo">Rs&nbsp</span>
-                                            </div>
-                                        </a>
-                                        <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-                                            <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                                                <span class="rupee-logo">Rs&nbsp</span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <a href="#" class="see-all-items-for-sale">
-                                        See all
-                                    </a>
                                 </div>
                             </form>
                         </div>
 						<div class="col-md-1">
 							<div class="dropdown" style="display:inline">
-								<button type="button" class="btn dropdown-toggle global-browse" id="menu2" data-toggle="dropdown">Browse</button>
-                                <ul class="dropdown-menu used-dropdown-menu" style="margin-top:42%; margin-left:-188%;" role="menu" aria-labelledby="menu2">
+			          <button type="button" class="btn dropdown-toggle global-browse" id="menu2" data-toggle="dropdown">Browse</button>
+                         <ul class="dropdown-menu used-dropdown-menu" style="margin-top:42%; margin-left:-188%;" role="menu" aria-labelledby="menu2">
                                     <div class="arrow-up-behind" style="margin-left:69.5%; margin-top:-11.5%"></div>
                                     <div class="arrow-up-front" style="margin-left:70.5%; margin-top:-10.5%"></div>
-									<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Latest</a></li>
+
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/viewrequests">Latest</a></li>
+
+                {% for key,value in cat_dict.iteritems %}
 									<li role="presentation" class="dropdown-submenu">
-										<a role="menuitem" tabindex="-1" href="#">Electronics</a>
+										<a role="menuitem" tabindex="-1" href="/buyandsell/viewrequests/{{key}}">{{ key }}</a>
 										<ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu2">
-											<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Computer Accessories</a></li>
-											<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mobile Accessories</a></li>
-											<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Other</a></li>
+                  {% for row in value %}
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/viewrequests/{{row.main_category}}/{{row.code}}">{{row.name}}</a></li>
+                  {% endfor %}
 										</ul>
 									</li>
-									<li role="presentation" class="dropdown-submenu">
-										<a role="menuitem" tabindex="-1" href="#">Books</a>
-										<ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu2">
-											<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Education</a></li>
-											<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Fiction</a></li>
-											<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Course Books</a></li>
-											<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Other</a></li>
-										</ul>
-									</li>
-									<li role="presentation" class="dropdown-submenu">
-										<a role="menuitem" tabindex="-1" href="#">Miscellaneous</a>
-										<ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu2">
-											<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Bicycles</a></li>
-											<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Trunks</a></li>
-											<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Other</a></li>
-										</ul>
-									</li>
-								</ul>
+                {% endfor %}
+						</ul>
 							</div>
-							
 						</div>
 
                         <div class="col-md-3">
@@ -253,9 +52,9 @@
                                 <ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu1">
                                     <div class="arrow-up-behind" style="margin-left:81.5%; margin-top:-11.5%"></div>
                                     <div class="arrow-up-front" style="margin-left:82%; margin-top:-10.5%"></div>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="my-account.html">My Account</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/my-account">My Account</a></li>
                                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Channel- i</a></li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Logout</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="">Logout</a></li>
                                 </ul>
                             </div>
                             <button type="button" data-toggle="modal" data-target="#request-item-modal" class="btn global-button">
@@ -268,68 +67,97 @@
 					</div>
 				</header>
 			</div>
+{% endblock %}
+
+
+		{% block content %}
 		<div class="container">
-			
+
 			<div class="row sub-header">
 				<div class="col-md-3">
 				</div>
-				<div class="col-md-9">	
+				<div class="col-md-9">
 					<ol class="breadcrumb">
-					  <li><a href="#">Electronics</a></li>
-					  <li class="active">Computer Accessories</li>
+          {% if not mc and not category %}
+              <li>
+                <a class="active" href="/buyandsell/viewrequests">Latest</a>
+              </li>
+            {% endif %}
+            {% if mc and not category  %}
+              <li>
+                <a class="active" href="/buyandsell/viewrequests/{{mc}}">{{mc}}</a>
+              </li>
+            {% endif %}
+             {% if mc and category %}
+               <li>
+                <a  href="/buyandsell/viewrequests/{{mc}}">{{mc}}</a>
+              </li>
+               <li>
+    <a class="active" href="/buyandsell/viewrequests/{{mc}}/{{c}}">{{ category}}</a>
+              </li>
+          {% endif %}
 					</ol>
-					<a href="#">	
-						<button type="button" class="btn global-button watch-button">
-							Watch this Category
+					<a href="#">
+						<button type="button" class="btn global-button watch-button" onclick="watch(this,'{{mc}}','{{c}}')" >
+{% if mc and not category %}
+{% if mc in main_watched %}
+{{ mc }}
+{% endif %}
+{% endif %}
+{% if mc and  category %}
+{% if category in sub_watched %}
+{{ category }}
+{% endif %}
+{% endif %}
+
 						</button>
 					</a>
 				</div>
 			</div>
-			
 			<div class="row">
 				<div class="col-md-3">
 				</div>
-				<div class="col-md-9">	
+				<div class="col-md-9">
 					<div class="division-line">
 					</div>
 				</div>
 			</div>
-						
+{% block leftbox %}
 			<div class="row">
 				<div class="col-md-3">
 					<div class="left-box">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <form action="action_page.php" class="input-group-addon view-what">
-                                    <div>
-                                        <input type="radio" name="radio" id="items-for-sale" class="radio">
-                                        <label for="items-for-sale">
-                                            <a href="buy-page.html"><div></div>Items for Sale</a>
-                                        </label>
-                                    </div>
+						<div class="row">
+							<div class="col-md-12">
+								<form action="" class="input-group-addon view-what">
+									<div>
+										<input type="radio" name="radio" id="items-for-sale" class="radio" checked>
+									<label for="items-for-sale">
+										<a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}"><div></div>Items for Sale</a>
+									</label>
+</div>
 
-                                    <div>
-                                        <input type="radio" name="radio" id="requests" class="radio" checked>
-                                        <label for="requests">
-                                            <a href="requests.html"><div></div>Requests</a>
-                                        </label>
-                                    </div>
-                                </form>
-                                <div class="left-division-line">
-                                </div>
-                            </div>
-                        </div>
+									<div>
+										<input type="radio" name="radio" id="requests" class="radio"/>
+										<label for="requests">
+											<a href="/buyandsell/viewrequests{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}"><div></div>Requests</a>
+										</label>
+									</div>
+								</form>
+								<div class="left-division-line">
+								</div>
+							</div>
+						</div>
 						<div class="row price-filter">
 							<div class="col-md-12">
 								<p>Price Range</p>
-								
-								<form action="action_page.php" class="input-group-addon view-what">
+
+								<form action="" class="input-group-addon view-what" method="get">
 									<div class="price-line">
                                         <div class="slider-back"></div>
                                         <div id="slider-range"></div>
 										<div class="prices" style= "margin-top:20px;">
-											<input type="text" id="low" class="price-range-text-input">
-											<input type="text" id="high" class="price-range-text-input">
+											<input type="text" id="low" class="price-range-text-input" placeholder="Min" name="ll">
+											<input type="text" id="high" class="price-range-text-input" placeholder="Max" name="ul">
 											<button class="global-browse price-range-submit">
 												<span class="glyphicon glyphicon-menu-right"></span>
 											</button>
@@ -338,11 +166,12 @@
 								</form>
 							</div>
 						</div>
-						
 					</div>
 				</div>
-                <div class="col-md-9 page-content">
-                    <table class="table table-striped">
+{% endblock %}
+				<div class="col-md-9 pageContent">
+{% if table_data %}
+<table class="table table-striped">
                         <thead>
                         <tr>
                             <th>Item</th>
@@ -351,355 +180,79 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">Mouse</td>
-                            <td class="requested-item-price">130</td>
-                            <td>40 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">Apple Computer's Photo</td>
-                            <td class="requested-item-price">20000</td>
-                            <td>33 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">Hard Disk (2 TB)</td>
-                            <td class="requested-item-price">2000</td>
-                            <td>27 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">Macbook Photo</td>
-                            <td class="requested-item-price">50</td>
-                            <td>22 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">I phone's Photo</td>
-                            <td class="requested-item-price">230</td>
-                            <td>22 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">Apple Computer's Photo</td>
-                            <td class="requested-item-price">200</td>
-                            <td>19 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">Android Poster</td>
-                            <td class="requested-item-price">200</td>
-                            <td>14 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">Mouse</td>
-                            <td class="requested-item-price">130</td>
-                            <td>40 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">Apple Computer's Photo</td>
-                            <td class="requested-item-price">20000</td>
-                            <td>33 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">Hard Disk (2 TB)</td>
-                            <td class="requested-item-price">2000</td>
-                            <td>27 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">Macbook Photo</td>
-                            <td class="requested-item-price">50</td>
-                            <td>22 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">I phone's Photo</td>
-                            <td class="requested-item-price">230</td>
-                            <td>22 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">Apple Computer's Photo</td>
-                            <td class="requested-item-price">200</td>
-                            <td>19 days</td>
-                        </tr>
-                        <tr data-toggle="modal" data-target="#request-modal" class="request">
-                            <td class="requested-item-name">Android Poster</td>
-                            <td class="requested-item-price">200</td>
-                            <td>14 days</td>
-                        </tr>
-                        </tbody>
+                {% for row in table_data %}
+    <tr onclick="request_details({{ row.pk }})" class="request">
+               <td class="requested-item-name">{{row.item_name}}</td>
+               <td class="requested-item-price">{{row.price_upper}}</td>
+               <td>{{ row.expiry_date|timeuntil }}</td>
+    </tr>
+                {% endfor %}
+                         </tbody>
                     </table>
+{% endif %}
                 </div>
+
+{% block paginator %}
                 <nav>
                     <ul class="pagination pagination-customized">
-                        <li class="disabled">
-                            <a href="#" aria-label="Previous">
+
+                    {% if table_data.number != 1 %}
+                        <li>
+  <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page=1" aria-label="Previous">
+                                <span aria-hidden="true">First</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                      {% if  table_data.has_previous %}
+                        <li>
+  <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.previous_page_number }}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
+                    {% endif %}
+
+                       {% for page in page_list %}
+                          {% if table_data.number == page %}
+                             <li class="active">
+                              <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.number }}">{{table_data.number}}
+                              </a>
+                            </li>
+                         {% else %}
+                              <li>
+                                <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ page }}">{{ page }}
+                                </a>
+                              </li>
+                          {% endif %}
+                        {% endfor %}
+
+                       {% if table_data.has_next %}
                         <li>
-                            <a href="#" aria-label="Next">
+                            <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.next_page_number }}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
+                      {% endif %}
+
+              {% if table_data.number != table_data.paginator.num_pages %}
+                        <li>
+                            <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ paginator.num_pages }}" aria-label="Next">
+                <span aria-hidden="true">last</span>
+                            </a>
+                        </li>
+             {% endif %}
+
                     </ul>
                 </nav>
+{% endblock %}
 			</div>
-			
+
 		</div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="item-for-sale-modal" tabindex="-1" role="dialog" aria-labelledby="item-for-sale-modalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="width:800px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color:white; width:20px; height:20px">&times;</span></button>
-                        <h4 class="modal-title" id="modal-title">Modal title</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-5 col-xl-5 col-xs-5 col-sm-5">
-                                <img class="thumbnail modal-image" src="designStuff/appleMac.jpg">
-                            </div>
-                            <div class="col-md-7 col-xl-7 col-xs-7 col-sm-7">
-                                <p class="description">
-                                    Lorem ipsum dolor sit amet, adipiscing ipsum sed sem, do enim imperdiet nullam libero. Nulla a odio elementum ut, sed arcu. Mauris tellus libero, est sed, donec eu habitant dui quis donec arcu, suscipit aenea
-                                </p>
-                                <div class="division-line">
-                                </div>
-                                <table class="table item-details">
-                                    <tbody>
-                                    <tr>
-                                        <td width="20%">Price:</td>
-                                        <td class="modal-price">Rs. 123</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="20%">Owner:</td>
-                                        <td class="modal-owner">Chhota Bachcha</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="20%">Phone:</td>
-                                        <td class="modal-phone">9999999999</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <div class="enquire-clicked">
-                                    <p><strong>Following mail will be sent to the Owner</strong></p>
-                                    <p class="mail-to-be-sent">
-                                        Lorem ipsum dolor sit amet, adipiscing ipsum sed sem, do enim imperdiet nullam libero. Nulla a odio elementum ut, sed arcu. Mauris tellus libero, est sed, donec eu habitant dui quis donec arcu, suscipit aenea
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary enquire" style="margin:0px auto">Enquire</button>
-                        <button type="button" class="btn btn-primary send" data-dismiss="modal" style="margin:0px auto; display:none;">Send</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="request-modal" tabindex="-1" role="dialog" aria-labelledby="request-modalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="width:600px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color:white; width:20px; height:20px">&times;</span></button>
-                        <h4 class="modal-title" id="modal-title">Modal title</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12 col-xl-12 col-xs-12 col-sm-12">
-                                <table class="table item-details">
-                                    <tbody>
-                                    <tr>
-                                        <td width="20%">Max Price:</td>
-                                        <td>Rs. <span class="modal-max-price">123</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="20%">Requested by:</td>
-                                        <td class="modal-owner">Chhota Bachcha</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="20%">Phone:</td>
-                                        <td class="modal-phone">9999999999</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <div class="enquire-clicked">
-                                    <p><strong>Following mail will be sent to the Owner</strong></p>
-                                    <p class="mail-to-be-sent">
-                                        Lorem ipsum dolor sit amet, adipiscing ipsum sed sem, do enim imperdiet nullam libero. Nulla a odio elementum ut, sed arcu. Mauris tellus libero, est sed, donec eu habitant dui quis donec arcu, suscipit aenea
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary enquire" style="margin:0px auto">Enquire</button>
-                        <button type="button" class="btn btn-primary send" data-dismiss="modal" style="margin:0px auto; display:none;">Send</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="sell-item-modal" tabindex="-1" role="dialog" aria-labelledby="sell-item-modalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="width:800px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color:white; width:20px; height:20px">&times;</span></button>
-                        <h4 class="modal-title" id="modal-title">Add Item for Sale</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="sell-form-body">
-                            <form class="form-horizontal" action="#">
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label" style="text-align: left" for="name">Item Name</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="name" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label" style="text-align: left" for="category">Category</label>
-                                    <div class="col-sm-4">
-                                        <select class="form-control" id="category" >
-                                            <option>Electronics</option>
-                                            <option>Books</option>
-                                            <option>Miscellaneous</option>
-                                        </select>
-                                    </div>
-                                    <label class="col-sm-3 control-label" style="text-align: right" for="category">Sub-Category</label>
-                                    <div class="col-sm-3">
-                                        <select class="form-control" id="category" >
-                                            <option>All</option>
-                                            <option>Acadmeic</option>
-                                            <option>Course Books</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label" style="text-align: left" for="name">Price</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="name">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label" style="text-align: left" for="expiry">Expires In</label>
-                                    <div class="col-sm-10">
-                                        <select class="form-control" id="category" >
-                                            <option>5 days</option>
-                                            <option>10 days</option>
-                                            <option>15 days</option>
-                                            <option>20 days</option>
-                                            <option>25 days</option>
-                                            <option>30 days</option>
-                                            <option>35 days</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-4">
-                                        <div class="sell-form-image-box">
-                                            <img src="designStuff/cameraLogo.PNG" style="width:100%">
-                                            <button type="button" class="btn" style="margin: 12% 0% 0% 6%">Choose an Image</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label class="control-label" for="description" style="text-align: left">Description</label>
-                                            <textarea id="description" rows="3" style="width:96.5%"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label" for="email" style="text-align: left;  padding-left:0px;">Your Email Id</label>
-                                            <div class="col-sm-9">
-                                                <input type="email" class="form-control" id="email">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label" for="phone" style="text-align: left; padding-left:0px;">Your Phone</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" id="phone">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin:0px auto">Done</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="request-item-modal" tabindex="-1" role="dialog" aria-labelledby="request-item-modalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="width:800px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color:white; width:20px; height:20px">&times;</span></button>
-                        <h4 class="modal-title" id="modal-title">Request an Item</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="sell-form-body">
-                            <form class="form-horizontal" action="#">
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" style="text-align: left" for="name">Item Name</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="name">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" style="text-align: left" for="category">Category</label>
-                                    <div class="col-sm-9">
-                                        <select class="form-control" id="category" >
-                                            <option>Electronics</option>
-                                            <option>Books</option>
-                                            <option>Miscellaneous</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" style="text-align: left" for="name">Price</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="name">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" style="text-align: left" for="expiry">Expires In</label>
-                                    <div class="col-sm-9">
-                                        <select class="form-control" id="category" >
-                                            <option>5 days</option>
-                                            <option>10 days</option>
-                                            <option>15 days</option>
-                                            <option>20 days</option>
-                                            <option>25 days</option>
-                                            <option>30 days</option>
-                                            <option>35 days</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" for="email" style="text-align: left;">Your Email Id</label>
-                                    <div class="col-sm-9">
-                                        <input type="email" class="form-control" id="email">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" for="phone" style="text-align: left;">Your Phone</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="phone">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin:0px auto">Done</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+{% endblock %}
 
 
-    </body>
-</html>
+
+
+
+
+

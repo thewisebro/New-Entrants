@@ -120,25 +120,8 @@
 				$(".send").css("display","none");
 			}
 		);
-		
-		 
-		$(".watch-button").click
-		(
-			function()
-			{
-				if($(this).hasClass("watch-button-watching"))
-				{
-					$(this).removeClass("watch-button-watching");
-					$(this).text("Watch this Category");
-				}
-				else
-				{
-					$(this).addClass("watch-button-watching");
-					$(this).text("Watching");
-				}
-			}
-		 );
 
+		
         $(document).mouseup
         (
             function(x)
@@ -227,8 +210,8 @@
 		({
 		  range: true,
 		  min: 0,
-		  max: 500,
-		  values: [ 5, 300 ],
+		  max: 50000,
+		  values: [ 0, 50000 ],
 		  slide: function( event, ui )
 		  {
 			$( "#low" ).val(ui.values[ 0 ]);

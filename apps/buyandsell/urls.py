@@ -12,6 +12,8 @@ urlpatterns = patterns('',
     url(r'^requestitem/$', requestitem,name='request form'),
     url(r'^watch/(?P<mc>\w+)/?$', watch, name='watch main category'),
     url(r'^watch/(?P<mc>\w+)/(?P<c>\w+)/?$', watch, name='watch sub category'),
+    url(r'^unwatch/(?P<mc>\w+)/?$', unwatch, name='watch main category'),
+    url(r'^unwatch/(?P<mc>\w+)/(?P<c>\w+)/?$', unwatch, name='watch sub category'),
     url(r'^request_details/(?P<pk>\w+)/?$',requestdetails),
     url(r'^sell_details/(?P<pk>\w+)/?$',selldetails),
     url(r'^search/(?P<search_type>\w+)/?$',search),
@@ -23,4 +25,4 @@ urlpatterns = patterns('',
     url(r'^manage/$', manage,name='manage_form'),
     url(r'^my-account/$', my_account),
 
- ) 
+ )

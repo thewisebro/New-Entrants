@@ -1,119 +1,5 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "buyandsell/base.html" %}
 
-
-
-		<!-- Bootstrap -->
-    {% block css %}
-		<link rel="stylesheet" href="{{ STATIC_URL }}css/buyandsell/bootstrap.min.css">
-		<link rel="stylesheet" href="{{ STATIC_URL }}css/buyandsell/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="{{ STATIC_URL }}css/buyandsell/jquery-ui.css">
-		<link href="{{ STATIC_URL }}css/buyandsell/index.css" type= "text/css" rel="stylesheet">
-    {% endblock %}
-    {% block scripts_head %}
-		<script src="{{ STATIC_URL }}js/buyandsell/bootstrap.min.js"></script>
-
-		<script src="{{ STATIC_URL }}js/buyandsell/sliderJquery.js"></script>
-		<script src="{{ STATIC_URL }}js/buyandsell/sliderJqueryUi.js"></script>
-
-		<script src="{{ STATIC_URL }}js/buyandsell/bootstrap.min.js"></script>
-
-		<script src="{{ STATIC_URL }}js/buyandsell/main.js"></script>
-    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-    <script type="text/javascript" src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script></head>
-
-   {% endblock %}
-	<!--
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-
-
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-
-
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-	-->
-		<!--jquery and css for price range selector -->
-
-
-
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-
-
-
-
-
-	</head>
-{% block header %}
-	<body>
-		<div class="headerBackground">
-				<header class="header container">
-					<div class="row">
-						<div class="col-md-3 col-xl-2">
-							<a href="buy-page.html">
-								<h1 class="logo">Buy & Sell</h1>
-							</a>
-						</div>
-                        <!--Search box HTML starts here-->
-
-                        <div class="col-md-5 search-area">
-                            <form action="#" id="search_form">
-                                <input class="search-form" type="search" name="keyword" placeholder="What are you looking for... " autocomplete="off">
-                                <span class="glyphicon glyphicon-search global-search-icon"></span>
-                                <div class="search-result-box">
-
-                                </div>
-                            </form>
-                        </div>
-						<div class="col-md-1">
-							<div class="dropdown" style="display:inline">
-								<button type="button" class="btn dropdown-toggle global-browse" id="menu2" data-toggle="dropdown">Browse</button>
-                                <ul class="dropdown-menu used-dropdown-menu" style="margin-top:42%; margin-left:-188%;" role="menu" aria-labelledby="menu2">
-                                    <div class="arrow-up-behind" style="margin-left:69.5%; margin-top:-11.5%"></div>
-                                    <div class="arrow-up-front" style="margin-left:70.5%; margin-top:-10.5%"></div>
-
-									<li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/buy">Latest</a></li>
-
-                {% for key,value in cat_dict.iteritems %}
-									<li role="presentation" class="dropdown-submenu">
-										<a role="menuitem" tabindex="-1" href="/buyandsell/buy/{{key}}">{{ key }}</a>
-										<ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu2">
-                  {% for row in value %}
-											<li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/buy/{{row.main_category}}/{{row.code}}">{{row.name}}</a></li>
-                  {% endfor %}
-										</ul>
-									</li>
-                {% endfor %}
-								</ul>
-							</div>
-						</div>
-
-                        <div class="col-md-3">
-                            <div class="dropdown" style="display:inline">
-                                <button class="btn btn-default dropdown-toggle user-photo-button" type="button" id="menu1" data-toggle="dropdown">
-                                    <img src="designStuff/niteshSir.png" class="user-photo">
-                                    <span class="caret user-photo-caret"></span>
-                                </button>
-                                <ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu1">
-                                    <div class="arrow-up-behind" style="margin-left:81.5%; margin-top:-11.5%"></div>
-                                    <div class="arrow-up-front" style="margin-left:82%; margin-top:-10.5%"></div>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/my-account">My Account</a></li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Channel- i</a></li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="">Logout</a></li>
-                                </ul>
-                            </div>
-                            <button type="button" data-toggle="modal" data-target="#request-item-modal" class="btn global-button">
-                                Request
-                            </button>
-                            <button type="button" data-toggle="modal" data-target="#sell-item-modal" class="btn global-button" style="margin-left:60px">
-                                Sell
-                            </button>
-                        </div>
-					</div>
-				</header>
-			</div>
-{% endblock %}
 {% block content %}
 		<div class="container">
 
@@ -143,14 +29,17 @@
 							<div class="col-md-12 watched-categories">
 								<p class="categories-you-are-watching">Categories you are Watching</p>
 
-                                <ul>                         {% for main_cat,cat_list in watched_cat_dict.iteritems %}
-                                    <li class="watched-main">{{ main_cat }}</li>
-                                    <ul class="watched-sub-in-main" >
-                                      {% for cat in cat_list %}
+                                <ul>
+                                    {% for main_cat,cat_list in watched_cat_dict.iteritems %}
+                                    <li class="watched-main">{{ main_cat }}
+                                        <ul class="watched-sub-in-main" >
+                                        {% for cat in cat_list %}
                                         <li>{{ cat }}</li>
-                                      {% endfor %}
-                                    </ul>
-                                {% endfor %}
+                                        {% endfor %}
+                                        </ul>
+
+                                    </li>
+                                                                    {% endfor %}
                                 </ul>
                                 <button type="button" onclick="manage()"  class="global-browse manage-watched-button">Manage</button>
 							</div>
@@ -164,7 +53,8 @@
 					<div class="row">
 
                       {% for row in sell_items %}
-                           <div class="col-md-3" id = "sell{{row.pk}}">
+
+<div class="col-md-3" id = "sell{{row.pk}}">
                             <div class="thumbnailBG thumbnailBG-my-account">
                                 <div class="thumbnail">
                                     <img src="/media/{{ row.item_image }}" alt="Generic placeholder thumbnail">
@@ -178,14 +68,14 @@
                                         </div>
                                         <div class="col-md-5">
                                             <a onclick ="edit_sell({{ row.pk }})" class="edit-button">
-                                                <img class="edit-button-image" src="images/edit-button.png">
+                                                <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/edit-button.png">
                                                 <span class="edit-button-text">Edit</span>
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                                 <a title="Remove" onclick = "trash('sell',{{row.id}})" class="item-remove-button">
-                                    <img class="item-remove-button-image" src="images/close-button.png">
+                                    <img class="item-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
                                 </a>
                             </div>
                           </div>
@@ -214,18 +104,18 @@
 
                            {% for row in request_items %}
                                 <tr id = "request{{ row.pk }}" class="request">
-                                    <td class="requested-item-name">{{ row.item_name }}</td>
+         <td class="requested-item-name">{{ row.item_name }}</td>
                                     <td class="requested-item-price">{{ row.price_upper}}</td>
                                     <td>{{ row.expiry_date|timeuntil }}</td>
                                     <td>
-<a onclick = "trash('request',{{row.id}})" class="request-remove-button">
-      <img class="request-remove-button-image" src="images/close-button.png">
+      <a onclick = "trash('request',{{row.id}})" class="request-remove-button">
+      <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
                           <span class="request-remove-button-text">Remove</span>
                                         </a>
 
                                         <a onclick="edit_request({{row.id}})" class="edit-button">
-      <img class="request-edit-button-image" src="images/close-button.png">
-                          <span class="request-edit-button-text">Edit</span>
+      <img class="request-edit-button-image" src="{{STATIC_URL}}images/buyandsell/edit-button.png">
+                           <span class="request-edit-button-text">Edit</span>
                                         </a>
                                     </td>
                                 </tr>
@@ -240,11 +130,6 @@
 			       </div>
 		      </div>
 
-{% block scripts_foot %}
-<script src="{{ STATIC_URL }}js/common.js"></script>
-<script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>
-{% endblock %}
 
 {% endblock %}
-    </body>
-</html>
+

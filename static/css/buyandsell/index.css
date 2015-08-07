@@ -591,10 +591,15 @@ textarea
     padding-top: 0;
 }
 
+.watched-main
+{
+    margin-top: 5px;
+}
+
 .watched-sub-in-main
 {
     padding-left: 1px;
-    margin-top: 5px;
+    margin-top: 0;
 }
 
 .caption
@@ -624,7 +629,7 @@ textarea
 
 .watched-categories ul li:before
 {
-    content: url("../images/bullet.png");
+    content: url("../../images/buyandsell/bullet.png");
     margin-right: 10px;
     margin-top: 0;
 }
@@ -638,7 +643,7 @@ textarea
 
 .watched-categories ul ul li:before
 {
-    content: url("../images/sub-bullet.png");
+    content: url("../../images/buyandsell/sub-bullet.png");
     margin-right: 10px;
     margin-top: 0;
 }
@@ -771,4 +776,4 @@ td .edit-button
 .other-persons-search
 {
     display: none;
-}
+=
