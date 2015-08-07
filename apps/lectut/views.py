@@ -645,7 +645,7 @@ def search(request):
       break
 
   final_posts = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,posts)
-  final_files = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,upload_files)
+  final_files = map(lambda result:result.as_dict_search() if (result is not None and result.deleted == False) else None,upload_files)
   final_batches = map(lambda result:batch_dict(result) ,batches)
 
   results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'final_faculties':final_faculties , 'status':100}
@@ -687,6 +687,7 @@ def leave_batch(request , batch_id):
 @csrf_exempt
 @CORS_allow
 def faculty_files(request, faculty_id):
+  hello
   if not User.objects.filter(id = faculty_id).exists():
     return HttpResponse(json.dumps({'msg':'Faculty Doesnot exist' , 'status':101}), content_type="application/json")
   user = User.objects.get(id = faculty_id)

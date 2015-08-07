@@ -151,6 +151,20 @@ class Uploadedfile(BaseUpload):
         }
         return fileData
 
+  def as_dict_search(self):
+    filepath = str(self.upload_file)
+    filename = filepath.split("/")[3]
+
+    fileData={
+           'id':self.id,
+           'upload_file':filename,
+           'username':str(self.post.upload_user.name),
+           'datetime_created':str(self.datetime_created),
+           'file_type':self.file_type,
+           'upload_type':Act_Types[self.upload_type],
+    }
+    return fileData
+
 
 class post_comment(models.Model):
   post = models.ForeignKey(Post)
