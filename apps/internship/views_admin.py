@@ -20,12 +20,11 @@ import cStringIO as StringIO
 from internship.models import *
 from internship import forms 
 from internship.views import resume, resume_to_verify
-from placement.utils import get_resume_binary
+from placement.utils import get_resume_binary, previous_sem
 from internship.utils import handle_exc
 from nucleus.models import Student, Branch, StudentInfo
 from placement.models import InternshipInformation, ProjectInformation, EducationalDetails
 from placement.policy import current_session_year
-
 from django.conf import settings
 
 # Permission denied page. User will be redirected to this page if he fails the user_passes_test.
