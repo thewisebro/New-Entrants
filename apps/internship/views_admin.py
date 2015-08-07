@@ -18,7 +18,7 @@ import logging
 
 import cStringIO as StringIO
 from internship.models import *
-from internship import forms 
+from internship import forms
 from internship.views import resume, resume_to_verify
 from placement.utils import get_resume_binary, previous_sem
 from internship.utils import handle_exc
@@ -283,19 +283,27 @@ def selected_students(request, company_id) :
         sheet.write(row, 7, '-')
         sheet.write(row, 8, '-')
         sheet.write(row, 14, '-')
-      sheet.write(row, 9, EducationalDetails.objects.get(student = student, course = previous_sem(student.semester)).cgpa)
+      edu = EducationalDetails.objects.filter(student=student, course = previous_sem(student.semester))
+      if edu:
+        sheet.write(row, 9, edu[0].cgpa)
+      else:
+        sheet.write(row, 9, "-")
       try :
-        tenth_marks = EducationalDetails.objects.get(student = student, course = '10TH')
-        sheet.write(row, 10, tenth_marks.cgpa)
-      except EducationalDetails.DoesNotExist :
-        sheet.write(row, 10, '-')
+        tenth_marks_edu = EducationalDetails.objects.filter(student = student, course = '10TH')
+        if tenth_marks_edu:
+          tenth_marks = tenth_marks_edu[0].cgpa
+          sheet.write(row, 10, tenth_marks)
+        else:
+          sheet.write(row, 10, '-')
       except :
         sheet.write(row, 10, '-')
       try :
-        twelfth_marks = EducationalDetails.objects.get(student = student, course = '12TH')
-        sheet.write(row, 11, twelfth_marks.cgpa)
-      except EducationalDetails.DoesNotExist :
-        sheet.write(row, 11, '-')
+        twelfth_marks_edu = EducationalDetails.objects.filter(student = student, course = '12TH')
+        if twelfth_marks_edu:
+          twelfth_marks = twelfth_marks_edu[0].cgpa
+          sheet.write(row, 11, twelfth_marks)
+        else:
+          sheet.write(row, 11, '-')
       except :
         sheet.write(row, 11, '-')
       sheet.write(row, 12, student.user.contact_no)
