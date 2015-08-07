@@ -11,13 +11,13 @@
 
 <div class="tabbable" id="company_list_switch">
   <ul class="nav nav-tabs">
-    <li class="active">
-      <a href="#apply_for_placement" data-toggle="tab">
+    <li class="active" id="apply_for_placement_li">
+      <a href="#apply_for_placement" onclick="changeTab(0);" data-toggle="tab">
         Apply for Internship
       </a>
     </li>
-    <li>
-      <a href="#all_companies" data-toggle="tab">
+    <li id="all_companies_li">
+      <a href="#all_companies" onclick="changeTab(1);" data-toggle="tab">
         All Companies
       </a>
     </li>
@@ -159,7 +159,22 @@
 
 
 {% block scripts %}
-<script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap-tab.js"></script>
+<script>
+  changeTab = function (num) {
+    if (num==0) {
+      document.getElementById('apply_for_placement_li').classList.add("active");
+      document.getElementById('all_companies_li').classList.remove("active");
+      document.getElementById('all_companies').classList.remove("active");
+      document.getElementById('apply_for_placement').classList.add("active");
+    }
+    if (num==1) {
+      document.getElementById('apply_for_placement_li').classList.remove("active");
+      document.getElementById('all_companies_li').classList.add("active");
+      document.getElementById('all_companies').classList.add("active");
+      document.getElementById('apply_for_placement').classList.remove("active");
+    }
+  }
+</script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/internship/application_switch.js"></script>
 {% endblock %}
 

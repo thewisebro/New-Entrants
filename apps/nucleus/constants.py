@@ -47,14 +47,14 @@ channeli_apps = {
   'dc++' : {'name':'DC++', 'url':'/dc++/'},
 }
 
-student_apps = ['acad','lectut','yaadein','jukebox','dc++','placement',
+student_apps = ['acad','lectut','jukebox','dc++','placement',
                 'buysell', 'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research']
 
 faculty_apps = ['responses','acad_course_students','facapp','lectut','placement', 'research',
                 'thinktank','lostfound','softwares','peoplesearch']
 
-other_apps = ['lectut','yaadein','jukebox','dc++','thinktank',
+other_apps = ['lectut','jukebox','dc++','thinktank',
               'lostfound','softwares','peoplesearch','placement']
 
 external_links = {
@@ -73,12 +73,13 @@ channeli_links = [
   {'name':'Instruments Search','url':'/equipments/'},
   {'name':'Mess Feedback','url':'/messmenu/feedback/'},
   {'name':'Smart Card Registration','url':'/genforms/'},
-  {'name':'Print Scholarship Form','url':'/scholarships/mcm_print_pdf/'},
-  {'name':'LAN Registration','url':'/wifi/'},
+  {'name':'Scholarship Form','url':'/scholarships/mcm/'},
+  #{'name':'LAN Registration','url':'/wifi/'},
   {'name':'Telephone Directory','url':'/static/pdfs/directoryeng15022015.pdf'},
   {'name':'Meeting Section','url':'/meeting_minutes/'},
   {'name':'Dairy Reports','url':'/meeting_minutes/dairy.php'},
   {'name':'Forms','url':'/forms/'},
+  {'name':'IITR Logo','url':'/static/images/iitr_logo.jpg'},
   #{'name':'Scholarship Form','url':'/mcm/mcm/'},
 ]
 

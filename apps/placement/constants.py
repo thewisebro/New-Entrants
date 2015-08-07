@@ -154,6 +154,7 @@ STATUS_CHOICES = (
 
 # Choices for clusters in company contact
 CLUSTER_CHOICES = (
+        (0, 0),
         (1, 1),
         (2, 2),
         (3, 3),

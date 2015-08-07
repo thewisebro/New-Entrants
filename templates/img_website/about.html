@@ -13,16 +13,6 @@
 
 {% block scripts %}
   {{ block.super }}
-  <script>
-  $.getJSON("https://graph.facebook.com/IMGIITRoorkee", function(data){
-      likes = String(data.likes/1000);
-      likes_displayed = likes.substring(0,4);
-      if(likes_displayed[3]==0)
-        likes_displayed = likes.substring(0,2);
-      document.getElementById("likes").innerHTML = likes_displayed;
-  });
-  </script>
-
 {% endblock scripts %}
 
 {% block links %}
@@ -153,6 +143,13 @@
 
 					<div class="whoweare_content_box">
 						<span id="likes"></span>
+                                                <script>
+                                                    likes = String({{ page_likes }}/1000);
+                                                    likes_displayed = likes.substring(0,4);
+                                                    if(likes_displayed[3]==0)
+                                                      likes_displayed = likes.substring(0,2);
+                                                    document.getElementById("likes").innerHTML = likes_displayed;
+                                                </script>
 						<p>thousand social media followers, who love us and our work.</p>
 					</div> <!-- end whoweare_content_box -->
 

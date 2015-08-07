@@ -206,7 +206,7 @@ def print_pdf(request):
   if not check_permission(request.user, 'FreeMessing'):
     messages.info(request,"'Student Loan Aid Form' for Free Messing is not open for your department. Please contact 'IMG' in case of any discrepency")
     return HttpResponseRedirect('/')
-  person = Person.objects.get(user = request.user)
+  person = Student.objects.get(user = request.user)
   student = StudentLoanAid.objects.filter(student = person)[0]
   personinfo, created = StudentInfo.objects.get_or_create(student = person)
   template_name = 'mcm/loan_aid_pdf.html'

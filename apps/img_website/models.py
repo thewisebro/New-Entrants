@@ -103,7 +103,7 @@ class TeamMember(models.Model):
   member_about = models.CharField(max_length = 200)
 
   def __unicode__(self):
-    student = Student.objects.get(pk = self.member_name)
+    student = Student.objects.get(user_id = self.member_name)
     return student.name
 
 class MemberLinks(models.Model):
@@ -122,7 +122,7 @@ class MemberLinks(models.Model):
   link = models.URLField()
 
   def __unicode__(self):
-    student = Student.objects.get(pk = self.teammember.member_name)
+    student = Student.objects.get(user_id = self.teammember.member_name)
     return student.name + '_' + self.website
 
 class AddMemberForm(forms.ModelForm):

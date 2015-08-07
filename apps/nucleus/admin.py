@@ -70,7 +70,11 @@ class UserAdmin(AuthUserAdmin):
   )
   ordering = ('username',)
   filter_horizontal = ('groups', 'user_permissions',)
-  search_fields = ['username', 'name']
+  search_fields = ['username', 'name', 'email']
+
+class WebmailAdmin(ModelAdmin):
+  search_fields = ['webmail_id', 'user__username','user__name']
+  list_display = ['webmail_id', 'user']
 
 class BranchAdmin(ModelAdmin):
   search_fields = ['code', 'name', 'department']
@@ -81,6 +85,17 @@ class StudentAdmin(ModelAdmin):
   related_search_fields = {
     'user':('username',),
   }
+  list_display = ['student_enr_no', 'student_name', 'branch', 'student_year']
+  list_filter = ['branch__degree', 'branch__department', 'branch__graduation', 'semester_no']
+  def student_enr_no(self, obj):
+    return obj.user.username
+  def student_name(self, obj):
+    return obj.user.name
+  def student_year(self, obj):
+    return (obj.semester_no + 1)/2
+  student_enr_no.short_description = 'Enrollment Number'
+  student_name.short_description = 'Name'
+  student_year.short_description = 'Year'
 
 class StudentUserAdmin(ModelAdmin):
   search_fields = ['name', 'username']
@@ -91,9 +106,14 @@ class CourseAdmin(ModelAdmin):
   exclude = ['id']
   search_fields = ['code', 'name']
 
+class FacultyAdmin(ModelAdmin):
+  search_fields = ['user__username', 'user__name']
+  list_display = ['user', 'department', 'designation']
+  list_filter = ['department','designation']
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Owner)
-admin.site.register(WebmailAccount)
+admin.site.register(WebmailAccount, WebmailAdmin)
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(StudentInfo)
@@ -102,6 +122,6 @@ admin.site.register(StudentUserInfo, StudentUserAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(RegisteredCourse)
 admin.site.register(Batch)
-admin.site.register(Faculty)
+admin.site.register(Faculty, FacultyAdmin)
 admin.site.register(GlobalVar)
 admin.site.register(Alumni)
