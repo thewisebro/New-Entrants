@@ -95,7 +95,7 @@ def dispbatch(request):
       batches = faculty.batch_set.all()
       courses = map(lambda x: x.course, batches)
       batches_info = map(lambda x: batch_dict(x),batches)
-      userPosts = Post.post_objects.all().order_by('-datetime_created')
+      userPosts = Post.post_objects.all().order_by('-datetime_created')[:20]
 
     else:
       userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')[:20]
@@ -620,10 +620,11 @@ def search(request):
     query_courses_code =  SearchQuerySet().models(Course).autocomplete(code_auto = value)[:5] #.models(Course)
     query_total_courses = query_courses_name + query_courses_code
     query_courses = sorted(query_total_courses, key=lambda obj: obj.score)
+    query_users = SearchQuerySet().models(User).autocomplete(name_auto = value) #[:25]
   else:
     query = SearchQuerySet().autocomplete(content_auto = value).models(filter_model)
 
-  final_posts , final_files ,posts , upload_files , batches , final_batches = [],[],[],[],[],[]
+  final_posts , final_files ,posts , upload_files , batches , final_batches , final_faculties = [],[],[],[],[],[],[]
   print query_uploadfile
   try:
     posts = map(lambda result:Post.objects.get(id = result.pk) if Post.objects.filter(id=result.pk).exists() else None,query_post)
@@ -634,11 +635,20 @@ def search(request):
   except:
     pass
 
+  count_fac = 0
+  for some_user in query_users:
+    this_user = User.objects.get(id = some_user.pk)
+    if getUserType(this_user) == "1":
+      final_faculties.append({'id':this_user.id , 'name':this_user.name})
+      count_fac +=1
+    if count_fac ==5:
+      break
+
   final_posts = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,posts)
   final_files = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,upload_files)
   final_batches = map(lambda result:batch_dict(result) ,batches)
 
-  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'status':100}
+  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'final_faculties':final_faculties , 'status':100}
   return HttpResponse(json.dumps(results), content_type="application/json")
 
 
