@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.core.servers.basehttp import FileWrapper
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.template import RequestContext 
+from django.template import RequestContext
 from django.db.models import Q
 from django.http import Http404
 from django.core.urlresolvers import reverse
@@ -24,7 +24,7 @@ import simplejson as json
 
 import cStringIO as StringIO
 from internship.models import *
-from internship import forms 
+from internship import forms
 from nucleus.models import Student, Branch, StudentInfo
 from placement.utils import get_resume_binary
 from internship.utils import handle_exc
@@ -36,7 +36,7 @@ from django.conf import settings
 # Permission denied page. User will be redirected to this page if he fails the user_passes_test.
 login_url = '/internship/'
 l=logging.getLogger('internship')
-   
+
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').count() != 0, login_url='/nucleus/login/')
 def company_list(request):
@@ -245,14 +245,16 @@ def submitted_resume(request, company_id) :
 @login_required
 def set_priority(request):
   student = request.user.student
-  internship_person = InternshipPerson.objects.get_or_create(student=student)[0]
-  companies_applied = CompanyApplicationMap.objects.filter(student=internship_person, company__pk__in = [229,230,231,233,234])
+  internship_person = InternshipPerson.objects.get(student=student)
+  companies_applied = CompanyApplicationMap.objects.filter(student=internship_person, company__pk__in = [366, 367, 368])
   message=""
   for company in companies_applied:
     company_priority = CompanyPriority.objects.get_or_create(student=student,company=company.company)
   company_data = CompanyPriority.objects.filter(student=student)
   if not companies_applied:
     message = "You have not applied for any of the companies for which priority is required. In case of any discrepancy, contact IMG."
+  if not internship_person.status=='OPN':
+    message = "You are not eligible for internship. Contact IMG in case of any discrepancy"
   if request.method == "POST":
     company_priority = CompanyPriority.objects.filter(student=student).delete()
     data = json.loads(request.POST.items()[0][0])
@@ -271,9 +273,22 @@ def set_priority(request):
     if not message:
       message = "Saved Successfully"
     json_data = json.dumps({'message':message,'is_success':is_success})
-    return HttpResponse(json_data,mimetype='application/json')
+    return HttpResponse(json_data, content_type='application/json')
 
   return render_to_response('internship/priority.html', {
         "data": company_data,
         "message":message,
         }, context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Internship Admin').exists(), login_url=login_url)
+def import_priority_data:
+  if request.method=='POST':
+    company_priority = CompanyPriority.objects.all()
+    student_list = list(set([l.student for l in company_priority]))
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('sheet 1')
+
+    headers = ['Enrollment No', ' Name', 'CGPA', 'Email']
+    pass

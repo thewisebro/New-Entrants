@@ -11,13 +11,13 @@ Internship Online
   <nav>
     {% for group in user.groups.all %}
 
-    {# Student URLs #}   
+    {# Student URLs #}
     {% if group.name == 'Student' %}
     <a href="{% url 'internship.views.index' %}">Home</a>
     &nbsp;|&nbsp;
     {% endif %}
 
-    {# Admin URLs #}    
+    {# Admin URLs #} 
     {% if group.name == 'Placement Admin' %}
     <a href="{% url 'internship.views_admin.company_list_admin' %}">Home (Admin)</a>
     &nbsp;|&nbsp;
@@ -27,7 +27,7 @@ Internship Online
        <a href="{% url 'placement.views.index' %}">Placement Online</a>
     &nbsp;|&nbsp;
     <a href="{% url 'nucleus.views.logout' %}">Logout</a>
-    
+
   </nav>
 </div>
 {% endblock %}
@@ -48,40 +48,41 @@ Internship Online
 <ul>
     {% for group in user.groups.all %}
 
-    {# Student URLs #}   
+    {# Student URLs #}
     {% if group.name == 'Student' %}
 
     <a href="{% url 'internship.views_student.company_list' %}"><li>Company List</li></a>
     <a href="{% url 'internship.views_results.results_company_list' %}" ><li>Results</li></a>
     <a href="{% url 'internship.views_notice.notice_list' %}" ><li>Forms</li></a>
-    <a href="/internship/FAQ/"><li>FAQ</li></a>
-    
+    {# Company priority with hardcoded company list in views #}
+    <a href="{% url 'internship.views_student.set_priority' %}"><li>Set Priority</li></a>
+   <a href="/internship/FAQ/"><li>FAQ</li></a>
+
     {% endif %}
 
-    {# Admin URLs #}    
+    {# Admin URLs #}
     {% if group.name == 'Placement Admin' %}
 
-    
+
     <li><strong>Admin URLs</strong></li>
     <a href="{% url 'internship.views_admin.company_list_admin' %}"><li>Company Admin</li></a>
     <a href="{% url 'internship.views_notice.notice_list_admin' %}"><li>Forms</li></a>
     <a href="{% url 'internship.views_admin.branch_details' %}" > <li id="student_details_li">Student Details</li> </a>
 
-   
 
     {% endif %}
 
     {% endfor %}
-   
-    {# Common URLs #} 
+
+    {# Common URLs #}
     <div class="subheading"><strong>Forum</strong></div>
     <a href="{% url 'internship.views_forum.forum' 'T' %}" ><li>Technical Forum</li></a>
     <a href="{% url 'internship.views_forum.forum' 'P' %}" ><li>Placement Forum</li></a>
-    
+
     <div class="subheading"><strong>Feedback</strong></div>
     <a href="{% url 'internship.views_feedback.feedback' %}" ><li>Give feedback</li></a>
     <a href="{% url 'internship.views_feedback.feedback_company_list' %}" ><li>View feedback</li></a>
-    
+
 </ul>
 </nav>
 </div>
