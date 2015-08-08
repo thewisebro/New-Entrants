@@ -54,6 +54,7 @@ urlpatterns += patterns('internship.views_admin',
   #Admin URLS
   (r'^company/$', 'company_list_admin'),
   (r'^company/add/$', 'company_add'),
+  (r'^download/priority/$', 'import_intern_priority'),
   (r'^branch/$', 'branch_details'),
   (r'^branch/(?P<branch_code>\w+)/$', 'branch_details'),
   (r'^company/(?P<company_id>\w+)/delete/$', 'company_delete'),

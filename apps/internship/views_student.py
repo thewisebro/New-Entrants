@@ -279,16 +279,3 @@ def set_priority(request):
         "data": company_data,
         "message":message,
         }, context_instance = RequestContext(request))
-
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Internship Admin').exists(), login_url=login_url)
-def import_priority_data:
-  if request.method=='POST':
-    company_priority = CompanyPriority.objects.all()
-    student_list = list(set([l.student for l in company_priority]))
-
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('sheet 1')
-
-    headers = ['Enrollment No', ' Name', 'CGPA', 'Email']
-    pass
