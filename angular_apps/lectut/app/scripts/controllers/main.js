@@ -9,7 +9,7 @@
    */
 
   var redirect_url = base_domain + '/login/?next=/lectut/';
-lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails','CourseDataById','ngNotify',function ($location,$scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails, CourseDataById, ngNotify) {
+lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails','CourseDataById','ngNotify','JoinCourse','LeaveCourse',function ($location,$scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails, CourseDataById, ngNotify,JoinCourse, LeaveCourse) {
 
     // New custom theme in notification
     ngNotify.addType('myTheme', 'notiLec');
@@ -34,6 +34,12 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
             $scope.courseName = d.batch_info.course_name;
             $scope.courseCode = d.batch_info.code;
             $scope.courseid = id;
+            $scope.teaching = false;
+            for(var i=0;i<$scope.auth.batches.length;i++){
+              if($scope.auth.batches[i].id == id){
+               $scope.teaching = true;
+              }
+            }
           });
     }
 
@@ -173,6 +179,33 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
        //console.log(d);
     });
   }
+
+  $scope.isCourseCheck = function(){
+    
+  }
+
+  $scope.getPostData = function(courseId) {
+    
+  }
+
+  $scope.joinCourse = function(id){
+    var promiseJoinCourse = JoinCourse.joinCourse(id);
+    promiseJoinCourse.then(function(d){
+      if(d.status === 100){
+        $scope.teaching = true;  
+      }
+    });
+  }
+
+   $scope.leaveCourse = function(id){
+    var promiseLeaveCourse = LeaveCourse.leaveCourse(id);
+    promiseLeaveCourse.then(function(d){
+      if(d.status === 100){
+        $scope.teaching = false;  
+      }
+    });
+  }
+
 }]);
 
 
@@ -1007,6 +1040,7 @@ lectutApp.controller('FacultyCtrl', ['$scope','$routeParams','$rootScope','$loca
      promiseFacultyData.then(
       function(d){
         //console.log(d);
+        $scope.facultyData = d;
         var allFiles = [];
         for (var key in d.Files) {
            if (d.Files.hasOwnProperty(key)) {
@@ -1128,7 +1162,7 @@ lectutApp.controller('FacultyCtrl', ['$scope','$routeParams','$rootScope','$loca
          table.columns().indexes().flatten().each( function ( i ) {
              if(i==2){
              var column = table.column( i );
-             var select = $('<select id="courseFilterType"><option value="">All Courses</option></select><div id="fileFilterArrow">&#x25BC;</div>')
+             var select = $('<select id="courseFilterType"><option value="">All Courses</option></select><div id="courseFilterArrow">&#x25BC;</div>')
              .appendTo( $(".dataTables_wrapper") )
              .on( 'change', function () {
                var val = $.fn.dataTable.util.escapeRegex(

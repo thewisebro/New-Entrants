@@ -63,7 +63,7 @@
         <div class="topSearchBox"><!-- Search box-->
         <span class="searchIconTop"><i class="fa fa-search"></i></span>
         <div class="crossTop" ng-click="clearSearch()" ng-show="queryString.length != 0"><i class="fa fa-times-circle"></i></div>
-        <input class="mainSearch" type="text" placeholder="Search for profs, courses, files and posts..." ng-model="queryString"  ng-change="searchFunc(queryString)"></input>
+        <input class="mainSearch" type="text" placeholder="Search for faculty, courses, files and posts..." ng-model="queryString"  ng-change="searchFunc(queryString)"></input>
         <a ng-href="#/" ng-class="{activeHome:isHome('/')}" ng-show="logIn"><div class="homeTab">Home</div></a>
         <a ng-href="#/" ng-class="{activeHome:isHome('/')}" ng-show="!logIn" ><div style="margin-right:-131px"class="homeTab">Home</div></a>
         </div>
@@ -72,6 +72,16 @@
            </div>
            <div ng-show="(searchResults.files.length != 0 || searchResults.courses.length != 0 || searchResults.posts.length != 0 )&& queryString.length != 0">
             <div class="searchFor">Search results for <span class="textHighlightSearch">{[queryString]}</span></div>
+            <div class="subSearchHeading">Faculty</div>
+            <div class="noResults" ng-hide="searchResults.final_faculties.length != 0">No Results</div>
+            <div class="subSearchContent" ng-show="searchResults.final_faculties.length != 0">
+                  <a ng-href="#/faculty/{[faculty.id]}" ng-repeat="faculty in searchResults.final_faculties | limitTo: 3">
+                    <div  ng-click="clearSearch();" class="profSearchIndi">
+                      <img ng-src="{[base_domain]}/{[faculty.photo]}"></img>
+                      <span>{[faculty.name]}</span>
+                    </div>
+                  </a>
+            </div>
             <div class="subSearchHeading">Courses</div>
             <div class="noResults" ng-hide="searchResults.courses.length != 0">No Results</div>
             <div class="subSearchContent" ng-show="searchResults.courses.length != 0">
@@ -177,6 +187,8 @@
         <div ng-hide="$root.whichView == 'CourseHomeCtrl'">
          <div style="font-family:opensans_semibold;font-size:15px;">
           <div style="padding-right:10px; text-transform: capitalize;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;max-width: 368px; float:left;">{[courseName]}</div><div style="float:left;">({[courseCode]})</div>
+          <div class="joinCourse" ng-click="joinCourse(courseId.courseId)" ng-show="!teaching && auth.userType === '0'">Join Course</div>
+          <div class="joinCourse" ng-click="leaveCourse(courseId.courseId)" ng-show="teaching && auth.userType === '0'">Leave Course</div>
          </div>
         </div>
         <div style="padding-right:10px; text-transform: capitalize;font-family:opensans_semibold;font-size:15px;" ng-show="$root.whichView == 'CourseHomeCtrl' && !logIn">
