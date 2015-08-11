@@ -69,9 +69,9 @@
         <a ng-href="#/" ng-class="{activeHome:isHome('/')}" ng-show="!logIn" ><div style="margin-right:-131px"class="homeTab">Home</div></a>
         </div>
         <div class="searchResult" ng-show="queryString.length != 0">
-           <div style="padding:10px;" ng-show="(searchResults.files.length == 0 && searchResults.courses.length == 0 && searchResults.posts.length == 0 )&& queryString.length != 0"> No results found
+           <div style="padding:10px;" ng-show="(searchResults.final_faculties.length == 0 && searchResults.files.length == 0 && searchResults.courses.length == 0 && searchResults.posts.length == 0 )&& queryString.length != 0"> No results found
            </div>
-           <div ng-show="(searchResults.files.length != 0 || searchResults.courses.length != 0 || searchResults.posts.length != 0 )&& queryString.length != 0">
+           <div ng-show="(searchResults.final_faculties.length != 0 || searchResults.files.length != 0 || searchResults.courses.length != 0 || searchResults.posts.length != 0 )&& queryString.length != 0">
             <div class="searchFor">Search results for <span class="textHighlightSearch">{[queryString]}</span></div>
             <div class="subSearchHeading">Faculty</div>
             <div class="noResults" ng-hide="searchResults.final_faculties.length != 0">No Results</div>
