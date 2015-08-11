@@ -17,7 +17,7 @@ Internship Online
     &nbsp;|&nbsp;
     {% endif %}
 
-    {# Admin URLs #} 
+    {# Admin URLs #}
     {% if group.name == 'Placement Admin' %}
     <a href="{% url 'internship.views_admin.company_list_admin' %}">Home (Admin)</a>
     &nbsp;|&nbsp;
@@ -68,7 +68,7 @@ Internship Online
     <a href="{% url 'internship.views_admin.company_list_admin' %}"><li>Company Admin</li></a>
     <a href="{% url 'internship.views_notice.notice_list_admin' %}"><li>Forms</li></a>
     <a href="{% url 'internship.views_admin.branch_details' %}" > <li id="student_details_li">Student Details</li></a>
-    <a href="{% url 'internship.views_admin.import_intern_priority' %}"><li>Download Intern Priority</li></a>
+{#    <a href="{% url 'internship.views_admin.import_intern_priority' %}"><li>Download Intern Priority</li></a>  #}
 
     {% endif %}
 
