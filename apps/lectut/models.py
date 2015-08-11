@@ -131,34 +131,16 @@ class Uploadedfile(BaseUpload):
   def delete(self):
     self.deleted = True
     self.save()
-'''
-  def save(self , *args, **kwargs):
-    import pdb;pdb.set_trace()
-    fileToAdd = super(Uploadedfile , self).save(*args, **kwargs)
-    if self.file_type == 'image':
-      size = 100,100
-      try:
-#        outfile = str(self.upload_file).split(".")[0]+"_thumbnail"
-        outfile = str(self.upload_file)
-        im = Image.open(self.upload_file)
-        im = im.resize(size, Image.ANTIALIAS)
-#        thumb = ImageOps.fit(self.upload_file, size, Image.ANTIALIAS)
-#        im.thumbnail(size)
-        im.save(self.upload_file, "JPEG")
-      except Exception as e:
-        print "cannot create thumbnail "+str(e)
-
-    return fileToAdd
-'''
+    return None
 
   def as_dict(self):
-        filepath = str(self.upload_file)
-        filename = filepath.split("/")[3]
-        if self.file_type == 'image':
-          filepath = 'media/'+filepath
-        else:
-          filepath = ''
-        fileData={
+    filepath = str(self.upload_file)
+    filename = filepath.split("/")[3]
+    if self.file_type == 'image':
+      filepath = 'media/'+filepath
+    else:
+      filepath = ''
+    fileData={
            'id':self.id,
 #           'post':self.post.id,
            'upload_file':self.description,
@@ -168,8 +150,8 @@ class Uploadedfile(BaseUpload):
            'file_type':self.file_type,
            'upload_type':Act_Types[self.upload_type],
            'download_count':self.download_count,
-        }
-        return fileData
+    }
+    return fileData
 
 # Used for search
   def as_dict_disp(self):
@@ -246,5 +228,24 @@ class Activity(models.Model):
                u = Upload()
                u.save()
 
-  post_save.connect(create_upload, sender=BaseUpload)'''
+  post_save.connect(create_upload, sender=BaseUpload)
+  
+  def save(self , *args, **kwargs):
+    import pdb;pdb.set_trace()
+    fileToAdd = super(Uploadedfile , self).save(*args, **kwargs)
+    if self.file_type == 'image':
+      size = 100,100
+      try:
+#        outfile = str(self.upload_file).split(".")[0]+"_thumbnail"
+        outfile = str(self.upload_file)
+        im = Image.open(self.upload_file)
+        im = im.resize(size, Image.ANTIALIAS)
+#        thumb = ImageOps.fit(self.upload_file, size, Image.ANTIALIAS)
+#        im.thumbnail(size)
+        im.save(self.upload_file, "JPEG")
+      except Exception as e:
+        print "cannot create thumbnail "+str(e)
+
+    return fileToAdd'''
+
 
