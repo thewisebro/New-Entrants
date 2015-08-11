@@ -2,15 +2,13 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import datetime
 import core.models.fields
-import django.core.validators
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('nucleus', '__first__'),
+        ('nucleus', '0006_auto_20150417_0353'),
     ]
 
     operations = [
@@ -48,6 +46,7 @@ class Migration(migrations.Migration):
                 ('website', models.CharField(max_length=100, blank=True)),
                 ('brochure', core.models.fields.AutoDeleteFileField(null=True, upload_to=b'placement/brochures/', blank=True)),
                 ('sector', models.CharField(max_length=3, choices=[(b'FIN', b'Finance'), (b'PSU', b'PSU/Government'), (b'CON', b'Consultancy'), (b'FMC', b'FMCG'), (b'PHA', b'Pharmaceuticals'), (b'RnD', b'R&D'), (b'IT', b'IT'), (b'ACA', b'Academics'), (b'OIL', b'Oil & Gas'), (b'CIN', b'Construction / Infrastructure'), (b'COR', b'Core Engineering')])),
+                ('category_required', models.BooleanField(default=False)),
             ],
             options={
                 'abstract': False,
@@ -61,7 +60,7 @@ class Migration(migrations.Migration):
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
                 ('status', models.CharField(max_length=3, choices=[(b'APP', b'Applied'), (b'FIN', b'Finalized'), (b'SEL', b'Selected')])),
                 ('shortlisted', models.BooleanField(default=False)),
-                ('time_of_application', core.models.fields.DateTimeField(default=datetime.datetime(2015, 1, 17, 18, 26, 9, 93838))),
+                ('time_of_application', core.models.fields.DateTimeField(auto_now=True)),
                 ('company', models.ForeignKey(to='placement.Company')),
             ],
             options={
@@ -74,7 +73,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
                 ('company_name', models.CharField(max_length=250)),
-                ('cluster', models.IntegerField(blank=True, null=True, choices=[(1, 1), (2, 2), (3, 3), (4, 4)])),
+                ('cluster', models.IntegerField(blank=True, null=True, choices=[(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)])),
                 ('status', models.CharField(blank=True, max_length=40, null=True, choices=[(b'JAF Sent', b'JAF Sent'), (b'JAF Received', b'JAF Received'), (b'STF Sent', b'STF Sent'), (b'Not Called', b'Not Called'), (b'JAF + STF sent', b'JAF + STF sent'), (b'JAF+ STF recieved', b'JAF+ STF recieved'), (b'Not Picking Up', b'Not Picking Up'), (b'Incorrect contact info', b'Incorrect contact info'), (b'Call Later', b'call later'), (b'Denied', b'Denied'), (b'Process Confirmed', b'Process Confirmed'), (b'Other', b'Other')])),
                 ('last_contact', models.CharField(max_length=100, null=True, blank=True)),
                 ('person_in_contact', models.CharField(max_length=100, null=True, blank=True)),
@@ -134,7 +133,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
-                ('contact_person', models.CharField(max_length=100)),
+                ('contact_person', models.CharField(max_length=250)),
                 ('designation', models.CharField(max_length=100, null=True, blank=True)),
                 ('phone_no', models.CharField(max_length=250, null=True, blank=True)),
                 ('email', models.CharField(max_length=250, null=True, blank=True)),
@@ -190,22 +189,6 @@ class Migration(migrations.Migration):
                 ('priority', models.IntegerField(default=1, choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 10), (11, 11), (12, 12), (13, 13), (14, 14), (15, 15), (16, 16), (17, 17), (18, 18), (19, 19), (20, 20), (21, 21), (22, 22), (23, 23), (24, 24)])),
                 ('visible', models.BooleanField(default=True)),
                 ('student', models.ForeignKey(to='nucleus.Student')),
-            ],
-            options={
-                'abstract': False,
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name='Facebook',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('datetime_created', models.DateTimeField(auto_now_add=True)),
-                ('internship', models.TextField(validators=[django.core.validators.MaxLengthValidator(70)])),
-                ('projects', models.TextField(validators=[django.core.validators.MaxLengthValidator(70)])),
-                ('extra_curriculars', models.TextField(validators=[django.core.validators.MaxLengthValidator(70)])),
-                ('b_tech_degree', models.CharField(max_length=100, blank=True)),
-                ('student', models.OneToOneField(to='nucleus.Student')),
             ],
             options={
                 'abstract': False,
@@ -375,7 +358,7 @@ class Migration(migrations.Migration):
                 ('placed_company_category', models.CharField(blank=True, max_length=3, null=True, choices=[(b'A', b'A'), (b'B', b'B'), (b'C', b'C'), (b'U', b'University')])),
                 ('no_of_companies_placed', models.IntegerField(default=0)),
                 ('status', models.CharField(default=b'CLS', max_length=3, choices=[(b'CLS', b'Closed'), (b'OPN', b'Opened'), (b'LCK', b'Locked'), (b'VRF', b'Verified')])),
-                ('photo', core.models.fields.AutoDeleteImageField(help_text=b"<span style='margin-left:-70px;font-size:0.9em;'>Recommended size: <b>35mm width x 45mm height</b></span>", null=True, upload_to=b'placement/photos/', blank=True)),
+                ('photo', core.models.fields.AutoDeleteImageField(help_text=b"<span style='font-size:0.9em;'>Recommended size: <b>35mm width x 45mm height</b></span>", null=True, upload_to=b'placement/photos/', blank=True)),
                 ('is_debarred', models.BooleanField(default=False)),
                 ('student', models.OneToOneField(to='nucleus.Student')),
             ],

@@ -32,23 +32,31 @@ urlpatterns += patterns('placement.views_slots',
                        (r'^company_search/','company_search'),
     )
 
-
-
 # IMG urls
 urlpatterns += patterns('placement.views_img',
                        (r'^update/$','update_status'),
                        (r'^generate/(?P<company_id>\d+)/$','generate_missing_resumes'), #No link available; do it directly in emergency
                        (r'^registration/$','generate_registration_no'),
                        (r'^contact_manager/$','placement_manager_view'),
+                       (r'^contact_manager/contactperson_data/$','placement_manager_contact_person_data'),
                        (r'^company_coordinator/$', 'company_coordinator_view'),
+                       (r'^contact_manager/(?P<user_id>\d+)/$', 'company_coordinator_view'),
+                       (r'^company_coordinator/contactperson_data/$','company_coordinator_contact_person_data'),
+                       (r'^company_coordinator/contactperson_data/(?P<user_id>\d+)/$','company_coordinator_contact_person_data'),
                        (r'^company_coordinator/today/$', 'company_coordinator_today_view'),
-                       (r'^contactmanager_manual/$','contactmanager_edit'),
-                       (r'^contact_manager/edit/(?P<company_id>\d+)/$','contactmanager_edit'),
+                       (r'^company_coordinator/contactperson_data/today/$','company_coordinator_contact_person_data_today'),
+                       (r'^contactmanager_manual/$','add_company_manual'),
+                       (r'^contact_manager/edit/(?P<company_id>\d+)/$','edit_company_manual'),
+                       (r'^contact_manager/edit/comments/(?P<company_id>\d+)/$','edit_comments'),
+                       (r'^contact_manager/remove/comments/(?P<comment_id>\d+)/$','delete_comments'),
                        (r'^contact_manager/remove/(?P<company_id>\d+)/$','contactmanager_delete'),
-                       (r'^contact_manager/assign','assign_company_coordinator'),
+                       (r'^contact_manager/remove_campuscontact/(?P<campuscontact_id>\d+)/$','campuscontact_delete'),
+                       (r'^contact_manager/details/(?P<company_id>\d+)/$','company_details'),
+                       (r'^contact_manager/assign','assign_campus_contact'),
                        (r'^contact_manager/add/$', 'add_company_coordinator'),
                        (r'^contact_manager/person_search/$', 'person_search'),
-                       (r'^contact_manager/generate_xls/$', 'generate_company_contact_xls'),
+                       (r'^contact_manager/company_search/$', 'company_search'),
+ #                      (r'^contact_manager/generate_xls/$', 'generate_company_contact_xls'),
     )
 
 # Admin urls

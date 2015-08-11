@@ -106,6 +106,7 @@ DEVELOPMENT_SITES = {
   'IMGSITE': {'id': 3, 'domain': 'http://imgsite.goku.channeli.in'},
 }
 
+IMG_WEBSITE_BASE_URL = '/img_website'
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media') + os.sep

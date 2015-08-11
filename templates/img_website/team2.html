@@ -54,7 +54,7 @@ $('.lightboxTrigger').click(function(e) {
     $('#imageSet').find('.lightboxTrigger').each(function() {
         var name_html = $(this).attr("id");
         {% for member in members %}
-          var name_back = "{{ member.member_name.admission_semtype }}";
+          var name_back = "{{ member.member_name.user.name }}";
           if(name_html == name_back){
           var $href = $(this).attr('href');
           $('#slideshow').append(
