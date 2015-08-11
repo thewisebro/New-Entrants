@@ -674,26 +674,26 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                  <i ng-show='file.file_type == "other"' class="fa fa-file"></i>
                   */
                  if(full.file_type == "image"){
-                   html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a download ng-href="{[base_domain]}/lectut_api/download/'+ full.id+'">'+full.description+'</a></span>';
+                   html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a download ng-href="{[base_domain]}/lectut_api/download/'+ full.id+'">'+full.upload_file+'</a></span>';
                  } 
                  else if(full.file_type == "ppt"){
-                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                  else if(full.file_type == "zip"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
 
                  else if(full.file_type == "pdf"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                   else if(full.file_type == "sheet"){
-                   html += '<i class="fa fa-file-excel-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-excel-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                 else if(full.file_type == "doc"){
-                   html += '<i class="fa fa-file-word-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-word-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                  else{
-                   html += '<i class="fa fa-file-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                 html += '<span class="fileShowUser">by: '+full.username+'</span>';
                 html += '<span class="fileShowDownloads">Downloads: '+full.download_count+'</span>';
@@ -1066,26 +1066,26 @@ lectutApp.controller('FacultyCtrl', ['$scope','$routeParams','$rootScope','$loca
              .renderWith(function(data,type,full){
                  var html= "";
                  if(full.file_type == "image"){
-                   html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a download ng-href="{[base_domain]}/lectut_api/download/'+ full.id+'">'+full.description+'</a></span>';
+                   html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a download ng-href="{[base_domain]}/lectut_api/download/'+ full.id+'">'+full.upload_file+'</a></span>';
                  } 
                  else if(full.file_type == "ppt"){
-                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                  else if(full.file_type == "zip"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
 
                  else if(full.file_type == "pdf"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                   else if(full.file_type == "sheet"){
-                   html += '<i class="fa fa-file-excel-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-excel-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                 else if(full.file_type == "doc"){
-                   html += '<i class="fa fa-file-word-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-word-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                  else{
-                   html += '<i class="fa fa-file-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                 html += '<span class="fileShowDownloads">Downloads: '+full.download_count+'</span>';
                 html += '<div style="display: inline-block; float:right;margin-left:10px;"><a style="text-decoration:none" ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'""><i class="fa fa-external-link fileSetting"></i></a></div>';
