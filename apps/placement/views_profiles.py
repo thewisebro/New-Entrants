@@ -243,7 +243,7 @@ def educational_details(request):
         return HttpResponseRedirect(reverse('placement.views_profiles.educational_details'))
 
     else :
-      formset = EducationalDetailsFormSet(queryset = EducationalDetails.objects.filter(student = student))
+      formset = EducationalDetailsFormSet(queryset = EducationalDetails.objects.filter(student = student).exclude(course=previous_sem(student.semester)))
     # Override the choices for course as per the course of the user.
     # Added the blank option to make sure that the formset works fine.
     if student.semester[:-2] == 'UG':
@@ -255,19 +255,24 @@ def educational_details(request):
     if student.semester[:-2] == 'PHD':
       for form in formset :
         form.fields['course'].choices = (('','---------'),) + MC.SEMESTER_CHOICES[:5]
-#    import ipdb; ipdb.set_trace()
-#    # Disable form of recent data
-#    for form in formset:
-#      if form.initial:
-#        if form.initial['course'] == previous_sem(student.semester):
-#          for key in form.fields.keys()[:6]:
-#            form.fields[key].widget.attrs['readonly'] = True
 
     # Insert courses not offered by our institute as these are missing in the branch.
     branches = get_branches_for_educational_details()
     for form in formset :
       form.fields['discipline'].choices = branches
       form.fields['discipline'].widget = Select(choices = branches )
+    recent = EducationalDetails.objects.filter(student=student, course=previous_sem(student.semester))
+    if recent:
+      recent = recent[0]
+    long_name_course = recent.course
+    for inst in MC.SEMESTER_CHOICES:
+      if inst[0] == previous_sem(student.semester):
+        long_name_course = inst[1]
+        break
+    recent.course = (recent.course, long_name_course)
+
+    long_name_discipline = Branch.objects.get(code=recent.discipline).name
+    recent.discipline = (recent.discipline, long_name_discipline)
 
     if plac_person.status in ('LCK', 'VRF') :
       # The details are uneditable
@@ -275,6 +280,7 @@ def educational_details(request):
     else :
       template = 'placement/basic_form.html'
     return render_to_response(template , {
+        'recent' : recent,
         'isFormSet' : True,
         'form' : formset,
         'title' : 'Educational Details',
