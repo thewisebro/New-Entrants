@@ -108,7 +108,7 @@ class Post(models.Model):
 
 #  Gives path where uploaded file is saved
 def upload_path(instance , filename ):
-  return ('lectut/'+instance.post.batch.name+'/'+instance.file_type+'/'+filename)
+  return ('lectut/'+instance.post.batch.course.code+'/'+instance.file_type+'/'+filename)
 #  return os.path.join('lectut/',instance.file_type,'/')
 
 

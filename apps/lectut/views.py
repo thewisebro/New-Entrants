@@ -668,7 +668,7 @@ def join_batch(request , batch_id):
   if request.user.is_authenticated():
     userType = getUserType(request.user)
     if userType == "1":
-      faculty = request.faculty
+      faculty = request.user.faculty
       batch = Batch.objects.get(id = batch_id)
       batch.faculties.add(faculty)
       return HttpResponse(json.dumps({'msg':'Successfully Joined Course','status':100}), content_type="application/json")
@@ -684,9 +684,9 @@ def leave_batch(request , batch_id):
   if request.user.is_authenticated():
     userType = getUserType(request.user)
     if userType == "1":
-      faculty = request.faculty
+      faculty = request.user.faculty
       batch = Batch.objects.get(id = batch_id)
-      batch.faculties.delete(faculty)
+      batch.faculties.remove(faculty)
       return HttpResponse(json.dumps({'msg':'Successfully Left Course','status':100}), content_type="application/json")
     else:
       return HttpResponse(json.dumps({'msg':'You are not a faculty','status':101}), content_type="application/json")
