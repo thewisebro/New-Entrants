@@ -301,6 +301,25 @@ body {
         >a{
           text-decoration: blink;
         }
+      .profSearchIndi{
+        color: #848484;
+        border-bottom: 1px solid #EEE;
+        padding: 10px 8px;
+        &:hover{
+          color: white;
+          background: #3498db;
+        }
+        img{
+          background-color: #E4E4E4;
+          width: 40px;
+          height: 40px;
+          border-radius: 34px;
+        }
+        span{
+          line-height: 40px;
+          padding-left: 10px;
+        }
+      }
       .courseSearchIndi{
         color: #848484;
         border-bottom: 1px solid #EEE;
@@ -692,7 +711,22 @@ body {
       font-size: 18px;  
     } 
     .courseHeadingNameId{
-      
+      .joinCourse{
+          float: left;
+          background: #F62459;
+          padding: 0px 16px;
+          color: white;
+          border-radius: 44px;
+          height: 30px;
+          margin-top: 11px;
+          line-height: 30px;
+          margin-left: 11px;
+          font-size: 13px;
+          cursor: pointer;
+          &:hover{
+            background:#E22253;
+          }
+      }
     }
     .courseSearch{
       float: right; 
@@ -1297,6 +1331,17 @@ body {
   text-overflow: ellipsis;
   font-size: 12px;
 }
+
+#courseFilterArrow{
+  position: absolute;
+  top: 24px;
+  right: 157px;
+  border-radius: 2px;
+  color: #999999;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+
 #fileFilterType{
 position: absolute;
 top: 20px;
@@ -1313,7 +1358,38 @@ right: 20px;
        background-image: -webkit-linear-gradient(top, #E5E5E5, #F4F4F4);
        background-position: center right;
        background-repeat: no-repeat;
-border: 1px solid #AAA;
+        border: 1px solid #AAA;
+        border-radius: 2px;
+color: #555;
+       font-size: inherit;
+margin: 0;
+overflow: hidden;
+          padding-top: 3px;
+          padding-bottom: 2px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+outline: 0px;
+         font-family: $osSB;
+         font-size:13px;
+}
+
+#courseFilterType{
+position: absolute;
+top: 20px;
+right: 151px;
+       -webkit-appearance: button;
+       -moz-appearance: button;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -webkit-padding-end: 22px;
+       -moz-padding-end: 20px;
+       -webkit-padding-start: 7px;
+       -moz-padding-start: 2px;
+       background-color: #F7F7F7;
+       background-image: -webkit-linear-gradient(top, #E5E5E5, #F4F4F4);
+       background-position: center right;
+       background-repeat: no-repeat;
+        border: 1px solid #AAA;
         border-radius: 2px;
 color: #555;
        font-size: inherit;
@@ -1343,7 +1419,10 @@ outline: 0px;
   color: #BBBBBB;
   font-size: 13px;
 }
-
+.course_name_in_datatable{
+  font-size: 13px;
+  color: #BBBBBB;
+}
 .dt-loading{
   color: rgb(185, 185, 185);
   font-family: opensans_regular;
@@ -1355,7 +1434,7 @@ table.dataTable span a {
   font-size:13px;
   display: inline-block;
   white-space: nowrap;
-  width: 380px;
+  /*width: 380px;*/
   overflow: hidden;
   text-overflow: ellipsis;
     vertical-align: sub;
@@ -2118,3 +2197,23 @@ border: 1px solid #D9D9D9;
 .ngn-success{
   z-index: 12312312312;
 }
+
+
+// ------------------ Faculty Profile---------------------
+
+.facultyHeading{
+    height: 49px;
+    background: white;
+    font-size: 19px;
+    line-height: 50px;
+    padding: 0px 20px;
+    border: 1px solid #DDD;
+}
+
+.profHeadingName{
+    display: inline-block;
+    font-family: "opensans_regular";
+    color: #656565;
+    font-size: 18px;
+}
+
