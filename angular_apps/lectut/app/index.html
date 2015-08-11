@@ -188,8 +188,8 @@
         <div ng-hide="$root.whichView == 'CourseHomeCtrl'">
          <div style="font-family:opensans_semibold;font-size:15px;">
           <div style="padding-right:10px; text-transform: capitalize;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;max-width: 368px; float:left;">{[courseName]}</div><div style="float:left;">({[courseCode]})</div>
-          <div class="joinCourse" ng-click="joinCourse(courseId.courseId)" ng-show="login && !teaching && auth.userType === '1'">Join Course</div>
-          <div class="joinCourse" ng-click="leaveCourse(courseId.courseId)" ng-show="login && teaching && auth.userType === '1'">Leave Course</div>
+          <div class="joinCourse" ng-click="joinCourse(courseId.courseId)" ng-show="logIn && !teaching && auth.userType === '1'">Join Course</div>
+          <div class="joinCourse" ng-click="leaveCourse(courseId.courseId)" ng-show="logIn && teaching && auth.userType === '1'">Leave Course</div>
          </div>
         </div>
         <div style="padding-right:10px; text-transform: capitalize;font-family:opensans_semibold;font-size:15px;" ng-show="$root.whichView == 'CourseHomeCtrl' && !logIn">
