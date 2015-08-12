@@ -246,7 +246,7 @@ def submitted_resume(request, company_id) :
 def set_priority(request):
   student = request.user.student
   internship_person = InternshipPerson.objects.get(student=student)
-  companies_applied = CompanyApplicationMap.objects.filter(student=internship_person, company__pk__in = [366, 367, 368])
+  companies_applied = CompanyApplicationMap.objects.filter(student=internship_person, company__pk__in = [366, 367, 368, 371])
   message=""
   for company in companies_applied:
     company_priority = CompanyPriority.objects.get_or_create(student=student,company=company.company)
