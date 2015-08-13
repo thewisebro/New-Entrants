@@ -131,7 +131,7 @@ function lookup(val,type)
                  "</div></a>";
               }
 
-              html+= "<div class = \"division-line\"></div>"+
+              html+= "<div class = \"search-box-division-line\"></div>"+
               "<div class = \"searched-items-for-sale\">";
 
              if ( data['sell_items'].length )
@@ -168,7 +168,7 @@ function lookup(val,type)
              }
 
              html += "</div>" +
-              "<div class = \"division-line\"></div>"+
+              "<div class = \"search-box-division-line\"></div>"+
               "<div class = \"searched-items-for-sale\">";
 
              if ( data['requests'].length )

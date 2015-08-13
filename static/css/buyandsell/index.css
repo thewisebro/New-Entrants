@@ -49,7 +49,7 @@ a:focus
 	margin:0;
 	margin-top:-2px;
 	font-family:Arial;
-	font-size:2.5em;
+	font-size:25px;
 	display: inline;
 }
 
@@ -201,6 +201,17 @@ a:focus
 	opacity: 0;
 }
 
+.search-box-division-line
+{
+	width:100%;
+	height:2px;
+	border-top:1px solid #dcdcdc;
+	border-bottom:1px solid #fefefe;
+	margin-top:15px;
+	margin-bottom: 15px;
+}
+
+
 .left-division-line
 {
 	width:80%;
@@ -305,7 +316,7 @@ input.radio:empty
     height: 16px;
     margin:-3px 10px 0 0;
     vertical-align:middle;
-    background-image: url("../images/radio-button-empty.png");
+    background-image: url("../../images/buyandsell/radio-button-empty.png");
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -313,7 +324,7 @@ input.radio:empty
 }
 input[type="radio"]:checked + label div
 {
-    background-image:url("../images/radio-button-checked.png");
+    background-image:url("../../images/buyandsell/radio-button-checked.png");
 }
 
 .pageContent
@@ -490,6 +501,7 @@ input[type="radio"]:checked + label div
     position: relative;
     box-shadow: 0px 4px 5px rgba(51,51,51,0.5);
     display:none;
+    padding-bottom:15px;
 }
 
 .sell-form-search-result-box
@@ -562,7 +574,7 @@ input[type="radio"]:checked + label div
     font-size:13px;
     display: block;
     text-align:right;
-    margin:auto 24px 12px auto;
+    margin:auto 24px 0 auto;
 }
 .max-price-heading
 {
