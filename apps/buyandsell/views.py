@@ -26,14 +26,19 @@ def buy(request,mc = None,c = None):
   main_watched_cat , sub_watched_cat , watched_cat_dict=get_watched_categories(request)
   sub_watched_cat = [ cat.name for cat in sub_watched_cat ]
 
+  queries_without_page=request.GET.copy()                      #this is for preserving the query parameter on pagination
+  if queries_without_page.has_key('page'):
+    del queries_without_page['page']
+
   qdata = ''
   table_data = ''
   price_valid = 0
   maincategory = ''
   category = ''
   error_msg = ''
-  print login_flag
-  print type(request.user)
+  pl=None
+  pu=None
+
   cat_dict = get_category_dictionary()
   if mc and c:
     cat = BuySellCategory.objects.get(code=c)
@@ -58,18 +63,32 @@ def buy(request,mc = None,c = None):
       'cat_dict':cat_dict,
       'category':category,
       'main_watched':main_watched_cat,
-      'sub_watched':sub_watched_cat
+      'sub_watched':sub_watched_cat,
+      'queries':queries_without_page,
+      'll':pl if pl else 1,
+      'ul':pu if pu else 50000
           }
       return render(request,'buyandsell/buy-page.html',context)
+
     if pu >= 0 and pl >= 0 and pu > pl:
       price_valid = 1
     else:
-      error_msg = "invalid price range"
-      return render(request,'buyandsell/buy.html',
-          {'error_msg':error_msg,
-          'table_data':table_data,
-          'cat_dict':cat_dict
-          })
+      messages.error(request,"Please enter correct")
+      context={
+      'table_data':table_data,
+      'mc':mc,
+      'c':c,
+      'login_flag':login_flag,
+      'cat_dict':cat_dict,
+      'category':category,
+      'main_watched':main_watched_cat,
+      'sub_watched':sub_watched_cat,
+      'queries':queries_without_page,
+      'll':pl if pl else 1,
+      'ul':pu if pu else 50000
+           }
+      return render(request,'buyandsell/buy-page.html',context)
+
 
   if mc and c and price_valid:
     qdata = SaleItems.items.filter(category__main_category=mc,
@@ -100,9 +119,26 @@ def buy(request,mc = None,c = None):
   else:
     error_msg = 'No items in database'
 
-  paginator = Paginator(table_data, 8)
+  if len(table_data) <= 16:
+      context={
+        'error_msg':error_msg,
+        'table_data':table_data,
+        'mc':mc,
+        'c':c,
+        'login_flag':login_flag,
+        'cat_dict':cat_dict,
+        'category':category,
+        'main_watched':main_watched_cat,
+        'sub_watched':sub_watched_cat,
+        'queries':queries_without_page,
+        'll':pl if pl else 1,
+        'ul':pu if pu else 50000
+            }
+      return render(request,'buyandsell/buy-page.html',context)
+
+  paginator = Paginator(table_data, 16)
   page = request.GET.get('page', 1)
-  page_list = _get_page_list(page, paginator.num_pages, 8)
+  page_list = _get_page_list(page, paginator.num_pages, 16)
   try:
     table_data = paginator.page(page)
   except PageNotAnInteger:
@@ -123,10 +159,12 @@ def buy(request,mc = None,c = None):
     'page_list':page_list,
     'category':category,
     'main_watched':main_watched_cat,
-    'sub_watched':sub_watched_cat
+    'sub_watched':sub_watched_cat,
+    'queries':queries_without_page,
+    'll':pl if pl else 1,
+    'ul':pu if pu else 50000
           }
-  print main_watched_cat
-  print sub_watched_cat
+
   return render(request,'buyandsell/buy-page.html',context)
 
 
@@ -135,26 +173,62 @@ def viewrequests(request,mc=None,c=None):
   if request.user is not None and request.user.is_authenticated():
     login_flag = True
 
+  main_watched_cat , sub_watched_cat , watched_cat_dict=get_watched_categories(request)
+  sub_watched_cat = [ cat.name for cat in sub_watched_cat ]
+  cat_dict = get_category_dictionary()
+
+  queries_without_page=request.GET.copy()                      #this is for preserving the query parameter on pagination
+  if queries_without_page.has_key('page'):
+    del queries_without_page['page']
+
   qdata = ''
   table_data = ''
   price_valid = 0
   maincategory = ''
   category = ''
   error_msg = ''
-  cat_dict = get_category_dictionary()
+  pl = None
+  pu = None
 
   if request.GET.get('ll') and request.GET.get('ul'):
-    pl = int(request.GET.get('ll'))
-    pu = int(request.GET.get('ul'))
+    try:
+      pl = int(request.GET.get('ll'))
+      pu = int(request.GET.get('ul'))
+    except:
+      messages.error(request,"Please enter integer values")
+      context={
+      'table_data':table_data,
+      'mc':mc,
+      'c':c,
+      'login_flag':login_flag,
+      'cat_dict':cat_dict,
+      'category':category,
+      'main_watched':main_watched_cat,
+      'sub_watched':sub_watched_cat,
+      'queries':queries_without_page,
+      'll':pl if pl else 1,
+      'ul':pu if pl else 50000
+          }
+      return render(request,'buyandsell/requests.html',context)
     if pu >= 0 and pl >= 0 and pu > pl:
       price_valid = 1
     else:
-      error_msg = "invalid price range"
-      return render(request,'buyandsell/buy.html',
-          {'error_msg':error_msg,
-          'table_data':table_data,
-          'cat_dict':cat_dict
-          })
+      messages.error(request,"Please enter correct")
+      context={
+      'table_data':table_data,
+      'mc':mc,
+      'c':c,
+      'login_flag':login_flag,
+      'cat_dict':cat_dict,
+      'category':category,
+      'main_watched':main_watched_cat,
+      'sub_watched':sub_watched_cat,
+      'queries':queries_without_page,
+      'll':pl if pl else 1,
+      'ul':pu if pu else 50000
+           }
+      return render(request,'buyandsell/requests.html',context)
+
 
   if mc and c:
     cat = BuySellCategory.objects.get(code=c)
@@ -192,9 +266,27 @@ def viewrequests(request,mc=None,c=None):
   else:
     error_msg = 'No items in database'
 
-  paginator = Paginator(table_data, 10)
+  if len(table_data) <= 16:
+      context={
+        'error_msg':error_msg,
+        'table_data':table_data,
+        'mc':mc,
+        'c':c,
+        'login_flag':login_flag,
+        'cat_dict':cat_dict,
+        'category':category,
+        'main_watched':main_watched_cat,
+        'sub_watched':sub_watched_cat,
+        'queries':queries_without_page,
+        'll':pl if pl else 1,
+        'ul':pu if pl else 50000
+            }
+      return render(request,'buyandsell/requests.html',context)
+
+
+  paginator = Paginator(table_data, 16)
   page = request.GET.get('page', 1)
-  page_list = _get_page_list(page, paginator.num_pages, 10)
+  page_list = _get_page_list(page, paginator.num_pages, 16)
   try:
     table_data = paginator.page(page)
   except PageNotAnInteger:
@@ -214,7 +306,12 @@ def viewrequests(request,mc=None,c=None):
     'cat_dict':cat_dict,
     'paginator':paginator,
     'page_list':page_list,
-    'category':category
+    'category':category,
+    'main_watched':main_watched_cat,
+    'sub_watched':sub_watched_cat,
+    'queries':queries_without_page,
+    'll':pl if pl else 1,
+    'ul':pu if pl else 50000
           }
   return render(request,'buyandsell/requests.html',context)
 
@@ -623,6 +720,11 @@ def search(request,search_type):
 
 
 def seeall(request,search_type):
+  login_flag = False
+  if request.user is not None and request.user.is_authenticated():
+   login_flag = True
+
+  cat_dict = get_category_dictionary()
   main_dict={}
   srch_string=request.GET.get('keyword','')
   word_list=srch_string.split(' ')
@@ -631,11 +733,51 @@ def seeall(request,search_type):
     if word !='':
       words.append(word)
 
-  if search_type=="requests" :
+  if search_type=="requests":
     queryset=[]
     un_queryset = {}
     count = {}
-    print words
+    price_valid = 0
+    pl = None
+    pu = None
+
+    queries_without_page=request.GET.copy()                      #this is for preserving the query parameter on pagination
+    if queries_without_page.has_key('page'):
+      del queries_without_page['page']
+
+
+    if request.GET.get('ll') and request.GET.get('ul'):
+      try:
+        pl = int(request.GET.get('ll'))
+        pu = int(request.GET.get('ul'))
+      except:
+        messages.error(request,"Please enter integer values")
+        context={
+        'table_data':queryset,
+        'login_flag':login_flag,
+        'cat_dict':cat_dict,
+        'll':pl if pl else 1,
+        'ul':pu if pu else 50000,
+        'queries':queries_without_page,
+        'search_string':srch_string
+          }
+        return render(request,'buyandsell/requests.html',context)
+
+      if pu >= 0 and pl >= 0 and pu > pl:
+        price_valid = 1
+      else:
+        messages.error(request,"Please enter correct")
+        context={
+        'table_data':queryset,
+        'login_flag':login_flag,
+        'cat_dict':cat_dict,
+        'll':pl if pl else 1,
+        'ul':pu if pu else 50000,
+        'queries':queries_without_page,
+        'search_string':srch_string
+          }
+        return render(request,'buyandsell/requests.html',context)
+
     for word in words:
       result = RequestedItems.items.filter(item_name__icontains=word,is_active=True)
       for temp in result:
@@ -650,9 +792,21 @@ def seeall(request,search_type):
     for item_id in count_date_sorted_queryset:
       queryset.append(un_queryset[item_id])
 
-    queries_without_page=request.GET.copy()                      #this is for preserving the query parameter on pagination
-    if queries_without_page.has_key('page'):
-      del queries_without_page['page']
+
+    if price_valid:
+      queryset = [obj for obj in queryset if obj.price_upper >= pl and obj.price_upper <= pu]
+
+    if len(queryset) <= 16:
+      context={
+        'table_data':queryset,
+        'login_flag':login_flag,
+        'cat_dict':cat_dict,
+        'll':pl if pl else 1,
+        'ul':pu if pu else 50000,
+        'queries':queries_without_page,
+        'search_string':srch_string
+            }
+      return render(request,'buyandsell/requests.html',context)
 
     paginator = Paginator(queryset, 10)
     page = request.GET.get('page', 1)
@@ -666,18 +820,65 @@ def seeall(request,search_type):
       logger.info(request.user.username+": pagination error EmptyPage")
       table_data = paginator.page(paginator.num_pages)
 
-    context={'table_data':table_data,
-             'paginator':paginator,
-             'page_list':page_list,
-             'queries':queries_without_page
+    context={
+    'table_data':table_data,
+    'login_flag':login_flag,
+    'cat_dict':cat_dict,
+    'paginator':paginator,
+    'page_list':page_list,
+    'll':pl if pl else 1,
+    'ul':pu if pu else 50000,
+    'queries':queries_without_page,
+    'search_string':srch_string
     }
-    return render(request,'buyandsell/show_requests.html',context)
+
+    return render(request,'buyandsell/requests.html',context)
 
   if search_type=="sell":
     queryset=[]
     un_queryset = {}
     count = {}
-    print words
+    price_valid = 0
+    pl = None
+    pu = None
+
+    queries_without_page=request.GET.copy()                      #this is for preserving the query parameter on pagination
+    if queries_without_page.has_key('page'):
+      del queries_without_page['page']
+
+
+    if request.GET.get('ll') and request.GET.get('ul'):
+      try:
+        pl = int(request.GET.get('ll'))
+        pu = int(request.GET.get('ul'))
+      except:
+        messages.error(request,"Please enter integer values")
+        context={
+        'table_data':queryset,
+        'login_flag':login_flag,
+        'cat_dict':cat_dict,
+        'll':pl if pl else 1,
+        'ul':pu if pu else 50000,
+        'queries':queries_without_page,
+        'search_string':srch_string
+          }
+        return render(request,'buyandsell/buy-page.html',context)
+
+      if pu >= 0 and pl >= 0 and pu > pl:
+        price_valid = 1
+      else:
+        messages.error(request,"Please enter correct")
+        context={
+        'table_data':queryset,
+        'login_flag':login_flag,
+        'cat_dict':cat_dict,
+        'll':pl if pl else 1,
+        'ul':pu if pu else 50000,
+        'queries':queries_without_page,
+        'search_string':srch_string
+          }
+        return render(request,'buyandsell/buy-page.html',context)
+
     for word in words:
       result = SaleItems.items.filter(item_name__icontains=word,is_active=True)
       for temp in result:
@@ -692,9 +893,20 @@ def seeall(request,search_type):
     for item_id in count_date_sorted_queryset:
       queryset.append(un_queryset[item_id])
 
-    queries_without_page=request.GET.copy()                      #this is for preserving the query parameter on pagination
-    if queries_without_page.has_key('page'):
-      del queries_without_page['page']
+    if price_valid:
+      queryset = [obj for obj in queryset if obj.cost >= pl and obj.cost <= pu]
+
+    if len(queryset) <= 16:
+      context={
+        'table_data':queryset,
+        'login_flag':login_flag,
+        'cat_dict':cat_dict,
+        'll':pl if pl else 1,
+        'ul':pu if pu else 50000,
+        'queries':queries_without_page,
+        'search_string':srch_string
+            }
+      return render(request,'buyandsell/buy-page.html',context)
 
     paginator = Paginator(queryset, 10)
     page = request.GET.get('page', 1)
@@ -708,12 +920,19 @@ def seeall(request,search_type):
       logger.info(request.user.username+": pagination error EmptyPage")
       table_data = paginator.page(paginator.num_pages)
 
-    context={'table_data':table_data,
-             'paginator':paginator,
-             'page_list':page_list,
-             'queries':queries_without_page
+    context={
+    'table_data':table_data,
+    'login_flag':login_flag,
+    'cat_dict':cat_dict,
+    'paginator':paginator,
+    'page_list':page_list,
+    'll':pl if pl else 1,
+    'ul':pu if pu else 50000,
+    'queries':queries_without_page,
+    'search_string':srch_string
     }
-    return render(request,'buyandsell/buy.html',context)
+
+    return render(request,'buyandsell/buy-page.html',context)
 
 @login_required
 def edit(request,form_type,pk): #need to activate if item date  is renewed
@@ -1075,7 +1294,7 @@ def _get_page_list(page_no, pages, items_per_page):
   l = range(1, pages+1)
   page_no = int(page_no)
 
-  items_per_page /= 2
+  items_per_page /= 4
   if page_no in l[0:items_per_page]:
     return l[0:2*items_per_page]
 

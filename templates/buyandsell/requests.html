@@ -57,10 +57,10 @@
                                     <li role="presentation"><a role="menuitem" tabindex="-1" href="">Logout</a></li>
                                 </ul>
                             </div>
-                            <button type="button" data-toggle="modal" data-target="#request-item-modal" class="btn global-button">
+                            <button type="button" onclick="request_form()" class="btn global-button">
                                 Request
                             </button>
-                            <button type="button" data-toggle="modal" data-target="#sell-item-modal" class="btn global-button" style="margin-left:60px">
+                            <button type="button" onclick="sell_form()" class="btn global-button" style="margin-left:60px">
                                 Sell
                             </button>
                         </div>
@@ -97,20 +97,34 @@
               </li>
           {% endif %}
 					</ol>
-					<a href="#">
-						<button type="button" class="btn global-button watch-button" onclick="watch(this,'{{mc}}','{{c}}')" >
-{% if mc and not category %}
-{% if mc in main_watched %}
-{{ mc }}
-{% endif %}
-{% endif %}
-{% if mc and  category %}
-{% if category in sub_watched %}
-{{ category }}
-{% endif %}
-{% endif %}
+          <a>
+          {% if mc and not category %}
+            {% if mc in main_watched %}
+             <button type="button" class="btn global-button watch-button watch-button-watching" onclick='watch(this,"{{mc}}","{{c}}" )'>
+             Watching
+             </button>
+             {% else %}
+             <button type="button" class="btn global-button watch-button" onclick='watch(this,"{{mc}}","{{c}}" )'>
+             Watch this category
+             </button>
+              {% endif %}
+          {% endif %}
 
-						</button>
+          {% if mc and  category %}
+            {% if category in sub_watched %}
+             <button type="button" class="btn global-button watch-button watch-button-watching" onclick='watch(this,"{{mc}}","{{c}}" )'>
+             Watching
+             </button>
+              {% else %}
+             <button type="button" class="btn global-button watch-button" onclick='watch(this,"{{mc}}","{{c}}" )'>
+             Watch this category
+             </button>
+              {% endif %}
+            {% endif %}
+
+          {% if not mc and not category %}
+          {% endif %}
+
 					</a>
 				</div>
 			</div>
@@ -130,14 +144,14 @@
 							<div class="col-md-12">
 								<form action="" class="input-group-addon view-what">
 									<div>
-										<input type="radio" name="radio" id="items-for-sale" class="radio" checked>
+										<input type="radio" name="radio" id="items-for-sale" class="radio">
 									<label for="items-for-sale">
 										<a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}"><div></div>Items for Sale</a>
 									</label>
 </div>
 
 									<div>
-										<input type="radio" name="radio" id="requests" class="radio"/>
+										<input type="radio" name="radio" id="requests" class="radio"/ checked>
 										<label for="requests">
 											<a href="/buyandsell/viewrequests{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}"><div></div>Requests</a>
 										</label>
@@ -156,8 +170,26 @@
                                         <div class="slider-back"></div>
                                         <div id="slider-range"></div>
 										<div class="prices" style= "margin-top:20px;">
-											<input type="text" id="low" class="price-range-text-input" placeholder="Min" name="ll">
-											<input type="text" id="high" class="price-range-text-input" placeholder="Max" name="ul">
+{% if ll and ul %}
+<script>
+
+		$( "#slider-range" ).slider
+		({
+		  range: true,
+		  min: 0,
+		  max: 50000,
+      values:[{{ll}},{{ul}}],
+		  slide: function( event, ui )
+		  {
+			$( "#low" ).val(ui.values[ 0 ]);
+			$( "#high" ).val(ui.values[ 1 ] );
+		  }
+		});
+</script>
+{% endif %}
+                      <input type="hidden"  name="keyword"  value="{% if search_string %}{{search_string}}{% endif %}">
+											<input type="text" id="low" class="price-range-text-input" value="{% if ll %}{{ll}}{% endif %}" name="ll">
+											<input type="text" id="high" class="price-range-text-input" value="{% if ul %}{{ul}}{% endif %}" name="ul">
 											<button class="global-browse price-range-submit">
 												<span class="glyphicon glyphicon-menu-right"></span>
 											</button>
@@ -191,7 +223,7 @@
                     </table>
 {% endif %}
                 </div>
-
+{% if paginator %}
 {% block paginator %}
                 <nav>
                     <ul class="pagination pagination-customized">
@@ -245,6 +277,7 @@
                     </ul>
                 </nav>
 {% endblock %}
+{% endif %}
 			</div>
 
 		</div>
