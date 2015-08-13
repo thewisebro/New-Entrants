@@ -39,8 +39,8 @@
     {% ifequal title 'Educational Details' %}
      {% if recent %}
       <p><label for="id_form-0-year">Year:</label> <input disabled=True id="id_form-0-year" name="form-0-year" type="number" value="{{ recent.year }}"></p>
-      <p><label for="id_form-0-sgpa">SGPA:</label> <input disabled=True id="id_form-0-sgpa" name="form-0-sgpa" step="any" type="number" value="{{ recent.cgpa }}"></p>
-      <p><label for="id_form-0-cgpa">CGPA:</label> <input disabled=True id="id_form-0-cgpa" name="form-0-cgpa" step="any" type="number" value="{{ recent.sgpa }}"></p>
+      <p><label for="id_form-0-sgpa">SGPA:</label> <input disabled=True id="id_form-0-sgpa" name="form-0-sgpa" step="any" type="number" value="{{ recent.sgpa }}"></p>
+      <p><label for="id_form-0-cgpa">CGPA:</label> <input disabled=True id="id_form-0-cgpa" name="form-0-cgpa" step="any" type="number" value="{{ recent.cgpa }}"></p>
       <p><label for="id_form-0-course">Course:</label>
       <select disabled=True id="id_form-0-course" name="form-0-course">
       <option value="{{ recent.course.0 }}">{{ recent.course.1 }}</option>
