@@ -18,14 +18,13 @@ import logging
 
 import cStringIO as StringIO
 from internship.models import *
-from internship import forms 
+from internship import forms
 from internship.views import resume, resume_to_verify
-from placement.utils import get_resume_binary
+from placement.utils import get_resume_binary, previous_sem
 from internship.utils import handle_exc
 from nucleus.models import Student, Branch, StudentInfo
 from placement.models import InternshipInformation, ProjectInformation, EducationalDetails
 from placement.policy import current_session_year
-
 from django.conf import settings
 
 # Permission denied page. User will be redirected to this page if he fails the user_passes_test.
@@ -284,16 +283,28 @@ def selected_students(request, company_id) :
         sheet.write(row, 7, '-')
         sheet.write(row, 8, '-')
         sheet.write(row, 14, '-')
-      sheet.write(row, 9, student.cgpa)
+      edu = EducationalDetails.objects.filter(student=student, course = previous_sem(student.semester))
+      if edu:
+        sheet.write(row, 9, edu[0].cgpa)
+      else:
+        sheet.write(row, 9, "-")
       try :
-        tenth_marks = EducationalDetails.objects.get(student = student, course = '10TH')
-        sheet.write(row, 10, tenth_marks.cgpa)
-      except EducationalDetails.DoesNotExist :
+        tenth_marks_edu = EducationalDetails.objects.filter(student = student, course = '10TH')
+        if tenth_marks_edu:
+          tenth_marks = tenth_marks_edu[0].cgpa
+          sheet.write(row, 10, tenth_marks)
+        else:
+          sheet.write(row, 10, '-')
+      except :
         sheet.write(row, 10, '-')
       try :
-        twelfth_marks = EducationalDetails.objects.get(student = student, course = '12TH')
-        sheet.write(row, 11, twelfth_marks.cgpa)
-      except EducationalDetails.DoesNotExist :
+        twelfth_marks_edu = EducationalDetails.objects.filter(student = student, course = '12TH')
+        if twelfth_marks_edu:
+          twelfth_marks = twelfth_marks_edu[0].cgpa
+          sheet.write(row, 11, twelfth_marks)
+        else:
+          sheet.write(row, 11, '-')
+      except :
         sheet.write(row, 11, '-')
       sheet.write(row, 12, student.user.contact_no)
       sheet.write(row, 13, student.user.email)
@@ -406,3 +417,48 @@ def branch_details(request, branch_code = None) :
     return handle_exc(e, request)
 
 
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def import_intern_priority(request):
+#  if request.method=='POST':
+    company_priority = CompanyPriority.objects.all()
+    student_list = [l.student for l in company_priority]
+    student_list = list(set(student_list))
+    company_list = list(set([l.company for l in company_priority]))
+    company_list = list(set(company_list))
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('sheet 1')
+
+    headers = ['Enrollment No', ' Name', 'CGPA', 'Email']
+    for count in range(len(company_list)):
+      headers.append("Priority"+str(count+1))
+    final_list = []
+    for people in student_list:
+      try:
+        a = [people.user.username, people.user.name, people.cgpa, people.user.email]
+        priority = CompanyPriority.objects.filter(student=people).order_by('priority')
+        company_pri = [x.company.name_of_company for x in priority]
+        while len(company_pri)<len(company_list):
+          company_pri.append('-')
+        a.extend(company_pri)
+        final_list.append(a)
+      except:
+        message = 'Some error contact IMG'
+    try:
+      final_len = len(final_list[0])
+    except IndexError:
+      final_len = 0
+    print final_list
+    for (col, heading) in enumerate(headers):
+       ws.write(2, col+1, heading)
+    row = 3
+    for data in final_list:
+     for r in range(len(data)):
+       ws.write(row, r+1, data[r])
+     row +=1
+
+    file_name = 'Priority_MS_GS_intern'
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=%s.xls'%file_name
+    wb.save(response)
+    return response
