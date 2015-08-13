@@ -497,3 +497,8 @@ function transaction_form(type,id){
   });
  opened_dialog='trans_form';
 }
+
+
+
+
+

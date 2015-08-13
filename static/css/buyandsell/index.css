@@ -305,7 +305,7 @@ input.radio:empty
     height: 16px;
     margin:-3px 10px 0 0;
     vertical-align:middle;
-    background-image: url("../images/radio-button-empty.png");
+    background-image: url("../../images/buyandsell/radio-button-empty.png");
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -313,7 +313,7 @@ input.radio:empty
 }
 input[type="radio"]:checked + label div
 {
-    background-image:url("../images/radio-button-checked.png");
+    background-image:url("../../images/buyandsell/radio-button-checked.png");
 }
 
 .pageContent

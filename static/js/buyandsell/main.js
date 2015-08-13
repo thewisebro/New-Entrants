@@ -204,31 +204,18 @@
             }
 
         );
-
 		// Code for the price range selector (starts)
-		$( "#slider-range" ).slider
-		({
-		  range: true,
-		  min: 0,
-		  max: 50000,
-		  values: [ 0, 50000 ],
-		  slide: function( event, ui )
-		  {
-			$( "#low" ).val(ui.values[ 0 ]);
-			$( "#high" ).val(ui.values[ 1 ] );
-		  }
-		});
-		
-		$( "#low" ).val
-		( 
+
+	/*	$( "#low" ).val
+		(
 			$( "#slider-range" ).slider( "values", 0 )
 		);
-		
+
 		$( "#high" ).val
-		( 
+		(
 			$( "#slider-range" ).slider( "values", 1 )
 		);
-		 // Code for the price range selector (ends)
+		 // Code for the price range selector (ends)*/
 
 
         //Code to show the edit button when the item is hovered in my account page

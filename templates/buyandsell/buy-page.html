@@ -77,7 +77,7 @@
 							<div class="col-md-12">
 								<form action="" class="input-group-addon view-what">
 									<div>
-										<input type="radio" name="radio" id="items-for-sale" class="radio" checked>
+										<input type="radio" name="radio" id="items-for-sale" class="radio" checked >
 									<label for="items-for-sale">
 										<a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}"><div></div>Items for Sale</a>
 									</label>
@@ -98,13 +98,31 @@
 							<div class="col-md-12">
 								<p>Price Range</p>
 
-								<form action="" class="input-group-addon view-what" method="get">
+								<form action="" class="input-group-addon view-what" method="get" enctype = "text/plain">
 									<div class="price-line">
                                         <div class="slider-back"></div>
                                         <div id="slider-range"></div>
 										<div class="prices" style= "margin-top:20px;">
-											<input type="text" id="low" class="price-range-text-input" placeholder="Min" name="ll">
-											<input type="text" id="high" class="price-range-text-input" placeholder="Max" name="ul">
+              {% if ll and ul %}
+                <script>
+
+		        $( "#slider-range" ).slider
+		        ({
+		        range: true,
+		        min: 0,
+		        max: 50000,
+            values:[{{ll}},{{ul}}],
+		        slide: function( event, ui )
+		        {
+			      $( "#low" ).val(ui.values[ 0 ]);
+			      $( "#high" ).val(ui.values[ 1 ] );
+		        }
+		        });
+            </script>
+            {% endif %}
+                      <input type="hidden"  name="keyword"  value="{% if search_string %}{{search_string}}{% endif %}">
+											<input type="text" id="low" class="price-range-text-input" value="{% if ll %}{{ll}}{% endif %}" name="ll">
+											<input type="text" id="high" class="price-range-text-input" value="{% if ul %}{{ul}}{% endif %}" name="ul">
 											<button class="global-browse price-range-submit">
 												<span class="glyphicon glyphicon-menu-right"></span>
 											</button>
@@ -136,7 +154,7 @@
 {% endfor %}
 					</div>
                 </div>
-{% if page_list %}
+{% if paginator %}
 {% block paginator %}
                 <nav>
                     <ul class="pagination pagination-customized">
