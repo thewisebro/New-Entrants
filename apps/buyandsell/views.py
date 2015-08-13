@@ -455,7 +455,7 @@ def selldetails(request,pk):
 
   show_contact=1
   try:
-    item = SaleItems.objects.get(pk=pk)
+    item = SaleItems.items.get(pk=pk)
   except:
     messages.error(request , "OOps!, this item is either expired ,sold or deleted")
     return render(request,'buyandsell/selldetails.html')
@@ -495,7 +495,7 @@ def requestdetails(request,pk):
 
   show_contact=1
   try:
-    item=RequestedItems.objects.get(pk=pk)
+    item=RequestedItems.items.get(pk=pk)
   except:
     mesages.error(request , "OOps!, this item is either expired ,sold or deleted")
     return render(request,'buyandsell/requestdetails.html')
@@ -759,7 +759,8 @@ def seeall(request,search_type):
         'll':pl if pl else 1,
         'ul':pu if pu else 50000,
         'queries':queries_without_page,
-        'search_string':srch_string
+        'search_string':srch_string,
+        'search_flag':True
           }
         return render(request,'buyandsell/requests.html',context)
 
@@ -774,7 +775,8 @@ def seeall(request,search_type):
         'll':pl if pl else 1,
         'ul':pu if pu else 50000,
         'queries':queries_without_page,
-        'search_string':srch_string
+        'search_string':srch_string,
+        'search_flag':True
           }
         return render(request,'buyandsell/requests.html',context)
 
@@ -804,7 +806,8 @@ def seeall(request,search_type):
         'll':pl if pl else 1,
         'ul':pu if pu else 50000,
         'queries':queries_without_page,
-        'search_string':srch_string
+        'search_string':srch_string,
+        'search_flag':True
             }
       return render(request,'buyandsell/requests.html',context)
 
@@ -829,7 +832,8 @@ def seeall(request,search_type):
     'll':pl if pl else 1,
     'ul':pu if pu else 50000,
     'queries':queries_without_page,
-    'search_string':srch_string
+    'search_string':srch_string,
+    'search_flag':True
     }
 
     return render(request,'buyandsell/requests.html',context)
@@ -860,7 +864,8 @@ def seeall(request,search_type):
         'll':pl if pl else 1,
         'ul':pu if pu else 50000,
         'queries':queries_without_page,
-        'search_string':srch_string
+        'search_string':srch_string,
+        'search_flag':True
           }
         return render(request,'buyandsell/buy-page.html',context)
 
@@ -875,7 +880,8 @@ def seeall(request,search_type):
         'll':pl if pl else 1,
         'ul':pu if pu else 50000,
         'queries':queries_without_page,
-        'search_string':srch_string
+        'search_string':srch_string,
+        'search_flag':True
           }
         return render(request,'buyandsell/buy-page.html',context)
 
@@ -904,7 +910,8 @@ def seeall(request,search_type):
         'll':pl if pl else 1,
         'ul':pu if pu else 50000,
         'queries':queries_without_page,
-        'search_string':srch_string
+        'search_string':srch_string,
+        'search_flag':True
             }
       return render(request,'buyandsell/buy-page.html',context)
 
@@ -929,7 +936,8 @@ def seeall(request,search_type):
     'll':pl if pl else 1,
     'ul':pu if pu else 50000,
     'queries':queries_without_page,
-    'search_string':srch_string
+    'search_string':srch_string,
+    'search_flag':True
     }
 
     return render(request,'buyandsell/buy-page.html',context)

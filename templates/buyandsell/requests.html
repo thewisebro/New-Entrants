@@ -78,7 +78,7 @@
 				</div>
 				<div class="col-md-9">
 					<ol class="breadcrumb">
-          {% if not mc and not category %}
+          {% if not mc and not category  and not search_flag %}
               <li>
                 <a class="active" href="/buyandsell/viewrequests">Latest</a>
               </li>
@@ -95,6 +95,15 @@
                <li>
     <a class="active" href="/buyandsell/viewrequests/{{mc}}/{{c}}">{{ category}}</a>
               </li>
+          {% endif %}
+
+         {% if  search_flag %}
+          <li>
+                <a class="active">Searched</a>
+          </li>
+            <li>
+                <a class="active">{{search_string}}</a>
+            </li>
           {% endif %}
 					</ol>
           <a>
@@ -146,14 +155,24 @@
 									<div>
 										<input type="radio" name="radio" id="items-for-sale" class="radio">
 									<label for="items-for-sale">
-										<a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}"><div></div>Items for Sale</a>
+									{% if search_flag %}
+                          <a href="/buyandsell/see_all/sell/?{% if queries %}{{queries.urlencode}}{% endif %}"><div></div>Items for Sale</a>
+                  {% else %}
+                         	<a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}"><div></div>Items for Sale</a>
+                  {% endif %}
+
 									</label>
 </div>
 
 									<div>
 										<input type="radio" name="radio" id="requests" class="radio"/ checked>
 										<label for="requests">
+									{% if search_flag %}
+                          <a href="/buyandsell/see_all/requests/?{% if queries %}{{queries.urlencode}}{% endif %}"><div></div>Requests</a>
+                    {% else %}
 											<a href="/buyandsell/viewrequests{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}"><div></div>Requests</a>
+                    {% endif %}
+
 										</label>
 									</div>
 								</form>
