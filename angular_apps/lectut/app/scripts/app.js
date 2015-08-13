@@ -44,36 +44,9 @@ lectutApp.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
 
 lectutApp.config(['$locationProvider','$routeProvider',
   function( $locationProvider, $routeProvider) {
+   
     
-    // $urlRouterProvider.otherwise("/");
-      /* $stateProvider
-        .state('home',{
-           url: "/",
-           templateUrl: 'views/partials/common-course-home.html',
-           controller: 'CourseHomeCtrl' 
-        })
-        .state('course', {
-           url: "course/:courseId",
-           templateUrl: 'views/partials/course-detail.html',
-           controller: 'CourseDetailCtrl'
-         })
-        .state('course.feeds', {
-           url: "/feeds",
-           templateUrl: 'views/partials/course-feeds.html',
-           controller: 'CourseFeedsCtrl'
-         })
-        .state('course.files', {
-           url: "/files",
-           templateUrl: 'views/partials/course-files.html',
-           controller: 'CourseFilesCtrl'
-         })
-         .state('course.members', {
-           url: "/members",
-           templateUrl: 'views/partials/course-members.html',
-           controller: 'CourseMembersCtrl'
-         });  */
-    
-    $routeProvider.
+   $routeProvider.
       when('/', {
         templateUrl: 'views/partials/common-course-home.html',
         controller: 'CourseHomeCtrl'
@@ -101,6 +74,10 @@ lectutApp.config(['$locationProvider','$routeProvider',
       when('/course/:courseId/files/:fileId', {
         templateUrl: 'views/partials/one-file.html',
         controller: 'CourseOneFileCtrl'
+      }).
+      when('/faculty/:facultyId', {
+        templateUrl: 'views/partials/faculty.html',
+        controller: 'FacultyCtrl'
       }).
       otherwise({
         redirectTo: '/'

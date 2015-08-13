@@ -21,6 +21,7 @@ class UserIndex(indexes.SearchIndex, indexes.Indexable):
   username = indexes.CharField(model_attr='username')
   contact_no = indexes.CharField(model_attr='contact_no', null = True)
   email = indexes.CharField(model_attr='email', null = True)
+  name_auto = indexes.EdgeNgramField(model_attr='name')
 
   def get_model(self):
     return User
