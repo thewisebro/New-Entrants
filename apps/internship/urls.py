@@ -17,7 +17,7 @@ urlpatterns += patterns ('internship.views_student',
   (r'^company/(?P<company_id>\w+)/apply/$', 'apply'),
   (r'^company/(?P<company_id>\w+)/withdraw/$', 'withdraw'),
   (r'^company/(?P<company_id>\w+)/resume/$', 'submitted_resume'),
-  (r'^priority/$', 'set_priority'),
+#  (r'^priority/$', 'set_priority'),
 )
 
 urlpatterns += patterns ('internship.views_notice',
