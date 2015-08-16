@@ -138,7 +138,7 @@ def company_edit(request, company_id) :
         l.info(request.user.username +': form error in company edit.')
         messages.error(request, form.errors, extra_tags='form_error')
     else :
-      form = forms.CompanyForm(instance = company)
+      form = forms.CompanyForm(instance = company, auto_id='%s')
       if company.brochure :
         # Change the url of brochure
         company.brochure.name = u'internship/brochures/' + unicode(company.id) + '/'
