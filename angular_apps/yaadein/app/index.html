@@ -8,7 +8,7 @@
     <!-- /build -->
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <link rel="shortcut icon" href="/yaadein/favicon.ico">
+    <link rel="shortcut icon" href="/yaadein/data/favicon.ico">
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700|Pacifico" rel="stylesheet">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
@@ -56,7 +56,7 @@
               placeholder="Search people, spots..."
               pause="50"
               selected-object="personSelected"
-              remote-url="http://172.25.55.156/yaadein_api/search/3/?q="
+              remote-url="/yaadein_api/search/3/?q="
               search-fields="value"
               remote-url-data-field="results"
               remote-url-response-formatter="addOriginToImageUrl"
@@ -79,13 +79,13 @@
             <form class="post-form" name="postForm">
               <div class="tag-input-box">
                 <i class="inline fa fa-user-plus"></i>
-                <tags-input type="text" ng-model="newPost.user_tags" class="" display-property="value" placeholder="Tag friends" tabindex="0" add-from-autocomplete-only="true" replace-spaces-with-dashes="false" show-focus="true">
-                   <auto-complete source="loadTags($query, 4)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
+                <tags-input type="text" ng-model="newPost.user_tags" class="" display-property="value" placeholder="Tag your friends here" tabindex="0" add-from-autocomplete-only="true" replace-spaces-with-dashes="false" show-focus="true">
+                   <auto-complete source="loadTags($query, 1)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
                 </tags-input>
               </div>
               <div class="tag-input-box">
                 <i class="inline fa fa-map-marker"></i>
-                <tags-input type="text" ng-model="newPost.spot" class="" display-property="value" placeholder="Spot" add-from-autocomplete-only="true" tabindex="1" replace-spaces-with-dashes="false" max-tags="1">
+                <tags-input type="text" ng-model="newPost.spot" class="" display-property="value" placeholder="Where did this happen?" add-from-autocomplete-only="false" tabindex="1" replace-spaces-with-dashes="false" max-tags="1" on-tag-added="formatSpot($tag)">
                   <auto-complete source="loadSpots($query)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
                 </tags-input>
               </div>
@@ -102,7 +102,7 @@
                   required
                   name="message"
                   tabindex="2"
-                  class="big-input" placeholder="Type memory here" style="resize:none;" ng-model="newPost.post_text"></textarea>
+                  class="big-input" placeholder="Share your memories here... You can also include hashtags and select emojis by typing the : character." style="resize:none;" ng-model="newPost.post_text"></textarea>
                   <!-- <div class="private-select">
                     <input type="checkbox" ng-model="postStatus">&nbsp;Private
                   </div> -->

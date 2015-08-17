@@ -1,5 +1,10 @@
 <div id="search-div">
 <i id="search-icon" class="fa fa-search"></i>
-<input type="text" id="search-inp" placeholder="Search notices" onkeydown="search_keydown(event)">
+<input type="text" id="search-inp" placeholder="Search notices" onkeydown="search_keydown(event)" autocomplete="off">
+<a class="tooltip">
+<i id="search-info" class="fa fa-info-circle"></i>
+<span class="tooltip-content"><span class="tooltip-text"><span class="tooltip-inner"><p id="search-info-1">Apart from normal keyword search, any of the following date/range formats are supported : </p><p id="search-info-2">"Today", "Yesterday", "Last week", "Last thursday", "Apr 8", "24th Apr to 27-04-2015", "08/04/2015", "Yesterday - 1 month"</p></span></span></span>
+
+</a>
 </div>
 

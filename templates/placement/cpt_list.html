@@ -15,7 +15,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url 'placement.views_admin.cpt' year %}">{{ name }}</a>
+      <a href="/placement/cpt/{{ year }}">{{ name }}</a>
     </li>
     {% endif %}
     {% endfor %}
@@ -56,7 +56,7 @@
       <td>{{ forloop.counter }}</td>
       <td>
         {% if members_editable %}
-        <a href="{% url 'placement.views_admin.cpt_edit' member.id %}">
+        <a href="/placement/cpt/member/{{ member.id }}/">
           {{ member.name }}
         </a>
         {% else %}

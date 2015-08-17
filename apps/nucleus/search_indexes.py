@@ -19,8 +19,9 @@ class UserIndex(indexes.SearchIndex, indexes.Indexable):
   text = indexes.CharField(document = True,use_template = True)
   name = indexes.CharField(model_attr='name')
   username = indexes.CharField(model_attr='username')
-  contact_no = indexes.CharField(model_attr='contact_no')
-  email = indexes.CharField(model_attr='email')
+  contact_no = indexes.CharField(model_attr='contact_no', null = True)
+  email = indexes.CharField(model_attr='email', null = True)
+  name_auto = indexes.EdgeNgramField(model_attr='name')
 
   def get_model(self):
     return User

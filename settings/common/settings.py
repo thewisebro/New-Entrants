@@ -48,14 +48,12 @@ MANAGERS = ADMINS
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-    'NAME': 'fish',                   # Or path to database file if using sqlite3.
+    'NAME': 'channeli',                   # Or path to database file if using sqlite3.
                                           # The following settings are not used with sqlite3:
     'USER': 'channeli',
     'PASSWORD': 'channeli',
 
-    'HOST': '172.25.55.156',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-
-    'HOST': '172.25.55.156',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+    'HOST': '192.168.121.187',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
 
     'PORT': '',                           # Set to empty string for default.
   }
@@ -94,7 +92,7 @@ USE_I18N = True
 USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = True
+USE_TZ = False
 
 SITES = {
   'INTRANET': {'id': 1, 'domain': 'https://channeli.in'},
@@ -108,6 +106,7 @@ DEVELOPMENT_SITES = {
   'IMGSITE': {'id': 3, 'domain': 'http://imgsite.goku.channeli.in'},
 }
 
+IMG_WEBSITE_BASE_URL = '/img_website'
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media') + os.sep
@@ -251,6 +250,7 @@ THIRD_PARTY_APPS = (
 CHANNELI_APPS = (
   'nucleus',
   'jukebox',
+  'facapp',
   'api',
   'moderation',
   'notices',
@@ -278,6 +278,12 @@ CHANNELI_APPS = (
   'yaadein',
   'softwares',
   'mcm',
+  'phpapps',
+  'genforms',
+  'application_form',
+  'grades',
+  'img_website',
+  'redactor',
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + THIRD_PARTY_APPS + CHANNELI_APPS
@@ -287,7 +293,15 @@ FEED_APPS = (
   'lostfound',
   'buysell',
   'lectut',
+  'phpapps',
 )
+
+REDACTOR_OPTIONS = {
+      'lang': 'en',
+      'toolbar': 'default',
+      'imageUpload' : MEDIA_ROOT+'img_website/redactor/',
+}
+REDACTOR_UPLOADS = MEDIA_ROOT + 'img_website/redactor/'
 
 FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
 COMMENTS_APP = 'fluent_comments'
@@ -318,7 +332,7 @@ SHELL_PLUS = "ipython"
 SESSION_COOKIE_NAME = 'CHANNELI_SESSID'
 SESSION_COOKIE_HTTPONLY = False
 SESSION_ENGINE = 'nucleus.session'
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 CACHES = {
   'default': {
@@ -386,6 +400,14 @@ LOGGING = {
       'when'     : 'midnight',
       'backupCount':365
     },
+    'placement_file_logger': {
+      'level':'DEBUG',
+      'class':'logging.handlers.TimedRotatingFileHandler',
+      'formatter': 'verbose',
+      'filename' : os.path.join(PROJECT_ROOT, 'logs/placement'),
+      'when'     : 'midnight',
+      'backupCount':365
+    },
 
   },
   'loggers': {
@@ -406,6 +428,11 @@ LOGGING = {
       'handlers':['console'],
       'level':'INFO'
     },
+    'placement': {
+      'handlers':['console'],
+      'level':'INFO'
+    },
+
   }
 }
 

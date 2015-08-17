@@ -1,0 +1,165 @@
+{% extends "facapp/base.html" %}
+
+
+{% block app_content %}
+  
+  <script type="text/javascript" src="{{ STATIC_URL }}js/csrf.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/ckeditor/ckeditor.js"></script>
+
+  <script type="text/javascript">
+    function show_error(msg) {
+      var e_d = $('#error_msg_div');
+      e_d.empty();
+      e_d.removeAttr('hidden');
+      e_d.append(msg);
+    }
+    function enable_submit(arg) {
+      if(arg) {
+        $('#mail_submit').removeAttr('disabled');
+        $('#mail_ck').removeAttr('hidden');
+      }
+      else {
+        $('#mail_submit').attr('disabled', 'disabled');
+        $('#mail_ck').attr('hidden', 'true');
+      }
+    }
+    function check_submit() {
+      var total_checked = $('.student:checked').length;
+      if (total_checked > 0) enable_submit(true);
+      else enable_submit(false);
+    }
+    function clear_check_boxes(s) {
+      var id_val = s.value;
+      $('#id_student_'+id_val+':checked').each(function() {
+        $(this).removeAttr('checked');
+      });
+      check_submit();
+    }
+    function select_check_boxes(s) {
+      var id_val = s.value;
+      $('#id_student_'+id_val+':not(:checked)').each(function() {
+        $(this).attr('checked', true);
+      });
+      check_submit();
+    }
+    $(document).ready(function() {
+      $('#id_Branch').change(function(e) {
+        $.ajax({
+          type: "POST",
+          url: "/facapp/mass_mailer/choose_semester/", 
+          dataType: "jsonp",
+          data: {
+            branch: $('#id_Branch').val(),
+            timestamp: e.timeStamp
+          },
+          success: function(data) {
+	    if(data[0]['success']==false) {
+              show_error(data[1]['msg']);
+              return;
+            }
+            var semesters = $('#id_Semesters');
+            semesters.empty();
+            var len = data.length;
+            for (i=0;i<len;i++) {
+	      var code = data[i]["sem_code"];
+              var value = data[i]["sem_value"];
+              var count = data[i]["count"];
+	      semesters.append("<input type=\"checkbox\" name=\"semester\" class=\"semesters\" value=" + code + " id=" + code + " />" + value + "&nbsp;&nbsp;&nbsp;&nbsp;<b>Count: " + count + " </b></br><div id=div_id_" + code + " ></div>");
+	    }                                 // End for loop.
+	    semesters.removeAttr('hidden');
+	    enable_submit(false);
+            $('.semesters').click(function(event) {
+	      var curr = $(this);
+	      var curr_sem = curr.val();
+	      if (curr.is(':checked')) {
+		$.ajax({
+		  type: "POST",
+		  url: "/facapp/mass_mailer/show_student_list/",
+		  dataType: "jsonp",
+		  data: {
+		    branch: $('#id_Branch').val(),
+		    semester: curr_sem,
+		    timestamp: event.timeStamp
+		  },
+		  success: function(ydata) {
+	            if(data[0]['success']==false) {
+                      show_error(data[1]['msg']);
+                      return;
+		    }
+		    var ylen = ydata.length;
+		    var b_e = $('#div_id_' + curr_sem);
+		    b_e.empty();
+		    if (ylen>0) {
+                      b_e.append('<ul>');
+		      for(i=0;i<ylen;i++) {
+			var enrollment_no = ydata[i]['enrollment_no'];
+			var name = ydata[i]['name'];
+		        b_e.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" checked=\"true\" name=\"student\" class=\"student\" value=" + enrollment_no + " id=\"id_student_" + curr_sem + "\" onclick=\"check_submit();\"/>" + name + "</br>");
+		      }
+		      b_e.append('</ul>');
+
+
+
+
+
+		/************************************************************/
+		      // NOTE: Not working in Firefox 11.
+		/************************************************************/
+
+		      b_e.append("<input type=\"button\" onclick=\"clear_check_boxes("+curr_sem+");\" name=\"clear_button\" value=\"Clear All\"/>");
+		      b_e.append("<input type=\"button\" onclick=\"select_check_boxes("+curr_sem+");\" name=\"clear_button\" value=\"Select All\"/>");
+
+		/************************************************************/
+		      // NOTE: Not working in Firefox 11.
+		/************************************************************/
+
+
+
+
+		      b_e.show();
+		      enable_submit(true);
+		    }                         // End if ylen>0 condition.
+		  }                           // End success function.
+		});                           // End AJAX call.
+	      }                               // End if checked condition.
+	      else {
+		var b_e = $('#div_id_' + curr_sem);
+		b_e.hide();
+	        var total_checked = $('.semesters:checked').length;
+	        if (total_checked > 0) enable_submit(true);
+	        else enable_submit(false);
+	      }
+            });                               // End semesters click function.
+	  }                                   // End success function.
+        });                                   // End AJAX call.
+      });                                     // End change event.
+
+      // Now trigger the event for the first element in the drop down.
+      $('#id_Branch').change();
+    });                                       // End document ready event.
+  </script>
+
+  <div id='error_msg_div' hidden='true'></div>
+  <form action={{ action }} method="post" id="messageform" enctype='multipart/form-data'>
+    {% csrf_token %}
+    <select name="branch" id="id_Branch">
+      {% for b in branch_list %}
+      <option value={{ b.code }}>{{ b.name }}</option>
+      {% endfor %}
+    </select>
+    <div id='id_Semesters' hidden='true'></div>
+    <br/>
+    <br/>
+    <div id='mail_ck' hidden='true'>
+      {# Everything is this div is controlled by the enable_submit functions. #}
+      Subject: <input type='text' name='subject'></input><br/>
+      Multiple Attachments: <input type='file' name='attachments' multiple=''></input><br/>
+      <textarea name='mail_body' id='id_mail_body'></textarea>
+      <script type="text/javascript">
+        var editor = CKEDITOR.replace('mail_body', { customConfig : 'config_facapp.js' }); {# name or id of the textarea th at has to be used with CKEditor #}
+      </script>
+    </div>
+    <input type='submit' id='mail_submit' value='Submit' disabled='disabled'/>
+  </form>
+
+{% endblock %} {# End app_content block. #}

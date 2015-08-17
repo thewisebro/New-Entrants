@@ -60,7 +60,7 @@ def get_users(user):
         Q(birth_date__month = datetime.now().month))
   if group == 'Faculty':
     users = users.filter(faculty__department=user.faculty.department)
-    users = users.filter(birth_date_day=datetime.now().day, birth_date__month=datetime.now().month)
+    users = users.filter(birth_date__day=datetime.now().day, birth_date__month=datetime.now().month)
   return users
 
 @login_required
@@ -82,7 +82,7 @@ def wish(request,username):
     if request.method == 'POST' and request.POST['msg']:
       msg = request.POST['msg']
       bm = BirthdayMessage.objects.create(sender = request.user,receiver = birthday_user,message = msg)
-      Notification.save_notification(app='',text=request.user.html_name()+' wished you : '+escape(msg),url='/birthday/reply/'+str(bm.pk)+'/',users=[birthday_user])
+      Notification.save_notification(app='',text=request.user.html_name+' wished you : '+escape(msg),url='/birthday/reply/'+str(bm.pk)+'/',users=[birthday_user], instance=bm)
       messages.info(request,'Your message has been sent to '+birthday_user.first_name);
       close = True
     elif BirthdayMessage.objects.filter(sender = request.user,receiver = birthday_user,date = date.today()).count()>1:
@@ -102,7 +102,7 @@ def reply(request, message_id):
     bm.reply = msg
     bm.save()
     messages.info(request,'Your message has been sent to '+bm.sender.first_name);
-    Notification.save_notification(app='', text=request.user.html_name()+' replied you : '+escape(msg), url='', users = [bm.sender.student])
+    Notification.save_notification(app='', text=request.user.html_name+' replied you : '+escape(msg), url='', users = [bm.sender], instance=bm)
     close = True
     return render_to_response('birthday/reply.html', {'already_replied' : already_replied, 'close' : close}, context_instance = RequestContext(request))
   return render_to_response('birthday/reply.html', {'close' : close, 'already_replied' : already_replied}, context_instance = RequestContext(request))

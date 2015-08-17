@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/smoothness/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/smoothness/custom-jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/smoothness/nanoscroller.css">
+{{ form.media.css }}
+<style>
+body
+{
+  padding-left:400px;
+}
+div[class="redactor_box"]
+{
+  width:710px;
+}
+/*input[type="submit"], label[for="id_category"], select
+{
+  margin:5px 1440px 0px 0px;
+}*/
+form
+{
+  width:710px;
+}
+input
+{
+margin:10px 0px 10px 0px;
+}
+.nothing
+{
+width:20px;
+}
+input[type="text"]
+{
+width:400px;
+border: 1px solid #f2f3f3;
+color: #909b9c;
+height: 25px;
+/*padding: 0 10px;*/
+}
+#id_short_description
+{
+  border: 1px solid #f2f3f3;
+  color: #909b9c;
+}
+input[type="submit"]
+{
+  height: 35px;
+  line-height: 35px;
+  background-color: #e8522f;
+  outline: none;
+  border: 0px;
+  color: #ffffff;
+  padding: 0 20px;
+}
+select
+{
+  width: 100px;
+  height: 31px;
+  color: #7f8c8d;
+  border: 1px solid #d8dcdd;
+  font-family: 'ProximaNovaBold';
+  font-size: 16px;
+  padding: 0 10px;
+  margin-top: 10px;
+}
+</style>
+{% endblock styles %}
+
+{% block body %}
+  <script type="text/javascript" src="/static/js/jquery/jquery.min.js"></script>
+  <form action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% for field in form %}
+    {% if field.label == "Image" %}
+      {{ field.label_tag }}:
+    {% endif %}
+    {{ field.errors }}
+    {{ field }}
+    <br>
+  {% endfor %}
+  <input type="submit" value="Submit">
+  </form>
+{% endblock body %}
+
+{% block scripts %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery-ui.js"></script>
+  <script>
+    $(document).ready(function(){
+      $('#id_author').autocomplete({
+        source:'/settings/person_search/',
+        minLength:1
+      });
+    });
+  </script>
+  <script src="{{ STATIC_URL }}js/img_website/redactor/redactor.js" type="text/javascript"></script>
+  <script type="text/javascript" src="/static/redactor/jquery-migrate.min.js"></script>
+  <script type="text/javascript" src="/static/redactor/redactor.min.js"></script>
+
+{% endblock scripts %}

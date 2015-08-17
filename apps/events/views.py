@@ -167,7 +167,7 @@ def duration(event):
         if mins!= '00':
           duration_str += ', '+mins+' Minutes'
     elif td.days > 0:
-      duration_str = str(td.days+1)+(' Day' if td.days == 1 else ' Days')
+      duration_str = str(td.days+1)+(' Day' if td.days == 0 else ' Days')
     return duration_str
   else:
     return ''
@@ -179,7 +179,7 @@ def date_str(date):
   return "%s %s" % (date.day, date.strftime("%b"))
 
 def uptotime(event):
-  if event.upto_time:
+  if event.upto_time and event.time:
     if not event.upto_date:
       event.upto_date = event.date
     if event.upto_date == event.date:
@@ -206,11 +206,11 @@ def weekday(event):
 
 def shown_calendar_name(calendar):
   if calendar.cal_type == 'PRI':
-    return 'Personal Calendar'
+    return 'Personal'
   if calendar.cal_type == 'PUB':
-    return calendar.name + ' Calendar'
+    return calendar.name
   if calendar.cal_type == 'GRP':
-    return 'Groups Calendar'
+    return 'Groups'
 
 def diff(d1,d2):
   return (d1-d2.date()).days

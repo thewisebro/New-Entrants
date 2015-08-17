@@ -5,7 +5,7 @@ from django.forms.models import BaseModelFormSet
 
 from core import forms
 from core.forms import CKEditorWidget, CurrencyWidget
-from nucleus.models import Branch, StudentInfo, Student
+from nucleus.models import Branch, StudentInfo, Student, Group
 from placement import models
 from placement import constants as PC
 from placement.policy import current_session_year
@@ -16,6 +16,10 @@ class Place(forms.ModelForm):
     exclude = ('student', 'no_of_companies_placed', 'status', 'placed_company_category','is_debarred' )
 
 class CompanyForm(forms.ModelForm) :
+  def __init__(self, *args, **kwargs):
+    super(CompanyForm, self).__init__(*args, **kwargs)
+    self.auto_id = '%s'
+
   #Search for a better method
   contact_person = forms.ModelChoiceField(queryset = models.CPTMember.objects.filter(year = current_session_year()), required=False)
   open_for_disciplines = forms.ModelMultipleChoiceField(queryset=Branch.objects.all().order_by('degree','department'), widget=forms.CheckboxSelectMultiple)
@@ -45,6 +49,7 @@ class CompanyForm(forms.ModelForm) :
               'website',
               'brochure',
               'sector',
+              'category_required',
               'open_for_disciplines']
     exclude = ('year', )
     widgets = {#'open_for_disciplines' : forms.CheckboxSelectMultiple(),
@@ -96,21 +101,11 @@ class Profile(forms.ModelForm):
                'bank_account_no', 'height', 'blood_group', 'weight',
                'passport_no', 'nearest_station', 'local_guardian_name',
                'local_guardian_address', 'local_guardian_contact_no',
-               'physically_handicapped', 'fulltime', 'resident', 'license_no',
+               'physically_disabled', 'fulltime', 'resident', 'license_no',
                'category', 'home_contact_no')
-  birth_date = forms.DateField(required = True, widget=forms.DateInput(attrs={'class':'iDateField'}))
+  birth_date = forms.CharField(required = False)
 
 class EducationalFormset(BaseModelFormSet):
-  def clean(self):
-    super(EducationalFormset, self).clean()
-    courses = []
-    for form in self.forms:
-      if not form.empty_permitted:
-        courseField = form.cleaned_data['course']
-        if not courseField in courses:
-          courses.append(courseField)
-        else:
-          raise forms.ValidationError("Same courses is not allowed")
     pass
 
 class Contact(forms.ModelForm):
@@ -144,25 +139,16 @@ class ExcelForm(forms.Form):
       else:
         return excel_file
 
-class CompanycontactForm(forms.ModelForm):
-  when_to_contact = forms.DateField(widget=AdminDateWidget, required=False)
-  class Meta:
-    model = models.CompanyContact
-    exclude = {'contactperson', 'last_updated', 'last_contact'}
-
-class ContactpersonForm(forms.ModelForm):
-  class Meta:
-    model = models.ContactPerson
-
-class AssignCoordinatorForm(forms.Form):
-  company_coordinator = forms.ModelChoiceField(queryset=models.CompanyCoordi.objects.all(), empty_label="None", required=False)
-
-class AddCoordinatorForm(forms.Form):
-  student = forms.CharField(widget=forms.TextInput)
-  enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
-  class Meta:
-    model = models.CompanyCoordi
-
+#class CompanycontactForm(forms.ModelForm):
+#  when_to_contact = forms.DateField(widget=AdminDateWidget, required=False)
+#  class Meta:
+#    model = models.CompanyContact
+#    exclude = {'contactperson', 'last_updated', 'last_contact'}
+#
+#class ContactpersonForm(forms.ModelForm):
+#  class Meta:
+#    model = models.ContactPerson
+#
 class CreateSlotForm(forms.ModelForm):
   start_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])
   end_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])
@@ -202,3 +188,51 @@ def BaseModelFormFunction(model_type, exclude_list=None, data=None,**kwargs):
 
   return ObjectModelForm(data,**kwargs)
 
+# Following are the forms for new contact manager app
+
+class AssignCoordinatorForm(forms.Form):
+  company_coordinator = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label="None", required=False)
+
+class ViewCoordinatorWorkForm(forms.Form):
+  company_coordi_work = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label="None", required=False)
+
+class AddCoordinatorForm(forms.Form):
+  student = forms.CharField(widget=forms.TextInput)
+  enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
+
+class AddCompanyInfoForm(forms.ModelForm):
+  class Meta:
+    model = models.CompanyContactInfo
+
+class CommentsForm(forms.ModelForm):
+  class ContactPersonModelChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+      if obj.is_primary:
+        return str(obj.name)+'; '+str(obj.designation)+' (Primary Contact)'
+      return str(obj.name)+'; '+str(obj.designation)
+
+  def __init__(self, *args, **kwargs):
+    company_contact = kwargs.pop('company_contact')
+    super(CommentsForm, self).__init__(*args, **kwargs)
+    if company_contact:
+      self.fields['contact_person'].queryset = models.ContactPerson.objects.filter(company_contact = company_contact).exclude(name="").order_by('-is_primary')
+      try:
+        self.fields['contact_person'].initial = {'contact_person':models.ContactPerson.objects.get(company_contact = company_contact, is_primary=True).id}
+      except:
+        self.fields['contact_person'].initial = {'contact_person':models.ContactPerson.objects.filter(company_contact = company_contact)[0].id}
+
+  contact_person = ContactPersonModelChoiceField(queryset=models.ContactPerson.objects.none() ,required=True, empty_label=None)
+  class Meta:
+    model = models.CompanyContactComments
+    exclude = {'date_created', 'campus_contact'}
+
+class ContactPersonForm(forms.Form):
+    name = forms.CharField(required=True)
+    designation = forms.CharField(required=False)
+    phone_no = forms.CharField(required=False)
+    email = forms.CharField(required=False)
+    contact_id = forms.CharField(widget=forms.HiddenInput(), show_hidden_initial=True, required=False)
+    is_primary = forms.BooleanField(initial=False, required=False)
+    student = forms.ModelChoiceField(queryset=Group.objects.get(name='Company Coordinator').user_set.all(), empty_label='None', required=True)
+    last_contact = forms.BooleanField(required=False, label="Change Last Contact")
+    when_to_contact = forms.DateField(required=False, input_formats=['%Y-%m-%d','%d-%m-%Y'])

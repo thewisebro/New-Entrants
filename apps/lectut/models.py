@@ -13,7 +13,11 @@ from django.db.models.signals import post_save
 from datetime import datetime, timedelta
 import os
 
+from PIL import Image, ImageOps
+
 from notifications.models import Notification
+from django.contrib.comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 
 fs = FileSystemStorage(location='Uploads')
 
@@ -27,13 +31,14 @@ class BaseUpload(models.Model):
           self.__class__.objects.all().update(featured = False)
      super(Model, self).save(*args, **kwargs)"""
 
-Act_Types = (
-            ('lec' , 'Lecture'),
-            ('tut' , 'Tutorial'),
-            ('sol' , 'Solution'),
-            ('que' , 'Question'),
-            ('exm' , 'Exam Papers'),
-            )
+Act_Types = {
+            'lec' : 'Lecture',
+            'tut' : 'Tutorial',
+            'sol' : 'Solution',
+            'que' : 'Question',
+            'exp' : 'Exam Paper',
+            'other':'other'
+}
 
 class DeleteManager(models.Manager):
   def get_query_set(self):
@@ -56,12 +61,16 @@ class Post(models.Model):
 
 # Over-ridden to create notification
   def save(self, *args, **kwargs):
-    post = super(Post , self).save(*args, **kwargs)
-    currentBatch = Batch.objects.get(id = self.batch.id)
-    students = currentBatch.students.all()
-    users = map(lambda x:x.user, students)
     if not self.pk:
-      Notification.save_notification('lectut','The user ' +str(self.upload_user.name)+ ' added a post','#/course/'+currentBatch.id+'/posts/'+post.id+'/',users,self)
+      super(Post , self).save(*args, **kwargs)
+      post = Post.objects.get(id = self.id)
+      currentBatch = Batch.objects.get(id = self.batch.id)
+      students = currentBatch.students.all()
+      users = map(lambda x:x.user, students)
+      noti_text = str(self.upload_user.name) + " has added a post on Lectut"
+      Notification.save_notification('lectut',noti_text,'/lectut/#/course/'+str(currentBatch.id)+'/feeds/'+str(post.id)+'/',users,self)
+    else:
+      post = super(Post , self).save(*args, **kwargs)
     return post
 
   def delete(self):
@@ -69,6 +78,8 @@ class Post(models.Model):
     self.save()
 
   def as_dict(self):
+    ct = ContentType.objects.get_for_model(Post)
+    count = Comment.objects.filter(content_type=ct,object_pk=self.id).count()
     postData={
       'id':self.id,
       'upload_user': str(self.upload_user.name),
@@ -77,6 +88,7 @@ class Post(models.Model):
       'batch':self.batch_dict(),
       'content':self.content,
       'privacy':self.privacy,
+      'count':str(count),
     }
     return postData
 
@@ -96,14 +108,14 @@ class Post(models.Model):
 
 #  Gives path where uploaded file is saved
 def upload_path(instance , filename ):
-  return ('lectut/'+instance.file_type+'/'+filename)
+  return ('lectut/'+instance.post.batch.course.code+'/'+instance.file_type+'/'+filename)
 #  return os.path.join('lectut/',instance.file_type,'/')
 
 
 ''' Each file attributes '''
 class Uploadedfile(BaseUpload):
   post = models.ForeignKey(Post)
-  upload_file=models.FileField(upload_to= upload_path)
+  upload_file=models.FileField(upload_to= upload_path , max_length = 250)
   description=models.CharField(max_length=100 , null=False)
   file_type=models.CharField(max_length=10 , null=False)
   upload_type=models.CharField(max_length=3 , default='tut')
@@ -119,23 +131,42 @@ class Uploadedfile(BaseUpload):
   def delete(self):
     self.deleted = True
     self.save()
+    return None
 
   def as_dict(self):
-        filepath = str(self.upload_file)
-        filename = filepath.split("/")[2]
-        fileData={
+    filepath = str(self.upload_file)
+    filename = filepath.split("/")[3]
+    if self.file_type == 'image':
+      filepath = 'media/'+filepath
+    else:
+      filepath = ''
+    fileData={
            'id':self.id,
-           'post':self.post.id,
-           'upload_file':filename,
-           'filepath':'media/'+filepath,
+#           'post':self.post.id,
+           'upload_file':self.description,
+           'filepath':filepath,
            'username':str(self.post.upload_user.name),
            'datetime_created':str(self.datetime_created),
-           'description':self.description,
            'file_type':self.file_type,
-           'upload_type':self.upload_type,
+           'upload_type':Act_Types[self.upload_type],
            'download_count':self.download_count,
-        }
-        return fileData
+    }
+    return fileData
+
+# Used for search
+  def as_dict_disp(self):
+    filepath = str(self.upload_file)
+    filename = filepath.split("/")[3]
+
+    fileData={
+           'id':self.id,
+           'upload_file':self.description,
+           'username':str(self.post.upload_user.name),
+           'datetime_created':str(self.datetime_created),
+           'file_type':self.file_type,
+           'upload_type':Act_Types[self.upload_type],
+    }
+    return fileData
 
 
 class post_comment(models.Model):
@@ -197,5 +228,24 @@ class Activity(models.Model):
                u = Upload()
                u.save()
 
-  post_save.connect(create_upload, sender=BaseUpload)'''
+  post_save.connect(create_upload, sender=BaseUpload)
+  
+  def save(self , *args, **kwargs):
+    import pdb;pdb.set_trace()
+    fileToAdd = super(Uploadedfile , self).save(*args, **kwargs)
+    if self.file_type == 'image':
+      size = 100,100
+      try:
+#        outfile = str(self.upload_file).split(".")[0]+"_thumbnail"
+        outfile = str(self.upload_file)
+        im = Image.open(self.upload_file)
+        im = im.resize(size, Image.ANTIALIAS)
+#        thumb = ImageOps.fit(self.upload_file, size, Image.ANTIALIAS)
+#        im.thumbnail(size)
+        im.save(self.upload_file, "JPEG")
+      except Exception as e:
+        print "cannot create thumbnail "+str(e)
+
+    return fileToAdd'''
+
 

@@ -66,6 +66,9 @@ class UserPhoto(CropImage):
   def get_instance(cls, request, pk):
     if request.user.is_superuser:
       return User.objects.get(pk=pk)
+    elif User.objects.get(pk=pk).in_group('Student Group'):
+      if User.objects.get(pk=pk).group.admin.user == request.user:
+        return User.objects.get(pk=pk)
     else:
       return request.user
 
@@ -90,17 +93,21 @@ class UserPhoto(CropImage):
              '.' + fname.split('.')[-1]
     return fname
 
+def user_photo_upload(instance,filename):
+  if hasattr(instance,'faculty'):
+    return 'facapp/photos/'+filename
+  return 'nucleus/photo/'+filename
 
 class User(AbstractUser, models.Model):
   """
   User = Channeli User
   """
   name = models.CharField(max_length=MC.TEXT_LENGTH)
-  photo = UserPhoto.ModelField(upload_to='nucleus/photo/', blank=True)
-  gender = models.CharField(max_length=1, choices=MC.GENDER_CHOICES, blank=True)
+  photo = UserPhoto.ModelField(upload_to=user_photo_upload, null=True, blank=True)
+  gender = models.CharField(max_length=1, choices=MC.GENDER_CHOICES, null=True, blank=True)
   birth_date = models.DateField(blank=True, null=True,
                                 verbose_name='Date of Birth')
-  contact_no = models.CharField(max_length=12, blank=True,
+  contact_no = models.CharField(max_length=20, null=True, blank=True,
                                 verbose_name='Contact No')
   connections = models.ManyToManyField('self', through='Connection', symmetrical=False,
                                       related_name='related_to+', blank=True, null=True)
@@ -136,10 +143,13 @@ class User(AbstractUser, models.Model):
     if self.in_group('Student'):
       student = self.student
       string = MC.SIMPLIFIED_DEGREE[student.branch.degree]+' '+\
-               (student.branch.name if len(student.branch.name)<20\
-                else student.branch.code)
-      if student.semester > 0:
-        string += ' ' + int2roman(student.year) + ' Year'
+            (student.branch.name if len(student.branch.name)<20\
+            else student.branch.code)
+      if not student.passout_year:
+        if student.semester > 0:
+          string += ' ' + int2roman(student.year) + ' Year'
+      else:
+        string += ' (%s Batch)' % student.passout_year
       return string
     elif self.in_group('Faculty'):
       return dict(FC.DESIGNATION_CHOICES)[self.faculty.designation]+\
@@ -248,6 +258,11 @@ class User(AbstractUser, models.Model):
       to_people__status=status,
       to_people__from_user=self
     )
+
+User._meta.get_field('first_name').null=True
+User._meta.get_field('last_name').null=True
+User._meta.get_field('email').null=True
+User._meta.get_field('date_joined').null=True
 
 class WebmailAccount(models.Model):
   webmail_id = models.CharField(max_length=20, primary_key=True)
@@ -365,13 +380,13 @@ class AbstractStudentInfo(django_models.Model):
                   verbose_name='Father\'s Occupation')
   fathers_office_address = models.CharField(max_length=MC.TEXT_LENGTH,
                   blank=True, verbose_name='Father\'s Office Address')
-  fathers_office_phone_no = models.CharField(max_length=12, blank=True,
+  fathers_office_phone_no = models.CharField(max_length=20, blank=True,
                   verbose_name='Father\'s Office Phone No')
   mothers_name = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
                   verbose_name='Mother\'s Name')
-  permanent_address = models.CharField(max_length=MC.TEXT_LENGTH, blank=True,
+  permanent_address = models.CharField(max_length=250, blank=True,
                   verbose_name='Permanent Address')
-  home_contact_no = models.CharField(max_length=12, blank=True,
+  home_contact_no = models.CharField(max_length=20, blank=True,
                   verbose_name='Home Contact No')
   state = models.CharField(max_length=3, choices=MC.STATE_CHOICES, blank=True)
   city = models.CharField(max_length=MC.TEXT_LENGTH, blank=True)
@@ -388,7 +403,7 @@ class AbstractStudentInfo(django_models.Model):
                   verbose_name='Local Guardian\'s Name')
   local_guardian_address = models.CharField(max_length=MC.TEXT_LENGTH,
                   blank=True, verbose_name='Local Guardian\'s Address')
-  local_guardian_contact_no = models.CharField(max_length=12, blank=True,
+  local_guardian_contact_no = models.CharField(max_length=20, blank=True,
                   verbose_name='Local Guardian\'s Contact No')
   category = models.CharField(max_length=3, choices=MC.CATEGORY_CHOICES,
                   blank=True)
@@ -430,8 +445,8 @@ class StudentUserInfo(StudentUser, AbstractStudentInfo):
 
 
 class Course(models.Model):
-  id = models.CharField(primary_key=True, max_length=15)
-  code = models.CharField(max_length=MC.CODE_LENGTH)
+  id = models.CharField(primary_key=True, max_length=60)
+  code = models.CharField(max_length=50)
   name = models.CharField(max_length=MC.TEXT_LENGTH)
   credits = models.IntegerField()
   subject_area = models.CharField(max_length=MC.CODE_LENGTH)
@@ -492,6 +507,7 @@ class Faculty(Role('Faculty')):
     verbose_name_plural = 'Faculties'
 
 
+
 class Alumni(Role('Alumni')):
   branch = models.ForeignKey(Branch)
   admission_year = models.IntegerField()
@@ -503,7 +519,7 @@ class Alumni(Role('Alumni')):
 
 ########################## Other useful Models ########################
 
-class PHPSession(models.Model):
+class PHPSession(django_models.Model):
   session_key = models.CharField(max_length=40, primary_key=True)
   session_data = models.TextField()
   expire_date = models.DateTimeField(db_index=True)

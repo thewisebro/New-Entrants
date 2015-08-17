@@ -4,7 +4,7 @@
       onmouseout='event_container_mouse_out({{Event.id}});'>
   <div class='event'>
     <div class='event-time-title'>
-      <div class='event-time'>
+      <div class='event-time{{#if color}} {{color}}-time{{/if}}'>
         <div class='event-date'>{{Event.day}}</div>
         <div class='event-monthyear'>{{Event.monthyear}}</div>
       </div>
@@ -36,10 +36,10 @@
       <div class='event-name'>{{{Event.title}}}</div>
       <div style='clear:both'></div>
     </div>
-    {{#if Event.duration }}
+    {{#if Event.uptotime }}
       <div class='event-duration'>
         <div class='event-left'><i class="fa fa-clock-o"></i></div>
-        <div class='event-right'>{{Event.uptotime}} ({{Event.duration}})</div>
+        <div class='event-right'>{{Event.uptotime}}{{#if Event.duration}} ({{Event.duration}}){{/if}}</div>
         <div style='clear:both'></div>
       </div>
     {{/if}}

@@ -43,7 +43,7 @@ class ModelFeed(object):
     if content:
       if not Feed.objects.filter(instance_type=instance_type, instance_id=instance.id).exists():
         try:
-          feed = Feed(app=app, instance=instance, content=content)
+          feed = Feed(app=app, instance_type=instance_type, instance_id=instance.id, content=content)
           feed.user = user
           feed.link = link
           feed.save()

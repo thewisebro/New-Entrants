@@ -10,9 +10,9 @@
             <div class="postUserNameTime">
                 <div class="postUser">
                   <span class="postUserName">{[oneFile.file.username]}</span>
-                  <span class="removeFeedPost" ng-show="logIn && oneFile.file.username == oneFile.user_info.name" ng-click="removeFeedPost(oneFile.file.post, $index)">
+                  <!--<span class="removeFeedPost" ng-show="logIn && auth.user.name == oneFile.user_info.name" ng-click="removeFeedPost(oneFile.file.post, $index)">
                     <i class="fa fa-times-circle-o"></i>
-                  </span>
+                  </span>-->
                 </div>
                <div class="postTime">
                 <a am-time-ago="oneFile.file.datetime_created" ng-href="#/course/{[coId.courseId]}/feeds/{[post.post.id]}"></a>
@@ -22,7 +22,7 @@
 
             <div class="filesDisplay">
               <div class="postContent">
-                <div class="removeFeedFile" ng-show="logIn && oneFile.file.username == oneFile.user_info.name" ng-click="removeFeedFile(oneFile.file.id,$parent.$index,$index)">
+                <div class="removeFeedFile" ng-show="logIn && auth.user.name == oneFile.user_info.name" ng-click="removeFeedFile(oneFile.file.id,$parent.$index,$index)">
                 <i class="fa fa-times"></i>
               </div>
               <div class="fileOverlay">
@@ -30,8 +30,12 @@
               </div>
               <div class="fileImage">
                 <img ng-show='oneFile.file.file_type == "image"' ng-src="{[base_domain]}/{[oneFile.file.filepath]}"></img>
-                <i ng-show='oneFile.file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>
-                <i ng-show='oneFile.file.file_type == "other"' class="fa fa-file"></i> 
+                <i ng-show='oneFile.file.file_type == "pdf"' class="fa fa-file-pdf-o"></i>  
+                <i ng-show='oneFile.file.file_type == "ppt"' class="fa fa-file-powerpoint-o"></i> 
+                <i ng-show='oneFile.file.file_type == "zip"' class="fa fa-file-archive-o"></i> 
+                <i ng-show='oneFile.file.file_type == "sheet"' class="fa fa-file-excel-o"></i>
+                <i ng-show='oneFile.file.file_type == "doc"' class="fa fa-file-word-o"></i>
+                <i ng-show='oneFile.file.file_type == "other"' class="fa fa-file-o"></i>
               </div>
               <div class="fileData">
               <div class="filename">

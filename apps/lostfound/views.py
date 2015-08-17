@@ -324,13 +324,13 @@ def sendmail(request, type_of_mail, pk_id):
     qryst = LostItems.items.filter(pk = pk_id)
     subject = 'Your reported lost item ' + qryst[0].item_lost + ' has been reported as found!'
     msg = 'Your reported lost item ' + qryst[0].item_lost + ' has been reported as found by '
-    msg += user.get_name()
+    msg += user.name
     if contact:
       msg +=  '. You can contact him/her at this number ' + str(contact)
     if email:
       msg += '. Email him at ' + str(user.email)
     if not contact and not email:
-      msg += '\nThere is no contact info for ' + user.get_name()
+      msg += '\nThere is no contact info for ' + user.name
       msg += ' in the channel-i database.'
     template='lostfound/all_lost_items.html'
 
@@ -347,13 +347,13 @@ def sendmail(request, type_of_mail, pk_id):
     qryst = FoundItems.items.filter(pk = pk_id)
     subject = 'Your reported found item ' + qryst[0].item_found + ' has a prospective owner! '
     msg = 'Your reported found item ' + qryst[0].item_found + ' has claimed by '
-    msg += user.get_name()
+    msg += user.name
     if contact:
       msg +=  '. You can contact him/her at this number ' + str(contact)
     if email:
       msg += '. Email him at ' + str(user.email)
     if not contact and not email:
-      msg += '\nThere is no contact info for ' + user.get_name()
+      msg += '\nThere is no contact info for ' + user.name
       msg += ' in the channel-i database.'
     template='lostfound/all_found_items.html'
 
@@ -375,8 +375,8 @@ def sendmail(request, type_of_mail, pk_id):
     logger.info(request.user.username + ': error in sendmail ' + pk_id)
     logger.info(e)
   else:
-    msg = qryst[0].user.get_name() + ' has been informed.'
-    logger.info(request.user.username + ': sendmail successful to ' + qryst[0].user.get_name())
+    msg = qryst[0].user.name + ' has been informed.'
+    logger.info(request.user.username + ': sendmail successful to ' + qryst[0].user.name)
     messages.success(request, escape(msg))
     mail_flag = 1
   return render_to_response(template, {'query':qryst[0], 'mail_flag':mail_flag}, context_instance = RequestContext(request) )
