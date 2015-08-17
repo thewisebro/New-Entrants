@@ -80,7 +80,7 @@ def company_list(request):
             avlstatus.append('NAP')
         if company.status=='CLS':
           status.append('CLS')
-        elif CompanyApplicationMap.objects.filter(student = internship_person, status = 'SEL', company__year__contains = current_session_year()).exists():
+        elif CompanyApplicationMap.objects.filter(student = internship_person, company=company, status = 'SEL', company__year__contains = current_session_year()).exists():
           status.append('SEL')
         elif student.branch in branches and internship_person.status == 'OPN' and company.status == 'OPN':  
           try:
