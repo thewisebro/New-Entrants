@@ -264,15 +264,15 @@ def educational_details(request):
     recent = EducationalDetails.objects.filter(student=student, course=previous_sem(student.semester))
     if recent:
       recent = recent[0]
-    long_name_course = recent.course
-    for inst in MC.SEMESTER_CHOICES:
-      if inst[0] == previous_sem(student.semester):
-        long_name_course = inst[1]
-        break
-    recent.course = (recent.course, long_name_course)
+      long_name_course = recent.course
+      for inst in MC.SEMESTER_CHOICES:
+        if inst[0] == previous_sem(student.semester):
+          long_name_course = inst[1]
+          break
+      recent.course = (recent.course, long_name_course)
 
-    long_name_discipline = Branch.objects.get(code=recent.discipline).name
-    recent.discipline = (recent.discipline, long_name_discipline)
+      long_name_discipline = Branch.objects.get(code=recent.discipline).name
+      recent.discipline = (recent.discipline, long_name_discipline)
 
     if plac_person.status in ('LCK', 'VRF') :
       # The details are uneditable
