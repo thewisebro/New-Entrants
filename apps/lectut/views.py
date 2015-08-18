@@ -244,8 +244,7 @@ def uploadedFile(request , batch_id):
       return HttpResponse(json.dumps({'msg':'Empty posts are not allowed','status':101}), content_type='application/json')
     if getUserType(user) == "1":
       privacy = allData['privacy']
-    files = []
-    msg = ''
+    files,msg = [],[]
     counter = 0
     try:
       if userBatch is not None:
@@ -258,12 +257,14 @@ def uploadedFile(request , batch_id):
     for document in documents:
       file_type = getFileType(document)
 #      fileData = json.loads(extra[counter])
+      if file_type =='dangerous':
+        msg.append({'msg':str(document)+' : File type is dangerous. Cant save it on server','status':101})
       if file_type =='Video' and  document._size>MAX_VIDEO_SIZE:
-        msg = "Video too large.Must be smaller than 20MB"
+        msg.append({'msg':str(document)+' : Video too large.Must be smaller than 20MB','status':101})
       if file_type =='pdf' and  document._size>MAX_PDF_SIZE:
-        msg = "Image too large.Must be smaller than 20MB"
+        msg.append({'msg':str(document)+' : Image too large.Must be smaller than 5MB','status':101})
       elif document._size>MAX_IMAGE_SIZE:
-        msg = "File too large.Must be smaller than 20MB"
+        msg.append({'msg':str(document)+' : File too large.Must be smaller than 5MB','status':101})
       else:
         new_document = Uploadedfile(post =new_post, upload_file = document, description = str(document), file_type=file_type, upload_type = uploadTypes[counter])
         new_document.save()
@@ -275,7 +276,7 @@ def uploadedFile(request , batch_id):
       status = 101
     new_post = new_post.as_dict()
     complete_post = {'post':new_post,'files':files}
-    response =  HttpResponse(json.dumps({'complete_post':complete_post,'status':status , 'msg':msg}), content_type='application/json')
+    response =  HttpResponse(json.dumps({'complete_post':complete_post,'status':status , 'messages':msg}), content_type='application/json')
   else:
     response = HttpResponse('It is not a post request')
   return response
@@ -302,6 +303,8 @@ def getFileType(file_name):
       file_type="sheet"
     elif extension in ['doc','docx','odt','rtf']:
       file_type="doc"
+    elif extension in ['sh','dat','bash']:
+      file_type="dangerous"
     else:
       file_type="other"
   except:
