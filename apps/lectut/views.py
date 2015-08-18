@@ -412,11 +412,12 @@ def get_file(request , batch_id , file_id):
   if Uploadedfile.objects.filter(id = file_id).exists():
     if Uploadedfile.file_objects.filter(id = file_id).exists():
       File = Uploadedfile.file_objects.get(id = file_id)
+      import pdb;pdb.set_trace()
       user = File.post.upload_user
       user_info = user.serialize()
       File = File.as_dict()
       if user.is_authenticated():
-        return HttpResponse(json.dumps({'file':File , 'user_info':user_info , 'status':100}), content_type='application/json')
+        return HttpResponse(json.dumps({'file':File , 'user_info':user_info , 'user_id':str(user.id) , 'status':100}), content_type='application/json')
       else:
         return HttpResponse(json.dumps({'file':File , 'user_info':'' , 'status':100}), content_type='application/json')
     else:
