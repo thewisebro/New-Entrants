@@ -308,8 +308,8 @@ def mcm_submit(request):
       student.save()
       person.bhawan = form.cleaned_data['bhawan']
       person.room_no = form.cleaned_data['room_no']
-      person.personal_contact_no = form.cleaned_data['mobile_no']
-      person.email_id = form.cleaned_data['email']
+      person.user.contact_no = form.cleaned_data['mobile_no']
+      person.user.email = form.cleaned_data['email']
       personinfo.fathers_name = form.cleaned_data['fathers_name']
       personinfo.fathers_occupation = form.cleaned_data['fathers_occupation']
       personinfo.permanent_address = form.cleaned_data['home_address']
