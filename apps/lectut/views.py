@@ -412,7 +412,6 @@ def get_file(request , batch_id , file_id):
   if Uploadedfile.objects.filter(id = file_id).exists():
     if Uploadedfile.file_objects.filter(id = file_id).exists():
       File = Uploadedfile.file_objects.get(id = file_id)
-      import pdb;pdb.set_trace()
       user = File.post.upload_user
       user_info = user.serialize()
       File = File.as_dict()
