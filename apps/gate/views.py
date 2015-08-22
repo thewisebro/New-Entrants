@@ -29,7 +29,6 @@ def index(request):
 
   if request.method == 'POST':
     form = GateForm(request.POST)
-    string = ''
     if form.is_valid():
       form.process()
       fac.prof=person
