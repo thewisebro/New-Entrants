@@ -163,7 +163,7 @@ function lookup(val,type)
              else
              {
                html+="<p class=\"search-results-heading\">"+
-                        "No sell item matched</p>"+
+                        "No such Item found.</p>"+
                         "</div>";
              }
 
@@ -199,7 +199,7 @@ function lookup(val,type)
              {
 
               html+="<p class=\"search-results-heading\">"+
-                        "No request item matched</p>"+
+                        "No such request found.</p>"+
                         "</div>";
              }
 
@@ -498,7 +498,63 @@ function transaction_form(type,id){
  opened_dialog='trans_form';
 }
 
+$(document).ready
+(
+  function()
+  {
+   $(".thumbnailBG").mouseenter
+   (
+     function()
+     {
+       $(".edit-button", $(this)).css('opacity', 1);
+       $(".dropdown", $(this)).toggle();
+       //$(".item-options-dropdown", $(this)).css('display', 'block');
+     }
+                                                          );
 
+     $(".item-options-dropdown").css('display', 'none');
+     $(".thumbnailBG").mouseleave
+     (
+       function()
+       {
+         $(".edit-button", $(this)).css('opacity', 0);
+         $(".item-options-dropdown", $(this)).removeClass('open');
+         $(".dropdown", $(this)).toggle();
+       }
+     );
+    
+    $(".request").mouseover
+              (
+                        function()
+                                 {
+                                          $(".edit-button", $(this)).css('opacity', 1);
+                                                   $(".request-remove-button", $(this)).css('opacity', 1);
+                                                            }
+                                                                    );
+            $(".request").mouseout
+                      (
+                                function()
+                                         {
+                                                  $(".edit-button", $(this)).css('opacity', 0);
+                                                           $(".request-remove-button", $(this)).css('opacity', 0);
+                                                                    }
+                                                                            );
 
+                    $(".thumbnailBG-my-account").click
+                              (
+                                        function() //opens light box with details for the clicked item-for-sale
+                                                 {
+                                                          //var modalHead = $(".caption .itemName", $(this)).html();
+                                                          //console.log(modalHead);
+                                                          $(".modal-title").html(modalHead);
+                                                                   var modalImage = $((".thumbnail img"), $(this)).attr("src");
+                                                                            //console.log(modalImage);
+                                                                            $(".modal-image").attr("src",modalImage);
+                                                                                     var modalPrice = $("div .price", $(this)).html();
+                                                                                              //console.log(modalPrice);
+                                                                                              $(".modal-price").html(modalPrice);
+                                                                                                       }
+                                                                                                               );
 
-
+  }
+);
