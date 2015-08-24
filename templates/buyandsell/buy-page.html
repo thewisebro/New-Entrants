@@ -42,11 +42,11 @@
 
 					{% if mc and not category %}
             {% if mc in main_watched %}
-             <button type="button" class="btn global-button watch-button watch-button-watching" onclick='watch(this,"{{mc}}","{{c}}" )'>
+             <button type="button" id="watch_btn" class="btn global-button watch-button watch-button-watching" onclick='watch("{{mc}}","{{c}}" )'>
              Watching
              </button>
              {% else %}
-             <button type="button" class="btn global-button watch-button" onclick='watch(this,"{{mc}}","{{c}}" )'>
+             <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch("{{mc}}","{{c}}" )'>
              Watch this category
              </button>
               {% endif %}
@@ -54,11 +54,11 @@
 
           {% if mc and  category %}
             {% if category in sub_watched %}
-             <button type="button" class="btn global-button watch-button watch-button-watching" onclick='watch(this,"{{mc}}","{{c}}" )'>
+             <button type="button" id="watch_btn" class="btn global-button watch-button watch-button-watching" onclick='watch("{{mc}}","{{c}}" )'>
              Watching
              </button>
               {% else %}
-             <button type="button" class="btn global-button watch-button" onclick='watch(this,"{{mc}}","{{c}}" )'>
+             <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch("{{mc}}","{{c}}" )'>
              Watch this category
              </button>
               {% endif %}

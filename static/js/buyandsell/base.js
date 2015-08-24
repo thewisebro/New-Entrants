@@ -1,10 +1,11 @@
-//watch("ELECTRONICS");
 var opened_dialog="";  //variable to keep check of the opened dialog
 
-function watch(item,main_category,category)
+
+
+function watch(main_category,category)
 {
 
-      if($(item).hasClass("watch-button-watching"))
+      if($("#watch_btn").hasClass("watch-button-watching"))
 				{
               if (category != "None")
                   {
@@ -17,8 +18,8 @@ function watch(item,main_category,category)
                     watch_cat(url);
                   }
 
-					$(item).removeClass("watch-button-watching");
-					$(item).text("Watch this Category");
+					$("#watch_btn").removeClass("watch-button-watching");
+					$("#watch_btn").text("Watch this Category");
 				}
 			else
 				{
@@ -32,11 +33,12 @@ function watch(item,main_category,category)
                   url="/buyandsell/watch/"+main_category+"/";
                   watch_cat(url);
                 }
-					$(item).addClass("watch-button-watching");
-					$(item).text("Watching");
+					$("#watch_btn").addClass("watch-button-watching");
+					$("#watch_btn").text("Watching");
 				}
 
 }
+
 
 function watch_cat(url)
 {

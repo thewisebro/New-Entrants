@@ -204,18 +204,7 @@
             }
 
         );
-		// Code for the price range selector (starts)
 
-	/*	$( "#low" ).val
-		(
-			$( "#slider-range" ).slider( "values", 0 )
-		);
-
-		$( "#high" ).val
-		(
-			$( "#slider-range" ).slider( "values", 1 )
-		);
-		 // Code for the price range selector (ends)*/
 
 
         //Code to show the edit button when the item is hovered in my account page
