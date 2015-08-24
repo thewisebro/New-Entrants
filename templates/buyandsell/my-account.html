@@ -1,135 +1,141 @@
 {% extends "buyandsell/base.html" %}
 
 {% block content %}
-		<div class="container">
+<div class="container">
 
-			<div class="row sub-header">
-				<div class="col-md-3">
-				</div>
-				<div class="col-md-9">
-					<ol class="breadcrumb">
-					  <li class="active"><a href="#">My Account</a></li>
-					</ol>
-				</div>
-			</div>
+  <div class="row sub-header">
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-9">
+      <ol class="breadcrumb">
+        <li class="active"><a href="#">My Account</a></li>
+      </ol>
+    </div>
+  </div>
 
-			<div class="row">
-				<div class="col-md-3">
-				</div>
-				<div class="col-md-9">
-					<div class="division-line">
-					</div>
-				</div>
-			</div>
-{% block leftbox %}
-			<div class="row">
-				<div class="col-md-3">
-					<div class="left-box">
-						<div class="row">
-							<div class="col-md-12 watched-categories">
-								<p class="categories-you-are-watching">Categories you are Watching</p>
+  <div class="row">
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-9">
+      <div class="division-line">
+      </div>
+    </div>
+  </div>
+  {% block leftbox %}
+  <div class="row">
+    <div class="col-md-3">
+      <div class="left-box">
+        <div class="row">
+          <div class="col-md-12 watched-categories">
+            <p class="categories-you-are-watching">Categories you are Watching</p>
 
-                                <ul>
-                                    {% for main_cat,cat_list in watched_cat_dict.iteritems %}
-                                    <li class="watched-main">{{ main_cat }}
-                                        <ul class="watched-sub-in-main" >
-                                        {% for cat in cat_list %}
-                                        <li>{{ cat }}</li>
-                                        {% endfor %}
-                                        </ul>
+            <ul>
+              {% for main_cat,cat_list in watched_cat_dict.iteritems %}
+              <li class="watched-main">{{ main_cat }}
+                <ul class="watched-sub-in-main" >
+                  {% for cat in cat_list %}
+                  <li>{{ cat }}</li>
+                  {% endfor %}
+                </ul>
 
-                                    </li>
-                                                                    {% endfor %}
-                                </ul>
-                                <button type="button" onclick="manage()"  class="global-browse manage-watched-button">Manage</button>
-							</div>
-						</div>
-					</div>
-				</div>
-{% endblock %}
-				<div class="col-md-9 pageContent">
+              </li>
+              {% endfor %}
+            </ul>
+            <button type="button" onclick="manage()"  class="global-browse manage-watched-button">Manage</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+    <div class="col-md-9 pageContent">
 
-                    <p class="my-account-page-headings">Items you've Added for Sale</p>
-					<div class="row">
+      <p class="my-account-page-headings">Items you've Added for Sale</p>
+      <div class="row">
 
-                      {% for row in sell_items %}
+        {% for row in sell_items %}
 
-<div class="col-md-3" id = "sell{{row.pk}}">
-                            <div class="thumbnailBG thumbnailBG-my-account">
-                                <div class="thumbnail">
-                                    <img src="/media/{{ row.item_image }}" alt="Generic placeholder thumbnail">
-                                </div>
-                                <div class="caption">
-                                    <span class="itemName">{{ row.item_name }}</span>
-                                    <span class="price">Rs. {{row.cost}}</span>
-                                    <div class="row">
-                                        <div class="col-md-7">
-                                            <span class="expiresIn">Expires in {{ row.expiry_date|timeuntil }}</span>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <a onclick ="edit_sell({{ row.pk }})" class="edit-button">
-                                                <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/edit-button.png">
-                                                <span class="edit-button-text">Edit</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a title="Remove" onclick = "trash('sell',{{row.id}})" class="item-remove-button">
-                                    <img class="item-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
-                                </a>
-                            </div>
-                          </div>
-                      {% endfor %}
+        <div class="col-md-3" id = "sell{{row.pk}}">
+          <div class="thumbnailBG thumbnailBG-my-account">
+            <div class="dropdown item-options-dropdown" style="display:inline">
+              <button class="btn btn-default item-options-button dropdown-toggle" type="button" id="my-account-object-options" data-toggle="dropdown">
+                <img src="images/my-account-item-options.png" class="item-options-button-image">
+              </button>
+              <ul class="dropdown-menu item-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
+                <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-15.5%"></div>
+                <div class="arrow-up-front" style="margin-left:75%; margin-top:-13.5%"></div>
+                <li role="presentation"><a onclick ="edit_sell({{ row.pk }})" class="edit-button-text">Edit</a></li>
+                <li role="presentation"><a title="Remove" onclick = "trash('sell',{{row.id}})" class="item-remove-text">Remove</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mark Sold</a></li>
+              </ul>
+            </div>
 
-
-
-                    </div>
-                    <div class="row">
-                        <div class="division-line"></div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <p class="my-account-page-headings">Items you've Requested</p>
-                            <table class="table table-striped">
-                                <thead>
-                                <tr data-toggle="modal" data-target="#request-item-modal" class="request">
-                                    <th>Item</th>
-                                    <th>Max Price (Rs)</th>
-                                    <th>Expires in</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-
-                           {% for row in request_items %}
-                                <tr id = "request{{ row.pk }}" class="request">
-         <td class="requested-item-name">{{ row.item_name }}</td>
-                                    <td class="requested-item-price">{{ row.price_upper}}</td>
-                                    <td>{{ row.expiry_date|timeuntil }}</td>
-                                    <td>
-      <a onclick = "trash('request',{{row.id}})" class="request-remove-button">
-      <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
-                          <span class="request-remove-button-text">Remove</span>
-                                        </a>
-
-                                        <a onclick="edit_request({{row.id}})" class="edit-button">
-      <img class="request-edit-button-image" src="{{STATIC_URL}}images/buyandsell/edit-button.png">
-                           <span class="request-edit-button-text">Edit</span>
-                                        </a>
-                                    </td>
-                                </tr>
-
-                            {% endfor %}
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            <div class="thumbnail">
+              <img src="/media/{{ row.item_image }}" alt="Generic placeholder thumbnail">
+            </div>
+            <div class="caption">
+              <span class="itemName">{{ row.item_name }}</span>
+              <span class="price">Rs. {{row.cost}}</span>
+              <div class="row">
+                <div class="col-md-12">
+                  <span class="expiresIn">Expires in {{ row.expiry_date|timeuntil }}</span>
                 </div>
-			       </div>
-		      </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+
+
+      </div>
+      <div class="row">
+        <div class="division-line"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <p class="my-account-page-headings">Items you've Requested</p>
+          <table class="table table-striped">
+            <thead>
+            <tr data-toggle="modal" data-target="#request-item-modal" class="request">
+              <th>Item</th>
+              <th>Max Price (Rs)</th>
+              <th>Expires in</th>
+            </tr>
+            </thead>
+            <tbody>
+
+
+            {% for row in request_items %}
+            <tr id = "request{{ row.pk }}" class="request">
+              <td class="requested-item-name">{{ row.item_name }}</td>
+              <td class="requested-item-price">{{ row.price_upper}}</td>
+              <td>{{ row.expiry_date|timeuntil }}</td>
+              <td>
+                <a onclick = "trash('request',{{row.id}})" class="request-remove-button">
+                  <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
+                  <span class="request-remove-button-text">Remove</span>
+                </a>
+
+                <a onclick="edit_request({{row.id}})" class="edit-button">
+                  <img class="request-edit-button-image" src="{{STATIC_URL}}images/buyandsell/edit-button.png">
+                  <span class="request-edit-button-text">Edit</span>
+                </a>
+              </td>
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 {% endblock %}
+
+
 

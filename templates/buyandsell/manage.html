@@ -1,21 +1,29 @@
 <html>
 <head>
-<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-<script type="text/javascript" src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+  <script type="text/javascript" src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 </head>
 <body>
 
- {% if cat_dict %}
+{% if cat_dict %}
 <form method="post" action="" >
-{% csrf_token %}
-{% for key,value in cat_dict.items %}
-<input type="checkbox" id="{{ key }}" onchange="watch_subs('{{ key }}',{{value|length}})" {% if key in main_watched_cat %} checked{% endif %}>{{ key }}</input><br>
-{% for row in value %}
-<input type="checkbox" value="{{ row.id }}" id="{{key}}_{{forloop.counter}}" onchange="main_check('{{ key }}','{{key}}_{{forloop.counter}}',{{value|length}})" name="watched_category" {% if row in sub_watched_cat %} checked{% endif %}>{{ row.name }}</input>
-{% endfor %}
-<br>
-{% endfor %}
-<input type="submit" value="subit">
+  {% csrf_token %}
+  {% for key,value in cat_dict.items %}
+  <div>
+    <div>
+      <input type="checkbox" id="{{ key }}" onchange="watch_subs('{{ key }}',{{value|length}})" {% if key in main_watched_cat %} checked{% endif %}>{{ key }}</input><br>
+    </div>
+    <div>
+      {% for row in value %}
+      <div>
+        <input type="checkbox" value="{{ row.id }}" id="{{key}}_{{forloop.counter}}" onchange="main_check('{{ key }}','{{key}}_{{forloop.counter}}',{{value|length}})" name="watched_category" {% if row in sub_watched_cat %} checked{% endif %}>{{ row.name }}</input>
+      </div>
+      {% endfor %}
+    </div>
+    <br>
+  </div>
+  {% endfor %}
+  <input type="submit" value="Submit">
 </form>
 {% endif %}
 <script src="{{ STATIC_URL }}js/common.js"></script>
