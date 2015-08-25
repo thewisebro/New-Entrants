@@ -103,7 +103,7 @@ class Profile(forms.ModelForm):
                'local_guardian_address', 'local_guardian_contact_no',
                'physically_disabled', 'fulltime', 'resident', 'license_no',
                'category', 'home_contact_no')
-  birth_date = forms.CharField(required = False)
+  birth_date = forms.DateField(required=False, input_formats=['%Y-%m-%d','%d-%m-%Y'])
 
 class EducationalFormset(BaseModelFormSet):
     pass

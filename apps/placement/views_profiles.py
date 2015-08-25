@@ -123,7 +123,7 @@ def personal_information(request):
                 'fathers_occupation': info.fathers_occupation}
       form = plac_forms.Profile(initial=initial)
       # Disable Birthdate
-      form.fields['birth_date'].widget.attrs['readonly'] = True
+#  form.fields['birth_date'].widget.attrs['readonly'] = True
     return render_to_response('placement/basic_form.html', {
         'form': form,
         'title': 'Personal Information',
