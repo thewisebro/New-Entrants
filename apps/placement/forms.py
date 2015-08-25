@@ -103,7 +103,7 @@ class Profile(forms.ModelForm):
                'local_guardian_address', 'local_guardian_contact_no',
                'physically_disabled', 'fulltime', 'resident', 'license_no',
                'category', 'home_contact_no', 'birth_date')
-    birth_date = forms.DateField(required = True, widget=forms.DateInput(attrs={'class':'iDateField'}))
+  birth_date = forms.DateField(required = True, widget=forms.DateInput(attrs={'class':'iDateField'}))
 
 class EducationalFormset(BaseModelFormSet):
     pass
