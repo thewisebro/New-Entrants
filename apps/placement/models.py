@@ -84,7 +84,7 @@ class LanguagesKnown(models.Model):
 class ResearchPublications(models.Model):
   # All field req
   author = models.CharField(max_length=MC.TEXT_LENGTH)
-  title  = models.CharField(max_length=MC.TEXT_LENGTH)
+  title  = models.CharField(max_length=200)
   publisher = models.CharField(max_length=MC.TEXT_LENGTH)
   year = models.IntegerField()
   priority = models.IntegerField(choices=MC.PRIORITY_CHOICES, default=1)
