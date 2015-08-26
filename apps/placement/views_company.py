@@ -294,7 +294,7 @@ def set_workshop_priority(request):
 def workshop_registration(request):
   student = request.user.student
   plac_person = student.placementperson
-  if plac_person.status not in ['VRF', 'OPN']:
+  if plac_person.status not in ['VRF', 'OPN', 'LCK']:
     messages.error(request, 'You can not register for workshop. In case of any disperency, please contact IMG.')
     return HttpResponseRedirect(reverse('placement.views.index'))
   register, created = WorkshopRegistration.objects.get_or_create(placement_person = plac_person)

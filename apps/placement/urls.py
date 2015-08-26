@@ -89,7 +89,7 @@ urlpatterns += patterns('placement.views_admin',
 # Company urls
 urlpatterns += patterns('placement.views_company',
                         (r'^company/list/$','list'),
-                        (r'^workshop_registration/$', 'workshop_registration'),
+#                        (r'^workshop_registration/$', 'workshop_registration'),
 #                       (r'^workshop_priority/$', 'set_workshop_priority'),
                         (r'^company/(?P<company_id>\d+)/info/$','info'),
                         (r'^company/(?P<company_id>\d+)/opento/$','open_to'),
