@@ -248,7 +248,8 @@ def get_branches_for_educational_details() :
   returns a tuple of branch code and branch name with three extra entries,
   1: blank, 2:NA/Not Applicable, 3:NOT/None Of These
   """
-  branches = [('NA' , 'Not Applicable'),
+  branches = [('','--Select one--'),
+              ('NA' , 'Not Applicable'),
               ('NOT', 'None of these' )]
   branches.extend( Branch.objects.values_list('code', 'name').order_by('name') )
   return branches
