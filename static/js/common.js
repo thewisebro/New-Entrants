@@ -72,7 +72,7 @@ function dialog_iframe(data){
     $('body').append("<div id='"+data.name+"-div'></div>");
     var dialog_options = {
       autoOpen: false,
-      dialogClass: 'dialog-class',
+      dialogClass: 'dialog-class buyandsell-dialog',
       title: data.title,
       position: ['center',margin],
       width: data.width,

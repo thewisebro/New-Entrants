@@ -878,3 +878,83 @@ a:focus
 {
   outline: none;
 }
+
+
+.buyandsell-dialog
+{
+  background-color: #ffffff;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+.manage-watched-box-category-group
+{
+  display: inline;
+}
+
+.manage-watched-box-main
+{
+  display: inline;
+  font-weight: 600;
+}
+
+.manage-watched-box-sub-group
+{
+  display: inline;
+  font-size: 13px;
+}
+.manage-watched-box-sub
+{
+  display: inline;
+  margin-left: 25px;
+}
+
+.manage-watched-box-body
+{
+  background-color: #ffffff;
+  padding-top: 15px;
+}
+
+.manage-watched-box-checkbox-text
+{
+  display: inline;
+  margin-left: 5px;
+}
+
+.checkbox-custom-to-buyandsell
+{
+  width: 15px;
+  height: 15px;
+  content : url("../../images/buyandsell/checkbox-empty.png");
+}
+
+.checkbox-custom-to-buyandsell-checked
+{
+  content : url("../../images/buyandsell/checkbox-checked.png");
+}
+
+.ui-dialog-titlebar
+{
+  background-color: #333;
+}
+
+.ui-dialog-title
+{
+  color: white;
+}
+
+.ui-dialog-titlebar-close
+{
+  content : url("../../images/buyandsell/close-button-white.png");
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+
+.ui-state-focus
+{
+  -webkit-box-shadow: 0px 0px 0px transparent;
+  -moz-box-shadow: 0px 0px 0px transparent;;
+  box-shadow: 0px 0px 0px transparent;;
+}

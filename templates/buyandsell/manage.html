@@ -1,30 +1,55 @@
 <html>
 <head>
+  <link href="../../static/css/buyandsell/jquery-ui.css" type="text/css" rel="stylesheet">
+  <link href="../../static/css/buyandsell/bootstrap-theme.min.css" type="text/css" rel="stylesheet">
+  <link href="../../static/css/buyandsell/bootstrap.min.css" type="text/css" rel="stylesheet">
+  <link href="../../static/css/buyandsell/index.css" type="text/css" rel="stylesheet">
+
   <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
   <script type="text/javascript" src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 </head>
-<body>
+<body class="manage-watched-box-body">
 
 {% if cat_dict %}
+<div>
 <form method="post" action="" >
   {% csrf_token %}
-  {% for key,value in cat_dict.items %}
-  <div>
-    <div>
-      <input type="checkbox" id="{{ key }}" onchange="watch_subs('{{ key }}',{{value|length}})" {% if key in main_watched_cat %} checked{% endif %}>{{ key }}</input><br>
-    </div>
-    <div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        {% for key,value in cat_dict.items %}
+        <div manage-watched-box-category-group>
+    <span class="manage-watched-box-main">
+      <input type="checkbox" class="checkbox-custom-to-buyandsell" id="{{ key }}" onchange="watch_subs('{{ key }}',{{value|length}})" {% if key in main_watched_cat %} checked{% endif %}>
+        <span class="manage-watched-box-checkbox-text">
+          {{ key }}
+        </span>
+      </input>
+
+      <br>
+
+    </span>
+    <span class="manage-watched-box-sub-group">
       {% for row in value %}
-      <div>
-        <input type="checkbox" value="{{ row.id }}" id="{{key}}_{{forloop.counter}}" onchange="main_check('{{ key }}','{{key}}_{{forloop.counter}}',{{value|length}})" name="watched_category" {% if row in sub_watched_cat %} checked{% endif %}>{{ row.name }}</input>
-      </div>
+      <span class="manage-watched-box-sub">
+        <input class="checkbox-custom-to-buyandsell" type="checkbox" value="{{ row.id }}" id="{{key}}_{{forloop.counter}}" onchange="main_check('{{ key }}','{{key}}_{{forloop.counter}}',{{value|length}})" name="watched_category" {% if row in sub_watched_cat %} checked{% endif %}>
+          <span class="manage-watched-box-checkbox-text">
+            {{ row.name }}
+          </span>
+        </input>
+      </span>
+      <br>
       {% endfor %}
+    </span>
+          <br>
+        </div>
+        {% endfor %}
+      </div>
     </div>
-    <br>
   </div>
-  {% endfor %}
   <input type="submit" value="Submit">
 </form>
+</div>
 {% endif %}
 <script src="{{ STATIC_URL }}js/common.js"></script>
 <script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>

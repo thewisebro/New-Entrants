@@ -411,10 +411,12 @@ button.ui-button::-moz-focus-inner {
 	position: absolute;
 	right: .3em;
 	top: 50%;
-	width: 20px;
-	margin: -10px 0 0 0;
-	padding: 1px;
-	height: 20px;
+	width: 15px;
+	margin: -8px 5px 0 0;
+	height: 15px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
 }
 .ui-dialog .ui-dialog-content {
 	position: relative;
@@ -661,7 +663,7 @@ button.ui-button::-moz-focus-inner {
 	height: 1.7em;
 	margin-top: 0;
 	cursor: default;
-	background-color:#1081de;	
+	background-color:#1081de;
 	-ms-touch-action: none;
 	touch-action: none;
 }
@@ -885,7 +887,7 @@ body .ui-tooltip {
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
-	box-shadow: 0px 0px 2px #888888;
+	box-shadow: none;
 	color: #212121;
 }
 .ui-state-hover a,
@@ -902,7 +904,7 @@ body .ui-tooltip {
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
-	
+
 
 	font-weight: normal;
 	color: #212121;
