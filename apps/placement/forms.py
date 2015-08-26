@@ -169,6 +169,11 @@ class AddShortlistForm(forms.Form):
   student = forms.CharField(widget=forms.Textarea)
   company = forms.CharField(widget=forms.TextInput)
 
+class WorkshopRegistrationForm(forms.ModelForm):
+  class Meta:
+    model = models.WorkshopRegistration
+    exclude = ('placement_person',)
+
 def BaseModelFormFunction(model_type, exclude_list=None, data=None,**kwargs):
   """
     Use this function to create a model form from any model. It creates models with global settings so that all model forms and normaol forms have similar properties.

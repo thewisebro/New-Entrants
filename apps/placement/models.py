@@ -321,6 +321,17 @@ class CompanyPlacementPriority(models.Model):
     def __unicode__(self):
       return str(self.company) + str(self.priority) + str(self.slots)
 
+class WorkshopRegistration(models.Model):
+    """
+      Workshop Registration Model: Used in 2015-2016 session: Workshop was optional in this year.
+      This is different from Workshop Priority. Workshop priority was used in 2014-15. It was compulsory in this year.
+    """
+    placement_person = models.ForeignKey(PlacementPerson)
+    is_registered = models.BooleanField(default=False, verbose_name = "Select to register")
+
+    def _unicode__(self):
+      return str(self.placement_person.student.user.name)+" "+str(self.registered)
+
 class WorkshopPriority(models.Model):
 
   student = models.ForeignKey(Student)
