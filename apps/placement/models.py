@@ -326,9 +326,10 @@ class WorkshopRegistration(models.Model):
       Workshop Registration Model: Used in 2015-2016 session: Workshop was optional in this year.
       This is different from Workshop Priority. Workshop priority was used in 2014-15. It was compulsory in this year.
     """
-    placement_person = models.ForeignKey(PlacementPerson)
+    placement_person = models.ForeignKey(PlacementPerson, unique=True)
     is_registered = models.BooleanField(default=False, verbose_name = "Select to register")
     suggestions = models.CharField(null=True, blank=True, verbose_name = "Target Company", max_length = 300)
+    options = models.CharField(choices = PC.WORKSHOP_OPTIONS, max_length = 16, default="Group Discussion")
 
     def _unicode__(self):
       return str(self.placement_person.student.user.name)+" "+str(self.registered)
