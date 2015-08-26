@@ -82,7 +82,7 @@ def get_resume_binary(context, student, resume_type, verification_resume = False
   if graduation == 'UG' :
     courses = ('DPLM' ,'12TH' ,'10TH')
   elif graduation == 'PG' :
-    courses = ('UG0' ,'DPLM' ,'12TH' ,'10TH' ,'PG0')
+    courses = ('PG0', 'UG0' ,'DPLM' ,'12TH' ,'10TH')
   elif graduation == 'PHD' :
     courses = ('PG0' ,'UG0' ,'DPLM' ,'12TH' ,'10TH')
   course_name_map = {}
