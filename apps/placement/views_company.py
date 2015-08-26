@@ -318,7 +318,7 @@ def workshop_registration(request):
       return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
 
   return render_to_response('placement/basic_form.html',{
-      "title": "Workshop Registration 4P",
+      "title": "Workshop Registration 4P education",
       "action": "",
       "name": "workshop_registration",
       "form": registration_form,

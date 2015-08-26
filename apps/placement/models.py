@@ -328,8 +328,8 @@ class WorkshopRegistration(models.Model):
     """
     placement_person = models.ForeignKey(PlacementPerson, unique=True)
     is_registered = models.BooleanField(default=False, verbose_name = "Select to register")
-    suggestions = models.CharField(null=True, blank=True, verbose_name = "Target Company", max_length = 300)
     options = models.CharField(choices = PC.WORKSHOP_OPTIONS, max_length = 16, default="Group Discussion")
+    suggestions = models.CharField(null=True, blank=True, verbose_name = "Target Companies", max_length = 300)
 
     def _unicode__(self):
       return str(self.placement_person.student.user.name)+" "+str(self.registered)
