@@ -49,9 +49,8 @@ function remove_spare_cookies(){
   var url_piwikid_map = {
     '^/placement/':2,
     '^/lectut/':3,
-    '^/vle/':4,
-    '^/thinktank/':5,
-    '^/lostfound/':6,
+    '^/thinktank/':4,
+    '^/lostfound/':5,
     '^/softwares/':7,
     '^/messmenu/':8,
     '^/research_assistant/':9,
@@ -82,8 +81,8 @@ function remove_spare_cookies(){
           piwikTracker.setCookiePath('/');
         else
           piwikTracker.setCookiePath(urls[0].substr(1));
-        piwikTracker.trackPageView(); 
-        piwikTracker.enableLinkTracking(); 
+        piwikTracker.trackPageView();
+        piwikTracker.enableLinkTracking();
     });
   }
 })();
