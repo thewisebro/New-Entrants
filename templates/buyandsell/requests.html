@@ -1,51 +1,50 @@
 {% extends "buyandsell/base.html" %}
 {% block header %}
-	<body>
-		<div class="headerBackground">
-				<header class="header container">
-					<div class="row">
-						<div class="col-md-3 col-xl-2">
-							<a href="buy-page.html">
-								<h1 class="logo">Buy & Sell</h1>
-							</a>
-						</div>
-                        <!--Search box HTML starts here-->
+<body>
+<div class="headerBackground">
+  <header class="header container">
+    <div class="row">
+      <div class="col-md-3 col-xl-2">
+        <a href="buy-page.html">
+          <h1 class="logo">Buy & Sell</h1>
+        </a>
+      </div>
+      <!--Search box HTML starts here-->
 
-                        <div class="col-md-5 search-area">
-                            <form action="#" id="search_form">
-                                <input class="search-form" type="search" name="keyword" maxlength="50" placeholder="What are you looking for... " autocomplete="off">
-                                <span class="glyphicon glyphicon-search global-search-icon"></span>
-                                <div class="search-result-box">
+      <div class="col-md-5 search-area">
+        <form action="#" id="search_form">
+          <input class="search-form" type="search" name="keyword" maxlength="50" placeholder="What are you looking for... " autocomplete="off">
+          <img class="search-icon" src="{{STATIC_URL}}images/buyandsell/search-icon.png">
+          <div class="search-result-box">
 
-                                </div>
-                            </form>
-                        </div>
-						<div class="col-md-1">
-							<div class="dropdown" style="display:inline">
-			          <button type="button" class="btn dropdown-toggle global-browse" id="menu2" data-toggle="dropdown">Browse</button>
-                         <ul class="dropdown-menu used-dropdown-menu" style="margin-top:42%; margin-left:-188%;" role="menu" aria-labelledby="menu2">
-                                    <div class="arrow-up-behind" style="margin-left:69.5%; margin-top:-11.5%"></div>
-                                    <div class="arrow-up-front" style="margin-left:70.5%; margin-top:-10.5%"></div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-1">
+        <div class="dropdown" style="display:inline">
+          <button type="button" class="btn dropdown-toggle global-browse" id="menu2" data-toggle="dropdown">Browse</button>
+          <ul class="dropdown-menu used-dropdown-menu" style="margin-top:42%; margin-left:-188%;" role="menu" aria-labelledby="menu2">
+            <div class="arrow-up-behind" style="margin-left:69.5%; margin-top:-11.5%"></div>
+            <div class="arrow-up-front" style="margin-left:70.5%; margin-top:-10.5%"></div>
 
-									<li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/viewrequests">Latest</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/viewrequests">Latest</a></li>
 
-                {% for key,value in cat_dict.iteritems %}
-									<li role="presentation" class="dropdown-submenu">
-										<a role="menuitem" tabindex="-1" href="/buyandsell/viewrequests/{{key}}">{{ key }}</a>
-										<ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu2">
-                  {% for row in value %}
-						<li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/viewrequests/{{row.main_category}}/{{row.code}}">{{row.name}}</a></li>
-                  {% endfor %}
-										</ul>
-									</li>
+            {% for key,value in cat_dict.iteritems %}
+            <li role="presentation" class="dropdown-submenu">
+              <a role="menuitem" tabindex="-1" href="/buyandsell/viewrequests/{{key}}">{{ key }}</a>
+              <ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu2">
+                {% for row in value %}
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/viewrequests/{{row.main_category}}/{{row.code}}">{{row.name}}</a></li>
                 {% endfor %}
+
 						</ul>
+        {% endfor %}
 							</div>
 						</div>
 {% if login_flag %}
                         <div class="col-md-3">
                             <div class="dropdown" style="display:inline">
-                                <button class="btn btn-default dropdown-toggle user-photo-button" type="button" id="menu1" data-toggle="dropdown">
+                              <button class="btn btn-default dropdown-toggle user-photo-button user-photo-circle-converter" type="button" id="menu1" data-toggle="dropdown">
                                     <img src="{{ user.photo_url }}" class="user-photo">
                                     <span class="caret user-photo-caret"></span>
                                 </button>
@@ -71,8 +70,8 @@
 {% endblock %}
 
 
-		{% block content %}
-		<div class="container">
+{% block content %}
+<div class="container">
 
 			<div class="row sub-header">
 				<div class="col-md-3">
@@ -185,13 +184,13 @@
 							<div class="col-md-12">
 								<p>Price Range</p>
 
-								<form action="" class="input-group-addon view-what" method="get">
-									<div class="price-line">
-                                        <div class="slider-back"></div>
-                                        <div id="slider-range"></div>
-										<div class="prices" style= "margin-top:20px;">
-{% if ll and ul %}
-<script>
+            <form action="" class="input-group-addon view-what" method="get">
+              <div class="price-line">
+                <div class="slider-back"></div>
+                <div id="slider-range"></div>
+                <div class="prices" style= "margin-top:20px;">
+                  {% if ll and ul %}
+                  <script>
 
 		$( "#slider-range" ).slider
 		({
@@ -211,7 +210,7 @@
 											<input type="text" id="low" class="price-range-text-input" value="{% if ll %}{{ll}}{% endif %}" name="ll">
 											<input type="text" id="high" class="price-range-text-input" value="{% if ul %}{{ul}}{% endif %}" name="ul">
 											<button class="global-browse price-range-submit">
-												<span class="glyphicon glyphicon-menu-right"></span>
+                        <img class="price-range-submit-button-image"  src="{{STATIC_URL}}images/buyandsell/price-range-submit-button-image.png">
 											</button>
 										</div>
 									</div>
@@ -248,59 +247,59 @@
                 <nav>
                     <ul class="pagination pagination-customized">
 
-                    {% if table_data.number != 1 %}
-                        <li>
-  <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page=1" aria-label="Previous">
-                                <span aria-hidden="true">First</span>
-                            </a>
-                        </li>
-                    {% endif %}
+        {% if table_data.number != 1 %}
+        <li>
+          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page=1" aria-label="Previous">
+            <span aria-hidden="true">First</span>
+          </a>
+        </li>
+        {% endif %}
 
-                      {% if  table_data.has_previous %}
-                        <li>
-  <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.previous_page_number }}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                    {% endif %}
+        {% if  table_data.has_previous %}
+        <li>
+          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.previous_page_number }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        {% endif %}
 
-                       {% for page in page_list %}
-                          {% if table_data.number == page %}
-                             <li class="active">
-                              <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.number }}">{{table_data.number}}
-                              </a>
-                            </li>
-                         {% else %}
-                              <li>
-                                <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ page }}">{{ page }}
-                                </a>
-                              </li>
-                          {% endif %}
-                        {% endfor %}
+        {% for page in page_list %}
+        {% if table_data.number == page %}
+        <li class="active">
+          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.number }}">{{table_data.number}}
+          </a>
+        </li>
+        {% else %}
+        <li>
+          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ page }}">{{ page }}
+          </a>
+        </li>
+        {% endif %}
+        {% endfor %}
 
-                       {% if table_data.has_next %}
-                        <li>
-                            <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.next_page_number }}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                      {% endif %}
+        {% if table_data.has_next %}
+        <li>
+          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.next_page_number }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        {% endif %}
 
-              {% if table_data.number != table_data.paginator.num_pages %}
-                        <li>
-                            <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ paginator.num_pages }}" aria-label="Next">
-                <span aria-hidden="true">last</span>
-                            </a>
-                        </li>
-             {% endif %}
+        {% if table_data.number != table_data.paginator.num_pages %}
+        <li>
+          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ paginator.num_pages }}" aria-label="Next">
+            <span aria-hidden="true">last</span>
+          </a>
+        </li>
+        {% endif %}
 
-                    </ul>
-                </nav>
-{% endblock %}
-{% endif %}
-			</div>
+      </ul>
+    </nav>
+    {% endblock %}
+    {% endif %}
+  </div>
 
-		</div>
+</div>
 {% endblock %}
 
 

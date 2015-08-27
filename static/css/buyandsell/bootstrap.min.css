@@ -4604,6 +4604,12 @@ fieldset[disabled] .btn-default:hover {
   border-color: #1081DE;
 }
 
+.btn-primary a
+{
+  color: #fff;
+}
+
+
 .btn-primary.active,
 .btn-primary.focus,
 .btn-primary:active,

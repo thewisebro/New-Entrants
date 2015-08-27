@@ -64,7 +64,12 @@
                 <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-15.5%"></div>
                 <div class="arrow-up-front" style="margin-left:75%; margin-top:-13.5%"></div>
                 <li role="presentation"><a onclick ="edit_sell({{ row.pk }})" class="edit-button-text">Edit</a></li>
-                <li role="presentation"><a title="Remove" onclick = "trash('sell',{{row.id}})" class="item-remove-text">Remove</a></li>
+                <li role="presentation">
+                  <a title="Remove" onclick = "trash('sell',{{row.id}})" class="item-remove-text">Remove direct</a>
+                </li>
+                <li role="presentation">
+                  <a data-toggle="modal" data-target="#remove-item-confirm-modal" class="">Remove modal</a>
+                </li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mark Sold</a></li>
               </ul>
             </div>
@@ -116,7 +121,6 @@
                   <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
                   <span class="request-remove-button-text">Remove</span>
                 </a>
-
                 <a onclick="edit_request({{row.id}})" class="edit-button">
                   <img class="request-edit-button-image" src="{{STATIC_URL}}images/buyandsell/edit-button.png">
                   <span class="request-edit-button-text">Edit</span>
@@ -134,6 +138,25 @@
   </div>
 </div>
 
+<div class="modal fade" id="remove-item-confirm-modal" tabindex="-1" role="dialog" aria-labelledby="remove-item-confirm-modal-Label" aria-hidden="true">
+  <div class="modal-dialog" style="width:500px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color:white; width:20px; height:20px">&times;</span></button>
+        <h4 class="modal-title" id="modal-title">Are you Sure?</h4>
+      </div>
+      <div class="modal-body">
+        <p class="item-removal-confirmation-text">Are you sure you want to remove this item? <br/> This cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary remove-item-confirm-yes" style="margin:0px auto">
+          <a title="Remove" onclick = "trash('sell',{{row.id}})" class="item-remove-text">Yes</a>
+        </button>
+        <button type="button" class="btn btn-primary remove-item-confirm-no" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
 

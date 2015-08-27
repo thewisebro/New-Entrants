@@ -344,7 +344,13 @@ $(document).ready
       }
     );
 
-
+    //trying to adjust jquery-dialog height as per form height
+  /*  var formHeight = $(".manage-watched-box-form").css("height");
+    console.log(formHeight);
+    $(".manage-watched-box-body").css("height",formHeight+50+"px");
+    var bodyHeight = $(".manage-watched-box-body").css("height");
+    console.log(bodyHeight);
+  */
 
   }
 
