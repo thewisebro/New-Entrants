@@ -4,6 +4,12 @@ COMPANY_APPLICATION_STATUS = (
       ('SEL', 'Selected'),
     )
 
+WORKSHOP_OPTIONS = (
+      ('Group Discussion','Group Discussion'),
+      ('Case Study','Case Study'),
+      ('Both','Both'),
+    )
+
 FORUM_CHOICES = (
       ('T', 'Technical'),
       ('P', 'Placement'),

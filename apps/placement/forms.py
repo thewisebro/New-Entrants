@@ -102,8 +102,8 @@ class Profile(forms.ModelForm):
                'passport_no', 'nearest_station', 'local_guardian_name',
                'local_guardian_address', 'local_guardian_contact_no',
                'physically_disabled', 'fulltime', 'resident', 'license_no',
-               'category', 'home_contact_no')
-  birth_date = forms.CharField(required = False)
+               'category', 'home_contact_no', 'birth_date')
+  birth_date = forms.DateField(required = True, widget=forms.DateInput(attrs={'class':'iDateField'}))
 
 class EducationalFormset(BaseModelFormSet):
     pass
@@ -168,6 +168,11 @@ class EditSlotForm(forms.ModelForm):
 class AddShortlistForm(forms.Form):
   student = forms.CharField(widget=forms.Textarea)
   company = forms.CharField(widget=forms.TextInput)
+
+class WorkshopRegistrationForm(forms.ModelForm):
+  class Meta:
+    model = models.WorkshopRegistration
+    exclude = ('placement_person',)
 
 def BaseModelFormFunction(model_type, exclude_list=None, data=None,**kwargs):
   """

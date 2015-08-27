@@ -288,3 +288,40 @@ def set_workshop_priority(request):
       "is_checked": is_checked,
       "message": message,
         }, context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+def workshop_registration(request):
+  student = request.user.student
+  plac_person = student.placementperson
+  if plac_person.status not in ['VRF', 'OPN', 'LCK']:
+    messages.error(request, 'You can not register for workshop. In case of any disperency, please contact IMG.')
+    return HttpResponseRedirect(reverse('placement.views.index'))
+  prev_registration = WorkshopRegistration.objects.get_or_none(placement_person = plac_person)
+  registration_form = forms.WorkshopRegistrationForm(instance = prev_registration)
+  if request.method=="POST":
+    registration_form = forms.WorkshopRegistrationForm(request.POST, instance = prev_registration)
+    if registration_form.is_valid():
+      registration_obj = registration_form.save(commit=False)
+      registration_obj.placement_person = plac_person
+      l.info(request.user.username + ': workshop registration status changed to '+str(registration_obj.is_registered))
+      if registration_obj.is_registered:
+        registration_obj.save()
+        messages.success(request, 'Successfully registered for Workshop.')
+      else:
+        registration_obj.delete()
+        messages.success(request, 'Successfully de-registered for Workshop.')
+      return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
+    else:
+      l.info(request.user.username + ': Error saving workshop registration detail')
+      messages.error(request, 'Unknown error occured.')
+      return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
+
+  return render_to_response('placement/basic_form.html',{
+      "title": "Workshop Registration 4P Education",
+      "action": "",
+      "name": "workshop_registration",
+      "form": registration_form,
+      "editable_warning": "",
+      }, context_instance = RequestContext(request))
+
