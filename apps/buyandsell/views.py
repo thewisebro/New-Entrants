@@ -23,6 +23,7 @@ def buy(request,mc = None,c = None):
   login_flag = False
   if request.user is not None and request.user.is_authenticated():
    login_flag = True
+
   main_watched_cat , sub_watched_cat , watched_cat_dict=get_watched_categories(request)
   sub_watched_cat = [ cat.name for cat in sub_watched_cat ]
 
@@ -66,7 +67,8 @@ def buy(request,mc = None,c = None):
       'sub_watched':sub_watched_cat,
       'queries':queries_without_page,
       'll':pl if pl else 1,
-      'ul':pu if pu else 50000
+      'ul':pu if pu else 50000,
+      'user':request.user if login_flag else None
           }
       return render(request,'buyandsell/buy-page.html',context)
 
@@ -85,7 +87,8 @@ def buy(request,mc = None,c = None):
       'sub_watched':sub_watched_cat,
       'queries':queries_without_page,
       'll':pl if pl else 1,
-      'ul':pu if pu else 50000
+      'ul':pu if pu else 50000,
+      'user':request.user if login_flag else None
            }
       return render(request,'buyandsell/buy-page.html',context)
 
@@ -132,7 +135,8 @@ def buy(request,mc = None,c = None):
         'sub_watched':sub_watched_cat,
         'queries':queries_without_page,
         'll':pl if pl else 1,
-        'ul':pu if pu else 50000
+        'ul':pu if pu else 50000,
+        'user':request.user if login_flag else None
             }
       return render(request,'buyandsell/buy-page.html',context)
 
@@ -162,7 +166,8 @@ def buy(request,mc = None,c = None):
     'sub_watched':sub_watched_cat,
     'queries':queries_without_page,
     'll':pl if pl else 1,
-    'ul':pu if pu else 50000
+    'ul':pu if pu else 50000,
+    'user':request.user if login_flaf else None
           }
 
   return render(request,'buyandsell/buy-page.html',context)
@@ -207,7 +212,8 @@ def viewrequests(request,mc=None,c=None):
       'sub_watched':sub_watched_cat,
       'queries':queries_without_page,
       'll':pl if pl else 1,
-      'ul':pu if pl else 50000
+      'ul':pu if pl else 50000,
+      'user':request.user if login_flag else None
           }
       return render(request,'buyandsell/requests.html',context)
     if pu >= 0 and pl >= 0 and pu > pl:
@@ -225,7 +231,8 @@ def viewrequests(request,mc=None,c=None):
       'sub_watched':sub_watched_cat,
       'queries':queries_without_page,
       'll':pl if pl else 1,
-      'ul':pu if pu else 50000
+      'ul':pu if pu else 50000,
+      'user':request.user if login_flag else None
            }
       return render(request,'buyandsell/requests.html',context)
 
@@ -279,7 +286,8 @@ def viewrequests(request,mc=None,c=None):
         'sub_watched':sub_watched_cat,
         'queries':queries_without_page,
         'll':pl if pl else 1,
-        'ul':pu if pl else 50000
+        'ul':pu if pl else 50000,
+        'user':request.user if login_flag else None
             }
       return render(request,'buyandsell/requests.html',context)
 
@@ -311,7 +319,9 @@ def viewrequests(request,mc=None,c=None):
     'sub_watched':sub_watched_cat,
     'queries':queries_without_page,
     'll':pl if pl else 1,
-    'ul':pu if pl else 50000
+    'ul':pu if pl else 50000,
+    'user':request.user if login_flag else None
+
           }
   return render(request,'buyandsell/requests.html',context)
 
@@ -760,7 +770,8 @@ def seeall(request,search_type):
         'ul':pu if pu else 50000,
         'queries':queries_without_page,
         'search_string':srch_string,
-        'search_flag':True
+        'search_flag':True,
+        'user':request.user if login_flag else None
           }
         return render(request,'buyandsell/requests.html',context)
 
@@ -776,7 +787,8 @@ def seeall(request,search_type):
         'ul':pu if pu else 50000,
         'queries':queries_without_page,
         'search_string':srch_string,
-        'search_flag':True
+        'search_flag':True,
+        'user':request.user if login_flag else None
           }
         return render(request,'buyandsell/requests.html',context)
 
@@ -807,7 +819,8 @@ def seeall(request,search_type):
         'ul':pu if pu else 50000,
         'queries':queries_without_page,
         'search_string':srch_string,
-        'search_flag':True
+        'search_flag':True,
+        'user':request.user if login_flag else None
             }
       return render(request,'buyandsell/requests.html',context)
 
@@ -833,7 +846,8 @@ def seeall(request,search_type):
     'ul':pu if pu else 50000,
     'queries':queries_without_page,
     'search_string':srch_string,
-    'search_flag':True
+    'search_flag':True,
+    'user':request.user if login_flag else None
     }
 
     return render(request,'buyandsell/requests.html',context)
@@ -865,7 +879,8 @@ def seeall(request,search_type):
         'ul':pu if pu else 50000,
         'queries':queries_without_page,
         'search_string':srch_string,
-        'search_flag':True
+        'search_flag':True,
+        'user':request.user if login_flag else None
           }
         return render(request,'buyandsell/buy-page.html',context)
 
@@ -881,8 +896,9 @@ def seeall(request,search_type):
         'ul':pu if pu else 50000,
         'queries':queries_without_page,
         'search_string':srch_string,
-        'search_flag':True
-          }
+        'search_flag':True,
+        'user':request.user if login_flag else None
+           }
         return render(request,'buyandsell/buy-page.html',context)
 
     for word in words:
@@ -911,7 +927,8 @@ def seeall(request,search_type):
         'ul':pu if pu else 50000,
         'queries':queries_without_page,
         'search_string':srch_string,
-        'search_flag':True
+        'search_flag':True,
+        'user':request.user if login_flag else None
             }
       return render(request,'buyandsell/buy-page.html',context)
 
@@ -937,7 +954,8 @@ def seeall(request,search_type):
     'ul':pu if pu else 50000,
     'queries':queries_without_page,
     'search_string':srch_string,
-    'search_flag':True
+    'search_flag':True,
+    'user':request.user if login_flag else None
     }
 
     return render(request,'buyandsell/buy-page.html',context)
@@ -1067,6 +1085,8 @@ def my_account(request):
            'succ_sold_items':succ_sold_items,
            'succ_request_items':succ_request_items,
            'cat_dict':cat_dict,
+           'user':request.user,
+           'login_flag':True
           }
 
   return render(request,'buyandsell/my-account.html',context)

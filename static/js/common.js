@@ -269,6 +269,7 @@ function logout(from_buyandsell){
       user = {
         is_authenticated: false
       };
+      console.log("kanav");
       $(document).trigger("logout");
       if ( typeof(from_buyandsell) != 'undefined' && from_buyandsell == true )
        window.top.location.reload();

@@ -20,7 +20,7 @@
         {% for key,value in cat_dict.items %}
         <div manage-watched-box-category-group>
     <span class="manage-watched-box-main">
-      <input type="checkbox" class="checkbox-custom-to-buyandsell" id="{{ key }}" onchange="watch_subs('{{ key }}',{{value|length}})" {% if key in main_watched_cat %} checked{% endif %}>
+      <input type="checkbox"  id="{{ key }}" onchange="watch_subs('{{ key }}',{{value|length}})" {% if key in main_watched_cat %} checked class="checkbox-custom-to-buyandsell checkbox-custom-to-buyandsell-checked" {% else %}class="checkbox-custom-to-buyandsell" {% endif %}>
         <span class="manage-watched-box-checkbox-text">
           {{ key }}
         </span>
@@ -32,7 +32,7 @@
     <span class="manage-watched-box-sub-group">
       {% for row in value %}
       <span class="manage-watched-box-sub">
-        <input class="checkbox-custom-to-buyandsell" type="checkbox" value="{{ row.id }}" id="{{key}}_{{forloop.counter}}" onchange="main_check('{{ key }}','{{key}}_{{forloop.counter}}',{{value|length}})" name="watched_category" {% if row in sub_watched_cat %} checked{% endif %}>
+        <input  type="checkbox" value="{{ row.id }}" id="{{key}}_{{forloop.counter}}" onchange="main_check('{{ key }}','{{key}}_{{forloop.counter}}',{{value|length}})" name="watched_category" {% if row in sub_watched_cat %} checked class="checkbox-custom-to-buyandsell checkbox-custom-to-buyandsell-checked" {%else%} class="checkbox-custom-to-buyandsell" {% endif %}>
           <span class="manage-watched-box-checkbox-text">
             {{ row.name }}
           </span>

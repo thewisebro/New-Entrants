@@ -22,6 +22,7 @@
 		<script src="{{ STATIC_URL }}js/buyandsell/bootstrap.min.js"></script>
 
 		<script src="{{ STATIC_URL }}js/buyandsell/main.js"></script>
+    <script src="{{ STATIC_URL }}js/common.js"></script>
     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
     <script type="text/javascript" src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script></head>
 
@@ -90,10 +91,11 @@
 							</div>
 						</div>
 
-                        <div class="col-md-3">
+                       {% if login_flag %}
+                          <div class="col-md-3">
                             <div class="dropdown" style="display:inline">
-                                <button class="btn btn-default dropdown-toggle user-photo-button user-photo-circle-converter" type="button" id="menu1" data-toggle="dropdown">
-                                    <img src="designStuff/niteshSir.png" class="user-photo">
+                            <button class="btn btn-default dropdown-toggle user-photo-button user-photo-circle-converter" type="button" id="menu1" data-toggle="dropdown">
+                                    <img src="{{ user.photo_url }}" class="user-photo">
                                     <span class="caret user-photo-caret"></span>
                                 </button>
                                 <ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu1">
@@ -101,7 +103,7 @@
                                     <div class="arrow-up-front" style="margin-left:82%; margin-top:-10.5%"></div>
                                     <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/my-account">My Account</a></li>
                                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Channel- i</a></li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="">Logout</a></li>
+                                    <li role="presentation" ><a role="menuitem" tabindex="-1"  onclick = "logout(from_buyandsell = true)">Logout</a></li>
                                 </ul>
                             </div>
                             <button type="button" data-toggle="modal" data-target="#request-item-modal" class="btn global-button">
@@ -111,6 +113,7 @@
                                 Sell
                             </button>
                         </div>
+                      {% endif %}
 					</div>
 				</header>
 			</div>
@@ -118,7 +121,6 @@
 {% block content %}
 {% endblock %}
 {% block scripts_foot %}
-<script src="{{ STATIC_URL }}js/common.js"></script>
 <script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>
 {% endblock %}
     </body>
