@@ -138,7 +138,7 @@ def company_edit(request, company_id) :
         l.info(request.user.username +': form error in company edit.')
         messages.error(request, form.errors, extra_tags='form_error')
     else :
-      form = forms.CompanyForm(instance = company)
+      form = forms.CompanyForm(instance = company, auto_id='%s')
       if company.brochure :
         # Change the url of brochure
         company.brochure.name = u'internship/brochures/' + unicode(company.id) + '/'
@@ -418,7 +418,7 @@ def branch_details(request, branch_code = None) :
 
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def import_intern_priority(request):
 #  if request.method=='POST':
     company_priority = CompanyPriority.objects.all()

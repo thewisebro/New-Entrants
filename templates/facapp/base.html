@@ -95,7 +95,7 @@ Faculty Profile
     <link rel='stylesheet' href='{{ STATIC_URL }}css/facapp/generic_form.css' type='text/css'/>
     {% include "facapp/generic_form.html" %}
     {% if list %}
-      <h4>{{ model_name_space_separated }}:</h4> 
+      <h4>{{ model_name_space_separated }}:</h4>
       <ul>
         {% for l in list %}
           {% block model_details %} {% endblock %}

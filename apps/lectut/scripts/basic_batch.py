@@ -5,7 +5,7 @@ group = Group.objects.get(nickname = 'IMG')
 groupInfo = GroupInfo.objects.get(group = group)
 members = groupInfo.members.all()
 
-batches = Batch.objects.filter(id__in=[1,2,3,4,5]).all()
+batches = Batch.objects.filter(id__in=[4550,4551,4552]).all()
 for batch in batches:
   for member in members:
     try:

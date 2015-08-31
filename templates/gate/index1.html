@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GATE 2016 : IITR IRS</title>
+<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+<script type='text/javascript' href="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src = "{{ STATIC_URL }}jquery/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $(".add-more").click(function(){
+            var new_field = '<textarea name="other-scholarship-detail"></textarea>';
+    $(this).before(new_field);
+    })});
+</script>
+</head>
+<script type="text/javascript">
+$(function () {
+  $("#id_scholar_type").change(function() {
+    var val = $(this).val();
+    if(val === "MCM") {
+        $("#optionsdiv").hide();
+    }
+    else if(val === "GIS") {
+        $("#optionsdiv").show();
+    }
+  });
+});
+</script>
+<style>
+.errorlist li
+{
+color:red;
+}
+</style>
+
+<body>
+<div class='container'>
+<div class="well">
+  <div>
+    <div style="width:500px; font-size:30px; float:left;">GATE 2016 : IITR IRs</div>
+    <div style="float:left; padding-left:290px;"><a href='/'>Channel I</a></div>
+    <div style="float:left; padding-left:10px;"><a href='{% url 'nucleus.views.logout' %}'>Logout</a></div>
+  </div>
+  
+  <br/><br/>
+<div>
+<form action="" method="post">
+<p>*If the read only fields are empty, please fill your information on channeli settings first and then reload this page.<br/> Also, this form can be submitted once only.</p>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+        <div class="fieldWrapper">
+         {{ form.name.errors }}
+          <label for="id_name">Name:</label>
+          {{ form.name }}
+        </div>
+         <div class="fieldWrapper">
+         {{ form.employee_id.errors }}
+          <label for="id_enroll_no">Employee Id:</label>
+          {{ form.employee_id }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.designation.errors }}
+          <label for="id_graduation">Designation:</label>
+          {{ form.designation }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.department.errors }}
+          <label for="id_branch">Department:</label>
+          {{ form.department }}
+        </div>
+       <div class="fieldWrapper">
+          {{ form.date_of_join.errors }}
+          <label for="id_semester">Date of joining IITR:</label>
+          {{ form.date_of_join }}
+        </div>
+         <div class="fieldWrapper">
+          {{ form.date_of_birth.errors }}
+          <label for="id_category">Date of Birth:</label>
+          {{ form.date_of_birth }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.date_of_joinPos.errors }}
+          <label for="id_sholar_type">Date of joining the present position:</label>
+          {{ form.date_of_joinPos }}
+        </div>
+        <div class="fieldWrapper">
+         {{ form.phone_no_office.errors }}
+          <label for="id_cgpa"> Phone Office:</label>
+          {{ form.phone_no_office }}
+        </div>
+        <div class="fieldWrapper">
+         {{ form.phone_no_resi.errors }}
+          <label for="id_cgpa"> Phone Resi:</label>
+          {{ form.phone_no_resi }}
+        </div>
+        <div class="fieldWrapper">
+         {{ form.grade_pay.errors }}
+          <label for="id_sgpa">Present Grade Pay:</label>
+          {{ form.grade_pay }}
+        </div>
+       <div class="fieldWrapper">
+          {{ form.account_no.errors }}
+          <label for="id_account_no">Bank Account no.:</label>
+          {{ form.account_no }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.mobile_no.errors }}
+          <label for="id_bhawan">Mobile No:</label>
+          {{ form.mobile_no }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.email.errors }}
+          <label for="id_room_no">Email Id:</label>
+          {{ form.email }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.height.errors }}
+          <label for="id_home_address">Height(cms):</label>
+          {{ form.height }}
+        </div>
+          {{ form.weight.errors }}
+          <label for="id_family_income">Weight(kgs):</label>
+          {{ form.weight }}
+          </br>
+          {{ form.weight.errors }}
+          <label for="id_family_income">Age(Yrs):</label>
+          {{ form.age }}
+          <br/>
+        <div class="fieldWrapper">
+          {{ form.home_address.errors }}
+          <label for="id_home_address">Permanent Address:</label>
+          {{ form.home_address }}
+        </div>
+          {{ form.income.errors }}
+          <label for="id_family_income">Annual Income:</label>
+          {{ form.income }} Rs. (No commas)
+          <br/>
+        <div class="fieldWrapper">
+          {{ form.nominee.errors }}
+          <label for="id_home_address">Nominee Name:</label>
+          {{ form.nominee }}
+        </div>
+          {{ form.nominee_relation.errors }}
+          <label for="id_family_income">Relation with Nominee:</label>
+          {{ form.nominee_relation }}
+          <br/>
+          <p>Kindly give order of preference of examination weekends for GATE 2016</p>
+        <div class="fieldWrapper">
+          {{ form.pref1.errors }}
+          {{ form.pref1 }}
+        </div>
+          {{ form.pref2.errors }}
+          <label for="id_family_income">Second Preference:</label>
+          {{ form.pref2 }}
+          <br/>
+          <p>Kindly fill your preference of examination Cities for GATE 2016 (First Choice)</p>
+        <div class="fieldWrapper">
+          {{ form.city1.errors }}
+          {{ form.city1 }}
+        </div>
+          {{ form.city2.errors }}
+          <label for="id_home_address">Second choice:</label>
+          {{ form.city2 }}
+          <br/>
+          {{ form.city3.errors }}
+          <label for="id_home_address">Third choice:</label>
+          {{ form.city3 }}
+          </br>
+          {{ form.city4.errors }}
+          <label for="id_home_address">Fourth choice:</label>
+          {{ form.city4 }}
+          <br/>
+          {{ form.city5.errors }}
+          <label for="id_home_address">Fifth choice:</label>
+          {{ form.city5 }}
+          <br/>
+          {{ form.city6.errors }}
+          <label for="id_home_address">Sixth choice:</label>
+          {{ form.city6 }}
+          <br/>
+          <br/><br/>
+<input type="submit" value="Save changes" />
+</form>
+</div>
+</div>
+</div>
+</body>
+</html>

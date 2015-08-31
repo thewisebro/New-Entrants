@@ -13,6 +13,8 @@ from django.db.models.signals import post_save
 from datetime import datetime, timedelta
 import os
 
+from PIL import Image, ImageOps
+
 from notifications.models import Notification
 from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
@@ -106,7 +108,7 @@ class Post(models.Model):
 
 #  Gives path where uploaded file is saved
 def upload_path(instance , filename ):
-  return ('lectut/'+instance.post.batch.name+'/'+instance.file_type+'/'+filename)
+  return ('lectut/'+instance.post.batch.course.code+'/'+instance.file_type+'/'+filename)
 #  return os.path.join('lectut/',instance.file_type,'/')
 
 
@@ -129,27 +131,42 @@ class Uploadedfile(BaseUpload):
   def delete(self):
     self.deleted = True
     self.save()
+    return None
 
   def as_dict(self):
-        filepath = str(self.upload_file)
-        filename = filepath.split("/")[3]
-        if self.file_type == 'image':
-          filepath = 'media/'+filepath
-        else:
-          filepath = ''
-        fileData={
+    filepath = str(self.upload_file)
+    filename = filepath.split("/")[3]
+    if self.file_type == 'image':
+      filepath = 'media/'+filepath
+    else:
+      filepath = ''
+    fileData={
            'id':self.id,
-           'post':self.post.id,
-           'upload_file':filename,
+#           'post':self.post.id,
+           'upload_file':self.description,
            'filepath':filepath,
            'username':str(self.post.upload_user.name),
            'datetime_created':str(self.datetime_created),
-           'description':self.description,
            'file_type':self.file_type,
            'upload_type':Act_Types[self.upload_type],
            'download_count':self.download_count,
-        }
-        return fileData
+    }
+    return fileData
+
+# Used for search
+  def as_dict_disp(self):
+    filepath = str(self.upload_file)
+    filename = filepath.split("/")[3]
+
+    fileData={
+           'id':self.id,
+           'upload_file':self.description,
+           'username':str(self.post.upload_user.name),
+           'datetime_created':str(self.datetime_created),
+           'file_type':self.file_type,
+           'upload_type':Act_Types[self.upload_type],
+    }
+    return fileData
 
 
 class post_comment(models.Model):
@@ -211,5 +228,24 @@ class Activity(models.Model):
                u = Upload()
                u.save()
 
-  post_save.connect(create_upload, sender=BaseUpload)'''
+  post_save.connect(create_upload, sender=BaseUpload)
+  
+  def save(self , *args, **kwargs):
+    import pdb;pdb.set_trace()
+    fileToAdd = super(Uploadedfile , self).save(*args, **kwargs)
+    if self.file_type == 'image':
+      size = 100,100
+      try:
+#        outfile = str(self.upload_file).split(".")[0]+"_thumbnail"
+        outfile = str(self.upload_file)
+        im = Image.open(self.upload_file)
+        im = im.resize(size, Image.ANTIALIAS)
+#        thumb = ImageOps.fit(self.upload_file, size, Image.ANTIALIAS)
+#        im.thumbnail(size)
+        im.save(self.upload_file, "JPEG")
+      except Exception as e:
+        print "cannot create thumbnail "+str(e)
+
+    return fileToAdd'''
+
 

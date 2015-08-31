@@ -20,6 +20,8 @@ from operator import itemgetter
 import mimetypes, os
 import json
 
+from PIL import Image
+
 from nucleus.models import Batch, Course, User, Student , Faculty , RegisteredCourse
 from forms import *
 from models import *
@@ -45,7 +47,7 @@ def CORS_allow(view):
 
     response = view(request, *args, **kwargs)
     if DEVELOPMENT:
-      response["Access-Control-Allow-Origin"] = "http://172.25.55.156:9008"
+      response["Access-Control-Allow-Origin"] = "http://192.168.121.187:9008"
       response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
       response["Access-Control-Allow-Credentials"] = 'true'
 #      response["Access-Control-Max-Age"] = "1000"
@@ -82,9 +84,9 @@ def dispbatch(request):
     if userType == "0":
       student = request.user.student
       batches = student.batch_set.all()
-      courses = map(lambda x: x.course, batches)
-      batches_info = map(lambda x: batch_dict(x),batches)
-      userPosts = Post.post_objects.all().order_by('-datetime_created')
+#      courses = map(lambda x: x.course, batches)
+      batches_info = map(lambda x: batch_dict_disp(x),batches)
+      userPosts = Post.post_objects.all().order_by('-datetime_created')[:20]
 #      index = settings.PROJECT_ROOT + '/apps/lectut/static/lectut-front/dist/index.html'
 #      with open(index,'r') as f:
 #       response =  HttpResponse(f.read())
@@ -93,12 +95,12 @@ def dispbatch(request):
     elif userType == "1":
       faculty = request.user.faculty
       batches = faculty.batch_set.all()
-      courses = map(lambda x: x.course, batches)
-      batches_info = map(lambda x: batch_dict(x),batches)
-      userPosts = Post.post_objects.all().order_by('-datetime_created')
+#      courses = map(lambda x: x.course, batches)
+      batches_info = map(lambda x: batch_dict_disp(x),batches)
+      userPosts = Post.post_objects.all().order_by('-datetime_created')[:20]
 
     else:
-      userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')
+      userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')[:20]
       user_info = 'Unknown'
     for post in userPosts:
       posts.append(get_post_dict(post))
@@ -317,8 +319,9 @@ def download_file(request, file_id):
 #mimetype = mimetypes.guess_type(filename)[0]
 
 #  user = User.objects.get(username = 'harshithere')
-  downloadlog = DownloadLog(uploadedfile=download_file , user = request.user)
-  downloadlog.save()
+  if request.user.is_authenticated():
+    downloadlog = DownloadLog(uploadedfile=download_file , user = request.user)
+    downloadlog.save()
 #  file_name = smart_str(download_file)
 
 #  response = HttpResponse(file_check.read(),content_type='application/force-download')
@@ -355,6 +358,14 @@ def batch_dict(Batch):
                 'semtype':Batch.course.semtype,
                 'year':Batch.course.year
                }
+  return batch_info
+
+def batch_dict_disp(Batch):
+  batch_info = {
+                'id' : Batch.id,
+                'course_name' : Batch.course.name,
+                'code' : Batch.name.split(':')[0]
+  }
   return batch_info
 
 
@@ -619,10 +630,11 @@ def search(request):
     query_courses_code =  SearchQuerySet().models(Course).autocomplete(code_auto = value)[:5] #.models(Course)
     query_total_courses = query_courses_name + query_courses_code
     query_courses = sorted(query_total_courses, key=lambda obj: obj.score)
+    query_users = SearchQuerySet().models(User).autocomplete(name_auto = value) #[:25]
   else:
     query = SearchQuerySet().autocomplete(content_auto = value).models(filter_model)
 
-  final_posts , final_files ,posts , upload_files , batches , final_batches = [],[],[],[],[],[]
+  final_posts , final_files ,posts , upload_files , batches , final_batches , final_faculties = [],[],[],[],[],[],[]
   print query_uploadfile
   try:
     posts = map(lambda result:Post.objects.get(id = result.pk) if Post.objects.filter(id=result.pk).exists() else None,query_post)
@@ -633,14 +645,80 @@ def search(request):
   except:
     pass
 
-  final_posts = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,posts)
-  final_files = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,upload_files)
-  final_batches = map(lambda result:batch_dict(result) ,batches)
+  count_fac = 0
+  for some_user in query_users:
+    this_user = User.objects.get(id = some_user.pk)
+    if getUserType(this_user) == "1":
+      final_faculties.append({'id':this_user.id , 'name':this_user.name, 'photo':this_user.photo_url})
+      count_fac +=1
+    if count_fac ==5:
+      break
 
-  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'status':100}
+  final_posts = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,posts)
+  final_files = map(lambda result:result.as_dict_disp() if (result is not None and result.deleted == False) else None,upload_files)
+  final_batches = map(lambda result:batch_dict_disp(result) ,batches)
+
+  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'final_faculties':final_faculties , 'status':100}
   return HttpResponse(json.dumps(results), content_type="application/json")
 
 
+@csrf_exempt
+@CORS_allow
+def join_batch(request , batch_id):
+  if request.user.is_authenticated():
+    userType = getUserType(request.user)
+    if userType == "1":
+      faculty = request.user.faculty
+      batch = Batch.objects.get(id = batch_id)
+      batch.faculties.add(faculty)
+      return HttpResponse(json.dumps({'msg':'Successfully Joined Course','status':100}), content_type="application/json")
+    else:
+      return HttpResponse(json.dumps({'msg':'You are not a faculty','status':101}), content_type="application/json")
+  else:
+    return HttpResponse(json.dumps({'msg':'Some problem occured','status':102}), content_type="application/json")
+
+
+@csrf_exempt
+@CORS_allow
+def leave_batch(request , batch_id):
+  if request.user.is_authenticated():
+    userType = getUserType(request.user)
+    if userType == "1":
+      faculty = request.user.faculty
+      batch = Batch.objects.get(id = batch_id)
+      batch.faculties.remove(faculty)
+      return HttpResponse(json.dumps({'msg':'Successfully Left Course','status':100}), content_type="application/json")
+    else:
+      return HttpResponse(json.dumps({'msg':'You are not a faculty','status':101}), content_type="application/json")
+  else:
+    return HttpResponse(json.dumps({'msg':'Some problem occured','status':102}), content_type="application/json")
+
+@csrf_exempt
+@CORS_allow
+def faculty_files(request, faculty_id):
+  if not User.objects.filter(id = faculty_id).exists():
+    return HttpResponse(json.dumps({'msg':'Faculty Doesnot exist' , 'status':101}), content_type="application/json")
+  user = User.objects.get(id = faculty_id)
+  try:
+    faculty = user.faculty
+  except:
+    return HttpResponse(json.dumps({'msg':'User is not a faculty' , 'status':101}), content_type="application/json")  
+  All_files = {}
+  uploaded_files = Uploadedfile.objects.all().filter(post__upload_user = user)
+  for someFile in uploaded_files:
+    post = Post.objects.get(id = someFile.post_id)
+    fileDetails = someFile.as_dict()
+#    import pdb;pdb.set_trace()
+    postData = post.as_dict()
+    course_name = postData['batch']['course_name']
+    if course_name not in All_files:
+      All_files[course_name] = []
+    All_files[course_name].append(fileDetails)
+
+  return HttpResponse(json.dumps({'faculty':user.serialize() , 'Files':All_files,'status':100}), content_type="application/json")
+
+
+    
 """
 @csrf_exempt
 @CORS_allow
@@ -676,7 +754,7 @@ def search(request):
   results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'status':100}
   return HttpResponse(json.dumps(results), content_type="application/json")
 """
-# VIEWS FOR INITIAL REGISTRATION
+# VIEWS FOR INITIAL REGISTRATION ( Redeundant As of now )
 
 def create_batch(request):
   user = request.user
@@ -708,7 +786,7 @@ def create_batch(request):
   return HttpResponse(json.dumps(batch.batch_dict()), content_type='appliaction/json')
 
 
-def join_batch(request , batch_id):
+def join_batch_old(request , batch_id):
   batch = Batch.objects.get(id = batch_id)
   user = request.user
   userType = getUserType(user)

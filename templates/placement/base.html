@@ -85,12 +85,18 @@ Placement Online
           <a href="{% url 'placement.views.index' %}">
             <li id="home_li">Home</li>
           </a>
+          {% comment %}
+          {% if user.student.placementperson.status == 'OPN' or user.student.placementperson.status == 'LCK' or user.student.placementperson.status == 'VRF' %}
+          <a href="{% url 'placement.views_company.workshop_registration' %}">
+            <li id="workshop_registration_li">Workshop Registration</li>
+          </a>
+          {% endif %}
+          {% endcomment %}
           {% if user.student.placementperson.status != 'VRF' and user.student.placementperson.status != 'LCK' %}
           <a href="{% url 'placement.views_profiles.personal_information' %}">
             <li id="personal_information_li">Personal Information</li>
           </a>
           {% endif %}
-
           <a href="{% url 'placement.views_profiles.photo' %}">
             <li id="photo_li">Update Photo</li>
           </a>
@@ -150,7 +156,9 @@ Placement Online
           <a href="{% url 'placement.views.index' %}">
             <li id="home_li">Home</li>
           </a>
-
+          <a href="{% url 'placement.views_company.workshop_registration_export' %}">
+            <li id="workshop_registration_export">Export Workshop Registration</li>
+          </a>
           <a href="{% url 'placement.views_admin.notice_upload' %}" >
             <li id="upload_form_li">Upload Form</li>
           </a>

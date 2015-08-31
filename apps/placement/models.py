@@ -84,7 +84,7 @@ class LanguagesKnown(models.Model):
 class ResearchPublications(models.Model):
   # All field req
   author = models.CharField(max_length=MC.TEXT_LENGTH)
-  title  = models.CharField(max_length=MC.TEXT_LENGTH)
+  title  = models.CharField(max_length=200)
   publisher = models.CharField(max_length=MC.TEXT_LENGTH)
   year = models.IntegerField()
   priority = models.IntegerField(choices=MC.PRIORITY_CHOICES, default=1)
@@ -320,6 +320,19 @@ class CompanyPlacementPriority(models.Model):
 
     def __unicode__(self):
       return str(self.company) + str(self.priority) + str(self.slots)
+
+class WorkshopRegistration(models.Model):
+    """
+      Workshop Registration Model: Used in 2015-2016 session: Workshop was optional in this year.
+      This is different from Workshop Priority. Workshop priority was used in 2014-15. It was compulsory in this year.
+    """
+    placement_person = models.ForeignKey(PlacementPerson, unique=True)
+    is_registered = models.BooleanField(default=False, verbose_name = "Select to register")
+    options = models.CharField(choices = PC.WORKSHOP_OPTIONS, max_length = 16, default="Group Discussion")
+    suggestions = models.CharField(null=True, blank=True, verbose_name = "Target Companies", max_length = 300)
+
+    def _unicode__(self):
+      return str(self.placement_person.student.user.name)+" "+str(self.registered)
 
 class WorkshopPriority(models.Model):
 

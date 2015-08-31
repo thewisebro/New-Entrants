@@ -308,14 +308,17 @@ def mcm_submit(request):
       student.save()
       person.bhawan = form.cleaned_data['bhawan']
       person.room_no = form.cleaned_data['room_no']
-      person.personal_contact_no = form.cleaned_data['mobile_no']
-      person.email_id = form.cleaned_data['email']
+      person.user.contact_no = form.cleaned_data['mobile_no']
+      person.user.email = form.cleaned_data['email']
+      print person.user.email
       personinfo.fathers_name = form.cleaned_data['fathers_name']
       personinfo.fathers_occupation = form.cleaned_data['fathers_occupation']
       personinfo.permanent_address = form.cleaned_data['home_address']
       personinfo.bank_name = form.cleaned_data['bank_name']
       personinfo.bank_account_no = form.cleaned_data['account_no']
+      person.user.save()
       person.save()
+      print person.user.email
       personinfo.save()
       #template_name = 'mcm/mcm_pdf.html'
       personinfo, created = StudentInfo.objects.get_or_create(student = person)
