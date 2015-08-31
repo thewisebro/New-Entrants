@@ -718,7 +718,7 @@ textarea
 
 .watched-categories ul ul li
 {
-  margin-left:15px;
+  margin-left:20px;
   list-style: none;
   font-size: 13px;
   color: #545454;
@@ -799,7 +799,7 @@ td .edit-button
 .categories-you-are-watching
 {
   position: relative;
-  margin: 20px auto 12px -12px;
+  margin: 0 auto 12px -12px;
   text-align: center;
   font-weight: bold;
 }
@@ -1067,4 +1067,96 @@ a:focus
 {
   width: 8px;
   margin: 0 3px;
+}
+
+.alert-error
+{
+  position: fixed;
+  top: 50px;
+  background-color: #ffd2d2;
+  color: #dd0000;
+  border: 1px solid #dd0000;
+  z-index: 100;
+  padding: 10px 15px;
+}
+
+.your-phone-no
+{
+  position: relative;
+  margin: 20px auto 12px -12px;
+  text-align: left;
+  font-weight: bold;
+  padding-left: 37px;
+  display: inline-block;
+}
+
+.phone-no-visibility-toggle
+{
+  display: inline-block;
+  position: absolute;
+  width: 75px;
+  height: 21px;
+  border: 1px solid c5c5c5;
+  overflow: hidden;
+  left: 155px;
+  top: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+
+}
+
+.phone-no-visibility-toggle-options
+{
+  display: inline;
+  position: absolute;
+  top: -3px;
+  font-size: 11px;
+  padding: 5px 12px;
+}
+
+.phone-no-visibility-toggle-slider
+{
+  position: absolute;
+  left: -3px;
+}
+
+.phone-no-visible
+{
+  left: 0px;
+  padding-right: 19px;
+  color: #ffffff;
+  background: #1081de;
+}
+
+.phone-no-hidden
+{
+  left: 68px;
+  background-color: #dddddd;
+  padding-left: 26px;
+}
+
+.phone-no-visibility-toggle-button
+{
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background-color: #ffffff;
+  border: 1px solid #fbf1f1;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  left: 208px;
+  top: 18px;
+  cursor: pointer;
+  box-shadow: 0px 1px 3px #DDD;
+}
+
+.phone-no-visibility-info-text
+{
+  padding: 0 25px;
+  font-size: 12px;
+  font-style: italic;
+  color: #7D7D7D;
 }

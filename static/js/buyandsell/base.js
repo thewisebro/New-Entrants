@@ -1,10 +1,10 @@
 //watch("ELECTRONICS");
 var opened_dialog="";  //variable to keep check of the opened dialog
 
-function watch(main_category,category)
+function watch(item,main_category,category)
 {
 
-  if($("#watch_btn").hasClass("watch-button-watching"))
+  if($(item).hasClass("watch-button-watching"))
   {
     if (category != "None")
     {
@@ -17,8 +17,8 @@ function watch(main_category,category)
       watch_cat(url);
     }
 
-    $("#watch_btn").removeClass("watch-button-watching");
-    $("#watch_btn").text("Watch this Category");
+    $(item).removeClass("watch-button-watching");
+    $(item).text("Watch this Category");
   }
   else
   {
@@ -32,8 +32,8 @@ function watch(main_category,category)
       url="/buyandsell/watch/"+main_category+"/";
       watch_cat(url);
     }
-    $("#watch_btn").addClass("watch-button-watching");
-    $("#watch_btn").text("Watching");
+    $(item).addClass("watch-button-watching");
+    $(item).text("Watching");
   }
 
 }
@@ -369,7 +369,8 @@ function main_check(id_parent,id,len_sub)
     }
   }
   else  if(elem.prop("checked")==true)
-  { $("#" + id).addClass("checkbox-custom-to-buyandsell-checked");
+  {
+    $("#" + id).addClass("checkbox-custom-to-buyandsell-checked");
     for(var i=1;i<=len_sub;i++)
     {
       if( $("#"+id_parent+"_"+i).prop("checked")==false)
@@ -581,3 +582,25 @@ $(document).ready
 
   }
 );
+
+//Function to center align a div horizontally
+jQuery.fn.centerHorizontally = function () {
+  this.css("position","absolute");
+  this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) +  $(window).scrollLeft()) + "px");
+  return this;
+}
+
+  //Function to center align a div vertically
+  jQuery.fn.centerVertically = function () {
+    this.css("position","absolute");
+    this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) + $(window).scrollTop()) + "px");
+    return this;
+  }
+
+  //Function to center align a div both horizontally and vertically
+  jQuery.fn.center= function () {
+    this.css("position","absolute");
+    this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) + $(window).scrollTop()) + "px");
+    this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) +  $(window).scrollLeft()) + "px");
+    return this;
+  }
