@@ -1,7 +1,11 @@
 package img.newentrants;
 
 import android.app.Activity;
+<<<<<<< HEAD
 import android.support.v7.app.AppCompatActivity;
+=======
+import android.support.v7.app.ActionBarActivity;
+>>>>>>> 74941fafc479d89c34c2312423901b20ca87da51
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,7 +22,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+<<<<<<< HEAD
 public class Navigation extends AppCompatActivity
+=======
+
+public class Navigation extends ActionBarActivity
+>>>>>>> 74941fafc479d89c34c2312423901b20ca87da51
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -58,6 +67,7 @@ public class Navigation extends AppCompatActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
+<<<<<<< HEAD
                 mTitle = getString(R.string.title_section1);
                 break;
             case 2:
@@ -65,6 +75,24 @@ public class Navigation extends AppCompatActivity
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
+=======
+                mTitle = getString(R.string.tab1);
+                break;
+            case 2:
+                mTitle = getString(R.string.tab2);
+                break;
+            case 3:
+                mTitle = getString(R.string.tab3);
+                break;
+            case 4:
+                mTitle=getString(R.string.tab4);
+                break;
+            case 5:
+                mTitle=getString(R.string.tab5);
+                break;
+            case 6:
+                mTitle=getString(R.string.tab6);
+>>>>>>> 74941fafc479d89c34c2312423901b20ca87da51
                 break;
         }
     }

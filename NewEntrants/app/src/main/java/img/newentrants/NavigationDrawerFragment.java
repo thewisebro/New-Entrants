@@ -1,6 +1,10 @@
 package img.newentrants;
 
+<<<<<<< HEAD
 import android.support.v7.app.AppCompatActivity;
+=======
+import android.support.v7.app.ActionBarActivity;
+>>>>>>> 74941fafc479d89c34c2312423901b20ca87da51
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -97,15 +101,33 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
+<<<<<<< HEAD
+=======
+       // mDrawerListView.setAdapter(new ArrayAdapter<String>(this,R.layout.fragment_navigation_drawer)
+>>>>>>> 74941fafc479d89c34c2312423901b20ca87da51
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
+<<<<<<< HEAD
                 new String[]{
                         getString(R.string.title_section1),
                         getString(R.string.title_section2),
                         getString(R.string.title_section3),
                 }));
+=======
+                getResources().getStringArray(R.array.tabs)
+
+                /*new String[]{
+                        getString(R.string.tab1),
+                        getString(R.string.tab2),
+                        getString(R.string.tab3),
+                        getString(R.string.tab4),
+                        getString(R.string.tab5),
+                        getString(R.string.tab6),
+                }*/
+        ));
+>>>>>>> 74941fafc479d89c34c2312423901b20ca87da51
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }
@@ -267,7 +289,11 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private ActionBar getActionBar() {
+<<<<<<< HEAD
         return ((AppCompatActivity) getActivity()).getSupportActionBar();
+=======
+        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+>>>>>>> 74941fafc479d89c34c2312423901b20ca87da51
     }
 
     /**

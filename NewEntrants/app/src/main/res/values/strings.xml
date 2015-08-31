@@ -1,10 +1,27 @@
 <resources>
     <string name="app_name">NewEntrants</string>
 
+<<<<<<< HEAD
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
 
+=======
+    <string name="tab1">Profile</string>
+    <string name="tab2">Blogs</string>
+    <string name="tab3">Peer Connect</string>
+    <string name="tab4">Senior Connect</string>
+    <string name="tab5">Edit Info</string>
+    <string name="tab6">Logout</string>
+    <string-array name="tabs">
+        <item>Profile</item>
+        <item>Blogs</item>
+        <item>Peer Connect</item>
+        <item>Senior Connect</item>
+        <item>Edit Info</item>
+        <item>Logout</item>
+    </string-array>
+>>>>>>> 74941fafc479d89c34c2312423901b20ca87da51
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
