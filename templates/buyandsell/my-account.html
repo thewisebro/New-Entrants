@@ -68,7 +68,7 @@
                   <a title="Remove" onclick = "trash('sell',{{row.id}})" class="item-remove-text">Remove direct</a>
                 </li>
                 <li role="presentation">
-                  <a data-toggle="modal" data-target="#remove-item-confirm-modal" class="">Remove modal</a>
+                  <a data-toggle="modal" onclick = "assign_id({{row.id}},'sell')" data-target="#remove-item-confirm-modal" class="">Remove modal</a>
                 </li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mark Sold</a></li>
               </ul>
@@ -150,7 +150,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary remove-item-confirm-yes" style="margin:0px auto">
-          <a title="Remove" onclick = "trash('sell',{{row.id}})" class="item-remove-text">Yes</a>
+          <a title="Remove" id = "modal-delete" class="item-remove-text" data-dismiss = "modal">Yes</a>
         </button>
         <button type="button" class="btn btn-primary remove-item-confirm-no" data-dismiss="modal">No</button>
       </div>

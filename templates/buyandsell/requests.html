@@ -106,6 +106,7 @@
             </li>
           {% endif %}
 					</ol>
+{% if login_flag %}
           <a>
           {% if mc and not category %}
             {% if mc in main_watched %}
@@ -135,6 +136,7 @@
           {% endif %}
 
 					</a>
+        {% endif %}
 				</div>
 			</div>
 			<div class="row">

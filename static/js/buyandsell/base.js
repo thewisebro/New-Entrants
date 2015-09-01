@@ -44,7 +44,11 @@ function watch_cat(url)
     url : url,
     success: function (data)
     {
-      console.log("done"+data['success']);
+     console.log(data);
+     if(data['success'] == 'false'){
+          window.location.reload();
+          }
+
     }
   });
 }
@@ -296,7 +300,12 @@ function trash_item(type,id)
     url : "/buyandsell/trash/"+type+"/"+id+"/",
     success: function (data)
     {
+        if(data['success'] == 'false'){
+          window.location.reload();
+          }
+          else{
       $("#"+type+id).remove();
+      }
     }
   });
 }
@@ -395,6 +404,12 @@ $('body').ready(function(){
   });
 });
 
+function assign_id(id , type)
+{
+
+  $("#modal-delete").attr('onclick','trash(' + '"' +type +'"' +','+id + ')' );
+}
+
 show_contact();
 search_form();
 search();
@@ -491,6 +506,8 @@ function edit_request(pk){
 }
 
 function manage(){
+  console.log(user.is_authenticated);
+  check_user_data(user.is_authenticated,user.username);
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
   }

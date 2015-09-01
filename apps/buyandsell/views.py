@@ -15,6 +15,8 @@ from buyandsell.forms import *
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
+from api.utils import get_client_ip, pagelet_login_required,\
+                      ajax_login_required, dialog_login_required
 
 logger = logging.getLogger('buyandsell')
 
@@ -325,7 +327,7 @@ def viewrequests(request,mc=None,c=None):
           }
   return render(request,'buyandsell/requests.html',context)
 
-@login_required
+@dialog_login_required
 def sell(request):
   post_date = timezone.now()
   user = request.user
@@ -373,7 +375,7 @@ def sell(request):
   form=SellForm(initial=init_dict)
   return render(request,'buyandsell/form.html',{'form':form})
 
-@login_required
+@dialog_login_required
 def requestitem(request):
   post_date=timezone.now()
   user=request.user
@@ -421,8 +423,10 @@ def requestitem(request):
   form=RequestForm(initial=init_dict)
   return render(request,'buyandsell/form.html',{'form':form})
 
-@login_required
+
 def watch(request,mc=None,c=None):
+  if request.user is  None or not request.user.is_authenticated():
+    return HttpResponse(simplejson.dumps({'success':'false'}),content_type = "application/json")
 
   user=request.user
   if mc and not c:
@@ -440,8 +444,11 @@ def watch(request,mc=None,c=None):
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
 
-@login_required
+
 def unwatch(request,mc=None,c=None):
+  if request.user is  None or not request.user.is_authenticated():
+    return HttpResponse(simplejson.dumps({'success':'false'}),content_type = "application/json")
+
   user=request.user
   if mc and not c:
     cat_list = BuySellCategory.objects.filter(main_category=mc)
@@ -478,13 +485,19 @@ def selldetails(request,pk):
     self_flag=1
   if request.method=='POST':
     password=request.POST.get('password')
-    if user.check_password(password):
+
+    if login_flag == True and user.check_password(password):
       sendmail(request,'buy',pk)
-    elif password=='':
+
+    elif login_flag == True and  password=='':
       messages.error(request, 'Password cant be empty' )
 
-    elif not user.check_password(password):
+    elif login_flag == True and not user.check_password(password):
       messages.error(request, 'Incorrect password' )
+
+    else:
+      return render(request , 'dialog_base.html')
+
   if login_flag and len(ShowContact.objects.filter(user=user))==1:
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
       show_contact=0
@@ -518,13 +531,18 @@ def requestdetails(request,pk):
     self_flag=1
   if request.method=='POST':
     password=request.POST.get('password')
-    if user.check_password(password):
+
+    if login_flag and user.check_password(password):
       sendmail(request,'request',pk)
-    elif password=='':
+
+    elif login_flag and password=='':
       messages.error(request, 'Password cant be empty' )
 
-    elif not user.check_password(password):
+    elif login_flag and not user.check_password(password):
       messages.error(request, 'Incorrect password' )
+
+    else:
+      return render(request , 'dialog_base.html')
   if login_flag and len(ShowContact.objects.filter(user=user))==1:
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
       show_contact=0
@@ -536,6 +554,7 @@ def requestdetails(request,pk):
     'login_flag':login_flag
           }
   return render(request,'buyandsell/requestdetails.html',context)
+
 
 def sendmail(request, type_of_mail, id_pk):
   user = request.user
@@ -960,7 +979,7 @@ def seeall(request,search_type):
 
     return render(request,'buyandsell/buy-page.html',context)
 
-@login_required
+@dialog_login_required
 def edit(request,form_type,pk): #need to activate if item date  is renewed
   user=request.user
   post_date=date.today()
@@ -1103,8 +1122,10 @@ def get_category_dictionary():
     cat_dict[mcat]=sub_cat
   return cat_dict
 
-@login_required
 def trash_item(request,item_type,pk):
+  if request.user is  None or not request.user.is_authenticated():
+    return HttpResponse(simplejson.dumps({'success':'false'}),content_type = "application/json")
+
   if item_type=="request":
     item=RequestedItems.items.get(pk=pk)
     item.trash()
@@ -1117,7 +1138,7 @@ def trash_item(request,item_type,pk):
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
 
-@login_required
+@dialog_login_required
 def transaction(request,item_type,pk):
   user=request.user
 
@@ -1264,7 +1285,7 @@ def  get_watched_categories(request):
   print watched_cat_dict
   return main_watched_cat,sub_watched_cat,watched_cat_dict
 
-@login_required
+
 def show_contact(request,response):
   user=request.user
   if response=="yes":
@@ -1289,7 +1310,7 @@ def show_contact(request,response):
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
 
-@login_required
+@dialog_login_required
 def manage(request):
   user=request.user
   cat_dict=get_category_dictionary()
@@ -1316,7 +1337,8 @@ def manage(request):
   return render(request,'buyandsell/manage.html',
               {'cat_dict':cat_dict,
               'main_watched_cat':main_watched_cat,
-              'sub_watched_cat':sub_watched_cat})
+              'sub_watched_cat':sub_watched_cat,
+              'user':user})
 
 def _get_page_list(page_no, pages, items_per_page):
   l = range(1, pages+1)

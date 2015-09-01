@@ -20,10 +20,10 @@
 
   <script src="{{ STATIC_URL }}js/buyandsell/bootstrap.min.js"></script>
 
-  <script src="{{ STATIC_URL }}js/buyandsell/main.js"></script>
-  <script src="{{ STATIC_URL }}js/common.js"></script>
+    <script src="{{ STATIC_URL }}js/common.js"></script>
   <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
   <script type="text/javascript" src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+  <script> var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %}; console.log(user);</script>
 </head>
 
 {% endblock %}
@@ -110,10 +110,10 @@
             </li>
           </ul>
         </div>
-        <button type="button" data-toggle="modal" data-target="#request-item-modal" class="btn global-button">
+        <button type="button" onclick= "request_form()" class="btn global-button">
           Request
         </button>
-        <button type="button" data-toggle="modal" data-target="#sell-item-modal" class="btn global-button"
+        <button type="button" onclick = "sell_form()" class="btn global-button"
                 style="margin-left:60px">
           Sell
         </button>
@@ -137,6 +137,7 @@
 {% block content %}
 {% endblock %}
 {% block scripts_foot %}
+<script src="{{ STATIC_URL }}js/buyandsell/main.js"></script>
 <script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>
 {% endblock %}
 </body>

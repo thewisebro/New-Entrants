@@ -156,7 +156,8 @@ function check_user_data(is_authenticated, username){
     if(is_authenticated)
       $(document).trigger('login');
     else
-      $(document).trigger('logout');
+    {
+      logout(from_buyandsell = true)}
   }
 }
 
