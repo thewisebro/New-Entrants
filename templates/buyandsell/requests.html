@@ -89,6 +89,11 @@
 
 
 {% block content %}
+ {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }} </div>
+    {% endfor %}
+    {% endif %}
 <div class="container">
 			<div class="row sub-header">
 				<div class="col-md-3">
