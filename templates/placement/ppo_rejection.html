@@ -1,0 +1,87 @@
+{% extends "placement/base.html" %}
+{% load kwacros %}
+
+{% block app_styles %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/styles.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+    <link href="{{ STATIC_URL }}css/placement/jquery.tagit.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block app_content %}
+
+{% if title %}
+<h3>{{ title }}</h3>
+<hr/>
+{% endif %}
+
+{% if editable_warning %}
+<p class="editable_warning">{{ editable_warning }}</p>
+{% endif %}
+
+{% include "placement/generic_form.html" with action=action form=form name=name %}
+
+{% if ppo_lst %}
+<hr>
+<h3>List of PPO Rejected Students</h3>
+<br>
+<table class="sortable table table-striped table-bordered table-condensed" id="t1">
+  <thead>
+    <tr>
+      <th>S. No.</th>
+      <th>Enrollment No.</th>
+      <th>Name</th>
+      <th>Company</th>
+      <th>Package</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for ppo in ppo_lst %}
+  <tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ ppo.plac_person.student.user.username }}</td>
+    <td>{{ ppo.plac_person.student.user.name }}</td>
+    <td>{{ ppo.company.name }}</td>
+    <td>{{ ppo.package }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}
+
+{% block app_scripts %}
+  <script>
+   (function($) {
+      $(window).load(function() {
+        $('.ui-autocomplete').enscroll({
+           verticalTrackClass: 'track3',
+           verticalHandleClass: 'handle3',
+           addPaddingToPane: false,
+           pollChanges: true
+         });
+        });
+      })(jQuery);
+
+     $('body').ready(function(){
+       $('#id_company').autocomplete({
+         source:'/placement/company_search/',
+         select: function( event, ui ) {
+         $('#company_id').val(ui.item.id);
+         },
+         minLength:3
+       });
+     });
+
+     $('body').ready(function(){
+       $('#id_plac_person').autocomplete({
+         source:'/placement/plac_person_search/',
+         select: function( event, ui ) {
+         $('#enroll').val(ui.item.id);
+         },
+         minLength:3
+       });
+     });
+  </script>
+{% endblock %}

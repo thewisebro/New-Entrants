@@ -139,6 +139,15 @@ class ExcelForm(forms.Form):
       else:
         return excel_file
 
+class PpoRejectionForm(forms.Form) :
+  plac_person = forms.CharField()
+  enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
+  company = forms.CharField()
+  company_id = forms.CharField(widget=forms.HiddenInput(attrs={'id':'company_id'}))
+  package = forms.CharField(widget = CurrencyWidget(choices_whole = PC.PAY_WHOLE_CHOICES,
+                                             choices_currency = PC.PAY_PACKAGE_CURRENCY_CHOICES,
+                                             attrs={'class':'iCurrencyField'}))
+
 #class CompanycontactForm(forms.ModelForm):
 #  when_to_contact = forms.DateField(widget=AdminDateWidget, required=False)
 #  class Meta:
