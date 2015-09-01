@@ -7,6 +7,7 @@
 {% if item %}
 <p> {{ item.item_name }} </p>
 <p> {{ item.cost }}<p>
+<p><img src="/media/{{ item.item_image }}"></p>
 {% if show_contact %}
 <p> {{ item.contact }}</p>
 {% endif %}

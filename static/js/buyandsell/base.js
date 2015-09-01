@@ -1,10 +1,10 @@
 //watch("ELECTRONICS");
 var opened_dialog="";  //variable to keep check of the opened dialog
 
-function watch(item,main_category,category)
+function watch(main_category,category)
 {
 
-  if($(item).hasClass("watch-button-watching"))
+  if($("#watch_btn").hasClass("watch-button-watching"))
   {
     if (category != "None")
     {
@@ -17,8 +17,8 @@ function watch(item,main_category,category)
       watch_cat(url);
     }
 
-    $(item).removeClass("watch-button-watching");
-    $(item).text("Watch this Category");
+    $("#watch_btn").removeClass("watch-button-watching");
+    $("#watch_btn").text("Watch this Category");
   }
   else
   {
@@ -32,8 +32,8 @@ function watch(item,main_category,category)
       url="/buyandsell/watch/"+main_category+"/";
       watch_cat(url);
     }
-    $(item).addClass("watch-button-watching");
-    $(item).text("Watching");
+    $("#watch_btn").addClass("watch-button-watching");
+    $("#watch_btn").text("Watching");
   }
 
 }
@@ -44,7 +44,11 @@ function watch_cat(url)
     url : url,
     success: function (data)
     {
-      console.log("done"+data['success']);
+     console.log(data);
+     if(data['success'] == 'false'){
+          window.location.reload();
+          }
+
     }
   });
 }
@@ -296,17 +300,46 @@ function trash_item(type,id)
     url : "/buyandsell/trash/"+type+"/"+id+"/",
     success: function (data)
     {
+        if(data['success'] == 'false'){
+          window.location.reload();
+          }
+          else{
       $("#"+type+id).remove();
+      }
     }
   });
 }
 function show_contact()
 {
-  $("#show_contact").change(
+  $("#contact_visible").click(
     function(){
-      if($(this).prop("checked")==true)
-      {
         $.ajax({
+          url : "/buyandsell/show_contact/no/",
+          success: function (data)
+          {
+            console.log("dont show contact");
+
+          }
+        });
+      }
+      );
+
+      $('#contact_hidden').click(
+          function(){
+        $.ajax({
+          url : "/buyandsell/show_contact/yes/",
+          success: function (data)
+          {
+            console.log("show contact")
+          }
+        });
+      }
+    );
+    $('#show_contact').click(
+        function(){
+        if( $(this).hasClass('phone-no-visibility-toggle-button-hidden'))
+        {
+ $.ajax({
           url : "/buyandsell/show_contact/yes/",
           success: function (data)
           {
@@ -314,18 +347,20 @@ function show_contact()
 
           }
         });
-      }
-      else
-      {
-        $.ajax({
+        }
+        else
+        {
+ $.ajax({
           url : "/buyandsell/show_contact/no/",
           success: function (data)
           {
-            console.log("dont show contact")
+            console.log("dont show contact");
+
           }
         });
-      }
-    });
+        }
+
+});
 }
 function watch_subs(id,len_sub)
 {
@@ -396,6 +431,12 @@ $('body').ready(function(){
   });
 });
 
+function assign_id(id , type)
+{
+
+  $("#modal-delete").attr('onclick','trash(' + '"' +type +'"' +','+id + ')' );
+}
+
 show_contact();
 search_form();
 search();
@@ -431,13 +472,13 @@ function request_form(){
   opened_dialog='request_form_dialog';
 }
 
-function sell_details(pk){
+function sell_details(pk,item_name){
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
   }
   dialog_iframe({
     name:'sell_detail_dialog',
-    title:'SellItemDetails',
+    title:item_name,
     width:600,
     height:360,
     src:'/buyandsell/sell_details/'+pk+'/',
@@ -446,13 +487,13 @@ function sell_details(pk){
   opened_dialog='sell_detail_dialog';
 }
 
-function request_details(pk){
+function request_details(pk,item_name){
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
   }
   dialog_iframe({
     name:'request_detail_dialog',
-    title:'RequestItemDetails',
+    title:item_name,
     width:600,
     height:360,
     src:'/buyandsell/request_details/'+pk+'/',
@@ -492,6 +533,8 @@ function edit_request(pk){
 }
 
 function manage(){
+  console.log(user.is_authenticated);
+  check_user_data(user.is_authenticated,user.username);
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
   }
