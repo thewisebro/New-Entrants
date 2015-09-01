@@ -1160,3 +1160,14 @@ a:focus
   font-style: italic;
   color: #7D7D7D;
 }
+
+.phone-no-visibility-toggle-slider-hidden
+{
+
+  left: -69px;
+}
+
+.phone-no-visibility-toggle-button-hidden
+{
+  left: 152px;
+}

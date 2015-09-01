@@ -265,35 +265,15 @@ $(document).ready
     (
       function()
       {
-        $(".phone-no-visibility-toggle-button").animate
-        (
-          {
-            left:'152px'
-          }
-        );
-        $(".phone-no-visibility-toggle-slider").animate
-        (
-          {
-            left:'-69px'
-          }
-        );
+        $(".phone-no-visibility-toggle-button").addClass("phone-no-visibility-toggle-button-hidden",400);
+        $(".phone-no-visibility-toggle-slider").addClass("phone-no-visibility-toggle-slider-hidden",400);
       },
 
-    function()
-    {
-      $(".phone-no-visibility-toggle-button").animate
-      (
-        {
-          left:'208px'
-        }
-      );
-      $(".phone-no-visibility-toggle-slider").animate
-      (
-        {
-          left:'-3px'
-        }
-      );
-    }
+      function()
+      {
+        $(".phone-no-visibility-toggle-button").removeClass("phone-no-visibility-toggle-button-hidden",400);
+        $(".phone-no-visibility-toggle-slider").removeClass("phone-no-visibility-toggle-slider-hidden",400);
+      }
     );
 
 
