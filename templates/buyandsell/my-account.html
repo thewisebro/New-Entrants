@@ -2,7 +2,11 @@
 
 {% block content %}
 <div class="container">
-
+ {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }} </div>
+    {% endfor %}
+    {% endif %}
   <div class="row sub-header">
     <div class="col-md-3">
     </div>
@@ -27,17 +31,35 @@
       <div class="left-box">
         <div class="row">
           <div class="col-md-12">
+
+{% if show_contact %}
             <p class="your-phone-no">My Phone No.</p>
             <div class="phone-no-visibility-toggle">
               <div class="phone-no-visibility-toggle-slider">
-                <div class="phone-no-visibility-toggle-options phone-no-hidden">HIDDEN</div>
-                <div class="phone-no-visibility-toggle-options phone-no-visible">VISIBLE</div>
+                <div  id="contact_hidden" class="phone-no-visibility-toggle-options phone-no-hidden">HIDDEN</div>
+                <div id="contact_visible" class="phone-no-visibility-toggle-options phone-no-visible">VISIBLE</div>
               </div>
             </div>
-            <div class="phone-no-visibility-toggle-button"></div>
-            <p class="phone-no-visibility-info-text">Your phone number will be visible on your posts.</p>
+            <div id="show_contact" class="phone-no-visibility-toggle-button"></div>
+            <p class="phone-no-visibility-info-text">Decide whether your phone number should be visible on items.</p>
             <div class="left-division-line"></div>
+
+{% else %}
+  <p class="your-phone-no">My Phone No.</p>
+            <div class="phone-no-visibility-toggle">
+              <div  class="phone-no-visibility-toggle-slider phone-no-visibility-toggle-slider-hidden">
+                <div id="contact_hidden" class="phone-no-visibility-toggle-options phone-no-hidden">HIDDEN</div>
+                <div id="contact_visible" class="phone-no-visibility-toggle-options phone-no-visible">VISIBLE</div>
+              </div>
+            </div>
+            <div id="show_contact" class="phone-no-visibility-toggle-button phone-no-visibility-toggle-button-hidden"></div>
+            <p id="contact_txt"class="phone-no-visibility-info-text">Decide whether your phone number should be visible on items.</p>
+            <div class="left-division-line"></div>
+
+{% endif %}
+
           </div>
+
           <div class="col-md-12 watched-categories">
             <p class="categories-you-are-watching">Categories you are Watching</p>
 

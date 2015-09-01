@@ -311,11 +311,35 @@ function trash_item(type,id)
 }
 function show_contact()
 {
-  $("#show_contact").change(
+  $("#contact_visible").click(
     function(){
-      if($(this).prop("checked")==true)
-      {
         $.ajax({
+          url : "/buyandsell/show_contact/no/",
+          success: function (data)
+          {
+            console.log("dont show contact");
+
+          }
+        });
+      }
+      );
+
+      $('#contact_hidden').click(
+          function(){
+        $.ajax({
+          url : "/buyandsell/show_contact/yes/",
+          success: function (data)
+          {
+            console.log("show contact")
+          }
+        });
+      }
+    );
+    $('#show_contact').click(
+        function(){
+        if( $(this).hasClass('phone-no-visibility-toggle-button-hidden'))
+        {
+ $.ajax({
           url : "/buyandsell/show_contact/yes/",
           success: function (data)
           {
@@ -323,18 +347,20 @@ function show_contact()
 
           }
         });
-      }
-      else
-      {
-        $.ajax({
+        }
+        else
+        {
+ $.ajax({
           url : "/buyandsell/show_contact/no/",
           success: function (data)
           {
-            console.log("dont show contact")
+            console.log("dont show contact");
+
           }
         });
-      }
-    });
+        }
+
+});
 }
 function watch_subs(id,len_sub)
 {
