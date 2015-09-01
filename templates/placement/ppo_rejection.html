@@ -33,6 +33,7 @@
       <th>Name</th>
       <th>Company</th>
       <th>Package</th>
+      <th>Delete</th>
     </tr>
   </thead>
   <tbody>
@@ -44,6 +45,7 @@
     <td>{{ ppo.plac_person.student.user.name }}</td>
     <td>{{ ppo.company.name }}</td>
     <td>{{ ppo.package }}</td>
+    <td><span class='icon icon-remove' id='remove' style='cursor:pointer;' onclick='confirmfn({{ ppo.id }})'></span></span></td>
   </tr>
   {% endfor %}
   </tbody>
@@ -84,4 +86,10 @@
        });
      });
   </script>
+<script>
+function confirmfn(id){
+  var a = confirm("Are you sure?");
+  if (a==true){window.location='/placement/ppo_rejection/remove/'+id+'/';}
+}
+</script>
 {% endblock %}

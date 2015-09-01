@@ -140,7 +140,7 @@ class ExcelForm(forms.Form):
         return excel_file
 
 class PpoRejectionForm(forms.Form) :
-  plac_person = forms.CharField()
+  plac_person = forms.CharField(label = "Student")
   enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
   company = forms.CharField()
   company_id = forms.CharField(widget=forms.HiddenInput(attrs={'id':'company_id'}))

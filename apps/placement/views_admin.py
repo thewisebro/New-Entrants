@@ -752,7 +752,7 @@ def ppo_rejection(request):
       ppo_rejection_inst.company = Company.objects.get(id=ppo_form.cleaned_data['company_id'])
       ppo_rejection_inst.package = ppo_form.cleaned_data['package']
       ppo_rejection_inst.save()
-      messages.success(request, "PPO Rejection entry Successfully added")
+      messages.success(request, "PPO Rejection entry successfully added")
       return HttpResponseRedirect(reverse('placement.views_admin.ppo_rejection'))
   
   return render_to_response('placement/ppo_rejection.html',{
@@ -760,3 +760,15 @@ def ppo_rejection(request):
                             'ppo_lst': ppo_lst,
                             },
                             context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def ppo_rejection_delete(request, ppo_id):
+  try:
+    ppo_rejection_inst = PpoRejection.objects.get(id=ppo_id)
+  except:
+    messages.error(request, "Entry does not exist")
+    return HttpResponseRedirect(reverse('placement.views_admin.ppo_rejection'))
+  ppo_rejection_inst.delete()
+  messages.success(request, "Entry successfully deleted")
+  return HttpResponseRedirect(reverse('placement.views_admin.ppo_rejection'))

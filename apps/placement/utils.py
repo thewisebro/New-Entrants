@@ -300,7 +300,7 @@ def student_search(request):
         'label':'No results found',
         'value':q,
       }]
-      data = simplejson.dumps(obj)
+      data = json.dumps(obj)
       return data
     def person_dict(student):
       return {
@@ -308,7 +308,7 @@ def student_search(request):
         'label':str(student.user.name)+" ( "+str(student.user.info)+" )",
         'value':str(student.user.name),
       }
-    data = simplejson.dumps(map(person_dict,persons))
+    data = json.dumps(map(person_dict,persons))
   else:
     data = 'fail'
   return data
