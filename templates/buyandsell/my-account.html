@@ -26,6 +26,18 @@
     <div class="col-md-3">
       <div class="left-box">
         <div class="row">
+          <div class="col-md-12">
+            <p class="your-phone-no">My Phone No.</p>
+            <div class="phone-no-visibility-toggle">
+              <div class="phone-no-visibility-toggle-slider">
+                <div class="phone-no-visibility-toggle-options phone-no-hidden">HIDDEN</div>
+                <div class="phone-no-visibility-toggle-options phone-no-visible">VISIBLE</div>
+              </div>
+            </div>
+            <div class="phone-no-visibility-toggle-button"></div>
+            <p class="phone-no-visibility-info-text">Your phone number will be visible on your posts.</p>
+            <div class="left-division-line"></div>
+          </div>
           <div class="col-md-12 watched-categories">
             <p class="categories-you-are-watching">Categories you are Watching</p>
 
@@ -64,9 +76,6 @@
                 <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-15.5%"></div>
                 <div class="arrow-up-front" style="margin-left:75%; margin-top:-13.5%"></div>
                 <li role="presentation"><a onclick ="edit_sell({{ row.pk }})" class="edit-button-text">Edit</a></li>
-                <li role="presentation">
-                  <a title="Remove" onclick = "trash('sell',{{row.id}})" class="item-remove-text">Remove direct</a>
-                </li>
                 <li role="presentation">
                   <a data-toggle="modal" onclick = "assign_id({{row.id}},'sell')" data-target="#remove-item-confirm-modal" class="">Remove modal</a>
                 </li>

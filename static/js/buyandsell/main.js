@@ -1,15 +1,9 @@
-jQuery.fn.center = function () {
-  this.css("position","absolute");
-  this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) + $(window).scrollTop()) + "px");
-  this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) +  $(window).scrollLeft()) + "px");
-  return this;
-}
-
-
 $(document).ready
 (
   function()
   {
+    $(".alert-error").centerHorizontally();
+
     var widthOfWindow= $(window).width()
     $(".headerBackground").css("width",widthOfWindow+"px");
 
@@ -267,6 +261,23 @@ $(document).ready
       }
     );
 
+    $(".phone-no-visibility-toggle , .phone-no-visibility-toggle-button").toggle
+    (
+      function()
+      {
+        $(".phone-no-visibility-toggle-button").addClass("phone-no-visibility-toggle-button-hidden",400);
+        $(".phone-no-visibility-toggle-slider").addClass("phone-no-visibility-toggle-slider-hidden",400);
+      },
+
+      function()
+      {
+        $(".phone-no-visibility-toggle-button").removeClass("phone-no-visibility-toggle-button-hidden",400);
+        $(".phone-no-visibility-toggle-slider").removeClass("phone-no-visibility-toggle-slider-hidden",400);
+      }
+    );
+
+
+
     $(".thumbnailBG-my-account").click
     (
       function() //opens light box with details for the clicked item-for-sale
@@ -344,6 +355,7 @@ $(document).ready
       }
     );
 
+
     //trying to adjust jquery-dialog height as per form height
   /*  var formHeight = $(".manage-watched-box-form").css("height");
     console.log(formHeight);
@@ -380,4 +392,5 @@ window.jQuery
         }
       });
   });
+
 
