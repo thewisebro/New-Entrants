@@ -231,7 +231,7 @@ class PpoRejection(models.Model):
     This model contains information regarding students who has accepted PPO.
     This includes PPO in company and CTC of PPO
   """
-  plac_person = models.ForeignKey(PlacementPerson)
+  plac_person = models.ForeignKey(PlacementPerson, unique=True)
   company = models.ForeignKey(Company)
   package = models.CharField(max_length=20, null=True, blank=True, verbose_name = 'Package')
   def __unicode__(self):

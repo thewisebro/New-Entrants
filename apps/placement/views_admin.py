@@ -754,7 +754,9 @@ def ppo_rejection(request):
       ppo_rejection_inst.save()
       messages.success(request, "PPO Rejection entry successfully added")
       return HttpResponseRedirect(reverse('placement.views_admin.ppo_rejection'))
-  
+    else:
+      messages.error(request, ppo_form.errors)
+      return HttpResponseRedirect(reverse('placement.views_admin.ppo_rejection'))
   return render_to_response('placement/ppo_rejection.html',{
                             'form': ppo_form,
                             'ppo_lst': ppo_lst,

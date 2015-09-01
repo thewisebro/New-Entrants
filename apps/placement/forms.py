@@ -147,6 +147,17 @@ class PpoRejectionForm(forms.Form) :
   package = forms.CharField(widget = CurrencyWidget(choices_whole = PC.PAY_WHOLE_CHOICES,
                                              choices_currency = PC.PAY_PACKAGE_CURRENCY_CHOICES,
                                              attrs={'class':'iCurrencyField'}))
+  def is_valid(self):
+    valid = super(PpoRejectionForm, self).is_valid()
+    if not valid:
+      return False
+    cleaned_data = super(PpoRejectionForm,self).clean()
+    clean_enroll = cleaned_data.get("enroll")
+    if models.PpoRejection.objects.filter(plac_person__student__user__username=clean_enroll).exists():
+      import ipdb; ipdb.set_trace()
+      self.errors['Error'] = "PPO Rejection entry for this student already exists"
+      return False
+    return True
 
 #class CompanycontactForm(forms.ModelForm):
 #  when_to_contact = forms.DateField(widget=AdminDateWidget, required=False)
