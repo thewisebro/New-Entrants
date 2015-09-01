@@ -242,8 +242,6 @@ def get_prev_sem(sem):
 
 @login_required
 def mcm_submit(request):
-  messages.error(request, "Last date for submitting MCM Form was 31st August.")
-  return HttpResponseRedirect('/')
   if not check_permission(request.user, 'FreeMessing'):
     messages.info(request,"MCM Scholarship is not open for your department. Please contact 'IMG' in case of any discrepency")
     return HttpResponseRedirect('/')
