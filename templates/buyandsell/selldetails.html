@@ -1,21 +1,107 @@
- {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }} </div>
-    {% endfor %}
+{% extends "buyandsell/base.html" %}
+
+{% block header %}
+<body style="background-color: #ffffff;">
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+
+<div class="container item-details-dialog-container">
+  <div class="row">
+    <div class="col-xs-4">
+      <div>
+        <img style="width: 100%;" src="/media/{{ item.item_image }}">
+      </div>
+    </div>
+    <div class="col-xs-8">
+
+      {% if item %}
+      <p class="item-description">
+        Designing is a matter of concentration. You go deep into what you want to do. It's about intensive research,
+        really. The concentration is warm and intimate and like the fire inside the earth - intense but not distorted.
+
+      <div class="visible-division-line"></div>
+      </p>
+
+      <table class="table item-details-table">
+        <tbody>
+        <tr>
+          <td class="item-details-headings">
+            Price
+          </td>
+          <td>
+            <span>Rs. </span>
+            <span> {{ item.cost }}</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="item-details-headings">
+            Owner
+          </td>
+          <td>
+            <span> Insert owner's name here</span>
+          </td>
+        </tr>
+        {% if show_contact %}
+        <tr>
+          <td class="item-details-headings">
+            Phone
+          </td>
+          <td>
+            <p> {{ item.contact }}</p>
+          </td>
+        </tr>
+        {% endif %}
+        </tbody>
+      </table>
+
+      {% if not self_flag and login_flag %}
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="enquire-clicked">
+            <p><strong>Following mail will be sent to the Owner</strong></p>
+
+            <p class="mail-to-be-sent">
+              Lorem ipsum dolor sit amet, adipiscing ipsum sed sem, do enim imperdiet nullam libero. Nulla a odio elementum
+              ut, sed arcu. Mauris tellus libero, est sed, donec eu habitant dui quis donec arcu, suscipit aenea
+            </p>
+
+            <form action="" method="POST">
+              {% csrf_token %}
+              <span class="item-details-dialog-password-field-label">Please enter your password:</span>
+              <input class="dialog-password-field item-details-dialog-password-field" type="password" name="password">
+              <input class="send-button" type="submit" value="Send">
+            </form>
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <button type="button" class="btn btn-primary enquire enquire-button" style="margin:0px auto">Enquire</button>
+        </div>
+      </div>
+
+
+      {% endif %}
+
+
+    </div>
+  </div>
+
+
+
     {% endif %}
 
-{% if item %}
-<p> {{ item.item_name }} </p>
-<p> {{ item.cost }}<p>
-<p><img src="/media/{{ item.item_image }}"></p>
-{% if show_contact %}
-<p> {{ item.contact }}</p>
-{% endif %}
-{% endif %}
-{% if not self_flag and login_flag %}
-<form action ="" method="POST">
-{% csrf_token %}
-<input type="password" name="password">
-<input type="submit" value="submit">
-</form>
-{% endif %}
+</div>
+
+
+
+{% endblock %}
+
+</body>
+
+<div class="fading-rectangle"><div class="expired-item-icon"></div><div class="expired-item-text"></div></div>
