@@ -174,7 +174,7 @@ class BooksAuthoredForm(BaseModelForm):
 
 class RefereedJournalPapersForm(BaseModelForm):
   #Next line uncommented as CKEditor being called in template using JS
-  papers = forms.CharField(label='', widget=CKeditorWidget())
+  papers = forms.CharField(label='', widget=CKeditorWidget(), required=False)
   class Meta:
     model = RefereedJournalPapers
     exclude = ['faculty',]
