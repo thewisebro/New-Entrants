@@ -472,13 +472,13 @@ function request_form(){
   opened_dialog='request_form_dialog';
 }
 
-function sell_details(pk){
+function sell_details(pk,item_name){
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
   }
   dialog_iframe({
     name:'sell_detail_dialog',
-    title:'SellItemDetails',
+    title:item_name,
     width:600,
     height:360,
     src:'/buyandsell/sell_details/'+pk+'/',
@@ -487,13 +487,13 @@ function sell_details(pk){
   opened_dialog='sell_detail_dialog';
 }
 
-function request_details(pk){
+function request_details(pk,item_name){
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
   }
   dialog_iframe({
     name:'request_detail_dialog',
-    title:'RequestItemDetails',
+    title:item_name,
     width:600,
     height:360,
     src:'/buyandsell/request_details/'+pk+'/',

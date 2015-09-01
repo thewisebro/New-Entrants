@@ -156,7 +156,7 @@
 					<div class="row">
 {% for row in table_data %}
 						<div class="col-md-3 col-sm-6">
-							<a onclick="sell_details({{row.pk}})"  class="item">
+							<a onclick="sell_details({{row.pk}},'{{row.item_name}}')"  class="item">
 							  <div class="thumbnailBG">
 								  <div class="thumbnail">
 									 <img src="/media/{{row.item_image }}" alt="Generic placeholder thumbnail">
