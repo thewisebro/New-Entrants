@@ -36,27 +36,6 @@
       {% endif %}
     {% endif %}
     {% csrf_token %}
-{% comment %}
-#  {% ifequal title 'Educational Details' %}
-#     {% if recent %}
-#      <p><label for="id_form-0-year">Year:</label> <input disabled=True id="id_form-0-year" name="form-0-year" type="number" value="{{ recent.year }}"></p>
-#      <p><label for="id_form-0-sgpa">SGPA:</label> <input disabled=True id="id_form-0-sgpa" name="form-0-sgpa" step="any" type="number" value="{{ recent.sgpa }}"></p>
-#      <p><label for="id_form-0-cgpa">CGPA:</label> <input disabled=True id="id_form-0-cgpa" name="form-0-cgpa" step="any" type="number" value="{{ recent.cgpa }}"></p>
-#      <p><label for="id_form-0-course">Course:</label>
-#      <select disabled=True id="id_form-0-course" name="form-0-course">
-#      <option value="{{ recent.course.0 }}">{{ recent.course.1 }}</option>
-#      </select></p>
-#      <p><label for="id_form-0-institution">Institution:</label> <input disabled=True id="id_form-0-institution" maxlength="100" name="form-0-institution" type="text" value="Indian Institute of Technology, Roorkee"></p>
-#      <p><label for="id_form-0-discipline">Discipline:</label>
-#      <select disabled=True id="id_form-0-discipline" name="form-0-discipline">
-#      <option value="{{ recent.discipline.0 }}">{{ recent.discipline.1 }}</option>
-#      </select>
-#      </p>
-#    {% else %}
-#        You don't have any previous semester data. Please contact to IMG with recent Gradesheet in case of any disperency.
-#    {% endif %}
-#   {% endifequal %}
-{% endcomment %}
     {% if isFormSet %}
       {{ form.management_form }}
 {% for frm in form %}

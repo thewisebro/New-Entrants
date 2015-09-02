@@ -1,14 +1,16 @@
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.template.loader import render_to_string
+from django.db.models import Q
 
 from xhtml2pdf import pisa
 
 import cStringIO as StringIO
 import logging, os
 
-
+import json
 from placement.models import *
 from api import model_constants as MC
 from placement.constants import PAY_PACKAGE_CURRENCY_CONVERSION_RATES
@@ -286,4 +288,76 @@ def previous_sem(curr_sem):
       return curr_sem
     if curr_sem == "0":
       return curr_sem
+
+def student_search(request):
+  if request.is_ajax():
+    q = request.GET.get('term','')
+    print q
+    persons = Student.objects.filter(Q(user__name__icontains = q)|Q(user__username__icontains = q),passout_year=None).order_by('-user__username')[:50]
+    if not persons:
+      obj = [{
+        'id':'00000000',
+        'label':'No results found',
+        'value':q,
+      }]
+      data = json.dumps(obj)
+      return data
+    def person_dict(student):
+      return {
+        'id':str(student.user.username),
+        'label':str(student.user.name)+" ( "+str(student.user.info)+" )",
+        'value':str(student.user.name),
+      }
+    data = json.dumps(map(person_dict,persons))
+  else:
+    data = 'fail'
+  return data
+
+def company_search(request):
+  if request.is_ajax():
+    q = request.GET.get('term','')
+    print q
+    companies = Company.objects.filter(name__icontains = q, year=2015).order_by('-name')[:10]
+    if not companies:
+      obj = [{
+        'id':'00000000',
+        'label':'No results found',
+        'value':q,
+      }]
+      data = json.dumps(obj)
+      return data
+    def company_dict(company):
+      return {
+        'id':str(company.id),
+        'label':str(company.name),
+        'value':str(company.name),
+      }
+    data = json.dumps(map(company_dict,companies))
+  else:
+    data = 'fail'
+  return data
+
+def plac_person_search(request):
+  if request.is_ajax():
+    q = request.GET.get('term','')
+    print q
+    plac_persons = PlacementPerson.objects.filter(Q(student__user__name__icontains = q)|Q(student__user__username__icontains = q), status__in=['VRF','LCK','OPN'], student__passout_year=None).order_by('-student__user__username')[:20]
+    if not plac_persons:
+      obj = [{
+        'id':'00000000',
+        'label':'No results found',
+        'value':q,
+      }]
+      data = json.dumps(obj)
+      return data
+    def plac_person_dict(plac_person):
+      return {
+        'id':str(plac_person.student.user.username),
+        'label':str(plac_person.student.user.name)+" ( "+str(plac_person.student.user.info)+" )",
+        'value':str(plac_person.student.user.name),
+      }
+    data = json.dumps(map(plac_person_dict,plac_persons))
+  else:
+    data = 'fail'
+  return data
 
