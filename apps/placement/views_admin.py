@@ -746,16 +746,18 @@ def ppo_rejection(request):
   ppo_form = forms.PpoRejectionForm()
   if request.method == 'POST':
     ppo_form = forms.PpoRejectionForm(request.POST)
-    if ppo_form.is_valid():
-      ppo_rejection_inst = PpoRejection()
-      ppo_rejection_inst.plac_person = PlacementPerson.objects.get(student__user__username=ppo_form.cleaned_data['enroll'])
-      ppo_rejection_inst.company = Company.objects.get(id=ppo_form.cleaned_data['company_id'])
-      ppo_rejection_inst.package = ppo_form.cleaned_data['package']
-      ppo_rejection_inst.save()
-      messages.success(request, "PPO Rejection entry successfully added")
-      return HttpResponseRedirect(reverse('placement.views_admin.ppo_rejection'))
-    else:
-      messages.error(request, ppo_form.errors)
+    try: 
+      if ppo_form.is_valid():
+        cleaned_data = ppo_form.clean()
+        ppo_rejection_inst = PpoRejection()
+        ppo_rejection_inst.plac_person = PlacementPerson.objects.get(student__user__username=ppo_form.cleaned_data['enroll'])
+        ppo_rejection_inst.company = Company.objects.get(id=ppo_form.cleaned_data['company_id'])
+        ppo_rejection_inst.package = ppo_form.cleaned_data['package']
+        ppo_rejection_inst.save()
+        messages.success(request, "PPO Rejection entry successfully added")
+        return HttpResponseRedirect(reverse('placement.views_admin.ppo_rejection'))
+    except ValidationError as e:
+      messages.error(request, str(e[0]))
       return HttpResponseRedirect(reverse('placement.views_admin.ppo_rejection'))
   return render_to_response('placement/ppo_rejection.html',{
                             'form': ppo_form,

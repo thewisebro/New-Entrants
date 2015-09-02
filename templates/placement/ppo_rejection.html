@@ -10,10 +10,8 @@
 
 {% block app_content %}
 
-{% if title %}
-<h3>{{ title }}</h3>
+<h3>List of PPO Rejected Students</h3>
 <hr/>
-{% endif %}
 
 {% if editable_warning %}
 <p class="editable_warning">{{ editable_warning }}</p>
@@ -23,7 +21,6 @@
 
 {% if ppo_lst %}
 <hr>
-<h3>List of PPO Rejected Students</h3>
 <br>
 <table class="sortable table table-striped table-bordered table-condensed" id="t1">
   <thead>
