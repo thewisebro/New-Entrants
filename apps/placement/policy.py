@@ -1,5 +1,6 @@
-from placement.models import Results, Company, SecondRound, CompanyApplicationMap
+from placement.models import Results, Company, SecondRound, CompanyApplicationMap, PpoRejection
 import datetime
+import json
 
 def can_apply(plac_person, company_applying) :
   """
@@ -14,6 +15,8 @@ def can_apply(plac_person, company_applying) :
     return company_applying + ' is not open for applications.'
   if plac_person.student.branch not in company_applying.open_for_disciplines.all() :
     return company_applying.name + ' is not open for your branch.'
+  if not ppo_rejected(plac_person, company_applying):
+    return "You have rejected PPO of higher package. You can not apply to this company"
   if plac_person.no_of_companies_placed == 2 :
     return 'You have been placed in two companies.'
   if plac_person.no_of_companies_placed == 0 :
@@ -30,12 +33,52 @@ def can_apply(plac_person, company_applying) :
     if SecondRound.objects.filter(branch = plac_person.student.branch, year = current_session_year()).exists() :
       return True
     else :
-      'You have already been placed in "B" category company and Second round is not open for your branch.'
+      return 'You have already been placed in "B" category company and Second round is not open for your branch.'
   if placed_company_category in ('C','U') and company_applying.category in ('C', 'U') :
     return True
 #  if placed_company_category == 'U' and company_applying.category in ('U') :
 #   return 'You have already been placed in an university.'
   return True
+
+def ppo_rejected(plac_person, company_applying):
+
+  def INR_USD_request():
+    import requests
+    r = requests.get("http://api.fixer.io/latest?base=USD")
+    if r.status_code != 200:
+      return 65
+    return json.loads(r.content)['rates']['INR']
+
+  def parse_value(package_str):
+    package_str = package_str.split()
+    package = float(package_str[0])
+    if package_str[1] == 'Thousands':
+      package = package*1000
+    elif package_str[1] == 'Lacs':
+      package = package*100000
+    return package, package_str[2]
+
+  ppo_reject_inst = PpoRejection.objects.get_or_none(plac_person = plac_person)
+  if not ppo_reject_inst:
+    return False
+  ppo_package = ppo_reject_inst.package
+  if plac_person.student.branch.graduation == 'UG':
+    apply_package = company_applying.package_ug
+  elif plac_person.student.branch.graduation == 'PG':
+    apply_package = company_applying.package_pg
+  else:# plac_person.student.branch.graduation == 'PHD':
+    apply_package = company_applying.package_phd
+
+  ppo_package = parse_value(ppo_package)
+  apply_package = parse_value(apply_package)
+
+  if ppo_package[1] == apply_package[1]:
+    return ppo_package[0] <= apply_package[0]
+  else:
+    if ppo_package[1] == 'USD':
+      return ppo_package[0]*INR_USD_request() <= apply_package[0]
+    else:
+      return ppo_package[0] <= apply_package[0]*INR_USD_request()
 
 def get_higher_category(cat1, cat2) :
   """
