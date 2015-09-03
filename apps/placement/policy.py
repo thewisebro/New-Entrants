@@ -60,7 +60,7 @@ def ppo_rejected(plac_person, company_applying):
 
   ppo_reject_inst = PpoRejection.objects.get_or_none(plac_person = plac_person)
   if not ppo_reject_inst:
-    return False
+    return True
   ppo_package = ppo_reject_inst.package
   if plac_person.student.branch.graduation == 'UG':
     apply_package = company_applying.package_ug
