@@ -41,7 +41,7 @@
               </div>
             </div>
             <div id="show_contact" class="phone-no-visibility-toggle-button"></div>
-            <p class="phone-no-visibility-info-text">Decide whether your phone number should be visible on items.</p>
+            <p class="phone-no-visibility-info-text">Decide whether people can see your phone number.</p>
             <div class="left-division-line"></div>
 
 {% else %}
@@ -53,7 +53,7 @@
               </div>
             </div>
             <div id="show_contact" class="phone-no-visibility-toggle-button phone-no-visibility-toggle-button-hidden"></div>
-            <p id="contact_txt"class="phone-no-visibility-info-text">Decide whether your phone number should be visible on items.</p>
+            <p id="contact_txt"class="phone-no-visibility-info-text">Decide whether people can see your phone number.</p>
             <div class="left-division-line"></div>
 
 {% endif %}
@@ -90,6 +90,18 @@
 
         <div class="col-md-3" id = "sell{{row.pk}}">
           <div class="thumbnailBG thumbnailBG-my-account">
+            <div class="thumbnail">
+              <img src="/media/{{ row.item_image }}" alt="Generic placeholder thumbnail">
+            </div>
+            <div class="caption">
+              <span class="itemName">{{ row.item_name }}</span>
+              <span class="price">Rs. {{row.cost}}</span>
+              <div class="row">
+                <div class="col-md-12">
+                  <span class="expiresIn">Expires in {{ row.expiry_date|timeuntil }}</span>
+                </div>
+              </div>
+            </div>
             <div class="dropdown item-options-dropdown" style="display:inline">
               <button class="btn btn-default item-options-button dropdown-toggle" type="button" id="my-account-object-options" data-toggle="dropdown">
                 <img src="../../static/images/buyandsell/my-account-item-options.png" class="item-options-button-image">
@@ -104,9 +116,18 @@
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mark Sold</a></li>
               </ul>
             </div>
+          </div>
+        </div>
+        {% endfor %}
 
+        <div class="col-md-3" id = "sell{{row.pk}}">
+          <div class="thumbnailBG thumbnailBG-my-account expired-item">
             <div class="thumbnail">
-              <img src="/media/{{ row.item_image }}" alt="Generic placeholder thumbnail">
+              <img src="http://38ccda.medialib.glogster.com/media/56968c0d9eac812695560a35ed0d7699db8d96edeb58494421680cef98ccaf28/doggy.jpg" alt="Generic placeholder thumbnail">
+              <div class="fading-rectangle">
+                <img class="expired-icon item-expired-icon" src="{{STATIC_URL}}images/buyandsell/expired-icon.png">
+                <span class="item-expired-text" >Expired</span>
+              </div>
             </div>
             <div class="caption">
               <span class="itemName">{{ row.item_name }}</span>
@@ -117,9 +138,59 @@
                 </div>
               </div>
             </div>
+
+            <div class="dropdown item-options-dropdown" style="display:inline">
+              <button class="btn btn-default item-options-button dropdown-toggle" type="button" id="my-account-object-options" data-toggle="dropdown">
+                <img src="{{STATIC_URL}}images/buyandsell/my-account-item-options.png" class="item-options-button-image">
+              </button>
+              <ul class="dropdown-menu item-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
+                <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-15.5%"></div>
+                <div class="arrow-up-front" style="margin-left:75%; margin-top:-13.5%"></div>
+                <li role="presentation"><a onclick ="edit_sell({{ row.pk }})" class="edit-button-text">Edit</a></li>
+                <li role="presentation">
+                  <a data-toggle="modal" onclick = "assign_id({{row.id}},'sell')" data-target="#remove-item-confirm-modal" class="">Remove</a>
+                </li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mark Sold</a></li>
+              </ul>
+            </div>
           </div>
         </div>
-        {% endfor %}
+
+        <div class="col-md-3" id = "sell{{row.pk}}">
+          <div class="thumbnailBG thumbnailBG-my-account sold-item">
+            <div class="thumbnail">
+              <img src="http://38ccda.medialib.glogster.com/media/56968c0d9eac812695560a35ed0d7699db8d96edeb58494421680cef98ccaf28/doggy.jpg" alt="Generic placeholder thumbnail">
+              <div class="fading-rectangle">
+                <img class="mark-sold-icon" src="{{STATIC_URL}}images/buyandsell/mark-done.png">
+                <span class="item-sold-text" >Sold</span>
+              </div>
+            </div>
+            <div class="caption">
+              <span class="itemName">{{ row.item_name }}</span>
+              <span class="price">Rs. {{row.cost}}</span>
+              <div class="row">
+                <div class="col-md-12">
+                  <span class="expiresIn">Expires in {{ row.expiry_date|timeuntil }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="dropdown item-options-dropdown" style="display:inline">
+              <button class="btn btn-default item-options-button dropdown-toggle" type="button" id="my-account-object-options" data-toggle="dropdown">
+                <img src="{{STATIC_URL}}images/buyandsell/my-account-item-options.png" class="item-options-button-image">
+              </button>
+              <ul class="dropdown-menu item-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
+                <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-15.5%"></div>
+                <div class="arrow-up-front" style="margin-left:75%; margin-top:-13.5%"></div>
+                <li role="presentation"><a onclick ="edit_sell({{ row.pk }})" class="edit-button-text">Edit</a></li>
+                <li role="presentation">
+                  <a data-toggle="modal" onclick = "assign_id({{row.id}},'sell')" data-target="#remove-item-confirm-modal" class="">Remove</a>
+                </li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mark Sold</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
 
 

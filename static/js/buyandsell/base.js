@@ -135,7 +135,7 @@ function lookup(val,type)
             "</div></a>";
         }
 
-        html+= "<div class = \"search-box-division-line\"></div>"+
+        html+= "<div class = \"visible-division-line\"></div>"+
           "<div class = \"searched-items-for-sale\">";
 
         if ( data['sell_items'].length )
@@ -172,7 +172,7 @@ function lookup(val,type)
         }
 
         html += "</div>" +
-          "<div class = \"search-box-division-line\"></div>"+
+          "<div class = \"visible-division-line\"></div>"+
           "<div class = \"searched-items-for-sale\">";
 
         if ( data['requests'].length )
@@ -479,8 +479,8 @@ function sell_details(pk,item_name){
   dialog_iframe({
     name:'sell_detail_dialog',
     title:item_name,
-    width:600,
-    height:360,
+    width:800,
+    height:500,
     src:'/buyandsell/sell_details/'+pk+'/',
     close:function(){opened_dialog=""}
   });
@@ -495,7 +495,7 @@ function request_details(pk,item_name){
     name:'request_detail_dialog',
     title:item_name,
     width:600,
-    height:360,
+    height:400,
     src:'/buyandsell/request_details/'+pk+'/',
     close:function(){opened_dialog=""}
   });
