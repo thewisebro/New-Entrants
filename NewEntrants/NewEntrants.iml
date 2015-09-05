@@ -8,11 +8,7 @@
       </configuration>
     </facet>
   </component>
-<<<<<<< HEAD
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="true">
-=======
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
->>>>>>> 74941fafc479d89c34c2312423901b20ca87da51
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.gradle" />
