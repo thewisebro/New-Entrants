@@ -5,9 +5,11 @@ COMPANY_APPLICATION_STATUS = (
     )
 
 WORKSHOP_OPTIONS = (
-      ('Group Discussion','Group Discussion'),
-      ('Case Study','Case Study'),
-      ('Both','Both'),
+      ('Smart India', 'Smart India'),
+      ('4P Education','4P Education'),
+      ('Talerang','Talerang'),
+      ('Ethuns Consultancy Service','Ethuns Consultancy Service'),
+      ('NOT', 'Not interested')
     )
 
 FORUM_CHOICES = (
