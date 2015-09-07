@@ -22,7 +22,7 @@ class CompanyForm(forms.ModelForm) :
 
   #Search for a better method
   contact_person = forms.ModelChoiceField(queryset = models.CPTMember.objects.filter(year = current_session_year()), required=False)
-  open_for_disciplines = forms.ModelMultipleChoiceField(queryset=Branch.objects.all().order_by('degree','department'), widget=forms.CheckboxSelectMultiple)
+  open_for_disciplines = forms.CompanyMultipleChoiceField(queryset=Branch.objects.all().order_by('degree','department'), widget=forms.CheckboxSelectMultiple)
   class Meta :
     model   = models.Company
     fields = ['name',
