@@ -363,20 +363,23 @@ def workshop_registration(request):
   registration_form = forms.WorkshopRegistrationForm(instance = prev_registration)
   if request.method=="POST":
     registration_form = forms.WorkshopRegistrationForm(request.POST, instance = prev_registration)
-    if registration_form.is_valid():
-      registration_obj = registration_form.save(commit=False)
-      registration_obj.placement_person = plac_person
-      l.info(request.user.username + ': workshop registration status changed to '+str(registration_obj.is_registered))
-      if registration_obj.is_registered:
+    try:
+      if registration_form.is_valid():
+        registration_obj = registration_form.save(commit=False)
+        if registration_obj.options != 'NOT':
+          registration_obj.reason = ""
+        registration_obj.placement_person = plac_person
         registration_obj.save()
+        l.info(request.user.username + ': workshop registration successful')
         messages.success(request, 'Successfully registered for Workshop.')
+        return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
       else:
-        registration_obj.delete()
-        messages.success(request, 'Successfully de-registered for Workshop.')
-      return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
-    else:
-      l.info(request.user.username + ': Error saving workshop registration detail')
-      messages.error(request, 'Unknown error occured.')
+        l.info(request.user.username + ': Error saving workshop registration detail')
+        messages.error(request, 'Unknown error occured.')
+        return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
+    except ValidationError as e:
+      l.error(request.user.username + ': Error saving workshop registration detail')
+      messages.error(request, str(e[0]))
       return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
 
   return render_to_response('placement/basic_form.html',{

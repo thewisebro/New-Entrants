@@ -338,7 +338,7 @@ class WorkshopRegistration(models.Model):
       This is different from Workshop Priority. Workshop priority was used in 2014-15. It was compulsory in this year.
     """
     placement_person = models.ForeignKey(PlacementPerson, unique=True)
-    options = models.CharField(choices = PC.WORKSHOP_OPTIONS, max_length = 16, default="NOT")
+    options = models.CharField(choices = PC.WORKSHOP_OPTIONS, max_length = 28, default="NOT")
     reason = models.CharField(max_length=500, blank=True, null=True)
 
     def _unicode__(self):

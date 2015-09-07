@@ -189,6 +189,12 @@ class AddShortlistForm(forms.Form):
   company = forms.CharField(widget=forms.TextInput)
 
 class WorkshopRegistrationForm(forms.ModelForm):
+  def is_valid(self):
+    valid = super(WorkshopRegistrationForm, self).is_valid()
+    cleaned_data = super(WorkshopRegistrationForm,self).clean()
+    if cleaned_data['options']=='NOT' and cleaned_data['reason'] == '': 
+      raise forms.ValidationError("Please add specific reason for this option")
+    return True and valid
   class Meta:
     model = models.WorkshopRegistration
     exclude = ('placement_person',)
