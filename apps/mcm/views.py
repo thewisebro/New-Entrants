@@ -264,6 +264,7 @@ def mcm_submit(request):
     return HttpResponseRedirect('/')
     ##### Ends
     """
+    return HttpResponseRedirect('/')
     student = MCM.objects.create(student = person)
 
   if request.method == 'POST':
