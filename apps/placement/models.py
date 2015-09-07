@@ -226,6 +226,17 @@ class Results(models.Model):
   def __unicode__(self):
     return str(self.student) + str(self.company)
 
+class PpoRejection(models.Model):
+  """
+    This model contains information regarding students who has accepted PPO.
+    This includes PPO in company and CTC of PPO
+  """
+  plac_person = models.ForeignKey(PlacementPerson, unique=True)
+  company = models.ForeignKey(Company)
+  package = models.CharField(max_length=20, null=True, blank=True, verbose_name = 'Package')
+  def __unicode__(self):
+    return str(self.plac_person.student.name) + " " +str(self.company)+ " " +str(self.package)
+
 # Company related models end.
 
 # Miscellaneous models start.
@@ -320,6 +331,19 @@ class CompanyPlacementPriority(models.Model):
 
     def __unicode__(self):
       return str(self.company) + str(self.priority) + str(self.slots)
+
+class WorkshopRegistration(models.Model):
+    """
+      Workshop Registration Model: Used in 2015-2016 session: Workshop was optional in this year.
+      This is different from Workshop Priority. Workshop priority was used in 2014-15. It was compulsory in this year.
+    """
+    placement_person = models.ForeignKey(PlacementPerson, unique=True)
+    is_registered = models.BooleanField(default=False, verbose_name = "Select to register")
+    options = models.CharField(choices = PC.WORKSHOP_OPTIONS, max_length = 16, default="Group Discussion")
+    suggestions = models.CharField(null=True, blank=True, verbose_name = "Target Companies", max_length = 300)
+
+    def _unicode__(self):
+      return str(self.placement_person.student.user.name)+" "+str(self.registered)
 
 class WorkshopPriority(models.Model):
 

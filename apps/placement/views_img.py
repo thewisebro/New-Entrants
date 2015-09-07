@@ -718,28 +718,7 @@ def add_company_coordinator(request):
 
 @login_required
 def person_search(request):
-  if request.is_ajax():
-    q = request.GET.get('term','')
-    print q
-    persons = Student.objects.filter(Q(user__name__icontains = q)|Q(user__username__icontains = q),passout_year=None).order_by('-user__username')[:50]
-    if not persons:
-      obj = [{
-        'id':'00000000',
-        'label':'No results found',
-        'value':q,
-      }]
-      data = simplejson.dumps(obj)
-      return HttpResponse(data,'application/json')
-    def person_dict(student):
-      return {
-        'id':str(student.user.username),
-        'label':str(student.user.name)+" ( "+str(student.user.info)+" )",
-        'value':str(student.user.name),
-      }
-    data = simplejson.dumps(map(person_dict,persons))
-  else:
-    data = 'fail'
-  return HttpResponse(data,'application/json')
+  return HttpResponse(student_search(request), 'application/data')
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists() , login_url=login_url)

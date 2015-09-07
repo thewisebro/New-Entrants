@@ -57,7 +57,8 @@ def get_users(user):
         (Q(student__admission_year = user.student.admission_year)|
         Q(student__groupinfos__in = user.student.groupinfos.all()))&
         Q(birth_date__day = datetime.now().day)&
-        Q(birth_date__month = datetime.now().month))
+        Q(birth_date__month = datetime.now().month)&
+        Q(student__passout_year = None))
   if group == 'Faculty':
     users = users.filter(faculty__department=user.faculty.department)
     users = users.filter(birth_date__day=datetime.now().day, birth_date__month=datetime.now().month)

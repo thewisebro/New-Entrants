@@ -139,6 +139,25 @@ class ExcelForm(forms.Form):
       else:
         return excel_file
 
+class PpoRejectionForm(forms.Form) :
+  plac_person = forms.CharField(label = "Student")
+  enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
+  company = forms.CharField()
+  company_id = forms.CharField(widget=forms.HiddenInput(attrs={'id':'company_id'}))
+  package = forms.CharField(widget = CurrencyWidget(choices_whole = PC.PAY_WHOLE_CHOICES,
+                                             choices_currency = PC.PAY_PACKAGE_CURRENCY_CHOICES,
+                                             attrs={'class':'iCurrencyField'}))
+  def is_valid(self):
+    valid = super(PpoRejectionForm, self).is_valid()
+    cleaned_data = super(PpoRejectionForm,self).clean()
+    if not cleaned_data.has_key('enroll') or not cleaned_data.has_key('company_id'):
+      raise forms.ValidationError("Please select an option from suggestions.")
+
+    clean_enroll = cleaned_data.get("enroll")
+    if models.PpoRejection.objects.filter(plac_person__student__user__username=clean_enroll).exists():
+      raise forms.ValidationError("PPO Rejection entry for this student already exists")
+    return True and valid
+
 #class CompanycontactForm(forms.ModelForm):
 #  when_to_contact = forms.DateField(widget=AdminDateWidget, required=False)
 #  class Meta:
@@ -168,6 +187,11 @@ class EditSlotForm(forms.ModelForm):
 class AddShortlistForm(forms.Form):
   student = forms.CharField(widget=forms.Textarea)
   company = forms.CharField(widget=forms.TextInput)
+
+class WorkshopRegistrationForm(forms.ModelForm):
+  class Meta:
+    model = models.WorkshopRegistration
+    exclude = ('placement_person',)
 
 def BaseModelFormFunction(model_type, exclude_list=None, data=None,**kwargs):
   """

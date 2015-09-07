@@ -41,7 +41,7 @@ import xlrd
 def index(request):
   student = request.user.student
   user = request.user
-  courses = RegisteredCourses.objects.filter(student=student,cleared_status = "CUR")
+  courses = RegisteredCourses.objects.filter(student=student,year=2015,semester_type='S')
   course_details = []
   credits = []
   is_admin = False
