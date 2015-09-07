@@ -382,7 +382,7 @@ def workshop_registration(request):
       messages.error(request, str(e[0]))
       return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
 
-  return render_to_response('placement/basic_form.html',{
+  return render_to_response('placement/workshop_registration.html',{
       "title": "Workshop Registration",
       "action": "",
       "workshop_registration_jquery": True,
@@ -390,3 +390,12 @@ def workshop_registration(request):
       "form": registration_form,
       "editable_warning": "",
       }, context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+def workshop_registration_details(request):
+  term = request.GET.get('q')
+  return render_to_response('placement/workshop_details.html', {
+      "term": term,
+      }, context_instance = RequestContext(request))
+

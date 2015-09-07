@@ -1,0 +1,128 @@
+{% extends "placement/base.html" %}
+{% block app_content %}
+
+{% if error_msg %}
+{{ error_msg }}
+{% endif %}
+
+
+{% if title %}
+<h3>{{ title }}</h3>
+<hr/>
+{% endif %}
+
+{% if editable_warning %}
+<p class="editable_warning">{{ editable_warning }}</p>
+{% endif %}
+<table class="sortable table table-striped table-bordered table-condensed" id="t1">
+  <thead>
+    <tr>
+      <th>S. No.</th>
+      <th>Workshop Company</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  <tr>
+    <td>1</td>
+    <td>Smart India</td>
+    <td><a style='cursor: pointer;' onclick=open_frame('Smart&nbsp;India','/placement/workshop_registration_details/?q=SI',800)>Details</a></td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>4P Education</td>
+    <td><a style='cursor: pointer;' onclick=open_frame('4P&nbsp;Education','/placement/workshop_registration_details/?q=4E',800)>Details</a></td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Talerang</td>
+    <td><a style='cursor: pointer;' onclick=open_frame('Talerang','/placement/workshop_registration_details/?q=TA',800)>Details</a></td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>Ethnus Consultancy Service</td>
+    <td><a style='cursor: pointer;' onclick=open_frame('Ethnus&nbsp;Consultance&nbsp;Service','/placement/workshop_registration_details/?q=ECS',800)>Details</a></td>
+  </tr>
+
+  </tbody>
+</table>
+{% include "placement/generic_form.html" with action=action form=form name=name isFormSet=isFormSet %}
+
+{% endblock %}
+
+{% block app_scripts %}
+<script>
+
+function dialog_iframe(data){
+    var $dialog;
+    try {
+        $dialog = eval(data.name);
+    }catch(e){}
+
+    if(!$dialog){
+      var height,margin;
+      var related_window_height = $(window).height();
+      related_window_height -= (1-data.height/related_window_height)*150;
+      if(related_window_height > data.height){
+        height = data.height;
+        margin = (related_window_height-height)/2;
+      }
+      else{
+        margin = 50;
+        height = $(window).height()-2*margin;
+      }
+      $('body').append("<div id='"+data.name+"-div'></div>");
+      dialog_options = {
+        autoOpen: false,
+        dialogClass: 'dialog-class',
+        title: data.title,
+        position: ['center',margin],
+        width: data.width,
+        height: height,
+        draggable: false,
+        resizable: false,
+        sticky: true,
+        close: function(event, ui){
+          eval('delete '+data.name);
+          $('#'+data.name+'-div').remove();
+          },
+        open: function(event, ui){
+          $('#'+data.name+'-div').html(""+
+            "<iframe id='"+data.name+"-iframe' src='"+data.src+
+            "' width='"+(data.width-25)+"' height='"+(height-55)+"' frameborder=0></iframe>"
+          );
+        }
+      };
+      if('close' in data)
+        dialog_options.beforeClose = data.close;
+      $dialog = $('#'+data.name+'-div')
+                .html('<p>Loading...</p>')
+                .dialog(dialog_options);
+    }
+    $('.dialog-class').css({position:'fixed'});
+    $dialog.dialog('open');
+    eval(data.name+'=$dialog;');
+    current_dialog = $dialog;
+}
+
+function open_frame(company_name,url,width){
+    dialog_iframe({
+    name: 'company_details_dialog',
+    title: company_name,
+    width: width,
+    src: url,
+    });
+}
+
+function close_dialog(dialog_name){
+  eval(dialog_name).dialog('close');
+  current_dialog = null;
+}
+</script>
+
+{% if workshop_registration_jquery %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/placement/workshop_registration.js"></script>
+{% endif %}
+{% endblock %}
+

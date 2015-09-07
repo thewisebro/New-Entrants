@@ -192,7 +192,7 @@ class WorkshopRegistrationForm(forms.ModelForm):
   def is_valid(self):
     valid = super(WorkshopRegistrationForm, self).is_valid()
     cleaned_data = super(WorkshopRegistrationForm,self).clean()
-    if cleaned_data['options']=='NOT' and cleaned_data['reason'] == '': 
+    if cleaned_data['options']=='NOT' and cleaned_data['reason'].lower() == cleaned_data['reason'].upper(): 
       raise forms.ValidationError("Please add specific reason for this option")
     return True and valid
   class Meta:
