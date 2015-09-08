@@ -352,7 +352,7 @@ def is_eligible_for_workshop(student):
 #  return response
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def workshop_registration(request):
   student = request.user.student
   plac_person = student.placementperson
@@ -392,7 +392,7 @@ def workshop_registration(request):
       }, context_instance = RequestContext(request))
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def workshop_registration_details(request):
   term = request.GET.get('q')
   return render_to_response('placement/workshop_details.html', {
