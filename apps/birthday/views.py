@@ -84,7 +84,10 @@ def wish(request,username):
       msg = request.POST['msg']
       bm = BirthdayMessage.objects.create(sender = request.user,receiver = birthday_user,message = msg)
       Notification.save_notification(app='',text=request.user.html_name+' wished you : '+escape(msg),url='/birthday/reply/'+str(bm.pk)+'/',users=[birthday_user], instance=bm)
-      messages.info(request,'Your message has been sent to '+birthday_user.first_name);
+      if birthday_user.first_name:
+        messages.info(request,'Your message has been sent to '+birthday_user.first_name)
+      else:
+        messages.info(request,'Your message has been sent to '+birthday_user.name)
       close = True
     elif BirthdayMessage.objects.filter(sender = request.user,receiver = birthday_user,date = date.today()).count()>1:
       return render_to_response('birthday/wish.html',{'already_wished':True,'username':username},context_instance=RequestContext(request))

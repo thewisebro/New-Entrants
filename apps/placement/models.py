@@ -338,25 +338,24 @@ class WorkshopRegistration(models.Model):
       This is different from Workshop Priority. Workshop priority was used in 2014-15. It was compulsory in this year.
     """
     placement_person = models.ForeignKey(PlacementPerson, unique=True)
-    is_registered = models.BooleanField(default=False, verbose_name = "Select to register")
-    options = models.CharField(choices = PC.WORKSHOP_OPTIONS, max_length = 16, default="Group Discussion")
-    suggestions = models.CharField(null=True, blank=True, verbose_name = "Target Companies", max_length = 300)
+    options = models.CharField(choices = PC.WORKSHOP_OPTIONS, max_length = 28, default="NOT")
+    reason = models.CharField(max_length=500, blank=True, null=True)
 
     def _unicode__(self):
       return str(self.placement_person.student.user.name)+" "+str(self.registered)
 
-class WorkshopPriority(models.Model):
-
-  student = models.ForeignKey(Student)
-  day1_priority = models.IntegerField(default=0)
-  day2_priority = models.IntegerField(default=0)
-  day3_priority = models.IntegerField(default=0)
-  day4_priority = models.IntegerField(default=0)
-  day5_priority = models.IntegerField(default=0)
-  interview_application = models.BooleanField(default=False)
-
-  def __unicode__(self):
-     return str(self.student.user.name)+str(self.day1_priority)+str(self.day2_priority)+str(self.day3_priority)+str(self.day4_priority)+str(self.day5_priority)
+#class WorkshopPriority(models.Model):
+#
+#  student = models.ForeignKey(Student)
+#  day1_priority = models.IntegerField(default=0)
+#  day2_priority = models.IntegerField(default=0)
+#  day3_priority = models.IntegerField(default=0)
+#  day4_priority = models.IntegerField(default=0)
+#  day5_priority = models.IntegerField(default=0)
+#  interview_application = models.BooleanField(default=False)
+#
+#  def __unicode__(self):
+#     return str(self.student.user.name)+str(self.day1_priority)+str(self.day2_priority)+str(self.day3_priority)+str(self.day4_priority)+str(self.day5_priority)
 
 ############NEW CONTACT MANAGER MODELS
 

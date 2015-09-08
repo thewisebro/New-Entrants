@@ -22,7 +22,7 @@ class CompanyForm(forms.ModelForm) :
 
   #Search for a better method
   contact_person = forms.ModelChoiceField(queryset = models.CPTMember.objects.filter(year = current_session_year()), required=False)
-  open_for_disciplines = forms.ModelMultipleChoiceField(queryset=Branch.objects.all().order_by('degree','department'), widget=forms.CheckboxSelectMultiple)
+  open_for_disciplines = forms.CompanyMultipleChoiceField(queryset=Branch.objects.all().order_by('degree','department'), widget=forms.CheckboxSelectMultiple)
   class Meta :
     model   = models.Company
     fields = ['name',
@@ -189,6 +189,12 @@ class AddShortlistForm(forms.Form):
   company = forms.CharField(widget=forms.TextInput)
 
 class WorkshopRegistrationForm(forms.ModelForm):
+  def is_valid(self):
+    valid = super(WorkshopRegistrationForm, self).is_valid()
+    cleaned_data = super(WorkshopRegistrationForm,self).clean()
+    if cleaned_data['options']=='NOT' and cleaned_data['reason'].lower() == cleaned_data['reason'].upper(): 
+      raise forms.ValidationError("Please add specific reason for this option")
+    return True and valid
   class Meta:
     model = models.WorkshopRegistration
     exclude = ('placement_person',)
