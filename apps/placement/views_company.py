@@ -233,93 +233,159 @@ def is_eligible_for_workshop(student):
   else:
     return False
 
-@csrf_exempt
+#@csrf_exempt
+#@login_required
+#def set_workshop_priority(request):
+#  student = request.user.student
+#  if not is_eligible_for_workshop(student):
+#    access_message = "Workshop registration is not open for your branch. In case of any discrepancy, please contact IMG."
+#    return render_to_response('placement/workshop_priority.html', {
+#      "access_message": access_message,
+#        }, context_instance = RequestContext(request))
+#  workshop_days = [ '2nd September 06:00pm-10:00pm, Tuesday',
+#                    '3rd September 06:00pm-10:00pm, Wednesday',
+#                    '4th September 06:00pm-10:00pm, Thursday',
+#                    '5th September 06:00pm-10:00pm, Friday',
+#                    '6th September 11:30am-03:30pm, Saturday']
+#  priority, created = WorkshopPriority.objects.get_or_create(student=student)
+#  is_checked = False
+#  if not created:
+#    priority_list = [int(priority.day1_priority),int(priority.day2_priority),int(priority.day3_priority),int(priority.day4_priority),int(priority.day5_priority)]
+#    workshop_days = [x for (y,x) in sorted(zip(priority_list,workshop_days))]
+#    is_checked = priority.interview_application
+#  message=""
+#  if request.method == "POST":
+#    try:
+#      priority = WorkshopPriority.objects.get(student=student).delete()
+#      priority = WorkshopPriority.objects.create(student=student)
+#      data = json.loads(request.POST.items()[0][0])
+#      is_success="True"
+#      for l in data:
+#         if l.has_key('id'):
+#           if l['id']=='2nd September 06:00pm-10:00pm, Tuesday':
+#             priority.day1_priority = int(l['priority'])+1
+#           elif l['id']=='3rd September 06:00pm-10:00pm, Wednesday':
+#             priority.day2_priority = int(l['priority'])+1
+#           elif l['id']=='4th September 06:00pm-10:00pm, Thursday':
+#             priority.day3_priority = int(l['priority'])+1
+#           elif l['id']=='5th September 06:00pm-10:00pm, Friday':
+#             priority.day4_priority = int(l['priority'])+1
+#           elif l['id']=='6th September 11:30am-03:30pm, Saturday':
+#             priority.day5_priority = int(l['priority'])+1
+#         elif l.has_key('apply'):
+#            priority.interview_application = l["apply"]
+#
+#      priority.save()
+#      message = "Saved Successfully"
+#    except Exception as e:
+#      message = "Some error occured. Please contact IMG"
+#      is_success = False
+#    json_data = json.dumps({'message':message, 'is_success':is_success})
+#    return HttpResponse(json_data, mimetype='application/json')
+#
+#  return render_to_response('placement/workshop_priority.html', {
+#      "data": workshop_days,
+#      "is_checked": is_checked,
+#      "message": message,
+#        }, context_instance = RequestContext(request))
+#
+#@login_required
+#@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#def workshop_registration(request):
+#  student = request.user.student
+#  plac_person = student.placementperson
+#  if plac_person.status not in ['VRF', 'OPN', 'LCK']:
+#    messages.error(request, 'You can not register for workshop. In case of any disperency, please contact IMG.')
+#    return HttpResponseRedirect(reverse('placement.views.index'))
+#  prev_registration = WorkshopRegistration.objects.get_or_none(placement_person = plac_person)
+#  registration_form = forms.WorkshopRegistrationForm(instance = prev_registration)
+#  if request.method=="POST":
+#    registration_form = forms.WorkshopRegistrationForm(request.POST, instance = prev_registration)
+#    if registration_form.is_valid():
+#      registration_obj = registration_form.save(commit=False)
+#      registration_obj.placement_person = plac_person
+#      l.info(request.user.username + ': workshop registration status changed to '+str(registration_obj.is_registered))
+#      if registration_obj.is_registered:
+#        registration_obj.save()
+#        messages.success(request, 'Successfully registered for Workshop.')
+#      else:
+#        registration_obj.delete()
+#        messages.success(request, 'Successfully de-registered for Workshop.')
+#      return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
+#    else:
+#      l.info(request.user.username + ': Error saving workshop registration detail')
+#      messages.error(request, 'Unknown error occured.')
+#      return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
+#
+#  return render_to_response('placement/basic_form.html',{
+#      "title": "Workshop Registration 4P Education",
+#      "action": "",
+#      "name": "workshop_registration",
+#      "form": registration_form,
+#      "editable_warning": "",
+#      }, context_instance = RequestContext(request))
+#
+#@login_required
+#@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+#def workshop_registration_export(request):
+#  import xlwt
+#  l.info(request.user.username + ': Exported Workshop Registration File')
+#  registered_lst = WorkshopRegistration.objects.all().order_by('options','placement_person__student__user__username')
+#  wb = xlwt.Workbook(encoding='utf-8')
+#  ws = wb.add_sheet('Sheet 1')
+#
+#  ws.write(0, 0, 'Sr. No.')
+#  ws.write(0, 1, 'Enrollment No.')
+#  ws.write(0, 2, 'Name')
+#  ws.write(0, 3, 'Selected Option')
+#  ws.write(0, 4, 'Target Companies')
+#
+#  lst = registered_lst.values_list('placement_person__student__user__username', 'placement_person__student__user__name', 'options', 'suggestions')
+#  for row, rowdata in enumerate(lst):
+#    ws.write(row+1, 0, row+1)
+#    for col, val in enumerate(rowdata):
+#      ws.write(row+1, col+1, val)
+#
+#  response = HttpResponse(content_type='application/vnd.ms-excel')
+#  response['Content-Disposition']='attachment; filename=workshop_data.xls'
+#  wb.save(response)
+#  return response
+
 @login_required
-def set_workshop_priority(request):
-  student = request.user.student
-  if not is_eligible_for_workshop(student):
-    access_message = "Workshop registration is not open for your branch. In case of any discrepancy, please contact IMG."
-    return render_to_response('placement/workshop_priority.html', {
-      "access_message": access_message,
-        }, context_instance = RequestContext(request))
-  workshop_days = [ '2nd September 06:00pm-10:00pm, Tuesday',
-                    '3rd September 06:00pm-10:00pm, Wednesday',
-                    '4th September 06:00pm-10:00pm, Thursday',
-                    '5th September 06:00pm-10:00pm, Friday',
-                    '6th September 11:30am-03:30pm, Saturday']
-  priority, created = WorkshopPriority.objects.get_or_create(student=student)
-  is_checked = False
-  if not created:
-    priority_list = [int(priority.day1_priority),int(priority.day2_priority),int(priority.day3_priority),int(priority.day4_priority),int(priority.day5_priority)]
-    workshop_days = [x for (y,x) in sorted(zip(priority_list,workshop_days))]
-    is_checked = priority.interview_application
-  message=""
-  if request.method == "POST":
-    try:
-      priority = WorkshopPriority.objects.get(student=student).delete()
-      priority = WorkshopPriority.objects.create(student=student)
-      data = json.loads(request.POST.items()[0][0])
-      is_success="True"
-      for l in data:
-         if l.has_key('id'):
-           if l['id']=='2nd September 06:00pm-10:00pm, Tuesday':
-             priority.day1_priority = int(l['priority'])+1
-           elif l['id']=='3rd September 06:00pm-10:00pm, Wednesday':
-             priority.day2_priority = int(l['priority'])+1
-           elif l['id']=='4th September 06:00pm-10:00pm, Thursday':
-             priority.day3_priority = int(l['priority'])+1
-           elif l['id']=='5th September 06:00pm-10:00pm, Friday':
-             priority.day4_priority = int(l['priority'])+1
-           elif l['id']=='6th September 11:30am-03:30pm, Saturday':
-             priority.day5_priority = int(l['priority'])+1
-         elif l.has_key('apply'):
-            priority.interview_application = l["apply"]
-
-      priority.save()
-      message = "Saved Successfully"
-    except Exception as e:
-      message = "Some error occured. Please contact IMG"
-      is_success = False
-    json_data = json.dumps({'message':message, 'is_success':is_success})
-    return HttpResponse(json_data, mimetype='application/json')
-
-  return render_to_response('placement/workshop_priority.html', {
-      "data": workshop_days,
-      "is_checked": is_checked,
-      "message": message,
-        }, context_instance = RequestContext(request))
-
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def workshop_registration(request):
   student = request.user.student
   plac_person = student.placementperson
-  if plac_person.status not in ['VRF', 'OPN', 'LCK']:
+  if plac_person.status != 'VRF':
     messages.error(request, 'You can not register for workshop. In case of any disperency, please contact IMG.')
     return HttpResponseRedirect(reverse('placement.views.index'))
   prev_registration = WorkshopRegistration.objects.get_or_none(placement_person = plac_person)
   registration_form = forms.WorkshopRegistrationForm(instance = prev_registration)
   if request.method=="POST":
     registration_form = forms.WorkshopRegistrationForm(request.POST, instance = prev_registration)
-    if registration_form.is_valid():
-      registration_obj = registration_form.save(commit=False)
-      registration_obj.placement_person = plac_person
-      l.info(request.user.username + ': workshop registration status changed to '+str(registration_obj.is_registered))
-      if registration_obj.is_registered:
+    try:
+      if registration_form.is_valid():
+        registration_obj = registration_form.save(commit=False)
+        if registration_obj.options != 'NOT':
+          registration_obj.reason = ""
+        registration_obj.placement_person = plac_person
         registration_obj.save()
+        l.info(request.user.username + ': workshop registration successful')
         messages.success(request, 'Successfully registered for Workshop.')
+        return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
       else:
-        registration_obj.delete()
-        messages.success(request, 'Successfully de-registered for Workshop.')
-      return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
-    else:
-      l.info(request.user.username + ': Error saving workshop registration detail')
-      messages.error(request, 'Unknown error occured.')
+        l.info(request.user.username + ': Error saving workshop registration detail')
+        messages.error(request, 'Unknown error occured.')
+        return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
+    except ValidationError as e:
+      l.error(request.user.username + ': Error saving workshop registration detail')
+      messages.error(request, str(e[0]))
       return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
 
-  return render_to_response('placement/basic_form.html',{
-      "title": "Workshop Registration 4P Education",
+  return render_to_response('placement/workshop_registration.html',{
+      "title": "Workshop Registration",
       "action": "",
+      "workshop_registration_jquery": True,
       "name": "workshop_registration",
       "form": registration_form,
       "editable_warning": "",
@@ -327,26 +393,9 @@ def workshop_registration(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
-def workshop_registration_export(request):
-  import xlwt
-  l.info(request.user.username + ': Exported Workshop Registration File')
-  registered_lst = WorkshopRegistration.objects.all().order_by('options','placement_person__student__user__username')
-  wb = xlwt.Workbook(encoding='utf-8')
-  ws = wb.add_sheet('Sheet 1')
+def workshop_registration_details(request):
+  term = request.GET.get('q')
+  return render_to_response('placement/workshop_details.html', {
+      "term": term,
+      }, context_instance = RequestContext(request))
 
-  ws.write(0, 0, 'Sr. No.')
-  ws.write(0, 1, 'Enrollment No.')
-  ws.write(0, 2, 'Name')
-  ws.write(0, 3, 'Selected Option')
-  ws.write(0, 4, 'Target Companies')
-
-  lst = registered_lst.values_list('placement_person__student__user__username', 'placement_person__student__user__name', 'options', 'suggestions')
-  for row, rowdata in enumerate(lst):
-    ws.write(row+1, 0, row+1)
-    for col, val in enumerate(rowdata):
-      ws.write(row+1, col+1, val)
-
-  response = HttpResponse(content_type='application/vnd.ms-excel')
-  response['Content-Disposition']='attachment; filename=workshop_data.xls'
-  wb.save(response)
-  return response
