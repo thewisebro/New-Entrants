@@ -480,7 +480,7 @@ function sell_details(pk,item_name){
     name:'sell_detail_dialog',
     title:item_name,
     width:800,
-    height:500,
+    height:520,
     src:'/buyandsell/sell_details/'+pk+'/',
     close:function(){opened_dialog=""}
   });

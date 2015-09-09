@@ -77,7 +77,7 @@ def buy(request,mc = None,c = None):
     if pu >= 0 and pl >= 0 and pu > pl:
       price_valid = 1
     else:
-      messages.error(request,"Please enter correct")
+      messages.error(request,"Please enter correct range")
       context={
       'table_data':table_data,
       'mc':mc,
@@ -221,7 +221,7 @@ def viewrequests(request,mc=None,c=None):
     if pu >= 0 and pl >= 0 and pu > pl:
       price_valid = 1
     else:
-      messages.error(request,"Please enter correct")
+      messages.error(request,"Please enter correct range")
       context={
       'table_data':table_data,
       'mc':mc,
@@ -506,7 +506,8 @@ def selldetails(request,pk):
     'item':item,
     'self_flag':self_flag,
     'show_contact':show_contact,
-    'login_flag':login_flag
+    'login_flag':login_flag,
+    'user':request.user if login_flag else None
           }
   print show_contact
   return render(request,'buyandsell/selldetails.html',context)
@@ -551,7 +552,8 @@ def requestdetails(request,pk):
     'item':item,
     'self_flag':self_flag,
     'show_contact':show_contact,
-    'login_flag':login_flag
+    'login_flag':login_flag,
+    'user':request.user if login_flag else None
           }
   return render(request,'buyandsell/requestdetails.html',context)
 
