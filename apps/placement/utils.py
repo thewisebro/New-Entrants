@@ -265,6 +265,9 @@ def ContactValidator(value):
 def previous_sem(curr_sem):
   ''' curr_sem = "UG20" -> previous_sem = "UG11" '''
   try:
+    if curr_sem=='PG10':
+      prev_sem = 'UG0'
+      return prev_sem
     disp = curr_sem[:2]
     if disp not in ["UG","PG"]:
       disp = "PHD"
