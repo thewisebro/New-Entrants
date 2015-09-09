@@ -571,6 +571,14 @@ a: focus
   align:center;
 }
 
+.request-form-body
+{
+  width:auto;
+  padding: 45px;
+  align:center;
+}
+
+
 .search-result-box
 {
   border: 1px solid #ccc;
@@ -1338,3 +1346,14 @@ a:focus
  {
    padding-top: 5px;
  }
+
+ .form-group
+ {
+   margin-bottom: 30px;
+ }
+
+
+.form-group .col-xs-8 .form-group:last-child
+{
+  margin-bottom: 0;
+}

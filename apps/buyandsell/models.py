@@ -16,7 +16,7 @@ class MemberPhoto(CropImage):
 
   @classmethod
   def get_instance(cls, request, pk):
-    item = SaleItems.objects.:
+    pass
 
   @classmethod
   def get_image_url(cls, image_field):

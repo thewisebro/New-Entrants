@@ -415,13 +415,13 @@ def requestitem(request):
       else:
         print "form filled wrongly"
     else:
-      return render(request,'buyandsell/form.html',{'form':form})
+      return render(request,'buyandsell/requestform.html',{'form':form})
   init_dict={
              'email':request.user.email,
              'contact':contact,
             }
   form=RequestForm(initial=init_dict)
-  return render(request,'buyandsell/form.html',{'form':form})
+  return render(request,'buyandsell/requestform.html',{'form':form})
 
 
 def watch(request,mc=None,c=None):
