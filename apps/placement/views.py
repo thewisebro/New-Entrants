@@ -67,7 +67,6 @@ def index(request):
       plac_person = PlacementPerson.objects.get_or_create(student = student)[0]
       if (not WorkshopRegistration.objects.filter(placement_person=plac_person).exists()) and plac_person.status == 'VRF':
         l.info(request.user.username+': Redirected to Workshop Registration Page')
-        messages.error(request, 'Please enter your choice for workshop registration.')
         return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
       if plac_person.status == 'VRF' :
         applications = CompanyApplicationMap.objects.filter(plac_person = plac_person, company__year__contains = current_session_year())
