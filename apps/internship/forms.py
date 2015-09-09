@@ -8,7 +8,7 @@ class CompanyForm(ModelForm):
   latest_date_of_joining = forms.CharField(required= False, widget = forms.DateInput(attrs={'class':'iDateField'}))
   last_date_of_applying = forms.CharField(required= False, widget = forms.DateInput(attrs={'class':'iDateTimeField'}))
   probable_date_of_arrival = forms.CharField(required= False, widget = forms.DateInput(attrs={'class':'iDateField'}))
-  open_for_disciplines = forms.ModelMultipleChoiceField(queryset=Branch.objects.filter(graduation__in=('UG','PG')).order_by('degree', 'department'), widget=forms.CheckboxSelectMultiple)
+  open_for_disciplines = forms.CompanyMultipleChoiceField(queryset=Branch.objects.filter(graduation__in=('UG','PG')).order_by('degree', 'department'), widget=forms.CheckboxSelectMultiple)
   class Meta:
     model   = models.Company
     exclude = ('year',)

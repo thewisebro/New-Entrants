@@ -250,13 +250,10 @@ def mcm_submit(request):
 
   if MCM.objects.filter(student = person).exists():
     student = MCM.objects.filter(student = person)[0]
-    """
-    ### Temporary code block. Note: Please remove this while reopening this portal ###
+
     if student.check is False:
       messages.info(request,"MCM and Free-messing Scholarship portal is closed now! Please contact 'IMG' in case of any discrepency")
       return HttpResponseRedirect('/')
-    ##### Ends
-    """
   else:
     """
     ### Temporary code block. Note: Please remove this while reopening this portal ###
@@ -264,6 +261,7 @@ def mcm_submit(request):
     return HttpResponseRedirect('/')
     ##### Ends
     """
+    return HttpResponseRedirect('/')
     student = MCM.objects.create(student = person)
 
   if request.method == 'POST':
