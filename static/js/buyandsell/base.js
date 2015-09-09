@@ -448,8 +448,8 @@ function sell_form(){
   console.log("kanav");
   dialog_iframe({
     name:'sell_form_dialog',
-    title:'SellForm',
-    width:600,
+    title:'Sell an Item',
+    width:800,
     height:650,
     src:'/buyandsell/sell/',
     close:function(){opened_dialog=""}

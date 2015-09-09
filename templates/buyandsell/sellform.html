@@ -1,0 +1,153 @@
+{% extends "buyandsell/base.html" %}
+
+{% block header %}
+<body style="background-color: #ffffff;">
+
+<div class="sell-form-body">
+  <form class="form-horizontal" action="#">
+    <div class="form-group">
+      <label class="col-xs-2 control-label" style="text-align: left" for="name">Item Name</label>
+      <div class="col-xs-10 sell-form-item-name-area">
+        <input type="text" class="form-control sell-form-item-name" id="id_item_name">
+        <div class="sell-form-search-result-box">
+          <div class="searched-items-for-sale">
+            <p class="search-results-heading">
+              Similar entries in Requests
+              <span class="max-price-heading">Max Price</span>
+
+            </p>
+
+            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
+              <div>
+                                                <span class="searched-item-name">
+                                                    Electric Kettle
+                                                </span>
+                                                <span class="searched-item-price">
+                                                    350
+                                                </span>
+                <span class="rupee-logo">Rs&nbsp</span>
+              </div>
+            </a>
+            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
+              <div>
+                                                <span class="searched-item-name">
+                                                    Electric Kettle
+                                                </span>
+                                                <span class="searched-item-price">
+                                                    350
+                                                </span>
+                <span class="rupee-logo">Rs&nbsp</span>
+              </div>
+            </a>
+            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
+              <div>
+                                                <span class="searched-item-name">
+                                                    Electric Kettle
+                                                </span>
+                                                <span class="searched-item-price">
+                                                    350
+                                                </span>
+                <span class="rupee-logo">Rs&nbsp</span>
+              </div>
+            </a>
+            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
+              <div>
+                                                <span class="searched-item-name">
+                                                    Electric Kettle
+                                                </span>
+                                                <span class="searched-item-price">
+                                                    350
+                                                </span>
+                <span class="rupee-logo">Rs&nbsp</span>
+              </div>
+            </a>
+            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
+              <div>
+                                                <span class="searched-item-name">
+                                                    Electric Kettle
+                                                </span>
+                                                <span class="searched-item-price">
+                                                    350
+                                                </span>
+                <span class="rupee-logo">Rs&nbsp</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-xs-2 control-label" style="text-align: left" for="category">Category</label>
+      <div class="col-xs-4">
+        <select class="form-control" id="id_category" >
+          <option>Electronics</option>
+          <option>Books</option>
+          <option>Miscellaneous</option>
+        </select>
+      </div>
+      <label class="col-xs-3 control-label" style="text-align: right" for="category">Sub-Category</label>
+      <div class="col-xs-3">
+        <select class="form-control" id="sub_category" >
+          <option>All</option>
+          <option>Acadmeic</option>
+          <option>Course Books</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-xs-2 control-label" style="text-align: left" for="name">Price</label>
+      <div class="col-xs-10">
+        <input type="text" class="form-control" id="id_cost">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-xs-2 control-label" style="text-align: left" for="expiry">Expires In</label>
+      <div class="col-xs-10">
+        <select class="form-control" id="id_days_till_expiry" >
+          <option>5 days</option>
+          <option>10 days</option>
+          <option>15 days</option>
+          <option>20 days</option>
+          <option>25 days</option>
+          <option>30 days</option>
+          <option>35 days</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-xs-4">
+        <div class="sell-form-image-box">
+          <img src="designStuff/cameraLogo.PNG" style="width:100%">
+          <button type="button" class="btn" style="margin: 12% 0% 0% 6%">Choose an Image</button>
+        </div>
+      </div>
+      <div class="col-xs-8">
+        <div class="form-group">
+          <label class="control-label" for="description" style="text-align: left">Description</label>
+          <textarea id="id_detail" rows="3" style="width:96.5%"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-3 control-label" for="email" style="text-align: left;  padding-left:0px;">Your Email Id</label>
+          <div class="col-xs-9">
+            <input type="email" class="form-control" id="id_email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-3 control-label" for="phone" style="text-align: left; padding-left:0px;">Your Phone</label>
+          <div class="col-xs-9">
+            <input type="text" class="form-control" id="id_contact">
+          </div>
+        </div>
+      </div>
+    </div>
+    <input class="btn btn-primary send-button" type="submit" value="Done">
+  </form>
+</div>
+
+
+{% endblock %}
+
+</body>
+
+<div class="fading-rectangle"><div class="expired-item-icon"></div><div class="expired-item-text"></div></div>
+

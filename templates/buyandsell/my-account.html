@@ -182,11 +182,9 @@
               <ul class="dropdown-menu item-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
                 <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-15.5%"></div>
                 <div class="arrow-up-front" style="margin-left:75%; margin-top:-13.5%"></div>
-                <li role="presentation"><a onclick ="edit_sell({{ row.pk }})" class="edit-button-text">Edit</a></li>
                 <li role="presentation">
                   <a data-toggle="modal" onclick = "assign_id({{row.id}},'sell')" data-target="#remove-item-confirm-modal" class="">Remove</a>
                 </li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mark Sold</a></li>
               </ul>
             </div>
           </div>
