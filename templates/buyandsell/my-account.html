@@ -87,7 +87,7 @@
       <div class="row">
 
         {% for row in sell_items %}
-
+{% if row.is_active %}
         <div class="col-md-3" id = "sell{{row.pk}}">
           <div class="thumbnailBG thumbnailBG-my-account">
             <div class="thumbnail">
@@ -113,17 +113,17 @@
                 <li role="presentation">
                   <a data-toggle="modal" onclick = "assign_id({{row.id}},'sell')" data-target="#remove-item-confirm-modal" class="">Remove</a>
                 </li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mark Sold</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" onclick = "transaction_form('sell', {{ row.pk }})">Mark Sold</a></li>
               </ul>
             </div>
           </div>
         </div>
-        {% endfor %}
 
+{% else %}
         <div class="col-md-3" id = "sell{{row.pk}}">
           <div class="thumbnailBG thumbnailBG-my-account expired-item">
             <div class="thumbnail">
-              <img src="http://38ccda.medialib.glogster.com/media/56968c0d9eac812695560a35ed0d7699db8d96edeb58494421680cef98ccaf28/doggy.jpg" alt="Generic placeholder thumbnail">
+              <img src="/media/{{row.item_image}}" alt="Generic placeholder thumbnail">
               <div class="fading-rectangle">
                 <img class="expired-icon item-expired-icon" src="{{STATIC_URL}}images/buyandsell/expired-icon.png">
                 <span class="item-expired-text" >Expired</span>
@@ -134,7 +134,7 @@
               <span class="price">Rs. {{row.cost}}</span>
               <div class="row">
                 <div class="col-md-12">
-                  <span class="expiresIn">Expires in {{ row.expiry_date|timeuntil }}</span>
+
                 </div>
               </div>
             </div>
@@ -150,16 +150,19 @@
                 <li role="presentation">
                   <a data-toggle="modal" onclick = "assign_id({{row.id}},'sell')" data-target="#remove-item-confirm-modal" class="">Remove</a>
                 </li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mark Sold</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1"onclick = "transaction_form('sell', {{ row.pk }})">Mark Sold</a></li>
               </ul>
             </div>
           </div>
         </div>
-
+{% endif %}
+{% endfor %}
+            {% if succ_sold_items %}
+                 {% for row in succ_sold_items %}
         <div class="col-md-3" id = "sell{{row.pk}}">
           <div class="thumbnailBG thumbnailBG-my-account sold-item">
             <div class="thumbnail">
-              <img src="http://38ccda.medialib.glogster.com/media/56968c0d9eac812695560a35ed0d7699db8d96edeb58494421680cef98ccaf28/doggy.jpg" alt="Generic placeholder thumbnail">
+              <img src="/media/{{ row.item_image }}" alt="Generic placeholder thumbnail">
               <div class="fading-rectangle">
                 <img class="mark-sold-icon" src="{{STATIC_URL}}images/buyandsell/mark-done.png">
                 <span class="item-sold-text" >Sold</span>
@@ -190,7 +193,8 @@
           </div>
         </div>
 
-
+{% endfor %}
+{% endif %}
 
       </div>
       <div class="row">

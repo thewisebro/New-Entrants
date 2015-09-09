@@ -5,7 +5,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('mcm.views',
   (r'^mcm/$', 'mcm_submit'),
-	(r'^mcm_print_pdf/$', 'mcm_print_pdf'),
+  (r'^mcm_print_pdf/$', 'mcm_print_pdf'),
   #(r'^loan_aid/$', 'loan_aid_submit'),
   #(r'^print_pdf/$', 'print_pdf'),
   (r'^data/$', 'scholarship_data_listing'),

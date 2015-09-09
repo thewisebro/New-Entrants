@@ -18,12 +18,13 @@
     <div class="col-xs-8">
 
       {% if item %}
-      <p class="item-description">
-        Designing is a matter of concentration. You go deep into what you want to do. It's about intensive research,
-        really. The concentration is warm and intimate and like the fire inside the earth - intense but not distorted.
 
+{% if item.detail %}
+      <p class="item-description">
+        {{ item.detail }}
       <div class="visible-division-line"></div>
       </p>
+{% endif %}
 
       <table class="table item-details-table">
         <tbody>
@@ -41,7 +42,7 @@
             Owner
           </td>
           <td>
-            <span> Insert owner's name here</span>
+            <span> {{ item.user.name }}</span>
           </td>
         </tr>
         {% if show_contact %}
@@ -65,8 +66,10 @@
             <p><strong>Following mail will be sent to the Owner</strong></p>
 
             <p class="mail-to-be-sent">
-              Lorem ipsum dolor sit amet, adipiscing ipsum sed sem, do enim imperdiet nullam libero. Nulla a odio elementum
-              ut, sed arcu. Mauris tellus libero, est sed, donec eu habitant dui quis donec arcu, suscipit aenea
+            Your item   {{item.item_name}}  has a buyer on Buy and Sell!
+   Your item  {{item.item_name}}  added by you on   {{item.post_date}} has a prospective buyer! {{user.name}} wants to buy your item. You can contact {% if user.gender == 'F' %} her{% else %} him {% endif %} at this number {{ user.contact_no }} or email {% if user.gender == 'F' %} her{% else %} him {% endif %} at {{user.email}}<br>
+   Note: if there is no phone number or email id, that means that {{ user.name}} has not filled in his contact information in the channel-i database.
+
             </p>
 
             <form action="" method="POST">

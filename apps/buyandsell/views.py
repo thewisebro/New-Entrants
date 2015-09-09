@@ -77,7 +77,7 @@ def buy(request,mc = None,c = None):
     if pu >= 0 and pl >= 0 and pu > pl:
       price_valid = 1
     else:
-      messages.error(request,"Please enter correct")
+      messages.error(request,"Please enter correct range")
       context={
       'table_data':table_data,
       'mc':mc,
@@ -221,7 +221,7 @@ def viewrequests(request,mc=None,c=None):
     if pu >= 0 and pl >= 0 and pu > pl:
       price_valid = 1
     else:
-      messages.error(request,"Please enter correct")
+      messages.error(request,"Please enter correct range")
       context={
       'table_data':table_data,
       'mc':mc,
@@ -506,7 +506,8 @@ def selldetails(request,pk):
     'item':item,
     'self_flag':self_flag,
     'show_contact':show_contact,
-    'login_flag':login_flag
+    'login_flag':login_flag,
+    'user':request.user if login_flag else None
           }
   print show_contact
   return render(request,'buyandsell/selldetails.html',context)
@@ -551,7 +552,8 @@ def requestdetails(request,pk):
     'item':item,
     'self_flag':self_flag,
     'show_contact':show_contact,
-    'login_flag':login_flag
+    'login_flag':login_flag,
+    'user':request.user if login_flag else None
           }
   return render(request,'buyandsell/requestdetails.html',context)
 
@@ -572,7 +574,7 @@ def sendmail(request, type_of_mail, id_pk):
     qryst = SaleItems.objects.filter(pk = id_pk)
 
     if buy_mail_list:
-      messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+\
+      messages.error(request,"A mail has already been sent to "+qryst[0].user.name+\
           " by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       already_sent=1
 
@@ -581,11 +583,11 @@ def sendmail(request, type_of_mail, id_pk):
       new_mail_sent.save()
       subject = 'Your item ' + qryst[0].item_name + ' has a buyer on Buy and Sell!'
       msg = 'Your item ' + qryst[0].item_name + ' added by you on ' + str(qryst[0].post_date) + ' has a prospective buyer! '
-      msg += user.first_name + ' wants to buy your item. You can contact '+pronoun+' at this number ' + contact
+      msg += user.name + ' wants to buy your item. You can contact '+pronoun+' at this number ' + contact
       msg += ' or email '+pronoun+' at ' + str(user.email) +\
-      '\nNote: if there is no phone number or email id, that means that ' + user.first_name
+      '\nNote: if there is no phone number or email id, that means that ' + user.name
       msg += ' has not filled in his contact information in the channel-i database.'
-      notif_text = user.first_name + ' wants to buy ' + qryst[0].item_name + ' added by you. '
+      notif_text = user.name + ' wants to buy ' + qryst[0].item_name + ' added by you. '
       if contact:
         notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
       if qryst[0].email:
@@ -599,7 +601,7 @@ def sendmail(request, type_of_mail, id_pk):
     qryst = RequestedItems.objects.filter(pk = id_pk)
     buy_mail_list=RequestMails.objects.filter(by_user__username=username,item__pk=id_pk)
     if buy_mail_list:
-      messages.error(request,"A mail has already been sent to "+qryst[0].user.first_name+\
+      messages.error(request,"A mail has already been sent to "+qryst[0].user.name+\
           " by you for this item. He may contact you shortly. If not, go ahead and contact "+pronoun+" yourself!")
       already_sent=1
 
@@ -608,11 +610,11 @@ def sendmail(request, type_of_mail, id_pk):
       new_mail_sent.save()
       subject = 'Your request for ' + qryst[0].item_name + ' has been answered!'
       msg = 'Your request ' + qryst[0].item_name + ' added by you on ' + str(qryst[0].post_date) + ' has a prospective seller! \n'
-      msg += user.first_name + ' has the item that you requested for. You can contact '+pronoun+' at this number ' + contact
+      msg += user.name + ' has the item that you requested for. You can contact '+pronoun+' at this number ' + contact
       msg += ' or email '+pronoun+' at ' + str(user.email) +\
-      '\n\n Note: if there is no phone number or email id, that means that ' + user.first_name
+      '\n\n Note: if there is no phone number or email id, that means that ' + user.name
       msg += ' has not filled in his contact information in the channel-i database.'
-      notif_text = user.first_name + ' has an item(' + qryst[0].item_name + ') you requested for. '
+      notif_text = user.name + ' has an item(' + qryst[0].item_name + ') you requested for. '
       if contact:
         notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
       if qryst[0].email:
@@ -625,11 +627,11 @@ def sendmail(request, type_of_mail, id_pk):
     receiver = [str(qryst[0].email),]
     try:
       send_mail(subject, msg, 'buysell@iitr.ernet.in', receiver, fail_silently = True)
-      email_sent_msg = qryst[0].user.first_name +\
+      email_sent_msg = qryst[0].user.name +\
   ' has been sent a mail with your contact information. He may contact you shortly. If not, go ahead and contact '+pronoun+' youself!'
       messages.success(request, email_sent_msg)
     except Exception as e:
-      messages.error(request, 'Email has not been sent to ' + qryst[0].user.first_name + '. Error occured and reported.' )
+      messages.error(request, 'Email has not been sent to ' + qryst[0].user.name + '. Error occured and reported.' )
 
 def search(request,search_type):
   main_dict={}

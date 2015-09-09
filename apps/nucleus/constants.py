@@ -74,11 +74,12 @@ channeli_links = [
   {'name':'Mess Feedback','url':'/messmenu/feedback/'},
   {'name':'Smart Card Registration','url':'/genforms/'},
   {'name':'Scholarship Form','url':'/scholarships/mcm/'},
-  {'name':'LAN Registration','url':'/wifi/'},
+  #{'name':'LAN Registration','url':'/wifi/'},
   {'name':'Telephone Directory','url':'/static/pdfs/directoryeng15022015.pdf'},
   {'name':'Meeting Section','url':'/meeting_minutes/'},
   {'name':'Dairy Reports','url':'/meeting_minutes/dairy.php'},
   {'name':'Forms','url':'/forms/'},
+  {'name':'IITR Logo','url':'/static/images/iitr_logo.jpg'},
   #{'name':'Scholarship Form','url':'/mcm/mcm/'},
 ]
 
@@ -86,9 +87,9 @@ channeli_links = map(lambda n:external_links[n],['iitr','webmail','library']) + 
 
 img_tools = [
   {'name': 'IMG Wiki', 'url': 'http://wiki.channeli.in', 'icon':'wiki.ico'},
-  {'name': 'Producteev', 'url': 'https://www.producteev.com/workspace/', 'icon':'producteev.ico'},
+  {'name': 'Trello', 'url': 'https://trello.com/imgiitr', 'icon':'trello.ico'},
   {'name': 'GitLab', 'url': 'http://git.channeli.in', 'icon':'gitlab.ico'},
-  {'name': 'Piwik', 'url': 'http://analytics.channeli.in','icon':'piwik.ico'},
+  {'name': 'Piwik', 'url': 'https://channeli.in/piwik/','icon':'piwik.ico'},
   {'name': 'Slack', 'url': 'https://team-img.slack.com/messages/all-main/','icon':'slack.ico'},
   {'name': 'Status', 'url': 'http://status.channeli.in','icon':'status.ico'},
   {'name': 'Sentry', 'url': 'http://sentry.channeli.in/img/channel-i/','icon':'sentry.ico'},

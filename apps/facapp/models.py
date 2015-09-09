@@ -86,7 +86,9 @@ class BooksAuthored(models.Model):
 
 class RefereedJournalPapers(models.Model):
   faculty = models.ForeignKey(Faculty, primary_key=True)
-  papers = models.TextField()
+  papers = models.TextField(blank=True)
+  def __unicode__(self):
+    return str(self.faculty)
   '''  CKEditor Models over  '''
 
 class Invitations(models.Model):
