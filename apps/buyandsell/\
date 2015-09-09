@@ -11,7 +11,7 @@ MEDIA_ROOT = settings.MEDIA_ROOT
 class BuyandsellPhoto(CropImage):
   unique_name = 'buyandsell_pic'
   field_name = 'pic'
-  width = 188
+  width = 132
   height = 150
 
   @classmethod
