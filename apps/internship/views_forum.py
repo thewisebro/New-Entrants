@@ -47,7 +47,7 @@ def forum(request, forum_type, page_no = None) :
       if request.POST['content']=="":
         messages.error(request, 'An empty reply cannot be posted')
         return HttpResponseRedirect(reverse('internship.views_forum.forum', args=[ forum_type ]))
-      if request.user.student:
+      elif request.user.groups.filter(name='Student').exists():
         student = request.user.student
         post = ForumPost.objects.get(pk = request.POST['post_id'])
         reply = ForumReply(post = post,
@@ -58,8 +58,7 @@ def forum(request, forum_type, page_no = None) :
         reply.save()
         l.info(request.user.username+' : tried to post a reply on forum')
         messages.success(request, "Forum Post successful")
-      elif request.user:
-        user = request.user
+      elif request.user.groups.filter(name='Placement Admin').exists():
         #if user.groups.filter(name = 'Placement Admin').exists():
         post = ForumPost.objects.get(pk = request.POST['post_id'])
         reply = ForumReply(post = post,

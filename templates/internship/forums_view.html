@@ -102,7 +102,7 @@ function Blank_TextField_Validator_new()
 {% endif %}
 
 <!-- ForumReply form -->
-{% if request.user %}
+{% if user %}
 <a href="javascript:void();" onclick="javascript:switchReplyStatus({{ post.id }});"><button id="forum_reply_post_button" class="btn btn-primary"><span id="ReplyLink{{ post.id }}">Reply</span></button></a>
 <form method="POST" id="ForumReply{{ post.id }}" style="display:none;" onsubmit="return Blank_TextField_Validator_new()">
   {% csrf_token %}

@@ -63,7 +63,7 @@ def check_session(request):
       user = User.objects.get_or_none(pk=current_user_id)
       print user
       if user:
-        result["info"] = user.info
+        result["info"] = user.info.encode('utf-8')
         print user.info
         result["_name"] = user.name.encode('utf-8')
         result["msg"] = "YES"
@@ -95,15 +95,15 @@ def channeli_login(request):
   print password
   user = User.objects.get_or_none(username=username)
   if not user:
-    result['msg'] = "NO"
+    result["msg"] = "NO"
   elif user.check_password(password):
 # make_user_login(request,user)
-    result['info'] = user.info.encode('utf-8')
-    result['_name'] = user.name.encode('utf-8')
-    result['msg'] = "YES"
-    result['session_variable'] = make_user_login(request,user)
+    result["info"] = user.info.encode('utf-8')
+    result["_name"] = user.name.encode('utf-8')
+    result["msg"] = "YES"
+    result["session_variable"] = make_user_login(request,user)
   else:
-    result['msg'] = "USER NO"
+    result["msg"] = "USER NO"
 #response = HttpResponse(result)
 # for key, value in HEADERS.iteritems():
 #   result[key] = value
@@ -121,18 +121,18 @@ def logout_user(request):
    'Access-Control-Allow-Headers': 'x-Requested-With'}
 
   c=[]
-  result = {'msg':'','_name':'','info':'','session_variable':''}
+  result = {"msg":"","_name":"","info":"","session_variable":""}
 
   if request.method == "POST":
     sessionid = request.POST.get("session_key")
     try:
       session = Session.objects.get(session_key=sessionid)
       session.delete()
-      result['msg'] = "OK"
+      result["msg"] = "OK"
     except:
-      result['msg'] = "FAILURE"
+      result["msg"] = "FAILURE"
   else:
-    result['msg'] = "FAILURE"
+    result["msg"] = "FAILURE"
 #  response = HttpResponse(json.dumps(result), contenttype='application/json')
 #  for key, value in HEADERS.iteritems():
 #    response[key] = value

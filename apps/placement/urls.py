@@ -30,7 +30,7 @@ urlpatterns += patterns('placement.views_slots',
                        (r'^slot/edit/(?P<slot_id>\d+)/$', 'edit_slot'),
                        (r'^slot/generate_xls/(?P<slot_id>\d+)/$', 'import_slot_data'),
                        (r'^company_search/','company_search'),
-    )
+)
 
 # IMG urls
 urlpatterns += patterns('placement.views_img',
@@ -56,7 +56,7 @@ urlpatterns += patterns('placement.views_img',
                        (r'^contact_manager/add/$', 'add_company_coordinator'),
                        (r'^contact_manager/person_search/$', 'person_search'),
                        (r'^contact_manager/company_search/$', 'company_search'),
- #                      (r'^contact_manager/generate_xls/$', 'generate_company_contact_xls'),
+#                      (r'^contact_manager/generate_xls/$', 'generate_company_contact_xls'),
     )
 
 # Admin urls
@@ -84,12 +84,18 @@ urlpatterns += patterns('placement.views_admin',
                         (r'^downloads/$', 'downloads'),
                         (r'^test/$', 'test'),
                         (r'^insert_shortlist/$', 'insert_shortlist'),
+                        (r'^plac_person_search/$','plac_person_search'),
+#                        (r'^ppo_rejection/$','ppo_rejection'),
+#                        (r'^ppo_rejection/remove/(?P<ppo_id>\d+)/$','ppo_rejection_delete'),
                        )
 
 # Company urls
 urlpatterns += patterns('placement.views_company',
                         (r'^company/list/$','list'),
-#                       (r'^workshop_registration/$', 'set_workshop_priority'),
+                        (r'^workshop_registration/$', 'workshop_registration'),
+                        (r'^workshop_registration_details/$', 'workshop_registration_details'),
+#                       (r'^workshop_registration_export/$', 'workshop_registration_export'),
+#                       (r'^workshop_priority/$', 'set_workshop_priority'),
                         (r'^company/(?P<company_id>\d+)/info/$','info'),
                         (r'^company/(?P<company_id>\d+)/opento/$','open_to'),
                         (r'^company/$', 'admin_list'),
@@ -166,4 +172,3 @@ urlpatterns += patterns('placement.media',
                         (r'^media/results/institute/branchwise/$', 'institute_results_branchwise'),
                         (r'^media/results/institute/$', 'institute_results'),
                         )
-

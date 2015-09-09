@@ -58,6 +58,9 @@ function uncheck_all()
 </script>
 {% endif %}
 
+{% if workshop_registration_jquery %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/placement/workshop_registration.js"></script>
+{% endif %}
 {% if educational_jquery_required %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/placement/educational_details.js"></script>
 {% endif %}
