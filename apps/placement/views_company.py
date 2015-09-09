@@ -29,6 +29,7 @@ login_url = '/placement/'
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def list(request) :
   """
   Displays the list of companies to student. The student can apply to a company if that company
@@ -94,6 +95,7 @@ def info(request, company_id) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def open_to(request, company_id) :
   """
   Displays the name of branches for which a company is open.
@@ -381,6 +383,8 @@ def workshop_registration(request):
       l.error(request.user.username + ': Error saving workshop registration detail')
       messages.error(request, str(e[0]))
       return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
+  if not WorkshopRegistration.objects.filter(placement_person=plac_person).exists():
+    messages.error(request, 'Please fill workshop registration details. Deadline is 14th September.')
   return render_to_response('placement/workshop_registration.html',{
       "title": "Workshop Registration",
       "action": "",
