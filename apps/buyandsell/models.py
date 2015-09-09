@@ -4,7 +4,44 @@ from api import model_constants as MC
 from buyandsell.constants import *
 from moderation.models import Reportable
 from django.conf import settings
+from crop_image import CropImage
 MEDIA_ROOT = settings.MEDIA_ROOT
+
+
+class MemberPhoto(CropImage):
+  unique_name = 'buyandsell_pic'
+  field_name = 'pic'
+  width = 132
+  height = 150
+
+  @classmethod
+  def get_instance(cls, request, pk):
+    item = SaleItems.objects.:
+
+  @classmethod
+  def get_image_url(cls, image_field):
+    if image_field:
+      return image_field.instance.pic.url
+    else:
+      return settings.STATIC_URL + 'images/buysell/default.png'
+
+  @classmethod
+  def file_name(cls, image_field, fname):
+    if image_field.instance.pic:
+      url_image = image_field.instance.pic.url
+    else:
+      url_image = "buyandsell/pics/" + image_field.instance.item.item_name + "_1.jpg"
+    previous_name = url_image.split(".")[0]
+    prev_name = previous_name.split("/")[-1]
+    if "_" in prev_name:
+      try:
+        new_number = str(int(prev_name.split("_")[-1]) + 1)
+      except Exception:
+        new_number = "1"
+    else:
+      new_number = "1"
+    fname = image_field.instance.item.item_name + '_' + new_number + '.' +fname.split('.')[-1]
+    return fname
 
 class BuySellCategory(models.Model):
   watch_users = models.ManyToManyField(User,blank=True)
@@ -26,7 +63,6 @@ class SaleItems(Reportable, models.Model):
   expiry_date = models.DateField()
   email = models.EmailField()
   category = models.ForeignKey(BuySellCategory)
-  item_image = models.ImageField(upload_to='buyandsell/images', default='../static/images/buysell/default.png', blank=True)
   show_contact=models.BooleanField(default=True)
   is_active=models.BooleanField(default=True)
   def __unicode__ (self):
@@ -73,3 +109,12 @@ class SuccessfulTransaction(models.Model):
 class ShowContact(models.Model):
   user=models.OneToOneField(User)
   contact_shown=models.BooleanField(default=True)
+
+
+class Pic(models.Model):
+  item = models.OneToOneField(SaleItems, primary_key=True)
+  pic =  MemberPhoto.ModelField(
+                           upload_to = 'buyandsell/pics/',
+                           blank = True,
+                           null = True,
+          )
