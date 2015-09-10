@@ -362,22 +362,16 @@ def sell(request):
         new_item.user = user
         new_item.save()
 
-        img = ItemPic( item = new_item )
-#   img.pic.url = settings.STATIC_URL + 'images/buysell/default.png'
+        img = ItemPic(item = new_item)
         img.save()
-
-
-        app = 'buyandsell'
         watch_user_list = new_item.category.watch_users.all()
-        print watch_user_list
         notif_text = str(new_item.item_name)+"has been added to the category"+str(new_item.category.name)
         notif_text += "that you have watched"
         url = '/buyandsell/sell_details/' + str(new_item.pk)
-        Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
-
+        Notification.save_notification('buyandsell', notif_text, url, watch_user_list, new_item)
         return  TemplateResponse(request, 'buyandsell/helper.html', {'redirect_url':'/buyandsell/buy/','id':new_item.pk })
       else:
-        print "form filled wrongly"
+        messages.errror(request ,"Form incorrectly filled")
     else:
       return render(request,'buyandsell/form.html',{'form':form})
   init_dict={
@@ -999,7 +993,6 @@ def edit(request,form_type,pk): #need to activate if item date  is renewed
   post_date=date.today()
   if form_type=="sell":
     instance=SaleItems.objects.get(pk=pk)
-    flag=instance.item_image
     old_category=instance.category
     if request.method=='POST':
       form=SellForm(request.POST,request.FILES,instance=instance)
@@ -1033,13 +1026,13 @@ def edit(request,form_type,pk): #need to activate if item date  is renewed
             notif_text+="that you have watched"
             url = '/buyandsell/sell_details/' + str(edited_item.pk)
             Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)
-          return TemplateResponse(request, 'buyandsell/helper.html', {'redirect_url':'/buyandsell/my-account/'})
+          return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/my-account/'})
         else:
           print "form filled wrongly"
       else:
-        return render(request,'buyandsell/form.html',{'form':form,'flag':flag})
+        return render(request,'buyandsell/form.html',{'form':form})
     form=SellForm(instance=instance)
-    return render(request,'buyandsell/form.html',{'form':form,'flag':flag})
+    return render(request,'buyandsell/form.html',{'form':form})
 
   if form_type=="request":
     instance=RequestedItems.objects.get(pk=pk)  #update notifications to be given to watch users

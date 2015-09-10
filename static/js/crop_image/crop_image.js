@@ -17,6 +17,7 @@ function cropping_done(image_url){
   if (uname == 'buyandsell_pic')
   {
     window.top.location = "/buyandsell/buy";
+    console.log("there");
   }
 }
 
