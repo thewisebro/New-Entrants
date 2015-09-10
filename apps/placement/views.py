@@ -65,6 +65,9 @@ def index(request):
     # XXX : Do not take student from session, at least home page should reflect the changes.
       student = Student.objects.get(user = request.user)
       plac_person = PlacementPerson.objects.get_or_create(student = student)[0]
+      if (not WorkshopRegistration.objects.filter(placement_person=plac_person).exists()) and plac_person.status == 'VRF':
+        l.info(request.user.username+': Redirected to Workshop Registration Page')
+        return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
       if plac_person.status == 'VRF' :
         applications = CompanyApplicationMap.objects.filter(plac_person = plac_person, company__year__contains = current_session_year())
       else :

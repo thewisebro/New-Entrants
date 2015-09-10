@@ -29,6 +29,7 @@ login_url = '/placement/'
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def list(request) :
   """
   Displays the list of companies to student. The student can apply to a company if that company
@@ -94,6 +95,7 @@ def info(request, company_id) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def open_to(request, company_id) :
   """
   Displays the name of branches for which a company is open.
@@ -352,38 +354,37 @@ def is_eligible_for_workshop(student):
 #  return response
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
 def workshop_registration(request):
-  if not request.user.groups.filter(name='Placement Admin'):
-    student = request.user.student
-    plac_person = student.placementperson
-    if plac_person.status != 'VRF':
-      messages.error(request, 'You can not register for workshop. In case of any disperency, please contact IMG.')
-      return HttpResponseRedirect(reverse('placement.views.index'))
-    prev_registration = WorkshopRegistration.objects.get_or_none(placement_person = plac_person)
-    registration_form = forms.WorkshopRegistrationForm(instance = prev_registration)
-    if request.method=="POST":
-      registration_form = forms.WorkshopRegistrationForm(request.POST, instance = prev_registration)
-      try:
-        if registration_form.is_valid():
-          registration_obj = registration_form.save(commit=False)
-          if registration_obj.options != 'NOT':
-            registration_obj.reason = ""
-          registration_obj.placement_person = plac_person
-          registration_obj.save()
-          l.info(request.user.username + ': workshop registration successful')
-          messages.success(request, 'Successfully registered for Workshop.')
-          return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
-        else:
-          l.info(request.user.username + ': Error saving workshop registration detail')
-          messages.error(request, 'Unknown error occured.')
-          return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
-      except ValidationError as e:
-        l.error(request.user.username + ': Error saving workshop registration detail')
-        messages.error(request, str(e[0]))
+  student = request.user.student
+  plac_person = student.placementperson
+  if plac_person.status != 'VRF':
+    messages.error(request, 'You can not register for workshop. Only verified students can register for workshop.')
+    return HttpResponseRedirect(reverse('placement.views.index'))
+  prev_registration = WorkshopRegistration.objects.get_or_none(placement_person = plac_person)
+  registration_form = forms.WorkshopRegistrationForm(instance = prev_registration)
+  if request.method=="POST":
+    registration_form = forms.WorkshopRegistrationForm(request.POST, instance = prev_registration)
+    try:
+      if registration_form.is_valid():
+        registration_obj = registration_form.save(commit=False)
+        if registration_obj.options != 'NOT':
+          registration_obj.reason = ""
+        registration_obj.placement_person = plac_person
+        registration_obj.save()
+        l.info(request.user.username + ': workshop registration successful')
+        messages.success(request, 'Successfully registered for Workshop.')
         return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
-  else:
-    registration_form = forms.WorkshopRegistrationForm(instance = None)
+      else:
+        l.info(request.user.username + ': Error saving workshop registration detail')
+        messages.error(request, 'Unknown error occured.')
+        return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
+    except ValidationError as e:
+      l.error(request.user.username + ': Error saving workshop registration detail')
+      messages.error(request, str(e[0]))
+      return HttpResponseRedirect(reverse('placement.views_company.workshop_registration'))
+  if not WorkshopRegistration.objects.filter(placement_person=plac_person).exists():
+    messages.error(request, 'Please fill workshop registration details. Deadline is 14th September.')
   return render_to_response('placement/workshop_registration.html',{
       "title": "Workshop Registration",
       "action": "",
@@ -394,7 +395,7 @@ def workshop_registration(request):
       }, context_instance = RequestContext(request))
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
 def workshop_registration_details(request):
   term = request.GET.get('q')
   return render_to_response('placement/workshop_details.html', {
