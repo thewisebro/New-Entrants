@@ -339,7 +339,7 @@ class WorkshopRegistration(models.Model):
     """
     placement_person = models.ForeignKey(PlacementPerson, unique=True)
     options = models.CharField(choices = PC.WORKSHOP_OPTIONS, max_length = 28, default="NOT")
-    reason = models.CharField(max_length=500, blank=True, null=True)
+    reason = models.CharField(max_length=500, blank=True, null=True, help_text="None")
 
     def _unicode__(self):
       return str(self.placement_person.student.user.name)+" "+str(self.registered)
