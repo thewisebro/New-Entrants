@@ -327,31 +327,6 @@ def is_eligible_for_workshop(student):
 #      "editable_warning": "",
 #      }, context_instance = RequestContext(request))
 #
-#@login_required
-#@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
-#def workshop_registration_export(request):
-#  import xlwt
-#  l.info(request.user.username + ': Exported Workshop Registration File')
-#  registered_lst = WorkshopRegistration.objects.all().order_by('options','placement_person__student__user__username')
-#  wb = xlwt.Workbook(encoding='utf-8')
-#  ws = wb.add_sheet('Sheet 1')
-#
-#  ws.write(0, 0, 'Sr. No.')
-#  ws.write(0, 1, 'Enrollment No.')
-#  ws.write(0, 2, 'Name')
-#  ws.write(0, 3, 'Selected Option')
-#  ws.write(0, 4, 'Target Companies')
-#
-#  lst = registered_lst.values_list('placement_person__student__user__username', 'placement_person__student__user__name', 'options', 'suggestions')
-#  for row, rowdata in enumerate(lst):
-#    ws.write(row+1, 0, row+1)
-#    for col, val in enumerate(rowdata):
-#      ws.write(row+1, col+1, val)
-#
-#  response = HttpResponse(content_type='application/vnd.ms-excel')
-#  response['Content-Disposition']='attachment; filename=workshop_data.xls'
-#  wb.save(response)
-#  return response
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
@@ -401,4 +376,30 @@ def workshop_registration_details(request):
   return render_to_response('placement/workshop_details.html', {
       "term": term,
       }, context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def workshop_registration_export(request):
+  import xlwt
+  l.info(request.user.username + ': Exported Workshop Registration File')
+  registered_lst = WorkshopRegistration.objects.all().order_by('options','placement_person__student__user__username')
+  wb = xlwt.Workbook(encoding='utf-8')
+  ws = wb.add_sheet('Sheet 1')
+
+  ws.write(0, 0, 'Sr. No.')
+  ws.write(0, 1, 'Enrollment No.')
+  ws.write(0, 2, 'Name')
+  ws.write(0, 3, 'Selected Option')
+  ws.write(0, 4, 'Reason')
+
+  lst = registered_lst.values_list('placement_person__student__user__username', 'placement_person__student__user__name', 'options', 'reason')
+  for row, rowdata in enumerate(lst):
+    ws.write(row+1, 0, row+1)
+    for col, val in enumerate(rowdata):
+      ws.write(row+1, col+1, val)
+
+  response = HttpResponse(content_type='application/vnd.ms-excel')
+  response['Content-Disposition']='attachment; filename=workshop_data.xls'
+  wb.save(response)
+  return response
 
