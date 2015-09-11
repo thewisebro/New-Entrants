@@ -15,7 +15,7 @@ def can_apply(plac_person, company_applying) :
     return company_applying + ' is not open for applications.'
   if plac_person.student.branch not in company_applying.open_for_disciplines.all() :
     return company_applying.name + ' is not open for your branch.'
-  if not ppo_rejected(plac_person, company_applying):
+  if ppo_rejected(plac_person, company_applying):
     return "You have rejected PPO of higher package. You can not apply to this company"
   if plac_person.no_of_companies_placed == 2 :
     return 'You have been placed in two companies.'
@@ -41,7 +41,7 @@ def can_apply(plac_person, company_applying) :
   return True
 
 def ppo_rejected(plac_person, company_applying):
-
+  import ipdb; ipdb.set_trace()
   def INR_USD_request():
     import requests
     r = requests.get("http://api.fixer.io/latest?base=USD")
@@ -60,7 +60,7 @@ def ppo_rejected(plac_person, company_applying):
 
   ppo_reject_inst = PpoRejection.objects.get_or_none(plac_person = plac_person)
   if not ppo_reject_inst:
-    return True
+    return False
   ppo_package = ppo_reject_inst.package
   if plac_person.student.branch.graduation == 'UG':
     apply_package = company_applying.package_ug
@@ -69,16 +69,20 @@ def ppo_rejected(plac_person, company_applying):
   else:# plac_person.student.branch.graduation == 'PHD':
     apply_package = company_applying.package_phd
 
+  if not apply_package:
+    return False
   ppo_package = parse_value(ppo_package)
   apply_package = parse_value(apply_package)
 
+  if apply_package[0] == 0.0:
+    return False
   if ppo_package[1] == apply_package[1]:
-    return ppo_package[0] <= apply_package[0]
+    return ppo_package[0] > apply_package[0]
   else:
     if ppo_package[1] == 'USD':
-      return ppo_package[0]*INR_USD_request() <= apply_package[0]
+      return ppo_package[0]*INR_USD_request() > apply_package[0]
     else:
-      return ppo_package[0] <= apply_package[0]*INR_USD_request()
+      return ppo_package[0] > apply_package[0]*INR_USD_request()
 
 def get_higher_category(cat1, cat2) :
   """
