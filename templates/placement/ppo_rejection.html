@@ -40,7 +40,7 @@
     <td>{{ forloop.counter }}</td>
     <td>{{ ppo.plac_person.student.user.username }}</td>
     <td>{{ ppo.plac_person.student.user.name }}</td>
-    <td>{{ ppo.company.name }}</td>
+    <td>{{ ppo.company }}</td>
     <td>{{ ppo.package }}</td>
     <td><span class='icon icon-remove' id='remove' style='cursor:pointer;' onclick='confirmfn({{ ppo.id }})'></span></span></td>
   </tr>
@@ -62,16 +62,6 @@
          });
         });
       })(jQuery);
-
-     $('body').ready(function(){
-       $('#id_company').autocomplete({
-         source:'/placement/company_search/',
-         select: function( event, ui ) {
-         $('#company_id').val(ui.item.id);
-         },
-         minLength:3
-       });
-     });
 
      $('body').ready(function(){
        $('#id_plac_person').autocomplete({
