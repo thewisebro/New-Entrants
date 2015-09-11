@@ -85,8 +85,8 @@ urlpatterns += patterns('placement.views_admin',
                         (r'^test/$', 'test'),
                         (r'^insert_shortlist/$', 'insert_shortlist'),
                         (r'^plac_person_search/$','plac_person_search'),
-#                        (r'^ppo_rejection/$','ppo_rejection'),
-#                        (r'^ppo_rejection/remove/(?P<ppo_id>\d+)/$','ppo_rejection_delete'),
+                        (r'^ppo_rejection/$','ppo_rejection'),
+                        (r'^ppo_rejection/remove/(?P<ppo_id>\d+)/$','ppo_rejection_delete'),
                        )
 
 # Company urls
