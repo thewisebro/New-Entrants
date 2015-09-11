@@ -232,8 +232,9 @@ class PpoRejection(models.Model):
     This includes PPO in company and CTC of PPO
   """
   plac_person = models.ForeignKey(PlacementPerson, unique=True)
-  company = models.ForeignKey(Company)
+  company = models.CharField(max_length=MC.TEXT_LENGTH, null=True, blank=True)
   package = models.CharField(max_length=20, null=True, blank=True, verbose_name = 'Package')
+
   def __unicode__(self):
     return str(self.plac_person.student.name) + " " +str(self.company)+ " " +str(self.package)
 
