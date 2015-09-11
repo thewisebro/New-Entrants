@@ -6,7 +6,10 @@ $(document).ready(function() {
 
 
     options = $('#id_options')
-    if (options.val() == '4P Education') {
+    if (options.val() == 'NOT') {
+      options.parent().next().children().get(2).innerHTML='';
+    }
+    else if (options.val() == '4P Education') {
       options.parent().next().show();
       options.parent().next().children().get(0).innerHTML='Fill at least one topic from given options';
       options.parent().next().children().get(1).setAttribute('placeholder','Case Study, HR interview, Personal Interview, Group Discussion');
@@ -20,8 +23,10 @@ $(document).ready(function() {
     }
 
     $('select').filter(function(){return this.id.match(/id_options/)}).change(function(){
-        if(this.value == 'NOT')
+        if(this.value == 'NOT') {
           $(this).parent().next().show();
+          $(this).parent().next().children().get(2).innerHTML='';
+        }
         else if(this.value == '4P Education'){
           $(this).parent().next().show();
           $(this).parent().next().children().get(0).innerHTML='Fill at least one topic from given options';

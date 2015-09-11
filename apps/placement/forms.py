@@ -195,7 +195,7 @@ class WorkshopRegistrationForm(forms.ModelForm):
     if cleaned_data['options']=='NOT' and cleaned_data['reason'].lower() == cleaned_data['reason'].upper(): 
       raise forms.ValidationError("Please add specific reason for this option")
     if cleaned_data['options']=='4P Education' and cleaned_data['reason'].lower() == cleaned_data['reason'].upper():
-      raise forms.ValidationError("Please add at least one option from Case Study, HR Interview, Personal Interview, Group Disucssion")
+      raise forms.ValidationError("Please add at least one option from Case Study, HR Interview, Personal Interview and Group Discussion")
     if cleaned_data['options']=='Ethuns Consultancy Service' and cleaned_data['reason'].lower() == cleaned_data['reason'].upper():
       raise forms.ValidationError("Please fill the sector for mock interview. Ex. IT/Software, Electrical/Electronics, Mechanical, Chemical, Civil, Finance/Consulting etc.")
     return True and valid
