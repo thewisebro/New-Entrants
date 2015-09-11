@@ -343,7 +343,7 @@ def workshop_registration(request):
     try:
       if registration_form.is_valid():
         registration_obj = registration_form.save(commit=False)
-        if registration_obj.options != 'NOT':
+        if registration_obj.options not in ['NOT','4P Education','Ethuns Consultancy Service']:
           registration_obj.reason = ""
         registration_obj.placement_person = plac_person
         registration_obj.save()
