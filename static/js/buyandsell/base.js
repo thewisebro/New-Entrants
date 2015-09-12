@@ -556,9 +556,9 @@ function transaction_form(type,id){
   }
   dialog_iframe({
     name:'trans_form',
-    title:'transaction_form',
-    width:600,
-    height:600,
+    title:'We value your feedback',
+    width:800,
+    height:535,
     src:'/buyandsell/succ_trans/' + type + '/' + id,
     close:function(){opened_dialog=""}
   });
@@ -590,7 +590,28 @@ $(document).ready
       }
     );
 
-    $(".request").mouseover
+    $(".request").mouseenter
+    (
+      function()
+      {
+        $(".edit-button", $(this)).css('opacity', 1);
+        $(".dropdown", $(this)).toggle();
+        //$(".item-options-dropdown", $(this)).css('display', 'block');
+      }
+    );
+
+    $(".request-options-dropdown").css('display', 'none');
+    $(".request").mouseleave
+    (
+      function()
+      {
+        $(".edit-button", $(this)).css('opacity', 0);
+        $(".request-options-dropdown", $(this)).removeClass('open');
+        $(".dropdown", $(this)).toggle();
+      }
+    );
+
+ /*   $(".request").mouseover
     (
       function()
       {
@@ -606,7 +627,7 @@ $(document).ready
         $(".request-remove-button", $(this)).css('opacity', 0);
       }
     );
-
+*/
     $(".thumbnailBG-my-account").click
     (
       function() //opens light box with details for the clicked item-for-sale

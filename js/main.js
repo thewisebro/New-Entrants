@@ -286,6 +286,28 @@
             }
         );
 
+        $(".request").mouseenter
+        (
+          function()
+          {
+            $(".edit-button", $(this)).css('opacity', 1);
+            $(".dropdown", $(this)).toggle();
+            //$(".item-options-dropdown", $(this)).css('display', 'block');
+          }
+        );
+
+        $(".request-options-dropdown").css('display', 'none');
+
+        $(".request").mouseleave
+        (
+          function()
+          {
+            $(".edit-button", $(this)).css('opacity', 0);
+            $(".item-options-dropdown", $(this)).removeClass('open');
+            $(".dropdown", $(this)).toggle();
+          }
+        );
+
         $(".request").mouseover
         (
             function()

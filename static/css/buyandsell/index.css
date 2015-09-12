@@ -286,7 +286,6 @@ a:focus
 
 label
 {
-  width: 200px;
   border-radius: 3px;
 }
 
@@ -470,12 +469,70 @@ input[type="radio"]:checked + label div
 {
   position: absolute;
   margin-top: 12px;
-  margin-left: -90px;
-  min-width: 120px;
+  margin-left: -100px;
+  min-width: 130px;
   display: none;
 }
 
 .item-options-dropdown-menu>li>a
+{
+  display:block;
+  padding:5px 15px;
+  clear:both;
+  font-weight:400;
+  line-height:1.42857143;
+  color:#333;
+  white-space:nowrap;
+}
+
+.item-options-dropdown-menu>li>a>img
+{
+  margin-right: 5px;
+}
+
+.request-options-button
+{
+  border:none;
+  background:none;
+  padding:0px;
+  position: absolute;
+  right: -7px;
+}
+
+
+.request-options-button:hover
+{
+  border:none;
+  background:none;
+}
+
+.request-options-button:focus
+{
+  border:none;
+  background:none;
+}
+
+.request-options-button-image
+{
+  width:25px;
+  height:25px;
+}
+
+.request-options-dropdown
+{
+  right: 20px;
+  display: none;
+}
+
+.request-options-dropdown-menu
+{
+  top: 26px;
+  width: 165px;
+  left: 41%;
+  display: none;
+}
+
+.request-options-dropdown-menu>li>a
 {
   display:block;
   padding:3px 0 3px 20px;
@@ -483,9 +540,22 @@ input[type="radio"]:checked + label div
   font-weight:400;
   line-height:1.42857143;
   color:#333;
-  white-space:nowrap
+  white-space:nowrap;
+  float : left;
+  padding: 5px 15px;
+  width: 100%;
 }
 
+.request-options-dropdown-menu>li>a:hover
+{
+  background-color: #dcdcdc;
+  color: #333;
+}
+
+.request-options-dropdown-menu>li>a>img
+{
+  margin-right: 5px;
+}
 
 a: focus
 {
@@ -511,6 +581,28 @@ a: focus
   border-right: 13px solid transparent;
 
   border-bottom: 13px solid #ccc;
+  z-index:-1000;
+}
+
+.request-arrow-up-front {
+  position:absolute;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
+  border-bottom: 10px solid white;
+  z-index:2000;
+}
+
+.request-arrow-up-behind {
+  position:absolute;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
+  border-bottom: 10px solid #ccc;
   z-index:-1000;
 }
 
@@ -578,6 +670,12 @@ a: focus
   align:center;
 }
 
+.transaction-form-body
+{
+  width:auto;
+  padding: 45px;
+  align:center;
+}
 
 .search-result-box
 {
@@ -1025,6 +1123,7 @@ a:focus
 .table-striped tbody tr
 {
   cursor: pointer;
+  transition: background-color ease-out 100ms;
 }
 
 .table-striped tbody tr:hover
@@ -1096,7 +1195,7 @@ a:focus
 {
   padding: 6px 25px;
   margin-left: 25px;
-  margin-right: 155px;
+  margin-right: 34%;
 }
 
 .price-range-submit-button-image
@@ -1309,6 +1408,10 @@ a:focus
 .expired-icon
 {
   width: 15px;
+}
+
+.item-expired-icon
+{
   position: absolute;
   bottom: 6px;
   right: 55px;
@@ -1324,8 +1427,7 @@ a:focus
   font-weight: bold;
 }
 
-
-.mark-sold-icon
+.item-sold-icon
 {
   width: 15px;
   position: absolute;
@@ -1342,6 +1444,30 @@ a:focus
   font-size: 13px;
   font-weight: bold;
 }
+
+.request-expired-icon
+{
+  margin-top: -1px;
+}
+
+.request-expired-text
+{
+  color: #a80000;
+  font-size: 13px;
+}
+
+.request-successful-icon
+{
+  width: 15px;
+}
+
+
+.request-successful-text
+{
+  color: #00aa00;
+  font-size: 13px;
+}
+
  .form-group label
  {
    padding-top: 5px;
@@ -1356,4 +1482,74 @@ a:focus
 .form-group .col-xs-8 .form-group:last-child
 {
   margin-bottom: 0;
+}
+
+.your-experience label
+{
+  margin-left: 15px;
+}
+
+.your-experience label input
+{
+  margin-top: 5px;
+}
+
+.not-interested
+{
+  background: none;
+  border: none;
+  color: #888;
+  border-bottom: 1px solid transparent;
+  padding: 5px 0;
+  float: right;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+
+.not-interested:hover
+{
+  border-bottom: 1px solid #888;
+  color: #888;
+}
+
+.not-interested:focus
+{
+  outline: none;
+  border-bottom: 1px solid #888;
+  color: #888;
+}
+
+.not-interested:active
+{
+  outline: none;
+  border-bottom: 1px solid #888;
+  color: #888;
+}
+
+textarea
+{
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+textarea:focus
+{
+  -webkit-box-shadow: none;
+  outline: #1081de auto 1px;
+}
+
+.form-control
+{
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+.form-control:focus
+{
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }

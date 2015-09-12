@@ -367,13 +367,13 @@ def sell(request):
       else:
         print "form filled wrongly"
     else:
-      return render(request,'buyandsell/sellform.html',{'form':form})
+      return render(request,'buyandsell/form.html',{'form':form})
   init_dict={
              'email':request.user.email,
              'contact':contact,
             }
   form=SellForm(initial=init_dict)
-  return render(request,'buyandsell/sellform.html',{'form':form})
+  return render(request,'buyandsell/form.html',{'form':form})
 
 @dialog_login_required
 def requestitem(request):

@@ -1,50 +1,87 @@
-<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-<script type="text/javascript" src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script></head>
-<body>
+{% extends "buyandsell/base.html" %}
+
+{% block header %}
+<body style="background-color: #ffffff;">
+
 {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }} </div>
-    {% endfor %}
-    {% endif %}
-{% if type %}
-<form action="" method="post">
-{% csrf_token %}
-<label for="buyer">Buyer</label>
-<select id="buyer" name="buyer_username">
-<option value=""  selected>-----------</option>
-{% for obj in mail_list %}
-<option value="{{ obj.by_user.username }}">{{ obj.by_user.name }}</option>
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">{{ message }}</div>
 {% endfor %}
-</select>
-<br>
-<label for="other">Other</label>
-<input type="text" id="id_username"></input><br>
-<input type="hidden" id="enroll" name="username_other">
-<label for="feedback">Feedback</label>
-<textarea cols="40" id="sell_feedback" name="feedback" rows="10"></textarea>
-<br>
-<input type="submit"  value="submit">
+{% endif %}
+{% if type %}
+<div class="form-horizontal transaction-form-body" action="" method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <label class="col-xs-4 control-label" for="buyer">Whom did you sell this Item ?</label>
+    <select class="col-xs-8" id="buyer" name="buyer_username">
+      <option value="" selected>-----------</option>
+      {% for obj in mail_list %}
+      <option value="{{ obj.by_user.username }}">{{ obj.by_user.name }}</option>
+      {% endfor %}
+      <option>Other</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="col-xs-4 control-label" for="buyer">Please type in the name</label>
+    <input class="col-xs-8" type="text" id="id_username"></input><br>
+    <input type="hidden" id="enroll" name="username_other">
+  </div>
+
+  <form role="form">
+    <label class="control-label">How was your overall Experience ?</label>
+  </form>
+
+  <div class="form-group your-experience">
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Excellent
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Good
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Fair
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Poor
+    </label>
+  </div>
+
+  <div class="form-group">
+    <label class="col-xs-4 control-label" for="feedback">Comments/ Suggestions</label>
+    <textarea  class="col-xs-8" id="sell_feedback" name="feedback" rows="5"></textarea>
+  </div>
+
+  <div class="form-group">
+    <input class="btn btn-primary send-button" style="right: -15px" type="submit" value="Done">
+    <input type="submit" value="Not Interested" class="btn not-interested">
+  </div>
+
+
 </form>
 {% else %}
 <form action="" method="post">
-{% csrf_token %}
-<label for="seller">Seller</label>
-<select id="seller" name="seller_username">
-<option value=""  selected>-----------</option>
-{% for obj in mail_list %}
-<option value="{{ obj.by_user.username }}">{{ obj.by_user.name }}</option>
-{% endfor %}
-</select>
-<br>
-<label for="other">Other</label>
-<input type="text" id="id_username"></input><br>
-<input type="hidden" id="enroll" name="username_other">
-<label for="feedback">Feedback</label>
-<textarea cols="40" id="request_feedback" name="feedback" rows="10"></textarea>
-<br>
-<input type="submit" value="submit">
+  {% csrf_token %}
+  <label for="seller">Seller</label>
+  <select id="seller" name="seller_username">
+    <option value="" selected>-----------</option>
+    {% for obj in mail_list %}
+    <option value="{{ obj.by_user.username }}">{{ obj.by_user.name }}</option>
+    {% endfor %}
+  </select>
+  <br>
+  <label for="other">Other</label>
+  <input type="text" id="id_username"></input><br>
+  <input type="hidden" id="enroll" name="username_other">
+  <label for="feedback">Feedback</label>
+  <textarea cols="40" id="request_feedback" name="feedback" rows="10"></textarea>
+  <br>
+  <input type="submit" value="submit">
 </form>
 {% endif %}
+
+{% endblock %}
+
 </body>
 <script src="{{ STATIC_URL }}js/common.js"></script>
 <script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>
