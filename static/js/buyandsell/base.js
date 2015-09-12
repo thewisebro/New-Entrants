@@ -567,16 +567,17 @@ function transaction_form(type,id){
 }
 function upload_image_buyandsell(unique_name, id){
   uname = unique_name;
-
 if(opened_dialog !=""){
-    close_dialog(opened_dialog);
-console.log("opened_dialog");
-  }  dialog_iframe({
+        close_dialog(opened_dialog);
+
+  }
+  dialog_iframe({
     name: 'upload_image_dialog',
     title: 'Upload Image',
     width: 700,
     height: 500,
-    src: '/crop_image/upload_image/' + unique_name + '/' + id + '/'
+    src: '/crop_image/upload_image/' + unique_name + '/' + id + '/',
+    close:function(){opened_dialog=""}
   });
 opened_dialog = 'upload_image_dialog';
 }
