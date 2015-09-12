@@ -14,6 +14,11 @@ function upload_image(unique_name, id){
 function cropping_done(image_url){
   close_dialog('upload_image_dialog');
   $('#'+uname+'-img').attr('src',image_url);
+  if (uname == 'buyandsell_pic')
+  {
+    window.top.location = "/buyandsell/buy";
+    console.log("there");
+  }
 }
 
 function setup_jcrop(){

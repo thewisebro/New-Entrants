@@ -91,7 +91,12 @@
         <div class="col-md-3" id = "sell{{row.pk}}">
           <div class="thumbnailBG thumbnailBG-my-account">
             <div class="thumbnail">
-              <img src="/media/{{ row.item_image }}" alt="Generic placeholder thumbnail">
+          {% if row.itempic.pic %}
+									 <img src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
+{% else %}
+									 <img src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+{% endif %}
+
             </div>
             <div class="caption">
               <span class="itemName">{{ row.item_name }}</span>
@@ -127,6 +132,8 @@
                     <span>Remove</span>
                   </a>
                 </li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" onclick = "transaction_form('sell', {{ row.pk }})">Mark Sold</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" onclick = "upload_image_buyandsell('buyandsell_pic', {{ row.pk }})">Change Image</a></li>
               </ul>
             </div>
           </div>
@@ -136,7 +143,12 @@
         <div class="col-md-3" id = "sell{{row.pk}}">
           <div class="thumbnailBG thumbnailBG-my-account expired-item">
             <div class="thumbnail">
-              <img src="/media/{{row.item_image}}" alt="Generic placeholder thumbnail">
+            {% if row.itempic.pic %}
+									 <img src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
+{% else %}
+									 <img src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+{% endif %}
+
               <div class="fading-rectangle">
                 <img class="expired-icon item-expired-icon" src="{{STATIC_URL}}images/buyandsell/expired-icon.png">
                 <span class="item-expired-text" >Expired</span>
@@ -177,6 +189,9 @@
                     <span>Remove</span>
                   </a>
                 </li>
+
+                <li role="presentation"><a role="menuitem" tabindex="-1"onclick = "transaction_form('sell', {{ row.pk }})">Mark Sold</a></li>
+  <li role="presentation"><a role="menuitem" tabindex="-1" onclick = "upload_image_buyandsell('buyandsell_pic', {{ row.pk }})">Change Image</a></li>
               </ul>
             </div>
           </div>
@@ -188,7 +203,12 @@
         <div class="col-md-3" id = "sell{{row.pk}}">
           <div class="thumbnailBG thumbnailBG-my-account sold-item">
             <div class="thumbnail">
-              <img src="/media/{{ row.item_image }}" alt="Generic placeholder thumbnail">
+             {% if row.itempic.pic %}
+									 <img src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
+{% else %}
+									 <img src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+{% endif %}
+
               <div class="fading-rectangle">
                 <img class="item-sold-icon" src="{{STATIC_URL}}images/buyandsell/mark-done.png">
                 <span class="item-sold-text" >Sold</span>

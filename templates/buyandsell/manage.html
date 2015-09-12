@@ -4,7 +4,7 @@
   <link href="../../static/css/buyandsell/bootstrap-theme.min.css" type="text/css" rel="stylesheet">
   <link href="../../static/css/buyandsell/bootstrap.min.css" type="text/css" rel="stylesheet">
   <link href="../../static/css/buyandsell/index.css" type="text/css" rel="stylesheet">
-  <script> var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %}; console.log(user);</script>
+  <script> var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %}; </script>
   <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
   <script type="text/javascript" src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 </head>
