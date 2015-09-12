@@ -448,9 +448,9 @@ function sell_form(){
   console.log("kanav");
   dialog_iframe({
     name:'sell_form_dialog',
-    title:'SellForm',
-    width:600,
-    height:650,
+    title:'Sell an Item',
+    width:800,
+    height:730,
     src:'/buyandsell/sell/',
     close:function(){opened_dialog=""}
   });
@@ -463,9 +463,9 @@ function request_form(){
   }
   dialog_iframe({
     name:'request_form_dialog',
-    title:'RequestForm',
-    width:600,
-    height:600,
+    title:'Request an Item',
+    width:550,
+    height:665,
     src:'/buyandsell/requestitem/',
     close:function(){opened_dialog=""}
   });

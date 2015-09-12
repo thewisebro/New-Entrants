@@ -358,6 +358,7 @@ input[type="radio"]:checked + label div
   font-size: 13px;
   color:#505050;
   margin-top: 0px;
+  font-weight: 600;
 }
 
 .expiresIn
@@ -566,11 +567,17 @@ a: focus
 .sell-form-body
 {
   width:auto;
-  padding-top:20px;
-  padding-left:50px;
-  padding-right: 50px;
+  padding: 45px;
   align:center;
 }
+
+.request-form-body
+{
+  width:auto;
+  padding: 45px;
+  align:center;
+}
+
 
 .search-result-box
 {
@@ -966,6 +973,7 @@ a:focus
   text-align: center;
   font-size: 18px;
   font-family: opensans;
+  padding-left: 9%;
 }
 
 .ui-dialog-titlebar-close
@@ -977,6 +985,20 @@ a:focus
   padding: 3px;
 }
 
+@-moz-document url-prefix()
+{
+  .ui-dialog-titlebar-close:after
+  {
+    content: '';
+    background-image: url("../../images/buyandsell/close-button-grey.png");
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 10px;
+    padding: 3px;
+
+  }
+}
+
 .ui-state-focus
 {
   -webkit-box-shadow: 0px 0px 0px transparent;
@@ -984,15 +1006,12 @@ a:focus
   box-shadow: 0px 0px 0px transparent;;
 }
 
-.manage-watched-box-submit
+.manage-watched-box-submit-button
 {
+  position: relative;
   display: inline;
   float: right;
   margin-right: 15px;
-}
-
-.manage-watched-box-submit-button
-{
   background-color: #1081de;
   color: #ffffff;
   border: none;
@@ -1322,4 +1341,19 @@ a:focus
   right: 5px;
   font-size: 13px;
   font-weight: bold;
+}
+ .form-group label
+ {
+   padding-top: 5px;
+ }
+
+ .form-group
+ {
+   margin-bottom: 30px;
+ }
+
+
+.form-group .col-xs-8 .form-group:last-child
+{
+  margin-bottom: 0;
 }

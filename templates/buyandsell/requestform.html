@@ -1,0 +1,137 @@
+{% extends "buyandsell/base.html" %}
+
+{% block header %}
+<body style="background-color: #ffffff;">
+
+<div class="request-form-body">
+  <form class="form-horizontal" action="#">
+    <div class="form-group">
+      <label class="col-xs-4 control-label" style="text-align: left" for="name">Item Name</label>
+      <div class="col-xs-8 sell-form-item-name-area">
+        <input type="text" class="form-control sell-form-item-name" id="name">
+        <div class="sell-form-search-result-box">
+          <div class="searched-items-for-sale">
+            <p class="search-results-heading">
+              Similar Items for Sale
+              <span class="max-price-heading">Price</span>
+
+            </p>
+
+            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
+              <div>
+                                                <span class="searched-item-name">
+                                                    Electric Kettle
+                                                </span>
+                                                <span class="searched-item-price">
+                                                    350
+                                                </span>
+                <span class="rupee-logo">Rs&nbsp</span>
+              </div>
+            </a>
+            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
+              <div>
+                                                <span class="searched-item-name">
+                                                    Electric Kettle
+                                                </span>
+                                                <span class="searched-item-price">
+                                                    350
+                                                </span>
+                <span class="rupee-logo">Rs&nbsp</span>
+              </div>
+            </a>
+            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
+              <div>
+                                                <span class="searched-item-name">
+                                                    Electric Kettle
+                                                </span>
+                                                <span class="searched-item-price">
+                                                    350
+                                                </span>
+                <span class="rupee-logo">Rs&nbsp</span>
+              </div>
+            </a>
+            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
+              <div>
+                                                <span class="searched-item-name">
+                                                    Electric Kettle
+                                                </span>
+                                                <span class="searched-item-price">
+                                                    350
+                                                </span>
+                <span class="rupee-logo">Rs&nbsp</span>
+              </div>
+            </a>
+            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
+              <div>
+                                                <span class="searched-item-name">
+                                                    Electric Kettle
+                                                </span>
+                                                <span class="searched-item-price">
+                                                    350
+                                                </span>
+                <span class="rupee-logo">Rs&nbsp</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-xs-4 control-label" style="text-align: left" for="category">Category</label>
+      <div class="col-xs-8">
+        <select class="form-control" id="category" >
+          <option>Electronics</option>
+          <option>Books</option>
+          <option>Miscellaneous</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-xs-4 control-label" for="category">Sub-Category</label>
+      <div class="col-xs-8">
+        <select class="form-control" id="category" >
+          <option>All</option>
+          <option>Acadmeic</option>
+          <option>Course Books</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-xs-4 control-label" style="text-align: left" for="name">Price</label>
+      <div class="col-xs-8">
+        <input type="text" class="form-control" id="name">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-xs-4 control-label" style="text-align: left" for="expiry">Expires In</label>
+      <div class="col-xs-8">
+        <select class="form-control" id="category" >
+          <option>5 days</option>
+          <option>10 days</option>
+          <option>15 days</option>
+          <option>20 days</option>
+          <option>25 days</option>
+          <option>30 days</option>
+          <option>35 days</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-xs-4 control-label" for="email" style="text-align: left;">Your Email Id</label>
+      <div class="col-xs-8">
+        <input type="email" class="form-control" id="email">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-xs-4 control-label" for="phone" style="text-align: left;">Your Phone</label>
+      <div class="col-xs-8">
+        <input type="text" class="form-control" id="phone">
+      </div>
+    </div>
+    <input class="btn btn-primary send-button" type="submit" value="Done">
+  </form>
+</div>
+
+{% endblock %}
+
+</body>
