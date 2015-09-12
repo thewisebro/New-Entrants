@@ -8,7 +8,7 @@ from crop_image import CropImage
 MEDIA_ROOT = settings.MEDIA_ROOT
 
 
-class BuyandsellPhoto(CropImage):
+class MemberPhoto(CropImage):
   unique_name = 'buyandsell_pic'
   field_name = 'pic'
   width = 188
@@ -16,9 +16,7 @@ class BuyandsellPhoto(CropImage):
 
   @classmethod
   def get_instance(cls, request, pk):
-    item = SaleItems.objects.get(pk = pk)
-    return item.itempic
-
+    pass
 
   @classmethod
   def get_image_url(cls, image_field):
@@ -113,9 +111,9 @@ class ShowContact(models.Model):
   contact_shown=models.BooleanField(default=True)
 
 
-class ItemPic(models.Model):
+class Pic(models.Model):
   item = models.OneToOneField(SaleItems, primary_key=True)
-  pic =  BuyandsellPhoto.ModelField(
+  pic =  MemberPhoto.ModelField(
                            upload_to = 'buyandsell/pics/',
                            blank = True,
                            null = True,
