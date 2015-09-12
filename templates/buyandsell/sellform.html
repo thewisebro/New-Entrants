@@ -115,29 +115,19 @@
       </div>
     </div>
     <div class="form-group">
-      <div class="col-xs-4">
-        <div class="sell-form-image-box">
-          <img src="designStuff/cameraLogo.PNG" style="width:100%">
-          <button type="button" class="btn" style="margin: 12% 0% 0% 6%">Choose an Image</button>
-        </div>
+      <label class="control-label" for="description">Description</label>
+      <textarea id="id_detail" rows="3" style="width:98%"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="col-xs-3 control-label" for="email">Your Email Id</label>
+      <div class="col-xs-9">
+        <input type="email" class="form-control" id="id_email">
       </div>
-      <div class="col-xs-8">
-        <div class="form-group">
-          <label class="control-label" for="description" style="text-align: left">Description</label>
-          <textarea id="id_detail" rows="3" style="width:96.5%"></textarea>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-3 control-label" for="email" style="text-align: left;  padding-left:0px;">Your Email Id</label>
-          <div class="col-xs-9">
-            <input type="email" class="form-control" id="id_email">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-3 control-label" for="phone" style="text-align: left; padding-left:0px;">Your Phone</label>
-          <div class="col-xs-9">
-            <input type="text" class="form-control" id="id_contact">
-          </div>
-        </div>
+    </div>
+    <div class="form-group">
+      <label class="col-xs-3 control-label" for="phone" >Your Phone</label>
+      <div class="col-xs-9">
+        <input type="text" class="form-control" id="id_contact">
       </div>
     </div>
     <input class="btn btn-primary send-button" type="submit" value="Done">

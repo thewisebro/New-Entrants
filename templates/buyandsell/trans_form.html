@@ -9,7 +9,7 @@
 {% endfor %}
 {% endif %}
 {% if type %}
-<div class="form-horizontal transaction-form-body" action="" method="post">
+<form class="form-horizontal transaction-form-body" action="" method="post">
   {% csrf_token %}
   <div class="form-group">
     <label class="col-xs-4 control-label" for="buyer">Whom did you sell this Item ?</label>
@@ -28,9 +28,9 @@
     <input type="hidden" id="enroll" name="username_other">
   </div>
 
-  <form role="form">
-    <label class="control-label">How was your overall Experience ?</label>
-  </form>
+  <div class="form-group" style="margin-bottom: 10px;">
+    <label class="control-label col-xs-12">How was your overall Experience ?</label>
+  </div>
 
   <div class="form-group your-experience">
     <label class="radio-inline">
@@ -49,7 +49,7 @@
 
   <div class="form-group">
     <label class="col-xs-4 control-label" for="feedback">Comments/ Suggestions</label>
-    <textarea  class="col-xs-8" id="sell_feedback" name="feedback" rows="5"></textarea>
+    <textarea class="col-xs-8" id="sell_feedback" name="feedback" rows="5"></textarea>
   </div>
 
   <div class="form-group">
@@ -62,7 +62,7 @@
 {% else %}
 <form action="" method="post">
   {% csrf_token %}
-  <label for="seller">Seller</label>
+  <label for="seller">Who did you buy this item from ?</label>
   <select id="seller" name="seller_username">
     <option value="" selected>-----------</option>
     {% for obj in mail_list %}
@@ -73,6 +73,22 @@
   <label for="other">Other</label>
   <input type="text" id="id_username"></input><br>
   <input type="hidden" id="enroll" name="username_other">
+
+  <div class="form-group your-experience">
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Excellent
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Good
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Fair
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Poor
+    </label>
+  </div>
+
   <label for="feedback">Feedback</label>
   <textarea cols="40" id="request_feedback" name="feedback" rows="10"></textarea>
   <br>

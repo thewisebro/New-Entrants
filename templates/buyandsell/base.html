@@ -81,19 +81,18 @@
             <div class="arrow-up-front" style="margin-left:70.5%; margin-top:-10.5%"></div>
 
             <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/buy">Latest</a></li>
-
             {% for key,value in cat_dict.iteritems %}
             <li role="presentation" class="dropdown-submenu">
               <a role="menuitem" tabindex="-1" href="/buyandsell/buy/{{key}}">{{ key }}</a>
               <ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu2">
                 {% for row in value %}
-                <li role="presentation"><a role="menuitem" tabindex="-1"
-                                           href="/buyandsell/buy/{{row.main_category}}/{{row.code}}">{{row.name}}</a>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/buy/{{row.main_category}}/{{row.code}}">{{row.name}}</a>
                 </li>
                 {% endfor %}
-
               </ul>
-              {% endfor %}
+            </li>
+            {% endfor %}
+            </ul>
         </div>
       </div>
 

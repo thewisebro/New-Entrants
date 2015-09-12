@@ -183,8 +183,7 @@
                           <a href="/buyandsell/see_all/sell/?{% if queries %}{{queries.urlencode}}{% endif %}"><div></div>Items for Sale</a>
                  {% else %}
                   <a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}">
-                    <div></div>
-                    Items for Sale</a>
+                    <div></div>Items for Sale</a>
                   {% endif %}
 
                 </label>
@@ -195,12 +194,10 @@
                 <label for="requests">
                   {% if search_flag %}
                   <a href="/buyandsell/see_all/requests/?{% if queries %}{{queries.urlencode}}{% endif %}">
-                    <div></div>
-                    Requests</a>
+                    <div></div>Requests</a>
                   {% else %}
                   <a href="/buyandsell/viewrequests{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}">
-                    <div></div>
-                    Requests</a>
+                    <div></div>Requests</a>
                   {% endif %}
 
                 </label>
@@ -235,7 +232,7 @@
                     }
                     });
                   </script>
-                  
+
                   {% endif %}
                   <input type="hidden" name="keyword" value="{% if search_string %}{{search_string}}{% endif %}">
                   <input type="text" id="low" class="price-range-text-input" value="{% if ll %}{{ll}}{% endif %}"
