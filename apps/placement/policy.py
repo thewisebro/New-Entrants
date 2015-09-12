@@ -41,7 +41,6 @@ def can_apply(plac_person, company_applying) :
   return True
 
 def ppo_rejected(plac_person, company_applying):
-  import ipdb; ipdb.set_trace()
   def INR_USD_request():
     import requests
     r = requests.get("http://api.fixer.io/latest?base=USD")
