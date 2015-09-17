@@ -389,10 +389,12 @@ def workshop_registration_export(request):
   ws.write(0, 0, 'Sr. No.')
   ws.write(0, 1, 'Enrollment No.')
   ws.write(0, 2, 'Name')
-  ws.write(0, 3, 'Selected Option')
-  ws.write(0, 4, 'Reason')
+  ws.write(0, 3, 'Branch')
+  ws.write(0, 4, 'Contact No')
+  ws.write(0, 5, 'Selected Option')
+  ws.write(0, 6, 'Reason')
 
-  lst = registered_lst.values_list('placement_person__student__user__username', 'placement_person__student__user__name', 'options', 'reason')
+  lst = registered_lst.values_list('placement_person__student__user__username', 'placement_person__student__user__name', 'placement_person__student__branch__name', 'placement_person__student__user__contact_no', 'options', 'reason')
   for row, rowdata in enumerate(lst):
     ws.write(row+1, 0, row+1)
     for col, val in enumerate(rowdata):
