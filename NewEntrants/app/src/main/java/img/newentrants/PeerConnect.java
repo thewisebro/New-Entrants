@@ -16,7 +16,8 @@ import android.view.ViewGroup;
 
 import java.util.Locale;
 
-public class SeniorConnect extends AppCompatActivity implements ActionBar.TabListener {
+
+public class PeerConnect extends AppCompatActivity implements ActionBar.TabListener {
 
     SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -28,7 +29,7 @@ public class SeniorConnect extends AppCompatActivity implements ActionBar.TabLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_senior_connect);
+        setContentView(R.layout.activity_peer_connect);
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -39,7 +40,7 @@ public class SeniorConnect extends AppCompatActivity implements ActionBar.TabLis
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager = (ViewPager) findViewById(R.id.pager_peer);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // When swiping between different sections, select the corresponding
@@ -70,7 +71,7 @@ public class SeniorConnect extends AppCompatActivity implements ActionBar.TabLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_senior_connect, menu);
+        getMenuInflater().inflate(R.menu.menu_peer_connect, menu);
         return true;
     }
 
@@ -118,7 +119,6 @@ public class SeniorConnect extends AppCompatActivity implements ActionBar.TabLis
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-
             return PlaceholderFragment.newInstance(position + 1);
         }
 
@@ -133,10 +133,11 @@ public class SeniorConnect extends AppCompatActivity implements ActionBar.TabLis
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.sc1).toUpperCase(l);
+                    return getString(R.string.pc1).toUpperCase(l);
                 case 1:
-                    return getString(R.string.sc2).toUpperCase(l);
-            }
+                    return getString(R.string.pc2).toUpperCase(l);
+
+        }
             return null;
         }
     }
@@ -149,22 +150,14 @@ public class SeniorConnect extends AppCompatActivity implements ActionBar.TabLis
          * The fragment argument representing the section number for this
          * fragment.
          */
-        private int position;
         private static final String ARG_SECTION_NUMBER = "section_number";
-
 
         /**
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public PlaceholderFragment(int pos) {
-
-            position=pos;
-
-        }
-
+        private int position;
         public static PlaceholderFragment newInstance(int sectionNumber) {
-
             PlaceholderFragment fragment = new PlaceholderFragment(sectionNumber);
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -172,28 +165,23 @@ public class SeniorConnect extends AppCompatActivity implements ActionBar.TabLis
             return fragment;
         }
 
-
+        public PlaceholderFragment(int i) {
+            position =i;
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-
-            /*Spinner branch=(Spinner) findViewById(R.id.spinner_branch);
-            ArrayAdapter<CharSequence> adapter_branch= ArrayAdapter.createFromResource(getActivity(), R.array.branches, android.R.layout.simple_spinner_item);
-            adapter_branch.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            branch.setAdapter(adapter_branch);*/
-
             View pageView;
             switch(position) {
+                case 2:
+                    pageView = inflater.inflate(R.layout.fragment_peer_connect_request, container, false);
 
-                case 2: pageView = inflater.inflate(R.layout.fragment_senior_connect_accepted, container, false);
-                            break;
-                default: pageView = inflater.inflate(R.layout.fragment_senior_connect_request, container, false);
-                            break;
+                break;
+                default:
+                   pageView = inflater.inflate(R.layout.fragment_peer_connect, container, false);
 
             }
-
-
             return pageView;
         }
     }

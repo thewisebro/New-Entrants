@@ -15,6 +15,7 @@
 
     <application
         android:allowBackup="true"
+        android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
@@ -42,6 +43,22 @@
         <activity
             android:name=".SeniorConnect"
             android:label="@string/title_activity_senior_connect" >
+        </activity>
+        <activity
+            android:name=".PeerConnect"
+            android:label="@string/title_activity_peer_connect" >
+        </activity>
+        <activity
+            android:name=".Edit_Info"
+            android:label="@string/title_activity_edit__info" >
+        </activity>
+        <activity
+            android:name=".Blogs"
+            android:label="@string/title_activity_blogs" >
+        </activity>
+        <activity
+            android:name=".Profile"
+            android:label="@string/title_activity_profile" >
         </activity>
     </application>
 

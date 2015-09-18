@@ -1,22 +1,17 @@
 package img.newentrants;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 
 public class Navigation extends ActionBarActivity
@@ -50,10 +45,28 @@ public class Navigation extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        /*FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+                .commit();*/
+        Intent intent;
+        switch(position) {
+            case 0: intent = new Intent(this,Profile.class);
+                break;
+            case 1: intent = new Intent(this,Blogs. class);
+                break;
+            case 2: intent = new Intent(this,PeerConnect. class);
+                break;
+            case 3: intent = new Intent(this,SeniorConnect. class);
+                break;
+            case 4: intent = new Intent(this,Edit_Info. class);
+                break;
+            default: intent = new Intent(this,Blogs. class);
+                break;
+
+        }
+        startActivity(intent);
+
     }
 
     public void onSectionAttached(int number) {
