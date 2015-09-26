@@ -1204,3 +1204,11 @@ lectutApp.controller('FacultyCtrl', ['$scope','$routeParams','$rootScope','$loca
 
 
 }]);
+
+
+lectutApp.controller('FourNotCtrl', ['$scope','$routeParams','$rootScope','$location','ngNotify',function($scope, $routeParams,$rootScope, $location, ngNotify) {
+    //console.log($routeParams);
+    $rootScope.whichView = "FourNotCtrl";
+
+
+}]);

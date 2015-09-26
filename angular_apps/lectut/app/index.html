@@ -146,13 +146,14 @@
             <div id="userpic">
               <img ng-show="logIn" ng-src="{[base_domain]}{[auth.user.photo]}" alt="">
               <i ng-hide="logIn" class="fa fa-user anonUser"></i>
+
             </div>
             <div id="userdata">
- 	      <div>
-          <div ng-show="logIn">{[auth.user.name]}</div>
- 	        <div ng-show="logIn">{[auth.user.role]}</div>
-	      </div>
-             
+       	      <div>
+                <div ng-show="logIn">{[auth.user.name]}</div>
+       	        <div ng-show="logIn">{[auth.user.role]}</div>
+      	      </div>
+              <div ng-if="auth.userType == 1" class="viewProfile"><a href="#/faculty/{[auth.user_id]}/">View Profile</a></div>
             </div>
          </div> 
          
@@ -187,7 +188,7 @@
 
 <!-- Center view -->
 <div class="centerDiv" class="ng-fadeInUp">
-  <div ng-click="getPostData()" class="courseFullDiv"  ng-hide="$root.whichView == 'FacultyCtrl'">
+  <div ng-click="getPostData()" class="courseFullDiv"  ng-hide="$root.whichView == 'FacultyCtrl' || $root.whichView == 'FourNotCtrl'">
     <div class="courseHeading">
       <div class="courseHeadingNameId">
         <div ng-hide="$root.whichView == 'CourseHomeCtrl'">

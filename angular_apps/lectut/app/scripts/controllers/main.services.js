@@ -406,3 +406,27 @@ app.service('LeaveCourse', ['$http','$q','ngNotify',
           return deferred.promise;
         };
 }]);
+
+
+app.factory('authHttpResponseInterceptor',['$q','$location',function($q,$location){
+        return {
+            // upto 300
+            'response': function(response){
+                if (response.data.lectut_status === 101) {
+                    //for redirects to 404 
+                    $location.path('/404');
+                }
+                return response || $q.when(response);
+            },
+            // above 300
+            'responseError': function(rejection) {
+              console.log(rejection);
+                if (rejection.status === 401) {
+                    console.log("401");
+                } else if (rejection.status === 400) {
+                   console.log("400");
+                }
+                return $q.reject(rejection);
+            }
+        }
+    }])
