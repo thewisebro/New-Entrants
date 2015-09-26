@@ -153,7 +153,7 @@
       <div class="postData">
           <div class="postUserNameTime">
             <div class="postUser">
-              <span class="postUserName">{[post.post.upload_user]}</span>
+              <span class="postUserName"><a ng-href="#/faculty/{[post.post.upload_user_id]}/">{[post.post.upload_user]}</a></span>
               <span class="removeFeedPost" ng-show="logIn && auth.user.name == post.post.upload_user" ng-click="removeFeedPost(post.post.id, $index)">
                   <i class="fa fa-times-circle-o"></i>
               </span>

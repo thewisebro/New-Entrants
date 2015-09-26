@@ -30,15 +30,17 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
             //console.log("-----------------------");
             //console.log(d);
             //alert(d.batch);
-            console.log(d);
+            //console.log(d);
             $scope.courseName = d.batch_info.course_name;
             $scope.courseCode = d.batch_info.code;
             $scope.courseid = id;
             $scope.teaching = false;
-            for(var i=0;i<$scope.auth.batches.length;i++){
-              if($scope.auth.batches[i].id == id){
-               $scope.teaching = true;
-              }
+            if($scope.auth && $scope.auth.batches){
+              for(var i=0;i<$scope.auth.batches.length;i++){
+                if($scope.auth.batches[i].id == id){
+                 $scope.teaching = true;
+                }
+              }  
             }
           });
     }
@@ -116,6 +118,8 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
          //console.log(d);
          $scope.auth = d;
          $rootScope.commonPosts = d.posts;
+         console.log("jome");
+         console.log($rootScope.commonPosts);
          //console.log("this is auth");
          //console.log($scope.auth.userType == "2");
          if($scope.auth.userType == "0" || $scope.auth.userType == "1"){
@@ -166,11 +170,13 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
   
    $scope.getFeedData = function(id){
     $scope.selectedCourse=id;
-        for(var i=0;i<$scope.auth.batches.length;i++){
-          if($scope.auth.batches[i].id == id){
-            $scope.courseName = $scope.auth.batches[i].course_name;
-            $scope.courseid = id;
-          }
+        if($scope.auth.userType == "1"){
+          for(var i=0;i<$scope.auth.batches.length;i++){
+            if($scope.auth.batches[i].id == id){
+              $scope.courseName = $scope.auth.batches[i].course_name;
+              $scope.courseid = id;
+            }
+          }  
         }
     var promiseCourseData = CourseDetails.getCourseDetailsData(id);
 

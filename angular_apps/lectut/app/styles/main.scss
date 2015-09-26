@@ -41,10 +41,11 @@
  $osSB: 'opensans_semibold';
  $osSBI: 'opensans_semibolditalic';
   
-  $th1: #3498db;
+ $th1: #3498db;
 
 
-  // font awesome colors
+
+// font awesome colors
 .fa-file-video-o{
   color:#e67e22 !important;
 }
@@ -1998,6 +1999,8 @@ ul.comment-list-wrapper ul.comment-list-wrapper {
   .comments-form textarea {
     height: 30px;
     padding: 3px;
+    max-width: 500px;
+    max-height: 80px;
     color: #797979; }
   .comments-form label {
     float: left;

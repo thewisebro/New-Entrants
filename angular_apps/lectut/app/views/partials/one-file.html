@@ -9,7 +9,7 @@
           <div class="postContentAll">
             <div class="postUserNameTime">
                 <div class="postUser">
-                  <span class="postUserName">{[oneFile.file.username]}</span>
+                  <span class="postUserName"> <a ng-href="#/faculty/{[post.post.user_id]}">{[oneFile.file.username]}</a></span>
                   <!--<span class="removeFeedPost" ng-show="logIn && auth.user.name == oneFile.user_info.name" ng-click="removeFeedPost(oneFile.file.post, $index)">
                     <i class="fa fa-times-circle-o"></i>
                   </span>-->
