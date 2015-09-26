@@ -51,6 +51,10 @@ student_apps = ['acad','lectut','jukebox','dc++','placement',
                 'buysell', 'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research']
 
+student_apps_feedback = ['acad','lectut','jukebox','dc++','placement',
+                'buysell', 'thinktank','lostfound','softwares',
+                'peoplesearch','messmenu','research', 'androidnotices']
+
 faculty_apps = ['responses','acad_course_students','facapp','lectut','placement', 'research',
                 'thinktank','lostfound','softwares','peoplesearch']
 

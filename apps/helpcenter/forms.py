@@ -34,7 +34,7 @@ class LoginHelpForm(forms.Form):
 
 def ResponseFormGen(user):
   if user.in_group('Student'):
-    choices = map(lambda a:(a,channeli_apps[a]['name']),student_apps)
+    choices = map(lambda a:(a,channeli_apps[a]['name']),student_apps_feedback)
   elif user.in_group('Faculty'):
     choices = map(lambda a:(a,channeli_apps[a]['name']),faculty_apps)
   else:
