@@ -1,4 +1,4 @@
-''' File to transfer old files from old_files/ in the lectut/ directory'''
+''' File to transfer old files from old_files_lectut/ in the lectut/ directory'''
 
 import xlrd
 import os
@@ -6,7 +6,7 @@ import shutil
 import xlwt
 
 file_types = ['exp','lec','tut','sol']
-os.chdir('media/old_files')
+os.chdir('media/old_files_lectut')
 
 for file_type in file_types:
   print os.getcwd()

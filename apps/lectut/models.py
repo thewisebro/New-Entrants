@@ -84,6 +84,7 @@ class Post(models.Model):
       'id':self.id,
       'upload_user': str(self.upload_user.name),
       'upload_user_id': str(self.upload_user.id),
+      'userType' : str(self.getUserType(self.upload_user)),
       'user_image': str(self.upload_user.photo_url),
       'datetime_created':str(self.datetime_created),
       'batch':self.batch_dict(),
@@ -106,8 +107,18 @@ class Post(models.Model):
                  }
     return batch_info
 
+  def getUserType(self , user):
+    try:
+      if user.in_group('student'):
+        return "0"
+      elif user.in_group('faculty'):
+        return "1"
+      else:
+        return "2"
+    except:
+        return "2"
 
-#  Gives path where uploaded file is saved
+# Gives path where uploaded file is saved
 def upload_path(instance , filename ):
   return ('lectut/'+instance.post.batch.course.code+'/'+instance.file_type+'/'+filename)
 #  return os.path.join('lectut/',instance.file_type,'/')
