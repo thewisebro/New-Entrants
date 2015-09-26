@@ -165,40 +165,6 @@ def generate_missing_resumes(request, company_id):
                             }, context_instance = RequestContext(request))
 
 
-#@login_required
-#@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
-#def generate_company_contact_xls(request):
-#  if request.method == 'POST':
-#    company = CompanyContact.objects.all()
-#    wb = xlwt.Workbook(encoding='utf-8')
-#    ws = wb.add_sheet('sheet 1')
-#
-#    ws.write(0, 0, 'Company Name' )
-#    ws.write(0, 1, 'Cluster' )
-#    ws.write(0, 2, 'Contact Student' )
-#    ws.write(0, 3, 'Designation' )
-#    ws.write(0, 4, 'Phone Number' )
-#    ws.write(0, 5, 'Email' )
-#    ws.write(0, 6, 'Status' )
-#    ws.write(0, 7, 'Last Contact' )
-#    ws.write(0, 8, 'Student in Contact' )
-#    ws.write(0, 9, 'Comments')
-#    ws.write(0, 10, 'When to contact')
-#
-#    lst = company.values_list('company_name', 'cluster',
-#              'contactperson__contact_person', 'contactperson__designation', 'contactperson__phone_no',
-#              'contactperson__email', 'status', 'last_contact', 'person_in_contact', 'comments',
-#              'when_to_contact')
-#
-#    for row, rowdata in enumerate(lst):
-#       for col, val in enumerate(rowdata):
-#         ws.write(row+1, col, val)
-#
-#    response = HttpResponse(content_type='application/vnd.ms-excel')
-#    response['Content-Disposition'] = 'attachment; filename=placement_data.xls'
-#    wb.save(response)
-#    return response
-#
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
@@ -319,6 +285,64 @@ def placement_manager_contact_person_data(request):
       data_to_send.append(a)
   data_to_send = {'data':data_to_send}
   return HttpResponse(simplejson.dumps(data_to_send),'application/json')
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
+def placement_manager_contact_person_data_export(request):
+  if request.method == 'POST':
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('sheet 1')
+
+    ws.write(0, 0, 'Company Name' )
+    ws.write(0, 1, 'Cluster' )
+    ws.write(0, 2, 'Status' )
+    ws.write(0, 3, 'Contact Person' )
+    ws.write(0, 4, 'Designation' )
+    ws.write(0, 5, 'Phone Number' )
+    ws.write(0, 6, 'Email' )
+    ws.write(0, 7, 'Is Primary?' )
+    ws.write(0, 8, 'Last Contact' )
+    ws.write(0, 9, 'Person in Contact' )
+    ws.write(0, 10, 'When to Contact' )
+    ws.write(0, 11, 'Recent Comment')
+
+    company = CompanyContactInfo.objects.all()
+    contactPerson_lst = ContactPerson.objects.all().order_by('company_contact__name','is_primary')
+    comment_lst = CompanyContactComments.objects.filter(campus_contact__contact_person__in=contactPerson_lst)
+    i = 1
+    date_style=xlwt.easyxf(num_format_str="dd/mm/yyyy")
+    for inst in contactPerson_lst:
+      company_inst = inst.company_contact
+      ws.write(i, 0, company_inst.name)
+      ws.write(i, 1, company_inst.cluster)
+      ws.write(i, 2, company_inst.status)
+      ws.write(i, 3, inst.name)
+      ws.write(i, 4, inst.designation)
+      ws.write(i, 5, inst.phone_no)
+      ws.write(i, 6, inst.email)
+      ws.write(i, 7, 'Yes' if (inst.is_primary) else 'No')
+      ws.write(i, 8, inst.campuscontact.last_contact, style=date_style)
+      try:
+        ws.write(i, 9, inst.campuscontact.student.user.name)
+      except AttributeError:
+        ws.write(i, 9, 'None')
+      ws.write(i, 10, inst.campuscontact.when_to_contact, style=date_style)
+      comment = ""
+      try:
+        comment = comment_lst.filter(campus_contact__contact_person=inst).order_by('-date_created')[0].comment
+        if comment == "" or not comment:
+          raise IndexError
+        if comment[:37] == "<span name=thakur style='color:red;'>":
+          comment = "By Placement Manager: "+comment[37:-7]
+      except IndexError:
+        pass
+
+      ws.write(i, 11, comment)
+      i += 1
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=placement_data.xls'
+    wb.save(response)
+    return response
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
@@ -492,9 +516,6 @@ def company_coordinator_contact_person_data_today(request):
       data_to_send.append(a)
   data_to_send = {'data':data_to_send}
   return HttpResponse(simplejson.dumps(data_to_send),'application/json')
-
-
-
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator','Placement Manager']).exists(), login_url=login_url)
@@ -718,28 +739,7 @@ def add_company_coordinator(request):
 
 @login_required
 def person_search(request):
-  if request.is_ajax():
-    q = request.GET.get('term','')
-    print q
-    persons = Student.objects.filter(Q(user__name__icontains = q)|Q(user__username__icontains = q),passout_year=None).order_by('-user__username')[:50]
-    if not persons:
-      obj = [{
-        'id':'00000000',
-        'label':'No results found',
-        'value':q,
-      }]
-      data = simplejson.dumps(obj)
-      return HttpResponse(data,'application/json')
-    def person_dict(student):
-      return {
-        'id':str(student.user.username),
-        'label':str(student.user.name)+" ( "+str(student.user.info)+" )",
-        'value':str(student.user.name),
-      }
-    data = simplejson.dumps(map(person_dict,persons))
-  else:
-    data = 'fail'
-  return HttpResponse(data,'application/json')
+  return HttpResponse(student_search(request), 'application/data')
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists() , login_url=login_url)

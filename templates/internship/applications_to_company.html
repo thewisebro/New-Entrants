@@ -1,6 +1,9 @@
 {% extends "internship/base.html" %}
 
 {% block app_content %}
+<style type="text/css">
+  .category  { color:RED ; }
+</style>
 <h3>Applications to {{ company.name_of_company }}</h3>
 
 <div class="tabbable">
@@ -18,7 +21,7 @@
     </li>
     {% else %}
     <li>
-      <a href="{% url 'internship.views_admin.applications_to_company' company.id %}">
+      <a href="{% url 'internship.views_admin.applications_to_company' company_id=company.id %}">
         Finalize
       </a>
     </li>
@@ -32,6 +35,15 @@
 </div>
 
 {% if details %}
+<div style="float:right; margin-bottom:10px;" class="btn-group">
+  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+    Color codes
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu">
+    <li><a href="#"><span class="category">Selected</span></a></li>
+  </ul>
+</div>
 <button type="button" class="btn btn-primary" onclick="check_all('applications');">Select All</button>
 <button type="button" class="btn btn-primary" onclick="uncheck_all('applications');">Unselect All</button>
 <form method="POST">
@@ -54,7 +66,11 @@
     </thead>
     <tbody>
     {% for application,PersonInfo in details %}
+    {% if application.student.is_placed %}
+    <tr class=category>
+    {% else %}
     <tr>
+    {% endif %}
       <td>{{ forloop.counter }}</td>
       <td><input type="checkbox" name="selected_applications" value="{{ application.id }}"/></td>
       <td>{{ application.student.student.user.username }}</td>
@@ -78,5 +94,6 @@ No applications yet!
 {% endblock app_content %}
 
 {% block app_scripts %}
+<script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/placement/check_all.js"></script>
 {% endblock %}

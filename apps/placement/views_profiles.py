@@ -33,6 +33,7 @@ login_url = '/placement/'
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def photo(request):
   try :
     l.info(request.user.username + ': Opened view to add/update photo')
@@ -78,6 +79,7 @@ def photo(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def personal_information(request):
   """
     View/Update Studental Information
@@ -123,7 +125,7 @@ def personal_information(request):
                 'fathers_occupation': info.fathers_occupation}
       form = plac_forms.Profile(initial=initial)
       # Disable Birthdate
-      form.fields['birth_date'].widget.attrs['readonly'] = True
+#  form.fields['birth_date'].widget.attrs['readonly'] = True
     return render_to_response('placement/basic_form.html', {
         'form': form,
         'title': 'Personal Information',
@@ -137,6 +139,7 @@ def personal_information(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def contact(request):
   """
     View/Update Student.
@@ -180,6 +183,7 @@ def contact(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def educational_details(request):
   """
     View/Update Educational Details
@@ -243,7 +247,8 @@ def educational_details(request):
         return HttpResponseRedirect(reverse('placement.views_profiles.educational_details'))
 
     else :
-      formset = EducationalDetailsFormSet(queryset = EducationalDetails.objects.filter(student = student).exclude(course=previous_sem(student.semester)))
+      #formset = EducationalDetailsFormSet(queryset = EducationalDetails.objects.filter(student = student).exclude(course=previous_sem(student.semester)))
+      formset = EducationalDetailsFormSet(queryset = EducationalDetails.objects.filter(student = student))
     # Override the choices for course as per the course of the user.
     # Added the blank option to make sure that the formset works fine.
     if student.semester[:-2] == 'UG':
@@ -261,18 +266,18 @@ def educational_details(request):
     for form in formset :
       form.fields['discipline'].choices = branches
       form.fields['discipline'].widget = Select(choices = branches )
-    recent = EducationalDetails.objects.filter(student=student, course=previous_sem(student.semester))
-    if recent:
-      recent = recent[0]
-    long_name_course = recent.course
-    for inst in MC.SEMESTER_CHOICES:
-      if inst[0] == previous_sem(student.semester):
-        long_name_course = inst[1]
-        break
-    recent.course = (recent.course, long_name_course)
-
-    long_name_discipline = Branch.objects.get(code=recent.discipline).name
-    recent.discipline = (recent.discipline, long_name_discipline)
+#    recent = EducationalDetails.objects.filter(student=student, course=previous_sem(student.semester))
+#    if recent:
+#      recent = recent[0]
+#      long_name_course = recent.course
+#      for inst in MC.SEMESTER_CHOICES:
+#        if inst[0] == previous_sem(student.semester):
+#          long_name_course = inst[1]
+#          break
+#      recent.course = (recent.course, long_name_course)
+#
+#      long_name_discipline = Branch.objects.get(code=recent.discipline).name
+#      recent.discipline = (recent.discipline, long_name_discipline)
 
     if plac_person.status in ('LCK', 'VRF') :
       # The details are uneditable
@@ -280,7 +285,7 @@ def educational_details(request):
     else :
       template = 'placement/basic_form.html'
     return render_to_response(template , {
-        'recent' : recent,
+#        'recent' : recent,
         'isFormSet' : True,
         'form' : formset,
         'title' : 'Educational Details',
@@ -295,6 +300,7 @@ def educational_details(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def placement_information(request) :
   """
     View/Update Placement Information
@@ -356,6 +362,7 @@ def placement_information(request) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def editset(request, model_name):
   """
   A view to handle all the formsets that are mapped to student using ForeignKey to student.

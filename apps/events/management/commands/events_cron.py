@@ -85,7 +85,12 @@ class Command(BaseCommand):
       email_ids = []
       for event_user in event_users:
         if event_user.email_subscribed:
-          email_ids.append(event_user.user.email)
+          # dont send event mails to passout students
+          try:
+            if not event_user.user.student.passout_year:
+              email_ids.append(event_user.user.email)
+          except:
+            email_ids.append(event_user.user.email)
       while email_ids:
         first_100_email_ids = email_ids[:100]
         email_ids = email_ids[100:]

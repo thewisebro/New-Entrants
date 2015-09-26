@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
-
+from django.core.urlresolvers import reverse
 from xhtml2pdf import pisa
 
 from mcm.models import MCM, StudentLoanAid
@@ -251,11 +251,9 @@ def mcm_submit(request):
   if MCM.objects.filter(student = person).exists():
     student = MCM.objects.filter(student = person)[0]
     """
-    ### Temporary code block. Note: Please remove this while reopening this portal ###
     if student.check is False:
       messages.info(request,"MCM and Free-messing Scholarship portal is closed now! Please contact 'IMG' in case of any discrepency")
       return HttpResponseRedirect('/')
-    ##### Ends
     """
   else:
     """
@@ -264,7 +262,9 @@ def mcm_submit(request):
     return HttpResponseRedirect('/')
     ##### Ends
     """
-    student = MCM.objects.create(student = person)
+    return HttpResponseRedirect('/')
+    """To be added while reopening
+    student = MCM.objects.create(student = person)"""
 
   if request.method == 'POST':
     form = MCMForm(request.POST)
@@ -308,14 +308,17 @@ def mcm_submit(request):
       student.save()
       person.bhawan = form.cleaned_data['bhawan']
       person.room_no = form.cleaned_data['room_no']
-      person.personal_contact_no = form.cleaned_data['mobile_no']
-      person.email_id = form.cleaned_data['email']
+      person.user.contact_no = form.cleaned_data['mobile_no']
+      person.user.email = form.cleaned_data['email']
+      print person.user.email
       personinfo.fathers_name = form.cleaned_data['fathers_name']
       personinfo.fathers_occupation = form.cleaned_data['fathers_occupation']
       personinfo.permanent_address = form.cleaned_data['home_address']
       personinfo.bank_name = form.cleaned_data['bank_name']
       personinfo.bank_account_no = form.cleaned_data['account_no']
+      person.user.save()
       person.save()
+      print person.user.email
       personinfo.save()
       #template_name = 'mcm/mcm_pdf.html'
       personinfo, created = StudentInfo.objects.get_or_create(student = person)
