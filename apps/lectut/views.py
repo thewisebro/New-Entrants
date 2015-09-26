@@ -104,9 +104,9 @@ def dispbatch(request):
     if userType == "0":
       student = request.user.student
       batches = student.batch_set.all()
-#      courses = map(lambda x: x.course, batches)
+      batch_ids = map(lambda x: x.id,batches)
       batches_info = map(lambda x: batch_dict_disp(x),batches)
-      userPosts = Post.post_objects.all().order_by('-datetime_created')[:20]
+      userPosts = Post.post_objects.filter(batch_id__in = batch_ids).order_by('-datetime_created')[:20]
 #      index = settings.PROJECT_ROOT + '/apps/lectut/static/lectut-front/dist/index.html'
 #      with open(index,'r') as f:
 #       response =  HttpResponse(f.read())
@@ -115,9 +115,9 @@ def dispbatch(request):
     elif userType == "1":
       faculty = request.user.faculty
       batches = faculty.batch_set.all()
-#      courses = map(lambda x: x.course, batches)
+      batch_ids = map(lambda x: x.id,batches)
       batches_info = map(lambda x: batch_dict_disp(x),batches)
-      userPosts = Post.post_objects.all().order_by('-datetime_created')[:20]
+      userPosts = Post.post_objects.all().filter(batch_id__in = batch_ids).order_by('-datetime_created')[:20]
 
     else:
       userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')[:20]
@@ -415,9 +415,12 @@ def get_post(request , batch_id , post_id):
       post = Post.post_objects.get(id = post_id)
       complete_post = get_post_dict(post)
       if user.is_authenticated():
-        return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize() , 'lectut_status':100}), content_type='application/json')
+        if authenticate ( user , batch_id):
+          return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize() , 'in_batch' : True,'lectut_status':100}), content_type='application/json')
+        else:
+          return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize() ,'in_batch' : False, 'lectut_status':100}), content_type='application/json')
       else:
-        return HttpResponse(json.dumps({'post':complete_post , 'user_info':'' , 'lectut_status':100}), content_type='application/json')
+        return HttpResponse(json.dumps({'post':complete_post , 'user_info':'' , 'in_batch' : False,'lectut_status':100}), content_type='application/json')
     else:
       msg = 'Post has been deleted'
   else:
@@ -605,12 +608,16 @@ def get_files(request, batch_id):
 @CORS_allow
 def post_comments(request , post_id):
   post = Post.post_objects.get(id = post_id)
-  return render(request,'comments/comments.html',{'instance': post})
+  if authenticate( request.user , post.batch.id):
+    return render(request,'comments/comments.html',{'instance': post})
+  else:
+    return HttpResponse(json.dumps({'msg':'User doesnot belong to batch','lectut_status':101}), content_type='application/json')
 
 
 @csrf_exempt
 @CORS_allow
 def add_comment(request , post_id):
+  import pdb;pdb.set_trace()
   post = Post.post_objects.get(id = post_id)
   return null
 
@@ -670,8 +677,8 @@ def search(request):
   final_posts , final_files ,posts , upload_files , batches , final_batches , final_faculties = [],[],[],[],[],[],[]
   print query_uploadfile
   try:
-    posts = map(lambda result:Post.objects.get(id = result.pk) if Post.objects.filter(id=result.pk).exists() else None,query_post)
-    upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk) if Uploadedfile.objects.filter(id=result.pk).exists() else None,query_uploadfile)
+    posts = map(lambda result:Post.objects.get(id = result.pk) if Post.post_objects.filter(id=result.pk).exists() else None,query_post)
+    upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk) if Uploadedfile.file_objects.filter(id=result.pk).exists() else None,query_uploadfile)
     for course in query_courses:
       course_jagan = Course.objects.get(id = course.pk)
       map(lambda x: batches.append(x),Batch.objects.filter(course = course_jagan))
@@ -687,7 +694,7 @@ def search(request):
     if count_fac ==5:
       break
 
-  final_posts = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,posts)
+  final_posts = map(lambda result:result.as_dict() if (result is not None and result.privacy == False) else None,posts)
   final_files = map(lambda result:result.as_dict_disp() if (result is not None and result.deleted == False) else None,upload_files)
   final_batches = map(lambda result:batch_dict_disp(result) ,batches)
 
