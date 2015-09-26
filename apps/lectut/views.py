@@ -165,20 +165,9 @@ def coursepage(request, batch_id):
     number = 0
     userType=getUserType(user)
 
-    if userType == "0":
-      if user.student in userBatch.students.all():
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created')[:20] #[number:(number+post_count)]
-        in_batch = True
-      else:
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')[:20]
-        in_batch = False
-    elif userType == "1":
-      if user.faculty in userBatch.faculties.all():
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created')[:20] #[number:(number+post_count)]
-        in_batch = True
-      else:
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')[:20]
-        in_batch = False
+    if authenticate(user , batch_id):
+      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created')[:20] #[number:(number+post_count)]
+      in_batch = True
     else:
       previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')[:20]
       in_batch = False
