@@ -99,6 +99,7 @@ def dispbatch(request):
   if request.user.is_authenticated():
     userType = getUserType(request.user)
     batches_info = []
+    user_id = request.user.id
     user_info = request.user.serialize()
     if userType == "0":
       student = request.user.student
@@ -121,10 +122,12 @@ def dispbatch(request):
     else:
       userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')[:20]
       user_info = 'Unknown'
+      user_id = 0
     for post in userPosts:
       posts.append(get_post_dict(post))
     data = {'user': user_info,
             'batches': batches_info,
+            'user_id':user_id,
             'posts':posts,
             'userType': userType}
 
@@ -156,7 +159,7 @@ def coursepage(request, batch_id):
 #    usrname = request.POST.get('user','harshithere')
 #    user = User.objects.get(username=usrname)
     if not Batch.objects.filter(id=batch_id).exists():
-      return HttpResponse(json.dumps('This batch doesnot exist'),content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'This batch doesnot exist','status':101}),content_type='application/json')
     userBatch = Batch.objects.get(id=batch_id)
     posts = []
     request.session['batchId'] = batch_id
@@ -179,7 +182,8 @@ def coursepage(request, batch_id):
     context = {'posts': posts,
                'batch':batch_dict(userBatch),
                'userType':userType,
-               'in_batch':in_batch,}
+               'in_batch':in_batch,
+               'status':100}
 
     return HttpResponse(json.dumps(context),content_type='application/json')
 #    return render( request, 'lectut/image.html', context)
@@ -242,11 +246,11 @@ def uploadedFile(request , batch_id):
       course = Course.objects.get(id = batch_id)
       userBatch = None
     else:
-      return HttpResponse(json.dumps({'msg':'Invalid Course. Please contact IMG if problem persists' , 'status':102}), content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'Invalid Course. Please contact IMG if problem persists' , 'status':101}), content_type='application/json')
 
 #    data = request.POST.get('formText','')
     if not authenticate(request.user , batch_id):
-       return HttpResponse(json.dumps({'msg':'User is not a member of given course. Please contact IMG if problem persists' , 'status':102}), content_type='application/json')
+       return HttpResponse(json.dumps({'msg':'User is not a member of given course. Please contact IMG if you wish to post' , 'status':101}), content_type='application/json')
     data = allData['formText']
     privacy = False
     uploadTypes = allData['typeData']
@@ -434,7 +438,7 @@ def get_file(request , batch_id , file_id):
       user_info = user.serialize()
       File = File.as_dict()
       if user.is_authenticated():
-        return HttpResponse(json.dumps({'file':File , 'user_info':user_info , 'user_id':str(user.id) , 'status':100}), content_type='application/json')
+        return HttpResponse(json.dumps({'file':File , 'user_info':user_info , 'user_id':str(user.id) , 'userType':str(getUserType(user)) , 'status':100}), content_type='application/json')
       else:
         return HttpResponse(json.dumps({'file':File , 'user_info':'' , 'status':100}), content_type='application/json')
     else:
@@ -467,7 +471,7 @@ def deleteFile(request , file_id):
           msg = 'The post has been deleted as well'
       except:
         msg = 'Some error Occured'
-        status = 102
+        status = 101
     else:
       msg = 'You are not authorised to delete this file. This shall be reported'
   else:
@@ -494,7 +498,7 @@ def deletePost(request , post_id):
         status = 100
       except:
         msg = 'Kuch katta ho gaya'
-        status = 102
+        status = 101
     else:
       msg = 'You are not authorised to delete this post. This shall be reported'
   else:
@@ -602,6 +606,14 @@ def get_files(request, batch_id):
 def post_comments(request , post_id):
   post = Post.post_objects.get(id = post_id)
   return render(request,'comments/comments.html',{'instance': post})
+
+
+@csrf_exempt
+@CORS_allow
+def add_comment(request , post_id):
+  post = Post.post_objects.get(id = post_id)
+  return null
+
 
 
 ''' Creates a event/reminder '''
@@ -729,9 +741,10 @@ def faculty_files(request, faculty_id):
   for someFile in uploaded_files:
     post = Post.objects.get(id = someFile.post_id)
     fileDetails = someFile.as_dict()
-#    import pdb;pdb.set_trace()
     postData = post.as_dict()
     course_name = postData['batch']['course_name']
+    course_code = postData['batch']['id']
+    course_name = str(course_name) + str(';;;;')+ str(course_code)
     if course_name not in All_files:
       All_files[course_name] = []
     All_files[course_name].append(fileDetails)
