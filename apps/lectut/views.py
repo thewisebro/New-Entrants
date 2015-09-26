@@ -265,9 +265,9 @@ def uploadedFile(request , batch_id):
       if file_type =='Video' and  document._size>MAX_VIDEO_SIZE:
         msg.append({'msg':str(document)+' : Video too large.Must be smaller than 20MB','status':101})
       if file_type =='pdf' and  document._size>MAX_PDF_SIZE:
-        msg.append({'msg':str(document)+' : File too large.Must be smaller than 5MB','status':101})
+        msg.append({'msg':str(document)+' : File too large.Must be smaller than 20MB','status':101})
       elif document._size>MAX_IMAGE_SIZE:
-        msg.append({'msg':str(document)+' : Image too large.Must be smaller than 5MB','status':101})
+        msg.append({'msg':str(document)+' : Image too large.Must be smaller than 10MB','status':101})
       else:
         new_document = Uploadedfile(post =new_post, upload_file = document, description = str(document), file_type=file_type, upload_type = uploadTypes[counter])
         new_document.save()
