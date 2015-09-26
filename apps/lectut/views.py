@@ -257,7 +257,7 @@ def uploadedFile(request , batch_id):
     documents = request.FILES.getlist('file')
     extra = request.POST.getlist('extra','')
     if not data and not documents:
-      return HttpResponse(json.dumps({'msg':'Empty posts are not allowed','lectut_status':101}), content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'Empty posts are not allowed','lectut_status':102}), content_type='application/json')
     if getUserType(user) == "1":
       privacy = allData['privacy']
     files,msg = [],[]
@@ -274,7 +274,7 @@ def uploadedFile(request , batch_id):
       file_type = getFileType(document)
 #      fileData = json.loads(extra[counter])
       if file_type =='dangerous':
-        msg.append({'msg':str(document)+' : File type is dangerous. Cant save it on server','lectut_status':101})
+        msg.append({'msg':str(document)+' : File type is dangerous. Cant save it on server','lectut_status':102})
       if file_type =='Video' and  document._size>MAX_VIDEO_SIZE:
         msg.append({'msg':str(document)+' : Video too large.Must be smaller than 20MB','lectut_status':102})
       if file_type =='pdf' and  document._size>MAX_PDF_SIZE:
@@ -289,7 +289,7 @@ def uploadedFile(request , batch_id):
     new_post.save()
     if msg !='':
 #      response =  HttpResponse(json.dumps(msg), content_type='application/json')
-      lectut_status = 101
+      lectut_status = 100
     new_post = new_post.as_dict()
     complete_post = {'post':new_post,'files':files}
     response =  HttpResponse(json.dumps({'complete_post':complete_post,'lectut_status':lectut_status , 'messages':msg}), content_type='application/json')
