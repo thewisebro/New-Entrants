@@ -60,7 +60,12 @@
         </div>
 
         <!-- Appname-->
-        <a href="/lectut/#/"><div class="appName"><img src="lectutlogo.png" style="padding-right: 8px;width: 19px;padding-top: 10px;"/>Lectut</div></a>
+        <a href="/lectut/#/">
+          <div class="appName">
+            <img src="lectutlogo.png" style="padding-right: 8px;width: 19px;padding-top: 10px; vertical-align: text-bottom;"/>
+            <span class="nameLectut">Lectut</span>
+          </div>
+        </a>
         <div class="topSearchBox"><!-- Search box-->
         <span class="searchIconTop"><i class="fa fa-search"></i></span>
         <div class="crossTop" ng-click="clearSearch()" ng-show="queryString.length != 0"><i class="fa fa-times-circle"></i></div>
@@ -93,7 +98,7 @@
                     </div>
                   </a>
             </div>
-            <div class="subSearchHeading">Files</div>
+            <div class="subSearchHeading">Files <span>(click to download)</span></div>
             <div class="noResults" ng-hide="searchResults.files.length != 0">No Results</div>
             <div class="subSearchContent">
                <div ng-repeat="file in searchResults.files | limitTo: 5">
@@ -141,13 +146,14 @@
             <div id="userpic">
               <img ng-show="logIn" ng-src="{[base_domain]}{[auth.user.photo]}" alt="">
               <i ng-hide="logIn" class="fa fa-user anonUser"></i>
+
             </div>
             <div id="userdata">
- 	      <div>
-          <div ng-show="logIn">{[auth.user.name]}</div>
- 	        <div ng-show="logIn">{[auth.user.role]}</div>
-	      </div>
-             
+       	      <div>
+                <div ng-show="logIn">{[auth.user.name]}</div>
+       	        <div ng-show="logIn">{[auth.user.role]}</div>
+      	      </div>
+              <div ng-if="auth.userType == 1" class="viewProfile"><a href="#/faculty/{[auth.user_id]}/">View Profile</a></div>
             </div>
          </div> 
          
@@ -182,7 +188,7 @@
 
 <!-- Center view -->
 <div class="centerDiv" class="ng-fadeInUp">
-  <div ng-click="getPostData()" class="courseFullDiv"  ng-hide="$root.whichView == 'FacultyCtrl'">
+  <div ng-click="getPostData()" class="courseFullDiv"  ng-hide="$root.whichView == 'FacultyCtrl' || $root.whichView == 'FourNotCtrl'">
     <div class="courseHeading">
       <div class="courseHeadingNameId">
         <div ng-hide="$root.whichView == 'CourseHomeCtrl'">
