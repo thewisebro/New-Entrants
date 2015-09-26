@@ -112,7 +112,7 @@ def channeli_login(request):
 
 def bunkometer(request):
   return HttpResponse('So, started with bunkometer django part!')
-def getSubjects(request,username):
+def getCourses(request,username):
   try:
     student = Student.objects.get(user__username=username)
     registeredCourses = []
@@ -120,9 +120,13 @@ def getSubjects(request,username):
     subData={}
     #nos -> number of subjects
     subData['nos'] = len(registeredCourses)
+    courses = []
     for i in range(len(registeredCourses)):
-       subData['sub%d'%(i+1)] = registeredCourses[i].course.code
-       subData['sub%d_fullForm'%(i+1)] = registeredCourses[i].course.name
+       course = {}
+       course['code'] = registeredCourses[i].course.code
+       course['name'] = registeredCourses[i].course.name
+       courses.append(course)
+    subData['courses'] = courses
   except ObjectDoesNotExist:
     return JsonResponse({'nos':0 , 'error':'Object doesn\'t exist.'})
   return JsonResponse(subData)
