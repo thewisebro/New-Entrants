@@ -51,6 +51,10 @@ lectutApp.config(['$locationProvider','$routeProvider',
         templateUrl: 'views/partials/common-course-home.html',
         controller: 'CourseHomeCtrl'
       }).
+      when('/404', {
+        templateUrl: '404.html',
+        controller: 'FourNotCtrl'
+      }).
       /*when('/course/:courseId/', {
         templateUrl: 'views/partials/course-detail.html',
         controller: 'CourseDetailCtrl'
@@ -80,8 +84,12 @@ lectutApp.config(['$locationProvider','$routeProvider',
         controller: 'FacultyCtrl'
       }).
       otherwise({
-        redirectTo: '/'
+        redirectTo:'/404'
       });
     //$locationProvider.html5Mode(true);
-  }]);
+  }])
 
+ .config(['$httpProvider',function($httpProvider) {
+      //Http Intercpetor to check auth failures for xhr requests
+      $httpProvider.interceptors.push('authHttpResponseInterceptor');
+  }]);
