@@ -259,3 +259,31 @@ def get_branches_for_educational_details() :
 def ContactValidator(value):
   if not str(value).isdigit():
     raise ValidationError("Contact number should contain only numerical digits.")
+
+def previous_sem(curr_sem):
+  ''' curr_sem = "UG20" -> previous_sem = "UG11" '''
+  try:
+    disp = curr_sem[:2]
+    if disp not in ["UG","PG"]:
+      disp = "PHD"
+    current_sem_code = curr_sem[-2:]
+    current_sem_code_year = current_sem_code[0]
+    current_sem_code_sem = current_sem_code[1]
+    try:
+      if current_sem_code_sem == "1":
+        prev_sem_code_sem = "0"
+        prev_sem_code_year = current_sem_code_year
+      else:
+        prev_sem_code_year = str(int(current_sem_code_year)-1)
+        prev_sem_code_sem = "1"
+      if prev_sem_code_year == "0":
+        return ""
+      return disp+prev_sem_code_year+prev_sem_code_sem
+    except valueerror:
+      return curr_sem
+  except:
+    if curr_sem == "":
+      return curr_sem
+    if curr_sem == "0":
+      return curr_sem
+

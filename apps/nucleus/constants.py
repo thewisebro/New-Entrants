@@ -74,11 +74,12 @@ channeli_links = [
   {'name':'Mess Feedback','url':'/messmenu/feedback/'},
   {'name':'Smart Card Registration','url':'/genforms/'},
   {'name':'Scholarship Form','url':'/scholarships/mcm/'},
-  {'name':'LAN Registration','url':'/wifi/'},
+  #{'name':'LAN Registration','url':'/wifi/'},
   {'name':'Telephone Directory','url':'/static/pdfs/directoryeng15022015.pdf'},
   {'name':'Meeting Section','url':'/meeting_minutes/'},
   {'name':'Dairy Reports','url':'/meeting_minutes/dairy.php'},
   {'name':'Forms','url':'/forms/'},
+  {'name':'IITR Logo','url':'/static/images/iitr_logo.jpg'},
   #{'name':'Scholarship Form','url':'/mcm/mcm/'},
 ]
 

@@ -66,6 +66,7 @@ def websitebrowser(request,path):
   if not os.path.exists(MEDIA_ROOT+'facapp/websites/'+request.user.username):
     os.chdir(MEDIA_ROOT+'facapp/websites/')
     os.mkdir(request.user.username)
+  if not os.path.exists(MEDIA_ROOT+'facapp/websites/'+request.user.username+'/Website'):
     os.chdir(MEDIA_ROOT+'facapp/websites/'+request.user.username)
     os.mkdir('Website')
 

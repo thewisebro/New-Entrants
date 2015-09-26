@@ -102,20 +102,10 @@ class Profile(forms.ModelForm):
                'passport_no', 'nearest_station', 'local_guardian_name',
                'local_guardian_address', 'local_guardian_contact_no',
                'physically_disabled', 'fulltime', 'resident', 'license_no',
-               'category', 'home_contact_no', 'birth_date')
-  birth_date = forms.DateField(required = True, widget=forms.DateInput(attrs={'class':'iDateField'}))
+               'category', 'home_contact_no')
+  birth_date = forms.CharField(required = False)
 
 class EducationalFormset(BaseModelFormSet):
-  def clean(self):
-    super(EducationalFormset, self).clean()
-    courses = []
-    for form in self.forms:
-      if not form.empty_permitted:
-        courseField = form.cleaned_data['course']
-        if not courseField in courses:
-          courses.append(courseField)
-        else:
-          raise forms.ValidationError("Same courses is not allowed")
     pass
 
 class Contact(forms.ModelForm):
