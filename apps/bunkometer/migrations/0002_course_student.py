@@ -7,14 +7,15 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bunkometer', '0002_auto_20150913_0144'),
+        ('nucleus', '0013_auto_20150926_2204'),
+        ('bunkometer', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='timetable',
-            name='bunk',
-            field=models.IntegerField(default=0),
+            model_name='course',
+            name='student',
+            field=models.ForeignKey(to='nucleus.Student', null=True),
             preserve_default=True,
         ),
     ]

@@ -3,6 +3,7 @@ from nucleus.models import Student
 # Create your models here.
 
 class Course(models.Model):
+  student = models.ForeignKey(Student, null=True)
   course_code = models.CharField(max_length = 100, primary_key = True)
   course_name = models.CharField(max_length = 200)
   def __unicode__(self):

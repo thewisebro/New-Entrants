@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseServerError
 from django.http import JsonResponse
-from models import Bunk,TimeTable
+from models import Bunk,TimeTable, Course
 from nucleus.models import RegisteredCourse,Student,User
 from django.db.models.base import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
@@ -69,10 +69,10 @@ def check_session(request):
    logger.info("nucleus -> peoplesearch -> check_session: , error: "+ str(e))
 
 #  response = HttpResponse(json.dumps(result), contenttype='application/json')
- c.append(result)
+# c.append(result)
 #  for key, value in HEADERS.iteritems():
 #    response[key] = value
- return HttpResponse(c)
+ return result
 
 @csrf_exempt
 def channeli_login(request):
@@ -101,7 +101,7 @@ def channeli_login(request):
     result['success'] = "YES"
     result['session_key'] = make_user_login(request,user)
   else:
-    result['success'] = "USER NO"
+    result['success'] = "NO"
 #response = HttpResponse(result)
 # for key, value in HEADERS.iteritems():
 #   result[key] = value
@@ -109,6 +109,8 @@ def channeli_login(request):
   print c
   return HttpResponse(c)
 
+
+###################################################################
 
 def bunkometer(request):
   return HttpResponse('So, started with bunkometer django part!')
@@ -148,113 +150,85 @@ def getBunks(request,username):
     return JsonResponse({'nos':0,'error':'Object doesn\'t exist.'})
   return JsonResponse(jsonObj)
 
-def day(x):
-  if x is 0:
-    return 'Mon'
-  if x is 1:
-    return 'Tues'
-  if x is 2:
-    return 'Wed'
-  if x is 3:
-    return 'Thurs'
-  if x is 4:
-    return 'Fri'
-  return 'Unknown'
-
-
-def times(x):
-  if x is 0:
-    return '8-9'
-  elif x is 1:
-    return '9-10'
-  elif x is 2:
-    return '10-11'
-  elif x is 3:
-    return '11-12'
-  elif x is 4:
-    return '12-1'
-  elif x is 5:
-    return '1-2'
-  elif x is 6:
-    return '2-3'
-  elif x is 7:
-    return '3-4'
-  elif x is 8:
-    return '4-5'
-  elif x is 9:
-    return '5-6'
-  return 'Invalid time'
-
-
 @csrf_exempt
 def saveTimeTable(request,username):
+   ans = {'sucess':'NO'}
    try:
      student = Student.objects.get(user__username=username)
      TimeTable.objects.filter(student__user__username=username).delete()
-     c=[]
-     ans = {'success':"NO"}
      if request.method == 'POST':
        result = check_session(request)
        if result['msg']=='YES':
          try:
           json_data = json.loads(request.body)
+          print len(json_data)
           for i in range(len(json_data)):
             day = json_data[i]['day']
             sche = json_data[i]['schedule']
             for j in range(len(sche)):
               time = sche[j]['time']
               cell = sche[j]['cell']
-              cell['courseCode']
+              print day, time, cell['courseCode']
               TimeTable.objects.create(student=student,day=i,course_code=cell['courseCode'],course_name = cell['courseName'],class_type=cell['classType'],bunk=cell['bunk'],time=time)
-          for i in range(5):
-            print day(i)
-            dayData = json_data['%d'%i]
-            for j in range(10):
-              TimeTable.objects.create(student=student,day=i,course_code=dayData['%d'%j]['courseCode'],class_type=dayData['%d'%j]['classType'],time=j)
-              print times(j)
-              print dayData['%d'%j]['subCode'],dayData['%d'%j]['classType']
-              ans['success']="YES"
-              c.append(ans)
+            ans['success']="YES"
+            ans['mesage'] = "Successfully saved to Cloud."
+          return JsonResponse(ans)
          except KeyError:
-            return HttpResponseServerError("Malformed data!")
-         return HttpResponse(c)
+            ans['message'] = "Failed because of Key Error."
+            return JsonResponse(ans)
      else:
-       return HttpResponse(c)
+       ans['message'] = "Failed: Not a POST request."
+       return JsonResponse(ans)
    except ObjectDoesNotExist:
-      return HttpResponse('Student doesn\'t exist.')
+      ans['message'] = "Required student doesn\'t exist."
+      return JsonResponse(ans)
 
 
 @csrf_exempt
 def saveBunks(request,username):
+  ans = {'success':'NO'}
   try:
+    print 'bunks'
     student = Student.objects.get(user__username=username)
-    Bunk.objects.filter(student=student).delete()
-    jsondata = json.loads(request.body)
-    print jsondata
-    subjects = jsondata.keys()
-    print subjects
-    for sub in subjects:
-      Bunk.objects.create(student=student,subject=sub,lec_bunk=jsondata[sub]['lec'],tut_bunk=jsondata[sub]['tut'],prac_bunk=jsondata[sub]['prac'])
+    Bunk.objects.filter(student__user__username=username).delete()
+    bunksData = json.loads(request.body)
+#print JsonResponse(bunksData) 
+    for courses in bunksData:
+       bunk = courses['bunk']
+       course = courses['course']
+       Bunk.objects.create(student = student, course_code = course['code'], lec_bunk = bunk['lec'], lec_total = bunk['lecTotal'], tut_bunk = bunk['tut'], tut_total = bunk['tutTotal'], prac_bunk = bunk['prac'], prac_total = bunk['pracTotal'])
+
   except (ObjectDoesNotExist,KeyError):
-    return HttpResponse("Student %s not found"%username)
-  return HttpResponse('Saved the bunks.')
+    ans['message'] = "Failed: User doesn't exist OR Server error."
+    return JsonResponse(ans)
+  ans['message'] = "Successfully saved the bunks to cloud."
+  ans['success'] = "YES"
+  return JsonResponse(ans)
+
+@csrf_exempt
+def saveCourses(request, username):
+  ans = {'success': "NO"}
+  try:
+     print 'courses'
+     courses = json.loads(request.body)
+     print 'Courses number: ',len(courses)
+     student = Student.objects.get(user__username = username)
+     Course.objects.filter(student__user__username = username).delete()
+     for course in courses:
+        print course['code'], course['name']
+        Course.objects.create(student = student, course_code = course['code'], course_name = course['name'])
+     ans['success'] = 'YES'
+     ans['message'] = 'Successfully saved to cloud.'
+     return JsonResponse(ans)
+  except Exception as e:
+     ans['message'] = '%s (%s)' % (e.message, type(e))
+     return JsonResponse(ans)
 
 def getTimeTable(request,username):
+  json = {}
   try:
     student = Student.objects.get(user__username=username)
-    json = {}
     time_table = TimeTable.objects.filter(student=student)
-#print time_table
-    for i in range(5):
-      day_schedule={}
-      for j in range(10):
-        cell = time_table.get(day=day(i),time=times(j)) 
-        day_schedule['%d'%j] = {'code':cell.subject,'class_type':cell.class_type}
-      json['%d'%i] = day_schedule
-    for i in range(5):
-      for j in range(10):  
-        cell = json['%d'%i]['%d'%j]
-        print cell['code'],cell['class_type']
-  except (ObjectDoesNotExist): 
-    return HttpResponse('Invalid student %s, or KeyError in timetable.'%username)
+  except:
+    return HttpResponse('bhup')
   return JsonResponse(json)

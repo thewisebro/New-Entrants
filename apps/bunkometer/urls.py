@@ -8,5 +8,6 @@ urlpatterns=patterns('',
     url('^getbunks/(?P<username>\d+)/$',getBunks),
     url('^savetimetable/(?P<username>\d+)/$',saveTimeTable),
     url('^savebunks/(?P<username>\d+)/$',saveBunks),
+    url('^savecourses/(?P<username>\d+)/$', saveCourses),
     url('^gettimetable/(?P<username>\d+)/$',getTimeTable),
 )
