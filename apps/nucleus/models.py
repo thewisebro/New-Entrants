@@ -95,7 +95,7 @@ class UserPhoto(CropImage):
 
 def user_photo_upload(instance,filename):
   if hasattr(instance,'faculty'):
-    return 'faculty/photo/'+filename
+    return 'facapp/photos/'+filename
   return 'nucleus/photo/'+filename
 
 class User(AbstractUser, models.Model):
