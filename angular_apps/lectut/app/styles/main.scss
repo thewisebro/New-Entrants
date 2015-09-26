@@ -296,6 +296,9 @@ body {
       font-size: 13px;
       background: #F1F1F1;
       padding: 2px 8px;
+      >span{
+        text-transform: lowercase;
+      }
     }
     .subSearchContent{
 
@@ -306,6 +309,7 @@ body {
         color: #848484;
         border-bottom: 1px solid #EEE;
         padding: 10px 8px;
+        position:relative;
         &:hover{
           color: white;
           background: #3498db;
@@ -319,6 +323,7 @@ body {
         span{
           line-height: 40px;
           padding-left: 10px;
+          position:absolute;
         }
       }
       .courseSearchIndi{
@@ -1384,6 +1389,7 @@ outline: 0px;
 }
 
 #courseFilterType{
+max-width:220px;
 position: absolute;
 top: 20px;
 right: 151px;
@@ -1477,6 +1483,7 @@ table.dataTable {
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate{
   float: left;
   margin-left: 20px;
+  font-size: 13px;
 }
 
 table.dataTable thead th,
@@ -1536,7 +1543,6 @@ table.dataTable tfoot td {
   >label{
     font-size:14px;
     color: $g13;
-    margin-left:20px; 
     select{
       border-radius: 13px;
       height: 25px;
@@ -1618,6 +1624,27 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
 table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border tbody tr:first-child td, table.dataTable.display tbody tr:first-child th, table.dataTable.display tbody tr:first-child td {
   border-top: none;
   border-top: 1px solid #EEE;
+}
+
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+  color:#9E9E9E !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+        color: #333 !important;
+    border: 1px solid #cacaca;
+    border-radius: 47px;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, white), color-stop(100%, #dcdcdc));
+    background: -webkit-linear-gradient(top, white 0%, #dcdcdc 100%);
+    background: -moz-linear-gradient(top, white 0%, #dcdcdc 100%);
+    background: -ms-linear-gradient(top, white 0%, #dcdcdc 100%);
+    background: -o-linear-gradient(top, white 0%, #dcdcdc 100%);
+    background: linear-gradient(to bottom, white 0%, #dcdcdc 100%);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+  border-radius: 300px;
 }
 // members display
 

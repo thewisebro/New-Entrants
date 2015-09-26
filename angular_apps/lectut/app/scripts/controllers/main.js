@@ -665,8 +665,8 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
    ).withOption('createdRow', function(row, data, dataIndex) {
    // Recompiling so we can bind Angular directive to the DT
        $compile(angular.element(row).contents())($scope);
-   }).withOption('paging',false).withOption('compact','true');
-   //.withPaginationType('full_numbers');
+   }).withOption('paging',true).withOption('compact','true')
+   .withPaginationType('full_numbers');
  
    $scope.dtColumns = [
              /*DTColumnBuilder.newColumn(null).withTitle('<div type="checkbox">Mark</div>').notSortable()
@@ -881,6 +881,7 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
     var promiseMembers = LoadOnePost.getOnePost($routeParams.courseId,$routeParams.postId);
     promiseMembers.then(function(d){
       $scope.onePost = d.post;
+      $scope.is_member = d.in_batch;
       //console.log(d);
     });
 
@@ -1073,8 +1074,8 @@ lectutApp.controller('FacultyCtrl', ['$scope','$routeParams','$rootScope','$loca
    ).withOption('createdRow', function(row, data, dataIndex) {
    // Recompiling so we can bind Angular directive to the DT
        $compile(angular.element(row).contents())($scope);
-   }).withOption('paging',false).withOption('compact','true');
-   //.withPaginationType('full_numbers');
+   }).withOption('paging',true).withOption('compact','true')
+   .withPaginationType('full_numbers');
  
    $scope.dtColumns = [
              DTColumnBuilder.newColumn(null).withTitle('<span>File Name</span>')

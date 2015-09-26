@@ -311,7 +311,6 @@ app.service('Comments', ['$http','$q','ngNotify',
         };
 }]);
 
-
 app.service('LoadFacultyData', ['$http','$q','ngNotify',
       function($http, $q, ngNotify){
         var deferred;
