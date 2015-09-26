@@ -72,6 +72,25 @@ def get_post_dict(post):
     files.append(document)
   return {'post':post,'files':files}
 
+def authenticate( user , batch_id ):
+  currentBatch = Batch.objects.get(id = batch_id)
+  userType = getUserType(user)
+  if userType == "0":
+    student = user.student
+    students = currentBatch.students.all()
+    if student in students:
+      return True
+    else:
+      return False
+
+  if userType == "1":
+    faculty = user.faculty
+    faculties = currentBatch.faculties.all()
+    if faculty in faculties:
+      return True
+    else:
+      return False
+
 
 @csrf_exempt
 @CORS_allow
@@ -128,7 +147,7 @@ def latest_feeds(request):
   return HttpResponse (json.dumps({'posts':posts, 'userType':userType}),content_type='application/json')
 
 
- '''When a user views a specific batch, this view is used to send him the necessary data depending on his credentials'''  
+'''When a user views a specific batch, this view is used to send him the necessary data depending on his credentials'''
 @csrf_exempt
 @CORS_allow
 #@login_required
@@ -237,11 +256,12 @@ def uploadedFile(request , batch_id):
       return HttpResponse(json.dumps({'msg':'Invalid Course. Please contact IMG if problem persists' , 'status':102}), content_type='application/json')
 
 #    data = request.POST.get('formText','')
+    if not authenticate(request.user , batch_id):
+       return HttpResponse(json.dumps({'msg':'User is not a member of given course. Please contact IMG if problem persists' , 'status':102}), content_type='application/json')
     data = allData['formText']
     privacy = False
     uploadTypes = allData['typeData']
     documents = request.FILES.getlist('file')
-    import pdb;pdb.set_trace()
     extra = request.POST.getlist('extra','')
     if not data and not documents:
       return HttpResponse(json.dumps({'msg':'Empty posts are not allowed','status':101}), content_type='application/json')
@@ -306,7 +326,7 @@ def getFileType(file_name):
       file_type="sheet"
     elif extension in ['doc','docx','odt','rtf']:
       file_type="doc"
-    elif extension in ['sh','dat','bash']:
+    elif extension in ['sh','dat','bash','exe']:
       file_type="dangerous"
     else:
       file_type="other"
