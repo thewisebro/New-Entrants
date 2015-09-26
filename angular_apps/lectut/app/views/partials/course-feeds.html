@@ -1,7 +1,7 @@
 <div class="courseFeeds">
     
   <div class="createPost">
-    <div class="uploadBox" ng-show="logIn" style="border-top: 1px solid #DDD;padding-top:20px;">
+    <div class="uploadBox" ng-show="logIn && is_member == true" style="border-top: 1px solid #DDD;padding-top:20px;">
     <div class="cPPic">
        <img ng-src="{[base_domain]}{[auth.user.photo]}"></img> 
     </div>
@@ -153,7 +153,12 @@
       <div class="postData">
           <div class="postUserNameTime">
             <div class="postUser">
-              <span class="postUserName"><a ng-href="#/faculty/{[post.post.upload_user_id]}/">{[post.post.upload_user]}</a></span>
+              <span ng-if="post.post.userType == '1'" class="postUserName">
+                <a ng-href="#/faculty/{[post.post.upload_user_id]}/">{[post.post.upload_user]}</a>
+              </span>
+              <span ng-if="post.post.userType == '0'" class="postUserName">
+                {[post.post.upload_user]}
+              </span>
               <span class="removeFeedPost" ng-show="logIn && auth.user.name == post.post.upload_user" ng-click="removeFeedPost(post.post.id, $index)">
                   <i class="fa fa-times-circle-o"></i>
               </span>

@@ -1142,6 +1142,14 @@ body {
                               //text-decoration:underline;
                               //color: $g19;
                             }
+                            >a{
+                              color: $th1;
+                              text-decoration:none;
+                              &:hover{
+                                text-decoration:underline;
+                                //color: $g19;
+                              }
+                            }
                          }
                          .removeFeedPost{
                             color: rgb(177, 177, 177);
@@ -2220,3 +2228,6 @@ border: 1px solid #D9D9D9;
     font-size: 18px;
 }
 
+.nameLectut{
+  
+}

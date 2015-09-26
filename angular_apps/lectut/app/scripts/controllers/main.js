@@ -118,6 +118,7 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
          //console.log(d);
          $scope.auth = d;
          $rootScope.commonPosts = d.posts;
+
          console.log("jome");
          console.log($rootScope.commonPosts);
          //console.log("this is auth");
@@ -182,7 +183,8 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
 
     promiseCourseData.then(function (d) {
        $scope.posts = d.posts;
-       //console.log(d);
+       $scope.is_member = d.in_batch;
+       console.log("asdsadsad");
     });
   }
 
@@ -518,7 +520,8 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
   var promiseCourseData = CourseDetails.getCourseDetailsData($scope.courseId);
     promiseCourseData.then(function (d) {
        $scope.posts = d.posts;
-       //console.log(d);
+       $scope.is_member = d.in_batch;
+       //console.log("a");
     });
 
   $scope.getFeedData = function(id){
@@ -527,7 +530,8 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 
     promiseCourseData.then(function (d) {
        $scope.posts = d.posts;
-       //console.log(d);
+       $scope.is_member = d.in_batch;
+       //console.log("b");
     });
   }
   
@@ -1050,10 +1054,15 @@ lectutApp.controller('FacultyCtrl', ['$scope','$routeParams','$rootScope','$loca
         var allFiles = [];
         for (var key in d.Files) {
            if (d.Files.hasOwnProperty(key)) {
+               // Modelling & Simulation£$£$2323
+               var keyArray = key.split(";;;;");
+               var key_courseName = keyArray[0];
+               var key_courseId = keyArray[1];
                var obj = d.Files[key];
-               courseNamekeys.push(key);
+               courseNamekeys.push(key_courseName);
                for(var i=0;i<obj.length;i++){
-                  obj[i].course_name = key;
+                  obj[i].course_name = key_courseName;
+                  obj[i].course_id = key_courseId;
                }
                allFiles = allFiles.concat(obj);
             }
@@ -1094,7 +1103,7 @@ lectutApp.controller('FacultyCtrl', ['$scope','$routeParams','$rootScope','$loca
                    html += '<i class="fa fa-file-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                 html += '<span class="fileShowDownloads">Downloads: '+full.download_count+'</span>';
-                html += '<div style="display: inline-block; float:right;margin-left:10px;"><a style="text-decoration:none" ng-href="#/course/{[courseId.courseId]}/files/'+full.id+'""><i class="fa fa-external-link fileSetting"></i></a></div>';
+                html += '<div style="display: inline-block; float:right;margin-left:10px;"><a style="text-decoration:none" ng-href="#/course/'+ full.course_id+'/files/'+full.id+'""><i class="fa fa-external-link fileSetting"></i></a></div>';
                 return html;
              }),
             // DTColumnBuilder.newColumn('description').withTitle('Name'),
