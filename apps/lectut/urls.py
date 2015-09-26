@@ -34,7 +34,7 @@ urlpatterns = patterns('',
 
         url(r'^events/$', views.getReminder, name='getReminder'),
         url(r'^comments/(?P<post_id>\w+)/$', views.post_comments, name='post_comments'),
-        url(r'^add_comment/(?P<post_id>\w+)/$', views.add_comments, name='add_comments'),
+        url(r'^add_comment/(?P<post_id>\w+)/$', views.add_comment, name='add_comment'),
 
         url(r'^login/$','django.contrib.auth.views.login' , {'template_name':'lectut/login.html'}),
         url(r'^logout/$','django.contrib.auth.views.logout' , {'next_page':'/lectut/login'}),

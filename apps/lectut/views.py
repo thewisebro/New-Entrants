@@ -159,7 +159,7 @@ def coursepage(request, batch_id):
 #    usrname = request.POST.get('user','harshithere')
 #    user = User.objects.get(username=usrname)
     if not Batch.objects.filter(id=batch_id).exists():
-      return HttpResponse(json.dumps({'msg':'This batch doesnot exist','status':101}),content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'This batch doesnot exist','lectut_status':101}),content_type='application/json')
     userBatch = Batch.objects.get(id=batch_id)
     posts = []
     request.session['batchId'] = batch_id
@@ -183,7 +183,7 @@ def coursepage(request, batch_id):
                'batch':batch_dict(userBatch),
                'userType':userType,
                'in_batch':in_batch,
-               'status':100}
+               'lectut_status':100}
 
     return HttpResponse(json.dumps(context),content_type='application/json')
 #    return render( request, 'lectut/image.html', context)
@@ -235,7 +235,7 @@ def uploadFile(request , batch_id):
 def uploadedFile(request , batch_id):
   if request.method == 'POST':
     allData = json.loads(request.POST['data'])
-    status = 100
+    lectut_status = 100
     user = request.user
 #    usrname = allData['user']
 #    user = User.objects.get(username=usrname)
@@ -246,18 +246,18 @@ def uploadedFile(request , batch_id):
       course = Course.objects.get(id = batch_id)
       userBatch = None
     else:
-      return HttpResponse(json.dumps({'msg':'Invalid Course. Please contact IMG if problem persists' , 'status':101}), content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'Invalid Course. Please contact IMG if problem persists' , 'lectut_status':101}), content_type='application/json')
 
 #    data = request.POST.get('formText','')
     if not authenticate(request.user , batch_id):
-       return HttpResponse(json.dumps({'msg':'User is not a member of given course. Please contact IMG if you wish to post' , 'status':101}), content_type='application/json')
+       return HttpResponse(json.dumps({'msg':'User is not a member of given course. Please contact IMG if you wish to post' , 'lectut_status':101}), content_type='application/json')
     data = allData['formText']
     privacy = False
     uploadTypes = allData['typeData']
     documents = request.FILES.getlist('file')
     extra = request.POST.getlist('extra','')
     if not data and not documents:
-      return HttpResponse(json.dumps({'msg':'Empty posts are not allowed','status':101}), content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'Empty posts are not allowed','lectut_status':101}), content_type='application/json')
     if getUserType(user) == "1":
       privacy = allData['privacy']
     files,msg = [],[]
@@ -269,18 +269,18 @@ def uploadedFile(request , batch_id):
         new_post = Post(upload_user = user, course = course, content = data , privacy = privacy)
       new_post.save()
     except:
-      return HttpResponse(json.dumps({'msg':'Cannot save post','status':102}), content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'Cannot save post','lectut_status':102}), content_type='application/json')
     for document in documents:
       file_type = getFileType(document)
 #      fileData = json.loads(extra[counter])
       if file_type =='dangerous':
-        msg.append({'msg':str(document)+' : File type is dangerous. Cant save it on server','status':101})
+        msg.append({'msg':str(document)+' : File type is dangerous. Cant save it on server','lectut_status':101})
       if file_type =='Video' and  document._size>MAX_VIDEO_SIZE:
-        msg.append({'msg':str(document)+' : Video too large.Must be smaller than 20MB','status':101})
+        msg.append({'msg':str(document)+' : Video too large.Must be smaller than 20MB','lectut_status':102})
       if file_type =='pdf' and  document._size>MAX_PDF_SIZE:
-        msg.append({'msg':str(document)+' : File too large.Must be smaller than 20MB','status':101})
+        msg.append({'msg':str(document)+' : File too large.Must be smaller than 20MB','lectut_status':102})
       elif document._size>MAX_IMAGE_SIZE:
-        msg.append({'msg':str(document)+' : Image too large.Must be smaller than 10MB','status':101})
+        msg.append({'msg':str(document)+' : Image too large.Must be smaller than 10MB','lectut_status':102})
       else:
         new_document = Uploadedfile(post =new_post, upload_file = document, description = str(document), file_type=file_type, upload_type = uploadTypes[counter])
         new_document.save()
@@ -289,10 +289,10 @@ def uploadedFile(request , batch_id):
     new_post.save()
     if msg !='':
 #      response =  HttpResponse(json.dumps(msg), content_type='application/json')
-      status = 101
+      lectut_status = 101
     new_post = new_post.as_dict()
     complete_post = {'post':new_post,'files':files}
-    response =  HttpResponse(json.dumps({'complete_post':complete_post,'status':status , 'messages':msg}), content_type='application/json')
+    response =  HttpResponse(json.dumps({'complete_post':complete_post,'lectut_status':lectut_status , 'messages':msg}), content_type='application/json')
   else:
     response = HttpResponse('It is not a post request')
   return response
@@ -335,9 +335,9 @@ def download_file(request, file_id):
     if Uploadedfile.file_objects.filter(id = file_id).exists():
       download_file = Uploadedfile.file_objects.get(id = file_id)
     else:
-      return HttpResponse(json.dumps({'msg':'File has been deleted' , 'status':101}), content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'File has been deleted' , 'lectut_status':101}), content_type='application/json')
   else:
-    return HttpResponse(json.dumps({'msg':'No file found with this id' , 'status':101}), content_type='application/json')
+    return HttpResponse(json.dumps({'msg':'No file found with this id' , 'lectut_status':101}), content_type='application/json')
 
   path_to_file = os.path.join(MEDIA_URL, str(download_file.upload_file))
   download_file_open = download_file.upload_file.path
@@ -400,7 +400,7 @@ def batch_data(request , batch_id):
   if Batch.objects.filter(id = batch_id).exists():
     batch = Batch.objects.get(id = batch_id)
     batch_info = batch_dict(batch)
-    response = HttpResponse(json.dumps({'batch_info':batch_info , 'status':100}), content_type='application/json')
+    response = HttpResponse(json.dumps({'batch_info':batch_info , 'lectut_status':100}), content_type='application/json')
   else:
     response = HttpResponse(json.dumps({'msg':'The batch doesnot exist' , 'status':101}), content_type='application/json')  
   return response
@@ -415,15 +415,15 @@ def get_post(request , batch_id , post_id):
       post = Post.post_objects.get(id = post_id)
       complete_post = get_post_dict(post)
       if user.is_authenticated():
-        return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize() , 'status':100}), content_type='application/json')
+        return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize() , 'lectut_status':100}), content_type='application/json')
       else:
-        return HttpResponse(json.dumps({'post':complete_post , 'user_info':'' , 'status':100}), content_type='application/json')
+        return HttpResponse(json.dumps({'post':complete_post , 'user_info':'' , 'lectut_status':100}), content_type='application/json')
     else:
       msg = 'Post has been deleted'
   else:
     msg = 'Post doesnot exist'
 
-  response = HttpResponse(json.dumps({'msg':msg , 'status':101}), content_type='application/json')
+  response = HttpResponse(json.dumps({'msg':msg , 'lectut_status':101}), content_type='application/json')
   return response
 
 
@@ -438,15 +438,15 @@ def get_file(request , batch_id , file_id):
       user_info = user.serialize()
       File = File.as_dict()
       if user.is_authenticated():
-        return HttpResponse(json.dumps({'file':File , 'user_info':user_info , 'user_id':str(user.id) , 'userType':str(getUserType(user)) , 'status':100}), content_type='application/json')
+        return HttpResponse(json.dumps({'file':File , 'user_info':user_info , 'user_id':str(user.id) , 'userType':str(getUserType(user)) , 'lectut_status':100}), content_type='application/json')
       else:
-        return HttpResponse(json.dumps({'file':File , 'user_info':'' , 'status':100}), content_type='application/json')
+        return HttpResponse(json.dumps({'file':File , 'user_info':'' , 'lectut_status':100}), content_type='application/json')
     else:
       msg = 'File has been deleted'
   else:
     msg = 'File doesnot exist'
 
-  response = HttpResponse(json.dumps({'msg':msg , 'status':101}), content_type='application/json')
+  response = HttpResponse(json.dumps({'msg':msg , 'lectut_status':101}), content_type='application/json')
   return response
 
 
@@ -455,7 +455,7 @@ def get_file(request , batch_id , file_id):
 #@login_required
 def deleteFile(request , file_id):
   user = request.user
-  status = 101
+  lectut_status = 101
   if Uploadedfile.file_objects.filter(pk=file_id).exists():
     fileToDelete = Uploadedfile.objects.get(pk=file_id)
     post = fileToDelete.post
@@ -464,19 +464,19 @@ def deleteFile(request , file_id):
       try:
         fileToDelete.delete()
         msg = 'File has been deleted'
-        status = 100
+        lectut_status = 100
         counter = Uploadedfile.file_objects.all().filter(post = post).count()
         if counter ==0 and post.content =='':
           post.delete()
           msg = 'The post has been deleted as well'
       except:
         msg = 'Some error Occured'
-        status = 101
+        lectut_status = 102
     else:
       msg = 'You are not authorised to delete this file. This shall be reported'
   else:
     msg='File doesnot exist'
-  response = HttpResponse(json.dumps({'msg':msg,'status':status}), content_type='application/json')
+  response = HttpResponse(json.dumps({'msg':msg,'lectut_status':lectut_status}), content_type='application/json')
   return response
 #  return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
@@ -485,7 +485,7 @@ def deleteFile(request , file_id):
 @CORS_allow
 def deletePost(request , post_id):
   user = request.user
-  status = 101
+  lectut_status = 101
   if Post.post_objects.filter(pk=post_id).exists():
     postToDelete = Post.objects.get(pk=post_id)
     if user.in_group('faculty') or user == postToDelete.upload_user:
@@ -495,15 +495,15 @@ def deletePost(request , post_id):
         for afile in files:
           afile.delete()
         msg = 'Post has been deleted'
-        status = 100
+        lectut_status = 100
       except:
         msg = 'Kuch katta ho gaya'
-        status = 101
+        lectut_status = 101
     else:
       msg = 'You are not authorised to delete this post. This shall be reported'
   else:
     msg='Post doesnot exist'
-  response = HttpResponse(json.dumps({'msg':msg , 'status':status}), content_type='application/json')
+  response = HttpResponse(json.dumps({'msg':msg , 'lectut_status':lectut_status}), content_type='application/json')
   return response
 
 # Not used currently
@@ -547,7 +547,7 @@ def userdownloads(request , batch_id):
 @CORS_allow
 def batchMembers(request , batch_id):
   if not Batch.objects.filter(id = batch_id).exists():
-    return HttpResponse(json.dumps({'msg':'Batch Doesnot exist' , 'status':101}), content_type="application/json")
+    return HttpResponse(json.dumps({'msg':'Batch Doesnot exist' , 'lectut_status':101}), content_type="application/json")
   currentBatch = Batch.objects.get(id = batch_id)
   students = currentBatch.students.all()
   users = map(lambda x:x.user, students)
@@ -563,7 +563,7 @@ def batchMembers(request , batch_id):
     user = user.serialize()
     faculties.append(user)
 
-  members = {'students':students, 'faculties':faculties , 'status':100}
+  members = {'students':students, 'faculties':faculties , 'lectut_status':100}
 
   return HttpResponse(json.dumps(members), content_type="application/json")
 
@@ -573,7 +573,7 @@ def batchMembers(request , batch_id):
 @CORS_allow
 def get_files(request, batch_id):
   if not Batch.objects.filter(id = batch_id).exists():
-    return HttpResponse(json.dumps({'msg':'Batch Doesnot exist' , 'status':101}), content_type="application/json")
+    return HttpResponse(json.dumps({'msg':'Batch Doesnot exist' , 'lectut_status':101}), content_type="application/json")
   currentBatch = Batch.objects.get(id = batch_id)
   AllFiles = {'lec':[],'tut':[],'exp':[],'sol':[],'que':[]}
   currentFiles = Uploadedfile.file_objects.all().filter(post__batch_id = batch_id)
@@ -598,7 +598,7 @@ def get_files(request, batch_id):
   AllArchives['Solution'] = AllArchives.pop('sol')
   AllArchives['Question'] = AllArchives.pop('que')
 
-  files = {'currentFiles':AllFiles , 'archiveFiles':AllArchives , 'status':100}
+  files = {'currentFiles':AllFiles , 'archiveFiles':AllArchives , 'lectut_status':100}
   return HttpResponse(json.dumps(files), content_type="application/json")
 
 @csrf_exempt
@@ -691,7 +691,7 @@ def search(request):
   final_files = map(lambda result:result.as_dict_disp() if (result is not None and result.deleted == False) else None,upload_files)
   final_batches = map(lambda result:batch_dict_disp(result) ,batches)
 
-  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'final_faculties':final_faculties , 'status':100}
+  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'final_faculties':final_faculties , 'lectut_status':100}
   return HttpResponse(json.dumps(results), content_type="application/json")
 
 
@@ -704,11 +704,11 @@ def join_batch(request , batch_id):
       faculty = request.user.faculty
       batch = Batch.objects.get(id = batch_id)
       batch.faculties.add(faculty)
-      return HttpResponse(json.dumps({'msg':'Successfully Joined Course','status':100}), content_type="application/json")
+      return HttpResponse(json.dumps({'msg':'Successfully Joined Course','lectut_status':100}), content_type="application/json")
     else:
-      return HttpResponse(json.dumps({'msg':'You are not a faculty','status':101}), content_type="application/json")
+      return HttpResponse(json.dumps({'msg':'You are not a faculty','lectut_status':101}), content_type="application/json")
   else:
-    return HttpResponse(json.dumps({'msg':'Some problem occured','status':102}), content_type="application/json")
+    return HttpResponse(json.dumps({'msg':'Some problem occured','lectut_status':102}), content_type="application/json")
 
 
 @csrf_exempt
@@ -720,22 +720,22 @@ def leave_batch(request , batch_id):
       faculty = request.user.faculty
       batch = Batch.objects.get(id = batch_id)
       batch.faculties.remove(faculty)
-      return HttpResponse(json.dumps({'msg':'Successfully Left Course','status':100}), content_type="application/json")
+      return HttpResponse(json.dumps({'msg':'Successfully Left Course','lectut_status':100}), content_type="application/json")
     else:
-      return HttpResponse(json.dumps({'msg':'You are not a faculty','status':101}), content_type="application/json")
+      return HttpResponse(json.dumps({'msg':'You are not a faculty','lectut_status':101}), content_type="application/json")
   else:
-    return HttpResponse(json.dumps({'msg':'Some problem occured','status':102}), content_type="application/json")
+    return HttpResponse(json.dumps({'msg':'Some problem occured','lectut_status':102}), content_type="application/json")
 
 @csrf_exempt
 @CORS_allow
 def faculty_files(request, faculty_id):
   if not User.objects.filter(id = faculty_id).exists():
-    return HttpResponse(json.dumps({'msg':'Faculty Doesnot exist' , 'status':101}), content_type="application/json")
+    return HttpResponse(json.dumps({'msg':'Faculty Doesnot exist' , 'lectut_status':101}), content_type="application/json")
   user = User.objects.get(id = faculty_id)
   try:
     faculty = user.faculty
   except:
-    return HttpResponse(json.dumps({'msg':'User is not a faculty' , 'status':101}), content_type="application/json")  
+    return HttpResponse(json.dumps({'msg':'User is not a faculty' , 'lectut_status':101}), content_type="application/json")  
   All_files = {}
   uploaded_files = Uploadedfile.objects.all().filter(post__upload_user = user)
   for someFile in uploaded_files:
@@ -749,7 +749,7 @@ def faculty_files(request, faculty_id):
       All_files[course_name] = []
     All_files[course_name].append(fileDetails)
 
-  return HttpResponse(json.dumps({'faculty':user.serialize() , 'Files':All_files,'status':100}), content_type="application/json")
+  return HttpResponse(json.dumps({'faculty':user.serialize() , 'Files':All_files,'lectut_status':100}), content_type="application/json")
 
 
     
@@ -785,7 +785,7 @@ def search(request):
   final_files = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,upload_files)
   final_batches = map(lambda result:batch_dict(result) ,batches)
 
-  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'status':100}
+  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'lectut_status':100}
   return HttpResponse(json.dumps(results), content_type="application/json")
 """
 # VIEWS FOR INITIAL REGISTRATION ( Redeundant As of now )
