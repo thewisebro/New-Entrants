@@ -127,6 +127,8 @@ def latest_feeds(request):
     posts.append(get_post_dict(post))
   return HttpResponse (json.dumps({'posts':posts, 'userType':userType}),content_type='application/json')
 
+
+ '''When a user views a specific batch, this view is used to send him the necessary data depending on his credentials'''  
 @csrf_exempt
 @CORS_allow
 #@login_required
@@ -239,6 +241,7 @@ def uploadedFile(request , batch_id):
     privacy = False
     uploadTypes = allData['typeData']
     documents = request.FILES.getlist('file')
+    import pdb;pdb.set_trace()
     extra = request.POST.getlist('extra','')
     if not data and not documents:
       return HttpResponse(json.dumps({'msg':'Empty posts are not allowed','status':101}), content_type='application/json')
@@ -315,13 +318,19 @@ def getFileType(file_name):
 @csrf_exempt
 @CORS_allow
 def download_file(request, file_id):
-  download_file = Uploadedfile.objects.get(id = file_id)
+  if Uploadedfile.objects.filter(id = file_id).exists():
+    if Uploadedfile.file_objects.filter(id = file_id).exists():
+      download_file = Uploadedfile.file_objects.get(id = file_id)
+    else:
+      return HttpResponse(json.dumps({'msg':'File has been deleted' , 'status':101}), content_type='application/json')
+  else:
+    return HttpResponse(json.dumps({'msg':'No file found with this id' , 'status':101}), content_type='application/json')
+
   path_to_file = os.path.join(MEDIA_URL, str(download_file.upload_file))
   download_file_open = download_file.upload_file.path
   file_check = open(download_file_open,"r")
 #mimetype = mimetypes.guess_type(filename)[0]
 
-#  user = User.objects.get(username = 'harshithere')
   if request.user.is_authenticated():
     downloadlog = DownloadLog(uploadedfile=download_file , user = request.user)
     downloadlog.save()
