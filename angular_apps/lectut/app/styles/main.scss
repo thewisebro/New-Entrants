@@ -226,7 +226,7 @@ body {
   .topSearchBox{
     .homeTab{
        float: right;
-       margin-right: -70px;
+       margin-right: 4px;
        font-size: 14px;
        line-height:49px;
        font-family: opensans_semibold;
@@ -1432,12 +1432,12 @@ outline: 0px;
   padding-left: 10px;
 }
 .timeFile{
-  color: #BBBBBB;
+  color: #8E8E8E;
   font-size: 13px;
 }
 .course_name_in_datatable{
   font-size: 13px;
-  color: #BBBBBB;
+  color: #8E8E8E;
 }
 .dt-loading{
   color: rgb(185, 185, 185);
@@ -1461,13 +1461,13 @@ table.dataTable span a {
 
 table.dataTable tbody tr{
   &:hover .fileShowUser{
-    color:#AAA;
+    color:#777;
   }
   &:hover .fileShowDownloads{
-    color:#AAA;
+    color:#777;
   }
   &:hover .timeFile{
-    color:#AAA;
+    color: #777;
   }
 }
 table.dataTable tbody th, table.dataTable tbody td{

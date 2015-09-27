@@ -47,6 +47,11 @@
         <div class="linksRight">
         <ul>
           <li>
+            <a href="https://channeli.in/#helpcenter" class="logOut">
+            Feedback
+            </a>
+          </li>
+          <li>
             <a href="/" class="logOut">
             Channeli
             </a>
@@ -83,7 +88,7 @@
             <div class="subSearchContent" ng-show="searchResults.final_faculties.length != 0">
                   <a ng-href="#/faculty/{[faculty.id]}" ng-repeat="faculty in searchResults.final_faculties | limitTo: 3">
                     <div  ng-click="clearSearch();" class="profSearchIndi">
-                      <img ng-src="{[base_domain]}/{[faculty.photo]}"></img>
+                      <img ng-src="{[base_domain]}{[faculty.photo]}"></img>
                       <span>{[faculty.name]}</span>
                     </div>
                   </a>
