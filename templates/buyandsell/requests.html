@@ -338,11 +338,11 @@
         </thead>
         <tbody>
         {% for row in table_data %}
-        <tr onclick="request_details({{ row.pk }},'{{row.item_name}}')" class="request">
-          <td class="requested-item-name">{{row.item_name}}</td>
-          <td class="requested-item-price">{{row.price_upper}}</td>
-          <td>{{ row.expiry_date|timeuntil }}</td>
-        </tr>
+          <tr onclick="request_details({{ row.pk }},'{{row.item_name}}')" class="request">
+            <td class="requested-item-name">{{row.item_name}}</td>
+            <td class="requested-item-price">{{row.price_upper}}</td>
+            <td>{{ row.expiry_date|timeuntil }}</td>
+          </tr>
         {% endfor %}
         </tbody>
       </table>

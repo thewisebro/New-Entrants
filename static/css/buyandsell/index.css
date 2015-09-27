@@ -813,6 +813,11 @@ textarea
   border-bottom: 1px solid #DDDDDD;
 }
 
+.my-account-requests-table tbody tr
+{
+  cursor: default !important;
+}
+
 .manage-watched-button
 {
   float: right;
