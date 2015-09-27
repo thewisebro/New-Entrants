@@ -10,7 +10,7 @@ os.chdir('media/lectut')
 upload_types=['lec','tut','sol','exp']
 
 for upload_type in upload_types:
-  workbook = xlrd.open_workbook('../../apps/lectut/scripts/old_db/'+upload_type+'.xlsx')
+  workbook = xlrd.open_workbook('/home/apps/channeli/apps/lectut/scripts/old_db/'+upload_type+'.xlsx')
   worksheet = workbook.sheet_by_name('Sheet1')
 
   num_rows = worksheet.nrows - 1
@@ -92,6 +92,55 @@ for upload_type in upload_types:
         ws.write(row,3,str(filename))
         ws.write(row,4,'Couldnot save file :'+str(e))
         row+=1
+      print 'old',course.code
+      new_course_code = ''
+      if len(course.code.split('-')[0])==2:
+        new_course_code = course.code.split('-')[0]+'N'
+        new_course_code += '-'+course.code.split('-')[1]
+        
+
+      if len(course.code.split('-')[0])==3:
+        new_course_code = course.code.split('-')[0][:2]
+        new_course_code += '-'+course.code.split('-')[1]
+
+      c1 = Course.objects.filter(code = new_course_code)
+      if len(c1) == 1:
+        course = c1[0]
+        batch = Batch.objects.get(course=course) 
+        print new_course_code
+        print course
+        print batch
+        print user
+        print Post.objects.filter(course = course).filter(upload_user=user)
+        try:
+          if not Post.objects.filter(course = course).filter(upload_user=user).exists():
+            try:
+              content = 'This post contains all previously uploaded files in your course'
+              new_post = Post(upload_user=user,batch = batch,course = course, content=content, privacy=False)
+              print '\t',
+              print batch
+              new_post.save()
+            except:
+              fail+=1
+              print 'Couldnot create post'
+          else:
+            new_post = Post.objects.filter(course=course, upload_user = user)[0]
+          print new_post
+          print new_post.course
+          file_object = open(filename)
+#        file_object = File(filename)    
+          fileToAdd = Uploadedfile(post = new_post, upload_file = File(file_object), description=filename,upload_type=upload_type,file_type=file_type)
+          fileToAdd.save()
+          print 'Successfully added file:'+str(filename)
+          file_saves +=1
+        except Exception as e:
+          fail +=1
+          print 'Error in saving file:' +str(e)
+          ws.write(row,2,str(curr_row))
+          ws.write(row,3,str(filename))
+          ws.write(row,4,'Couldnot save file :'+str(e))
+          row+=1
+ 
     else:
       print ' Some error in retrieving values'
       progress = True
