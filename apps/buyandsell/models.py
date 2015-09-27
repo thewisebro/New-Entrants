@@ -8,7 +8,7 @@ from crop_image import CropImage
 MEDIA_ROOT = settings.MEDIA_ROOT
 
 
-class MemberPhoto(CropImage):
+class BuyandsellPhoto(CropImage):
   unique_name = 'buyandsell_pic'
   field_name = 'pic'
   width = 188
@@ -16,7 +16,8 @@ class MemberPhoto(CropImage):
 
   @classmethod
   def get_instance(cls, request, pk):
-    pass
+    item = SaleItems.objects.get(pk = pk)
+    return item.itempic
 
   @classmethod
   def get_image_url(cls, image_field):
@@ -55,7 +56,6 @@ class SaleItems(Reportable, models.Model):
   user = models.ForeignKey(User)
   item_name = models.CharField(max_length = MC.TEXT_LENGTH)
   cost = models.IntegerField(max_length = MC.CODE_LENGTH)
-  status = models.CharField(max_length = MC.TEXT_LENGTH, choices=STATUS)
   detail = models.TextField()
   contact = models.CharField(max_length = MC.CODE_LENGTH)
   post_date = models.DateField() # redundant because of datetime_created field. Kept to avoid changes
@@ -71,7 +71,6 @@ class SaleItems(Reportable, models.Model):
 class RequestedItems(Reportable, models.Model):
   user = models.ForeignKey(User)
   item_name = models.CharField(max_length = MC.TEXT_LENGTH)
-  condition = models.CharField(max_length = MC.TEXT_LENGTH, choices=STATUS)
   price_upper = models.IntegerField(max_length = MC.CODE_LENGTH)
   price_lower = models.IntegerField(max_length = MC.CODE_LENGTH, blank= True, default=0)
   post_date = models.DateField()
@@ -111,9 +110,9 @@ class ShowContact(models.Model):
   contact_shown=models.BooleanField(default=True)
 
 
-class Pic(models.Model):
+class ItemPic(models.Model):
   item = models.OneToOneField(SaleItems, primary_key=True)
-  pic =  MemberPhoto.ModelField(
+  pic =  BuyandsellPhoto.ModelField(
                            upload_to = 'buyandsell/pics/',
                            blank = True,
                            null = True,
