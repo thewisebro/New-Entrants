@@ -114,7 +114,7 @@ def channeli_login(request):
 
 def bunkometer(request):
   return HttpResponse('So, started with bunkometer django part!')
-def getCourses(request,username):
+def getRegisteredCourses(request,username):
   try:
     student = Student.objects.get(user__username=username)
     registeredCourses = []
@@ -130,25 +130,46 @@ def getCourses(request,username):
        courses.append(course)
     subData['courses'] = courses
   except ObjectDoesNotExist:
-    return JsonResponse({'nos':0 , 'error':'Object doesn\'t exist.'})
+    return JsonResponse({'nos':0 , 'courses' : [],'error':'Object doesn\'t exist.'})
   return JsonResponse(subData)
 
+def getCourses(request, username):
+  ans = {'nos': 0, 'courses': []}
+  try:
+    student = Student.objects.get(user__username = username)
+    courses = Course.objects.filter(student = student)
+    ans['nos'] = len(courses)
+    for course in courses:
+      json = {}
+      json['code'] = course.course_code
+      json['name'] = course.course_name
+      ans['courses'].append(json)
+    return JsonResponse(ans)
+  except Exception as e:
+    return JsonResponse(ans)
+
 def getBunks(request,username):
+  ans = {'success': 'NO', 'bunks': []}
   try:
     student = Student.objects.get(user__username=username)
     bunks = Bunk.objects.filter(student=student)
-    jsonObj = {}
-    individual={}
-    jsonObj['nos'] = len(bunks)
-    for i in range(len(bunks)):
-      individual={}
-      individual['lec'] = bunks[i].lec_bunk
-      individual['tut'] = bunks[i].tut_bunk
-      individual['prac'] = bunks[i].prac_bunk
-      jsonObj[bunks[i].subject] = individual
-  except ObjectDoesNotExist:
-    return JsonResponse({'nos':0,'error':'Object doesn\'t exist.'})
-  return JsonResponse(jsonObj)
+    for bunk in bunks:
+      json = {}
+      data = {}
+      json['course'] = {}
+      json['course']['code'] = bunk.course_code
+      data['lec'] = bunk.lec_bunk
+      data['lecTotal'] = bunk.lec_total
+      data['tut'] = bunk.tut_bunk
+      data['tutTotal'] = bunk.tut_total
+      data['prac'] = bunk.prac_bunk
+      data['pracTotal'] = bunk.prac_total
+      json['bunk'] = data
+      ans['bunks'].append(json)
+    ans['sucess'] = 'YES'  
+    return JsonResponse(ans)
+  except Exception as e:
+    return JsonResponse(ans)
 
 @csrf_exempt
 def saveTimeTable(request,username):
@@ -170,17 +191,20 @@ def saveTimeTable(request,username):
               cell = sche[j]['cell']
               print day, time, cell['courseCode']
               TimeTable.objects.create(student=student,day=i,course_code=cell['courseCode'],course_name = cell['courseName'],class_type=cell['classType'],bunk=cell['bunk'],time=time)
-            ans['success']="YES"
-            ans['mesage'] = "Successfully saved to Cloud."
+            ans['success'] = 'YES'
+            ans['message'] = 'Successfully saved timetable to Cloud.'
           return JsonResponse(ans)
          except KeyError:
-            ans['message'] = "Failed because of Key Error."
+            ans['message'] = 'Failed because of Key Error.'
             return JsonResponse(ans)
+       else:
+         ans['message'] = 'UNAUTHORIZED'
+         return JsonResponse(ans)
      else:
-       ans['message'] = "Failed: Not a POST request."
+       ans['message'] = 'Failed: Not a POST request.'
        return JsonResponse(ans)
    except ObjectDoesNotExist:
-      ans['message'] = "Required student doesn\'t exist."
+      ans['message'] = 'Required student doesn\'t exist.'
       return JsonResponse(ans)
 
 
@@ -188,6 +212,10 @@ def saveTimeTable(request,username):
 def saveBunks(request,username):
   ans = {'success':'NO'}
   try:
+    result = check_session(request)
+    if result['msg']!='YES':
+      ans['message'] = 'UNAUTHORIZED'
+      return JsonResponse(ans)
     print 'bunks'
     student = Student.objects.get(user__username=username)
     Bunk.objects.filter(student__user__username=username).delete()
@@ -199,16 +227,20 @@ def saveBunks(request,username):
        Bunk.objects.create(student = student, course_code = course['code'], lec_bunk = bunk['lec'], lec_total = bunk['lecTotal'], tut_bunk = bunk['tut'], tut_total = bunk['tutTotal'], prac_bunk = bunk['prac'], prac_total = bunk['pracTotal'])
 
   except (ObjectDoesNotExist,KeyError):
-    ans['message'] = "Failed: User doesn't exist OR Server error."
+    ans['message'] = 'Failed: User doesn\'t exist OR Server error.'
     return JsonResponse(ans)
-  ans['message'] = "Successfully saved the bunks to cloud."
-  ans['success'] = "YES"
+  ans['message'] = 'Successfully saved the bunks to cloud.'
+  ans['success'] = 'YES'
   return JsonResponse(ans)
 
 @csrf_exempt
 def saveCourses(request, username):
-  ans = {'success': "NO"}
+  ans = {'success': 'NO'}
   try:
+     result = check_session(request)
+     if result['msg']!='YES':
+      ans['message'] = 'UNAUTHORIZED'
+      return JsonResponse(ans)
      print 'courses'
      courses = json.loads(request.body)
      print 'Courses number: ',len(courses)
@@ -218,17 +250,37 @@ def saveCourses(request, username):
         print course['code'], course['name']
         Course.objects.create(student = student, course_code = course['code'], course_name = course['name'])
      ans['success'] = 'YES'
-     ans['message'] = 'Successfully saved to cloud.'
+     ans['message'] = 'Successfully saved courses to cloud.'
      return JsonResponse(ans)
   except Exception as e:
      ans['message'] = '%s (%s)' % (e.message, type(e))
      return JsonResponse(ans)
 
 def getTimeTable(request,username):
-  json = {}
+  ans = {'success': 'NO', 'timetable':[]}
   try:
     student = Student.objects.get(user__username=username)
     time_table = TimeTable.objects.filter(student=student)
-  except:
-    return HttpResponse('bhup')
-  return JsonResponse(json)
+    data = [{}]*7
+    for day in range(len(data)):
+      json = {}
+      json['day'] = day
+      json['schedule'] = []
+      data[day] = json
+    for cell in time_table:
+      print cell.time, cell.day, cell.course_name
+      binderCellToTime = {}
+      binderCellToTime['time'] = cell.time
+      _cell = {}
+      _cell['courseCode'] = cell.course_code
+      _cell['courseName'] = cell.course_name
+      _cell['classType'] = cell.class_type
+      _cell['bunk'] = cell.bunk
+      binderCellToTime['cell'] = _cell
+      data[cell.day]['schedule'].append(binderCellToTime)
+    ans['timetable'] = data
+    ans['success'] = 'YES'
+    return JsonResponse(ans)
+  except Exception as e:
+    ans['message'] = '%s (%s)'%(e.message, type(e))
+    return JsonResponse(ans)

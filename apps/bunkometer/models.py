@@ -25,7 +25,7 @@ class Bunk(models.Model):
 
 class TimeTable(models.Model):
   student = models.ForeignKey(Student,null=True)
-  day = models.CharField(max_length=9)
+  day = models.IntegerField(default=0)
   time = models.IntegerField(default=0)
   bunk = models.IntegerField(default=0)
   course_code = models.CharField(max_length=40,default="xy")
