@@ -13,3 +13,4 @@ bower_components
 media/
 build/
 static/excel/*
+apps/lectut/scripts/old_db/
