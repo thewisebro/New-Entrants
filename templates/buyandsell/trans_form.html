@@ -18,11 +18,11 @@
       {% for obj in mail_list %}
       <option value="{{ obj.by_user.username }}">{{ obj.by_user.name }}</option>
       {% endfor %}
-      <option>Other</option>
+      <option id="other-person-option">Other</option>
     </select>
   </div>
 
-  <div class="form-group">
+  <div id="other-person-option-clicked" class="form-group">
     <label class="col-xs-4 control-label" for="buyer">Please type in the name</label>
     <input class="col-xs-8" type="text" id="id_username"></input><br>
     <input type="hidden" id="enroll" name="username_other">
@@ -101,4 +101,5 @@
 </body>
 <script src="{{ STATIC_URL }}js/common.js"></script>
 <script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>
+<script src="{{ STATIC_URL }}js/buyandsell/main.js"></script>
 

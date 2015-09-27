@@ -1,5 +1,6 @@
 {% extends "buyandsell/base.html" %}
 {% block content %}
+<body>
 <div class="container">
   {% if messages %}
   {% for message in messages %}
@@ -114,10 +115,26 @@
 
           <div class="col-md-12">
             <p class="filter-by-category-heading">Filter by Category</p>
-            <div class="dropdown">
+            <div class="dropdown" id="filter-by-category">
               <div class="active-category dropdown-toggle" data-toggle="dropdown" id="category-filter">
                 <img class="dropdown-arrow" src="{{STATIC_URL}}images/buyandsell/dropdown-arrow.png">
-                <span class="active-category-text">Electronics</span>
+                <ul class="active-category-text">
+                  {% if not mc and not category and not search_flag %}
+                  <li>
+                    <a class="active" href="/buyandsell/buy">Latest</a>
+                  </li>
+                  {% endif %}
+                  {% if mc and not category  %}
+                  <li>
+                    <a class="active" href="/buyandsell/buy/{{mc}}">{{mc}}</a>
+                  </li>
+                  {% endif %}
+                  {% if mc and category %}
+                  <li>
+                    <a  href="/buyandsell/buy/{{mc}}">{{mc}}</a>
+                  </li>
+                  {% endif %}
+                </ul>
               </div>
               <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0; margin-left: 30px; " role="menu" aria-labelledby="category-filter">
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/buy">Latest</a></li>
@@ -136,10 +153,27 @@
             </div>
 
             <ul class="left-box-sub-category-list">
-              <li class="left-box-sub-category">Sub Category</li>
-              <li class="left-box-sub-category left-box-sub-category-active">Sub Category</li>
-              <li class="left-box-sub-category">Sub Category</li>
-              <li class="left-box-sub-category">Sub Category</li>
+              {% for key,value in cat_dict.items %}
+              {% if key == mc  %}
+
+              {% for sub_cat in value %}
+
+
+              {% if category == sub_cat.name %}
+              <li class="left-box-sub-category left-box-sub-category-active">
+                <a href="/buyandsell/buy/{{mc}}/{{sub_cat.code}}">{{sub_cat.name}}</a>
+              </li>
+
+              {% else %}
+              <li class="left-box-sub-category">
+                <a href="/buyandsell/buy/{{mc}}/{{sub_cat.code}}">{{sub_cat.name}}</a>
+              </li>
+              {% endif %}
+
+              {% endfor %}
+
+              {% endif %}
+              {% endfor %}
             </ul>
 
             <div class="left-division-line">
@@ -174,11 +208,14 @@
                     });
                   </script>
                   {% endif %}
-                  <input type="hidden"  name="keyword"  value="{% if search_string %}{{search_string}}{% endif %}">
-                  <input type="text" id="low" class="price-range-text-input" value="{% if ll %}{{ll}}{% endif %}" name="ll">
-                  <input type="text" id="high" class="price-range-text-input" value="{% if ul %}{{ul}}{% endif %}" name="ul">
+                  <div class="price-range-text-input-group">
+                    <input type="hidden"  name="keyword"  value="{% if search_string %}{{search_string}}{% endif %}">
+                    <input type="text" id="low" class="price-range-text-input" value="{% if ll %}{{ll}}{% endif %}" name="ll">
+                    <input type="text" id="high" class="price-range-text-input" value="{% if ul %}{{ul}}{% endif %}" name="ul">
+                  </div>
                   <button class="global-browse price-range-submit">
-                    <img class="price-range-submit-button-image"  src="{{STATIC_URL}}images/buyandsell/price-range-submit-button-image.png">
+                    <img class="price-range-submit-button-image"
+                         src="{{STATIC_URL}}images/buyandsell/price-range-submit-button-image.png">
                   </button>
                 </div>
               </div>
@@ -187,8 +224,9 @@
         </div>
       </div>
     </div>
+
     {% endblock %}
-    <div class="col-md-9 pageContent">
+    <div class="col-md-9 page-content">
       <div class="row">
         {% for row in table_data %}
         <div class="col-md-3 col-sm-6">
@@ -198,7 +236,7 @@
                 {% if row.itempic.pic %}
                 <img src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
                 {% else %}
-                <img src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+                <img src="{{STATIC_URL}}images/buyandsell/default.png" alt="Generic placeholder thumbnail">
                 {% endif %}
               </div>
               <div class="caption">
@@ -212,63 +250,69 @@
         {% endfor %}
       </div>
     </div>
-    {% if paginator %}
-    {% block paginator %}
-    <nav>
-      <ul class="pagination pagination-customized">
 
-        {% if table_data.number != 1 %}
-        <li>
-          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page=1" aria-label="Previous">
-            <span aria-hidden="true">First</span>
-          </a>
-        </li>
-        {% endif %}
-
-        {% if  table_data.has_previous %}
-        <li>
-          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.previous_page_number }}" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        {% endif %}
-
-        {% for page in page_list %}
-        {% if table_data.number == page %}
-        <li class="active">
-          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.number }}">{{table_data.number}}
-          </a>
-        </li>
-        {% else %}
-        <li>
-          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ page }}">{{ page }}
-          </a>
-        </li>
-        {% endif %}
-        {% endfor %}
-
-        {% if table_data.has_next %}
-        <li>
-          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.next_page_number }}" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-        {% endif %}
-
-        {% if table_data.number != table_data.paginator.num_pages %}
-        <li>
-          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ paginator.num_pages }}" aria-label="Next">
-            <span aria-hidden="true">last</span>
-          </a>
-        </li>
-        {% endif %}
-
-      </ul>
-    </nav>
-    {% endblock %}
-    {% endif %}
   </div>
 
 </div>
+</div>
 {% endblock %}
 
+<footer>
+
+  {% block paginator %}
+  <nav>
+    <ul class="pagination pagination-customized">
+
+      {% if table_data.number != 1 %}
+      <li>
+        <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page=1" aria-label="Previous">
+          <span aria-hidden="true">First</span>
+        </a>
+      </li>
+      {% endif %}
+
+      {% if  table_data.has_previous %}
+      <li>
+        <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.previous_page_number }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {% endif %}
+
+      {% for page in page_list %}
+      {% if table_data.number == page %}
+      <li class="active">
+        <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.number }}">{{table_data.number}}
+        </a>
+      </li>
+      {% else %}
+      <li>
+        <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ page }}">{{ page }}
+        </a>
+      </li>
+      {% endif %}
+      {% endfor %}
+
+      {% if table_data.has_next %}
+      <li>
+        <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.next_page_number }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      {% endif %}
+
+      {% if table_data.number != table_data.paginator.num_pages %}
+      <li>
+        <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ paginator.num_pages }}" aria-label="Next">
+          <span aria-hidden="true">last</span>
+        </a>
+      </li>
+      {% endif %}
+
+    </ul>
+  </nav>
+  {% endblock %}
+</footer>
+
+
+</body>

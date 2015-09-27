@@ -4,7 +4,7 @@
 <body style="background-color: #ffffff;">
 {% if messages %}
 {% for message in messages %}
-<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+<div class="alert alert-{{ message.tags }} sell-details-message">{{ message }}</div>
 {% endfor %}
 {% endif %}
 
@@ -13,9 +13,9 @@
     <div class="col-xs-4">
       <div>
       {% if item.itempic.pic %}
-									 <img src="{{item.itempic.pic.url}}" alt="Generic placeholder thumbnail">
+									 <img class="sell-details-image" src="{{item.itempic.pic.url}}" alt="Generic placeholder thumbnail">
 {% else %}
-									 <img src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+									 <img class="sell-details-image" src="{{STATIC_URL}}images/buyandsell/default.png" alt="Generic placeholder thumbnail">
 {% endif %}
       </div>
     </div>

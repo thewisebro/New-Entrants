@@ -4,6 +4,13 @@ $(document).ready
   {
     $(".alert-error").centerHorizontally();
 
+    var hideAlert=function()
+    {
+      $(".alert").fadeOut();
+    };
+
+    setTimeout(hideAlert, 5000);
+
     var widthOfWindow= $(window).width()
     $(".headerBackground").css("width",widthOfWindow+"px");
 
@@ -23,17 +30,40 @@ $(document).ready
     );
 
     //Give bottom shadow to header-background on scrolldown
-    $(window).scroll(function() {
-      var scroll = $(window).scrollTop();
-      if (scroll > 0) {
-        $("#header").addClass("active");
+    $(window).scroll
+    (
+      function()
+      {
+        var scroll = $(window).scrollTop();
+        if (scroll > 0)
+        {
+          $("#header").addClass("active");
+        }
+        else
+        {
+          $("#header").removeClass("active");
+        }
       }
-      else {
-        $("#header").removeClass("active");
-      }
-    });
+    );
 
-    $(".item").click
+    $(document).click
+    (
+      function ()
+      {
+        if($("#filter-by-category").hasClass("open"))
+        {
+          $(".dropdown-arrow",$(this)).addClass("dropdown-arrow-pointing-down");
+          $(".active-category",$(this)).addClass("active-category-dropdown-active");
+        }
+        else
+        {
+          $(".dropdown-arrow",$(this)).removeClass("dropdown-arrow-pointing-down")
+          $(".active-category",$(this)).removeClass("active-category-dropdown-active");
+        }
+      }
+    );
+
+  /*  $(".item").click
     (
       function() //opens light box with details for the clicked item-for-sale
       {
@@ -48,7 +78,7 @@ $(document).ready
         $(".modal-price").html(modalPrice);
       }
     );
-
+*/
     $(".request").click
     (
       function() //opens light box with details for the clicked request
@@ -107,7 +137,7 @@ $(document).ready
             $(".enquire").css("display","none");
             $(".send").css("display","inline");
           }
-          ,400);
+          ,0);
       }
     );
     $("#item-for-sale-modal").on
@@ -227,6 +257,8 @@ $(document).ready
 
 
     //Code to show the edit button when the item is hovered in my account page
+
+    /*
     $(".thumbnailBG").mouseover
     (
       function()
@@ -260,6 +292,8 @@ $(document).ready
         $(".request-remove-button", $(this)).css('opacity', 0);
       }
     );
+    */
+
 
     $(".phone-no-visibility-toggle , .phone-no-visibility-toggle-button").toggle
     (
@@ -278,7 +312,7 @@ $(document).ready
 
 
 
-    $(".thumbnailBG-my-account").click
+ /*   $(".thumbnailBG-my-account").click
     (
       function() //opens light box with details for the clicked item-for-sale
       {
@@ -293,7 +327,7 @@ $(document).ready
         $(".modal-price").html(modalPrice);
       }
     );
-
+*/
     $(".yes").click
     (
       function()
@@ -338,7 +372,19 @@ $(document).ready
             $(".enquire").css("display","none");
             $(".send").css("display","inline");
           }
-          ,400);
+          ,0);
+      }
+    );
+
+    $("#buyer").change
+    (
+      function() {
+        if ($('#buyer').val() == "Other") {
+          $('#other-person-option-clicked').show();
+        }
+        else {
+          $('#other-person-option-clicked').hide();
+        }
       }
     );
 

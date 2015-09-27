@@ -55,7 +55,7 @@ class SaleItems(Reportable, models.Model):
   user = models.ForeignKey(User)
   item_name = models.CharField(max_length = MC.TEXT_LENGTH)
   cost = models.IntegerField(max_length = MC.CODE_LENGTH)
-  status = models.CharField(max_length = MC.TEXT_LENGTH, choices=STATUS)
+
   detail = models.TextField()
   contact = models.CharField(max_length = MC.CODE_LENGTH)
   post_date = models.DateField() # redundant because of datetime_created field. Kept to avoid changes
@@ -71,7 +71,6 @@ class SaleItems(Reportable, models.Model):
 class RequestedItems(Reportable, models.Model):
   user = models.ForeignKey(User)
   item_name = models.CharField(max_length = MC.TEXT_LENGTH)
-  condition = models.CharField(max_length = MC.TEXT_LENGTH, choices=STATUS)
   price_upper = models.IntegerField(max_length = MC.CODE_LENGTH)
   price_lower = models.IntegerField(max_length = MC.CODE_LENGTH, blank= True, default=0)
   post_date = models.DateField()

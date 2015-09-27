@@ -55,7 +55,11 @@ a:focus
 
 .search-area
 {
-  margin-top:5px;
+  width: 41.5%;
+  position: relative;
+  margin-left: 35px;
+  margin-top: 5px;
+  display: inline-block;
 }
 
 .search-form
@@ -70,7 +74,7 @@ a:focus
 .search-icon
 {
   position:absolute;
-  right:21px;
+  right:5px;
   top:5px;
   color: #1081de;
   width: 15px;
@@ -227,15 +231,13 @@ a:focus
 
 .left-box
 {
-  height:500px;
+  padding-bottom: 55px;
   border-radius:2px;
-  background-color: #f8f8F8;
   margin-top: -30px;
   background-color: #ffffff;
   padding-top:10px;
   padding-left:10px;
   position: fixed;
-
   width: 260px;
   border: 1px solid #dedede;
 }
@@ -252,6 +254,14 @@ a:focus
   font-weight: 500;
 }
 
+.price-range-text-input-group
+{
+  position: absolute;
+  top: 73px;
+  width: 80%;
+
+}
+
 .price-range-text-input
 {
   width:36%;
@@ -264,8 +274,10 @@ a:focus
 
 .price-range-submit
 {
-  border:none;
-  margin-left:2px;
+  border: none;
+  margin-left: 2px;
+  position: absolute;
+  left: 206px;
 }
 
 #slider-range
@@ -330,6 +342,7 @@ input[type="radio"]:checked + label div
 .pageContent
 {
   margin-top:0px;
+  z-index: -1;
 }
 
 .sub-header
@@ -424,9 +437,15 @@ input[type="radio"]:checked + label div
 .used-dropdown-menu
 {
   position: absolute;
-
   margin-left: 103px;
   margin-top: 44px;
+}
+
+.header-user-photo-dropdown-menu
+{
+  position: absolute;
+  left: -127px;
+  margin-top: 15px;
 }
 
 .item-options-button-image
@@ -689,7 +708,8 @@ a: focus
   border-top: 1px solid transparent;
   z-index: 1;
   background-color: rgb(254, 253, 255);
-  position: relative;
+  position: absolute;
+  width: 100%;
   box-shadow: 0px 4px 5px rgba(51,51,51,0.5);
   display:none;
   padding-bottom:15px;
@@ -866,8 +886,8 @@ textarea
   height: 6px;
   width: 23px;
   background-color: #1081de;
-  left: 74%;
-  top: 41%;
+  left: 210px;
+  top: 43px;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   cursor: pointer;
@@ -1225,6 +1245,17 @@ a:focus
   border: 1px solid #dd0000;
   z-index: 100;
   padding: 10px 15px;
+}
+
+.sell-details-message
+{
+  position: relative;
+  top: 0;
+}
+
+.sell-details-image
+{
+  width: 100%;
 }
 
 .your-phone-no
@@ -1615,25 +1646,44 @@ textarea:focus
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+  transition: border ease-out 200ms;
 }
 
 .active-category:hover
 {
+  border: 1px solid #1081DE;
+  transition: border ease-out 200ms;
+}
 
+.active-category-dropdown-active
+{
+  border: 1px solid #1081DE;
+  transition: border ease-out 200ms;
 }
 
 .dropdown-arrow
 {
-  width: 10px;
+  height: 10px;
   position: relative;
   top: 0;
   margin-left: 10px;
+  transition: ease-out 200ms;
+}
 
+.dropdown-arrow-pointing-down
+{
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+  transform: rotate(90deg);
+  transition: ease-out 200ms;
 }
 
 .active-category-text
 {
-  margin-left: 5px;
+  display: inline-block;
+  list-style-type: none;
+  padding: 0;
+  margin: 0 5px;
 }
 
 .left-box-sub-category-list
@@ -1648,9 +1698,44 @@ textarea:focus
   margin-left: 50px;
   display: inline-block;
   padding: 5px 0;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
 }
 
-.left-box-sub-category-active
+.left-box-sub-category a
+{
+  color:#686868;
+}
+
+.left-box-sub-category:hover
+{
+  border-bottom: 1px solid #1081de;
+  transition: border-bottom ease-out 200ms;
+}
+
+.left-box-sub-category-active a
 {
   color:#1081de;
+}
+
+#other-person-option-clicked
+{
+  display: none;
+}
+
+.header-logo-div
+{
+  display: inline-block;
+  width: 260px;
+  position: relative;
+  float: left;
+  margin-top: 4px;
+}
+
+.browse-button-div
+{
+  position: relative;
+  margin-left: 25px;
+  top: -5px;
+  display: inline-block;
 }
