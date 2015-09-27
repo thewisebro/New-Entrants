@@ -694,7 +694,7 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                  }
 
                  else if(full.file_type == "pdf"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
+                   html += '<i class="fa fa-file-pdf-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                   else if(full.file_type == "sheet"){
                    html += '<i class="fa fa-file-excel-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
@@ -1092,7 +1092,7 @@ lectutApp.controller('FacultyCtrl', ['$scope','$routeParams','$rootScope','$loca
                  }
 
                  else if(full.file_type == "pdf"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
+                   html += '<i class="fa fa-file-pdf-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                   else if(full.file_type == "sheet"){
                    html += '<i class="fa fa-file-excel-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';

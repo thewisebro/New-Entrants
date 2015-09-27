@@ -18,13 +18,13 @@
                   </span>-->
                 </div>
                <div class="postTime">
-                <a am-time-ago="oneFile.file.datetime_created" ng-href="#/course/{[coId.courseId]}/feeds/{[post.post.id]}"></a>
+                <a am-time-ago="oneFile.file.datetime_created"></a>
                </div>
               </div>
 
 
             <div class="filesDisplay">
-              <div class="postContent">
+              <div class="postContent" style="width:400px;">
                 <div class="removeFeedFile" ng-show="logIn && auth.user.name == oneFile.user_info.name" ng-click="removeFeedFile(oneFile.file.id,$parent.$index,$index)">
                 <i class="fa fa-times"></i>
               </div>
