@@ -17,7 +17,6 @@ class BuySellCategoryAdmin(admin.ModelAdmin):
 class SuccessfulTransactionAdmin(admin.ModelAdmin):
   list_display=('seller','buyer','sell_item','request_item','is_requested','trasaction_date','feedback')
 
-
 #class PersonAdmin(admin.ModelAdmin):
 # list_display=('person_id','name')
 admin.site.register(SaleItems, ItemsForSaleAdmin)

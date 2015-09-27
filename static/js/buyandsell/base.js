@@ -559,7 +559,7 @@ function transaction_form(type,id){
     name:'trans_form',
     title:'We value your feedback',
     width:800,
-    height:535,
+    height:600,
     src:'/buyandsell/succ_trans/' + type + '/' + id,
     close:function(){opened_dialog=""}
   });
@@ -581,6 +581,26 @@ if(opened_dialog !=""){
   });
 opened_dialog = 'upload_image_dialog';
 }
+
+function special_submit(id,type) {
+    var form = $("#trans_form")
+      form.attr("action" , "/buyandsell/succ_trans/" + type + "/" + id + "/ni/");
+      form.submit()
+      }
+
+function bring_subcats() {
+
+$("select#id_category").click(function (){
+      var category = $(this).val();
+      var url = "/buyandsell/bring_subcats/" + category +"/";
+      $.get(url, function(data){
+        console.log(data);
+         $("select#sub_category").html(data);
+        });
+      });
+    }
+bring_subcats();
+
 $(document).ready
 (
   function()

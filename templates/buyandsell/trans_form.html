@@ -9,7 +9,7 @@
 {% endfor %}
 {% endif %}
 {% if type %}
-<form class="form-horizontal transaction-form-body" action="" method="post">
+<form id="trans_form"  class="form-horizontal transaction-form-body" action="" method="post">
   {% csrf_token %}
   <div class="form-group">
     <label class="col-xs-4 control-label" for="buyer">Whom did you sell this Item ?</label>
@@ -34,16 +34,16 @@
 
   <div class="form-group your-experience">
     <label class="radio-inline">
-      <input type="radio" name="optradio">Excellent
+      <input type="radio" >Excellent
     </label>
     <label class="radio-inline">
-      <input type="radio" name="optradio">Good
+      <input type="radio" >Good
     </label>
     <label class="radio-inline">
-      <input type="radio" name="optradio">Fair
+      <input type="radio" >Fair
     </label>
     <label class="radio-inline">
-      <input type="radio" name="optradio">Poor
+      <input type="radio" >Poor
     </label>
   </div>
 
@@ -53,11 +53,10 @@
   </div>
 
   <div class="form-group">
-    <input class="btn btn-primary send-button" style="right: -15px" type="submit" value="Done">
-    <input type="submit" value="Not Interested" class="btn not-interested">
+
   </div>
-
-
+ <input class="btn btn-primary send-button" style="right: -15px" type="submit" value="Done">
+ <input class="btn not-interested"  style="right: -15px" type="button" value="Not interested" onclick = "special_submit({{id}},'sell')">
 </form>
 {% else %}
 <form action="" method="post">

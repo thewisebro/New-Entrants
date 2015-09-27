@@ -2,136 +2,126 @@
 
 {% block header %}
 <body style="background-color: #ffffff;">
+<div class="sell-form-body">
 
-<div class="request-form-body">
-  <form class="form-horizontal" action="#">
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+
+  <form class="form-horizontal" action="" method = "post">
+{% csrf_token %}
     <div class="form-group">
-      <label class="col-xs-4 control-label" style="text-align: left" for="name">Item Name</label>
-      <div class="col-xs-8 sell-form-item-name-area">
-        <input type="text" class="form-control sell-form-item-name" id="name">
-        <div class="sell-form-search-result-box">
-          <div class="searched-items-for-sale">
-            <p class="search-results-heading">
-              Similar Items for Sale
-              <span class="max-price-heading">Price</span>
+      <label class="col-xs-2 control-label" style="text-align: left" for="name">Item Name</label>
+      <div class="col-xs-10 sell-form-item-name-area">
+        <input type="text" class="form-control sell-form-item-name" id="id_item_name" name="item_name" value = "{{ form.item_name.value|default_if_none:""}}" required>
+      </div>
+    </div>
 
-            </p>
+{% if form.item_name.errors %}
+<div style="margin:10px 0px 0px 30px;" >
+	<div >{{ form.item_name.errors }}</div>
+</div>
+{% endif %}
 
-            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-              <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                <span class="rupee-logo">Rs&nbsp</span>
-              </div>
-            </a>
-            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-              <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                <span class="rupee-logo">Rs&nbsp</span>
-              </div>
-            </a>
-            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-              <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                <span class="rupee-logo">Rs&nbsp</span>
-              </div>
-            </a>
-            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-              <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                <span class="rupee-logo">Rs&nbsp</span>
-              </div>
-            </a>
-            <a data-toggle="modal" data-target="#request-modal"  class="searched-item instant-searched-request" href="#">
-              <div>
-                                                <span class="searched-item-name">
-                                                    Electric Kettle
-                                                </span>
-                                                <span class="searched-item-price">
-                                                    350
-                                                </span>
-                <span class="rupee-logo">Rs&nbsp</span>
-              </div>
-            </a>
+    <div class="form-group">
+      <label class="col-xs-2 control-label" style="text-align: left" for="category">Category</label>
+      <div class="col-xs-4">
+        <select class="form-control" id="id_category" >
+{% for category in main_cats %}
+          <option>{{category}}</option>
+{% endfor %}
+        </select>
+      </div>
+
+      <label class="col-xs-3 control-label" style="text-align: right" for="category">Sub-Category</label>
+      <div class="col-xs-3">
+        <select class="form-control" id="sub_category" name="category" required >
+{% for sub_category in sub_cats %}
+          <option value = "{{sub_category.id}}">{{sub_category.name}}</option>
+{% endfor %}
+        </select>
+      </div>
+    </div>
+
+{% if form.category.errors %}
+<div class="span2" style="margin:10px 0px 0px 30px;">
+	<div class="entries_error">{{ form.category.errors }}</div>
+</div>
+{% endif %}
+
+    <div class="form-group">
+      <label class="col-xs-2 control-label" style="text-align: left" for="name">Maximum Price</label>
+      <div class="col-xs-10">
+        <input type="text" class="form-control" id="id_cost" name = "price_upper" value="{{ form.price_upper.value|default_if_none:""}}" required>
+      </div>
+    </div>
+
+{% if form.price_upper.errors %}
+<div class="span2" style="margin:10px 0px 0px 30px;">
+	<div class="entries_error">{{ form.price_upper.errors }}</div>
+</div>
+{% endif %}
+
+
+    <div class="form-group">
+      <label class="col-xs-2 control-label" style="text-align: left" for="expiry">Days to Expire:</label>
+      <div class="col-xs-10">
+        <select class="form-control" id="id_days_till_expiry" name="days_till_expiry" > Days
+          <option>10</option>
+          <option>15</option>
+          <option>20</option>
+          <option>25</option>
+          <option>30</option>
+          <option>45</option>
+          <option>60</option>
+        </select>
+      </div>
+    </div>
+
+{% if form.days_till_expiry.errors %}
+<div class="row-fluid">
+	<div class="span2 offset4 entries">{{ form.days_till_expiry.errors }}</div>
+</div>
+{% endif %}
+
+        <div class="form-group">
+          <label class="col-xs-3 control-label" for="email" style="text-align: left;  padding-left:0px;">Your Email Id</label>
+          <div class="col-xs-9">
+            <input type="email" class="form-control" id="id_email" name="email" value="{% if form.email.value %}{{ form.email.value }}{% endif %}" required>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-xs-4 control-label" style="text-align: left" for="category">Category</label>
-      <div class="col-xs-8">
-        <select class="form-control" id="category" >
-          <option>Electronics</option>
-          <option>Books</option>
-          <option>Miscellaneous</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-xs-4 control-label" for="category">Sub-Category</label>
-      <div class="col-xs-8">
-        <select class="form-control" id="category" >
-          <option>All</option>
-          <option>Acadmeic</option>
-          <option>Course Books</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-xs-4 control-label" style="text-align: left" for="name">Price</label>
-      <div class="col-xs-8">
-        <input type="text" class="form-control" id="name">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-xs-4 control-label" style="text-align: left" for="expiry">Expires In</label>
-      <div class="col-xs-8">
-        <select class="form-control" id="category" >
-          <option>5 days</option>
-          <option>10 days</option>
-          <option>15 days</option>
-          <option>20 days</option>
-          <option>25 days</option>
-          <option>30 days</option>
-          <option>35 days</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-xs-4 control-label" for="email" style="text-align: left;">Your Email Id</label>
-      <div class="col-xs-8">
-        <input type="email" class="form-control" id="email">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-xs-4 control-label" for="phone" style="text-align: left;">Your Phone</label>
-      <div class="col-xs-8">
-        <input type="text" class="form-control" id="phone">
+
+       {% if form.email.errors %}
+         <div class="span2 " style="margin:10px 0px 0px 30px">
+	        <div class="entries_error">{{ form.email.errors }}</div>
+           </div>
+        {% endif %}
+
+        <div class="form-group">
+          <label class="col-xs-3 control-label" for="phone" style="text-align: left; padding-left:0px;">Your Phone</label>
+          <div class="col-xs-9">
+            <input type="text" class="form-control" id="id_contact" name="contact"    value="{{ form.contact.value|default_if_none:"" }}" maxlength = "10" required>
+        </div>
+        </div>
+
+    {% if form.contact.errors %}
+        <div class="span2" style="margin:10px 0px 0px 30px;">
+	      <div class="entries_error">{{ form.contact.errors }}</div>
+        </div>
+   {% endif %}
+
       </div>
     </div>
     <input class="btn btn-primary send-button" type="submit" value="Done">
   </form>
 </div>
 
+
 {% endblock %}
 
 </body>
+
+
+
