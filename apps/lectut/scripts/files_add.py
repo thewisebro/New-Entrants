@@ -9,13 +9,14 @@ from lectut.views import getFileType
 os.chdir('media/lectut')
 upload_types=['lec','tut','sol','exp']
 
+file_saves = 0
 for upload_type in upload_types:
   workbook = xlrd.open_workbook('/home/apps/channeli/apps/lectut/scripts/old_db/'+upload_type+'.xlsx')
   worksheet = workbook.sheet_by_name('Sheet1')
 
   num_rows = worksheet.nrows - 1
   num_cells = worksheet.ncols - 1
-  curr_row,success,fail,post_id,file_saves = 1,0,0,0,0
+  curr_row,success,fail,post_id = 1,0,0,0
   fail_prof,fail_course = [],[]
   change_dir,progress = False,True
 
@@ -52,7 +53,6 @@ for upload_type in upload_types:
       row+=1
 
     try:
-#      import pdb;pdb.set_trace()
       course = Course.objects.get(code = course_code)
       batch = Batch.objects.get(course = course)
       os.chdir(course_code)
@@ -80,11 +80,14 @@ for upload_type in upload_types:
         else:
           new_post = Post.objects.get(batch = batch, upload_user = user)
         file_object = open(filename)
-#      file_object = File(filename)    
-        fileToAdd = Uploadedfile(post = new_post, upload_file = File(file_object), description=filename,upload_type=upload_type,file_type=file_type)
-        fileToAdd.save()
-        print 'Successfully added file:'+str(filename)
-        file_saves +=1
+        filestart = filename.split('.')[-2]
+#      file_object = File(filename)
+        if not Uploadedfile.objects.filter(upload_file__startswith = 'lectut/'+str(course_code)+'/'+str(file_type)+'/'+filestart).exists():
+#        if not Uploadedfile.objects.filter(upload_file = filename).exists():
+          fileToAdd = Uploadedfile(post = new_post, upload_file = File(file_object), description=filename,upload_type=upload_type,file_type=file_type)
+          fileToAdd.save()
+          print 'Successfully added file:'+str(filename)
+          file_saves +=1
       except Exception as e:
         fail +=1
         print 'Error in saving file:' +str(e)
@@ -95,6 +98,7 @@ for upload_type in upload_types:
       print 'old',course.code
       new_course_code = ''
       if len(course.code.split('-')[0])==2:
+#      import pdb;pdb.set_trace()
         new_course_code = course.code.split('-')[0]+'N'
         new_course_code += '-'+course.code.split('-')[1]
         
@@ -128,11 +132,13 @@ for upload_type in upload_types:
           print new_post
           print new_post.course
           file_object = open(filename)
-#        file_object = File(filename)    
-          fileToAdd = Uploadedfile(post = new_post, upload_file = File(file_object), description=filename,upload_type=upload_type,file_type=file_type)
-          fileToAdd.save()
-          print 'Successfully added file:'+str(filename)
-          file_saves +=1
+          filestart = filename.split('.')[-2]
+#         file_object = File(filename)
+          if not Uploadedfile.objects.filter(upload_file__startswith = 'lectut/'+str(course_code)+'/'+str(file_type)+'/'+filestart).exists():
+            fileToAdd = Uploadedfile(post = new_post, upload_file = File(file_object), description=filename,upload_type=upload_type,file_type=file_type)
+            fileToAdd.save()
+            print 'Successfully added file:'+str(filename)
+            file_saves +=1
         except Exception as e:
           fail +=1
           print 'Error in saving file:' +str(e)
@@ -153,6 +159,6 @@ for upload_type in upload_types:
   print 'Final:'
   print 'Success' +str(success)
   print 'Fail' +str(fail)
-  print file_saves
 
+print 'New File Saves' +str(file_saves)
 wb.save('files_db_errors.xlsx') 
