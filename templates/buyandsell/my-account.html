@@ -2,15 +2,13 @@
 
 {% block content %}
 <div class="container">
- {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }} </div>
-    {% endfor %}
-    {% endif %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">{{ message }} </div>
+  {% endfor %}
+  {% endif %}
   <div class="row sub-header">
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-9">
+    <div>
       <ol class="breadcrumb">
         <li class="active"><a href="#">My Account</a></li>
       </ol>
@@ -27,12 +25,12 @@
   </div>
   {% block leftbox %}
   <div class="row">
-    <div class="col-md-3">
+    <div>
       <div class="left-box">
         <div class="row">
           <div class="col-md-12">
 
-{% if show_contact %}
+            {% if show_contact %}
             <p class="your-phone-no">My Phone No.</p>
             <div class="phone-no-visibility-toggle">
               <div class="phone-no-visibility-toggle-slider">
@@ -44,8 +42,8 @@
             <p class="phone-no-visibility-info-text">Decide whether people can see your phone number.</p>
             <div class="left-division-line"></div>
 
-{% else %}
-  <p class="your-phone-no">My Phone No.</p>
+            {% else %}
+            <p class="your-phone-no">My Phone No.</p>
             <div class="phone-no-visibility-toggle">
               <div  class="phone-no-visibility-toggle-slider phone-no-visibility-toggle-slider-hidden">
                 <div id="contact_hidden" class="phone-no-visibility-toggle-options phone-no-hidden">HIDDEN</div>
@@ -56,7 +54,7 @@
             <p id="contact_txt"class="phone-no-visibility-info-text">Decide whether people can see your phone number.</p>
             <div class="left-division-line"></div>
 
-{% endif %}
+            {% endif %}
 
           </div>
 
@@ -75,6 +73,11 @@
               </li>
               {% endfor %}
             </ul>
+
+            {% if not watched_cat_dict %}
+            <p class="you-are-not-watching">You are not watching any category.</p>
+            {% endif %}
+
             <button type="button" onclick="manage()"  class="global-browse manage-watched-button">Manage</button>
           </div>
         </div>
@@ -85,22 +88,24 @@
 
       <p class="my-account-page-headings">Items you've Added for Sale</p>
       <div class="row">
-
         {% for row in sell_items %}
-{% if row.is_active %}
-        <div class="col-md-3" id = "sell{{row.pk}}">
+        {% if row.is_active %}
+        <div class="col-xs-6 col-sm-6 col-md-3" id = "sell{{row.pk}}">
           <div class="thumbnailBG thumbnailBG-my-account">
             <div class="thumbnail">
-          {% if row.itempic.pic %}
-									 <img src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
-{% else %}
-									 <img src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
-{% endif %}
+              {% if row.itempic.pic %}
+              <img class="item-for-sale-image" src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
+              {% else %}
+              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+              {% endif %}
 
             </div>
             <div class="caption">
-              <span class="itemName">{{ row.item_name }}</span>
-              <span class="price">Rs. {{row.cost}}</span>
+              <div class="itemName" style="display: inline; white-space: nowrap; width: 100px; overflow: hidden; text-overflow: ellipsis;">{{row.item_name}}</div>
+              <span class="price">
+                <img class="rupee-icon rupee-icon-item-for-sale" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">
+                {{row.cost}}
+              </span>
               <div class="row">
                 <div class="col-md-12">
                   <span class="expiresIn">Expires in {{ row.expiry_date|timeuntil }}</span>
@@ -143,15 +148,15 @@
           </div>
         </div>
 
-{% else %}
-        <div class="col-md-3" id = "sell{{row.pk}}">
+        {% else %}
+        <div class="col-xs-6 col-sm-6 col-md-3" id = "sell{{row.pk}}">
           <div class="thumbnailBG thumbnailBG-my-account expired-item">
             <div class="thumbnail">
-            {% if row.itempic.pic %}
-									 <img src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
-{% else %}
-									 <img src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
-{% endif %}
+              {% if row.itempic.pic %}
+              <img class="item-for-sale-image" src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
+              {% else %}
+              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+              {% endif %}
 
               <div class="fading-rectangle">
                 <img class="expired-icon item-expired-icon" src="{{STATIC_URL}}images/buyandsell/expired-icon.png">
@@ -195,23 +200,23 @@
                 </li>
 
                 <li role="presentation"><a role="menuitem" tabindex="-1"onclick = "transaction_form('sell', {{ row.pk }})">Mark Sold</a></li>
-  <li role="presentation"><a role="menuitem" tabindex="-1" onclick = "upload_image_buyandsell('buyandsell_pic', {{ row.pk }})">Change Image</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" onclick = "upload_image_buyandsell('buyandsell_pic', {{ row.pk }})">Change Image</a></li>
               </ul>
             </div>
           </div>
         </div>
-{% endif %}
-{% endfor %}
-            {% if succ_sold_items %}
-                 {% for row in succ_sold_items %}
-        <div class="col-md-3" id = "sell{{row.pk}}">
+        {% endif %}
+        {% endfor %}
+        {% if succ_sold_items %}
+        {% for row in succ_sold_items %}
+        <div class="col-xs-6 col-sm-6 col-md-3" id = "sell{{row.pk}}">
           <div class="thumbnailBG thumbnailBG-my-account sold-item">
             <div class="thumbnail">
-             {% if row.itempic.pic %}
-									 <img src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
-{% else %}
-									 <img src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
-{% endif %}
+              {% if row.itempic.pic %}
+              <img class="item-for-sale-image" src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
+              {% else %}
+              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+              {% endif %}
 
               <div class="fading-rectangle">
                 <img class="item-sold-icon" src="{{STATIC_URL}}images/buyandsell/mark-done.png">
@@ -243,8 +248,12 @@
           </div>
         </div>
 
-{% endfor %}
-{% endif %}
+        {% endfor %}
+        {% endif %}
+
+        {% if not sell_items %}
+        <p class="you-have-not-added-any">You haven't added any Item for Sale.</p>
+        {% endif %}
 
       </div>
       <div class="row">
@@ -258,7 +267,7 @@
             <thead>
             <tr data-toggle="modal" data-target="#request-item-modal" class="request">
               <th>Item</th>
-              <th>Max Price (Rs)</th>
+              <th>Max Price ( <img class="rupee-icon rupee-icon-item-for-sale" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png"> )</th>
               <th>Expires in / Status</th>
             </tr>
             </thead>
@@ -343,6 +352,10 @@
 
             </tbody>
           </table>
+          {% if not request_items %}
+          <p class="you-have-not-added-any">You haven't added any Request.</p>
+          {% endif %}
+
         </div>
       </div>
     </div>

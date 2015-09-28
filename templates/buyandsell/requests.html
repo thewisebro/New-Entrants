@@ -2,7 +2,7 @@
 {% block header %}
 <body>
 <div class="headerBackground">
-  <header class="header container">
+  <header class="header container header-container">
 
     <div class="header-logo-div">
       <a href="/buyandsell/buy">
@@ -53,7 +53,7 @@
 
     {% if login_flag %}
 
-    <div class="dropdown" style=" display:inline; float: right;">
+    <div class="dropdown" style=" display:inline; float: right; margin-right: -15px;">
       <button class="btn btn-default dropdown-toggle user-photo-button user-photo-circle-converter" type="button"
               id="menu1" data-toggle="dropdown">
         <img src="{{ user.photo_url }}" class="user-photo">
@@ -103,7 +103,7 @@
   <div class="row sub-header">
     <div class="col-md-3">
     </div>
-    <div class="col-md-9">
+    <div>
       <ol class="breadcrumb">
         {% if not mc and not category  and not search_flag %}
         <li>
@@ -176,7 +176,7 @@
   </div>
   {% block leftbox %}
   <div class="row">
-    <div class="col-md-3">
+    <div>
       <div class="left-box">
         <div class="row">
           <div class="col-md-12">
@@ -211,7 +211,7 @@
             <div class="left-division-line">
             </div>
           </div>
-
+          {% if not search_flag %}
           <div class="col-md-12">
             <p class="filter-by-category-heading">Filter by Category</p>
             <div class="dropdown" id="filter-by-category">
@@ -280,6 +280,7 @@
             <div class="left-division-line">
             </div>
           </div>
+          {% endif %}
 
         </div>
 
@@ -310,6 +311,8 @@
                   </script>
                   {% endif %}
                   <div class="price-range-text-input-group">
+                    <img class="rupee-icon input-box-rupee-icon-min" src="{{STATIC_URL}}images/buyandsell/rupee-icon-with-white-bg.png">
+                    <img class="rupee-icon input-box-rupee-icon-max" src="{{STATIC_URL}}images/buyandsell/rupee-icon-with-white-bg.png">
                     <input type="hidden" name="keyword" value="{% if search_string %}{{search_string}}{% endif %}">
                     <input type="text" id="low" class="price-range-text-input" value="{% if ll %}{{ll}}{% endif %}" name="ll">
                     <input type="text" id="high" class="price-range-text-input" value="{% if ul %}{{ul}}{% endif %}" name="ul">
@@ -332,17 +335,17 @@
         <thead>
         <tr>
           <th>Item</th>
-          <th>Max Price (Rs)</th>
+          <th>Max Price (  <img class="rupee-icon" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">  )</th>
           <th>Expires in</th>
         </tr>
         </thead>
         <tbody>
         {% for row in table_data %}
-          <tr onclick="request_details({{ row.pk }},'{{row.item_name}}')" class="request">
-            <td class="requested-item-name">{{row.item_name}}</td>
-            <td class="requested-item-price">{{row.price_upper}}</td>
-            <td>{{ row.expiry_date|timeuntil }}</td>
-          </tr>
+        <tr onclick="request_details({{ row.pk }},'{{row.item_name}}')" class="request">
+          <td class="requested-item-name">{{row.item_name}}</td>
+          <td class="requested-item-price">{{row.price_upper}}</td>
+          <td>{{ row.expiry_date|timeuntil }}</td>
+        </tr>
         {% endfor %}
         </tbody>
       </table>

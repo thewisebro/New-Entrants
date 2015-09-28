@@ -4,69 +4,70 @@
 <body style="background-color: #ffffff;">
 <div class="sell-form-body">
 
-{% if messages %}
-{% for message in messages %}
-<div class="alert alert-{{ message.tags }}">{{ message }}</div>
-{% endfor %}
-{% endif %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+  {% endif %}
 
   <form class="form-horizontal" action="" method = "post">
-{% csrf_token %}
+    {% csrf_token %}
     <div class="form-group">
       <label class="col-xs-2 control-label" style="text-align: left" for="name">Item Name</label>
       <div class="col-xs-10 sell-form-item-name-area">
-        <input type="text" class="form-control sell-form-item-name" id="id_item_name" name="item_name" value = "{{ form.item_name.value|default_if_none:""}}" required>
+        <input type="text" class="form-control sell-form-item-name" id="id_item_name" name="item_name" maxlength="40" value = "{{ form.item_name.value|default_if_none:""}}" required>
       </div>
     </div>
 
-{% if form.item_name.errors %}
-<div style="margin:10px 0px 0px 30px;" >
-	<div >{{ form.item_name.errors }}</div>
-</div>
-{% endif %}
+    {% if form.item_name.errors %}
+    <div style="margin:10px 0px 0px 30px;" >
+      <div >{{ form.item_name.errors }}</div>
+    </div>
+    {% endif %}
 
     <div class="form-group">
       <label class="col-xs-2 control-label" style="text-align: left" for="category">Category</label>
       <div class="col-xs-4">
         <select class="form-control" id="id_category" >
-{% for category in main_cats %}
+          {% for category in main_cats %}
           <option>{{category}}</option>
-{% endfor %}
+          {% endfor %}
         </select>
       </div>
 
       <label class="col-xs-3 control-label" style="text-align: right" for="category">Sub-Category</label>
       <div class="col-xs-3">
         <select class="form-control" id="sub_category" name="category" required >
-{% for sub_category in sub_cats %}
+          {% for sub_category in sub_cats %}
           <option value = "{{sub_category.id}}">{{sub_category.name}}</option>
-{% endfor %}
+          {% endfor %}
         </select>
       </div>
     </div>
 
-{% if form.category.errors %}
-<div class="span2" style="margin:10px 0px 0px 30px;">
-	<div class="entries_error">{{ form.category.errors }}</div>
-</div>
-{% endif %}
+    {% if form.category.errors %}
+    <div class="span2" style="margin:10px 0px 0px 30px;">
+      <div class="entries_error">{{ form.category.errors }}</div>
+    </div>
+    {% endif %}
 
     <div class="form-group">
-      <label class="col-xs-2 control-label" style="text-align: left" for="name">Price</label>
+      <label class="col-xs-2 control-label" style="text-align: left;" for="name">Price</label>
       <div class="col-xs-10">
-        <input type="text" class="form-control" id="id_cost" name = "cost" value="{{ form.cost.value|default_if_none:""}}" required>
+        <img class="rupee-icon sell-form-rupee-icon" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">
+        <input type="text" class="form-control" style=" padding-left: 25px;" id="id_cost" name = "cost" value="{{ form.cost.value|default_if_none:""}}" required>
       </div>
     </div>
 
-{% if form.cost.errors %}
-<div class="span2" style="margin:10px 0px 0px 30px;">
-	<div class="entries_error">{{ form.cost.errors }}</div>
-</div>
-{% endif %}
+    {% if form.cost.errors %}
+    <div class="span2" style="margin:10px 0px 0px 30px;">
+      <div class="entries_error">{{ form.cost.errors }}</div>
+    </div>
+    {% endif %}
 
 
     <div class="form-group">
-      <label class="col-xs-2 control-label" style="text-align: left" for="expiry">Days to Expire:</label>
+      <label class="col-xs-2 control-label" style="text-align: left" for="expiry">Expires in:</label>
       <div class="col-xs-10">
         <select class="form-control" id="id_days_till_expiry" name="days_till_expiry" > Days
           <option>10</option>
@@ -77,76 +78,58 @@
           <option>45</option>
           <option>60</option>
         </select>
+        <p class="expires-in-days-text">days</p>
       </div>
     </div>
 
-{% if form.days_till_expiry.errors %}
-<div class="row-fluid">
-	<div class="span2 offset4 entries">{{ form.days_till_expiry.errors }}</div>
+    {% if form.days_till_expiry.errors %}
+    <div class="row-fluid">
+      <div class="span2 offset4 entries">{{ form.days_till_expiry.errors }}</div>
+    </div>
+    {% endif %}
+
+      <div class="form-group">
+        <label class="col-xs-12 control-label" for="description">Description</label>
+        <textarea id="id_detail" class="col-xs-12" rows="3" style="width:95.5%; margin-left: 15px; border:1px solid #cccccc;" name="detail" required>{{ form.detail.value|default_if_none:"" }}</textarea>
+      </div>
+
+      {% if form.detail.errors %}
+      <div class="span2" style="margin:10px 0px 0px 30px;">
+        <div class="entries_error">{{ form.detail.errors }}</div>
+      </div>
+
+      {% endif %}
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" for="email">Your Email Id</label>
+        <div class="col-xs-9">
+          <input type="email" class="form-control" id="id_email" name="email" value="{% if form.email.value %}{{ form.email.value }}{% endif %}" required>
+        </div>
+      </div>
+
+      {% if form.email.errors %}
+      <div class="span2 " style="margin:10px 0px 0px 30px">
+        <div class="entries_error">{{ form.email.errors }}</div>
+      </div>
+      {% endif %}
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" for="phone">Your Phone</label>
+        <div class="col-xs-9">
+          <input type="text" class="form-control" id="id_contact" name="contact"    value="{{ form.contact.value|default_if_none:"" }}" maxlength = "10" required>
+        </div>
+      </div>
+
+      {% if form.contact.errors %}
+      <div class="span2" style="margin:10px 0px 0px 30px;">
+        <div class="entries_error">{{ form.contact.errors }}</div>
+      </div>
+      {% endif %}
+
+    </div>
 </div>
-{% endif %}
-
-    <div class="form-group">
-<!--
-<<<<<<< HEAD
-      <label class="col-xs-12 control-label" for="description">Description</label>
-      <textarea id="id_detail" class="col-xs-12" rows="3" style="width: 95.5%;margin-left: 15px;"></textarea>
-    </div>
-    <div class="form-group">
-      <label class="col-xs-3 control-label" for="email">Your Email Id</label>
-      <div class="col-xs-9">
-        <input type="email" class="form-control" id="id_email">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-xs-3 control-label" for="phone" >Your Phone</label>
-      <div class="col-xs-9">
-        <input type="text" class="form-control" id="id_contact">
-=======
--->
-<div class="col-xs-8">
-        <div class="form-group">
-          <label class="col-xs-12 control-label" for="description">Description</label>
-          <textarea id="id_detail" class="col-xs-12" rows="3" style="width:96.5%" name="detail" required>{{ form.detail.value|default_if_none:"" }}</textarea>
-        </div>
-
-          {% if form.detail.errors %}
-           <div class="span2" style="margin:10px 0px 0px 30px;">
-            	<div class="entries_error">{{ form.detail.errors }}</div>
-            </div>
-          </div>
-           {% endif %}
-
-        <div class="form-group">
-          <label class="col-xs-3 control-label" for="email" style="text-align: left;  padding-left:0px;">Your Email Id</label>
-          <div class="col-xs-9">
-            <input type="email" class="form-control" id="id_email" name="email" value="{% if form.email.value %}{{ form.email.value }}{% endif %}" required>
-          </div>
-        </div>
-
-       {% if form.email.errors %}
-         <div class="span2 " style="margin:10px 0px 0px 30px">
-	        <div class="entries_error">{{ form.email.errors }}</div>
-           </div>
-        {% endif %}
-
-        <div class="form-group">
-          <label class="col-xs-3 control-label" for="phone" style="text-align: left; padding-left:0px;">Your Phone</label>
-          <div class="col-xs-9">
-            <input type="text" class="form-control" id="id_contact" name="contact"    value="{{ form.contact.value|default_if_none:"" }}" maxlength = "10" required>
-        </div>
-        </div>
-
-    {% if form.contact.errors %}
-        <div class="span2" style="margin:10px 0px 0px 30px;">
-	      <div class="entries_error">{{ form.contact.errors }}</div>
-        </div>
-   {% endif %}
-
-      </div>
-    </div>
-    <input class="btn btn-primary send-button" type="submit" value="Done">
-  </form>
+<input class="btn btn-primary done-button" type="submit" value="Done">
+</form>
 </div>
 
 

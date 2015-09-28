@@ -2,6 +2,11 @@ $(document).ready
 (
   function()
   {
+    if ($(".input-button")[0])
+    {
+      $(".ui-dialog-titlebar-close").css("display","none");
+    }
+
     $(".alert-error").centerHorizontally();
 
     var hideAlert=function()
@@ -20,12 +25,54 @@ $(document).ready
 
     }
 
+    var subHeaderWidth= $(".sub-header").width();
+    $(".page-content").css("width",subHeaderWidth-275+"px");
+    if(subHeaderWidth >= 1100)
+    {
+      $(".item-for-sale-image").css("height",150+"px");
+      $(".search-area").css("margin-left",35+"px");
+    }
+
+    else if(subHeaderWidth >= 900)
+    {
+      $(".item-for-sale-image").css("height",120+"px");
+      $(".search-area").css("margin-left",35+"px");
+      $(".itemName").css("width",80+"px");
+    }
+
+    else if(subHeaderWidth >= 750)
+    {
+      $(".item-for-sale-image").css("height",180+"px");
+      $(".search-area").css("margin-left",-120+"px");
+      $(".itemName").css("width",80+"px");
+    }
+
     $(window).resize
     (
       function()
       {
         var newWidthOfWindow= $(window).width();
         $(".headerBackground").css("width",newWidthOfWindow+"px");
+        var subHeaderWidth= $(".sub-header").width();
+        $(".page-content").css("width",subHeaderWidth-275+"px");
+        console.log(subHeaderWidth);
+        if(subHeaderWidth >= 1100)
+        {
+          $(".item-for-sale-image").css("height",150+"px");
+          $(".search-area").css("margin-left",35+"px");
+        }
+        else if(subHeaderWidth >= 900)
+        {
+          $(".item-for-sale-image").css("height",120+"px");
+          $(".search-area").css("margin-left",35+"px");
+          $(".itemName").css("width",80+"px");
+        }
+        else if(subHeaderWidth >= 750)
+        {
+          $(".item-for-sale-image").css("height",180+"px");
+          $(".search-area").css("margin-left",-120+"px");
+          $(".itemName").css("width",80+"px");
+        }
       }
     );
 

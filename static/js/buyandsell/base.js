@@ -135,13 +135,12 @@ function lookup(val,type)
             "</div></a>";
         }
 
-        html+= "<div class = \"visible-division-line\"></div>"+
-          "<div class = \"searched-items-for-sale\">";
-
         if ( data['sell_items'].length )
         {
 
-          html+="<p class=\"search-results-heading\">"+
+          html+="<div class = \"visible-division-line\"></div>"+
+            "<div class = \"searched-items-for-sale\">"+
+            "<p class=\"search-results-heading\">"+
             "<span class=\"searched-query\">"+val+"</span>&nbsp"+
             "in Items for Sale</p>";
 
@@ -155,7 +154,7 @@ function lookup(val,type)
               ' <span class="searched-item-price">'+
               data['sell_items'][i].cost+
               '</span>'+
-              ' <span class="rupee-logo">Rs&nbsp</span>'+
+              ' <span class="rupee-logo"><img class="rupee-icon" src="' +  static_url + '/images/buyandsell/rupee-icon.png">&nbsp</span>'+
               ' </div>'+
               "</a>";
 
@@ -166,7 +165,9 @@ function lookup(val,type)
         }
         else
         {
-          html+="<p class=\"search-results-heading\">"+
+          html+="<div class = \"visible-division-line\"></div>"+
+            "<div class = \"searched-items-for-sale\">"+
+            "<p class=\"search-results-heading\">"+
             "No such Item found.</p>"+
             "</div>";
         }
@@ -192,7 +193,7 @@ function lookup(val,type)
               ' <span class="searched-item-price">'+
               data['requests'][i].price_upper+
               '</span>'+
-              ' <span class="rupee-logo">Rs&nbsp</span>'+
+              ' <span class="rupee-logo"><img class="rupee-icon" src="' +  static_url + '/images/buyandsell/rupee-icon.png">&nbsp</span>'+
               ' </div>'+
               "</a>";
           }

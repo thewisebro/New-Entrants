@@ -5,6 +5,11 @@ body
   padding-right: 0px !important;
 }
 
+.container
+{
+  min-width: 765px;
+}
+
 @font-face {
   font-family: 'OpenSans';
 
@@ -19,6 +24,27 @@ body
   src: url(../../fonts/OpenSans-Semibold.ttf);
 
   src: url(../../fonts/OpenSans-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'OpenSans';
+  src: url(../../fonts/OpenSans-Regular.ttf);
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url(../../fonts/OpenSans-Semibold.ttf);
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url(../../fonts/OpenSans-Italic.ttf
+  font-style: italic, oblique;
+  }
+  @font-face {
+  font-family: 'OpenSans';
+  src: url(../../fonts/OpenSans-SemiboldItalic.ttf);
+  font-weight: bold;
+  font-style: italic, oblique;
 }
 
 a:hover
@@ -134,14 +160,27 @@ a:focus
   box-shadow: 0 1px 5px rgba(0,0,0,0.05);
 }
 
+.header-container
+{
+  padding: 0;
+}
+
 .breadcrumb
 {
   padding-left:0px;
   background-color: #F5F5F1;
   font-size: 14px;
+  margin-left: 290px;
   margin-top:10px;
   margin-bottom:0px;
   font-weight:normal;
+}
+
+.breadcrumb li a
+{
+  position: relative;
+  font-size: 13px;
+  font-weight: bold;
 }
 
 .breadcrumb > li + li:before {
@@ -240,6 +279,7 @@ a:focus
   position: fixed;
   width: 260px;
   border: 1px solid #dedede;
+  z-index: 1;
 }
 
 .price-line-height
@@ -339,12 +379,6 @@ input[type="radio"]:checked + label div
   background-image:url("../../images/buyandsell/radio-button-checked.png");
 }
 
-.pageContent
-{
-  margin-top:0px;
-  z-index: -1;
-}
-
 .sub-header
 {
   margin-top: 48px;
@@ -386,6 +420,14 @@ input[type="radio"]:checked + label div
 {
   font-size: 13px;
   float:right;
+}
+
+.page-content
+{
+  position: absolute;
+  margin-left: 290px;
+  padding-left: 0;
+
 }
 
 .page-content table tbody tr
@@ -668,6 +710,13 @@ a: focus
   border-radius: 3px;
 }
 
+.done-button
+{
+  float: right;
+  margin-right: 45px;
+  margin-top: -45px;
+}
+
 .enquire-clicked
 {
   display:none;
@@ -773,6 +822,14 @@ a: focus
   border-left: 1px solid #1081de;
 }
 
+.searched-item-name
+{
+  display: inline-block;
+  width: 175px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .rupee-logo
 {
   float:right;
@@ -808,14 +865,20 @@ textarea
 .my-account-page-headings
 {
   font-size:14px;
-  padding: 5px 0px 5px 5px;
-  border-top: 1px solid #FFFFFF;
+  padding: 5px 0px 5px 10px;
   border-bottom: 1px solid #DDDDDD;
+  background-color: #dedede;
+  margin-bottom: 30px;
 }
 
 .my-account-requests-table tbody tr
 {
   cursor: default !important;
+}
+
+.my-account-requests-table tbody tr:hover
+{
+  background-color: #f9f9f9 !important;
 }
 
 .manage-watched-button
@@ -1150,7 +1213,7 @@ a:focus
   background-color: #1081de;
   color: #ffffff;
   border: none;
-  padding: 4px 10px;
+  padding: 5px 20px;
   font-size: 13px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -1160,7 +1223,7 @@ a:focus
 .table-striped tbody tr
 {
   cursor: pointer;
-  transition: background-color ease-out 100ms;
+  transition: ease-out 100ms;
 }
 
 .table-striped tbody tr:hover
@@ -1269,7 +1332,7 @@ a:focus
   margin: 20px auto 12px -12px;
   text-align: left;
   font-weight: bold;
-  padding-left: 37px;
+  padding-left: 35px;
   display: inline-block;
 }
 
@@ -1339,7 +1402,7 @@ a:focus
 .phone-no-visibility-info-text
 {
   padding: 0 25px;
-  font-size: 12px;
+  font-size: 13px;
   font-style: italic;
   color: #7D7D7D;
 }
@@ -1453,6 +1516,34 @@ a:focus
 
 }
 
+.rupee-icon
+{
+  position: relative;
+  margin-top: -2px;
+  height: 12px;
+}
+
+.sell-form-rupee-icon
+{
+  position: absolute;
+  left: 25px;
+  top: 14px;
+}
+
+.input-box-rupee-icon-min
+{
+  position: absolute;
+  left: 5px;
+  top: 10px;
+}
+
+.input-box-rupee-icon-max
+{
+  position: absolute;
+  left: 90px;
+  top: 10px;
+}
+
 .expired-icon
 {
   width: 15px;
@@ -1516,15 +1607,15 @@ a:focus
   font-size: 13px;
 }
 
- .form-group label
- {
-   padding-top: 5px;
- }
+.form-group label
+{
+  padding-top: 5px;
+}
 
- .form-group
- {
-   margin-bottom: 30px;
- }
+.form-group
+{
+  margin-bottom: 30px;
+}
 
 
 .form-group .col-xs-8 .form-group:last-child
@@ -1616,7 +1707,7 @@ textarea:focus
   cursor: pointer;
   min-height: 0;
   support: IE7 /* support: IE10, see #8844 */
-  border-bottom: 1px solid #EEE;
+border-bottom: 1px solid #EEE;
   font-family: openSans;
   font-size: 14px;
 }
@@ -1743,4 +1834,43 @@ textarea:focus
   margin-left: 25px;
   top: -5px;
   display: inline-block;
+}
+
+.you-are-not-watching
+{
+  width: 200px;
+  margin-left: 25px;
+  font-size: 13px;
+  font-style: italic;
+  color: #7D7D7D;
+}
+
+.you-have-not-added-any
+{
+  padding: 0px 0 15px 20px;
+  font-size: 30px;
+  color: #AAA;
+}
+
+.span2
+{
+  position: relative;
+}
+
+.entries_error {
+  position: absolute;
+  z-index: 1;
+  background-color: #FBE2E2;
+  right: 0;
+  top: -62px;
+  padding: 0 5px;
+  color: #CA0303;
+  width: 190px;
+}
+
+.expires-in-days-text
+{
+  position: absolute;
+  left: 60px;
+  top: 8px;
 }
