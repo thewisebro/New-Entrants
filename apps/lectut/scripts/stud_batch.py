@@ -9,10 +9,11 @@ for some_course in reg_courses:
     code = str(some_course.course_details.course_code)
     course = Course.objects.get(code = code)
     batch = Batch.objects.get(course = course)
-    batch.students.add(some_student)
-    count+=1
-    print 'code'+str(some_course.course_details.course_code)
+    if not some_student in batch.students.all():
+      batch.students.add(some_student)
+      count+=1
+      print 'code'+str(some_course.course_details.course_code)
   except Exception as e:
     print e
 
-print 'Count'+str(count)
+print 'Number of students added'+str(count)
