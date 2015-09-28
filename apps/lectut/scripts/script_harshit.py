@@ -35,7 +35,7 @@ for file_type in file_types:
 
   for each_chu in ls:
     os.chdir(each_chu)
-    file_list=os.listdir(os.getcwd())#abhi faculty k andar hu main
+    file_list=os.listdir(os.getcwd())#abhi faculty k andar hu ( getting list of all files uploaded by this faculty
 #  print file_list
     total_files = total_files + len(file_list)
     for each_file in file_list:
@@ -71,12 +71,14 @@ for file_type in file_types:
             directory = '../../../lectut/'+course+'/'+directype+'/'
             if not os.path.exists(directory):
               os.makedirs(directory)
-            shutil.copy2(each_file,directory)
+            if not os.path.isfile(directory+str(each_file)):
+              shutil.copy2(each_file,directory)
+              total_success = total_success+1
+
             new_course_code = ''
             if len(course.split('-')[0])==2:
               new_course_code = course.split('-')[0]+'N'
               new_course_code += '-'+course.split('-')[1]
-        
 
             if len(course.split('-')[0])==3:
               new_course_code = course.split('-')[0][:2]
@@ -89,11 +91,11 @@ for file_type in file_types:
               directory = '../../../lectut/'+course2+'/'+directype+'/'
               if not os.path.exists(directory):
                 os.makedirs(directory)
-              shutil.copy2(each_file,directory)
-              total_success = total_success+1
+              if not os.path.isfile(directory+str(each_file)):
+                shutil.copy2(each_file,directory)
+                total_success = total_success+1
 
             print 'Copied file : ' +str(each_file)
-            total_success = total_success+1
           except Exception as e:
             ws.write(row,2,str(each_file))
             ws.write(row,3,str(e))
@@ -115,4 +117,5 @@ for file_type in file_types:
   ws.write(3,2,total_success)
   ws.write(4,2,fail)
   wb.save('files_error_'+file_type+'.xlsx')
+  print 'Number of files added'+str(total_success)
   print fail
