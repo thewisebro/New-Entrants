@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -20,6 +21,7 @@ public class Navigation extends ActionBarActivity
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
+
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     /**
@@ -44,12 +46,27 @@ public class Navigation extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        Fragment fragment;
         // update the main content by replacing fragments
-        /*FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        switch(position) {
+
+            case 1:fragment = new BlogsFragment();
+            break;
+            case 2:fragment = new SConnectFragment();
+            break;
+            case 3:fragment = new PConnectFragment();
+                break;
+            case 4 :fragment= new EditInfoFragment();
+            break;
+
+            default: fragment=new ProfileFragment();
+                break;
+        }
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();*/
-        Intent intent;
+                .replace(R.id.container, fragment)
+                .commit();
+       /*Intent intent;
         switch(position) {
             case 0: intent = new Intent(this,Profile.class);
                 break;
@@ -65,7 +82,7 @@ public class Navigation extends ActionBarActivity
                 break;
 
         }
-        startActivity(intent);
+        startActivity(intent);*/
 
     }
 
