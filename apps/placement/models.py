@@ -371,6 +371,7 @@ class CompanyContactInfo(models.Model):
 
     def __unicode__(self):
         return str(self.name)+str(self.status)
+
 class ContactPerson(models.Model):
     """
         Details of person inside the company whom campus contact would be
