@@ -1,6 +1,8 @@
 {% extends "buyandsell/base.html" %}
 
 {% block content %}
+
+<div class="full-page-transparent-overlay"></div>
 <div class="container">
   {% if messages %}
   {% for message in messages %}
@@ -84,7 +86,7 @@
       </div>
     </div>
     {% endblock %}
-    <div class="col-md-9 page-content">
+    <div class="page-content">
 
       <p class="my-account-page-headings">Items you've Added for Sale</p>
       <div class="row">
@@ -96,7 +98,7 @@
               {% if row.itempic.pic %}
               <img class="item-for-sale-image" src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
               {% else %}
-              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buyandsell/default.png" alt="Generic placeholder thumbnail">
               {% endif %}
 
 
@@ -107,11 +109,7 @@
                 <img class="rupee-icon rupee-icon-item-for-sale" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">
                 {{row.cost}}
               </span>
-              <div class="row">
-                <div class="col-md-12">
-                  <span class="expiresIn">Expires in {{ row.expiry_date|timeuntil }}</span>
-                </div>
-              </div>
+              <div class="expiresIn">Expires in {{row.expiry_date|timeuntil}}</div>
             </div>
             <div class="dropdown item-options-dropdown" style="display:inline">
               <button class="btn btn-default item-options-button dropdown-toggle" type="button" id="my-account-object-options" data-toggle="dropdown">
@@ -157,7 +155,7 @@
               {% if row.itempic.pic %}
               <img class="item-for-sale-image" src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
               {% else %}
-              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buyandsell/default.png" alt="Generic placeholder thumbnail">
               {% endif %}
 
               <div class="fading-rectangle">
@@ -228,11 +226,7 @@
             <div class="caption">
               <span class="itemName">{{ row.item_name }}</span>
               <span class="price">Rs. {{row.cost}}</span>
-              <div class="row">
-                <div class="col-md-12">
-                  <span class="expiresIn">Expires in {{ row.expiry_date|timeuntil }}</span>
-                </div>
-              </div>
+              <div class="expiresIn">Expires in {{row.expiry_date|timeuntil}}</div>
             </div>
 
             <div class="dropdown item-options-dropdown" style="display:inline">
@@ -443,6 +437,8 @@
     </div>
   </div>
 </div>
+
+
 
 {% endblock %}
 

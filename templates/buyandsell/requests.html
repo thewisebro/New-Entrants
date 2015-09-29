@@ -133,39 +133,39 @@
         </li>
         {% endif %}
       </ol>
-      {% if login_flag %}
-      <a>
-        {% if mc and not category %}
-        {% if mc in main_watched %}
-        <button type="button"  id="watch_btn"  class="btn global-button watch-button watch-button-watching" onclick='watch("{{mc}}","{{c}}" )'>
-          Watching
-        </button>
-        {% else %}
-        <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch("{{mc}}","{{c}}" )'>
-          Watch this category
-        </button>
-        {% endif %}
-        {% endif %}
-
-        {% if mc and  category %}
-        {% if category in sub_watched %}
-        <button type="button" id="watch_btn" class="btn global-button watch-button watch-button-watching" onclick='watch("{{mc}}","{{c}}" )'>
-          Watching
-        </button>
-        {% else %}
-        <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch("{{mc}}","{{c}}" )'>
-          Watch this category
-        </button>
-        {% endif %}
-        {% endif %}
-
-        {% if not mc and not category %}
-        {% endif %}
-
-      </a>
-      {% endif %}
     </div>
   </div>
+  {% if login_flag %}
+  <a class="watch-button-anchor">
+    {% if mc and not category %}
+    {% if mc in main_watched %}
+    <button type="button"  id="watch_btn"  class="btn global-button watch-button watch-button-watching" onclick='watch("{{mc}}","{{c}}" )'>
+      Watching
+    </button>
+    {% else %}
+    <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch("{{mc}}","{{c}}" )'>
+      Watch this category
+    </button>
+    {% endif %}
+    {% endif %}
+
+    {% if mc and  category %}
+    {% if category in sub_watched %}
+    <button type="button" id="watch_btn" class="btn global-button watch-button watch-button-watching" onclick='watch("{{mc}}","{{c}}" )'>
+      Watching
+    </button>
+    {% else %}
+    <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch("{{mc}}","{{c}}" )'>
+      Watch this category
+    </button>
+    {% endif %}
+    {% endif %}
+
+    {% if not mc and not category %}
+    {% endif %}
+
+  </a>
+  {% endif %}
   <div class="row">
     <div class="col-md-3">
     </div>
@@ -329,7 +329,7 @@
       </div>
     </div>
     {% endblock %}
-    <div class="col-md-9 page-content">
+    <div class="page-content">
       {% if table_data %}
       <table class="table table-striped">
         <thead>
@@ -350,65 +350,68 @@
         </tbody>
       </table>
       {% endif %}
+
+      {% if paginator %}
+      {% block paginator %}
+      <nav>
+        <ul class="pagination pagination-customized">
+
+          {% if table_data.number != 1 %}
+          <li>
+            <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page=1" aria-label="Previous">
+              <span aria-hidden="true">First</span>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if table_data.has_previous %}
+          <li>
+            <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.previous_page_number }}"
+               aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          {% endif %}
+
+          {% for page in page_list %}
+          {% if table_data.number == page %}
+          <li class="active">
+            <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.number }}">{{table_data.number}}
+            </a>
+          </li>
+          {% else %}
+          <li>
+            <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ page }}">{{ page }}
+            </a>
+          </li>
+          {% endif %}
+          {% endfor %}
+
+          {% if table_data.has_next %}
+          <li>
+            <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.next_page_number }}"
+               aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if table_data.number != table_data.paginator.num_pages %}
+          <li>
+            <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ paginator.num_pages }}"
+               aria-label="Next">
+              <span aria-hidden="true">last</span>
+            </a>
+          </li>
+          {% endif %}
+
+        </ul>
+      </nav>
+      {% endblock %}
+      {% endif %}
+
     </div>
-    {% if paginator %}
-    {% block paginator %}
-    <nav>
-      <ul class="pagination pagination-customized">
 
-        {% if table_data.number != 1 %}
-        <li>
-          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page=1" aria-label="Previous">
-            <span aria-hidden="true">First</span>
-          </a>
-        </li>
-        {% endif %}
-
-        {% if table_data.has_previous %}
-        <li>
-          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.previous_page_number }}"
-             aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        {% endif %}
-
-        {% for page in page_list %}
-        {% if table_data.number == page %}
-        <li class="active">
-          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.number }}">{{table_data.number}}
-          </a>
-        </li>
-        {% else %}
-        <li>
-          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ page }}">{{ page }}
-          </a>
-        </li>
-        {% endif %}
-        {% endfor %}
-
-        {% if table_data.has_next %}
-        <li>
-          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ table_data.next_page_number }}"
-             aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-        {% endif %}
-
-        {% if table_data.number != table_data.paginator.num_pages %}
-        <li>
-          <a href="?{% if queries %}{{queries.urlencode}}&amp;{% endif %}page={{ paginator.num_pages }}"
-             aria-label="Next">
-            <span aria-hidden="true">last</span>
-          </a>
-        </li>
-        {% endif %}
-
-      </ul>
-    </nav>
-    {% endblock %}
-    {% endif %}
   </div>
 
 </div>

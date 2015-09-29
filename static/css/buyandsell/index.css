@@ -26,26 +26,6 @@ body
   src: url(../../fonts/OpenSans-Regular.ttf);
 }
 
-@font-face {
-  font-family: 'OpenSans';
-  src: url(../../fonts/OpenSans-Regular.ttf);
-}
-@font-face {
-  font-family: 'OpenSans';
-  src: url(../../fonts/OpenSans-Semibold.ttf);
-  font-weight: bold;
-}
-@font-face {
-  font-family: 'OpenSans';
-  src: url(../../fonts/OpenSans-Italic.ttf
-  font-style: italic, oblique;
-  }
-  @font-face {
-  font-family: 'OpenSans';
-  src: url(../../fonts/OpenSans-SemiboldItalic.ttf);
-  font-weight: bold;
-  font-style: italic, oblique;
-}
 
 a:hover
 {
@@ -189,6 +169,14 @@ a:focus
   padding: 0 4px;
 }
 
+.watch-button-anchor
+{
+  position: relative;
+  top: -45px;
+  float: right;
+  margin-right: -45px;
+}
+
 .watch-button
 {
   position:absolute;
@@ -200,9 +188,9 @@ a:focus
   background-color:white;
   color:#505050;
   display:block;
-  right:16px;
-  top:10px;
   margin-right: 0px;
+  right: 16px;
+  top: 10px;
 }
 
 .watch-button:hover
@@ -291,7 +279,7 @@ a:focus
 {
   margin-left:20px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: bold;
 }
 
 .price-range-text-input-group
@@ -405,29 +393,34 @@ input[type="radio"]:checked + label div
   color:#505050;
   margin-top: 0px;
   font-weight: 600;
+  position: absolute;
 }
 
 .expiresIn
 {
   font-size: 11px;
-  font-weight:lighter;
-  margin:0px;
-  display: block;
   color: #C0C0C0;
+  display: inline-block;
+  width: 125px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: absolute;
+  left: 20px;
+  margin-top: 20px;
 }
 
 .price
 {
   font-size: 13px;
-  float:right;
   position: absolute;
-  bottom: 50px;
+  margin-top: 0;
   right: 20px;
 }
 
 .page-content
 {
-  position: absolute;
+  position: relative;
   margin-left: 290px;
   padding-left: 0;
 
@@ -596,9 +589,9 @@ input[type="radio"]:checked + label div
 
 .request-options-dropdown-menu
 {
-  top: 26px;
+  top: 25px;
   width: 165px;
-  left: 41%;
+  left: -110px;
   display: none;
 }
 
@@ -905,7 +898,8 @@ textarea
 
 .caption
 {
-  padding: 5px;
+  padding: 2px 5px 0 5px;
+  height: 40px;
 }
 
 .ui-slider .ui-slider-handle
@@ -920,7 +914,13 @@ textarea
 
 .pagination-customized
 {
-  margin-left: 50%;
+  margin-left: 20%;
+}
+
+.pagination-bottom-aligned
+{
+  position: fixed;
+  bottom: 25px;
 }
 
 .watched-categories ul li
@@ -1733,6 +1733,7 @@ border-bottom: 1px solid #EEE;
 .filter-by-category-heading
 {
   margin-left: 20px;
+  font-weight: bold;
 }
 
 .active-category
@@ -1876,4 +1877,42 @@ border-bottom: 1px solid #EEE;
   position: absolute;
   left: 60px;
   top: 8px;
+}
+
+.sell-details-message
+{
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
+
+@font-face {
+  font-family: 'OpenSans';
+  src: url(../../fonts/OpenSans-Regular.ttf);
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url(../../fonts/OpenSans-Semibold.ttf);
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url(../../fonts/OpenSans-Italic.ttf
+  font-style: italic, oblique;
+  }
+  @font-face {
+  font-family: 'OpenSans';
+  src: url(../../fonts/OpenSans-SemiboldItalic.ttf);
+  font-weight: bold;
+  font-style: italic, oblique;
+}
+
+.full-page-transparent-overlay
+{
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  z-index: 2
 }

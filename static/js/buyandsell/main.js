@@ -1,11 +1,25 @@
-$(document).ready
-(
-  function()
+
+  function loadingComplete()
   {
-    if ($(".input-button")[0])
+   /* if ($(".input-button").length)
     {
-      $(".ui-dialog-titlebar-close").css("display","none");
+      parent.$(".ui-dialog-titlebar-close").css("display","none");
     }
+   */
+    if ($("body").height() > $(window).height())
+    {
+      $("body").css("margin-right",'15px');
+    }
+
+    //this function removes the bug in which item options of my-account page behaved improperly and their visibility toggled irrationally
+
+    var hideOverlay=function()
+    {
+      $(".full-page-transparent-overlay").css("display","none");
+    };
+    setTimeout(hideOverlay, 50);
+
+    //visibility bugfix ends
 
     $(".alert-error").centerHorizontally();
 
@@ -16,7 +30,7 @@ $(document).ready
 
     setTimeout(hideAlert, 5000);
 
-    var widthOfWindow= $(window).width()
+    var widthOfWindow= $(window).width();
     $(".headerBackground").css("width",widthOfWindow+"px");
 
     var attr = $(this).attr('name');
@@ -29,7 +43,7 @@ $(document).ready
     $(".page-content").css("width",subHeaderWidth-275+"px");
     if(subHeaderWidth >= 1100)
     {
-      $(".item-for-sale-image").css("height",150+"px");
+      $(".item-for-sale-image").css("height",160+"px");
       $(".search-area").css("margin-left",35+"px");
     }
 
@@ -58,7 +72,7 @@ $(document).ready
         console.log(subHeaderWidth);
         if(subHeaderWidth >= 1100)
         {
-          $(".item-for-sale-image").css("height",150+"px");
+          $(".item-for-sale-image").css("height",160+"px");
           $(".search-area").css("margin-left",35+"px");
         }
         else if(subHeaderWidth >= 900)
@@ -72,6 +86,15 @@ $(document).ready
           $(".item-for-sale-image").css("height",180+"px");
           $(".search-area").css("margin-left",-120+"px");
           $(".itemName").css("width",80+"px");
+        }
+
+        if ($(".page-content").height() < $(window).height() - 181 )
+        {
+          $(".pagination").addClass("pagination-bottom-aligned");
+        }
+        else
+        {
+          $(".pagination-customized").css("margin-left","40%");
         }
       }
     );
@@ -458,8 +481,6 @@ $(document).ready
   */
 
   }
-
-);
 
 window.jQuery
 (
