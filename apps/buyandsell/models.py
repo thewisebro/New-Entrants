@@ -24,7 +24,7 @@ class BuyandsellPhoto(CropImage):
     if image_field:
       return image_field.instance.pic.url
     else:
-      return settings.STATIC_URL + 'images/buysell/default.png'
+      return settings.STATIC_URL + 'images/buyandsell/default.png'
 
   @classmethod
   def file_name(cls, image_field, fname):

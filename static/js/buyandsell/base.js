@@ -146,7 +146,8 @@ function lookup(val,type)
 
           for(var i=0;i<data['sell_items'].length;i++)
           {
-            html+="<a class=\"searched-item instant-searched-item-for-sale\" onclick=\"sell_details("+data['sell_items'][i].id+")\">"+
+            html+="<a class=\"searched-item instant-searched-item-for-sale\" onclick=\"sell_details("+data['sell_items'][i].id + ",'" +
+              data['sell_items'][i].name + "'" + ")\">"+
               '<div>'+
               '<span class="searched-item-name">'+
               data['sell_items'][i].name+
@@ -185,7 +186,8 @@ function lookup(val,type)
 
           for(var i=0;i<data['requests'].length;i++)
           {
-            html+="<a class=\"searched-item instant-searched-request\" onclick=\"request_details("+data['requests'][i].id+")\">"+
+            html+="<a class=\"searched-item instant-searched-request\" onclick=\"request_details("+data['requests'][i].id+",'" +
+              data['requests'][i].name + "'" + ")\">" +
               '<div>'+
               '<span class="searched-item-name">'+
               data['requests'][i].name+
@@ -434,8 +436,11 @@ $('body').ready(function(){
 
 function assign_id(id , type)
 {
+   if( type == 'sell')
+   $("#modal-delete").attr('onclick','trash(' + '"' +type +'"' +','+id + ')' );
+   else
+   $("#modal-delete-request").attr('onclick','trash(' + '"' +type +'"' +','+id + ')' );
 
-  $("#modal-delete").attr('onclick','trash(' + '"' +type +'"' +','+id + ')' );
 }
 
 show_contact();
@@ -584,6 +589,7 @@ opened_dialog = 'upload_image_dialog';
 }
 
 function special_submit(id,type) {
+  console.log("done");
     var form = $("#trans_form")
       form.attr("action" , "/buyandsell/succ_trans/" + type + "/" + id + "/ni/");
       form.submit()

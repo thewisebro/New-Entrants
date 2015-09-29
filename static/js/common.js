@@ -157,9 +157,43 @@ function check_user_data(is_authenticated, username){
       $(document).trigger('login');
     else
     {
-      logout(from_buyandsell = true)}
+      $(document).trigger('logout');
+    }
   }
 }
+
+function check_user_data_buyandsell(is_authenticated, username){
+  if(!(is_authenticated === true || is_authenticated === false))
+    return;
+  if(user.is_authenticated != is_authenticated ||
+      (user.is_authenticated && user.username != username)){
+    if(is_authenticated){
+      user = {
+        is_authenticated: true,
+        username: username
+      };
+    }
+    else{
+      user = {
+        is_authenticated: false
+      };
+    }
+    if(current_dialog){
+      try{
+        current_dialog.dialog('close');
+      } catch(e){}
+    }
+    console.log('is_authenticated: '+is_authenticated);
+    console.log('username: '+username);
+    if(is_authenticated)
+      $(document).trigger('login');
+    else
+    {
+      logout(from_buyandsell = true);
+    }
+  }
+}
+
 
 function load_pagelets(dom_elem){
   $(dom_elem).find('.pagelet').each(function(){
@@ -270,7 +304,6 @@ function logout(from_buyandsell){
       user = {
         is_authenticated: false
       };
-      console.log("kanav");
       $(document).trigger("logout");
       if ( typeof(from_buyandsell) != 'undefined' && from_buyandsell == true )
        window.top.location.reload();

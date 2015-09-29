@@ -295,6 +295,7 @@ FEED_APPS = (
   'buysell',
   'lectut',
   'phpapps',
+  'buyandsell'
 )
 
 REDACTOR_OPTIONS = {

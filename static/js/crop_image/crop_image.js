@@ -1,7 +1,12 @@
 var uname;
+var from_buyandsell_accounts;
 
-function upload_image(unique_name, id){
+function upload_image(unique_name, id ,from_accounts){
   uname = unique_name;
+
+  if ( typeof(from_accounts) != 'undefined' && from_accounts == true )
+      from_buyandsell_accounts = true;
+
   dialog_iframe({
     name: 'upload_image_dialog',
     title: 'Upload Image',
@@ -15,9 +20,12 @@ function cropping_done(image_url){
   close_dialog('upload_image_dialog');
   $('#'+uname+'-img').attr('src',image_url);
   if (uname == 'buyandsell_pic')
-  {
+  {  console.log(from_buyandsell_accounts);
+    if (from_buyandsell_accounts == true)
+      window.location.reload();
+    else
     window.top.location = "/buyandsell/buy";
-    console.log("there");
+
   }
 }
 
