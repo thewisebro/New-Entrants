@@ -8,7 +8,7 @@ class saleFeed(ModelFeed):
     app = 'buyandsell'
 
   def save(self, instance, created):
-    instance.link = '/buyandsell/sell_details/' + str(instance.pk)
+    instance.link = '/buyandsell/sell_details/' + str(instance.pk) + '/notif'
     return {
       'content': render_to_string('buyandsell/sale_feed.html', {
         'instance': instance,
@@ -24,7 +24,7 @@ class requestFeed(ModelFeed):
     app = 'buyandsell'
 
   def save(self, instance, created):
-    instance.link = '/buyandsell/request_details/' + str(instance.pk)
+    instance.link = '/buyandsell/request_details/' + str(instance.pk) + '/notif'
     return {
       'content': render_to_string('buyandsell/request_feed.html', {
         'instance': instance,

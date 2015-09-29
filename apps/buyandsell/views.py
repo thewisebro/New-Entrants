@@ -481,6 +481,7 @@ def unwatch(request,mc=None,c=None):
   return HttpResponse(success, content_type="application/json")
 
 def selldetails(request,pk,notif_flag = None):
+#import pdb;pdb.set_trace();
   login_flag = False
   if request.user is not None and request.user.is_authenticated():
    login_flag = True
