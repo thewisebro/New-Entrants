@@ -16,7 +16,7 @@ from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from api.utils import get_client_ip, pagelet_login_required,\
-                      ajax_login_required, dialog_login_required
+                      ajax_login_required, dialog_login_required_buyandsell
 
 logger = logging.getLogger('buyandsell')
 
@@ -169,7 +169,7 @@ def buy(request,mc = None,c = None):
     'queries':queries_without_page,
     'll':pl if pl else 1,
     'ul':pu if pu else 50000,
-    'user':request.user if login_flaf else None
+    'user':request.user if login_flag else None
           }
 
   return render(request,'buyandsell/buy-page.html',context)
@@ -327,7 +327,7 @@ def viewrequests(request,mc=None,c=None):
           }
   return render(request,'buyandsell/requests.html',context)
 
-@dialog_login_required
+@dialog_login_required_buyandsell
 def sell(request):
   cat_dict = get_category_dictionary()
   main_categories = cat_dict.keys()
@@ -365,8 +365,8 @@ def sell(request):
         app = 'buyandsell'
         watch_user_list = new_item.category.watch_users.all()
         print watch_user_list
-        notif_text = str(new_item.item_name)+"has been added to the category"+str(new_item.category.name)
-        notif_text += "that you have watched"
+        notif_text = str(new_item.item_name)+" has been added to the category "+str(new_item.category.name)
+        notif_text += " that you have watched"
         url = '/buyandsell/sell_details/' + str(new_item.pk)
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
 
@@ -384,7 +384,7 @@ def sell(request):
   form=SellForm(initial=init_dict)
   return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
 
-@dialog_login_required
+@dialog_login_required_buyandsell
 def requestitem(request):
   cat_dict = get_category_dictionary()
   main_categories = cat_dict.keys()
@@ -422,8 +422,8 @@ def requestitem(request):
         app='buyandsell'
         watch_user_list=new_item.category.watch_users.all()
         print watch_user_list
-        notif_text=str(new_item.item_name)+"has been requested in the category"+str(new_item.category.name)
-        notif_text+="that you have watched"
+        notif_text=str(new_item.item_name)+" has been requested in the category "+str(new_item.category.name)
+        notif_text+=" that you have watched"
         url = '/buyandsell/sell_details/' + str(new_item.pk)
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
         return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/viewrequests/'})
@@ -511,7 +511,7 @@ def selldetails(request,pk):
       messages.error(request, 'Incorrect password' )
 
     else:
-      return render(request , 'dialog_base.html')
+      return render(request , 'dialog_base_buyandsell.html')
 
   if login_flag and len(ShowContact.objects.filter(user=user))==1:
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
@@ -558,7 +558,7 @@ def requestdetails(request,pk):
       messages.error(request, 'Incorrect password' )
 
     else:
-      return render(request , 'dialog_base.html')
+      return render(request , 'dialog_base_buyandsell.html')
   if login_flag and len(ShowContact.objects.filter(user=user))==1:
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
       show_contact=0
@@ -996,8 +996,8 @@ def seeall(request,search_type):
 
     return render(request,'buyandsell/buy-page.html',context)
 
-@dialog_login_required
-def edit(request,form_type,pk): #need to activate if item date  is renewed
+@dialog_login_required_buyandsell
+def edit(request,form_type,pk):
   cat_dict = get_category_dictionary()
   main_categories = cat_dict.keys()
   sub_categories = cat_dict[main_categories[0]]
@@ -1032,6 +1032,8 @@ def edit(request,form_type,pk): #need to activate if item date  is renewed
           edited_item.post_date=post_date
           edited_item.expiry_date=expiry_date
           edited_item.user=user
+          if edited_item.expiry_date > post_date:
+            edited_item.is_active = True
           edited_item.save()
           if edited_item.category !=  old_category:
             app='buyandsell'
@@ -1050,7 +1052,7 @@ def edit(request,form_type,pk): #need to activate if item date  is renewed
     return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
 
   if form_type=="request":
-    instance=RequestedItems.objects.get(pk=pk)  #update notifications to be given to watch users
+    instance=RequestedItems.objects.get(pk=pk)
     old_category=instance.category
     if request.method=='POST':
       form=RequestForm(request.POST,request.FILES,instance=instance)
@@ -1078,6 +1080,8 @@ def edit(request,form_type,pk): #need to activate if item date  is renewed
           edited_item.post_date=post_date
           edited_item.expiry_date=expiry_date
           edited_item.user=user
+          if edited_item.expiry_date > post_date:
+            edited_item.is_active = True
           edited_item.save()
           if edited_item.category !=  old_category:
             app='buyandsell'
@@ -1163,7 +1167,7 @@ def trash_item(request,item_type,pk):
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
 
-@dialog_login_required
+@dialog_login_required_buyandsell
 def transaction(request,item_type,pk,ignore_flag = None):
   user=request.user
   if item_type == "sell":
@@ -1171,13 +1175,13 @@ def transaction(request,item_type,pk,ignore_flag = None):
       itm=SaleItems.items.get(pk=pk)
     except:
       messages.error(request,"This item has been deleted or does not exist")
-      return HttpResponseRedirect('/buyandsell/my-account/')
+      return HttpResponseRedirect('/buyandsell/succ_trans/sell/'+pk+'/')
 
     itm_user=itm.user
     if itm_user != user:
       messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.\
                               You can only fill the form for the items in your account")
-      return HttpResponseRedirect('/buyandsell/my-account/')
+      return HttpResponseRedirect('/buyandsell/succ_trans/sell/'+pk+'/')
 
     if request.method == "POST":
       try:
@@ -1190,15 +1194,16 @@ def transaction(request,item_type,pk,ignore_flag = None):
       form=TransactionForm()
       buyer_username=request.POST.get('buyer_username')
       username_other=request.POST.get('username_other')
-      if buyer_username != "":
+      if buyer_username != "" and buyer_username != "Other":
         buyer=User.objects.get(username=buyer_username)
-      elif buyer_username=="" and ( not username_other.isspace() and username_other != ""):
-        tentative_buyer=User.objects.get(username=username_other)
-        if tentative_buyer:
-          buyer = tentative_buyer
-        else:
+      elif (buyer_username=="" or buyer_username == "Other") and  username_other != "":
+        try:
+          tentative_buyer=User.objects.get(username=username_other)
+          if tentative_buyer:
+            buyer = tentative_buyer
+        except:
           buyer = None
-      elif buyer_username=="" and ( username_other.isspace() or username_other==""):
+      elif (buyer_username==""  or buyer_username == "Other") and username_other == "":
         if not ignore_flag:
           messages.error(request,"Buyer dosent exist or not filled!!")
           return HttpResponseRedirect('/buyandsell/succ_trans/sell/'+pk+'/')
@@ -1229,13 +1234,13 @@ def transaction(request,item_type,pk,ignore_flag = None):
       itm=RequestedItems.items.get(pk=pk)
     except:
       messages.error(request,"This item has been deleted or does not exist")
-      return HttpResponseRedirect('/buyandsell/my-account/')
+      return HttpResponseRedirect('/buyandsell/succ_trans/request/'+pk+'/')
 
     itm_user=itm.user
     if itm_user != user:
       messages.error(request,"This item is not added by you,you you cannot fill it's transaction form\
           .You can only fill the form for the items in your account")
-      return HttpResponseRedirect('/buyandsell/my-account/')
+      return HttpResponseRedirect('/buyandsell/succ_trans/request/'+pk+'/')
 
 
     if request.method=="POST":
@@ -1250,25 +1255,25 @@ def transaction(request,item_type,pk,ignore_flag = None):
       form=TransactionForm()
       seller_username=request.POST.get('seller_username')
       username_other=request.POST.get('username_other')
-      print seller_username
-      print username_other
-      if seller_username != "":
+      if seller_username != "" and seller_username != "Other":
         seller=User.objects.get(username=seller_username)
-      elif seller_username=="" and ( not username_other.isspace() and username_other!="" ):
+      elif (seller_username=="" or seller_username == "Other") and  username_other != "":
         tentative_seller=User.objects.get(username=username_other)
         if tentative_seller:
           seller=tentative_seller
         else:
           seller=None
-      elif seller_username=="" and ( username_other.isspace() or username_other=="" ):
-        seller=None
+      elif (seller_username==""  or seller_username == "Other") and username_other == "":
+        if not ignore_flag:
+          messages.error(request,"Seller dosent exist or not filled!!")
+          return HttpResponseRedirect('/buyandsell/succ_trans/request/'+pk+'/')
+        else:
+          seller = None
 
       new_item=form.save(commit=False)
       if  not  request.POST.get('feedback').isspace() and  request.POST.get('feedback')!="":
         new_item.feedback=request.POST.get('feedback')
-      else:
-        messages.error(request,"Feedback cant be empty")
-        return HttpResponseRedirect('/buyandsell/succ_trans/request/'+pk+'/')
+
       new_item.seller=seller
       new_item.buyer=user
       request_item=RequestedItems.items.get(pk=pk)
@@ -1278,12 +1283,14 @@ def transaction(request,item_type,pk,ignore_flag = None):
       new_item.save()
       request_item.is_active = False
       request_item.save()
-      return TemplateResponse(request, 'buyandsell/form.html',
+      return TemplateResponse(request, 'buyandsell/helper1.html',
           {'redirect_url':'/buyandsell/my-account/'})
 
     request_item=RequestedItems.items.get(pk=pk)
     mail_list=RequestMails.objects.filter(item=request_item)
-    return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list})
+    return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list ,
+                                                        'type':item_type,
+                                                        'id':request_item.id})
 
 def  get_watched_categories(request):
   user=request.user
@@ -1334,7 +1341,7 @@ def show_contact(request,response):
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
 
-@dialog_login_required
+@dialog_login_required_buyandsell
 def manage(request):
   user=request.user
   cat_dict=get_category_dictionary()
