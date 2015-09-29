@@ -1,7 +1,7 @@
 {% extends "buyandsell/base.html" %}
 {% block content %}
 <body>
-<div class="container">
+<div class="container" style="min-width: 765px;">
   {% if messages %}
   {% for message in messages %}
   <div class="alert alert-{{ message.tags }}">{{ message }} </div>
