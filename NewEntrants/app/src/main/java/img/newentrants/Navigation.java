@@ -1,7 +1,6 @@
 package img.newentrants;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -53,9 +52,9 @@ public class Navigation extends ActionBarActivity
 
             case 1:fragment = new BlogsFragment();
             break;
-            case 2:fragment = new SConnectFragment();
+            case 3:fragment = new SConnectFragment();
             break;
-            case 3:fragment = new PConnectFragment();
+            case 2:fragment = new PConnectFragment();
                 break;
             case 4 :fragment= new EditInfoFragment();
             break;
@@ -63,9 +62,10 @@ public class Navigation extends ActionBarActivity
             default: fragment=new ProfileFragment();
                 break;
         }
-        fragmentManager.beginTransaction()
+       fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
+
        /*Intent intent;
         switch(position) {
             case 0: intent = new Intent(this,Profile.class);
