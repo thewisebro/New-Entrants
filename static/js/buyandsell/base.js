@@ -583,7 +583,7 @@ if(opened_dialog !=""){
     width: 700,
     height: 500,
     src: '/crop_image/upload_image/' + unique_name + '/' + id + '/',
-    close:function(){opened_dialog=""}
+    close:function(){opened_dialog="";window.location = "/buyandsell/buy";}
   });
 opened_dialog = 'upload_image_dialog';
 }

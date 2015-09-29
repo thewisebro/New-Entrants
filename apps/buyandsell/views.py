@@ -480,7 +480,7 @@ def unwatch(request,mc=None,c=None):
   success = simplejson.dumps(success)
   return HttpResponse(success, content_type="application/json")
 
-def selldetails(request,pk):
+def selldetails(request,pk,notif_flag = None):
   login_flag = False
   if request.user is not None and request.user.is_authenticated():
    login_flag = True
@@ -490,7 +490,10 @@ def selldetails(request,pk):
     item = SaleItems.items.get(pk=pk)
   except:
     messages.error(request , "OOps!, this item is either expired ,sold or deleted")
-    return render(request,'buyandsell/selldetails.html')
+    if not notif_flag:
+      return render(request,'buyandsell/selldetails.html')
+    else:  
+      return render(request,'buyandsell/selldetails_notif.html')
 
   self_flag = 0
   user = request.user
@@ -511,7 +514,12 @@ def selldetails(request,pk):
       messages.error(request, 'Incorrect password' )
 
     else:
-      return render(request , 'dialog_base_buyandsell.html')
+      if not notif_flag:
+        return render(request , 'dialog_base_buyandsell.html')
+      else:  
+        messages.error(request , "You must log-in to proceed")
+        return render(request,'buyandsell/selldetails_notif.html')
+ 
 
   if login_flag and len(ShowContact.objects.filter(user=user))==1:
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
@@ -524,10 +532,13 @@ def selldetails(request,pk):
     'login_flag':login_flag,
     'user':request.user if login_flag else None
           }
-  print show_contact
-  return render(request,'buyandsell/selldetails.html',context)
 
-def requestdetails(request,pk):
+  if not notif_flag:
+    return render(request,'buyandsell/selldetails.html',context)
+  else:  
+    return render(request,'buyandsell/selldetails_notif.html',context)
+
+def requestdetails(request,pk , notif_flag = None):
   login_flag = False
   if request.user is not None and request.user.is_authenticated():
    login_flag = True
@@ -536,8 +547,12 @@ def requestdetails(request,pk):
   try:
     item=RequestedItems.items.get(pk=pk)
   except:
-    mesages.error(request , "OOps!, this item is either expired ,sold or deleted")
-    return render(request,'buyandsell/requestdetails.html')
+    mesages.error(request , "OOps!, this request is either expired ,sold or deleted")
+    if not notif_flag:
+      return render(request,'buyandsell/requestdetails.html')
+    else:  
+      return render(request,'buyandsell/requestdetails_notif.html')
+  
 
   self_flag=0
   user=request.user
@@ -558,7 +573,12 @@ def requestdetails(request,pk):
       messages.error(request, 'Incorrect password' )
 
     else:
-      return render(request , 'dialog_base_buyandsell.html')
+      if not notif_flag:
+        return render(request , 'dialog_base_buyandsell.html')
+      else:  
+        messages.error(request , "You must log-in to proceed")
+        return render(request,'buyandsell/requestdetails_notif.html')
+  
   if login_flag and len(ShowContact.objects.filter(user=user))==1:
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
       show_contact=0
@@ -570,7 +590,10 @@ def requestdetails(request,pk):
     'login_flag':login_flag,
     'user':request.user if login_flag else None
           }
-  return render(request,'buyandsell/requestdetails.html',context)
+  if not notif_flag:
+    return render(request,'buyandsell/requestdetails.html',context)
+  else:  
+    return render(request,'buyandsell/requestdetails_notif.html',context)
 
 
 def sendmail(request, type_of_mail, id_pk):

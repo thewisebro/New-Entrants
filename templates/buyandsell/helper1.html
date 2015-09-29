@@ -5,19 +5,10 @@
 //console.loh("hi");
 //close_dialog(parent.current_dialog);
 window.top.location = "{{ redirect_url }}";
-window.location.reload();
+//window.location.reload();
 {% endif %}
 </script>
 </head>
 <body>
-<form action="" method="post"  enctype="multipart/form-data">
-{% csrf_token %}
-{{ form.as_p }}
-{% if flag %}
-<label for="current image">Current image</label>
-<img src="/media/{{flag}}"><br>
-{% endif %}
-<input type="submit" value="submit">
-</form>
 </body>
 </html>
