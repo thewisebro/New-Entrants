@@ -420,6 +420,9 @@ input[type="radio"]:checked + label div
 {
   font-size: 13px;
   float:right;
+  position: absolute;
+  bottom: 50px;
+  right: 20px;
 }
 
 .page-content

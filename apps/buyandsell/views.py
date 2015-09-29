@@ -169,7 +169,7 @@ def buy(request,mc = None,c = None):
     'queries':queries_without_page,
     'll':pl if pl else 1,
     'ul':pu if pu else 50000,
-    'user':request.user if login_flag else None
+    'user':request.user if login_flaf else None
           }
 
   return render(request,'buyandsell/buy-page.html',context)
@@ -329,6 +329,9 @@ def viewrequests(request,mc=None,c=None):
 
 @dialog_login_required
 def sell(request):
+  cat_dict = get_category_dictionary()
+  main_categories = cat_dict.keys()
+  sub_categories = cat_dict[main_categories[0]]
   post_date = timezone.now()
   user = request.user
   contact = request.user.contact_no
@@ -343,8 +346,11 @@ def sell(request):
       cost = form.cleaned_data['cost']
       if phone.isdigit():
         digcheck = 1
-      if  len(phone) == len(str(int(phone))):
-        zercheck = 1
+      try:
+        if  len(phone) == len(str(int(phone))):
+          zercheck = 1
+      except:
+        pass
       if len(phone) == 10:
         lencheck = 1
       if cost>=0:
@@ -363,20 +369,26 @@ def sell(request):
         notif_text += "that you have watched"
         url = '/buyandsell/sell_details/' + str(new_item.pk)
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
-        return TemplateResponse(request, 'buyandsell/helperform.html', {'redirect_url':'/buyandsell/buy/'})
+
+        pic =ItemPic( item = new_item )
+        pic.save()
+        return TemplateResponse(request, 'buyandsell/helper.html', {'redirect_url':'/buyandsell/buy/','id':new_item.id})
       else:
-        print "form filled wrongly"
+        messages.error(request , "Form is wrongly filled")
     else:
-      return render(request,'buyandsell/sellform.html',{'form':form})
+      return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
   init_dict={
              'email':request.user.email,
              'contact':contact,
             }
   form=SellForm(initial=init_dict)
-  return render(request,'buyandsell/sellform.html',{'form':form})
+  return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
 
 @dialog_login_required
 def requestitem(request):
+  cat_dict = get_category_dictionary()
+  main_categories = cat_dict.keys()
+  sub_categories = cat_dict[main_categories[0]]
   post_date=timezone.now()
   user=request.user
   contact=request.user.contact_no
@@ -390,9 +402,12 @@ def requestitem(request):
       phone=form.cleaned_data['contact']
       price_upper=form.cleaned_data['price_upper']
       if phone.isdigit():
-        digcheck=1   # use try-except and disply message just after this
-      if  len(phone)==len(str(int(phone))):
-        zercheck=1
+        digcheck=1
+      try:
+        if len(phone)==len(str(int(phone))):
+          zercheck=1
+      except:
+        pass
       if len(phone) == 10:
         lencheck=1
       if price_upper >= 0:
@@ -411,17 +426,17 @@ def requestitem(request):
         notif_text+="that you have watched"
         url = '/buyandsell/sell_details/' + str(new_item.pk)
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
-        return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/viewrequests/'})
+        return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/viewrequests/'})
       else:
-        print "form filled wrongly"
+        messages.error(request , "Form is wrongly filled")
     else:
-      return render(request,'buyandsell/requestform.html',{'form':form})
+      return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
   init_dict={
              'email':request.user.email,
              'contact':contact,
             }
   form=RequestForm(initial=init_dict)
-  return render(request,'buyandsell/requestform.html',{'form':form})
+  return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
 
 
 def watch(request,mc=None,c=None):
@@ -983,11 +998,13 @@ def seeall(request,search_type):
 
 @dialog_login_required
 def edit(request,form_type,pk): #need to activate if item date  is renewed
+  cat_dict = get_category_dictionary()
+  main_categories = cat_dict.keys()
+  sub_categories = cat_dict[main_categories[0]]
   user=request.user
   post_date=date.today()
   if form_type=="sell":
     instance=SaleItems.objects.get(pk=pk)
-    flag=instance.item_image
     old_category=instance.category
     if request.method=='POST':
       form=SellForm(request.POST,request.FILES,instance=instance)
@@ -1000,8 +1017,11 @@ def edit(request,form_type,pk): #need to activate if item date  is renewed
         cost=form.cleaned_data['cost']
         if phone.isdigit():
           digcheck=1
-        if  len(phone)==len(str(int(phone))):
-          zercheck=1
+        try:
+          if  len(phone)==len(str(int(phone))):
+            zercheck=1
+        except:
+          pass
         if len(phone) == 10:
           lencheck=1
         if cost>=0:
@@ -1021,13 +1041,13 @@ def edit(request,form_type,pk): #need to activate if item date  is renewed
             notif_text+="that you have watched"
             url = '/buyandsell/sell_details/' + str(edited_item.pk)
             Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)
-          return TemplateResponse(request, 'buyandsell/helper.html', {'redirect_url':'/buyandsell/my-account/'})
+          return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/my-account/'})
         else:
-          print "form filled wrongly"
+          messages.error(request , "form wrongly filled")
       else:
-        return render(request,'buyandsell/form.html',{'form':form,'flag':flag})
+        return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
     form=SellForm(instance=instance)
-    return render(request,'buyandsell/form.html',{'form':form,'flag':flag})
+    return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
 
   if form_type=="request":
     instance=RequestedItems.objects.get(pk=pk)  #update notifications to be given to watch users
@@ -1043,8 +1063,11 @@ def edit(request,form_type,pk): #need to activate if item date  is renewed
         price_upper=form.cleaned_data['price_upper']
         if phone.isdigit():
           digcheck=1
-        if  len(phone)==len(str(int(phone))):
-          zercheck=1
+        try:
+          if  len(phone)==len(str(int(phone))):
+            zercheck=1
+        except:
+          pass
         if len(phone) == 10:
           lencheck=1
         if price_upper>=0:
@@ -1064,13 +1087,13 @@ def edit(request,form_type,pk): #need to activate if item date  is renewed
             notif_text+="that you have watched"
             url = '/buyandsell/sell_details/' + str(edited_item.pk)
             Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)
-          return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
+          return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/my-account/'})
         else:
-          print "form filled wrongly"
+          messages.error(request , "form wrongly filled")
       else:
-        return render(request,'buyandsell/reqform.html',{'form':form})
+        return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
     form=RequestForm(instance=instance)
-    return render(request,'buyandsell/reqform.html',{'form':form})
+    return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
 
 @login_required
 def my_account(request):
@@ -1082,10 +1105,10 @@ def my_account(request):
   cat_dict = get_category_dictionary()
 
   successful_transactions_sell = SuccessfulTransaction.objects.filter(seller = user,is_requested = False)
-  succ_sold_items = [trans.sell_item for trans in successful_transactions_sell]
+  succ_sold_items = [trans.sell_item for trans in successful_transactions_sell if trans.sell_item.datetime_trashed is None]
 
   successful_transactions_requests = SuccessfulTransaction.objects.filter(buyer = user,is_requested = True)
-  succ_request_items = [trans.request_item for trans in successful_transactions_requests]
+  succ_request_items = [trans.request_item for trans in successful_transactions_requests if trans.request_item.datetime_trashed is None]
 
   for item in sell_items:
     if item in succ_sold_items:
@@ -1141,9 +1164,8 @@ def trash_item(request,item_type,pk):
   return HttpResponse(success, content_type="application/json")
 
 @dialog_login_required
-def transaction(request,item_type,pk):
+def transaction(request,item_type,pk,ignore_flag = None):
   user=request.user
-
   if item_type == "sell":
     try:
       itm=SaleItems.items.get(pk=pk)
@@ -1154,7 +1176,7 @@ def transaction(request,item_type,pk):
     itm_user=itm.user
     if itm_user != user:
       messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.\
-          You can only fill the form for the items in your account")
+                              You can only fill the form for the items in your account")
       return HttpResponseRedirect('/buyandsell/my-account/')
 
     if request.method == "POST":
@@ -1163,32 +1185,30 @@ def transaction(request,item_type,pk):
         if filled_form:
           messages.error(request,"oops!This item is already sold,you cant submit the form again!!")
           return HttpResponseRedirect('/buyandsell/succ_trans/sell/'+pk+'/')
-
       except:
         pass
-
       form=TransactionForm()
       buyer_username=request.POST.get('buyer_username')
       username_other=request.POST.get('username_other')
-      print buyer_username
-      print username_other
       if buyer_username != "":
         buyer=User.objects.get(username=buyer_username)
-      elif buyer_username=="" and ( not username_other.isspace() and username_other!=""):
+      elif buyer_username=="" and ( not username_other.isspace() and username_other != ""):
         tentative_buyer=User.objects.get(username=username_other)
         if tentative_buyer:
-          buyer=tentative_buyer
+          buyer = tentative_buyer
         else:
-          buyer=None
+          buyer = None
       elif buyer_username=="" and ( username_other.isspace() or username_other==""):
-        buyer=None
+        if not ignore_flag:
+          messages.error(request,"Buyer dosent exist or not filled!!")
+          return HttpResponseRedirect('/buyandsell/succ_trans/sell/'+pk+'/')
+        else:
+          buyer = None
 
       new_item=form.save(commit=False)
       if  not  request.POST.get('feedback').isspace() and  request.POST.get('feedback')!="":
         new_item.feedback=request.POST.get('feedback')
-      else:
-        messages.error(request,"Feedback cant be empty")
-        return HttpResponseRedirect('/buyandsell/succ_trans/sell/'+pk+'/')
+
       new_item.seller=user
       new_item.buyer=buyer
       sell_item=SaleItems.items.get(pk=pk)
@@ -1197,10 +1217,12 @@ def transaction(request,item_type,pk):
       new_item.save()
       sell_item.is_active = False
       sell_item.save()
-      return TemplateResponse(request, 'buyandsell/form.html', {'redirect_url':'/buyandsell/my-account/'})
+      return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/my-account/'})
     sell_item=SaleItems.items.get(pk=pk)
     mail_list=BuyMails.objects.filter(item=sell_item)
-    return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list,'type':item_type})
+    return render(request,'buyandsell/trans_form.html',{'mail_list':mail_list,
+                                                        'type':item_type,
+                                                        'id':sell_item.id})
 
   if item_type=="request":
     try:
@@ -1333,7 +1355,7 @@ def manage(request):
         cat.watch_users.remove(user)
         cat.save()
 
-    return TemplateResponse(request, 'buyandsell/form.html',
+    return TemplateResponse(request, 'buyandsell/helper1.html',
             {'redirect_url':'/buyandsell/my-account/'})
 
   return render(request,'buyandsell/manage.html',
@@ -1343,7 +1365,7 @@ def manage(request):
               'user':user})
 
 def _get_page_list(page_no, pages, items_per_page):
-  l = range(1, pages+1)
+  l = range(1, pages + 1)
   page_no = int(page_no)
 
   items_per_page /= 4
@@ -1356,10 +1378,11 @@ def _get_page_list(page_no, pages, items_per_page):
   else:
     return l[page_no - items_per_page + 1: page_no + items_per_page - 1]
 
-
 def bring_subcats(request , mc):
   cat_dict = get_category_dictionary()
   html = ''
   for category in cat_dict[mc]:
     html +='<option value="' + str(category.id) + '">' + category.name + '</option>'
+
   return HttpResponse(simplejson.dumps(html),content_type = 'application/json')
+
