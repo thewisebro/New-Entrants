@@ -165,61 +165,102 @@ def generate_missing_resumes(request, company_id):
                             }, context_instance = RequestContext(request))
 
 
-
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
 def placement_manager_view(request):
   assign_form = AssignCoordinatorForm()
   coordinator_work_form = ViewCoordinatorWorkForm()
-  if request.method == 'POST' :
-    pass
-#    form = ExcelForm(request.POST , request.FILES)
-#    if form.is_valid():
-#      excel_file= request.FILES['excel_file']
-#      workbook = xlrd.open_workbook(file_contents=excel_file.read())
-#      worksheet = workbook.sheet_by_index(0)
-#      num_rows = worksheet.nrows - 1
-#      num_cells = worksheet.ncols -1
-#      curr_row = 0
-#      companyname = ""
-#      while curr_row < num_rows:
-#         curr_row += 1
-#         row = worksheet.row(curr_row)
-#         contactperson    = ContactPerson()
-#         company          = CompanyContactInfo()
-#
-#         try:
-#
-#           company.name     = row[0].value.encode('ascii', 'ignore')
-#           company.status           = row[6].value.encode('ascii', 'ignore')
-#           company.last_contact     = row[7].value.encode('ascii', 'ignore')
-#           company.person_in_contact= row[8].value.encode('ascii', 'ignore')
-#           company.comments         = row[9].value.encode('ascii', 'ignore')
-#           try:
-#              company.cluster = int(row[1].value)
-#           except ValueError:
-#              pass
-#           contactperson.name = row[2].value.encode('ascii', 'ignore')
-#           contactperson.designation    = row[3].value.encode('ascii', 'ignore')
-#           try:
-#              contactperson.phone_no       = unicode(int(row[4].value)).encode('ascii', 'ignore')
-#           except ValueError:
-#              contactperson.phone_no       = unicode(row[4].value).encode('ascii', 'ignore')
-#           contactperson.email          = row[5].value.encode('ascii', 'ignore')
-#
-#         except IndexError:
-#             pass
-#         contactperson.save()
-#         company.contactperson = contactperson
-#         company.save()
-#
-  else:
-    form=ExcelForm()
+  form=ExcelForm()
   return render_to_response('placement/placement_mgr.html',{
           'excel_form' : form,
           'assign_form' : assign_form,
           'coordinator_work': coordinator_work_form,
         },context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists(), login_url = login_url)
+def import_contacts_excel(request):
+  if request.user.groups.filter(name='Placement Manager').exists():
+    permissions = True
+  else:
+    permissions = False
+  if request.method == 'POST':
+    form = ExcelForm(request.POST , request.FILES)
+    if form.is_valid():
+      excel_file= request.FILES['excel_file']
+      workbook = xlrd.open_workbook(file_contents=excel_file.read())
+      worksheet = workbook.sheet_by_index(0)
+      num_rows = worksheet.nrows - 1
+      num_cells = worksheet.ncols -1
+      curr_row = 0
+      companyname = ""
+      error = False
+      while curr_row < num_rows:
+        curr_row += 1
+        row = worksheet.row(curr_row)
+        try:
+          company_name = unicode(row[0].value).encode('ascii', 'ignore')
+          try:
+            company = CompanyContactInfo.objects.get(name=company_name)
+          except CompanyContactInfo.DoesNotExist:
+            company = CompanyContactInfo()
+            company.name = company_name
+            try:
+               company.cluster = int(row[1].value)
+            except ValueError:
+               pass
+            company.status = unicode(row[2].value).encode('ascii', 'ignore')
+            company.save()
+          contactperson = ContactPerson()
+          contactperson.name = unicode(row[3].value).encode('ascii', 'ignore')
+          contactperson.designation = unicode(row[4].value).encode('ascii', 'ignore')
+          try:
+            contactperson.phone_no = int(unicode(row[5].value).encode('ascii', 'ignore'))
+          except ValueError:
+            contactperson.phone_no = unicode(row[5].value).encode('ascii', 'ignore')
+          contactperson.email          = unicode(row[6].value).encode('ascii', 'ignore')
+          contactperson.company_contact = company
+          if ContactPerson.objects.filter(company_contact = company, is_primary = True).exists():
+            contactperson.is_primary = False
+          else:
+            contactperson.is_primary = True
+          contactperson.save()
+          campuscontact = CampusContact()
+          try:
+            campuscontact.last_contact = datetime.datetime(*xlrd.xldate_as_tuple(int(float(unicode(row[7].value))), workbook.datemode)).date()
+          except:
+            campuscontact.last_contact = None
+          campuscontact.contact_person = contactperson
+          if not permissions:
+            campuscontact.student = request.user.student
+          else:
+            try:
+              campuscontact.student = Student.objects.get(user__username = unicode(row[8].value).encode('ascii','ignore').split(':')[0])
+            except:
+              campuscontact.student = None
+          try:
+            campuscontact.when_to_contact = datetime.datetime(*xlrd.xldate_as_tuple(int(float(unicode(row[9].value))), workbook.datemode)).date() # dd/mm/yyyy
+          except:
+            pass
+          campuscontact.save()
+          comment = unicode(row[10].value).encode('ascii','ignore')
+          comment_obj = CompanyContactComments()
+          comment_obj.comment = comment
+          comment_obj.date_created = datetime.datetime.today()
+          comment_obj.campus_contact = campuscontact
+          comment_obj.save()
+        except IndexError:
+          pass
+        except:
+          messages.error(request, 'Unknown error occured at row '+str(curr_row)+'. Data before this row has been successfully updated. All data below this row is not processed.')
+          error = True
+          break
+      if not error:
+        messages.success(request, 'Data successfully uploaded')
+  if permissions:
+    return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+  else:
+    return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
@@ -323,7 +364,7 @@ def placement_manager_contact_person_data_export(request):
       ws.write(i, 7, 'Yes' if (inst.is_primary) else 'No')
       ws.write(i, 8, inst.campuscontact.last_contact, style=date_style)
       try:
-        ws.write(i, 9, inst.campuscontact.student.user.name)
+        ws.write(i, 9, inst.campuscontact.student.user.username+": "+inst.campuscontact.student.user.name)
       except AttributeError:
         ws.write(i, 9, 'None')
       ws.write(i, 10, inst.campuscontact.when_to_contact, style=date_style)

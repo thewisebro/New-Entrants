@@ -57,7 +57,7 @@ urlpatterns += patterns('placement.views_img',
                        (r'^contact_manager/add/$', 'add_company_coordinator'),
                        (r'^contact_manager/person_search/$', 'person_search'),
                        (r'^contact_manager/company_search/$', 'company_search'),
-#                      (r'^contact_manager/generate_xls/$', 'generate_company_contact_xls'),
+                       (r'^contact_manager/import/$', 'import_contacts_excel'),
     )
 
 # Admin urls
