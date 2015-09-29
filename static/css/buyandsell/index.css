@@ -5,11 +5,6 @@ body
   padding-right: 0px !important;
 }
 
-.container
-{
-  min-width: 765px;
-}
-
 @font-face {
   font-family: 'OpenSans';
 
@@ -143,6 +138,7 @@ a:focus
 .header-container
 {
   padding: 0;
+  min-width: 765px;
 }
 
 .breadcrumb
@@ -560,6 +556,7 @@ input[type="radio"]:checked + label div
   padding:0px;
   position: absolute;
   right: -7px;
+  top: -3px;
 }
 
 
@@ -1913,6 +1910,6 @@ border-bottom: 1px solid #EEE;
   position: fixed;
   height: 100%;
   width: 100%;
-  background-color: transparent;
+  background-color: #ffffff;
   z-index: 2
 }

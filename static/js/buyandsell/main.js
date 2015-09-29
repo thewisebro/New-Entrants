@@ -56,7 +56,7 @@
 
     else if(subHeaderWidth >= 750)
     {
-      $(".item-for-sale-image").css("height",180+"px");
+      $(".item-for-sale-image").css("height",181+"px");
       $(".search-area").css("margin-left",-120+"px");
       $(".itemName").css("width",80+"px");
     }
@@ -83,7 +83,7 @@
         }
         else if(subHeaderWidth >= 750)
         {
-          $(".item-for-sale-image").css("height",180+"px");
+          $(".item-for-sale-image").css("height",181+"px");
           $(".search-area").css("margin-left",-120+"px");
           $(".itemName").css("width",80+"px");
         }

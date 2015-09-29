@@ -515,8 +515,8 @@ function edit_sell(pk){
   dialog_iframe({
     name:'edit_sell_dialog',
     title:'EditSellItem',
-    width:600,
-    height:650,
+    width:800,
+    height:730,
     src:'/buyandsell/edit/sell/'+pk+'/',
     close:function(){opened_dialog=""}
   });
@@ -529,9 +529,9 @@ function edit_request(pk){
   }
   dialog_iframe({
     name:'edit_request_dialog',
-    title:'EditRequestItem',
+    title:'Edit Request',
     width:600,
-    height:600,
+    height:665,
     src:'/buyandsell/edit/request/'+pk+'/',
     close:function(){opened_dialog=""}
   });

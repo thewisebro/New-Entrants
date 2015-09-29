@@ -1070,9 +1070,9 @@ def edit(request,form_type,pk):
         else:
           messages.error(request , "form wrongly filled")
       else:
-        return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
+        return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories,'edit_flag':True})
     form=SellForm(instance=instance)
-    return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
+    return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories,'edit_flag':True})
 
   if form_type=="request":
     instance=RequestedItems.objects.get(pk=pk)
@@ -1118,9 +1118,9 @@ def edit(request,form_type,pk):
         else:
           messages.error(request , "form wrongly filled")
       else:
-        return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
+        return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories,'edit_flag':True})
     form=RequestForm(instance=instance)
-    return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
+    return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories,'edit_flag':True})
 
 @login_required
 def my_account(request):
