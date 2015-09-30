@@ -4,11 +4,11 @@
 
 {% if messages %}
 {% for message in messages %}
-<div class="alert alert-{{ message.tags }} sell-details-message">{{ message }}</div>
+<div class="alert alert-{{ message.tags }} sell-details-message" style="margin-top:75px;">{{ message }}</div>
 {% endfor %}
 {% endif %}
 
-<div class="container item-details-dialog-container">
+<div class="container item-details-dialog-container" style="padding-top: 80px; padding-left: 0; margin-top: 0;">
   <div class="row">
     <div class="col-xs-4">
       <div>
@@ -18,12 +18,18 @@
         <img class="sell-details-image" src="{{STATIC_URL}}images/buyandsell/default.png" alt="Generic placeholder thumbnail">
         {% endif %}
       </div>
+
     </div>
     <div class="col-xs-8">
 
       {% if item %}
 
       {% if item.detail %}
+
+      <p class="item-name-on-individual-page">
+        {{ item.item_name }}
+      </p>
+
       <p class="item-description">
         {{ item.detail }}
       <div class="visible-division-line"></div>
@@ -95,11 +101,11 @@
 
       {% endif %}
 
-
     </div>
+
   </div>
 
-
+  <div class="visible-division-line" style="margin-top: 40px;"></div>
 
   {% endif %}
 

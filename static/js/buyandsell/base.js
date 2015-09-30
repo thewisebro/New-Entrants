@@ -514,7 +514,7 @@ function edit_sell(pk){
   }
   dialog_iframe({
     name:'edit_sell_dialog',
-    title:'EditSellItem',
+    title:'Edit',
     width:800,
     height:730,
     src:'/buyandsell/edit/sell/'+pk+'/',

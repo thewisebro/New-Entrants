@@ -493,7 +493,7 @@ def selldetails(request,pk,notif_flag = None):
     messages.error(request , "OOps!, this item is either expired ,sold or deleted")
     if not notif_flag:
       return render(request,'buyandsell/selldetails.html')
-    else:  
+    else:
       return render(request,'buyandsell/selldetails_notif.html')
 
   self_flag = 0
@@ -517,10 +517,10 @@ def selldetails(request,pk,notif_flag = None):
     else:
       if not notif_flag:
         return render(request , 'dialog_base_buyandsell.html')
-      else:  
+      else:
         messages.error(request , "You must log-in to proceed")
-        return render(request,'buyandsell/selldetails_notif.html')
- 
+        return HttpResponseRedirect('/buyandsell/sell_details/' + str(item.pk) +'/notif')
+
 
   if login_flag and len(ShowContact.objects.filter(user=user))==1:
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
@@ -536,7 +536,7 @@ def selldetails(request,pk,notif_flag = None):
 
   if not notif_flag:
     return render(request,'buyandsell/selldetails.html',context)
-  else:  
+  else:
     return render(request,'buyandsell/selldetails_notif.html',context)
 
 def requestdetails(request,pk , notif_flag = None):
@@ -548,12 +548,12 @@ def requestdetails(request,pk , notif_flag = None):
   try:
     item=RequestedItems.items.get(pk=pk)
   except:
-    mesages.error(request , "OOps!, this request is either expired ,sold or deleted")
+    messages.error(request , "OOps!, this request is either expired ,sold or deleted")
     if not notif_flag:
       return render(request,'buyandsell/requestdetails.html')
-    else:  
+    else:
       return render(request,'buyandsell/requestdetails_notif.html')
-  
+
 
   self_flag=0
   user=request.user
@@ -576,10 +576,10 @@ def requestdetails(request,pk , notif_flag = None):
     else:
       if not notif_flag:
         return render(request , 'dialog_base_buyandsell.html')
-      else:  
+      else:
         messages.error(request , "You must log-in to proceed")
-        return render(request,'buyandsell/requestdetails_notif.html')
-  
+        return HttpResponseRedirect('/buyandsell/request_details/' + str(item.pk) +'/notif')
+
   if login_flag and len(ShowContact.objects.filter(user=user))==1:
     if ShowContact.objects.filter(user=user)[0].contact_shown==0:
       show_contact=0
@@ -593,7 +593,7 @@ def requestdetails(request,pk , notif_flag = None):
           }
   if not notif_flag:
     return render(request,'buyandsell/requestdetails.html',context)
-  else:  
+  else:
     return render(request,'buyandsell/requestdetails_notif.html',context)
 
 

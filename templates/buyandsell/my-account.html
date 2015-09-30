@@ -226,7 +226,6 @@
             <div class="caption">
               <span class="itemName">{{ row.item_name }}</span>
               <span class="price">Rs. {{row.cost}}</span>
-              <div class="expiresIn">Expires in {{row.expiry_date|timeuntil}}</div>
             </div>
 
             <div class="dropdown item-options-dropdown" style="display:inline">
@@ -262,6 +261,9 @@
       <div class="row">
         <div class="col-md-12">
           <p class="my-account-page-headings">Items you've Requested</p>
+
+          {% if request_items %}
+
           <table class="table table-striped my-account-requests-table">
             <thead>
             <tr data-toggle="modal" data-target="#request-item-modal" class="request">
@@ -388,13 +390,16 @@
 
             </tbody>
           </table>
-          {% if not request_items %}
+          {% else %}
           <p class="you-have-not-added-any">You haven't added any Request.</p>
           {% endif %}
 
         </div>
       </div>
     </div>
+  </div>
+  <div class="row">
+    <div class="space-maker" style="height: 100px;"></div>
   </div>
 </div>
 
@@ -409,8 +414,12 @@
         <p class="item-removal-confirmation-text">Are you sure you want to remove this item? <br/> This cannot be undone.</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary remove-item-confirm-yes" style="margin:0px auto">
-          <a title="Remove" id = "modal-delete" class="item-remove-text" data-dismiss = "modal">Yes</a>
+
+          <a title="Remove" id = "modal-delete" class="item-remove-text" data-dismiss = "modal">
+            <button type="button" class="btn btn-primary remove-item-confirm-yes" style="margin-right: -20px;">
+              Yes
+            </button>
+          </a>
         </button>
         <button type="button" class="btn btn-primary remove-item-confirm-no" data-dismiss="modal">No</button>
       </div>
@@ -429,9 +438,11 @@
         <p class="item-removal-confirmation-text">Are you sure you want to remove this request? <br/> This cannot be undone.</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary remove-item-confirm-yes" style="margin:0px auto">
-          <a title="Remove" id = "modal-delete-request" class="item-remove-text" data-dismiss = "modal">Yes</a>
-        </button>
+        <a title="Remove" id = "modal-delete-request" class="item-remove-text" data-dismiss = "modal">
+          <button type="button" class="btn btn-primary remove-item-confirm-yes" style="margin-right: -20px;">
+            Yes
+          </button>
+        </a>
         <button type="button" class="btn btn-primary remove-item-confirm-no" data-dismiss="modal">No</button>
       </div>
     </div>

@@ -1913,3 +1913,9 @@ border-bottom: 1px solid #EEE;
   background-color: #ffffff;
   z-index: 2
 }
+
+.item-name-on-individual-page
+{
+  font-size: 25px;
+  font-weight: bold;
+}

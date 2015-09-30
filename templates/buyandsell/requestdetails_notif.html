@@ -6,51 +6,57 @@
 
 {% if messages %}
 {% for message in messages %}
-<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+<div class="alert alert-{{ message.tags }}" style="margin-top:75px;">{{ message }}</div>
 {% endfor %}
 {% endif %}
 
-<div class="container request-details-dialog-container">
+<div class="container request-details-dialog-container" style="padding-top: 80px; margin-top: 0;">
 
-  <div class="col-xs-12">
-    <table class="table request-details-table">
-      <tbody>
-      <tr>
-        <td class="request-details-headings">
-          Max Price
-        </td>
-        <td>
-          <img class="rupee-icon" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">
-          <span> {{ item.price_upper }} </span>
-        </td>
-      </tr>
-      <tr>
-        <td class="request-details-headings">
-          Requested by
-        </td>
-        <td>
-          <span>{{item.user.name}}</span>
-        </td>
-      </tr>
-      {% if show_contact %}
-      <tr>
-        <td class="request-details-headings">
-          Phone
-        </td>
-        <td>
-          <p> {{ item.contact }}</p>
-        </td>
-      </tr>
-      {% endif %}
-      </tbody>
-    </table>
+  <div class="row" style="padding-right: 0;">
+    <div class="col-md-12">
+      <p class="item-name-on-individual-page">
+        {{ item.item_name }}
+      </p>
+      <table class="table request-details-table" style="padding:0">
+        <tbody>
+        <tr>
+          <td class="request-details-headings" style="width: 180px; padding-left: 0;">
+            Max Price
+          </td>
+          <td>
+            <img class="rupee-icon" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">
+            <span> {{ item.price_upper }} </span>
+          </td>
+        </tr>
+        <tr>
+          <td class="request-details-headings" style="width: 180px; padding-left: 0;">
+            Requested by
+          </td>
+          <td>
+            <span>{{item.user.name}}</span>
+          </td>
+        </tr>
+        {% if show_contact %}
+        <tr>
+          <td class="request-details-headings" style="width: 180px; padding-left: 0;">
+            Phone
+          </td>
+          <td>
+            <p> {{ item.contact }}</p>
+          </td>
+        </tr>
+        {% endif %}
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  {% if not self_flag and login_flag %}
+  <div class="visible-division-line" style="margin-bottom:35px"></div>
 
-  <div class="row request-details-dialog-enquire-divs">
+  {% if not self_flag and login_flag %}
+  <div class="row request-details-dialog-enquire-divs" style="padding-left: 0;">
     <div class="col-xs-12">
-      <div class="enquire-clicked">
+      <div class="enquire-clicked" style="padding-left: 0;">
         <p><strong>Following mail will be sent to the Owner</strong></p>
 
         <p class="mail-to-be-sent">
@@ -71,9 +77,9 @@
       </div>
     </div>
   </div>
-  <div class="row request-details-dialog-enquire-divs">
+  <div class="row request-details-dialog-enquire-divs" style="padding: 0;">
     <div class="col-xs-12">
-      <button type="button" class="btn btn-primary enquire enquire-button" style="margin:0px auto">Enquire</button>
+      <button type="button" class="btn btn-primary enquire enquire-button" style="margin:0px auto; left: 0;">Enquire</button>
     </div>
   </div>
 
