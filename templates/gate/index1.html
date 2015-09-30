@@ -94,16 +94,6 @@ color:red;
           {{ form.phone_no_resi }}
         </div>
         <div class="fieldWrapper">
-         {{ form.grade_pay.errors }}
-          <label for="id_sgpa">Present Grade Pay:</label>
-          {{ form.grade_pay }}
-        </div>
-       <div class="fieldWrapper">
-          {{ form.account_no.errors }}
-          <label for="id_account_no">Bank Account no.:</label>
-          {{ form.account_no }}
-        </div>
-        <div class="fieldWrapper">
           {{ form.mobile_no.errors }}
           <label for="id_bhawan">Mobile No:</label>
           {{ form.mobile_no }}
@@ -113,37 +103,6 @@ color:red;
           <label for="id_room_no">Email Id:</label>
           {{ form.email }}
         </div>
-        <div class="fieldWrapper">
-          {{ form.height.errors }}
-          <label for="id_home_address">Height(cms):</label>
-          {{ form.height }}
-        </div>
-          {{ form.weight.errors }}
-          <label for="id_family_income">Weight(kgs):</label>
-          {{ form.weight }}
-          </br>
-          {{ form.weight.errors }}
-          <label for="id_family_income">Age(Yrs):</label>
-          {{ form.age }}
-          <br/>
-        <div class="fieldWrapper">
-          {{ form.home_address.errors }}
-          <label for="id_home_address">Permanent Address:</label>
-          {{ form.home_address }}
-        </div>
-          {{ form.income.errors }}
-          <label for="id_family_income">Annual Income:</label>
-          {{ form.income }} Rs. (No commas)
-          <br/>
-        <div class="fieldWrapper">
-          {{ form.nominee.errors }}
-          <label for="id_home_address">Nominee Name:</label>
-          {{ form.nominee }}
-        </div>
-          {{ form.nominee_relation.errors }}
-          <label for="id_family_income">Relation with Nominee:</label>
-          {{ form.nominee_relation }}
-          <br/>
           <p>Kindly give order of preference of examination weekends for GATE 2016</p>
         <div class="fieldWrapper">
           {{ form.pref1.errors }}
@@ -178,7 +137,38 @@ color:red;
           <label for="id_home_address">Sixth choice:</label>
           {{ form.city6 }}
           <br/>
-          <br/><br/>
+          <p>**Below information is required for Insurance purposes.</p>
+        <div class="fieldWrapper">
+          {{ form.height.errors }}
+          <label for="id_home_address">Height(cms):</label>
+          {{ form.height }}
+        </div>
+          {{ form.weight.errors }}
+          <label for="id_family_income">Weight(kgs):</label>
+          {{ form.weight }}
+          </br>
+          {{ form.weight.errors }}
+          <label for="id_family_income">Age(Yrs):</label>
+          {{ form.age }}
+          <br/>
+        <div class="fieldWrapper">
+          {{ form.home_address.errors }}
+          <label for="id_home_address">Permanent Address:</label>
+          {{ form.home_address }}
+        </div>
+          {{ form.income.errors }}
+          <label for="id_family_income">Annual Income:</label>
+          {{ form.income }} Rs. (No commas)
+          <br/>
+        <div class="fieldWrapper">
+          {{ form.nominee.errors }}
+          <label for="id_home_address">Nominee Name:</label>
+          {{ form.nominee }}
+        </div>
+          {{ form.nominee_relation.errors }}
+          <label for="id_family_income">Relation with Nominee:</label>
+          {{ form.nominee_relation }}
+          <br/>
 <input type="submit" value="Save changes" />
 </form>
 </div>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GATE 2016 : IITR IRS</title>
+<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+<script type='text/javascript' href="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src = "{{ STATIC_URL }}jquery/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $(".add-more").click(function(){
+            var new_field = '<textarea name="other-scholarship-detail"></textarea>';
+    $(this).before(new_field);
+    })});
+</script>
+</head>
+<script type="text/javascript">
+$(function () {
+  $("#id_scholar_type").change(function() {
+    var val = $(this).val();
+    if(val === "MCM") {
+        $("#optionsdiv").hide();
+    }
+    else if(val === "GIS") {
+        $("#optionsdiv").show();
+    }
+  });
+});
+</script>
+<style>
+.errorlist li
+{
+color:red;
+}
+</style>
+
+<body>
+<div class='container'>
+<div class="well">
+  <div>
+    <div style="width:500px; font-size:30px; float:left;">GATE 2016 : IITR IRs</div>
+    <div style="float:left; padding-left:290px;"><a href='/'>Channel I</a></div>
+    <div style="float:left; padding-left:10px;"><a href='{% url 'nucleus.views.logout' %}'>Logout</a></div>
+  </div>
+  
+  <br/><br/>
+<div>
+<form action="" method="post">
+<p>*If the read only fields are empty, please fill your information on channeli settings first and then reload this page.<br/> Also, this form can be submitted once only.</p>
+    {% csrf_token %}
+    {% if form.errors %}
+      <strong>Please certify all the declarations.</strong>
+    {% endif %}
+    {{ form.non_field_errors }}
+        <div class="fieldWrapper">
+         {{ form.accept_1.errors }}
+         {{ form.accept_1 }}
+         {{ form.accept_1.label}}
+        </div>
+        <div class="fieldWrapper">
+         {{ form.accept_2.errors }}
+         {{ form.accept_2 }}
+         {{ form.accept_2.label}}
+        </div>
+        <div class="fieldWrapper">
+         {{ form.accept_3.errors }}
+         {{ form.accept_3 }}
+         {{ form.accept_3.label}}
+        </div>
+        <div class="fieldWrapper">
+         {{ form.accept_4.errors }}
+         {{ form.accept_4 }}
+         {{ form.accept_4.label}}
+        </div>
+        <div class="fieldWrapper">
+         {{ form.accept_5.errors }}
+         {{ form.accept_5 }}
+         {{ form.accept_5.label}}
+        </div>
+<input type="submit" value="Next" />
+</form>
+</div>
+</div>
+</div>
+</body>
+</html>

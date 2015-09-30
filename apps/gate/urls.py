@@ -5,4 +5,5 @@ admin.autodiscover()
 
 urlpatterns = patterns('gate.views',
   (r'^gate/$', 'index'),
+  (r'^gate1/$', 'index1'),
 )

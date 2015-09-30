@@ -8,12 +8,12 @@ class GateForm(forms.Form):
     employee_id = forms.CharField(max_length = 8, label = 'Employee Id.',widget=forms.TextInput(attrs={'readonly':'readonly'}))
     designation = forms.CharField(label = 'Designation', widget=forms.TextInput(attrs={'readonly':'readonly'}))
     department = forms.CharField(label = 'Department', widget=forms.TextInput(attrs={'readonly':'readonly'}))
-    date_of_join = forms.CharField(label = 'Date of Joining IITR', widget=forms.TextInput(attrs={'readonly':'readonly'}))
-    date_of_birth = forms.CharField(label = 'Date of Birth', widget=forms.TextInput(attrs={'readonly':'readonly'}))
-    date_of_joinPos = forms.CharField(label= 'Date of Joining the present position')
-    mobile_no = forms.CharField()
-    phone_no_office = forms.IntegerField(required=False)
-    phone_no_resi = forms.IntegerField(required=False)
+    date_of_join = forms.DateField(label = 'Date of Joining IITR', widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    date_of_birth = forms.DateField(label = 'Date of Birth', widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    date_of_joinPos = forms.DateField(required=True,label= 'Date of Joining the present position')
+    mobile_no = forms.CharField(max_length=10)
+    phone_no_office = forms.CharField()
+    phone_no_resi = forms.CharField()
     email = forms.EmailField()
     grade_pay = forms.IntegerField(required=False,label = 'Present Grade Pay')
     income = forms.IntegerField(label='Annual Income')
@@ -36,4 +36,12 @@ class GateForm(forms.Form):
     def process(self):
       form = self.cleaned_data
 
+class DeclarationForm(forms.Form):
+    accept_1 = forms.BooleanField(required = True,label = 'Random..........................')
+    accept_2 = forms.BooleanField(required = True,label = 'Random...........................')
+    accept_3 = forms.BooleanField(required = True,label = 'Random...........................')
+    accept_4 = forms.BooleanField(required = True,label = 'Random...........................')
+    accept_5 = forms.BooleanField(required = True,label = 'Random...........................')
+    def process(self):
+      form = self.cleaned_data
 
