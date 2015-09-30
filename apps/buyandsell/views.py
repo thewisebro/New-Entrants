@@ -20,6 +20,9 @@ from api.utils import get_client_ip, pagelet_login_required,\
 
 logger = logging.getLogger('buyandsell')
 
+def buyandsell(request):
+  logger.info(request.user.username+": in homepage.")
+  return HttpResponseRedirect('/buyandsell/buy/')
 
 def buy(request,mc = None,c = None):
   login_flag = False

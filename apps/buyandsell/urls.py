@@ -2,6 +2,7 @@ from django.conf.urls import url, patterns
 from buyandsell.views import *
 
 urlpatterns = patterns('',
+    url(r'^$',buyandsell),
     url(r'^buy()()/$', buy, name='none'),
     url(r'^buy/(?P<mc>\w+)/?$', buy, name='main category'),
     url(r'^buy/(?P<mc>\w+)/(?P<c>\w+)/?$', buy, name='sub category'),
