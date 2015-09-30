@@ -20,6 +20,7 @@ from django.contrib.sessions.models import Session
 #from settings import SESSION_COOKIE_NAME
 #
 from nucleus.forms import LoginForm
+from nucleus.utils import get_webmail_account, check_webmail_login
 from feeds.models import Feed
 from utilities.models import UserSession
 import crypt
@@ -49,7 +50,7 @@ def check_session(request):
     'Access-Control-Allow-Headers': 'x-Requested-With'}
 
   c=[]
-  result = {"msg":"NO","_name":"","info":"", "session_variable":""}
+  result = {"msg":"NO","_name":"","info":"", "session_variable":"", "enrollment_no":""}
 
   if request.method == "POST":
     sessionid=request.POST.get("session_key","")
@@ -68,6 +69,7 @@ def check_session(request):
         result["_name"] = user.name.encode('utf-8')
         result["msg"] = "YES"
         result["session_variable"] = sessionid.encode('utf-8')
+        result["enrollment_no"] = user.username.encode('utf-8')
     except Exception as e:
       pass
       logger.info("nucleus -> peoplesearch -> check_session: , error: "+ str(e))
@@ -87,23 +89,37 @@ def channeli_login(request):
      'Access-Control-Allow-Headers': 'x-Requested-With'}
 
   c=[]
-  result = {"msg":"NO","_name":"","info":"","session_variable":""}
-  print request.method
+  result = {"msg":"NO","_name":"","info":"","session_variable":"","enrollment_no":""}
   username = request.POST.get('username')
   password = request.POST.get('password')
   print username
   print password
   user = User.objects.get_or_none(username=username)
   if not user:
-    result["msg"] = "NO"
+    webmail_account = get_webmail_account(username)
+    if webmail_account:
+      username = webmail_account.user.username
+      user = webmail_account.user
+      if check_webmail_login(webmail_account.webmail_id if webmail_account else\
+                                   username, password): 
+        result["info"] = user.info.encode('utf-8')
+        result["_name"] = user.name.encode('utf-8')
+        result["msg"] = "YES"
+        result["session_variable"] = make_user_login(request,user)
+        result["enrollment_no"] = user.username.encode('utf-8')
+      else:
+        result["msg"] = "NO"
+    else:  
+      result["msg"] = "NO"
   elif user.check_password(password):
 # make_user_login(request,user)
     result["info"] = user.info.encode('utf-8')
     result["_name"] = user.name.encode('utf-8')
     result["msg"] = "YES"
     result["session_variable"] = make_user_login(request,user)
+    result["enrollment_no"] = user.username.encode('utf-8')
   else:
-    result["msg"] = "USER NO"
+    result["msg"] = "NO"
 #response = HttpResponse(result)
 # for key, value in HEADERS.iteritems():
 #   result[key] = value
