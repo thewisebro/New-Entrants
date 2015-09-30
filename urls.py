@@ -43,6 +43,7 @@ actual_urlpatterns = patterns('',
   url(r'^redactor/', include('redactor.urls')),
   url(r'^img_website/', include('img_website.urls')),
   url(r'^grades/', include('grades.urls')),
+  url(r'^gate/', include('gate.urls')),
   url(r'^genforms/', include('genforms.urls')),
   url(r'^app_form/', include('application_form.urls')),
 )

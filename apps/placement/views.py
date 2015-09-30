@@ -270,7 +270,7 @@ def forum(request, forum_type, page_no = None) :
       if request.POST['content']=="":
         messages.error(request, 'An empty reply cannot be posted')
         return HttpResponseRedirect(reverse('placement.views.forum', args=[ forum_type ]))
-      elif request.user.groups.filter(name='Student').exist():
+      elif request.user.groups.filter(name='Student').exists():
         student = request.user.student
         post = ForumPost.objects.get(pk = request.POST['post_id'])
         ForumReply.objects.create(post = post,
@@ -278,7 +278,7 @@ def forum(request, forum_type, page_no = None) :
                                 person_name = student.name,
                                 content = request.POST['content'],
                                 )
-      elif request.user.groups.filter(name='Placement Admin').exist():
+      elif request.user.groups.filter(name='Placement Admin').exists():
         post = ForumPost.objects.get(pk = request.POST['post_id'])
         ForumReply.objects.create(post = post,
                                 enrollment_no = '00000000',

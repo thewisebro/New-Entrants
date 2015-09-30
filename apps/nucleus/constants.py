@@ -51,6 +51,10 @@ student_apps = ['acad','lectut','jukebox','dc++','placement',
                 'buysell', 'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research']
 
+student_apps_feedback = ['acad','lectut','jukebox','dc++','placement',
+                'buysell', 'thinktank','lostfound','softwares',
+                'peoplesearch','messmenu','research', 'androidnotices']
+
 faculty_apps = ['responses','acad_course_students','facapp','lectut','placement', 'research',
                 'thinktank','lostfound','softwares','peoplesearch']
 
@@ -87,9 +91,9 @@ channeli_links = map(lambda n:external_links[n],['iitr','webmail','library']) + 
 
 img_tools = [
   {'name': 'IMG Wiki', 'url': 'http://wiki.channeli.in', 'icon':'wiki.ico'},
-  {'name': 'Producteev', 'url': 'https://www.producteev.com/workspace/', 'icon':'producteev.ico'},
+  {'name': 'Trello', 'url': 'https://trello.com/imgiitr', 'icon':'trello.ico'},
   {'name': 'GitLab', 'url': 'http://git.channeli.in', 'icon':'gitlab.ico'},
-  {'name': 'Piwik', 'url': 'http://analytics.channeli.in','icon':'piwik.ico'},
+  {'name': 'Piwik', 'url': 'https://channeli.in/piwik/','icon':'piwik.ico'},
   {'name': 'Slack', 'url': 'https://team-img.slack.com/messages/all-main/','icon':'slack.ico'},
   {'name': 'Status', 'url': 'http://status.channeli.in','icon':'status.ico'},
   {'name': 'Sentry', 'url': 'http://sentry.channeli.in/img/channel-i/','icon':'sentry.ico'},

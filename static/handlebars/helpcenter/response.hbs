@@ -10,7 +10,7 @@
     />
     <div class='query-main-content' onclick='min_max({{ response.id }});'>
       <img class='profile-pic' src='{{ response.user_photo }}'/>
-      <div class='person-name'>{{{ response.user_name }}}</div>
+      <div class='person-name'>{{{ response.user_name }}} ({{{ response.username }}})</div>
       <div class='min-max' id='min-max{{ response.id }}'>
         {{#if close_replies }}&#9660;{{ else }}&#9650;{{/if}}
       </div>

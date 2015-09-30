@@ -84,7 +84,7 @@ class LanguagesKnown(models.Model):
 class ResearchPublications(models.Model):
   # All field req
   author = models.CharField(max_length=MC.TEXT_LENGTH)
-  title  = models.CharField(max_length=MC.TEXT_LENGTH)
+  title  = models.CharField(max_length=200)
   publisher = models.CharField(max_length=MC.TEXT_LENGTH)
   year = models.IntegerField()
   priority = models.IntegerField(choices=MC.PRIORITY_CHOICES, default=1)
@@ -226,6 +226,18 @@ class Results(models.Model):
   def __unicode__(self):
     return str(self.student) + str(self.company)
 
+class PpoRejection(models.Model):
+  """
+    This model contains information regarding students who has accepted PPO.
+    This includes PPO in company and CTC of PPO
+  """
+  plac_person = models.ForeignKey(PlacementPerson, unique=True)
+  company = models.CharField(max_length=MC.TEXT_LENGTH, null=True, blank=True)
+  package = models.CharField(max_length=20, null=True, blank=True, verbose_name = 'Package')
+
+  def __unicode__(self):
+    return str(self.plac_person.student.name) + " " +str(self.company)+ " " +str(self.package)
+
 # Company related models end.
 
 # Miscellaneous models start.
@@ -321,18 +333,30 @@ class CompanyPlacementPriority(models.Model):
     def __unicode__(self):
       return str(self.company) + str(self.priority) + str(self.slots)
 
-class WorkshopPriority(models.Model):
+class WorkshopRegistration(models.Model):
+    """
+      Workshop Registration Model: Used in 2015-2016 session: Workshop was optional in this year.
+      This is different from Workshop Priority. Workshop priority was used in 2014-15. It was compulsory in this year.
+    """
+    placement_person = models.ForeignKey(PlacementPerson, unique=True)
+    options = models.CharField(choices = PC.WORKSHOP_OPTIONS, max_length = 28, default="NOT")
+    reason = models.CharField(max_length=500, blank=True, null=True, help_text="None")
 
-  student = models.ForeignKey(Student)
-  day1_priority = models.IntegerField(default=0)
-  day2_priority = models.IntegerField(default=0)
-  day3_priority = models.IntegerField(default=0)
-  day4_priority = models.IntegerField(default=0)
-  day5_priority = models.IntegerField(default=0)
-  interview_application = models.BooleanField(default=False)
+    def _unicode__(self):
+      return str(self.placement_person.student.user.name)+" "+str(self.registered)
 
-  def __unicode__(self):
-     return str(self.student.user.name)+str(self.day1_priority)+str(self.day2_priority)+str(self.day3_priority)+str(self.day4_priority)+str(self.day5_priority)
+#class WorkshopPriority(models.Model):
+#
+#  student = models.ForeignKey(Student)
+#  day1_priority = models.IntegerField(default=0)
+#  day2_priority = models.IntegerField(default=0)
+#  day3_priority = models.IntegerField(default=0)
+#  day4_priority = models.IntegerField(default=0)
+#  day5_priority = models.IntegerField(default=0)
+#  interview_application = models.BooleanField(default=False)
+#
+#  def __unicode__(self):
+#     return str(self.student.user.name)+str(self.day1_priority)+str(self.day2_priority)+str(self.day3_priority)+str(self.day4_priority)+str(self.day5_priority)
 
 ############NEW CONTACT MANAGER MODELS
 
@@ -347,6 +371,7 @@ class CompanyContactInfo(models.Model):
 
     def __unicode__(self):
         return str(self.name)+str(self.status)
+
 class ContactPerson(models.Model):
     """
         Details of person inside the company whom campus contact would be

@@ -13,6 +13,7 @@ import datetime
 from nucleus.models import Student, WebmailAccount
 from placement import policy, forms
 from placement.policy import current_session_year
+from placement import utils
 from placement.models import *
 from placement.utils import *
 from placement.forms import *
@@ -69,19 +70,7 @@ def create_slot(request):
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def company_search(request):
-  if request.is_ajax():
-    q = request.GET.get('term','')
-    companies = Company.objects.filter(name__icontains = q,year=2014).order_by('-name')[:10]
-    def company_dict(company):
-      return {
-        'id':company.id,
-        'label':str(company.name),
-        'value':str(company.name)
-      }
-    data = json.dumps(map(company_dict,companies))
-  else:
-    data = 'fail'
-  return HttpResponse(data,'application/json')
+  return HttpResponse(utils.company_search(request),'application/json')
 
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def edit_slot(request, slot_id):
