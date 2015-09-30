@@ -8,7 +8,7 @@
       <div class="postData">
           <div class="postUserNameTime">
             <div class="postUser">
-              <span class="postUserName">{[onePost.post.upload_user]}</span>
+              <span class="postUserName"><a ng-href="#/faculty/{[onePost.post.upload_user_id]}/">{[onePost.post.upload_user]}</a></span>
               <span class="removeFeedPost" ng-show="logIn && auth.user.name == onePost.post.upload_user" ng-click="removeFeedPost(onePost.post.id, $index)">
                   <i class="fa fa-times-circle-o"></i>
               </span>
@@ -51,7 +51,7 @@
               </div> 
           </div>
    </div>
-          <div class="commentsBlock" ng-show="logIn">
+          <div class="commentsBlock" ng-show="logIn && is_member">
             <div ng-click="loadCommentsFunc(onePost.post.id)" class="showHideComments">
             Comments <span class="commentsCount" ng-show="onePost.post.count != 0">{[onePost.post.count]}</span>
             </div>

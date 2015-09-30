@@ -232,8 +232,9 @@ class PpoRejection(models.Model):
     This includes PPO in company and CTC of PPO
   """
   plac_person = models.ForeignKey(PlacementPerson, unique=True)
-  company = models.ForeignKey(Company)
+  company = models.CharField(max_length=MC.TEXT_LENGTH, null=True, blank=True)
   package = models.CharField(max_length=20, null=True, blank=True, verbose_name = 'Package')
+
   def __unicode__(self):
     return str(self.plac_person.student.name) + " " +str(self.company)+ " " +str(self.package)
 
@@ -339,7 +340,7 @@ class WorkshopRegistration(models.Model):
     """
     placement_person = models.ForeignKey(PlacementPerson, unique=True)
     options = models.CharField(choices = PC.WORKSHOP_OPTIONS, max_length = 28, default="NOT")
-    reason = models.CharField(max_length=500, blank=True, null=True)
+    reason = models.CharField(max_length=500, blank=True, null=True, help_text="None")
 
     def _unicode__(self):
       return str(self.placement_person.student.user.name)+" "+str(self.registered)
@@ -370,6 +371,7 @@ class CompanyContactInfo(models.Model):
 
     def __unicode__(self):
         return str(self.name)+str(self.status)
+
 class ContactPerson(models.Model):
     """
         Details of person inside the company whom campus contact would be

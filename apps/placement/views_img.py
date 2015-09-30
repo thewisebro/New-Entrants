@@ -165,95 +165,102 @@ def generate_missing_resumes(request, company_id):
                             }, context_instance = RequestContext(request))
 
 
-#@login_required
-#@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
-#def generate_company_contact_xls(request):
-#  if request.method == 'POST':
-#    company = CompanyContact.objects.all()
-#    wb = xlwt.Workbook(encoding='utf-8')
-#    ws = wb.add_sheet('sheet 1')
-#
-#    ws.write(0, 0, 'Company Name' )
-#    ws.write(0, 1, 'Cluster' )
-#    ws.write(0, 2, 'Contact Student' )
-#    ws.write(0, 3, 'Designation' )
-#    ws.write(0, 4, 'Phone Number' )
-#    ws.write(0, 5, 'Email' )
-#    ws.write(0, 6, 'Status' )
-#    ws.write(0, 7, 'Last Contact' )
-#    ws.write(0, 8, 'Student in Contact' )
-#    ws.write(0, 9, 'Comments')
-#    ws.write(0, 10, 'When to contact')
-#
-#    lst = company.values_list('company_name', 'cluster',
-#              'contactperson__contact_person', 'contactperson__designation', 'contactperson__phone_no',
-#              'contactperson__email', 'status', 'last_contact', 'person_in_contact', 'comments',
-#              'when_to_contact')
-#
-#    for row, rowdata in enumerate(lst):
-#       for col, val in enumerate(rowdata):
-#         ws.write(row+1, col, val)
-#
-#    response = HttpResponse(content_type='application/vnd.ms-excel')
-#    response['Content-Disposition'] = 'attachment; filename=placement_data.xls'
-#    wb.save(response)
-#    return response
-#
-
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
 def placement_manager_view(request):
   assign_form = AssignCoordinatorForm()
   coordinator_work_form = ViewCoordinatorWorkForm()
-  if request.method == 'POST' :
-    pass
-#    form = ExcelForm(request.POST , request.FILES)
-#    if form.is_valid():
-#      excel_file= request.FILES['excel_file']
-#      workbook = xlrd.open_workbook(file_contents=excel_file.read())
-#      worksheet = workbook.sheet_by_index(0)
-#      num_rows = worksheet.nrows - 1
-#      num_cells = worksheet.ncols -1
-#      curr_row = 0
-#      companyname = ""
-#      while curr_row < num_rows:
-#         curr_row += 1
-#         row = worksheet.row(curr_row)
-#         contactperson    = ContactPerson()
-#         company          = CompanyContactInfo()
-#
-#         try:
-#
-#           company.name     = row[0].value.encode('ascii', 'ignore')
-#           company.status           = row[6].value.encode('ascii', 'ignore')
-#           company.last_contact     = row[7].value.encode('ascii', 'ignore')
-#           company.person_in_contact= row[8].value.encode('ascii', 'ignore')
-#           company.comments         = row[9].value.encode('ascii', 'ignore')
-#           try:
-#              company.cluster = int(row[1].value)
-#           except ValueError:
-#              pass
-#           contactperson.name = row[2].value.encode('ascii', 'ignore')
-#           contactperson.designation    = row[3].value.encode('ascii', 'ignore')
-#           try:
-#              contactperson.phone_no       = unicode(int(row[4].value)).encode('ascii', 'ignore')
-#           except ValueError:
-#              contactperson.phone_no       = unicode(row[4].value).encode('ascii', 'ignore')
-#           contactperson.email          = row[5].value.encode('ascii', 'ignore')
-#
-#         except IndexError:
-#             pass
-#         contactperson.save()
-#         company.contactperson = contactperson
-#         company.save()
-#
-  else:
-    form=ExcelForm()
+  form=ExcelForm()
   return render_to_response('placement/placement_mgr.html',{
           'excel_form' : form,
           'assign_form' : assign_form,
           'coordinator_work': coordinator_work_form,
         },context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists(), login_url = login_url)
+def import_contacts_excel(request):
+  if request.user.groups.filter(name='Placement Manager').exists():
+    permissions = True
+  else:
+    permissions = False
+  if request.method == 'POST':
+    form = ExcelForm(request.POST , request.FILES)
+    if form.is_valid():
+      excel_file= request.FILES['excel_file']
+      workbook = xlrd.open_workbook(file_contents=excel_file.read())
+      worksheet = workbook.sheet_by_index(0)
+      num_rows = worksheet.nrows - 1
+      num_cells = worksheet.ncols -1
+      curr_row = 0
+      companyname = ""
+      error = False
+      while curr_row < num_rows:
+        curr_row += 1
+        row = worksheet.row(curr_row)
+        try:
+          company_name = unicode(row[0].value).encode('ascii', 'ignore')
+          try:
+            company = CompanyContactInfo.objects.get(name=company_name)
+          except CompanyContactInfo.DoesNotExist:
+            company = CompanyContactInfo()
+            company.name = company_name
+            try:
+               company.cluster = int(row[1].value)
+            except ValueError:
+               pass
+            company.status = unicode(row[2].value).encode('ascii', 'ignore')
+            company.save()
+          contactperson = ContactPerson()
+          contactperson.name = unicode(row[3].value).encode('ascii', 'ignore')
+          contactperson.designation = unicode(row[4].value).encode('ascii', 'ignore')
+          try:
+            contactperson.phone_no = int(unicode(row[5].value).encode('ascii', 'ignore'))
+          except ValueError:
+            contactperson.phone_no = unicode(row[5].value).encode('ascii', 'ignore')
+          contactperson.email          = unicode(row[6].value).encode('ascii', 'ignore')
+          contactperson.company_contact = company
+          if ContactPerson.objects.filter(company_contact = company, is_primary = True).exists():
+            contactperson.is_primary = False
+          else:
+            contactperson.is_primary = True
+          contactperson.save()
+          campuscontact = CampusContact()
+          try:
+            campuscontact.last_contact = datetime.datetime(*xlrd.xldate_as_tuple(int(float(unicode(row[7].value))), workbook.datemode)).date()
+          except:
+            campuscontact.last_contact = None
+          campuscontact.contact_person = contactperson
+          if not permissions:
+            campuscontact.student = request.user.student
+          else:
+            try:
+              campuscontact.student = Student.objects.get(user__username = unicode(row[8].value).encode('ascii','ignore').split(':')[0])
+            except:
+              campuscontact.student = None
+          try:
+            campuscontact.when_to_contact = datetime.datetime(*xlrd.xldate_as_tuple(int(float(unicode(row[9].value))), workbook.datemode)).date() # dd/mm/yyyy
+          except:
+            pass
+          campuscontact.save()
+          comment = unicode(row[10].value).encode('ascii','ignore')
+          comment_obj = CompanyContactComments()
+          comment_obj.comment = comment
+          comment_obj.date_created = datetime.datetime.today()
+          comment_obj.campus_contact = campuscontact
+          comment_obj.save()
+        except IndexError:
+          pass
+        except:
+          messages.error(request, 'Unknown error occured at row '+str(curr_row)+'. Data before this row has been successfully updated. All data below this row is not processed.')
+          error = True
+          break
+      if not error:
+        messages.success(request, 'Data successfully uploaded')
+  if permissions:
+    return HttpResponseRedirect(reverse('placement.views_img.placement_manager_view'))
+  else:
+    return HttpResponseRedirect(reverse('placement.views_img.company_coordinator_view'))
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
@@ -319,6 +326,64 @@ def placement_manager_contact_person_data(request):
       data_to_send.append(a)
   data_to_send = {'data':data_to_send}
   return HttpResponse(simplejson.dumps(data_to_send),'application/json')
+
+@login_required
+@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
+def placement_manager_contact_person_data_export(request):
+  if request.method == 'POST':
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('sheet 1')
+
+    ws.write(0, 0, 'Company Name' )
+    ws.write(0, 1, 'Cluster' )
+    ws.write(0, 2, 'Status' )
+    ws.write(0, 3, 'Contact Person' )
+    ws.write(0, 4, 'Designation' )
+    ws.write(0, 5, 'Phone Number' )
+    ws.write(0, 6, 'Email' )
+    ws.write(0, 7, 'Is Primary?' )
+    ws.write(0, 8, 'Last Contact' )
+    ws.write(0, 9, 'Person in Contact' )
+    ws.write(0, 10, 'When to Contact' )
+    ws.write(0, 11, 'Recent Comment')
+
+    company = CompanyContactInfo.objects.all()
+    contactPerson_lst = ContactPerson.objects.all().order_by('company_contact__name','is_primary')
+    comment_lst = CompanyContactComments.objects.filter(campus_contact__contact_person__in=contactPerson_lst)
+    i = 1
+    date_style=xlwt.easyxf(num_format_str="dd/mm/yyyy")
+    for inst in contactPerson_lst:
+      company_inst = inst.company_contact
+      ws.write(i, 0, company_inst.name)
+      ws.write(i, 1, company_inst.cluster)
+      ws.write(i, 2, company_inst.status)
+      ws.write(i, 3, inst.name)
+      ws.write(i, 4, inst.designation)
+      ws.write(i, 5, inst.phone_no)
+      ws.write(i, 6, inst.email)
+      ws.write(i, 7, 'Yes' if (inst.is_primary) else 'No')
+      ws.write(i, 8, inst.campuscontact.last_contact, style=date_style)
+      try:
+        ws.write(i, 9, inst.campuscontact.student.user.username+": "+inst.campuscontact.student.user.name)
+      except AttributeError:
+        ws.write(i, 9, 'None')
+      ws.write(i, 10, inst.campuscontact.when_to_contact, style=date_style)
+      comment = ""
+      try:
+        comment = comment_lst.filter(campus_contact__contact_person=inst).order_by('-date_created')[0].comment
+        if comment == "" or not comment:
+          raise IndexError
+        if comment[:37] == "<span name=thakur style='color:red;'>":
+          comment = "By Placement Manager: "+comment[37:-7]
+      except IndexError:
+        pass
+
+      ws.write(i, 11, comment)
+      i += 1
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=placement_data.xls'
+    wb.save(response)
+    return response
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator', 'Placement Manager']).exists() , login_url=login_url)
@@ -492,9 +557,6 @@ def company_coordinator_contact_person_data_today(request):
       data_to_send.append(a)
   data_to_send = {'data':data_to_send}
   return HttpResponse(simplejson.dumps(data_to_send),'application/json')
-
-
-
 
 @login_required
 @user_passes_test(lambda u:u.groups.filter(name__in=['Company Coordinator','Placement Manager']).exists(), login_url=login_url)

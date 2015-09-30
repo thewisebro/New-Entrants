@@ -143,15 +143,14 @@ class PpoRejectionForm(forms.Form) :
   plac_person = forms.CharField(label = "Student")
   enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
   company = forms.CharField()
-  company_id = forms.CharField(widget=forms.HiddenInput(attrs={'id':'company_id'}))
   package = forms.CharField(widget = CurrencyWidget(choices_whole = PC.PAY_WHOLE_CHOICES,
                                              choices_currency = PC.PAY_PACKAGE_CURRENCY_CHOICES,
                                              attrs={'class':'iCurrencyField'}))
   def is_valid(self):
     valid = super(PpoRejectionForm, self).is_valid()
     cleaned_data = super(PpoRejectionForm,self).clean()
-    if not cleaned_data.has_key('enroll') or not cleaned_data.has_key('company_id'):
-      raise forms.ValidationError("Please select an option from suggestions.")
+    if not cleaned_data.has_key('enroll'):
+      raise forms.ValidationError("Please select student name from suggestion list.")
 
     clean_enroll = cleaned_data.get("enroll")
     if models.PpoRejection.objects.filter(plac_person__student__user__username=clean_enroll).exists():
@@ -194,6 +193,10 @@ class WorkshopRegistrationForm(forms.ModelForm):
     cleaned_data = super(WorkshopRegistrationForm,self).clean()
     if cleaned_data['options']=='NOT' and cleaned_data['reason'].lower() == cleaned_data['reason'].upper(): 
       raise forms.ValidationError("Please add specific reason for this option")
+    if cleaned_data['options']=='4P Education' and cleaned_data['reason'].lower() == cleaned_data['reason'].upper():
+      raise forms.ValidationError("Please add at least one option from Case Study, HR Interview, Personal Interview and Group Discussion")
+    if cleaned_data['options']=='Ethuns Consultancy Service' and cleaned_data['reason'].lower() == cleaned_data['reason'].upper():
+      raise forms.ValidationError("Please fill the sector for mock interview. Ex. IT/Software, Electrical/Electronics, Mechanical, Chemical, Civil, Finance/Consulting etc.")
     return True and valid
   class Meta:
     model = models.WorkshopRegistration

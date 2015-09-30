@@ -36,10 +36,10 @@
       </div>
       <div class="exporter">
 
-{% comment %}        <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_img.generate_company_contact_xls' %}">
-              {% csrf_token %}
-              <button class="btn btn-primary" type="submit">Export</button>
-        </form>  {% endcomment %}
+      <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_img.placement_manager_contact_person_data_export' %}">
+        {% csrf_token %}
+        <button class="btn btn-primary" type="submit">Export</button>
+      </form>
       </div>
        {% if messages %}
        {% for message in messages %}
@@ -65,7 +65,7 @@
           <tr class="row">
             <td class="col-md-6">
               <div class="left-div">
-{% comment %}                <form class="form" enctype="multipart/form-data" method="post"  action="{% url 'placement.views_img.placement_manager_view' %}" >
+                <form class="form" enctype="multipart/form-data" method="post"  action="{% url 'placement.views_img.import_contacts_excel' %}" >
                   {% csrf_token %}
                   {% kwacro editable_field_div field %}
                     <div class="edit-row">
@@ -78,7 +78,7 @@
                   {% usekwacro editable_field_div excel_form.excel_file %}
                   <button class="btn btn-primary" type="submit">Submit</button>
                 </form>
-{% endcomment %}           </div>
+              </div>
             </td>
             <td class="col-md-6">
               <div class="right-div">
