@@ -32,14 +32,12 @@ public class PConnectFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_pconnect, container, false);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(
-                getChildFragmentManager());
-
-        mViewPager = (ViewPager) v.findViewById(R.id.pager);
+        View view = inflater.inflate(R.layout.fragment_pconnect, container, false);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+        mViewPager = (ViewPager) view.findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        return v;
+        return view;
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -61,12 +59,12 @@ public class PConnectFragment extends Fragment {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
+
             switch (position) {
                 case 0:
-                    return "Accepted".toUpperCase(l);
+                    return "Request";
                 case 1:
-                    return "Request".toUpperCase(l);
+                    return "Accepted";
 
             }
             return null;
@@ -75,7 +73,7 @@ public class PConnectFragment extends Fragment {
 
     public static class TabbedContentFragment extends Fragment {
 
-        public static final String ARG_SECTION_NUMBER = "section_number";
+
         public int position;
         public TabbedContentFragment(int i) {
             position=i;
@@ -87,9 +85,9 @@ public class PConnectFragment extends Fragment {
             View pageView;
             switch(position) {
 
-                case 1: pageView = inflater.inflate(R.layout.fragment_peer_connect_request, container, false);
+                case 1: pageView = inflater.inflate(R.layout.fragment_peer_connect, container, false);
                     break;
-                default: pageView = inflater.inflate(R.layout.fragment_peer_connect, container, false);
+                default: pageView = inflater.inflate(R.layout.fragment_peer_connect_request, container, false);
                     break;
 
             }

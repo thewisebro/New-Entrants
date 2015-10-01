@@ -53,8 +53,15 @@ public class SConnectFragment extends Fragment {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return "hello";
 
+            switch (position) {
+                case 0:
+                    return "Request";
+                case 1:
+                    return "Accepted";
+
+            }
+            return null;
         }
     }
 
