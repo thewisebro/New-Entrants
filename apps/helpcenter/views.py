@@ -188,6 +188,7 @@ def login_help(request, username=''):
   })
 
 
+@login_required
 @dialog_login_required
 def feedback(request):
   ResponseForm = ResponseFormGen(request.user)

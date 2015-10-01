@@ -22,7 +22,7 @@ class CompanyForm(forms.ModelForm) :
 
   #Search for a better method
   contact_person = forms.ModelChoiceField(queryset = models.CPTMember.objects.filter(year = current_session_year()), required=False)
-  open_for_disciplines = forms.ModelMultipleChoiceField(queryset=Branch.objects.all().order_by('degree','department'), widget=forms.CheckboxSelectMultiple)
+  open_for_disciplines = forms.CompanyMultipleChoiceField(queryset=Branch.objects.all().order_by('degree','department'), widget=forms.CheckboxSelectMultiple)
   class Meta :
     model   = models.Company
     fields = ['name',
@@ -106,16 +106,6 @@ class Profile(forms.ModelForm):
   birth_date = forms.DateField(required = True, widget=forms.DateInput(attrs={'class':'iDateField'}))
 
 class EducationalFormset(BaseModelFormSet):
-  def clean(self):
-    super(EducationalFormset, self).clean()
-    courses = []
-    for form in self.forms:
-      if not form.empty_permitted:
-        courseField = form.cleaned_data['course']
-        if not courseField in courses:
-          courses.append(courseField)
-        else:
-          raise forms.ValidationError("Same courses is not allowed")
     pass
 
 class Contact(forms.ModelForm):
@@ -149,6 +139,24 @@ class ExcelForm(forms.Form):
       else:
         return excel_file
 
+class PpoRejectionForm(forms.Form) :
+  plac_person = forms.CharField(label = "Student")
+  enroll = forms.CharField(widget=forms.HiddenInput(attrs={'id':'enroll'}))
+  company = forms.CharField()
+  package = forms.CharField(widget = CurrencyWidget(choices_whole = PC.PAY_WHOLE_CHOICES,
+                                             choices_currency = PC.PAY_PACKAGE_CURRENCY_CHOICES,
+                                             attrs={'class':'iCurrencyField'}))
+  def is_valid(self):
+    valid = super(PpoRejectionForm, self).is_valid()
+    cleaned_data = super(PpoRejectionForm,self).clean()
+    if not cleaned_data.has_key('enroll'):
+      raise forms.ValidationError("Please select student name from suggestion list.")
+
+    clean_enroll = cleaned_data.get("enroll")
+    if models.PpoRejection.objects.filter(plac_person__student__user__username=clean_enroll).exists():
+      raise forms.ValidationError("PPO Rejection entry for this student already exists")
+    return True and valid
+
 #class CompanycontactForm(forms.ModelForm):
 #  when_to_contact = forms.DateField(widget=AdminDateWidget, required=False)
 #  class Meta:
@@ -178,6 +186,21 @@ class EditSlotForm(forms.ModelForm):
 class AddShortlistForm(forms.Form):
   student = forms.CharField(widget=forms.Textarea)
   company = forms.CharField(widget=forms.TextInput)
+
+class WorkshopRegistrationForm(forms.ModelForm):
+  def is_valid(self):
+    valid = super(WorkshopRegistrationForm, self).is_valid()
+    cleaned_data = super(WorkshopRegistrationForm,self).clean()
+    if cleaned_data['options']=='NOT' and cleaned_data['reason'].lower() == cleaned_data['reason'].upper(): 
+      raise forms.ValidationError("Please add specific reason for this option")
+    if cleaned_data['options']=='4P Education' and cleaned_data['reason'].lower() == cleaned_data['reason'].upper():
+      raise forms.ValidationError("Please add at least one option from Case Study, HR Interview, Personal Interview and Group Discussion")
+    if cleaned_data['options']=='Ethuns Consultancy Service' and cleaned_data['reason'].lower() == cleaned_data['reason'].upper():
+      raise forms.ValidationError("Please fill the sector for mock interview. Ex. IT/Software, Electrical/Electronics, Mechanical, Chemical, Civil, Finance/Consulting etc.")
+    return True and valid
+  class Meta:
+    model = models.WorkshopRegistration
+    exclude = ('placement_person',)
 
 def BaseModelFormFunction(model_type, exclude_list=None, data=None,**kwargs):
   """
@@ -218,8 +241,8 @@ class CommentsForm(forms.ModelForm):
   class ContactPersonModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
       if obj.is_primary:
-        return obj.name+'; '+obj.designation+' (Primary Contact)'
-      return obj.name+'; '+obj.designation
+        return str(obj.name)+'; '+str(obj.designation)+' (Primary Contact)'
+      return str(obj.name)+'; '+str(obj.designation)
 
   def __init__(self, *args, **kwargs):
     company_contact = kwargs.pop('company_contact')

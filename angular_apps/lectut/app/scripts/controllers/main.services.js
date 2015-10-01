@@ -310,3 +310,122 @@ app.service('Comments', ['$http','$q','ngNotify',
           return deferred.promise;
         };
 }]);
+
+app.service('LoadFacultyData', ['$http','$q','ngNotify',
+      function($http, $q, ngNotify){
+        var deferred;
+          //console.log("s");
+          this.getFacultyData = function(facultyId){
+          var urlSend = base_domain+'/lectut_api/facultyFiles/'+facultyId+'/';
+          deferred = $q.defer();
+          $http.post(urlSend).success(function(d){
+              deferred.resolve(d);
+          }).error(function(d){
+            //console.log("error");
+             ngNotify.set('Error loading faculty profile.', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+
+          });
+          return deferred.promise;
+        };
+}]);
+
+
+app.service('JoinCourse', ['$http','$q','ngNotify',
+      function($http, $q, ngNotify){
+        var deferred;
+          //console.log("s");
+          this.joinCourse = function(courseId){
+          var urlSend = base_domain+'/lectut_api/joinBatch/'+courseId+'/';
+          deferred = $q.defer();
+          $http.post(urlSend).success(function(d){
+              if(d.status === 100){
+                deferred.resolve(d);
+                ngNotify.set(d.msg, {
+                  position:'top',
+                  type:'success',
+                  duration: 3000
+                }); 
+              }
+              else{
+                ngNotify.set(d.msg, {
+                  position:'top',
+                  type:'error',
+                  duration: 3000
+                }); 
+              }
+          }).error(function(d){
+            //console.log("error");
+             ngNotify.set('Cannot join this batch', {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+
+          });
+          return deferred.promise;
+        };
+}]);
+
+app.service('LeaveCourse', ['$http','$q','ngNotify',
+      function($http, $q, ngNotify){
+        var deferred;
+          //console.log("s");
+          this.leaveCourse = function(courseId){
+          var urlSend = base_domain+'/lectut_api/leaveBatch/'+courseId+'/';
+          deferred = $q.defer();
+          $http.post(urlSend).success(function(d){
+              if(d.status === 100){
+                deferred.resolve(d);
+                ngNotify.set(d.msg, {
+                  position:'top',
+                  type:'success',
+                  duration: 3000
+                }); 
+              }
+              else{
+                ngNotify.set(d.msg, {
+                  position:'top',
+                  type:'error',
+                  duration: 3000
+                }); 
+              }
+          }).error(function(d){
+            //console.log("error");
+             ngNotify.set(d.msg, {
+              position:'top',
+              type:'error',
+              duration: 3000
+             });
+
+          });
+          return deferred.promise;
+        };
+}]);
+
+
+app.factory('authHttpResponseInterceptor',['$q','$location',function($q,$location){
+        return {
+            // upto 300
+            'response': function(response){
+                if (response.data.lectut_status === 101) {
+                    //for redirects to 404 
+                    $location.path('/404');
+                }
+                return response || $q.when(response);
+            },
+            // above 300
+            'responseError': function(rejection) {
+              console.log(rejection);
+                if (rejection.status === 401) {
+                    console.log("401");
+                } else if (rejection.status === 400) {
+                   console.log("400");
+                }
+                return $q.reject(rejection);
+            }
+        }
+    }])

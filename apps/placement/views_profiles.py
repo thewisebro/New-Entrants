@@ -33,6 +33,7 @@ login_url = '/placement/'
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def photo(request):
   try :
     l.info(request.user.username + ': Opened view to add/update photo')
@@ -78,6 +79,7 @@ def photo(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def personal_information(request):
   """
     View/Update Studental Information
@@ -91,7 +93,7 @@ def personal_information(request):
       # create a default entry
       b_d = datetime.date(1990,1,1)
       # TODO : find a better way to create default rown
-      info = StudentInfo.objects.create(student = student, birth_date = b_d, height = 180, weight = 60)
+      info = StudentInfo.objects.create(student = student)
       l.info(request.user.username + ': created a default entry in personinfo.')
     if request.method == 'POST':
       form = plac_forms.Profile(request.POST, instance = info)
@@ -108,6 +110,9 @@ def personal_information(request):
       else:
         messages.error(request, form.errors, extra_tags='form_error')
     else :
+      birth_date = request.user.birth_date
+      if birth_date:
+        birth_date = birth_date.strftime('%d-%m-%Y')
       initial = {'city': info.city,
                 'mothers_name': info.mothers_name,
                 'fathers_office_address': info.fathers_office_address,
@@ -115,10 +120,12 @@ def personal_information(request):
                 'pincode': info.pincode ,
                 'fathers_office_phone_no': info.fathers_office_phone_no,
                 'fathers_name': info.fathers_name,
-                'birth_date': request.user.birth_date.strftime('%d-%m-%Y'),
+                'birth_date': birth_date,
                 'permanent_address': info.permanent_address,
                 'fathers_occupation': info.fathers_occupation}
       form = plac_forms.Profile(initial=initial)
+      # Disable Birthdate
+#  form.fields['birth_date'].widget.attrs['readonly'] = True
     return render_to_response('placement/basic_form.html', {
         'form': form,
         'title': 'Personal Information',
@@ -132,6 +139,7 @@ def personal_information(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def contact(request):
   """
     View/Update Student.
@@ -175,6 +183,7 @@ def contact(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def educational_details(request):
   """
     View/Update Educational Details
@@ -195,13 +204,24 @@ def educational_details(request):
         messages.error(request, "You cannot edit educational details because your status is lock/verified")
         return HttpResponseRedirect(reverse('placement.views_profiles.educational_details')) 
       formset = EducationalDetailsFormSet(request.POST, queryset = EducationalDetails.objects.filter(student = student))
-
       if formset.is_valid() :
         instances = formset.save(commit = False)
         # Make sure that the last element has student attached to it as it may be a newly created instance
         if len(instances) > 0:
           instances[-1].student = student
+        # Delete deleted object
+        for instance in formset.deleted_objects:
+          instance.delete()
         # save each instance individually as formset.save() will throw an exception if a form is marked as to be deleted.
+        courses = []
+        for form in formset.forms:
+          if (not form.empty_permitted or form.cleaned_data) and not form.cleaned_data['DELETE']:
+            courseField = form.cleaned_data['course']
+            if not courseField in courses:
+              courses.append(courseField)
+            else:
+              messages.error(request, "Same courses are not allowed.")
+              return HttpResponseRedirect(reverse('placement.views_profiles.educational_details')) 
         for instance in instances :
           instance.save()
         # Update the Student.cgpa field
@@ -227,6 +247,7 @@ def educational_details(request):
         return HttpResponseRedirect(reverse('placement.views_profiles.educational_details'))
 
     else :
+      #formset = EducationalDetailsFormSet(queryset = EducationalDetails.objects.filter(student = student).exclude(course=previous_sem(student.semester)))
       formset = EducationalDetailsFormSet(queryset = EducationalDetails.objects.filter(student = student))
     # Override the choices for course as per the course of the user.
     # Added the blank option to make sure that the formset works fine.
@@ -245,6 +266,18 @@ def educational_details(request):
     for form in formset :
       form.fields['discipline'].choices = branches
       form.fields['discipline'].widget = Select(choices = branches )
+#    recent = EducationalDetails.objects.filter(student=student, course=previous_sem(student.semester))
+#    if recent:
+#      recent = recent[0]
+#      long_name_course = recent.course
+#      for inst in MC.SEMESTER_CHOICES:
+#        if inst[0] == previous_sem(student.semester):
+#          long_name_course = inst[1]
+#          break
+#      recent.course = (recent.course, long_name_course)
+#
+#      long_name_discipline = Branch.objects.get(code=recent.discipline).name
+#      recent.discipline = (recent.discipline, long_name_discipline)
 
     if plac_person.status in ('LCK', 'VRF') :
       # The details are uneditable
@@ -252,6 +285,7 @@ def educational_details(request):
     else :
       template = 'placement/basic_form.html'
     return render_to_response(template , {
+#        'recent' : recent,
         'isFormSet' : True,
         'form' : formset,
         'title' : 'Educational Details',
@@ -266,6 +300,7 @@ def educational_details(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def placement_information(request) :
   """
     View/Update Placement Information
@@ -327,6 +362,7 @@ def placement_information(request) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def editset(request, model_name):
   """
   A view to handle all the formsets that are mapped to student using ForeignKey to student.

@@ -30,16 +30,16 @@
             <a href = "{% url 'placement.views_img.add_company_coordinator' %}" target="_blank">Add Company Coordinator</a>
           </div>
           <div class="sub-links">
-            <a href="/logout" target="_blank">Logout</a>
+            <a href="/logout">Logout</a>
           </div>
         </div>
       </div>
       <div class="exporter">
 
-{% comment %}        <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_img.generate_company_contact_xls' %}">
-              {% csrf_token %}
-              <button class="btn btn-primary" type="submit">Export</button>
-        </form>  {% endcomment %}
+      <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_img.placement_manager_contact_person_data_export' %}">
+        {% csrf_token %}
+        <button class="btn btn-primary" type="submit">Export</button>
+      </form>
       </div>
        {% if messages %}
        {% for message in messages %}
@@ -65,7 +65,7 @@
           <tr class="row">
             <td class="col-md-6">
               <div class="left-div">
-{% comment %}                <form class="form" enctype="multipart/form-data" method="post"  action="{% url 'placement.views_img.placement_manager_view' %}" >
+                <form class="form" enctype="multipart/form-data" method="post"  action="{% url 'placement.views_img.import_contacts_excel' %}" >
                   {% csrf_token %}
                   {% kwacro editable_field_div field %}
                     <div class="edit-row">
@@ -78,7 +78,7 @@
                   {% usekwacro editable_field_div excel_form.excel_file %}
                   <button class="btn btn-primary" type="submit">Submit</button>
                 </form>
-{% endcomment %}           </div>
+              </div>
             </td>
             <td class="col-md-6">
               <div class="right-div">
@@ -107,15 +107,15 @@
               <th>Select</th>
               <th>Company Name</th>
               <th>Cluster</th>
+              <th>Status</th>
               <th>Contact Person</th>
               <th>Designation</th>
               <th>Phone Number</th>
               <th>Email</th>
-              <th>Status</th>
               <th>Last Contact</th>
               <th>Person in Contact</th>
-              <th>Comments</th>
               <th>When to Contact</th>
+              <th>Comments</th>
               <th>Edit Company</th>
               <th>Remove</th>
             </tr>
@@ -131,11 +131,12 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/placement/jquery.dataTables.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/placement/jquery.leanModal.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/placement/dataTables.bootstrap.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/placement/dataTable.api.fnReloadAjax.js"></script>
   <script type="text/javascript">
     if (!String.prototype.format) {
       String.prototype.format = function() {
             var args = arguments;
-            return this.replace(/{(\d+)}/g, function(match, number) { 
+            return this.replace(/{(\d+)}/g, function(match, number) {
                return typeof args[number] != 'undefined'
                                   ? args[number]
                                   : match
@@ -153,10 +154,9 @@
                           "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
                                  $('td:eq(0)', nRow).html("<input type='checkbox' class='largerCheckbox' name='assigns' value='{0}'/>".format(aData[0]));
                                  $('td:eq(1)', nRow).html("<a style='cursor:pointer;' onclick=open_frame('Details','/placement/contact_manager/details/{0}',800,false)>{1}</a>".format(aData[0],aData[1]));
-                                 $('td:eq(5)', nRow).html("<div style='width:150px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'>{0}</div>".format(aData[5]));
-                                 $('td:eq(6)', nRow).html("<div style='width:150px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'>{0}</div>".format(aData[6]));
+                                 $('td:eq(7)', nRow).html("<div style='width:150px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'>{0}</div>".format(aData[7]));
 
-                                 $('td:eq(10)', nRow).html("<div style='width:160px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'><a style='cursor:pointer;' onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)><span>{1}</span></a></div>".format(aData[0],aData[10]));
+                                 $('td:eq(11)', nRow).html("<div style='width:160px;height:40px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'><a style='cursor:pointer;' onclick=open_frame('Comments','/placement/contact_manager/edit/comments/{0}',800,true)><span>Click to View</span></a></div>".format(aData[0]));
                                  $('td:eq(12)', nRow).html( " <div class='glyphs'>\
                                                               <div class='glyph'>\
                                                               <a onclick=open_frame('Edit&nbsp;Company','/placement/contact_manager/edit/{0}/',800,true)>\
@@ -260,7 +260,7 @@ function open_frame(company_name,url,width,refresh){
     width: width,
     src: url,
     close: function(){
-      $('#company').DataTable().ajax.reload();
+      $('#company').dataTable().fnReloadAjax(null,null,true);
       },
     });
   } else {

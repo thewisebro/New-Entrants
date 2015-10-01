@@ -18,11 +18,10 @@ from django.contrib import messages
 
 from nucleus.models import StudentInfo, Branch, Student
 from placement.forms import BaseModelFormFunction
-from placement import forms
+from placement import forms, utils
 from placement.policy import current_session_year
 from placement.models import *
 from placement.utils import *
-
 from django.conf import settings
 
 l = logging.getLogger('placement')
@@ -728,3 +727,52 @@ def insert_shortlist(request):
                               'form':form,},
                               context_instance = RequestContext(request))
 
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def company_search(request):
+  return HttpResponse(utils.company_search(request), 'application/json')
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def plac_person_search(request):
+  return HttpResponse(utils.plac_person_search(request), 'application/json')
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def ppo_rejection(request):
+  l.info(request.user.username + " : Tried to enter PPO Details")
+  ppo_lst = PpoRejection.objects.all()
+  ppo_form = forms.PpoRejectionForm()
+  if request.method == 'POST':
+    ppo_form = forms.PpoRejectionForm(request.POST)
+    try:
+      if ppo_form.is_valid():
+        cleaned_data = ppo_form.clean()
+        ppo_rejection_inst = PpoRejection()
+        ppo_rejection_inst.plac_person = PlacementPerson.objects.get(student__user__username=ppo_form.cleaned_data['enroll'])
+        ppo_rejection_inst.company = ppo_form.cleaned_data['company']
+        ppo_rejection_inst.package = ppo_form.cleaned_data['package']
+        ppo_rejection_inst.save()
+        messages.success(request, "PPO Rejection entry successfully added")
+        return HttpResponseRedirect(reverse('placement.views_admin.ppo_rejection'))
+    except ValidationError as e:
+      messages.error(request, str(e[0]))
+      return HttpResponseRedirect(reverse('placement.views_admin.ppo_rejection'))
+  return render_to_response('placement/ppo_rejection.html',{
+                            'form': ppo_form,
+                            'ppo_lst': ppo_lst,
+                            },
+                            context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def ppo_rejection_delete(request, ppo_id):
+  try:
+    ppo_rejection_inst = PpoRejection.objects.get(id=ppo_id)
+  except:
+    messages.error(request, "Entry does not exist")
+    return HttpResponseRedirect(reverse('placement.views_admin.ppo_rejection'))
+  ppo_rejection_inst.delete()
+  messages.success(request, "Entry successfully deleted")
+  return HttpResponseRedirect(reverse('placement.views_admin.ppo_rejection'))

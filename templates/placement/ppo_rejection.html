@@ -1,0 +1,82 @@
+{% extends "placement/base.html" %}
+{% load kwacros %}
+
+{% block app_styles %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/styles.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+    <link href="{{ STATIC_URL }}css/placement/jquery.tagit.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block app_content %}
+
+<h3>List of PPO Rejected Students</h3>
+<hr/>
+
+{% if editable_warning %}
+<p class="editable_warning">{{ editable_warning }}</p>
+{% endif %}
+
+{% include "placement/generic_form.html" with action=action form=form name=name %}
+
+{% if ppo_lst %}
+<hr>
+<br>
+<table class="sortable table table-striped table-bordered table-condensed" id="t1">
+  <thead>
+    <tr>
+      <th>S. No.</th>
+      <th>Enrollment No.</th>
+      <th>Name</th>
+      <th>Company</th>
+      <th>Package</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for ppo in ppo_lst %}
+  <tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ ppo.plac_person.student.user.username }}</td>
+    <td>{{ ppo.plac_person.student.user.name }}</td>
+    <td>{{ ppo.company }}</td>
+    <td>{{ ppo.package }}</td>
+    <td><span class='icon icon-remove' id='remove' style='cursor:pointer;' onclick='confirmfn({{ ppo.id }})'></span></span></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}
+
+{% block app_scripts %}
+  <script>
+   (function($) {
+      $(window).load(function() {
+        $('.ui-autocomplete').enscroll({
+           verticalTrackClass: 'track3',
+           verticalHandleClass: 'handle3',
+           addPaddingToPane: false,
+           pollChanges: true
+         });
+        });
+      })(jQuery);
+
+     $('body').ready(function(){
+       $('#id_plac_person').autocomplete({
+         source:'/placement/plac_person_search/',
+         select: function( event, ui ) {
+         $('#enroll').val(ui.item.id);
+         },
+         minLength:3
+       });
+     });
+  </script>
+<script>
+function confirmfn(id){
+  var a = confirm("Are you sure?");
+  if (a==true){window.location='/placement/ppo_rejection/remove/'+id+'/';}
+}
+</script>
+{% endblock %}

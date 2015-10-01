@@ -1,14 +1,16 @@
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.template.loader import render_to_string
+from django.db.models import Q
 
 from xhtml2pdf import pisa
 
 import cStringIO as StringIO
 import logging, os
 
-
+import json
 from placement.models import *
 from api import model_constants as MC
 from placement.constants import PAY_PACKAGE_CURRENCY_CONVERSION_RATES
@@ -82,7 +84,7 @@ def get_resume_binary(context, student, resume_type, verification_resume = False
   if graduation == 'UG' :
     courses = ('DPLM' ,'12TH' ,'10TH')
   elif graduation == 'PG' :
-    courses = ('UG0' ,'DPLM' ,'12TH' ,'10TH' ,'PG0')
+    courses = ('PG0', 'UG0' ,'DPLM' ,'12TH' ,'10TH')
   elif graduation == 'PHD' :
     courses = ('PG0' ,'UG0' ,'DPLM' ,'12TH' ,'10TH')
   course_name_map = {}
@@ -248,7 +250,7 @@ def get_branches_for_educational_details() :
   returns a tuple of branch code and branch name with three extra entries,
   1: blank, 2:NA/Not Applicable, 3:NOT/None Of These
   """
-  branches = [(''   , '--------------'),
+  branches = [('','--Select one--'),
               ('NA' , 'Not Applicable'),
               ('NOT', 'None of these' )]
   branches.extend( Branch.objects.values_list('code', 'name').order_by('name') )
@@ -259,3 +261,106 @@ def get_branches_for_educational_details() :
 def ContactValidator(value):
   if not str(value).isdigit():
     raise ValidationError("Contact number should contain only numerical digits.")
+
+def previous_sem(curr_sem):
+  ''' curr_sem = "UG20" -> previous_sem = "UG11" '''
+  try:
+    if curr_sem=='PG10':
+      prev_sem = 'UG0'
+      return prev_sem
+    disp = curr_sem[:2]
+    if disp not in ["UG","PG"]:
+      disp = "PHD"
+    current_sem_code = curr_sem[-2:]
+    current_sem_code_year = current_sem_code[0]
+    current_sem_code_sem = current_sem_code[1]
+    try:
+      if current_sem_code_sem == "1":
+        prev_sem_code_sem = "0"
+        prev_sem_code_year = current_sem_code_year
+      else:
+        prev_sem_code_year = str(int(current_sem_code_year)-1)
+        prev_sem_code_sem = "1"
+      if prev_sem_code_year == "0":
+        return ""
+      return disp+prev_sem_code_year+prev_sem_code_sem
+    except valueerror:
+      return curr_sem
+  except:
+    if curr_sem == "":
+      return curr_sem
+    if curr_sem == "0":
+      return curr_sem
+
+def student_search(request):
+  if request.is_ajax():
+    q = request.GET.get('term','')
+    print q
+    persons = Student.objects.filter(Q(user__name__icontains = q)|Q(user__username__icontains = q),passout_year=None).order_by('-user__username')[:50]
+    if not persons:
+      obj = [{
+        'id':'00000000',
+        'label':'No results found',
+        'value':q,
+      }]
+      data = json.dumps(obj)
+      return data
+    def person_dict(student):
+      return {
+        'id':str(student.user.username),
+        'label':str(student.user.name)+" ( "+str(student.user.info)+" )",
+        'value':str(student.user.name),
+      }
+    data = json.dumps(map(person_dict,persons))
+  else:
+    data = 'fail'
+  return data
+
+def company_search(request):
+  if request.is_ajax():
+    q = request.GET.get('term','')
+    print q
+    companies = Company.objects.filter(name__icontains = q, year=2015).order_by('-name')[:10]
+    if not companies:
+      obj = [{
+        'id':'00000000',
+        'label':'No results found',
+        'value':q,
+      }]
+      data = json.dumps(obj)
+      return data
+    def company_dict(company):
+      return {
+        'id':str(company.id),
+        'label':str(company.name),
+        'value':str(company.name),
+      }
+    data = json.dumps(map(company_dict,companies))
+  else:
+    data = 'fail'
+  return data
+
+def plac_person_search(request):
+  if request.is_ajax():
+    q = request.GET.get('term','')
+    print q
+    plac_persons = PlacementPerson.objects.filter(Q(student__user__name__icontains = q)|Q(student__user__username__icontains = q), status__in=['VRF','LCK','OPN'], student__passout_year=None).order_by('-student__user__username')[:20]
+    if not plac_persons:
+      obj = [{
+        'id':'00000000',
+        'label':'No results found',
+        'value':q,
+      }]
+      data = json.dumps(obj)
+      return data
+    def plac_person_dict(plac_person):
+      return {
+        'id':str(plac_person.student.user.username),
+        'label':str(plac_person.student.user.name)+" ( "+str(plac_person.student.user.info)+" )",
+        'value':str(plac_person.student.user.name),
+      }
+    data = json.dumps(map(plac_person_dict,plac_persons))
+  else:
+    data = 'fail'
+  return data
+

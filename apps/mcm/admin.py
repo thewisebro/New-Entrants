@@ -3,7 +3,7 @@ from mcm.models import McmPerson, StudentLoanAid, MCM
 
 
 class MCMAdmin(admin.ModelAdmin) :
-  search_fields = [ 'person__user__username']
+  search_fields = [ 'student__user__username']
   exclude = ['person']
 
 admin.site.register(McmPerson)

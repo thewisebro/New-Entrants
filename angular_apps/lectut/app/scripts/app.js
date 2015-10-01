@@ -44,39 +44,16 @@ lectutApp.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
 
 lectutApp.config(['$locationProvider','$routeProvider',
   function( $locationProvider, $routeProvider) {
+   
     
-    // $urlRouterProvider.otherwise("/");
-      /* $stateProvider
-        .state('home',{
-           url: "/",
-           templateUrl: 'views/partials/common-course-home.html',
-           controller: 'CourseHomeCtrl' 
-        })
-        .state('course', {
-           url: "course/:courseId",
-           templateUrl: 'views/partials/course-detail.html',
-           controller: 'CourseDetailCtrl'
-         })
-        .state('course.feeds', {
-           url: "/feeds",
-           templateUrl: 'views/partials/course-feeds.html',
-           controller: 'CourseFeedsCtrl'
-         })
-        .state('course.files', {
-           url: "/files",
-           templateUrl: 'views/partials/course-files.html',
-           controller: 'CourseFilesCtrl'
-         })
-         .state('course.members', {
-           url: "/members",
-           templateUrl: 'views/partials/course-members.html',
-           controller: 'CourseMembersCtrl'
-         });  */
-    
-    $routeProvider.
+   $routeProvider.
       when('/', {
         templateUrl: 'views/partials/common-course-home.html',
         controller: 'CourseHomeCtrl'
+      }).
+      when('/404', {
+        templateUrl: '404.html',
+        controller: 'FourNotCtrl'
       }).
       /*when('/course/:courseId/', {
         templateUrl: 'views/partials/course-detail.html',
@@ -102,9 +79,17 @@ lectutApp.config(['$locationProvider','$routeProvider',
         templateUrl: 'views/partials/one-file.html',
         controller: 'CourseOneFileCtrl'
       }).
+      when('/faculty/:facultyId', {
+        templateUrl: 'views/partials/faculty.html',
+        controller: 'FacultyCtrl'
+      }).
       otherwise({
-        redirectTo: '/'
+        redirectTo:'/404'
       });
     //$locationProvider.html5Mode(true);
-  }]);
+  }])
 
+ .config(['$httpProvider',function($httpProvider) {
+      //Http Intercpetor to check auth failures for xhr requests
+      $httpProvider.interceptors.push('authHttpResponseInterceptor');
+  }]);

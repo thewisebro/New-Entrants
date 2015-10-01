@@ -4,6 +4,14 @@ COMPANY_APPLICATION_STATUS = (
       ('SEL', 'Selected'),
     )
 
+WORKSHOP_OPTIONS = (
+      ('NOT', 'Not interested'),
+      ('Smart India', 'Smart India'),
+      ('4P Education','4P Education'),
+      ('Talerang','Talerang'),
+      ('Ethuns Consultancy Service','Ethuns Consultancy Service'),
+    )
+
 FORUM_CHOICES = (
       ('T', 'Technical'),
       ('P', 'Placement'),

@@ -47,14 +47,18 @@ channeli_apps = {
   'dc++' : {'name':'DC++', 'url':'/dc++/'},
 }
 
-student_apps = ['acad','lectut','yaadein','jukebox','dc++','placement',
+student_apps = ['acad','lectut','jukebox','dc++','placement',
                 'buysell', 'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research']
+
+student_apps_feedback = ['acad','lectut','jukebox','dc++','placement',
+                'buysell', 'thinktank','lostfound','softwares',
+                'peoplesearch','messmenu','research', 'androidnotices']
 
 faculty_apps = ['responses','acad_course_students','facapp','lectut','placement', 'research',
                 'thinktank','lostfound','softwares','peoplesearch']
 
-other_apps = ['lectut','yaadein','jukebox','dc++','thinktank',
+other_apps = ['lectut','jukebox','dc++','thinktank',
               'lostfound','softwares','peoplesearch','placement']
 
 external_links = {
@@ -73,12 +77,13 @@ channeli_links = [
   {'name':'Instruments Search','url':'/equipments/'},
   {'name':'Mess Feedback','url':'/messmenu/feedback/'},
   {'name':'Smart Card Registration','url':'/genforms/'},
-  {'name':'Print Scholarship Form','url':'/scholarships/mcm_print_pdf/'},
-  {'name':'LAN Registration','url':'/wifi/'},
+  {'name':'Scholarship Form','url':'/scholarships/mcm/'},
+  #{'name':'LAN Registration','url':'/wifi/'},
   {'name':'Telephone Directory','url':'/static/pdfs/directoryeng15022015.pdf'},
   {'name':'Meeting Section','url':'/meeting_minutes/'},
   {'name':'Dairy Reports','url':'/meeting_minutes/dairy.php'},
   {'name':'Forms','url':'/forms/'},
+  {'name':'IITR Logo','url':'/static/images/iitr_logo.jpg'},
   #{'name':'Scholarship Form','url':'/mcm/mcm/'},
 ]
 
@@ -86,9 +91,9 @@ channeli_links = map(lambda n:external_links[n],['iitr','webmail','library']) + 
 
 img_tools = [
   {'name': 'IMG Wiki', 'url': 'http://wiki.channeli.in', 'icon':'wiki.ico'},
-  {'name': 'Producteev', 'url': 'https://www.producteev.com/workspace/', 'icon':'producteev.ico'},
+  {'name': 'Trello', 'url': 'https://trello.com/imgiitr', 'icon':'trello.ico'},
   {'name': 'GitLab', 'url': 'http://git.channeli.in', 'icon':'gitlab.ico'},
-  {'name': 'Piwik', 'url': 'http://analytics.channeli.in','icon':'piwik.ico'},
+  {'name': 'Piwik', 'url': 'https://channeli.in/piwik/','icon':'piwik.ico'},
   {'name': 'Slack', 'url': 'https://team-img.slack.com/messages/all-main/','icon':'slack.ico'},
   {'name': 'Status', 'url': 'http://status.channeli.in','icon':'status.ico'},
   {'name': 'Sentry', 'url': 'http://sentry.channeli.in/img/channel-i/','icon':'sentry.ico'},

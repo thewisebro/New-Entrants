@@ -20,6 +20,8 @@ from operator import itemgetter
 import mimetypes, os
 import json
 
+from PIL import Image
+
 from nucleus.models import Batch, Course, User, Student , Faculty , RegisteredCourse
 from forms import *
 from models import *
@@ -45,7 +47,7 @@ def CORS_allow(view):
 
     response = view(request, *args, **kwargs)
     if DEVELOPMENT:
-      response["Access-Control-Allow-Origin"] = "http://172.25.55.156:9008"
+      response["Access-Control-Allow-Origin"] = "http://192.168.121.187:9008"
       response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
       response["Access-Control-Allow-Credentials"] = 'true'
 #      response["Access-Control-Max-Age"] = "1000"
@@ -70,6 +72,25 @@ def get_post_dict(post):
     files.append(document)
   return {'post':post,'files':files}
 
+def authenticate( user , batch_id ):
+  currentBatch = Batch.objects.get(id = batch_id)
+  userType = getUserType(user)
+  if userType == "0":
+    student = user.student
+    students = currentBatch.students.all()
+    if student in students:
+      return True
+    else:
+      return False
+
+  if userType == "1":
+    faculty = user.faculty
+    faculties = currentBatch.faculties.all()
+    if faculty in faculties:
+      return True
+    else:
+      return False
+
 
 @csrf_exempt
 @CORS_allow
@@ -78,13 +99,14 @@ def dispbatch(request):
   if request.user.is_authenticated():
     userType = getUserType(request.user)
     batches_info = []
+    user_id = request.user.id
     user_info = request.user.serialize()
     if userType == "0":
       student = request.user.student
       batches = student.batch_set.all()
-      courses = map(lambda x: x.course, batches)
-      batches_info = map(lambda x: batch_dict(x),batches)
-      userPosts = Post.post_objects.all().order_by('-datetime_created')
+      batch_ids = map(lambda x: x.id,batches)
+      batches_info = map(lambda x: batch_dict_disp(x),batches)
+      userPosts = Post.post_objects.filter(batch_id__in = batch_ids).order_by('-datetime_created')[:20]
 #      index = settings.PROJECT_ROOT + '/apps/lectut/static/lectut-front/dist/index.html'
 #      with open(index,'r') as f:
 #       response =  HttpResponse(f.read())
@@ -93,17 +115,19 @@ def dispbatch(request):
     elif userType == "1":
       faculty = request.user.faculty
       batches = faculty.batch_set.all()
-      courses = map(lambda x: x.course, batches)
-      batches_info = map(lambda x: batch_dict(x),batches)
-      userPosts = Post.post_objects.all().order_by('-datetime_created')
+      batch_ids = map(lambda x: x.id,batches)
+      batches_info = map(lambda x: batch_dict_disp(x),batches)
+      userPosts = Post.post_objects.all().filter(batch_id__in = batch_ids).order_by('-datetime_created')[:20]
 
     else:
-      userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')
+      userPosts = Post.post_objects.all().filter(privacy = False).order_by('-datetime_created')[:20]
       user_info = 'Unknown'
+      user_id = 0
     for post in userPosts:
       posts.append(get_post_dict(post))
     data = {'user': user_info,
             'batches': batches_info,
+            'user_id':user_id,
             'posts':posts,
             'userType': userType}
 
@@ -125,6 +149,8 @@ def latest_feeds(request):
     posts.append(get_post_dict(post))
   return HttpResponse (json.dumps({'posts':posts, 'userType':userType}),content_type='application/json')
 
+
+'''When a user views a specific batch, this view is used to send him the necessary data depending on his credentials'''
 @csrf_exempt
 @CORS_allow
 #@login_required
@@ -133,7 +159,7 @@ def coursepage(request, batch_id):
 #    usrname = request.POST.get('user','harshithere')
 #    user = User.objects.get(username=usrname)
     if not Batch.objects.filter(id=batch_id).exists():
-      return HttpResponse(json.dumps('This batch doesnot exist'),content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'This batch doesnot exist','lectut_status':101}),content_type='application/json')
     userBatch = Batch.objects.get(id=batch_id)
     posts = []
     request.session['batchId'] = batch_id
@@ -142,20 +168,9 @@ def coursepage(request, batch_id):
     number = 0
     userType=getUserType(user)
 
-    if userType == "0":
-      if user.student in userBatch.students.all():
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created')[:20] #[number:(number+post_count)]
-        in_batch = True
-      else:
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')[:20]
-        in_batch = False
-    elif userType == "1":
-      if user.faculty in userBatch.faculties.all():
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created')[:20] #[number:(number+post_count)]
-        in_batch = True
-      else:
-        previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')[:20]
-        in_batch = False
+    if authenticate(user , batch_id):
+      previous_posts = Post.post_objects.all().filter(batch_id = batch_id).order_by('-datetime_created')[:20] #[number:(number+post_count)]
+      in_batch = True
     else:
       previous_posts = Post.post_objects.all().filter(batch_id = batch_id).filter(privacy = False).order_by('-datetime_created')[:20]
       in_batch = False
@@ -167,7 +182,8 @@ def coursepage(request, batch_id):
     context = {'posts': posts,
                'batch':batch_dict(userBatch),
                'userType':userType,
-               'in_batch':in_batch,}
+               'in_batch':in_batch,
+               'lectut_status':100}
 
     return HttpResponse(json.dumps(context),content_type='application/json')
 #    return render( request, 'lectut/image.html', context)
@@ -219,7 +235,7 @@ def uploadFile(request , batch_id):
 def uploadedFile(request , batch_id):
   if request.method == 'POST':
     allData = json.loads(request.POST['data'])
-    status = 100
+    lectut_status = 100
     user = request.user
 #    usrname = allData['user']
 #    user = User.objects.get(username=usrname)
@@ -230,20 +246,21 @@ def uploadedFile(request , batch_id):
       course = Course.objects.get(id = batch_id)
       userBatch = None
     else:
-      return HttpResponse(json.dumps({'msg':'Invalid Course. Please contact IMG if problem persists' , 'status':102}), content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'Invalid Course. Please contact IMG if problem persists' , 'lectut_status':101}), content_type='application/json')
 
 #    data = request.POST.get('formText','')
+    if not authenticate(request.user , batch_id):
+       return HttpResponse(json.dumps({'msg':'User is not a member of given course. Please contact IMG if you wish to post' , 'lectut_status':101}), content_type='application/json')
     data = allData['formText']
     privacy = False
     uploadTypes = allData['typeData']
     documents = request.FILES.getlist('file')
     extra = request.POST.getlist('extra','')
     if not data and not documents:
-      return HttpResponse(json.dumps({'msg':'Empty posts are not allowed','status':101}), content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'Empty posts are not allowed','lectut_status':102}), content_type='application/json')
     if getUserType(user) == "1":
       privacy = allData['privacy']
-    files = []
-    msg = ''
+    files,msg = [],[]
     counter = 0
     try:
       if userBatch is not None:
@@ -252,16 +269,18 @@ def uploadedFile(request , batch_id):
         new_post = Post(upload_user = user, course = course, content = data , privacy = privacy)
       new_post.save()
     except:
-      return HttpResponse(json.dumps({'msg':'Cannot save post','status':102}), content_type='application/json')
+      return HttpResponse(json.dumps({'msg':'Cannot save post','lectut_status':102}), content_type='application/json')
     for document in documents:
       file_type = getFileType(document)
 #      fileData = json.loads(extra[counter])
+      if file_type =='dangerous':
+        msg.append({'msg':str(document)+' : File type is dangerous. Cant save it on server','lectut_status':102})
       if file_type =='Video' and  document._size>MAX_VIDEO_SIZE:
-        msg = "Video too large.Must be smaller than 20MB"
+        msg.append({'msg':str(document)+' : Video too large.Must be smaller than 20MB','lectut_status':102})
       if file_type =='pdf' and  document._size>MAX_PDF_SIZE:
-        msg = "Image too large.Must be smaller than 20MB"
+        msg.append({'msg':str(document)+' : File too large.Must be smaller than 20MB','lectut_status':102})
       elif document._size>MAX_IMAGE_SIZE:
-        msg = "File too large.Must be smaller than 20MB"
+        msg.append({'msg':str(document)+' : Image too large.Must be smaller than 10MB','lectut_status':102})
       else:
         new_document = Uploadedfile(post =new_post, upload_file = document, description = str(document), file_type=file_type, upload_type = uploadTypes[counter])
         new_document.save()
@@ -270,10 +289,10 @@ def uploadedFile(request , batch_id):
     new_post.save()
     if msg !='':
 #      response =  HttpResponse(json.dumps(msg), content_type='application/json')
-      status = 101
+      lectut_status = 100
     new_post = new_post.as_dict()
     complete_post = {'post':new_post,'files':files}
-    response =  HttpResponse(json.dumps({'complete_post':complete_post,'status':status , 'msg':msg}), content_type='application/json')
+    response =  HttpResponse(json.dumps({'complete_post':complete_post,'lectut_status':lectut_status , 'messages':msg}), content_type='application/json')
   else:
     response = HttpResponse('It is not a post request')
   return response
@@ -300,6 +319,8 @@ def getFileType(file_name):
       file_type="sheet"
     elif extension in ['doc','docx','odt','rtf']:
       file_type="doc"
+    elif extension in ['sh','dat','bash','exe']:
+      file_type="dangerous"
     else:
       file_type="other"
   except:
@@ -310,15 +331,22 @@ def getFileType(file_name):
 @csrf_exempt
 @CORS_allow
 def download_file(request, file_id):
-  download_file = Uploadedfile.objects.get(id = file_id)
+  if Uploadedfile.objects.filter(id = file_id).exists():
+    if Uploadedfile.file_objects.filter(id = file_id).exists():
+      download_file = Uploadedfile.file_objects.get(id = file_id)
+    else:
+      return HttpResponse(json.dumps({'msg':'File has been deleted' , 'lectut_status':101}), content_type='application/json')
+  else:
+    return HttpResponse(json.dumps({'msg':'No file found with this id' , 'lectut_status':101}), content_type='application/json')
+
   path_to_file = os.path.join(MEDIA_URL, str(download_file.upload_file))
   download_file_open = download_file.upload_file.path
   file_check = open(download_file_open,"r")
 #mimetype = mimetypes.guess_type(filename)[0]
 
-#  user = User.objects.get(username = 'harshithere')
-  downloadlog = DownloadLog(uploadedfile=download_file , user = request.user)
-  downloadlog.save()
+  if request.user.is_authenticated():
+    downloadlog = DownloadLog(uploadedfile=download_file , user = request.user)
+    downloadlog.save()
 #  file_name = smart_str(download_file)
 
 #  response = HttpResponse(file_check.read(),content_type='application/force-download')
@@ -357,6 +385,14 @@ def batch_dict(Batch):
                }
   return batch_info
 
+def batch_dict_disp(Batch):
+  batch_info = {
+                'id' : Batch.id,
+                'course_name' : Batch.course.name,
+                'code' : Batch.name.split(':')[0]
+  }
+  return batch_info
+
 
 @csrf_exempt
 @CORS_allow
@@ -364,7 +400,7 @@ def batch_data(request , batch_id):
   if Batch.objects.filter(id = batch_id).exists():
     batch = Batch.objects.get(id = batch_id)
     batch_info = batch_dict(batch)
-    response = HttpResponse(json.dumps({'batch_info':batch_info , 'status':100}), content_type='application/json')
+    response = HttpResponse(json.dumps({'batch_info':batch_info , 'lectut_status':100}), content_type='application/json')
   else:
     response = HttpResponse(json.dumps({'msg':'The batch doesnot exist' , 'status':101}), content_type='application/json')  
   return response
@@ -379,15 +415,18 @@ def get_post(request , batch_id , post_id):
       post = Post.post_objects.get(id = post_id)
       complete_post = get_post_dict(post)
       if user.is_authenticated():
-        return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize() , 'status':100}), content_type='application/json')
+        if authenticate ( user , batch_id):
+          return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize() , 'in_batch' : True,'lectut_status':100}), content_type='application/json')
+        else:
+          return HttpResponse(json.dumps({'post':complete_post,'user_info':user.serialize() ,'in_batch' : False, 'lectut_status':100}), content_type='application/json')
       else:
-        return HttpResponse(json.dumps({'post':complete_post , 'user_info':'' , 'status':100}), content_type='application/json')
+        return HttpResponse(json.dumps({'post':complete_post , 'user_info':'' , 'in_batch' : False,'lectut_status':100}), content_type='application/json')
     else:
       msg = 'Post has been deleted'
   else:
     msg = 'Post doesnot exist'
 
-  response = HttpResponse(json.dumps({'msg':msg , 'status':101}), content_type='application/json')
+  response = HttpResponse(json.dumps({'msg':msg , 'lectut_status':101}), content_type='application/json')
   return response
 
 
@@ -402,15 +441,15 @@ def get_file(request , batch_id , file_id):
       user_info = user.serialize()
       File = File.as_dict()
       if user.is_authenticated():
-        return HttpResponse(json.dumps({'file':File , 'user_info':user_info , 'status':100}), content_type='application/json')
+        return HttpResponse(json.dumps({'file':File , 'user_info':user_info , 'user_id':str(user.id) , 'userType':str(getUserType(user)) , 'lectut_status':100}), content_type='application/json')
       else:
-        return HttpResponse(json.dumps({'file':File , 'user_info':'' , 'status':100}), content_type='application/json')
+        return HttpResponse(json.dumps({'file':File , 'user_info':'' , 'lectut_status':100}), content_type='application/json')
     else:
       msg = 'File has been deleted'
   else:
     msg = 'File doesnot exist'
 
-  response = HttpResponse(json.dumps({'msg':msg , 'status':101}), content_type='application/json')
+  response = HttpResponse(json.dumps({'msg':msg , 'lectut_status':101}), content_type='application/json')
   return response
 
 
@@ -419,7 +458,7 @@ def get_file(request , batch_id , file_id):
 #@login_required
 def deleteFile(request , file_id):
   user = request.user
-  status = 101
+  lectut_status = 101
   if Uploadedfile.file_objects.filter(pk=file_id).exists():
     fileToDelete = Uploadedfile.objects.get(pk=file_id)
     post = fileToDelete.post
@@ -428,19 +467,19 @@ def deleteFile(request , file_id):
       try:
         fileToDelete.delete()
         msg = 'File has been deleted'
-        status = 100
+        lectut_status = 100
         counter = Uploadedfile.file_objects.all().filter(post = post).count()
         if counter ==0 and post.content =='':
           post.delete()
           msg = 'The post has been deleted as well'
       except:
         msg = 'Some error Occured'
-        status = 102
+        lectut_status = 102
     else:
       msg = 'You are not authorised to delete this file. This shall be reported'
   else:
     msg='File doesnot exist'
-  response = HttpResponse(json.dumps({'msg':msg,'status':status}), content_type='application/json')
+  response = HttpResponse(json.dumps({'msg':msg,'lectut_status':lectut_status}), content_type='application/json')
   return response
 #  return HttpResponseRedirect(reverse('coursepage' , kwargs={"batch_id":batch_id}))
 
@@ -449,7 +488,7 @@ def deleteFile(request , file_id):
 @CORS_allow
 def deletePost(request , post_id):
   user = request.user
-  status = 101
+  lectut_status = 101
   if Post.post_objects.filter(pk=post_id).exists():
     postToDelete = Post.objects.get(pk=post_id)
     if user.in_group('faculty') or user == postToDelete.upload_user:
@@ -459,15 +498,15 @@ def deletePost(request , post_id):
         for afile in files:
           afile.delete()
         msg = 'Post has been deleted'
-        status = 100
+        lectut_status = 100
       except:
         msg = 'Kuch katta ho gaya'
-        status = 102
+        lectut_status = 101
     else:
       msg = 'You are not authorised to delete this post. This shall be reported'
   else:
     msg='Post doesnot exist'
-  response = HttpResponse(json.dumps({'msg':msg , 'status':status}), content_type='application/json')
+  response = HttpResponse(json.dumps({'msg':msg , 'lectut_status':lectut_status}), content_type='application/json')
   return response
 
 # Not used currently
@@ -511,7 +550,7 @@ def userdownloads(request , batch_id):
 @CORS_allow
 def batchMembers(request , batch_id):
   if not Batch.objects.filter(id = batch_id).exists():
-    return HttpResponse(json.dumps({'msg':'Batch Doesnot exist' , 'status':101}), content_type="application/json")
+    return HttpResponse(json.dumps({'msg':'Batch Doesnot exist' , 'lectut_status':101}), content_type="application/json")
   currentBatch = Batch.objects.get(id = batch_id)
   students = currentBatch.students.all()
   users = map(lambda x:x.user, students)
@@ -527,7 +566,7 @@ def batchMembers(request , batch_id):
     user = user.serialize()
     faculties.append(user)
 
-  members = {'students':students, 'faculties':faculties , 'status':100}
+  members = {'students':students, 'faculties':faculties , 'lectut_status':100}
 
   return HttpResponse(json.dumps(members), content_type="application/json")
 
@@ -537,7 +576,7 @@ def batchMembers(request , batch_id):
 @CORS_allow
 def get_files(request, batch_id):
   if not Batch.objects.filter(id = batch_id).exists():
-    return HttpResponse(json.dumps({'msg':'Batch Doesnot exist' , 'status':101}), content_type="application/json")
+    return HttpResponse(json.dumps({'msg':'Batch Doesnot exist' , 'lectut_status':101}), content_type="application/json")
   currentBatch = Batch.objects.get(id = batch_id)
   AllFiles = {'lec':[],'tut':[],'exp':[],'sol':[],'que':[]}
   currentFiles = Uploadedfile.file_objects.all().filter(post__batch_id = batch_id)
@@ -562,14 +601,26 @@ def get_files(request, batch_id):
   AllArchives['Solution'] = AllArchives.pop('sol')
   AllArchives['Question'] = AllArchives.pop('que')
 
-  files = {'currentFiles':AllFiles , 'archiveFiles':AllArchives , 'status':100}
+  files = {'currentFiles':AllFiles , 'archiveFiles':AllArchives , 'lectut_status':100}
   return HttpResponse(json.dumps(files), content_type="application/json")
 
 @csrf_exempt
 @CORS_allow
 def post_comments(request , post_id):
   post = Post.post_objects.get(id = post_id)
-  return render(request,'comments/comments.html',{'instance': post})
+  if authenticate( request.user , post.batch.id):
+    return render(request,'comments/comments.html',{'instance': post})
+  else:
+    return HttpResponse(json.dumps({'msg':'User doesnot belong to batch','lectut_status':101}), content_type='application/json')
+
+
+@csrf_exempt
+@CORS_allow
+def add_comment(request , post_id):
+  import pdb;pdb.set_trace()
+  post = Post.post_objects.get(id = post_id)
+  return null
+
 
 
 ''' Creates a event/reminder '''
@@ -619,28 +670,96 @@ def search(request):
     query_courses_code =  SearchQuerySet().models(Course).autocomplete(code_auto = value)[:5] #.models(Course)
     query_total_courses = query_courses_name + query_courses_code
     query_courses = sorted(query_total_courses, key=lambda obj: obj.score)
+    query_users = SearchQuerySet().models(User).autocomplete(name_auto = value) #[:25]
   else:
     query = SearchQuerySet().autocomplete(content_auto = value).models(filter_model)
 
-  final_posts , final_files ,posts , upload_files , batches , final_batches = [],[],[],[],[],[]
+  final_posts , final_files ,posts , upload_files , batches , final_batches , final_faculties = [],[],[],[],[],[],[]
   print query_uploadfile
   try:
-    posts = map(lambda result:Post.objects.get(id = result.pk) if Post.objects.filter(id=result.pk).exists() else None,query_post)
-    upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk) if Uploadedfile.objects.filter(id=result.pk).exists() else None,query_uploadfile)
+    posts = map(lambda result:Post.objects.get(id = result.pk) if Post.post_objects.filter(id=result.pk).exists() else None,query_post)
+    upload_files = map(lambda result:Uploadedfile.objects.get(id = result.pk) if Uploadedfile.file_objects.filter(id=result.pk).exists() else None,query_uploadfile)
     for course in query_courses:
       course_jagan = Course.objects.get(id = course.pk)
       map(lambda x: batches.append(x),Batch.objects.filter(course = course_jagan))
   except:
     pass
 
-  final_posts = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,posts)
-  final_files = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,upload_files)
-  final_batches = map(lambda result:batch_dict(result) ,batches)
+  count_fac = 0
+  for some_user in query_users:
+    this_user = User.objects.get(id = some_user.pk)
+    if getUserType(this_user) == "1":
+      final_faculties.append({'id':this_user.id , 'name':this_user.name, 'photo':this_user.photo_url})
+      count_fac +=1
+    if count_fac ==5:
+      break
 
-  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'status':100}
+  final_posts = map(lambda result:result.as_dict() if (result is not None and result.privacy == False) else None,posts)
+  final_files = map(lambda result:result.as_dict_disp() if (result is not None and result.deleted == False) else None,upload_files)
+  final_batches = map(lambda result:batch_dict_disp(result) ,batches)
+
+  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'final_faculties':final_faculties , 'lectut_status':100}
   return HttpResponse(json.dumps(results), content_type="application/json")
 
 
+@csrf_exempt
+@CORS_allow
+def join_batch(request , batch_id):
+  if request.user.is_authenticated():
+    userType = getUserType(request.user)
+    if userType == "1":
+      faculty = request.user.faculty
+      batch = Batch.objects.get(id = batch_id)
+      batch.faculties.add(faculty)
+      return HttpResponse(json.dumps({'msg':'Successfully Joined Course','lectut_status':100}), content_type="application/json")
+    else:
+      return HttpResponse(json.dumps({'msg':'You are not a faculty','lectut_status':101}), content_type="application/json")
+  else:
+    return HttpResponse(json.dumps({'msg':'Some problem occured','lectut_status':102}), content_type="application/json")
+
+
+@csrf_exempt
+@CORS_allow
+def leave_batch(request , batch_id):
+  if request.user.is_authenticated():
+    userType = getUserType(request.user)
+    if userType == "1":
+      faculty = request.user.faculty
+      batch = Batch.objects.get(id = batch_id)
+      batch.faculties.remove(faculty)
+      return HttpResponse(json.dumps({'msg':'Successfully Left Course','lectut_status':100}), content_type="application/json")
+    else:
+      return HttpResponse(json.dumps({'msg':'You are not a faculty','lectut_status':101}), content_type="application/json")
+  else:
+    return HttpResponse(json.dumps({'msg':'Some problem occured','lectut_status':102}), content_type="application/json")
+
+@csrf_exempt
+@CORS_allow
+def faculty_files(request, faculty_id):
+  if not User.objects.filter(id = faculty_id).exists():
+    return HttpResponse(json.dumps({'msg':'Faculty Doesnot exist' , 'lectut_status':101}), content_type="application/json")
+  user = User.objects.get(id = faculty_id)
+  try:
+    faculty = user.faculty
+  except:
+    return HttpResponse(json.dumps({'msg':'User is not a faculty' , 'lectut_status':101}), content_type="application/json")  
+  All_files = {}
+  uploaded_files = Uploadedfile.objects.all().filter(post__upload_user = user)
+  for someFile in uploaded_files:
+    post = Post.objects.get(id = someFile.post_id)
+    fileDetails = someFile.as_dict()
+    postData = post.as_dict()
+    course_name = postData['batch']['course_name']
+    course_code = postData['batch']['id']
+    course_name = str(course_name) + str(';;;;')+ str(course_code)
+    if course_name not in All_files:
+      All_files[course_name] = []
+    All_files[course_name].append(fileDetails)
+
+  return HttpResponse(json.dumps({'faculty':user.serialize() , 'Files':All_files,'lectut_status':100}), content_type="application/json")
+
+
+    
 """
 @csrf_exempt
 @CORS_allow
@@ -673,10 +792,10 @@ def search(request):
   final_files = map(lambda result:result.as_dict() if (result is not None and result.deleted == False) else None,upload_files)
   final_batches = map(lambda result:batch_dict(result) ,batches)
 
-  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'status':100}
+  results = {'posts':final_posts , 'files':final_files , 'courses':final_batches ,'lectut_status':100}
   return HttpResponse(json.dumps(results), content_type="application/json")
 """
-# VIEWS FOR INITIAL REGISTRATION
+# VIEWS FOR INITIAL REGISTRATION ( Redeundant As of now )
 
 def create_batch(request):
   user = request.user
@@ -708,7 +827,7 @@ def create_batch(request):
   return HttpResponse(json.dumps(batch.batch_dict()), content_type='appliaction/json')
 
 
-def join_batch(request , batch_id):
+def join_batch_old(request , batch_id):
   batch = Batch.objects.get(id = batch_id)
   user = request.user
   userType = getUserType(user)

@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/base.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/dataTables.bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/jquery.dataTables.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/custom.css">
+  </head>
+  <body>
+    {% if term == '4E' %}
+    <p>A student can enrol in one or more of the modules given below when the company visits the campus.</p>
+    <ol>
+      <li>
+        <p><b>Keep Pace with the Case - An extensive Case preparation workshop:</p></b>
+        <p><b>Format:</b> Seminar</p>
+        <p>You should enroll if you are keen to understand:</p>
+        <ul>
+          <li>What kind of cases can be asked?</li>
+          <li>Why does a recruiter ask cases?</li>
+          <li>8 Step Case Solving Methodology - From Hypothesis Generation to Alternative Thinking</li>
+          <li>Guesstimate solving approach</li>
+          <li>Practice some cases asked in actual interviews</li>
+          <li>Comprehensive compendium of case frameworks and sample cases</li>
+        </ul>
+        <p>A definite must for those who have planned a Consulting or Analytics role ahead</p>
+        <p><b>Cost:</b> Rs. 1000 per student</p>
+      </li>
+      <li>
+        <p><b>The curious case of HR Questions</b></p>
+        <p><b>Format:</b> Seminar</p>
+        <p><b>Time:</b> 4 Hours</p>
+        <p>You should enroll if you are keen to understand:</p>
+        <ul>
+          <li>Why are HR Questions asked</li>
+          <li>Perspective development for commonly asked HR questions</li>
+          <li>Step by Step methodology for preparing for HR questions</li>
+          <li>Tailoring answers to HR questions to crack the interview</li>
+        </ul>
+        <p>A definite must for anyone and everyone who is still wondering how long is the long term and what to do if the short term goal is actually just to clear the immediately approaching exams</p>
+        <p><b>Cost:</b> Rs. 1000 per student</p>
+      </li>
+      <li>
+        <p><b>The inside view of a Personal Interview</b></p>
+        <p><b>Format:</b> Seminar and Mock Group Practice</p>
+        <p><b>Time:</b> 4 Hours</p>
+        <p>You should enroll if you are keen to understand:</p>
+        <ul>
+          <li>What all can be asked in a personal interview?
+          <li>Step by Step goal setting for Interview preparation
+          <li>Undergo mock Group Interview process and get experts feedback
+        </ul>
+        <p><b>Cost:</b> Rs. 1500 per student</p>
+      </li>
+      <li>
+        <p><b>Are you Ready for the GD?</b></p>
+        <p><b>Format:</b> Seminar and Mock Group Practice</p>
+        <p><b>Time:</b> 4 Hours</p>
+        <p>You should enroll if you are keen to understand:</p>
+        <ul>
+          <li>Importance of GD Process</li>
+          <li>How to handle various scenarios in a GD</li>
+          <li>How to ensure that you are heard in that fish market</li>
+          <li>Understanding various types of GDs and ways to crack them</li>
+          <li> Undergo mock GDs and get experts feedback</li>
+        </ul>
+        <p><b>Cost:</b> Rs. 1250 per student</p>
+      </li>
+    </ol>
+    {% elif term == 'SI' %}
+    <p>Has organised workshops for IIT Bombay, Kanpur, Kharagpur and Delhi.</p>
+    <p><b>At IIT Bombay ?</b><br>
+    A  Q&amp;A session is conducted for an hour on GD/ PI and Process which was requested by IIT Bombay.<br>
+    We conduct 2 group discussion sessions for each individual , a Factual  and Abstract Topic for students with a brief overview on mind mapping which helps them to generate more ideas on the GD  topic. Then a 15 to 20 minute one to one Personal interview takes place for a student followed by a detailed report. We conduct the program on week ends</p>
+    <p><b>At IIT Kharagpur ?</b><br>
+    In IIT Kharagpur we did assessments  for students who are appearing for Internships . Also we are working on a collaborative model to conduct Communication skills workshops for freshmen who are coming to campus. we conduct the program on saturdays.</p>
+    <p><b>At IIT Kanpur ?</b><br>
+    A brief PI assessment  and orientation sans GD for students applying for internships. we do the program between 5 pm and 2 am.</p>
+    <p><b>At IIT Delhi ?</b><br>
+    A workshop on Interview / GD / Process  and sector specific career counselling on Analytics and Finance Consulting jobs.</p>
+    <p><b>At IIT Roorkee:</b> Workshop+GD+PI</p>
+    {% elif term == 'TA' %}
+    <p><b>What:</b> Talerang offers a selective work-readiness program that helps students prepare for their careers and lives. Talerang started at Harvard Business School and our team has work experience in consulting, banking and marketing roles.</p>
+    <p><b>Why:</b> Students who are accepted will learn to communicate for impact, make a good first impression and improve their resume and interviewing skills.</p>
+    {% elif term == 'ECS' %}
+    <p>Bangalore based company, engaged in training students towards job preparedness. We've trained over 5 lakh students overall and we clocked over 200+ colleges (IITs, NITs, BITS Pilani etc.) and 1 lakh students last year alone. The core of our process is in the 30 minute technical+ HR interview for each B. Tech & M. Tech students across branches and sectors- we handle core IT, Mechanical, Electrical, Banking & Finance, Consulting & Analytics, Civil, Metallurgy etc.</p>
+
+<p><b>At IIT Roorkee:</b> GD+Technical PI</p>
+    {% endif %}
+  </body>
+</html>

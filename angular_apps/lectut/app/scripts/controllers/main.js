@@ -9,7 +9,7 @@
    */
 
   var redirect_url = base_domain + '/login/?next=/lectut/';
-lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails','CourseDataById','ngNotify',function ($location,$scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails, CourseDataById, ngNotify) {
+lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScope','SearchService', 'InitialSetup','CourseDetails','CourseDataById','ngNotify','JoinCourse','LeaveCourse',function ($location,$scope, $routeParams, $rootScope, SearchService, InitialSetup, CourseDetails, CourseDataById, ngNotify,JoinCourse, LeaveCourse) {
 
     // New custom theme in notification
     ngNotify.addType('myTheme', 'notiLec');
@@ -30,10 +30,18 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
             //console.log("-----------------------");
             //console.log(d);
             //alert(d.batch);
-            console.log(d);
+            //console.log(d);
             $scope.courseName = d.batch_info.course_name;
             $scope.courseCode = d.batch_info.code;
             $scope.courseid = id;
+            $scope.teaching = false;
+            if($scope.auth && $scope.auth.batches){
+              for(var i=0;i<$scope.auth.batches.length;i++){
+                if($scope.auth.batches[i].id == id){
+                 $scope.teaching = true;
+                }
+              }  
+            }
           });
     }
 
@@ -110,6 +118,9 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
          //console.log(d);
          $scope.auth = d;
          $rootScope.commonPosts = d.posts;
+
+         console.log("jome");
+         console.log($rootScope.commonPosts);
          //console.log("this is auth");
          //console.log($scope.auth.userType == "2");
          if($scope.auth.userType == "0" || $scope.auth.userType == "1"){
@@ -160,19 +171,49 @@ lectutApp.controller('MainCtrl', ['$location','$scope','$routeParams','$rootScop
   
    $scope.getFeedData = function(id){
     $scope.selectedCourse=id;
-        for(var i=0;i<$scope.auth.batches.length;i++){
-          if($scope.auth.batches[i].id == id){
-            $scope.courseName = $scope.auth.batches[i].course_name;
-            $scope.courseid = id;
-          }
+        if($scope.auth.userType == "1"){
+          for(var i=0;i<$scope.auth.batches.length;i++){
+            if($scope.auth.batches[i].id == id){
+              $scope.courseName = $scope.auth.batches[i].course_name;
+              $scope.courseid = id;
+            }
+          }  
         }
     var promiseCourseData = CourseDetails.getCourseDetailsData(id);
 
     promiseCourseData.then(function (d) {
        $scope.posts = d.posts;
-       //console.log(d);
+       $scope.is_member = d.in_batch;
+       console.log("asdsadsad");
     });
   }
+
+  $scope.isCourseCheck = function(){
+    
+  }
+
+  $scope.getPostData = function(courseId) {
+    
+  }
+
+  $scope.joinCourse = function(id){
+    var promiseJoinCourse = JoinCourse.joinCourse(id);
+    promiseJoinCourse.then(function(d){
+      if(d.status === 100){
+        $scope.teaching = true;  
+      }
+    });
+  }
+
+   $scope.leaveCourse = function(id){
+    var promiseLeaveCourse = LeaveCourse.leaveCourse(id);
+    promiseLeaveCourse.then(function(d){
+      if(d.status === 100){
+        $scope.teaching = false;  
+      }
+    });
+  }
+
 }]);
 
 
@@ -275,7 +316,7 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 
    $rootScope.whichView = "CourseDetailCtrl";
    this.params = $routeParams;
-   var csrf = $cookies.csrftoken;
+   // var csrf = $cookies.csrftoken;
    var y = $routeParams;
    $scope.coId = y;
 
@@ -479,7 +520,8 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
   var promiseCourseData = CourseDetails.getCourseDetailsData($scope.courseId);
     promiseCourseData.then(function (d) {
        $scope.posts = d.posts;
-       //console.log(d);
+       $scope.is_member = d.in_batch;
+       //console.log("a");
     });
 
   $scope.getFeedData = function(id){
@@ -488,7 +530,8 @@ lectutApp.controller('CourseDetailCtrl', ['$scope','CourseDetails','FeedFileDown
 
     promiseCourseData.then(function (d) {
        $scope.posts = d.posts;
-       //console.log(d);
+       $scope.is_member = d.in_batch;
+       //console.log("b");
     });
   }
   
@@ -622,8 +665,8 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
    ).withOption('createdRow', function(row, data, dataIndex) {
    // Recompiling so we can bind Angular directive to the DT
        $compile(angular.element(row).contents())($scope);
-   }).withOption('paging',false).withOption('compact','true');
-   //.withPaginationType('full_numbers');
+   }).withOption('paging',true).withOption('compact','true')
+   .withPaginationType('full_numbers');
  
    $scope.dtColumns = [
              /*DTColumnBuilder.newColumn(null).withTitle('<div type="checkbox">Mark</div>').notSortable()
@@ -641,26 +684,26 @@ lectutApp.controller('CourseFilesCtrl', [ 'DataTables', 'DTOptionsBuilder' , 'DT
                  <i ng-show='file.file_type == "other"' class="fa fa-file"></i>
                   */
                  if(full.file_type == "image"){
-                   html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a download ng-href="{[base_domain]}/lectut_api/download/'+ full.id+'">'+full.description+'</a></span>';
+                   html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a download ng-href="{[base_domain]}/lectut_api/download/'+ full.id+'">'+full.upload_file+'</a></span>';
                  } 
                  else if(full.file_type == "ppt"){
-                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                  else if(full.file_type == "zip"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
 
                  else if(full.file_type == "pdf"){
-                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-pdf-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                   else if(full.file_type == "sheet"){
-                   html += '<i class="fa fa-file-excel-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-excel-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                 else if(full.file_type == "doc"){
-                   html += '<i class="fa fa-file-word-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-word-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                  else{
-                   html += '<i class="fa fa-file-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.description+'</a></span>';
+                   html += '<i class="fa fa-file-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
                  }
                 html += '<span class="fileShowUser">by: '+full.username+'</span>';
                 html += '<span class="fileShowDownloads">Downloads: '+full.download_count+'</span>';
@@ -838,6 +881,7 @@ lectutApp.controller('CourseOnePostCtrl', ['LoadOnePost','$scope','$routeParams'
     var promiseMembers = LoadOnePost.getOnePost($routeParams.courseId,$routeParams.postId);
     promiseMembers.then(function(d){
       $scope.onePost = d.post;
+      $scope.is_member = d.in_batch;
       //console.log(d);
     });
 
@@ -992,5 +1036,180 @@ lectutApp.controller('CourseOneFileCtrl', ['LoadOneFile','$scope','$routeParams'
              } 
    });
  }
+
+}]);
+
+
+lectutApp.controller('FacultyCtrl', ['$scope','$routeParams','$rootScope','$location','ngNotify','LoadFacultyData','DataTables', 'DTOptionsBuilder' , 'DTColumnBuilder','DTInstances','$compile',function($scope, $routeParams, $rootScope, $location, ngNotify, LoadFacultyData,DataTables, DTOptionsBuilder, DTColumnBuilder, DTInstances,$compile) {
+    $rootScope.whichView = "FacultyCtrl";
+    var promiseFacultyData = LoadFacultyData.getFacultyData($routeParams.facultyId);
+   
+   var courseNamekeys = [];
+
+   
+   $scope.dtOptions = DTOptionsBuilder.fromFnPromise(
+     promiseFacultyData.then(
+      function(d){
+        //console.log(d);
+        $scope.facultyData = d;
+        var allFiles = [];
+        for (var key in d.Files) {
+           if (d.Files.hasOwnProperty(key)) {
+               // Modelling & Simulation£$£$2323
+               var keyArray = key.split(";;;;");
+               var key_courseName = keyArray[0];
+               var key_courseId = keyArray[1];
+               var obj = d.Files[key];
+               courseNamekeys.push(key_courseName);
+               for(var i=0;i<obj.length;i++){
+                  obj[i].course_name = key_courseName;
+                  obj[i].course_id = key_courseId;
+               }
+               allFiles = allFiles.concat(obj);
+            }
+        }
+        return allFiles;
+      }
+   )
+   ).withOption('createdRow', function(row, data, dataIndex) {
+   // Recompiling so we can bind Angular directive to the DT
+       $compile(angular.element(row).contents())($scope);
+   }).withOption('paging',true).withOption('compact','true')
+   .withPaginationType('full_numbers');
+ 
+   $scope.dtColumns = [
+             DTColumnBuilder.newColumn(null).withTitle('<span>File Name</span>')
+             .renderWith(function(data,type,full){
+                 var html= "";
+                 if(full.file_type == "image"){
+                   html += '<img style="margin-right:10px; width:20px;height:20px; vertical-align: middle;" ng-src="{[base_domain]}/'+full.filepath+'"></img><span> <a download ng-href="{[base_domain]}/lectut_api/download/'+ full.id+'">'+full.upload_file+'</a></span>';
+                 } 
+                 else if(full.file_type == "ppt"){
+                   html += '<i class="fa fa-file-powerpoint-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
+                 }
+                 else if(full.file_type == "zip"){
+                   html += '<i class="fa fa-file-archive-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
+                 }
+
+                 else if(full.file_type == "pdf"){
+                   html += '<i class="fa fa-file-pdf-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
+                 }
+                  else if(full.file_type == "sheet"){
+                   html += '<i class="fa fa-file-excel-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
+                 }
+                else if(full.file_type == "doc"){
+                   html += '<i class="fa fa-file-word-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
+                 }
+                 else{
+                   html += '<i class="fa fa-file-o" style="margin-right:15px; font-size:21px;"></i><span><a download ng-href="{[base_domain]}/lectut_api/download/'+full.id+'">'+full.upload_file+'</a></span>';
+                 }
+                html += '<span class="fileShowDownloads">Downloads: '+full.download_count+'</span>';
+                html += '<div style="display: inline-block; float:right;margin-left:10px;"><a style="text-decoration:none" ng-href="#/course/'+ full.course_id+'/files/'+full.id+'""><i class="fa fa-external-link fileSetting"></i></a></div>';
+                return html;
+             }),
+            // DTColumnBuilder.newColumn('description').withTitle('Name'),
+             DTColumnBuilder.newColumn('upload_type').withTitle('Type').notSortable().notVisible(),
+             DTColumnBuilder.newColumn('course_name').withTitle('Course Name').renderWith(function(data,type,full){
+              var html="";
+              html+='<span class="course_name_in_datatable">'+data+'</span>';
+              return html;
+             }).notSortable(),
+             DTColumnBuilder.newColumn('datetime_created').withTitle('Share Date')
+             .renderWith(function(data, type, full, meta) {
+                 //console.log(data);
+                 var html = "";
+                 html += '<div style=" display: inline-block;"><span class="timeFile">'+ moment(data).format("DD-MM-YY, HH:mm");+'</span></div>'; 
+                 return html;
+             })/*
+             DTColumnBuilder.newColumn(null).withTitle('').notSortable()
+             .renderWith(function(data, type, full, meta) {
+                 //return '<div class="downloadFile" ng-click="toggleAll()">Download</div>';
+                 return '<i class="fa fa-cog fileSetting" ng-click="toggleAll()"></i>';
+             })*/
+      ];
+      
+      // DTInstances.getLast().then(function (dtInstance) {
+      //     dtInstance.DataTable.data().each(function(data) {
+      //          $scope.selected[data.id] = false;
+      //     });
+      
+      // });
+
+       // Table Upload Type implementation
+       function loadFileType(){
+       if($(".dataTable").length != 0){
+         var table = $(".dataTable").DataTable();
+         table.columns().indexes().flatten().each( function ( i ) {
+             if(i==1){
+             var column = table.column( i );
+             var select = $('<select id="fileFilterType"><option value="">All types</option></select><div id="fileFilterArrow">&#x25BC;</div>')
+             .appendTo( $(".dataTables_wrapper") )
+             .on( 'change', function () {
+               var val = $.fn.dataTable.util.escapeRegex(
+                 $(this).val()
+                );
+            
+               column
+               .search( val ? '^'+val+'$' : '', true, false )
+               .draw();
+               } );
+
+              //column.data().unique().sort().each( function ( d, j ) {
+               select = $("#fileFilterType");
+               select.append( '<option value="Lecture">Lectures</option>' );
+               select.append( '<option value="Tutorial">Tutorials</option>' );
+               select.append( '<option value="Exam Paper">Exam Papers</option>' );
+               select.append( '<option value="Solution">Solutions</option>' );
+               //select.append( '<option value="que">'+Question+'</option>' );
+              // } );
+         } });
+       }
+       else{
+         setTimeout(function(){ loadFileType(); }, 500);
+       }
+       }
+
+       loadFileType();
+
+       // Table Upload Type implementation
+       function courseSelect(){
+       if($(".dataTable").length != 0){
+         var table = $(".dataTable").DataTable();
+         table.columns().indexes().flatten().each( function ( i ) {
+             if(i==2){
+             var column = table.column( i );
+             var select = $('<select id="courseFilterType"><option value="">All Courses</option></select><div id="courseFilterArrow">&#x25BC;</div>')
+             .appendTo( $(".dataTables_wrapper") )
+             .on( 'change', function () {
+               var val = $.fn.dataTable.util.escapeRegex(
+                 $(this).val()
+                );
+            
+               column
+               .search( val ? '^'+val+'$' : '', true, false )
+               .draw();
+               } );
+
+              select = $("#courseFilterType");
+              for(var i=0; i<courseNamekeys.length;i++){
+                select.append( '<option value="'+courseNamekeys[i]+'">'+courseNamekeys[i]+'</option>' );
+              }
+         } });
+       }
+       else{
+         setTimeout(function(){ courseSelect(); }, 500);
+       }
+       }
+
+       courseSelect();
+
+
+}]);
+
+
+lectutApp.controller('FourNotCtrl', ['$scope','$routeParams','$rootScope','$location','ngNotify',function($scope, $routeParams,$rootScope, $location, ngNotify) {
+    //console.log($routeParams);
+    $rootScope.whichView = "FourNotCtrl";
+
 
 }]);

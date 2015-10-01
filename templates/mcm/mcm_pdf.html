@@ -9,7 +9,7 @@
     <td style="width:25%;"></td>
   </tr>
 </table>
-<p style="text-align:center">APPLICATION FOR GRANT OF {{ title }} FOR THE SESSION 2014-2015</p>
+<p style="text-align:center">APPLICATION FOR GRANT OF {{ title }} FOR THE SESSION 2015-2016</p>
 <hr/>
 
 <table padding=7>
@@ -52,9 +52,9 @@
   </tr>
   <tr>
     <td>Mobile No:</td>
-    <td>{{ person.personal_contact_no }}</td>
+    <td>{{ person.user.contact_no }}</td>
     <td>Email id: </td>
-    <td>{{ person.email_id }}</td>
+    <td>{{ person.user.email }}</td>
   </tr>
 </table>
 <table>
@@ -93,7 +93,7 @@
 <br/>
 
 {% if student.other_scholarship_details %}
-  <b>Details of other Scholarships/Financial Aid during the current session (2014-2015)</b><br/>
+  <b>Details of other Scholarships/Financial Aid during the current session (2015-2016)</b><br/>
     {{ student.other_scholarship_details}}
 {% endif %}
 <br/>
@@ -124,6 +124,6 @@ Enclosures:<br/>
 2) Affidavit from all family members regarding income.<br/>
 3) Income certificate signed by Revenue officer.<br/>
 4) Photo copy of last semester Grade Sheet.<br/>
-5) JEE Advanced-2014 rank card (only for first year students).<br/>
+5) JEE Advanced-2015 rank card (only for first year students).<br/>
 </body>
 </html>
