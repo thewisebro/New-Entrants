@@ -14,7 +14,7 @@ tabs = [
 ]
 
 channeli_apps = {
-  'forum': {'name': 'Forum', 'url': '/#forum/', 'description': 'lorum ipsum'},
+  'forum': {'name': 'Forum', 'url': '/#forum/'},
   'events': {'name': 'Events', 'url':'/#events'},
   'groups': {'name': 'Groups', 'url':'/#groups'},
   'lectut' : {'name':'Lectures & Tutorials', 'url':'/lectut/'},
@@ -39,7 +39,7 @@ channeli_apps = {
   'peoplesearch' : {'name':'People Search', 'url':'/peoplesearch/'},
   'research' : {'name':'Research Assistant', 'url':'/research_assistant/'},
   'facultyfilemanager' : {'name':'File Manager', 'url':'/settings/filemanager/'},
-  'acad' : {'name':'Academics', 'url':'/acad/', 'description': 'lorum ipsum'},
+  'acad' : {'name':'Academics', 'url':'/acad/'},
   'acad_course_students' : {'name':'Course Students', 'url':'/acad/course_students/'},
   'responses' : {'name':'Response Forms', 'url':'/acad/responses/'},
   'iereg' : {'name':'Elective Registration', 'url':'/acad/ie_reg/'},

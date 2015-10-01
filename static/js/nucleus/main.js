@@ -183,12 +183,7 @@ function display_birthdays(){
       "<div class='event-box' "+
           (i==birthday_users.length-1?"style='border-bottom:0px'":'')+' '+
           "onclick='birthday_wish(\""+birthday_users[i].user.username+"\",\""+birthday_users[i].user.name+"\");'>"+
-          "<img class='birthday-image' " + (birthday_users[i].user.photo?"src='"+ birthday_users[i].user.photo + "'":"src='/photo/"+
-                            birthday_users[i].user.username +"/'")+" style=''/>" +
-          "<div class='name-age-div'>" +
-            "<div class='event-name1'>"+user_html_name(birthday_users[i].user)+"</div>"+
-            "<div class='event-age1'>" + getAge(birthday_users[i].birthdate) + " years old</div>" + 
-          "</div>" +
+        "<div class='event-name1'>"+user_html_name(birthday_users[i].user)+"</div>"+
       "</div>";
     $('#birthday-boxes').append(html);
   }
@@ -233,13 +228,3 @@ function birthday_wish(username,name){
   });
 }
 
-function getAge(dateString) {
-      var today = new Date();
-      var birthDate = new Date(dateString);
-      var age = today.getFullYear() - birthDate.getFullYear();
-      var m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-      return age.toString();
-}
