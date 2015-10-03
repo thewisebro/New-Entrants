@@ -1,0 +1,118 @@
+{% extends "buyandsell/base.html" %}
+
+{% block header %}
+<body style="background-color: #ffffff;">
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+{% if type == 'sell' %}
+<form id="trans_form"  class="form-horizontal transaction-form-body" action="" method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <label class="col-xs-4 control-label" for="buyer">Whom did you sell this Item ?</label>
+    <select class="col-xs-8" id="buyer" name="buyer_username">
+      <option value="" selected>-----------</option>
+      {% for obj in mail_list %}
+      <option value="{{ obj.by_user.username }}">{{ obj.by_user.name }}</option>
+      {% endfor %}
+      <option id="other-person-option">Other</option>
+    </select>
+  </div>
+
+  <div id="other-person-option-clicked" class="form-group">
+    <label class="col-xs-4 control-label" for="buyer">Please type in the name</label>
+    <input class="col-xs-8" type="text" id="id_username"></input><br>
+    <input type="hidden" id="enroll" name="username_other">
+  </div>
+
+  <div class="form-group" style="margin-bottom: 10px;">
+    <label class="control-label col-xs-12">How was your overall Experience ?</label>
+  </div>
+
+  <div class="form-group your-experience">
+    <label class="radio-inline">
+      <input type="radio" >Excellent
+    </label>
+    <label class="radio-inline">
+      <input type="radio" >Good
+    </label>
+    <label class="radio-inline">
+      <input type="radio" >Fair
+    </label>
+    <label class="radio-inline">
+      <input type="radio" >Poor
+    </label>
+  </div>
+
+  <div class="form-group">
+    <label class="col-xs-4 control-label" for="feedback">Comments/ Suggestions</label>
+    <textarea class="col-xs-8" id="sell_feedback" name="feedback" rows="5"></textarea>
+  </div>
+
+  <div class="form-group">
+
+  </div>
+ <input class="btn btn-primary send-button" style="right: -15px" type="submit" value="Done">
+ <input class="btn not-interested"  style="right: -15px" type="button" value="Not interested" onclick = "special_submit({{id}},'sell')">
+</form>
+{% else %}
+<form id="trans_form"  class="form-horizontal transaction-form-body" action="" method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <label class="col-xs-4 control-label" for="seller">Whom did you buy this item from ?</label>
+    <select class="col-xs-8" id="buyer" name="seller_username">
+      <option value="" selected>-----------</option>
+      {% for obj in mail_list %}
+      <option value="{{ obj.by_user.username }}">{{ obj.by_user.name }}</option>
+      {% endfor %}
+      <option id="other-person-option">Other</option>
+    </select>
+  </div>
+
+  <div id="other-person-option-clicked" class="form-group">
+    <label class="col-xs-4 control-label" for="buyer">Please type in the name</label>
+    <input class="col-xs-8" type="text" id="id_username"></input><br>
+    <input type="hidden" id="enroll" name="username_other">
+  </div>
+
+  <div class="form-group" style="margin-bottom: 10px;">
+    <label class="control-label col-xs-12">How was your overall Experience ?</label>
+  </div>
+
+  <div class="form-group your-experience">
+    <label class="radio-inline">
+      <input type="radio" >Excellent
+    </label>
+    <label class="radio-inline">
+      <input type="radio" >Good
+    </label>
+    <label class="radio-inline">
+      <input type="radio" >Fair
+    </label>
+    <label class="radio-inline">
+      <input type="radio" >Poor
+    </label>
+  </div>
+
+  <div class="form-group">
+    <label class="col-xs-4 control-label" for="feedback">Comments/ Suggestions</label>
+    <textarea class="col-xs-8" id="sell_feedback" name="feedback" rows="5"></textarea>
+  </div>
+
+  <div class="form-group">
+
+  </div>
+ <input class="btn btn-primary send-button" style="right: -15px" type="submit" value="Done">
+ <input class="btn not-interested"  style="right: -15px" type="button" value="Not interested" onclick = "special_submit({{id}},'request')">
+</form>
+{% endif %}
+{% endblock %}
+
+</body>
+<script src="{{ STATIC_URL }}js/common.js"></script>
+<script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>
+<script src="{{ STATIC_URL }}js/buyandsell/main.js"></script>
+

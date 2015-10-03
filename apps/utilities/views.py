@@ -1,7 +1,9 @@
 import datetime
+import simplejson
 import json
 import hashlib
 import random
+
 
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
@@ -20,6 +22,8 @@ from notices.models import NoticeUser, Category
 from notices.constants import MAIN_CATEGORIES_CHOICES
 from api.utils import pagelet_login_required, dialog_login_required
 from utilities.models import UserSession, PasswordCheck, UserEmail, PasswordReset
+from nucleus.models import *
+from django.db.models import Q
 from utilities.forms import ProfileFormPrimary, ProfileFormGuardian,\
     ProfileFormExtra, ChangePasswordForm, ChangePasswordFirstYearForm,\
     EmailForm, EventsSubscribeFormGen,NoticesSubscribeForm, GenProfileForm, PasswordCheckForm,\
@@ -195,6 +199,7 @@ def email(request):
       'notice_subscribed': notice_user.subscribed,
       'notice_subscribed_categories' : main_categories,
   })
+
 
 @pagelet_login_required
 def email_verify(request):
@@ -425,18 +430,21 @@ def password_reset(request):
       'form': form,
   })
 
+
 @login_required
 def person_search(request):
   if request.is_ajax():
     q = request.GET.get('term','')
-    persons = Person.objects.filter(Q(name__icontains = q)|Q(user__username__icontains = q)).order_by('-user__username')[:10]
+    persons = Student.objects.filter(Q(user__name__icontains = q)|Q(user__username__icontains = q)).order_by('-user__username')[:10]
     def person_dict(person):
       return {
         'id':person.user.username,
         'label':str(person)+" ("+str(person.branch.code)+")",
-        'value':person.user.username
+        'value':person.user.name
       }
     data = simplejson.dumps(map(person_dict,persons))
   else:
     data = 'fail'
-  return HttpResponse(data,'application/json') 
+  return HttpResponse(data,'application/json')
+
+
