@@ -47,13 +47,6 @@
         <item>Mumbai</item>
     </string-array>
 
-    <string name="title_activity_sconnect">Senior Connect</string>
-    <string name="title_activity_peer_connect">Peer Connect</string>
-    <string name="title_activity_edit__info">Edit Info</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_blogs">Blogs</string>
-    <string name="title_activity_profile">Profile</string>
 
 
 
