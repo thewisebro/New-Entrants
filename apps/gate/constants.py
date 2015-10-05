@@ -9,6 +9,8 @@ WEEKS= (
 #payment choice of student in case if SC/ST scholarship
 
 CITIES=(
+    ('None','None'),
+    ('Any Of These', 'Any Of These'),
     ('Amritsar','Amritsar'),
      ('Bathinda','Bathinda'),
      ('Chandigarh-Mohali-Fatehgarh Sahib','Chandigarh-Mohali-Fatehgarh Sahib'),

@@ -3,28 +3,41 @@
   <head>
     <title>GATE 2016 : IITR IRS</title>
 <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
 <script type='text/javascript' href="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src = "{{ STATIC_URL }}jquery/jquery.min.js"></script>
+<script type="text/javascript" src = "{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>
+<script type="text/javascript" src = "{{ STATIC_URL }}jquery/jquery-datetimepicker.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}jquery/jquery-datetimepicker.css">
 <script>
-    $(document).ready(function(){
-        $(".add-more").click(function(){
-            var new_field = '<textarea name="other-scholarship-detail"></textarea>';
-    $(this).before(new_field);
-    })});
+$(document).ready(function() {
+        $('.iDateField').datepicker({ dateFormat : 'dd-mm-yy'});
+        });
 </script>
 </head>
 <script type="text/javascript">
-$(function () {
-  $("#id_scholar_type").change(function() {
-    var val = $(this).val();
-    if(val === "MCM") {
-        $("#optionsdiv").hide();
-    }
-    else if(val === "GIS") {
-        $("#optionsdiv").show();
-    }
-  });
-});
+
+function update_options(x){
+  var i = document.getElementById("id_city"+x+"").options.selectedIndex;
+  for (var m = 1; m<7; m++){
+    if( x!=m )
+      {
+        document.getElementById("id_city"+m+"").options[i].style.visibilty="hidden";
+        document.getElementById("id_city"+m+"").options[i].style.display="none";
+      }
+  }
+
+
+}
+
+function calc_age(){
+  d_o_b = $("#id_date_of_birth").val();
+  c_d = $('#date').text();
+  age = parseInt(c_d.substr(6,9)) - parseInt(d_o_b.substr(6,9));
+  $("#id_age").val(age);
+  return age;
+
+}
 </script>
 <style>
 .errorlist li
@@ -48,6 +61,10 @@ color:red;
 <p>*If the read only fields are empty, please fill your information on channeli settings first and then reload this page.<br/> Also, this form can be submitted once only.</p>
     {% csrf_token %}
     {{ form.non_field_errors }}
+    {% ifequal err 1%}
+    <strong>" * City Fields have to be distinct"</strong>
+    {% endifequal %}
+        <div id ='date' style ="visibility:hidden"}>{{curr_date}}</div>
         <div class="fieldWrapper">
          {{ form.name.errors }}
           <label for="id_name">Name:</label>
@@ -73,7 +90,7 @@ color:red;
           <label for="id_semester">Date of joining IITR:</label>
           {{ form.date_of_join }}
         </div>
-         <div class="fieldWrapper">
+         <div class="fieldWrapper" onchange="calc_age()">
           {{ form.date_of_birth.errors }}
           <label for="id_category">Date of Birth:</label>
           {{ form.date_of_birth }}
@@ -118,7 +135,7 @@ color:red;
           {{ form.city1 }}
         </div>
           {{ form.city2.errors }}
-          <label for="id_home_address">Second choice:</label>
+          <label for="id_city2">Second choice:</label>
           {{ form.city2 }}
           <br/>
           {{ form.city3.errors }}
