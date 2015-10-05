@@ -46,6 +46,7 @@ def index1(request):
    else:
      return render_to_response('gate/index2.html',{'form' : form1},context_instance = RequestContext(request))
 
+@login_required
 def index(request):
 #messages.success(request,'hellovb')
   err = 0
