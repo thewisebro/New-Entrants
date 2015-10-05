@@ -29,7 +29,7 @@ def index1(request):
 
   if request.method == 'GET':
     if fac.saved==True:
-      return HttpResponse('Success')
+      return render_to_response('gate/gate_success.html',context_instance = RequestContext(request))
     else:
       form = DeclarationForm()
       return render_to_response('gate/index2.html',{'form' : form},context_instance = RequestContext(request))
@@ -46,6 +46,7 @@ def index1(request):
    else:
      return render_to_response('gate/index2.html',{'form' : form1},context_instance = RequestContext(request))
 
+@login_required
 def index(request):
 #messages.success(request,'hellovb')
   err = 0
