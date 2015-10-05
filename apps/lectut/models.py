@@ -75,6 +75,7 @@ class Post(models.Model):
 
   def delete(self):
     self.deleted = True
+    Notification.delete_notification('lectut',self)
     self.save()
 
   def as_dict(self):
