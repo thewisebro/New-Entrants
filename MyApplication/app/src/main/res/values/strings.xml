@@ -46,6 +46,9 @@
         <item>Roorkee</item>
         <item>Mumbai</item>
     </string-array>
+    <string name="title_activity_register">Register</string>
+
+    <string name="hello_world">Hello world!</string>
 
 
 
