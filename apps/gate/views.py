@@ -144,19 +144,22 @@ def index(request):
       if fac.declaration==True:
         birth_date = person.user.birth_date
         join_date = person.date_of_joining
+        curr_date = datetime.datetime.now().date()
+        curr_date = curr_date.strftime('%d-%m-%Y')
         age = 0
-      try:  
-        if birth_date:
-          curr_date = datetime.datetime.now().date()
-          delta = curr_date - birth_date
-          age = delta.days/365
-          birth_date = birth_date.strftime('%d-%m-%Y')
-          curr_date = curr_date.strftime('%d-%m-%Y')
-        if join_date:
-          join_date = datetime.datetime.strptime(join_date,'%Y-%m-%d').date()
-          join_date = join_date.strftime('%d-%m-%Y')
-      except:
-        pass    
+        try:
+          if birth_date:
+            delta = curr_date - birth_date
+            age = delta.days/365
+            birth_date = birth_date.strftime('%d-%m-%Y')
+        except:
+          pass
+        try:
+          if join_date:
+            join_date = datetime.datetime.strptime(join_date,'%Y-%m-%d').date()
+            join_date = join_date.strftime('%d-%m-%Y')
+        except:
+          pass
         form = GateForm(initial = {
             'name': person.user.name,
             'employee_id': person.employee_code,
