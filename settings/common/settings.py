@@ -54,7 +54,6 @@ DATABASES = {
     'PASSWORD': 'channeli',
 
     'HOST': '192.168.121.187',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-
     'PORT': '',                           # Set to empty string for default.
   }
 }
@@ -271,6 +270,7 @@ CHANNELI_APPS = (
   'games',
   'buysell',
   'utilities',
+  'buyandsell',
   'birthday',
   'messmenu',
   'placement',
@@ -295,6 +295,7 @@ FEED_APPS = (
   'buysell',
   'lectut',
   'phpapps',
+  'buyandsell'
 )
 
 REDACTOR_OPTIONS = {
