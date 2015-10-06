@@ -75,8 +75,10 @@
         <span class="searchIconTop"><i class="fa fa-search"></i></span>
         <div class="crossTop" ng-click="clearSearch()" ng-show="queryString.length != 0"><i class="fa fa-times-circle"></i></div>
         <input class="mainSearch" type="text" placeholder="Search for faculty, courses, files and posts..." ng-model="queryString"  ng-change="searchFunc(queryString)"></input>
-        <a ng-href="#/" ng-class="{activeHome:isHome('/')}" ng-show="logIn"><div class="homeTab">Home</div></a>
         <a ng-href="#/" ng-class="{activeHome:isHome('/')}" ng-show="!logIn" ><div style="margin-right:-50px"class="homeTab">Home</div></a>
+        <a ng-href="#/" ng-class="{activeHome:isHome('/')}" ng-show="logIn"><div class="homeTab">Home</div></a>
+        <a href="http://faculty" ng-show="logIn && auth.userType == 1"><div style="float:right; color:#E62254; padding-right:10px;" class="homeTab">Lectut Guide</div></a>
+        <a href="http://stud" ng-show="logIn && auth.userType == 0"><div style="float:right; color:#E62254; padding-right:10px;" class="homeTab">Lectut Guide</div></a>
         </div>
         <div class="searchResult" ng-show="queryString.length != 0">
            <div style="padding:10px;" ng-show="(searchResults.final_faculties.length == 0 && searchResults.files.length == 0 && searchResults.courses.length == 0 && searchResults.posts.length == 0 )&& queryString.length != 0"> No results found
