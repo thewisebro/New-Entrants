@@ -26,5 +26,6 @@ urlpatterns = patterns('',
     url(r'^succ_trans/(?P<item_type>\w+)/(?P<pk>\w+)/(?P<ignore_flag>\w+)/?$', transaction,name='transaction'),
     url(r'^show_contact/(?P<response>\w+)/?$',show_contact,name='show_contact'),
     url(r'^manage/$', manage,name='manage_form'),
+    url(r'^bring_subcats/(?P<mc>\w+)/?$', bring_subcats, name='bring_subcats'),
     url(r'^my-account/$', my_account),
      )
