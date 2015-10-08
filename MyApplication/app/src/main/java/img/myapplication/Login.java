@@ -27,7 +27,7 @@ public class Login extends AppCompatActivity {
         public static final String COLUMN_NAME_MOBILE = "Mobile_No";
         public static final String COLUMN_NAME_BRANCH = "Branch";
         public static final String COLUMN_NAME_State = "State";
-
+        public static final String DATABASE_NAME = "Entrants_Data";
 
     }
     @Override
@@ -37,21 +37,11 @@ public class Login extends AppCompatActivity {
 
         Enr_No=(EditText) findViewById(R.id.et_Enr_No);
         Password=(EditText) findViewById(R.id.et_Password);
-        button=(Button) findViewById(R.id.bt_SignIn);
-        /*button.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent= new Intent(getApplicationContext(), Navigation.class);
-                startActivity(intent);
-
-            }
-        });*/
 
 
     }
     public void login(View view){
-        DatabaseHelper mdbHelper= new DatabaseHelper(this);
+        /*DatabaseHelper mdbHelper= new DatabaseHelper(this);
         SQLiteDatabase db = mdbHelper.getReadableDatabase();
 
         String [] projection= {
@@ -62,14 +52,22 @@ public class Login extends AppCompatActivity {
         String [] arg={
                 String.valueOf(Enr_No),
                 String.valueOf(Password)
-        };
-        Cursor cursor= db.query(FeedEntry.TABLE_NAME, projection, selection, arg, null,null,FeedEntry.COLUMN_NAME_ENR );
-        Intent intent= new Intent(this, Navigation.class);
-        startActivity(intent);
+        };*/
+        SQLiteDatabase db= openOrCreateDatabase(FeedEntry.DATABASE_NAME, MODE_PRIVATE, null);
+
+        Cursor result=db.rawQuery("select * from Entrants where Enr_No='"+Enr_No.getText().toString()+"' and Password='"+Password.getText().toString()+"';",null);
+
+        if (result.getCount()!=0){
+
+            Intent intent= new Intent(this, Navigation.class);
+            startActivity(intent);
+            finish();
+        }
     }
     public void register_click(View view){
         Intent intent = new Intent(this, Register.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

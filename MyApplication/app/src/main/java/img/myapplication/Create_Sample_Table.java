@@ -24,9 +24,12 @@ public class Create_Sample_Table extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(this);
+       // FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(this);
+        SQLiteDatabase db= openOrCreateDatabase("Entrants_Data",MODE_PRIVATE,null);
+
         Intent intent= new Intent(this, Login.class);
         startActivity(intent);
+        finish();
     }
     public class FeedReaderDbHelper extends SQLiteOpenHelper {
         // If you change the database schema, you must increment the database version.

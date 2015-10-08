@@ -24,7 +24,7 @@ public class Register extends AppCompatActivity {
         public static final String COLUMN_NAME_MOBILE = "Mobile_No";
         public static final String COLUMN_NAME_BRANCH = "Branch";
         public static final String COLUMN_NAME_State = "State";
-
+        public static final String DATABASE_NAME = "Entrants_Data";
 
     }
 
@@ -35,8 +35,7 @@ public class Register extends AppCompatActivity {
 
     }
     public void register(View view){
-        DatabaseHelper mdbHelper = new DatabaseHelper(this);
-        SQLiteDatabase db = mdbHelper.getWritableDatabase();
+
 
         ContentValues values = new ContentValues();
         values.put(FeedEntry.COLUMN_NAME_NAME, String.valueOf((EditText) findViewById(R.id.new_name)));
@@ -48,12 +47,21 @@ public class Register extends AppCompatActivity {
         //values.put(FeedEntry.COLUMN_NAME_State, String.valueOf((EditText) findViewById(R.id.new_state)));
 
 // Insert the new row, returning the primary key value of the new row
-        long newRowId;
+       /* DatabaseHelper mdbHelper = new DatabaseHelper(this);
+        SQLiteDatabase db = mdbHelper.getWritableDatabase();
+       long newRowId;
         newRowId = db.insert(
-                FeedEntry.TABLE_NAME, null,values);
+                FeedEntry.TABLE_NAME, null,values);*/
 
+        SQLiteDatabase db= openOrCreateDatabase(FeedEntry.DATABASE_NAME, MODE_PRIVATE,null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS "+FeedEntry.TABLE_NAME+"("+FeedEntry.COLUMN_NAME_ENR+" VARCHAR, "+
+                    FeedEntry.COLUMN_NAME_NAME+" VARCHAR, "+FeedEntry.COLUMN_NAME_PASSWORD+" VARCHAR, "+
+                    FeedEntry.COLUMN_NAME_EMAIL+" VARCHAR, "+FeedEntry.COLUMN_NAME_MOBILE+" VARCHAR ); ");
+        db.execSQL("insert into "+FeedEntry.TABLE_NAME+" values("+String.valueOf((EditText) findViewById(R.id.new_enr))+","+String.valueOf((EditText) findViewById(R.id.new_name))+
+                    ","+String.valueOf((EditText) findViewById(R.id.new_password))+","+String.valueOf((EditText) findViewById(R.id.new_email))+","+String.valueOf((EditText) findViewById(R.id.new_number))+");");
         Intent intent=new Intent(this, Login.class);
         startActivity(intent);
+        finish();
     }
 
     @Override
