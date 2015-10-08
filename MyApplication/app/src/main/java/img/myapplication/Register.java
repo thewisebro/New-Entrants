@@ -36,29 +36,15 @@ public class Register extends AppCompatActivity {
     }
     public void register(View view){
 
-
-        ContentValues values = new ContentValues();
-        values.put(FeedEntry.COLUMN_NAME_NAME, String.valueOf((EditText) findViewById(R.id.new_name)));
-        values.put(FeedEntry.COLUMN_NAME_PASSWORD, String.valueOf((EditText) findViewById(R.id.new_password)));
-        values.put(FeedEntry.COLUMN_NAME_ENR, String.valueOf((EditText) findViewById(R.id.new_enr)));
-        values.put(FeedEntry.COLUMN_NAME_EMAIL, String.valueOf((EditText) findViewById(R.id.new_email)));
-        values.put(FeedEntry.COLUMN_NAME_MOBILE, String.valueOf((EditText) findViewById(R.id.new_number)));
-        //values.put(FeedEntry.COLUMN_NAME_BRANCH, String.valueOf((EditText) findViewById(R.id.new_branch)));
-        //values.put(FeedEntry.COLUMN_NAME_State, String.valueOf((EditText) findViewById(R.id.new_state)));
-
-// Insert the new row, returning the primary key value of the new row
-       /* DatabaseHelper mdbHelper = new DatabaseHelper(this);
-        SQLiteDatabase db = mdbHelper.getWritableDatabase();
-       long newRowId;
-        newRowId = db.insert(
-                FeedEntry.TABLE_NAME, null,values);*/
+        String enr= ((EditText) findViewById(R.id.new_enr)).getText().toString();
+        String name= ((EditText) findViewById(R.id.new_name)).getText().toString();
+        String password= ((EditText) findViewById(R.id.new_password)).getText().toString();
+        String email= ((EditText) findViewById(R.id.new_email)).getText().toString();
+        String number= ((EditText) findViewById(R.id.new_number)).getText().toString();
 
         SQLiteDatabase db= openOrCreateDatabase(FeedEntry.DATABASE_NAME, MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS "+FeedEntry.TABLE_NAME+"("+FeedEntry.COLUMN_NAME_ENR+" VARCHAR, "+
-                    FeedEntry.COLUMN_NAME_NAME+" VARCHAR, "+FeedEntry.COLUMN_NAME_PASSWORD+" VARCHAR, "+
-                    FeedEntry.COLUMN_NAME_EMAIL+" VARCHAR, "+FeedEntry.COLUMN_NAME_MOBILE+" VARCHAR ); ");
-        db.execSQL("insert into "+FeedEntry.TABLE_NAME+" values("+String.valueOf((EditText) findViewById(R.id.new_enr))+","+String.valueOf((EditText) findViewById(R.id.new_name))+
-                    ","+String.valueOf((EditText) findViewById(R.id.new_password))+","+String.valueOf((EditText) findViewById(R.id.new_email))+","+String.valueOf((EditText) findViewById(R.id.new_number))+");");
+        db.execSQL("create table if not exists Entrants( Enr_No varchar, Name varchar, Password varchar, Email varchar, Number varchar);");
+        db.execSQL("insert into Entrants values('"+enr+"','"+name+"','"+password+"','"+email+"','"+number+"');");
         Intent intent=new Intent(this, Login.class);
         startActivity(intent);
         finish();
