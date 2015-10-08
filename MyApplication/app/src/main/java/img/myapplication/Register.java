@@ -2,13 +2,15 @@ package img.myapplication;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.BaseColumns;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.provider.BaseColumns;
+import android.view.View;
 import android.widget.EditText;
 
 public class Register extends AppCompatActivity {
@@ -30,6 +32,9 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+    }
+    public void register(View view){
         DatabaseHelper mdbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = mdbHelper.getWritableDatabase();
 
@@ -39,13 +44,16 @@ public class Register extends AppCompatActivity {
         values.put(FeedEntry.COLUMN_NAME_ENR, String.valueOf((EditText) findViewById(R.id.new_enr)));
         values.put(FeedEntry.COLUMN_NAME_EMAIL, String.valueOf((EditText) findViewById(R.id.new_email)));
         values.put(FeedEntry.COLUMN_NAME_MOBILE, String.valueOf((EditText) findViewById(R.id.new_number)));
-        values.put(FeedEntry.COLUMN_NAME_BRANCH, String.valueOf((EditText) findViewById(R.id.new_branch)));
-        values.put(FeedEntry.COLUMN_NAME_State, String.valueOf((EditText) findViewById(R.id.new_state)));
+        //values.put(FeedEntry.COLUMN_NAME_BRANCH, String.valueOf((EditText) findViewById(R.id.new_branch)));
+        //values.put(FeedEntry.COLUMN_NAME_State, String.valueOf((EditText) findViewById(R.id.new_state)));
 
 // Insert the new row, returning the primary key value of the new row
         long newRowId;
         newRowId = db.insert(
                 FeedEntry.TABLE_NAME, null,values);
+
+        Intent intent=new Intent(this, Login.class);
+        startActivity(intent);
     }
 
     @Override
@@ -71,9 +79,9 @@ public class Register extends AppCompatActivity {
         public static final int DATABASE_VERSION = 1;
         public static final String DATABASE_NAME = "FeedReader.db";
 
-
+        @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL();
+           // db.execSQL();
         }
 
         @Override

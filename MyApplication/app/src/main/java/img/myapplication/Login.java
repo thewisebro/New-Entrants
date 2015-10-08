@@ -2,20 +2,34 @@ package img.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.provider.BaseColumns;
 
 public class Login extends AppCompatActivity {
     private EditText Enr_No;
     private EditText Password;
     private Button button;
+    public static abstract class FeedEntry implements BaseColumns {
+        public static final String TABLE_NAME = "Entrants";
+        public static final String COLUMN_NAME_NAME = "Name";
+        public static final String COLUMN_NAME_EMAIL = "Email";
+        public static final String COLUMN_NAME_ENR = "Enr_No";
+        public static final String COLUMN_NAME_PASSWORD = "Password";
+        public static final String COLUMN_NAME_MOBILE = "Mobile_No";
+        public static final String COLUMN_NAME_BRANCH = "Branch";
+        public static final String COLUMN_NAME_State = "State";
 
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +51,24 @@ public class Login extends AppCompatActivity {
 
     }
     public void login(View view){
+        DatabaseHelper mdbHelper= new DatabaseHelper(this);
+        SQLiteDatabase db = mdbHelper.getReadableDatabase();
 
+        String [] projection= {
+                FeedEntry.COLUMN_NAME_ENR,
+                FeedEntry.COLUMN_NAME_PASSWORD
+        };
+        String selection=FeedEntry.COLUMN_NAME_ENR+"=? AND "+FeedEntry.COLUMN_NAME_PASSWORD+"=?";
+        String [] arg={
+                String.valueOf(Enr_No),
+                String.valueOf(Password)
+        };
+        Cursor cursor= db.query(FeedEntry.TABLE_NAME, projection, selection, arg, null,null,FeedEntry.COLUMN_NAME_ENR );
         Intent intent= new Intent(this, Navigation.class);
+        startActivity(intent);
+    }
+    public void register_click(View view){
+        Intent intent = new Intent(this, Register.class);
         startActivity(intent);
     }
 
@@ -59,5 +89,25 @@ public class Login extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class DatabaseHelper extends SQLiteOpenHelper {
+
+        public DatabaseHelper(Context context) {
+            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        }
+
+        public static final int DATABASE_VERSION = 1;
+        public static final String DATABASE_NAME = "FeedReader.db";
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            // db.execSQL();
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        }
     }
 }

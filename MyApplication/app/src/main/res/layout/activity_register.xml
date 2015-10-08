@@ -150,7 +150,8 @@
         android:text="Submit"
         android:id="@+id/button_submit"
         android:layout_gravity="center_horizontal"
-        android:onClick="register"/>
+        android:onClick="register"
+        />
 
 
 </LinearLayout>

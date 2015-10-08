@@ -56,4 +56,14 @@
         android:text="Sign In"
         android:onClick="login"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register Now"
+        android:id="@+id/bt_Register"
+        android:layout_alignTop="@+id/bt_SignIn"
+        android:layout_alignLeft="@+id/tv_Password"
+        android:layout_alignStart="@+id/tv_Password"
+        android:onClick="register_click"/>
+
 </RelativeLayout>
