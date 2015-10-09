@@ -75,8 +75,20 @@ def index(request):
       fac.nominee_name=form.cleaned_data['nominee']
       fac.relation_nominee = form.cleaned_data['nominee_relation']
       fac.date_of_join_position = form.cleaned_data['date_of_joinPos']
+      week_list = []
+      week_none = 0
       fac.week_pref1 = form.cleaned_data['pref1']
+      if fac.week_pref1 == "None":
+        week_none = week_none + 1
+      else:
+        week_list.append(fac.week_pref1)
       fac.week_pref2 = form.cleaned_data['pref2']
+      if fac.week_pref2 == "None":
+        week_none = week_none + 1
+      else:
+        week_list.append(fac.week_pref2)
+
+      week_set = Set(week_list)
       fac.mobile_no = form.cleaned_data['mobile_no']
       cities_list = []
       cities_set = []
@@ -114,7 +126,7 @@ def index(request):
 
       cities_set = Set(cities_list)
       print len(cities_set)+cities_none
-      if len(cities_set)+cities_none == 6:
+      if len(cities_set)+cities_none == 6 and len(week_set)+week_none == 2 :
 
         fac.saved = True
         fac.save()

@@ -62,7 +62,7 @@ color:red;
     {% csrf_token %}
     {{ form.non_field_errors }}
     {% ifequal err 1%}
-    <strong>" * City Fields have to be distinct"</strong>
+    <strong>" * City Preferences and Week Preferences have to be distinct"</strong>
     {% endifequal %}
         <div id ='date' style ="visibility:hidden"}>{{curr_date}}</div>
         <div class="fieldWrapper">
