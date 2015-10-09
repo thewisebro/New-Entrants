@@ -12,7 +12,7 @@ from gate.forms import *
 from gate.constants import *
 from nucleus.models import Faculty
 
-
+import csv
 import logging, datetime
 import cStringIO as StringIO
 from django.conf import settings
@@ -178,6 +178,7 @@ def index(request):
     else:
       return render_to_response('gate/gate_success.html',context_instance = RequestContext(request))
 
+@login_required
 def gate_print_pdf(request):
   person = Faculty.objects.get(user = request.user)
   gate = Gate.objects.filter(prof = person)[0]
@@ -214,5 +215,38 @@ def gate_print_pdf(request):
   response['Content-Disposition'] = ('attachment; filename=GATE_' + person.user.username
             + '_' + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M") +'.pdf')
   response['Content-Length'] = len(result)
+  return response
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name = 'Gate Admin').exists())
+def gate_allinfo(request):
+  response = HttpResponse(content_type='text/csv')
+  response['Content-Disposition'] = 'attachment; filename="info.csv"'
+  a = csv.writer(response)
+  data = ['Name','Designation','Department','Employee_ID','Date_Of_JoiningIITR','Date Of Joining The Present Position','Mobile','Email','Week_1','Week_2','City_1','City_2','City_3','City_4','City_5','City_6']
+  a.writerow(data)
+  g = Gate.objects.all()
+# import ipdb;ipdb.set_trace()
+  for i in range(0,len(g)):
+    print g[i].prof.user.name,i
+    if g[i].saved==True:
+      data = []
+      data.append(g[i].prof.user.name)
+      data.append(g[i].prof.designation)
+      data.append(g[i].prof.department)
+      data.append(g[i].prof.employee_code)
+      data.append(g[i].prof.date_of_joining)
+      data.append(g[i].date_of_join_position)
+      data.append(g[i].mobile_no)
+      data.append(g[i].prof.user.username+'@iitr.ac.in')
+      data.append(g[i].week_pref1)
+      data.append(g[i].week_pref2)
+      data.append(g[i].city_pref1)
+      data.append(g[i].city_pref2)
+      data.append(g[i].city_pref3)
+      data.append(g[i].city_pref4)
+      data.append(g[i].city_pref5)
+      data.append(g[i].city_pref6)
+      a.writerow(data)
   return response
 
