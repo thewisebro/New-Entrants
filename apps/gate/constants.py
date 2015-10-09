@@ -11,7 +11,7 @@ WEEKS= (
 
 CITIES=(
     ('None','None'),
-    ('Any Of These', 'Any Of These'),
+    ('Any Exam City', 'Any Exam City '),
     ('Amritsar','Amritsar'),
      ('Bathinda','Bathinda'),
      ('Chandigarh-Mohali-Fatehgarh Sahib','Chandigarh-Mohali-Fatehgarh Sahib'),
