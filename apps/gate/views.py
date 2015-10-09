@@ -235,7 +235,7 @@ def gate_allinfo(request):
   response = HttpResponse(content_type='text/csv')
   response['Content-Disposition'] = 'attachment; filename="info.csv"'
   a = csv.writer(response)
-  data = ['Name','Designation','Department','Employee_ID','Date_Of_JoiningIITR','Date Of Joining The Present Position','Mobile','Email','Week_1','Week_2','City_1','City_2','City_3','City_4','City_5','City_6']
+  data = ['Name','Designation','Department','Employee_ID','Date_Of_JoiningIITR','Date Of Joining The Present Position','Mobile','Email','Week_1','Week_2','City_1','City_2','City_3','City_4','City_5','City_6','Phone_Office','Phone_Resi','Height','Weight','Age','Nominee_Name','Relation_Nominee','Annual_Income','Permanent Address']
   a.writerow(data)
   g = Gate.objects.all()
 # import ipdb;ipdb.set_trace()
@@ -259,6 +259,15 @@ def gate_allinfo(request):
       data.append(g[i].city_pref4)
       data.append(g[i].city_pref5)
       data.append(g[i].city_pref6)
+      data.append(g[i].phone_office)
+      data.append(g[i].phone_resi)
+      data.append(g[i].height)
+      data.append(g[i].weight)
+      data.append(g[i].age)
+      data.append(g[i].nominee_name)
+      data.append(g[i].relation_nominee)
+      data.append(g[i].annual_income)
+      data.append(g[i].prof.address)
       a.writerow(data)
   return response
 
