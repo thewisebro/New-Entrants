@@ -1,5 +1,8 @@
 package img.myapplication;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,8 +12,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import img.myapplication.R;
-
 
 public class Navigation extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -19,11 +20,32 @@ public class Navigation extends ActionBarActivity
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
     private CharSequence mTitle;
+    private String Enr_No;
+    public class USER_DATA{
+        public String name;
+        public String enr;
+        public String email;
+        public String mobile;
 
+    };
+    public USER_DATA user;
+    private Cursor result;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+
+        Intent intent_call= getIntent();
+        Enr_No=intent_call.getStringExtra("EXTRA_ENR");
+        SQLiteDatabase db= openOrCreateDatabase("Entrants_Data", MODE_PRIVATE, null);
+        result=db.rawQuery("select * from Entrants where Enr_No='"+Enr_No+"';",null);
+        user=null;
+      /*  if (result.moveToFirst()){
+            user.name=result.getString(result.getColumnIndex("Name"));
+            user.enr=result.getString(result.getColumnIndex("Enr_No"));
+            user.email=result.getString(result.getColumnIndex("Email"));
+            user.mobile=result.getString(result.getColumnIndex("Mobile_No"));
+        }*/
         mCurrentPosition=-1;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -49,7 +71,7 @@ public class Navigation extends ActionBarActivity
             case 4 :fragment= new EditInfoFragment();
                 break;
 
-            default: fragment=new ProfileFragment();
+            default: fragment=new ProfileFragment(result);
                 break;
         }
        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
