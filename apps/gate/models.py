@@ -19,7 +19,7 @@ class Gate(models.Model):
   age = models.IntegerField(null=True, blank=True)
   nominee_name = models.CharField(max_length=20, null=True, blank=True)
   relation_nominee = models.CharField(max_length=20, null=True, blank=True)
-  date_of_join_position = models.DateTimeField(max_length=20, null=True, blank=True, auto_now=True)
+  date_of_join_position = models.CharField(max_length=20, null=True, blank=True)
   week_pref1 = models.CharField(max_length=50, choices=WEEKS, null=True, blank=True)
   week_pref2 = models.CharField(max_length =50, choices=WEEKS, null=True, blank=True)
   city_pref1 = models.CharField(max_length=50, choices=CITIES, null=True, blank=True)
