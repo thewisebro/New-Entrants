@@ -75,6 +75,7 @@ def index(request):
       fac.nominee_name=form.cleaned_data['nominee']
       fac.relation_nominee = form.cleaned_data['nominee_relation']
       fac.date_of_join_position = form.cleaned_data['date_of_joinPos']
+#fac.date_of_join_position = fac.date_of_join_position.date()
       week_list = []
       week_none = 0
       fac.week_pref1 = form.cleaned_data['pref1']
@@ -248,7 +249,7 @@ def gate_allinfo(request):
       data.append(g[i].prof.department)
       data.append(g[i].prof.employee_code)
       data.append(g[i].prof.date_of_joining)
-      data.append(g[i].date_of_join_position)
+      data.append(g[i].date_of_join_position.date())
       data.append(g[i].mobile_no)
       data.append(g[i].prof.user.username+'@iitr.ac.in')
       data.append(g[i].week_pref1)
