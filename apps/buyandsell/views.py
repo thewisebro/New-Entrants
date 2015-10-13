@@ -7,11 +7,13 @@ from django.contrib import messages
 from datetime import date, timedelta, datetime
 from django.utils import timezone
 import simplejson
+import re
 from django.template.response import TemplateResponse
 from buyandsell.models import *
 from buyandsell.constants import *
 from notifications.models import Notification
 from buyandsell.forms import *
+from django.utils.html import strip_tags
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
@@ -344,9 +346,12 @@ def sell(request):
     negcheck = 0
     lencheck = 0
     zercheck = 0
+    splcheck = 0
     if form.is_valid():
       phone = form.cleaned_data['contact']
       cost = form.cleaned_data['cost']
+      name = form.cleaned_data['item_name']
+      detail = form.cleaned_data['detail']
       if phone.isdigit():
         digcheck = 1
       try:
@@ -358,7 +363,9 @@ def sell(request):
         lencheck = 1
       if cost>=0:
         negcheck = 1
-      if digcheck and negcheck and zercheck and lencheck:
+      if special_match(name) and special_match(detail):
+        splcheck = 1
+      if digcheck and negcheck and zercheck and lencheck and splcheck:
         new_item = form.save(commit=False)
         expiry_date = post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
         new_item.post_date = post_date
@@ -377,7 +384,10 @@ def sell(request):
         pic.save()
         return TemplateResponse(request, 'buyandsell/helper.html', {'redirect_url':'/buyandsell/buy/','id':new_item.id})
       else:
-        messages.error(request , "Form is wrongly filled")
+        if  not splcheck:
+          messages.error(request , "Special characters not allowed")
+        else:
+          messages.error(request , "Form wrongly filled")
     else:
       return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
   init_dict={
@@ -397,13 +407,15 @@ def requestitem(request):
   contact=request.user.contact_no
   if request.method=='POST':
     form=RequestForm(request.POST,request.FILES)
-    digcheck=0
-    negcheck=0
-    lencheck=0
-    zercheck=0
+    digcheck = 0
+    negcheck = 0
+    lencheck = 0
+    zercheck = 0
+    splcheck = 0
     if form.is_valid():
       phone=form.cleaned_data['contact']
       price_upper=form.cleaned_data['price_upper']
+      name = form.cleaned_data['item_name']
       if phone.isdigit():
         digcheck=1
       try:
@@ -415,7 +427,9 @@ def requestitem(request):
         lencheck=1
       if price_upper >= 0:
         negcheck=1
-      if digcheck and negcheck and zercheck and lencheck:
+      if special_match(name):
+        splcheck = 1
+      if digcheck and negcheck and zercheck and lencheck and splcheck:
         new_item=form.save(commit=False)
         expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
         new_item.post_date=post_date
@@ -431,7 +445,10 @@ def requestitem(request):
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
         return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/viewrequests/'})
       else:
-        messages.error(request , "Form is wrongly filled")
+        if  not splcheck:
+          messages.error(request , "Special characters not allowed")
+        else:
+          messages.error(request , "Form wrongly filled")
     else:
       return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
   init_dict={
@@ -1035,13 +1052,16 @@ def edit(request,form_type,pk):
     old_category=instance.category
     if request.method=='POST':
       form=SellForm(request.POST,request.FILES,instance=instance)
-      digcheck=0
-      negcheck=0
-      lencheck=0
-      zercheck=0
+      digcheck = 0
+      negcheck = 0
+      lencheck = 0
+      zercheck = 0
+      splcheck = 0
       if form.is_valid():
         phone=form.cleaned_data['contact']
         cost=form.cleaned_data['cost']
+        name = form.cleaned_data['item_name']
+        detail = form.cleaned_data['detail']
         if phone.isdigit():
           digcheck=1
         try:
@@ -1053,7 +1073,9 @@ def edit(request,form_type,pk):
           lencheck=1
         if cost>=0:
           negcheck=1
-        if digcheck and negcheck and zercheck and lencheck and zercheck:
+        if special_match(name) and special_match(detail):
+          splcheck = 1
+        if digcheck and negcheck and zercheck and lencheck and zercheck and splcheck:
           edited_item=form.save(commit=False)
           expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
           edited_item.post_date=post_date
@@ -1072,7 +1094,10 @@ def edit(request,form_type,pk):
             Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)
           return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/my-account/'})
         else:
-          messages.error(request , "form wrongly filled")
+          if  not splcheck:
+            messages.error(request , "Special characters not allowed")
+          else:
+            messages.error(request , "Form wrongly filled")
       else:
         return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories,'edit_flag':True})
     form=SellForm(instance=instance)
@@ -1087,9 +1112,11 @@ def edit(request,form_type,pk):
       negcheck=0
       lencheck=0
       zercheck=0
+      splcheck = 0
       if form.is_valid():
         phone=form.cleaned_data['contact']
         price_upper=form.cleaned_data['price_upper']
+        name = form.cleaned_data['item_name']
         if phone.isdigit():
           digcheck=1
         try:
@@ -1101,7 +1128,9 @@ def edit(request,form_type,pk):
           lencheck=1
         if price_upper>=0:
           negcheck=1
-        if digcheck and negcheck and zercheck and lencheck and zercheck:
+        if special_match(name):
+          splcheck = 1
+        if digcheck and negcheck and zercheck and lencheck and zercheck and splcheck:
           edited_item=form.save(commit=False)
           expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
           edited_item.post_date=post_date
@@ -1120,7 +1149,10 @@ def edit(request,form_type,pk):
             Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)
           return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/my-account/'})
         else:
-          messages.error(request , "form wrongly filled")
+          if  not splcheck:
+            messages.error(request , "Special characters not allowed")
+          else:
+            messages.error(request , "Form wrongly filled")
       else:
         return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories,'edit_flag':True})
     form=RequestForm(instance=instance)
@@ -1420,3 +1452,6 @@ def bring_subcats(request , mc):
 
   return HttpResponse(simplejson.dumps(html),content_type = 'application/json')
 
+def special_match(strg):
+  pattern = r'[A-z0-9\s]'
+  return bool(re.match(pattern, strg))

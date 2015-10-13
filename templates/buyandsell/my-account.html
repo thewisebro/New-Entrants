@@ -249,8 +249,8 @@
         {% endfor %}
         {% endif %}
 
-        {% if not sell_items %}
-        <p class="you-have-not-added-any">You haven't added any items for sale.</p>
+        {% if not sell_items and not succ_sold_items %}
+        <p class="you-have-not-added-any">You haven't added any Item for Sale.</p>
         {% endif %}
 
       </div>
@@ -261,8 +261,6 @@
       <div class="row">
         <div class="col-md-12">
           <p class="my-account-page-headings">Requested</p>
-
-          {% if request_items %}
 
           <table class="table table-striped my-account-requests-table">
             <thead>
@@ -391,8 +389,8 @@
 
             </tbody>
           </table>
-          {% else %}
-          <p class="you-have-not-added-any">You haven't added any requests.</p>
+          {% if not request_items and not succ_request_items  %}
+          <p class="you-have-not-added-any">You haven't added any Request.</p>
           {% endif %}
 
         </div>

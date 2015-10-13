@@ -57,7 +57,7 @@
       <label class="col-xs-4 control-label" style="text-align: left;" for="name">Price</label>
       <div class="col-xs-8">
         <img class="rupee-icon sell-form-rupee-icon" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">
-        <input type="number" class="form-control" style=" padding-left: 25px;" id="id_cost" name = "cost" value="{{ form.cost.value|default_if_none:""}}" required>
+        <input type="number" max = "50000" class="form-control" style=" padding-left: 25px;" id="id_cost" name = "cost" value="{{ form.cost.value|default_if_none:""}}" required>
       </div>
     </div>
 
@@ -116,7 +116,7 @@
       <div class="entries_error">{{ form.email.errors }}</div>
     </div>
     {% endif %}
-
+      
     <div class="form-group">
       <label class="col-xs-4 control-label" for="phone">Your Phone</label>
       <div class="col-xs-8">

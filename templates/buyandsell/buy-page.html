@@ -234,7 +234,7 @@
       <div class="row">
         {% for row in table_data %}
         <div class="col-xs-6 col-sm-6 col-md-3">
-          <a onclick="sell_details({{row.pk}},'{{row.item_name}}')"  class="item">
+          <a onclick='sell_details({{row.pk}},"{{row.item_name}}")'  class="item">
             <div class="thumbnailBG">
               <div class="thumbnail">
                 {% if row.itempic.pic %}
@@ -244,7 +244,7 @@
                 {% endif %}
               </div>
               <div class="caption">
-                <div class="itemName" style="display: inline-block; white-space: nowrap; width: 100px; overflow: hidden; text-overflow: ellipsis;">{{row.item_name}}</div>
+             <div class="itemName" style="display: inline-block; white-space: nowrap; width: 100px; overflow: hidden; text-overflow: ellipsis;">{{row.item_name}}</div>
                 <span class="price">
                   <img class="rupee-icon rupee-icon-item-for-sale" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">
                   {{row.cost}}
