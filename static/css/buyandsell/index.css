@@ -58,7 +58,7 @@ a:focus
 {
   width: 41.5%;
   position: relative;
-  margin-left: 35px;
+  margin-left: 30px;
   margin-top: 5px;
   display: inline-block;
 }
@@ -283,7 +283,6 @@ a:focus
   position: absolute;
   top: 73px;
   width: 80%;
-
 }
 
 .price-range-text-input
@@ -306,7 +305,7 @@ a:focus
 
 #slider-range
 {
-  width: 82%;
+  width: 84%;
   margin-top: 7px;
   border: 1px solid #1081de;
   cursor: pointer;
@@ -432,7 +431,7 @@ input[type="radio"]:checked + label div
 .page-content table tbody tr:hover
 {
   background-color: #ffffff;
-  border-left: 1px solid #1081de;
+  border-left: 1px solid transparent;
 }
 
 .user-photo
@@ -1187,14 +1186,22 @@ a:focus
 {
   .ui-dialog-titlebar-close:after
   {
-    content: '';
-    background-image: url("../../images/buyandsell/close-button-grey.png");
+    content: "X";
+    position: absolute;
+    top: -3px;
+    right: 1px;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 10px;
     padding: 3px;
-
+    color: #888888;
   }
+
+  .price-range-text-input
+  {
+    padding: 4px;
+  }
+
 }
 
 .ui-state-focus
@@ -1218,6 +1225,11 @@ a:focus
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+}
+
+.table-striped thead tr
+{
+  background-color: #d2d2d2;
 }
 
 .table-striped tbody tr
@@ -1884,6 +1896,27 @@ border-bottom: 1px solid #EEE;
 }
 
 
+.full-page-transparent-overlay
+{
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: #ffffff;
+  z-index: 2
+}
+
+.item-name-on-individual-page
+{
+  font-size: 25px;
+  font-weight: bold;
+}
+
+#sell_  feedback
+{
+  padding: 2px 2px;
+}
+
+
 @font-face {
   font-family: 'OpenSans';
   src: url(../../fonts/OpenSans-Regular.ttf);
@@ -1903,19 +1936,4 @@ border-bottom: 1px solid #EEE;
   src: url(../../fonts/OpenSans-SemiboldItalic.ttf);
   font-weight: bold;
   font-style: italic, oblique;
-}
-
-.full-page-transparent-overlay
-{
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  background-color: #ffffff;
-  z-index: 2
-}
-
-.item-name-on-individual-page
-{
-  font-size: 25px;
-  font-weight: bold;
 }

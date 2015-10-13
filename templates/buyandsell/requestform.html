@@ -15,7 +15,7 @@
     <div class="form-group">
       <label class="col-xs-4 control-label" style="text-align: left" for="name">Item Name</label>
       <div class="col-xs-8 sell-form-item-name-area">
-        <input type="text" class="form-control sell-form-item-name" id="id_item_name" name="item_name" value = "{{ form.item_name.value|default_if_none:""}}" required>
+        <input type="text" class="form-control sell-form-item-name" id="id_item_name" name="item_name"  maxlength="40" value = "{{ form.item_name.value|default_if_none:""}}" required>
       </div>
     </div>
 
@@ -56,7 +56,7 @@
       <label class="col-xs-4 control-label" style="text-align: left" for="name">Maximum Price</label>
       <div class="col-xs-8">
         <img class="rupee-icon sell-form-rupee-icon" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">
-        <input type="text" class="form-control" style=" padding-left: 25px;" id="id_cost" name = "price_upper" value="{{ form.price_upper.value|default_if_none:""}}" required>
+        <input type="number" class="form-control" style=" padding-left: 25px;" id="id_cost" name = "price_upper" value="{{ form.price_upper.value|default_if_none:""}}" required>
       </div>
     </div>
 

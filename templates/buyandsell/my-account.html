@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="full-page-transparent-overlay"></div>
-<div class="container" style="min-width: 765px;">
+<div class="container" style="min-width: 765px; padding-left: 23px;">
   {% if messages %}
   {% for message in messages %}
   <div class="alert alert-{{ message.tags }}">{{ message }} </div>
@@ -88,7 +88,7 @@
     {% endblock %}
     <div class="page-content">
 
-      <p class="my-account-page-headings">Items you've Added for Sale</p>
+      <p class="my-account-page-headings">Added for Sale</p>
       <div class="row">
         {% for row in sell_items %}
         {% if row.is_active %}
@@ -250,7 +250,7 @@
         {% endif %}
 
         {% if not sell_items %}
-        <p class="you-have-not-added-any">You haven't added any Item for Sale.</p>
+        <p class="you-have-not-added-any">You haven't added any items for sale.</p>
         {% endif %}
 
       </div>
@@ -260,7 +260,7 @@
 
       <div class="row">
         <div class="col-md-12">
-          <p class="my-account-page-headings">Items you've Requested</p>
+          <p class="my-account-page-headings">Requested</p>
 
           {% if request_items %}
 
@@ -270,6 +270,7 @@
               <th>Item</th>
               <th>Max Price ( <img class="rupee-icon rupee-icon-item-for-sale" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png"> )</th>
               <th>Expires in / Status</th>
+              <th></th>
             </tr>
             </thead>
             <tbody>
@@ -391,7 +392,7 @@
             </tbody>
           </table>
           {% else %}
-          <p class="you-have-not-added-any">You haven't added any Request.</p>
+          <p class="you-have-not-added-any">You haven't added any requests.</p>
           {% endif %}
 
         </div>

@@ -9,6 +9,7 @@
     if ($("body").height() > $(window).height())
     {
       $("body").css("margin-right",'15px');
+      $("").css("margin-right",'15px');
     }
 
     //this function removes the bug in which item options of my-account page behaved improperly and their visibility toggled irrationally
@@ -130,6 +131,9 @@
           $(".dropdown-arrow",$(this)).removeClass("dropdown-arrow-pointing-down")
           $(".active-category",$(this)).removeClass("active-category-dropdown-active");
         }
+
+
+
       }
     );
 

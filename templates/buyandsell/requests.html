@@ -1,6 +1,6 @@
 {% extends "buyandsell/base.html" %}
 {% block header %}
-<body>
+<body style="overflow-y: scroll;">
 <div class="headerBackground">
   <header class="header container header-container">
 
@@ -235,7 +235,7 @@
                   {% endif %}
                 </ul>
               </div>
-              <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0; margin-left: 30px; " role="menu" aria-labelledby="category-filter">
+              <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0;margin-left: 20px;border-top-left-radius: 0;border-top-right-radius: 0;min-width: 198px; "  role="menu" aria-labelledby="category-filter">
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/viewrequests">Latest</a></li>
 
                 {% for key,value in cat_dict.iteritems %}
