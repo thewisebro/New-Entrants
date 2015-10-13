@@ -1080,7 +1080,6 @@ def edit(request,form_type,pk):
           expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
           edited_item.post_date=post_date
           edited_item.expiry_date=expiry_date
-          edited_item.user=user
           if edited_item.expiry_date > post_date:
             edited_item.is_active = True
           edited_item.save()
@@ -1135,7 +1134,6 @@ def edit(request,form_type,pk):
           expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
           edited_item.post_date=post_date
           edited_item.expiry_date=expiry_date
-          edited_item.user=user
           if edited_item.expiry_date > post_date:
             edited_item.is_active = True
           edited_item.save()
@@ -1453,5 +1451,5 @@ def bring_subcats(request , mc):
   return HttpResponse(simplejson.dumps(html),content_type = 'application/json')
 
 def special_match(strg):
-  pattern = r'[A-z0-9\s]'
+  pattern = r'[A-z0-9\s\.\-\_\)\(]'
   return bool(re.match(pattern, strg))

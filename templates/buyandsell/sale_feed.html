@@ -11,7 +11,7 @@
 {% block feed_detail %}
 Added {{ instance.item_name }} for sale.
 <div style='clear:both'></div>
-  {% ifnotequal instance.itempic.pic None %}
+  {% if instance.itempic.pic  %}
    <img src="{{instance.itempic.pic.url}}">
-  {% endifnotequal %}
+  {% endif %}
 {% endblock %}

@@ -198,9 +198,13 @@
                     <span>Remove</span>
                   </a>
                 </li>
+               <li role="presentation">
+                  <a role="menuitem" tabindex="-1" onclick = "upload_image('buyandsell_pic', {{ row.pk }},from_accounts = true)">
+                    <img class="change-image-icon" src="{{STATIC_URL}}images/buyandsell/change-image-icon.png">
+                    <span>Change Image</span>
+                  </a>
+                </li>
 
-                <li role="presentation"><a role="menuitem" tabindex="-1"onclick = "transaction_form('sell', {{ row.pk }})">Mark Sold</a></li>
-  <li role="presentation"><a role="menuitem" tabindex="-1" onclick = "upload_image('buyandsell_pic', {{ row.pk }},from_accounts = true)">Change Image</a></li>
               </ul>
             </div>
           </div>
@@ -215,7 +219,7 @@
               {% if row.itempic.pic %}
               <img class="item-for-sale-image" src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
               {% else %}
-              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buyandsell/default.png" alt="Generic placeholder thumbnail">
               {% endif %}
 
               <div class="fading-rectangle">
