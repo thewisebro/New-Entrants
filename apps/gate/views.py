@@ -12,7 +12,7 @@ from gate.forms import *
 from gate.constants import *
 from nucleus.models import Faculty
 
-
+import csv
 import logging, datetime
 import cStringIO as StringIO
 from django.conf import settings
@@ -75,8 +75,21 @@ def index(request):
       fac.nominee_name=form.cleaned_data['nominee']
       fac.relation_nominee = form.cleaned_data['nominee_relation']
       fac.date_of_join_position = form.cleaned_data['date_of_joinPos']
+#fac.date_of_join_position = fac.date_of_join_position.date()
+      week_list = []
+      week_none = 0
       fac.week_pref1 = form.cleaned_data['pref1']
+      if fac.week_pref1 == "None":
+        week_none = week_none + 1
+      else:
+        week_list.append(fac.week_pref1)
       fac.week_pref2 = form.cleaned_data['pref2']
+      if fac.week_pref2 == "None":
+        week_none = week_none + 1
+      else:
+        week_list.append(fac.week_pref2)
+
+      week_set = Set(week_list)
       fac.mobile_no = form.cleaned_data['mobile_no']
       cities_list = []
       cities_set = []
@@ -114,7 +127,7 @@ def index(request):
 
       cities_set = Set(cities_list)
       print len(cities_set)+cities_none
-      if len(cities_set)+cities_none == 6:
+      if len(cities_set)+cities_none == 6 and len(week_set)+week_none == 2 :
 
         fac.saved = True
         fac.save()
@@ -144,19 +157,22 @@ def index(request):
       if fac.declaration==True:
         birth_date = person.user.birth_date
         join_date = person.date_of_joining
+        curr_date = datetime.datetime.now().date()
+        curr_date = curr_date.strftime('%d-%m-%Y')
         age = 0
-      try:  
-        if birth_date:
-          curr_date = datetime.datetime.now().date()
-          delta = curr_date - birth_date
-          age = delta.days/365
-          birth_date = birth_date.strftime('%d-%m-%Y')
-          curr_date = curr_date.strftime('%d-%m-%Y')
-        if join_date:
-          join_date = datetime.datetime.strptime(join_date,'%Y-%m-%d').date()
-          join_date = join_date.strftime('%d-%m-%Y')
-      except:
-        pass    
+        try:
+          if birth_date:
+            delta = curr_date - birth_date
+            age = delta.days/365
+            birth_date = birth_date.strftime('%d-%m-%Y')
+        except:
+          pass
+        try:
+          if join_date:
+            join_date = datetime.datetime.strptime(join_date,'%Y-%m-%d').date()
+            join_date = join_date.strftime('%d-%m-%Y')
+        except:
+          pass
         form = GateForm(initial = {
             'name': person.user.name,
             'employee_id': person.employee_code,
@@ -175,6 +191,7 @@ def index(request):
     else:
       return render_to_response('gate/gate_success.html',context_instance = RequestContext(request))
 
+@login_required
 def gate_print_pdf(request):
   person = Faculty.objects.get(user = request.user)
   gate = Gate.objects.filter(prof = person)[0]
@@ -211,5 +228,47 @@ def gate_print_pdf(request):
   response['Content-Disposition'] = ('attachment; filename=GATE_' + person.user.username
             + '_' + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M") +'.pdf')
   response['Content-Length'] = len(result)
+  return response
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name = 'Gate Admin').exists())
+def gate_allinfo(request):
+  response = HttpResponse(content_type='text/csv')
+  response['Content-Disposition'] = 'attachment; filename="info.csv"'
+  a = csv.writer(response)
+  data = ['Name','Designation','Department','Employee_ID','Date_Of_JoiningIITR','Date Of Joining The Present Position','Mobile','Email','Week_1','Week_2','City_1','City_2','City_3','City_4','City_5','City_6','Phone_Office','Phone_Resi','Height','Weight','Age','Nominee_Name','Relation_Nominee','Annual_Income','Permanent Address']
+  a.writerow(data)
+  g = Gate.objects.all()
+# import ipdb;ipdb.set_trace()
+  for i in range(0,len(g)):
+    print g[i].prof.user.name,i
+    if g[i].saved==True:
+      data = []
+      data.append(g[i].prof.user.name)
+      data.append(g[i].prof.designation)
+      data.append(g[i].prof.department)
+      data.append(g[i].prof.employee_code)
+      data.append(g[i].prof.date_of_joining)
+      data.append(g[i].date_of_join_position.date())
+      data.append(g[i].mobile_no)
+      data.append(g[i].prof.user.username+'@iitr.ac.in')
+      data.append(g[i].week_pref1)
+      data.append(g[i].week_pref2)
+      data.append(g[i].city_pref1)
+      data.append(g[i].city_pref2)
+      data.append(g[i].city_pref3)
+      data.append(g[i].city_pref4)
+      data.append(g[i].city_pref5)
+      data.append(g[i].city_pref6)
+      data.append(g[i].phone_office)
+      data.append(g[i].phone_resi)
+      data.append(g[i].height)
+      data.append(g[i].weight)
+      data.append(g[i].age)
+      data.append(g[i].nominee_name)
+      data.append(g[i].relation_nominee)
+      data.append(g[i].annual_income)
+      data.append(g[i].prof.address)
+      a.writerow(data)
   return response
 
