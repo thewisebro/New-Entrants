@@ -43,21 +43,20 @@
         <div class="image"><img src="{{ STATIC_URL }}images/placement/arrow_down.png" /></div>
       </button>
     </a>
-    <a target=_blank href="{% url 'placement.views.preview_resume' %}">
-      <button class="btn btn-info">
-        <div class="text" style="width:60px;">
-          Preview
-        </div>
-        <div class="image"><img src="{{ STATIC_URL }}images/placement/arrow_down.png" /></div>
-      </button>
-    </a>
     <a href="{% url 'placement.views.resume' %}">
-
       <button class="btn btn-info">
         <div class="text" style="width:60px;">
           Resume
         </div>
         <div class="image"><img src="{{ STATIC_URL }}images/placement/arrow_down.png" /></div>
+      </button>
+    </a>
+    <a target=_blank href="{% url 'placement.views.preview_resume' %}">
+      <button class="btn btn-info">
+        <div class="text" style="width:60px;">
+          Preview
+        </div>
+        <div class="image"><img width=16px height=16px src="{{ STATIC_URL }}images/placement/eye.png" /></div>
       </button>
     </a>
     <br/>
