@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = patterns('placement.views',
   (r'^$', 'index'),
+  (r'^preview_resume/$','preview_resume'),
   (r'^resume/$','resume'),
   (r'^resume_nik/$','resume_nik'),
   (r'^toggle/$','toggle'),
