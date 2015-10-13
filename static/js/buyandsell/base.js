@@ -1,7 +1,7 @@
 //watch("ELECTRONICS");
 var opened_dialog="";  //variable to keep check of the opened dialog
 
-function watch(main_category,category)
+function watch_new(main_category,category)
 {
 
   if($("#watch_btn").hasClass("watch-button-watching"))
@@ -455,8 +455,8 @@ function sell_form(){
   dialog_iframe({
     name:'sell_form_dialog',
     title:'Sell an Item',
-    width:800,
-    height:730,
+    width:600,
+    height:770,
     src:'/buyandsell/sell/',
     close:function(){opened_dialog=""}
   });
@@ -515,8 +515,8 @@ function edit_sell(pk){
   dialog_iframe({
     name:'edit_sell_dialog',
     title:'Edit',
-    width:800,
-    height:730,
+    width:600,
+    height:770,
     src:'/buyandsell/edit/sell/'+pk+'/',
     close:function(){opened_dialog=""}
   });
@@ -617,7 +617,7 @@ $(document).ready
       function()
       {
         $(".edit-button", $(this)).css('opacity', 1);
-        $(".dropdown", $(this)).toggle();
+        $(".dropdown", $(this)).show();
         //$(".item-options-dropdown", $(this)).css('display', 'block');
       }
     );
@@ -628,8 +628,11 @@ $(document).ready
       function()
       {
         $(".edit-button", $(this)).css('opacity', 0);
-        $(".item-options-dropdown", $(this)).removeClass('open');
-        $(".dropdown", $(this)).toggle();
+        //$(".item-options-dropdown", $(this)).removeClass('open');
+        if(!$(".dropdown", $(this)).hasClass("open"))
+        {
+          $(".dropdown", $(this)).hide();
+        }
       }
     );
 
@@ -653,6 +656,19 @@ $(document).ready
         $(".dropdown", $(this)).toggle();
       }
     );
+
+    $(document).click
+    (
+      function()
+      {
+        if((".item-options-button", $(".thumbnailBG")).attr('aria-expanded')== 'true')
+        {
+          //$(".dropdown", $(".thumbnailBG")).hide();
+          $(this).hide();
+        }
+      }
+    );
+
 
  /*   $(".request").mouseover
     (

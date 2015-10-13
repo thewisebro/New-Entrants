@@ -1,6 +1,6 @@
 {% extends "buyandsell/base.html" %}
 {% block content %}
-<body>
+<body style="overflow-y: scroll;">
 <div class="container" style="min-width: 765px;">
   {% if messages %}
   {% for message in messages %}
@@ -45,11 +45,11 @@
 
     {% if mc and not category %}
     {% if mc in main_watched %}
-    <button type="button" id="watch_btn" class="btn global-button watch-button watch-button-watching" onclick='watch("{{mc}}","{{c}}" )'>
+    <button type="button" id="watch_btn" class="btn global-button watch-button watch-button-watching" onclick='watch_new("{{mc}}","{{c}}" )'>
       Watching
     </button>
     {% else %}
-    <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch("{{mc}}","{{c}}" )'>
+    <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch_new("{{mc}}","{{c}}" )'>
       Watch this category
     </button>
     {% endif %}
@@ -57,11 +57,11 @@
 
     {% if mc and  category %}
     {% if category in sub_watched %}
-    <button type="button" id="watch_btn" class="btn global-button watch-button watch-button-watching" onclick='watch("{{mc}}","{{c}}" )'>
+    <button type="button" id="watch_btn" class="btn global-button watch-button watch-button-watching" onclick='watch_new("{{mc}}","{{c}}" )'>
       Watching
     </button>
     {% else %}
-    <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch("{{mc}}","{{c}}" )'>
+    <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch_new("{{mc}}","{{c}}" )'>
       Watch this category
     </button>
     {% endif %}
@@ -137,7 +137,7 @@
                   {% endif %}
                 </ul>
               </div>
-              <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0; margin-left: 30px; " role="menu" aria-labelledby="category-filter">
+              <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0;margin-left: 20px;border-top-left-radius: 0;border-top-right-radius: 0;min-width: 198px; " role="menu" aria-labelledby="category-filter">
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/buy">Latest</a></li>
                 {% for key,value in cat_dict.iteritems %}
                 <li role="presentation" class="dropdown-submenu">
@@ -229,7 +229,6 @@
         </div>
       </div>
     </div>
-
     {% endblock %}
     <div class="page-content">
       <div class="row">
@@ -256,6 +255,10 @@
           </a>
         </div>
         {% endfor %}
+
+        {% if not items %}
+        <p>No items in this category</p>
+        {% endif %}
       </div>
 
       {% if paginator %}
