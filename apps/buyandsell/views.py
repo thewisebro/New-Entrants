@@ -347,6 +347,7 @@ def sell(request):
     lencheck = 0
     zercheck = 0
     splcheck = 0
+    limcheck = 0
     if form.is_valid():
       phone = form.cleaned_data['contact']
       cost = form.cleaned_data['cost']
@@ -363,9 +364,11 @@ def sell(request):
         lencheck = 1
       if cost>=0:
         negcheck = 1
+      if cost <= 50000:
+        limcheck = 1
       if special_match(name) and special_match(detail):
         splcheck = 1
-      if digcheck and negcheck and zercheck and lencheck and splcheck:
+      if digcheck and negcheck and zercheck and lencheck and splcheck and limcheck:
         new_item = form.save(commit=False)
         expiry_date = post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
         new_item.post_date = post_date
@@ -379,15 +382,17 @@ def sell(request):
         notif_text += " that you have watched"
         url = '/buyandsell/sell_details/' + str(new_item.pk)
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
-
         pic =ItemPic( item = new_item )
         pic.save()
         return TemplateResponse(request, 'buyandsell/helper.html', {'redirect_url':'/buyandsell/buy/','id':new_item.id})
       else:
         if  not splcheck:
           messages.error(request , "Special characters not allowed")
+        elif not limcheck:
+          messages.error(request , "Price cannt be greater than 50000")
         else:
           messages.error(request , "Form wrongly filled")
+        return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
     else:
       return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
   init_dict={
@@ -412,6 +417,7 @@ def requestitem(request):
     lencheck = 0
     zercheck = 0
     splcheck = 0
+    limcheck = 0
     if form.is_valid():
       phone=form.cleaned_data['contact']
       price_upper=form.cleaned_data['price_upper']
@@ -424,12 +430,14 @@ def requestitem(request):
       except:
         pass
       if len(phone) == 10:
-        lencheck=1
+        lencheck = 1
       if price_upper >= 0:
-        negcheck=1
+        negcheck = 1
+      if price_upper <= 50000:
+        limcheck = 1
       if special_match(name):
         splcheck = 1
-      if digcheck and negcheck and zercheck and lencheck and splcheck:
+      if digcheck and negcheck and zercheck and lencheck and splcheck and limcheck:
         new_item=form.save(commit=False)
         expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
         new_item.post_date=post_date
@@ -438,7 +446,6 @@ def requestitem(request):
         new_item.save()
         app='buyandsell'
         watch_user_list=new_item.category.watch_users.all()
-        print watch_user_list
         notif_text=str(new_item.item_name)+" has been requested in the category "+str(new_item.category.name)
         notif_text+=" that you have watched"
         url = '/buyandsell/sell_details/' + str(new_item.pk)
@@ -447,8 +454,11 @@ def requestitem(request):
       else:
         if  not splcheck:
           messages.error(request , "Special characters not allowed")
+        elif not limcheck:
+          messages.error(request , " Maximum Price cannt be greater than 50000")
         else:
           messages.error(request , "Form wrongly filled")
+        return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
     else:
       return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
   init_dict={
@@ -501,7 +511,6 @@ def unwatch(request,mc=None,c=None):
   return HttpResponse(success, content_type="application/json")
 
 def selldetails(request,pk,notif_flag = None):
-#import pdb;pdb.set_trace();
   login_flag = False
   if request.user is not None and request.user.is_authenticated():
    login_flag = True
@@ -542,8 +551,8 @@ def selldetails(request,pk,notif_flag = None):
         return HttpResponseRedirect('/buyandsell/sell_details/' + str(item.pk) +'/notif')
 
 
-  if login_flag and len(ShowContact.objects.filter(user=user))==1:
-    if ShowContact.objects.filter(user=user)[0].contact_shown==0:
+  if login_flag and len(ShowContact.objects.filter(user=item.user))==1:
+    if ShowContact.objects.filter(user=item.user)[0].contact_shown==0:
       show_contact=0
 
   context = {
@@ -600,8 +609,8 @@ def requestdetails(request,pk , notif_flag = None):
         messages.error(request , "You must log-in to proceed")
         return HttpResponseRedirect('/buyandsell/request_details/' + str(item.pk) +'/notif')
 
-  if login_flag and len(ShowContact.objects.filter(user=user))==1:
-    if ShowContact.objects.filter(user=user)[0].contact_shown==0:
+  if login_flag and len(ShowContact.objects.filter(user=item.user))==1:
+    if ShowContact.objects.filter(user=item.user)[0].contact_shown==0:
       show_contact=0
 
   context={
@@ -1057,6 +1066,7 @@ def edit(request,form_type,pk):
       lencheck = 0
       zercheck = 0
       splcheck = 0
+      limcheck = 0
       if form.is_valid():
         phone=form.cleaned_data['contact']
         cost=form.cleaned_data['cost']
@@ -1071,11 +1081,13 @@ def edit(request,form_type,pk):
           pass
         if len(phone) == 10:
           lencheck=1
-        if cost>=0:
+        if cost >= 0:
           negcheck=1
+        if cost <= 50000:
+          limcheck = 1
         if special_match(name) and special_match(detail):
           splcheck = 1
-        if digcheck and negcheck and zercheck and lencheck and zercheck and splcheck:
+        if digcheck and negcheck and zercheck and lencheck and splcheck and limcheck :
           edited_item=form.save(commit=False)
           expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
           edited_item.post_date=post_date
@@ -1095,8 +1107,11 @@ def edit(request,form_type,pk):
         else:
           if  not splcheck:
             messages.error(request , "Special characters not allowed")
+          elif not limcheck:
+            messages.error(request , "Price cannt be greater than 50000")
           else:
             messages.error(request , "Form wrongly filled")
+          return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
       else:
         return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories,'edit_flag':True})
     form=SellForm(instance=instance)
@@ -1107,11 +1122,12 @@ def edit(request,form_type,pk):
     old_category=instance.category
     if request.method=='POST':
       form=RequestForm(request.POST,request.FILES,instance=instance)
-      digcheck=0
-      negcheck=0
-      lencheck=0
-      zercheck=0
+      digcheck = 0
+      negcheck = 0
+      lencheck = 0
+      zercheck = 0
       splcheck = 0
+      limcheck = 0
       if form.is_valid():
         phone=form.cleaned_data['contact']
         price_upper=form.cleaned_data['price_upper']
@@ -1127,9 +1143,11 @@ def edit(request,form_type,pk):
           lencheck=1
         if price_upper>=0:
           negcheck=1
+        if price_upper <= 50000:
+          limcheck = 1
         if special_match(name):
           splcheck = 1
-        if digcheck and negcheck and zercheck and lencheck and zercheck and splcheck:
+        if digcheck and negcheck and zercheck and lencheck and splcheck and limcheck:
           edited_item=form.save(commit=False)
           expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
           edited_item.post_date=post_date
@@ -1149,8 +1167,11 @@ def edit(request,form_type,pk):
         else:
           if  not splcheck:
             messages.error(request , "Special characters not allowed")
+          elif not limcheck:
+            messages.error(request , " Maximum Price cannt be greater than 50000")
           else:
             messages.error(request , "Form wrongly filled")
+          return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
       else:
         return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories,'edit_flag':True})
     form=RequestForm(instance=instance)
