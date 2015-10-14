@@ -153,43 +153,43 @@ def index(request):
     print 'yoyo'
 #    import ipdb;ipbd.set_trace()
     print person.user.birth_date
-    if fac.saved==False:
-      if fac.declaration==True:
-        birth_date = person.user.birth_date
-        join_date = person.date_of_joining
-        curr_date = datetime.datetime.now().date()
-        curr_date = curr_date.strftime('%d-%m-%Y')
-        age = 0
-        try:
-          if birth_date:
-            delta = curr_date - birth_date
-            age = delta.days/365
-            birth_date = birth_date.strftime('%d-%m-%Y')
-        except:
-          pass
-        try:
-          if join_date:
-            join_date = datetime.datetime.strptime(join_date,'%Y-%m-%d').date()
-            join_date = join_date.strftime('%d-%m-%Y')
-        except:
-          pass
-        form = GateForm(initial = {
-            'name': person.user.name,
-            'employee_id': person.employee_code,
-            'designation': person.designation,
-            'department': person.department,
-            'date_of_join': join_date,
-            'date_of_birth':birth_date,
-            'home_address': person.address,
-            'phone_no_office': person.user.contact_no,
-            'email': person.user.username+'@iitr.ac.in',
-            'age':age,
-            })
-        return render_to_response('gate/index1.html',{'form' : form,'curr_date':curr_date},context_instance = RequestContext(request))
-      else:
-        return HttpResponseRedirect('/gate/gate1')
+#  if fac.saved==False: #to be included for one time form filling
+    if fac.declaration==True:
+      birth_date = person.user.birth_date
+      join_date = person.date_of_joining
+      curr_date = datetime.datetime.now().date()
+      curr_date = curr_date.strftime('%d-%m-%Y')
+      age = 0
+      try:
+        if birth_date:
+          delta = curr_date - birth_date
+          age = delta.days/365
+          birth_date = birth_date.strftime('%d-%m-%Y')
+      except:
+        pass
+      try:
+        if join_date:
+          join_date = datetime.datetime.strptime(join_date,'%Y-%m-%d').date()
+          join_date = join_date.strftime('%d-%m-%Y')
+      except:
+        pass
+      form = GateForm(initial = {
+          'name': person.user.name,
+          'employee_id': person.employee_code,
+          'designation': person.designation,
+          'department': person.department,
+          'date_of_join': join_date,
+          'date_of_birth':birth_date,
+          'home_address': person.address,
+          'phone_no_office': person.user.contact_no,
+          'email': person.user.username+'@iitr.ac.in',
+          'age':age,
+          })
+      return render_to_response('gate/index1.html',{'form' : form,'curr_date':curr_date},context_instance = RequestContext(request))
     else:
-      return render_to_response('gate/gate_success.html',context_instance = RequestContext(request))
+      return HttpResponseRedirect('/gate/gate1')
+# else:
+#     return render_to_response('gate/gate_success.html',context_instance = RequestContext(request))
 
 @login_required
 def gate_print_pdf(request):

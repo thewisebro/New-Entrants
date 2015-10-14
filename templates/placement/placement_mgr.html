@@ -36,8 +36,9 @@
       </div>
       <div class="exporter">
 
-      <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_img.placement_manager_contact_person_data_export' %}">
+      <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_img.contact_person_data_export' %}">
         {% csrf_token %}
+        <input type=Hidden name='PM' value='1'>
         <button class="btn btn-primary" type="submit">Export</button>
       </form>
       </div>
