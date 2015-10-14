@@ -1238,7 +1238,8 @@ def transaction(request,item_type,pk,ignore_flag = None):
     if itm_user != user:
       messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.\
                               You can only fill the form for the items in your account")
-      return HttpResponseRedirect('/buyandsell/succ_trans/sell/'+pk+'/')
+      return render(request , 'dialog_base_buyandsell.html')
+
 
     if request.method == "POST":
       try:
@@ -1295,16 +1296,15 @@ def transaction(request,item_type,pk,ignore_flag = None):
 
     itm_user=itm.user
     if itm_user != user:
-      messages.error(request,"This item is not added by you,you you cannot fill it's transaction form\
+      messages.error(request,"This request is not added by you,you you cannot fill it's transaction form\
           .You can only fill the form for the items in your account")
-      return HttpResponseRedirect('/buyandsell/succ_trans/request/'+pk+'/')
-
+      return render(request , 'dialog_base_buyandsell.html')
 
     if request.method=="POST":
       try:
         filled_form=SuccessfulTransaction.objects.get(request_item=itm)
         if filled_form:
-          messages.error(request,"oops!This request is already fulfilled,you cant submit the form again!!")
+          messages.error(request,"oops!This request is already fulfilled,you cant submit the form again!")
           return HttpResponseRedirect('/buyandsell/succ_trans/request/'+pk+'/')
       except:
         pass
