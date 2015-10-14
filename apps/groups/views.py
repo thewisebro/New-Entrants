@@ -210,7 +210,8 @@ def group_members(request,username):
     if group.user == user or group.admin == student:
       can_edit = True
     groupinfo = GroupInfo.objects.get_or_create(group=group)[0]
-    m = Membership.objects.filter(groupinfo=groupinfo).order_by('student__admission_year','student__user__name')
+    m = Membership.objects.exclude(student__passout_year__isnull = False).filter(groupinfo=groupinfo).\
+                                            order_by('student__admission_year','student__user__name')
     count = group.groupinfo.members.count()
     return render_to_response('groups/group_members.html', {
         'group' : group,
@@ -224,6 +225,39 @@ def group_members(request,username):
   else:
     return HttpResponseRedirect('/')
 
+
+def group_alumni(request,username):
+  try:
+    group = Group.objects.get(user__username = username)
+  except Group.DoesNotExist as e:
+    return render_to_response('groups/group_members.html', {
+        'error_msg': 'No group found',
+        }, context_instance=RequestContext(request))
+  user = request.user
+  student = None
+  if user.is_authenticated() and user.in_group('Student'):
+    student = user.student
+  if group.is_active == True or group.user == user or group.admin == student:
+    can_edit = False
+    subscribers = get_subscribers_no(group)
+    subscribed = is_user_subscribed(user,group)
+    if group.user == user or group.admin == student:
+      can_edit = True
+    groupinfo = GroupInfo.objects.get_or_create(group=group)[0]
+    m = Membership.objects.exclude(student__passout_year__isnull = True).filter(groupinfo=groupinfo).\
+                                           order_by('student__admission_year','student__user__name')
+    count = group.groupinfo.members.count()
+    return render_to_response('groups/group_alumni.html', {
+        'group' : group,
+        'can_edit' : can_edit,
+        'membership' : m,
+        'count' : count,
+        'subscribers':subscribers,
+        'username':username,
+        'subscribed':subscribed,
+        }, context_instance=RequestContext(request))
+  else:
+    return HttpResponseRedirect('/')
 
 @dialog_login_required
 def member_add(request, username):
