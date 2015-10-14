@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <div class="exporter">
+      <div class="right-div">
       <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_img.contact_person_data_export' %}">
         {% csrf_token %}
         <input type=Hidden name='PM' value='0'>
