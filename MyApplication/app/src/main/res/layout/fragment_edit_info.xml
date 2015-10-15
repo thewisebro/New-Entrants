@@ -38,9 +38,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:hint="Name"
-
                 android:ems="10"
+                android:enabled="false"
                 android:id="@+id/edit_name"
                 android:layout_weight="1" />
         </TableRow>
@@ -53,15 +52,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Enrollment Number:"
-                android:editable="false"
-                />
+                android:text="Enrollment Number:"  />
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
+                android:enabled="false"
                 android:id="@+id/edit_enr"
                 android:layout_weight="1" />
         </TableRow>
@@ -147,6 +145,7 @@
             android:layout_height="wrap_content"
             android:text="Update"
             android:id="@+id/button_update"
+            android:onClick="update"
             android:layout_gravity="center_horizontal" />
 
     </LinearLayout>

@@ -49,7 +49,7 @@ public class Navigation extends ActionBarActivity
                 break;
             case 2:fragment = new PConnectFragment();
                 break;
-            case 4 :fragment= new EditInfoFragment();
+            case 4 :fragment= new EditInfoFragment(user);
                 break;
             case 5: logout();
                 break;

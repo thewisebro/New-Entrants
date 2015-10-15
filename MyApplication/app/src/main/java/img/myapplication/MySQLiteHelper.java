@@ -109,8 +109,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         values.put(KEY_PASSWORD, user.Password);
         values.put(KEY_EMAIL, user.Email);
         values.put(KEY_MOBILE, user.Mobile);
-        values.put(KEY_BRANCH, user.Branch);
-        values.put(KEY_STATE, user.State);
+       // values.put(KEY_BRANCH, user.Branch);
+       // values.put(KEY_STATE, user.State);
         int i=db.update(TABLE_USERS,values," enr_no = ? ", new String[]{user.Enr_No});
         db.close();
         return i;
