@@ -14,7 +14,7 @@ import android.view.MenuItem;
 public class Navigation extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-
+    private User_Model user;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
     private CharSequence mTitle;
@@ -27,7 +27,7 @@ public class Navigation extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
        // mTitle = getTitle();
-
+        user=(User_Model) getIntent().getSerializableExtra("user");
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
     public void logout(){
@@ -53,7 +53,7 @@ public class Navigation extends ActionBarActivity
                 break;
             case 5: logout();
                 break;
-            default: fragment=new ProfileFragment();
+            default: fragment=new ProfileFragment(user);
                 break;
         }
        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
