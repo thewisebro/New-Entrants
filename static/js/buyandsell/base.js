@@ -500,8 +500,8 @@ function request_details(pk,item_name){
   dialog_iframe({
     name:'request_detail_dialog',
     title:item_name,
-    width:600,
-    height:400,
+    width:650,
+    height:520,
     src:'/buyandsell/request_details/'+pk+'/',
     close:function(){opened_dialog=""}
   });

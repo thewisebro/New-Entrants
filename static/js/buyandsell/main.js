@@ -6,11 +6,7 @@
       parent.$(".ui-dialog-titlebar-close").css("display","none");
     }
    */
-    if ($("body").height() > $(window).height())
-    {
-      $("body").css("margin-right",'15px');
-      $("").css("margin-right",'15px');
-    }
+
 
     //this function removes the bug in which item options of my-account page behaved improperly and their visibility toggled irrationally
 
@@ -232,6 +228,8 @@
         $(".send").css("display","none");
       }
     );
+
+    $("#slider-range a:first-child").css("z-index","2");
 
 
     $(document).mouseup
