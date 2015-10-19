@@ -33,6 +33,11 @@
         <div id="user-account">
           <div id="user-thumbnail"><img src="{{ user.photo_url }}"/></div>
         </div>
+        {% if not email_verified %}
+        <div id='email_verification' class='email_verification_email' style='float:left; margin-right: 10px;'>
+          <a href='/#settings/email_auth'>Click here to verify email address</a>
+        </div>
+        {% endif %}
         {% if not_viewed_notifications_count == 0 %}
           <div id="notifications-count" class="notifications-count-inact">0</div>
         {% else %}
