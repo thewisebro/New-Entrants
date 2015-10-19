@@ -491,7 +491,7 @@ function Player() {
     $('#musicSlider').slider({
 
           slide: function(event, ui) {
-          //  $("#musicBlueSlider").css('width',$(this).slider('value'));
+          $("#musicBlueSlider").css('width',$(this).slider('value'));
           sound.pause();
           },
 
