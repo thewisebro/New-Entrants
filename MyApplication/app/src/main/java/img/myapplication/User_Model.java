@@ -11,8 +11,5 @@ public class User_Model implements Serializable{
     public String Branch;
     public String State;
 
-    public User_Model(){
-
-    }
 
 }

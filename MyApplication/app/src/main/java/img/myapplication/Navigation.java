@@ -9,6 +9,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class Navigation extends ActionBarActivity
@@ -60,7 +63,24 @@ public class Navigation extends ActionBarActivity
 
 
     }
+    public void update(View view) {
+        MySQLiteHelper db = new MySQLiteHelper(this);
 
+
+        EditText et_email = (EditText) findViewById(R.id.edit_email);
+        EditText et_number = (EditText) findViewById(R.id.edit_number);
+
+        user.Email = et_email.getText().toString();
+        user.Mobile = et_number.getText().toString();
+
+        if(db.updateUser(user)>0){
+            Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
+        }
+        else if(db.updateUser(user)==0){
+            Toast.makeText(getApplicationContext(),"No update", Toast.LENGTH_SHORT).show();
+        }
+
+    }
     public void getPageTitle(){
 
         String[] mTitleArray = getResources().getStringArray(R.array.tabs);

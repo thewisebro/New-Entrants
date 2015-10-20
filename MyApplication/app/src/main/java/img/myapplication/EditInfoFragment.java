@@ -5,8 +5,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Spinner;
 
 
 public class EditInfoFragment extends Fragment {
@@ -20,25 +21,31 @@ public class EditInfoFragment extends Fragment {
     public EditInfoFragment(User_Model arg){
         user=arg;
     }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
+
         db=new MySQLiteHelper(getContext());
         View view= inflater.inflate(R.layout.fragment_edit_info, container, false);
         et_name=(EditText) view.findViewById(R.id.edit_name);
         et_enr=(EditText) view.findViewById(R.id.edit_enr);
         et_email=(EditText) view.findViewById(R.id.edit_email);
         et_number=(EditText) view.findViewById(R.id.edit_number);
+
         et_name.setText(user.Name);
         et_enr.setText(user.Enr_No);
         et_email.setText(user.Email);
         et_number.setText(user.Mobile);
 
+        Spinner state= (Spinner) view.findViewById(R.id.edit_state);
+        ArrayAdapter<CharSequence> stateList=ArrayAdapter.createFromResource(getContext(),R.array.states,android.R.layout.simple_spinner_item);
+        stateList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        state.setAdapter(stateList);
+        Spinner branch= (Spinner) view.findViewById(R.id.edit_branch);
+        ArrayAdapter<CharSequence> branchList=ArrayAdapter.createFromResource(getContext(),R.array.branches,android.R.layout.simple_spinner_item);
+        branchList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        branch.setAdapter(branchList);
+
         return view;
     }
-    public void update(){
-        et_email=(EditText) getView().findViewById(R.id.edit_email);
-        et_number=(EditText) getView().findViewById(R.id.edit_number);
-        user.Email=et_email.getText().toString();
-        user.Mobile=et_number.getText().toString();
-        db.updateUser(user);
-    }
+
 }

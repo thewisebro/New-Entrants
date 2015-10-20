@@ -10,23 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class Register extends AppCompatActivity {
 
-    public static abstract class FeedEntry implements BaseColumns {
-        public static final String TABLE_NAME = "Entrants";
-        public static final String COLUMN_NAME_NAME = "Name";
-        public static final String COLUMN_NAME_EMAIL = "Email";
-        public static final String COLUMN_NAME_ENR = "Enr_No";
-        public static final String COLUMN_NAME_PASSWORD = "Password";
-        public static final String COLUMN_NAME_MOBILE = "Mobile_No";
-        public static final String COLUMN_NAME_BRANCH = "Branch";
-        public static final String COLUMN_NAME_State = "State";
-        public static final String DATABASE_NAME = "Entrants_Data";
-
-    }
     public User_Model user;
     public MySQLiteHelper db;
 
@@ -37,6 +27,16 @@ public class Register extends AppCompatActivity {
         user=new User_Model();
         setContentView(R.layout.activity_register);
 
+        Spinner state= (Spinner) findViewById(R.id.new_state);
+        ArrayAdapter<CharSequence> stateList=ArrayAdapter.createFromResource(this,R.array.states,android.R.layout.simple_spinner_item);
+        stateList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        state.setAdapter(stateList);
+        Spinner branch= (Spinner) findViewById(R.id.new_branch);
+        ArrayAdapter<CharSequence> branchList=ArrayAdapter.createFromResource(this,R.array.branches,android.R.layout.simple_spinner_item);
+        branchList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        branch.setAdapter(branchList);
+
+
     }
 
     public void register(View view){
@@ -45,9 +45,11 @@ public class Register extends AppCompatActivity {
         user.Password= ((EditText) findViewById(R.id.new_password)).getText().toString().trim();
         user.Email= ((EditText) findViewById(R.id.new_email)).getText().toString().trim();
         user.Mobile= ((EditText) findViewById(R.id.new_number)).getText().toString().trim();
+
+
         if(validate()) {
-            SQLiteDatabase db_ = openOrCreateDatabase(db.DATABASE_NAME, MODE_PRIVATE, null);
-            db_.execSQL("create table if not exists users( enr_no varchar primary key, name varchar, password varchar, email varchar unique, mobile varchar, branch varchar, state varchar);");
+            //SQLiteDatabase db_ = openOrCreateDatabase(db.DATABASE_NAME, MODE_PRIVATE, null);
+            //db_.execSQL("create table if not exists users( enr_no varchar primary key, name varchar, password varchar, email varchar unique, mobile varchar, branch varchar, state varchar);");
 
             db.addUser(user);
 
@@ -61,7 +63,7 @@ public class Register extends AppCompatActivity {
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         String mobilePattern="\\d+";
         String enrPattern="\\d+";
-        String namePattern="[a-zA-Z ]";
+        String namePattern="[a-zA-Z ]+";
         boolean flag=true;
         if (!(user.Email).matches(emailPattern)){
             Toast.makeText(getApplicationContext(), "Invalid valid email address", Toast.LENGTH_SHORT).show();
@@ -96,23 +98,5 @@ public class Register extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class DatabaseHelper extends SQLiteOpenHelper {
 
-        public DatabaseHelper(Context context) {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        }
-
-        public static final int DATABASE_VERSION = 1;
-        public static final String DATABASE_NAME = "FeedReader.db";
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-           // db.execSQL();
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        }
-    }
 }

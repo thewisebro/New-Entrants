@@ -22,23 +22,31 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
     private static final String KEY_BRANCH = "branch";
     private static final String KEY_STATE = "state";
 
-    private static final String[] COLUMNS = {KEY_ENR_NO,KEY_NAME,KEY_PASSWORD,KEY_EMAIL,KEY_MOBILE,KEY_BRANCH,KEY_STATE};
-
     public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS users ( " +
+                " enr_no text primary key,"+
+                "name text,"+
+                "password text,"+
+                "email text ,"+
+                "mobile text ,"+
+                "branch text,"+
+                "state text );" ;
 
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL(CREATE_USERS_TABLE);
 
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String CREATE_USERS_TABLE = "CREATE TABLE users ( " +
+        String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS users ( " +
                 " enr_no text primary key,"+
                 "name text,"+
                 "password text,"+
-                "email text unique,"+
-                "mobile text unique,"+
+                "email text ,"+
+                "mobile text ,"+
                 "branch text,"+
                 "state text );" ;
 
@@ -59,13 +67,25 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
     }*/
     public void addUser(User_Model user){
         SQLiteDatabase db=this.getWritableDatabase();
+        String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS users ( " +
+                " enr_no text primary key,"+
+                "name text,"+
+                "password text,"+
+                "email text ,"+
+                "mobile text ,"+
+                "branch text,"+
+                "state text );" ;
+
+
+        db.execSQL(CREATE_USERS_TABLE);
+
         ContentValues values=new ContentValues();
         values.put(KEY_ENR_NO, user.Enr_No);
         values.put(KEY_NAME, user.Name);
         values.put(KEY_PASSWORD, user.Password);
         values.put(KEY_EMAIL, user.Email);
         values.put(KEY_MOBILE, user.Mobile);
-    //    values.put(KEY_BRANCH, user.Branch);
+       // values.put(KEY_BRANCH, user.Branch);
     //    values.put(KEY_STATE, user.State);
 
         db.insert(TABLE_USERS, null, values);
@@ -75,6 +95,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
     public boolean checkUser(String enr_no, String password){
         SQLiteDatabase db= this.getReadableDatabase();
         Cursor cursor=db.rawQuery("select * from users where enr_no='" + enr_no + "' and password ='" + password + "';", null);
+
         if(cursor.getCount()==0) return false;
         else return true;
     }
@@ -86,8 +107,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         Cursor cursor=db.rawQuery("select * from users where enr_no='"+enr_no+"' and password ='"+password+"';",null);
         if (cursor.getCount()!=0) {
             cursor.moveToFirst();
-      // user.Enr_No="123";
-            user.Enr_No = cursor.getString(1);
+
+            user.Enr_No = cursor.getString(0);
            user.Name = cursor.getString(1);
             user.Password = cursor.getString(2);
             user.Email = cursor.getString(3);
@@ -101,23 +122,42 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
 
 
     }
+
     public int updateUser(User_Model user){
         SQLiteDatabase db=this.getWritableDatabase();
+
         ContentValues values= new ContentValues();
         values.put(KEY_ENR_NO, user.Enr_No);
         values.put(KEY_NAME, user.Name);
         values.put(KEY_PASSWORD, user.Password);
         values.put(KEY_EMAIL, user.Email);
         values.put(KEY_MOBILE, user.Mobile);
-       // values.put(KEY_BRANCH, user.Branch);
+        //values.put(KEY_BRANCH, user.Branch);
        // values.put(KEY_STATE, user.State);
         int i=db.update(TABLE_USERS,values," enr_no = ? ", new String[]{user.Enr_No});
-        db.close();
+
         return i;
+
     }
     public void deleteUser(User_Model user){
         SQLiteDatabase db= this.getWritableDatabase();
         db.delete(TABLE_USERS, " enr_no = ? ", new String[]{ user.Enr_No});
         db.close();
+    }
+
+    public void displayBlog(){
+
+    }
+    public void displayPeers(){
+
+    }
+    public void sortPeers(){
+
+    }
+    public void displaySeniors(){
+
+    }
+    public void sortSeniors(){
+        
     }
 }
