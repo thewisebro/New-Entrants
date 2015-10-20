@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.ListView;
+import android.widget.TextView;
 
 
 public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
@@ -12,7 +14,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
     public static final String DATABASE_NAME = "Entrants_Data";
 
     private static final String TABLE_USERS = "users";
-
+    private static final String TABLE_BLOGS= "blogs";
 
     private static final String KEY_ENR_NO = "enr_no";
     private static final String KEY_NAME = "name";
@@ -104,7 +106,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         User_Model user=new User_Model();
 
         //Cursor cursor= db.query(TABLE_USERS, COLUMNS, " enr_no = ? and password = ? ", new String[]{enr_no, password}, null, null, null, null);
-        Cursor cursor=db.rawQuery("select * from users where enr_no='"+enr_no+"' and password ='"+password+"';",null);
+        Cursor cursor=db.rawQuery("select * from users where enr_no='" + enr_no + "' and password ='" + password + "';", null);
         if (cursor.getCount()!=0) {
             cursor.moveToFirst();
 
@@ -134,7 +136,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         values.put(KEY_MOBILE, user.Mobile);
         //values.put(KEY_BRANCH, user.Branch);
        // values.put(KEY_STATE, user.State);
-        int i=db.update(TABLE_USERS,values," enr_no = ? ", new String[]{user.Enr_No});
+        int i=db.update(TABLE_USERS, values, " enr_no = ? ", new String[]{user.Enr_No});
 
         return i;
 
@@ -149,6 +151,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
 
     }
     public void displayPeers(){
+        ListView peers_state= (ListView) findViewById(R.id.peers_state);
+        for(int i=0; i<3; i++){
+            TextView peer=new TextView(getContext());
+        }
+
 
     }
     public void sortPeers(){
@@ -158,6 +165,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
 
     }
     public void sortSeniors(){
-        
+
     }
 }

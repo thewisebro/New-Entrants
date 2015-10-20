@@ -1,10 +1,22 @@
-<TableRow
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/pconnect_accepted"
+    android:id="@+id/pconnect"
     tools:context="img.newentrants.PeerConnect$PlaceholderFragment"
     android:fillViewport="false">
 
-</TableRow>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/peers_state"
+        android:layout_gravity="center_horizontal|top" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/peers_branch"
+        android:layout_gravity="center" />
+
+</FrameLayout>
