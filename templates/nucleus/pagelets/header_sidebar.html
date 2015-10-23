@@ -80,6 +80,13 @@
             <i class="{{ tab.class }}" style="color:{{ tab.color }}"></i>
           </div>
           <span class="tab-name float-left">{{ tab.name|title }}</span>
+          {% if tab.name == 'notices' %}
+            <div id="android-logo">
+              <a href="https://play.google.com/store/apps/details?id=in.channeli.noticeboard" target="blank">
+                <i class="fa fa-android fa-lg" style="color:#78C257;font-size:22px;margin-left:14px"></i>
+              </a>
+            </div>
+          {% endif %}
         </div>
       {% endfor %}
       <div id="tab-arrow"><div></div></div>

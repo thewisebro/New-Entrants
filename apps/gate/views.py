@@ -65,6 +65,7 @@ def index(request):
       form.process()
       fac.prof=person
       fac.grade_pay = form.cleaned_data['grade_pay']
+      fac.pay_band_basic = form.cleaned_data['pay_band_basic']
       fac.phone_office = form.cleaned_data['phone_no_office']
       fac.phone_resi = form.cleaned_data['phone_no_resi']
       fac.annual_income = form.cleaned_data['income']
@@ -180,7 +181,6 @@ def index(request):
           'department': person.department,
           'date_of_join': join_date,
           'date_of_birth':birth_date,
-          'home_address': person.address,
           'phone_no_office': person.user.contact_no,
           'email': person.user.username+'@iitr.ac.in',
           'age':age,
@@ -207,6 +207,8 @@ def gate_print_pdf(request):
             'date': datetime.datetime.now(),
             'mobile': gate.mobile_no,
             'email' : person.user.username+'@iitr.ac.in',
+            'grade_pay' : gate.grade_pay,
+            'pay_band_basic' : gate.pay_band_basic,
             'week_pref1': gate.week_pref1,
             'week_pref2': gate.week_pref2,
             'city_pref1': gate.city_pref1,
@@ -236,7 +238,7 @@ def gate_allinfo(request):
   response = HttpResponse(content_type='text/csv')
   response['Content-Disposition'] = 'attachment; filename="info.csv"'
   a = csv.writer(response)
-  data = ['Name','Designation','Department','Employee_ID','Date_Of_JoiningIITR','Date Of Joining The Present Position','Mobile','Email','Week_1','Week_2','City_1','City_2','City_3','City_4','City_5','City_6','Phone_Office','Phone_Resi','Height','Weight','Age','Nominee_Name','Relation_Nominee','Annual_Income','Permanent Address']
+  data = ['Name','Designation','Department','Employee_ID','Date_Of_JoiningIITR','Date Of Joining The Present Position','Mobile','Email','Grade Pay','Pay Band Basic','Week_1','Week_2','City_1','City_2','City_3','City_4','City_5','City_6','Phone_Office','Phone_Resi','Height','Weight','Age','Nominee_Name','Relation_Nominee','Annual_Income','Permanent Address']
   a.writerow(data)
   g = Gate.objects.all()
 # import ipdb;ipdb.set_trace()
@@ -249,9 +251,11 @@ def gate_allinfo(request):
       data.append(g[i].prof.department)
       data.append(g[i].prof.employee_code)
       data.append(g[i].prof.date_of_joining)
-      data.append(g[i].date_of_join_position.date())
+      data.append(g[i].date_of_join_position)
       data.append(g[i].mobile_no)
       data.append(g[i].prof.user.username+'@iitr.ac.in')
+      data.append(g[i].grade_pay)
+      data.append(g[i].pay_band_basic)
       data.append(g[i].week_pref1)
       data.append(g[i].week_pref2)
       data.append(g[i].city_pref1)

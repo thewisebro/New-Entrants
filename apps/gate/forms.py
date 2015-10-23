@@ -15,6 +15,7 @@ class GateForm(forms.Form):
     phone_no_office = forms.CharField()
     phone_no_resi = forms.CharField()
     email = forms.EmailField()
+    pay_band_basic = forms.IntegerField(required=False,label = 'Pay Band Basic')
     grade_pay = forms.IntegerField(required=False,label = 'Present Grade Pay')
     income = forms.IntegerField(label='Annual Income')
     home_address = forms.CharField(label = 'Permanent address')

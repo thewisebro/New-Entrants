@@ -10,6 +10,7 @@ class Gate(models.Model):
   declaration = models.BooleanField(default =False)
   prof = models.OneToOneField(Faculty)
   grade_pay = models.IntegerField(null=True,blank=True)
+  pay_band_basic = models.IntegerField(null=True,blank=True)
   mobile_no = models.CharField(max_length=10, null=True, blank=True)
   phone_office = models.CharField(max_length=20,null=True,blank=True)
   phone_resi = models.CharField(max_length=20,null=True,blank=True)
