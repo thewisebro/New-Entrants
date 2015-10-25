@@ -355,7 +355,7 @@ def forum_post(request) :
       messages.error(request, 'Please fill in the Question before submitting.')
       return HttpResponseRedirect(reverse('placement.views.forum', args=[ request.POST['forum_type'] ]))
     elif request.method == 'POST' :
-      if not request.user.groups.filter(name='Student'):
+      if request.user.groups.filter(name='Student'):
         student = request.user.student
         ForumPost.objects.create(enrollment_no = student.user.username,
                                person_name = student.user.name,
