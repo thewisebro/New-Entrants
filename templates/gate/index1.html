@@ -11,7 +11,9 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}jquery/jquery-datetimepicker.css">
 <script>
 $(document).ready(function() {
-        $('.iDateField').datepicker({ dateFormat : 'dd-mm-yy'});
+        $('.iDateField').datepicker({ dateFormat : 'dd-mm-yy',changeMonth: true,
+                changeYear: true,
+                yearRange: "1950:2015"});
         });
 </script>
 </head>
@@ -62,7 +64,7 @@ color:red;
     {% csrf_token %}
     {{ form.non_field_errors }}
     {% ifequal err 1%}
-    <strong>" * City Fields have to be distinct"</strong>
+    <strong>" * City Preferences and Week Preferences have to be distinct"</strong>
     {% endifequal %}
         <div id ='date' style ="visibility:hidden"}>{{curr_date}}</div>
         <div class="fieldWrapper">
@@ -120,6 +122,16 @@ color:red;
           <label for="id_room_no">Email Id:</label>
           {{ form.email }}
         </div>
+        <div class="fieldWrapper">
+          {{ form.grade_pay.errors }}
+          <label for="id_room_no">Grade Pay:</label>
+          {{ form.grade_pay }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.pay_band_basic.errors }}
+          <label for="id_room_no">Pay Band Basic:</label>
+          {{ form.pay_band_basic }}
+        </div>
           <p>Kindly give order of preference of examination weekends for GATE 2016</p>
         <div class="fieldWrapper">
           {{ form.pref1.errors }}
@@ -128,10 +140,12 @@ color:red;
           {{ form.pref2.errors }}
           <label for="id_family_income">Second Preference:</label>
           {{ form.pref2 }}
-          <br/>
-          <p>Kindly fill your preference of examination Cities for GATE 2016 (First Choice)</p>
+          </br>
+          <p>Kindly fill your preference of examination Cities for GATE 2016:</p>
+          </br>
         <div class="fieldWrapper">
           {{ form.city1.errors }}
+          <label for="id_city2">First choice:</label>
           {{ form.city1 }}
         </div>
           {{ form.city2.errors }}
@@ -170,11 +184,11 @@ color:red;
           <br/>
         <div class="fieldWrapper">
           {{ form.home_address.errors }}
-          <label for="id_home_address">Permanent Address:</label>
+          <label for="id_home_address">Residential Address:</label>
           {{ form.home_address }}
         </div>
           {{ form.income.errors }}
-          <label for="id_family_income">Annual Income:</label>
+          <label for="id_family_income">Annual Income(Lakhs):</label>
           {{ form.income }} Rs. (No commas)
           <br/>
         <div class="fieldWrapper">

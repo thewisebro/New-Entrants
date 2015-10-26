@@ -1,6 +1,7 @@
 #type of scholarship
 
 WEEKS= (
+    ('None','None'),
     ('WEEK1','January 30-31, 2016'),
     ('WEEK2','February 06-07, 2016'),
     )
@@ -10,7 +11,7 @@ WEEKS= (
 
 CITIES=(
     ('None','None'),
-    ('Any Of These', 'Any Of These'),
+    ('Any Exam City', 'Any Exam City '),
     ('Amritsar','Amritsar'),
      ('Bathinda','Bathinda'),
      ('Chandigarh-Mohali-Fatehgarh Sahib','Chandigarh-Mohali-Fatehgarh Sahib'),
