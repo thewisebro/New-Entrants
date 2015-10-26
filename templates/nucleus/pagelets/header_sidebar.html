@@ -34,8 +34,8 @@
           <div id="user-thumbnail"><img src="{{ user.photo_url }}"/></div>
         </div>
         {% if not email_verified %}
-        <div id='email_verification' class='email_verification_email' style='float:left; margin-right: 10px;'>
-          <a href='/#settings/email_auth'>Click here to verify email address</a>
+        <div id='email_verification' class='email_verification_email' style='float:left; margin-right: 15px; margin-top:-4px;'>
+          <a href='/#settings/email_auth'><span class='error message-span'>Click here to verify email address</span></a>
         </div>
         {% endif %}
         {% if not_viewed_notifications_count == 0 %}
@@ -80,6 +80,13 @@
             <i class="{{ tab.class }}" style="color:{{ tab.color }}"></i>
           </div>
           <span class="tab-name float-left">{{ tab.name|title }}</span>
+          {% if tab.name == 'notices' %}
+            <div id="android-logo">
+              <a href="https://play.google.com/store/apps/details?id=in.channeli.noticeboard" target="blank">
+                <i class="fa fa-android fa-lg" style="color:#78C257;font-size:22px;margin-left:14px"></i>
+              </a>
+            </div>
+          {% endif %}
         </div>
       {% endfor %}
       <div id="tab-arrow"><div></div></div>
