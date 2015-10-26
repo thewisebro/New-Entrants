@@ -13,6 +13,7 @@ CITIES=(
     ('None','None'),
     ('Any Exam City', 'Any Exam City '),
     ('Amritsar','Amritsar'),
+    ('Ambala','Ambala'),
      ('Bathinda','Bathinda'),
      ('Chandigarh-Mohali-Fatehgarh Sahib','Chandigarh-Mohali-Fatehgarh Sahib'),
      ('Dehradun','Dehradun'),
