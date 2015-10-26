@@ -1,11 +1,11 @@
 package img.myapplication;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.View;
 
 
 public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
@@ -15,6 +15,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
 
     private static final String TABLE_USERS = "users";
     private static final String TABLE_BLOGS= "blogs";
+
+    private static final String KEY_AUTHOR = "author";
+    private static final String KEY_TOPIC = "topic";
+    private static final String KEY_TAG = "tag";
+    private static final String KEY_TEXT = "text";
 
     private static final String KEY_ENR_NO = "enr_no";
     private static final String KEY_NAME = "name";
@@ -147,24 +152,39 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         db.close();
     }
 
-    public void displayBlog(){
+    public void displayBlog(View view, int tag){
+        SQLiteDatabase db= getReadableDatabase();
+        Blog_Model blog=new Blog_Model();
+        Cursor cursor;
+        switch (tag){
+            case 0:cursor=db.rawQuery("select * from blogs order by tag;", null);
+                break;
+            default:cursor=db.rawQuery("select * from blogs order by tag;", null);
+                break;
 
-    }
-    public void displayPeers(){
-        ListView peers_state= (ListView) findViewById(R.id.peers_state);
-        for(int i=0; i<3; i++){
-            TextView peer=new TextView(getContext());
         }
+        cursor.moveToFirst();
+        for(int i=0;i<cursor.getCount(); i++){
+            blog.author=cursor.getString(0);
+            blog.topic=cursor.getString(1);
+            blog.tag=cursor.getString(2);
+            blog.text=cursor.getString(3);
 
-
+        }
     }
-    public void sortPeers(){
 
-    }
-    public void displaySeniors(){
+    public void addBlog(Blog_Model blog){
 
-    }
-    public void sortSeniors(){
+        SQLiteDatabase db=this.getWritableDatabase();
 
+        ContentValues values=new ContentValues();
+        values.put(KEY_AUTHOR, blog.author);
+        values.put(KEY_TOPIC, blog.topic);
+        values.put(KEY_TAG, blog.tag);
+        values.put(KEY_TEXT, blog.text);
+
+
+        db.insert(TABLE_BLOGS, null, values);
     }
+
 }

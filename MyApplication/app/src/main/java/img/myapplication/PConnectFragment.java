@@ -8,6 +8,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class PConnectFragment extends Fragment {
 
@@ -28,6 +30,7 @@ public class PConnectFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pconnect, container, false);
+        displayPeers(inflater);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
         mViewPager = (ViewPager) view.findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -64,6 +67,21 @@ public class PConnectFragment extends Fragment {
             }
             return null;
         }
+    }
+    public void displayPeers(LayoutInflater inflater){
+        View view = inflater.inflate(R.layout.fragment_pconnect, container, false);
+        LinearLayout peers_state= (LinearLayout) view.findViewById(R.id.peers_state);
+        for(int i=0; i<3; i++){
+            TextView peer=new TextView(getContext());
+
+            peer.setText();
+            peers_state.addView(peer);
+        }
+
+
+    }
+    public void sortPeers(){
+
     }
 
     public static class TabbedContentFragment extends Fragment {

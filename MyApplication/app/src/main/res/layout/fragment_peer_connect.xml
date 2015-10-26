@@ -7,16 +7,17 @@
     tools:context="img.newentrants.PeerConnect$PlaceholderFragment"
     android:fillViewport="false">
 
-    <ListView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/peers_state"
-        android:layout_gravity="center_horizontal|top" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal|top"
+        android:id="@+id/peers_state"></LinearLayout>
 
-    <ListView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/peers_branch"
-        android:layout_gravity="center" />
-
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal|bottom"
+        android:id="@+id/peers_branch"></LinearLayout>
 </FrameLayout>

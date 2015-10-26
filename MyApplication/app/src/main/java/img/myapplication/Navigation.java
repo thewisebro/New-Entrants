@@ -120,6 +120,12 @@ public class Navigation extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
+    public void addBlog(View view){
+
+    }
+    public void sortBlog(View view){
+
+    }
 
 
 }
