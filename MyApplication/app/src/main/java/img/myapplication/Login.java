@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class Login extends AppCompatActivity {
     private EditText Enr_No;
@@ -34,6 +35,7 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+        else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();
     }
     public void register_click(View view){
         Intent intent = new Intent(this, Register.class);

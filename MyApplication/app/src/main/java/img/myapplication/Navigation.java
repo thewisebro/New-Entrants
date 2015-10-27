@@ -48,9 +48,9 @@ public class Navigation extends ActionBarActivity
                 break;
             case 1:fragment = new BlogsFragment();
                  break;
-            case 3:fragment = new SConnectFragment();
+            case 2:fragment = new ConnectFragment(1);
                 break;
-            case 2:fragment = new PConnectFragment();
+            case 3:fragment = new ConnectFragment(0);
                 break;
             case 4 :fragment= new EditInfoFragment(user);
                 break;

@@ -30,7 +30,7 @@ public class PConnectFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pconnect, container, false);
-        displayPeers(inflater);
+       // displayPeers(view);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
         mViewPager = (ViewPager) view.findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -68,13 +68,12 @@ public class PConnectFragment extends Fragment {
             return null;
         }
     }
-    public void displayPeers(LayoutInflater inflater){
-        View view = inflater.inflate(R.layout.fragment_pconnect, container, false);
+    public void displayPeers(View view){
         LinearLayout peers_state= (LinearLayout) view.findViewById(R.id.peers_state);
         for(int i=0; i<3; i++){
             TextView peer=new TextView(getContext());
 
-            peer.setText();
+            //peer.setText();
             peers_state.addView(peer);
         }
 

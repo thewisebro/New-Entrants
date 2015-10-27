@@ -52,6 +52,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_create__sample__table">Create_Sample_Table</string>
 
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 
 

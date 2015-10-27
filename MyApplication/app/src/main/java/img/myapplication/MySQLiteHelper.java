@@ -20,6 +20,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
     private static final String KEY_TOPIC = "topic";
     private static final String KEY_TAG = "tag";
     private static final String KEY_TEXT = "text";
+    private static final String KEY_DATE="date";
 
     private static final String KEY_ENR_NO = "enr_no";
     private static final String KEY_NAME = "name";
@@ -68,10 +69,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
 
         this.onCreate(db);
     }
-  /*  public void createTable(){
-        SQLiteDatabase db= SQLiteDatabase.openOrCreateDatabase(DATABASE_NAME,null,null);
-        db.execSQL("create table if not exists users( enr_no varchar primary key, name varchar, password varchar, email varchar unique, mobile varchar, branch varchar, state varchar);");
-    }*/
+
     public void addUser(User_Model user){
         SQLiteDatabase db=this.getWritableDatabase();
         String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS users ( " +
@@ -161,7 +159,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
                 break;
             default:cursor=db.rawQuery("select * from blogs order by tag;", null);
                 break;
-
         }
         cursor.moveToFirst();
         for(int i=0;i<cursor.getCount(); i++){
@@ -169,7 +166,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
             blog.topic=cursor.getString(1);
             blog.tag=cursor.getString(2);
             blog.text=cursor.getString(3);
-
+            blog.date=cursor.getString(4);
         }
     }
 
