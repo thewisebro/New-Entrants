@@ -377,7 +377,6 @@ def sell(request):
         new_item.save()
         app = 'buyandsell'
         watch_user_list = new_item.category.watch_users.all()
-        print watch_user_list
         notif_text = str(new_item.item_name)+" has been added to the category "+str(new_item.category.name)
         notif_text += " that you have watched"
         url = '/buyandsell/sell_details/' + str(new_item.pk)
@@ -1098,7 +1097,6 @@ def edit(request,form_type,pk):
           if edited_item.category !=  old_category:
             app='buyandsell'
             watch_user_list=edited_item.category.watch_users.all()
-            print watch_user_list
             notif_text=str(edited_item.item_name)+"has been added in the category"+str(edited_item.category.name)
             notif_text+="that you have watched"
             url = '/buyandsell/sell_details/' + str(edited_item.pk)
@@ -1158,7 +1156,6 @@ def edit(request,form_type,pk):
           if edited_item.category !=  old_category:
             app='buyandsell'
             watch_user_list=edited_item.category.watch_users.all()
-            print watch_user_list
             notif_text=str(edited_item.item_name)+"has been requested in the category"+str(edited_item.category.name)
             notif_text+="that you have watched"
             url = '/buyandsell/sell_details/' + str(edited_item.pk)
@@ -1391,7 +1388,6 @@ def  get_watched_categories(request):
       del watched_cat_dict[main_cat]
     elif count == cat_len:
       main_watched_cat.append(main_cat)
-  print watched_cat_dict
   return main_watched_cat,sub_watched_cat,watched_cat_dict
 
 
