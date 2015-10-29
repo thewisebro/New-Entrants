@@ -501,7 +501,7 @@ function request_details(pk,item_name){
     name:'request_detail_dialog',
     title:item_name,
     width:650,
-    height:520,
+    height:485,
     src:'/buyandsell/request_details/'+pk+'/',
     close:function(){opened_dialog=""}
   });
@@ -661,13 +661,38 @@ $(document).ready
     (
       function()
       {
-        if((".item-options-button", $(".thumbnailBG")).attr('aria-expanded')== 'true')
+
+        if($(".item-options-button").attr('aria-expanded')== 'false')
         {
-          //$(".dropdown", $(".thumbnailBG")).hide();
+          console.log("false tha wo");
           $(this).hide();
         }
+
+        else if($(".item-options-button").attr('aria-expanded')== 'true')
+        {
+          console.log("nahi nahi true tha wo");
+          $(this).hide();
+        }
+
+        else
+        {
+          console.log("kuchh nahi hua");
+        }
+
+        /*
+        if (".dropdown", $(this).hasClass("open"))
+        {
+          $(this).hide();
+        }
+        else
+        {
+          // not inside
+        }
+        */
       }
     );
+
+
 
 
  /*   $(".request").mouseover
@@ -687,6 +712,8 @@ $(document).ready
       }
     );
 */
+
+    /*
     $(".thumbnailBG-my-account").click
     (
       function() //opens light box with details for the clicked item-for-sale
@@ -702,6 +729,7 @@ $(document).ready
         $(".modal-price").html(modalPrice);
       }
     );
+    */
 
   }
 );

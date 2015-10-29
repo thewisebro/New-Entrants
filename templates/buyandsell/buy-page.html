@@ -104,13 +104,13 @@
 
               <div class="left-box-main-link-div">
                 {% if search_flag %}
-                <a href="/buyandsell/see_all/requests/?{% if queries %}{{queries.urlencode}}{% endif %}">
+                <a href="/buyandsell/see_all/requests/?{% if queries %}{{queries.urlencode}}{% endif %}" class="left-box-main-link-dormant">
                   <span>
                     Requests
                   </span>
                 </a>
                 {% else %}
-                <a href="/buyandsell/viewrequests{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}">
+                <a href="/buyandsell/viewrequests{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}" class="left-box-main-link-dormant">
                   <span>
                     Requests
                   </span>
@@ -147,7 +147,7 @@
                   {% endif %}
                 </ul>
               </div>
-              <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0;margin-left: 30px;border-top-left-radius: 0;border-top-right-radius: 0;min-width: 205px; " role="menu" aria-labelledby="category-filter">
+              <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0;margin-left: 30px;border-top-left-radius: 0;border-top-right-radius: 0;min-width: 199px; " role="menu" aria-labelledby="category-filter">
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/buy">Latest</a></li>
                 {% for key,value in cat_dict.iteritems %}
                 <li role="presentation" class="dropdown-submenu">

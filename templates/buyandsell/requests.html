@@ -6,7 +6,8 @@
 
     <div class="header-logo-div">
       <a href="/buyandsell/buy">
-        <h1 class="logo">Buy & Sell</h1>
+        <img src="{{STATIC_URL}}images/buyandsell/logo.png" class="header-logo-image">
+
       </a>
     </div>
     <!--Search box HTML starts here-->
@@ -84,9 +85,11 @@
     <div id="header-options">
       <div class="sign-in-button" onclick="open_login_dialog(from_buyandsell=true)">Sign In</div>
     </div>
+    <!--
     <div class="sign-in-request-text">
       Sign in to have a better experience
     </div>
+    -->
 
 
     {% endif %}
@@ -186,13 +189,13 @@
             <form action="" class="input-group-addon view-what" style="padding: 0;">
               <div class="left-box-main-link-div">
                 {% if search_flag %}
-                <a href="/buyandsell/see_all/sell/?{% if queries %}{{queries.urlencode}}{% endif %}">
+                <a href="/buyandsell/see_all/sell/?{% if queries %}{{queries.urlencode}}{% endif %}" class="left-box-main-link-dormant">
                   <span>
                     Items for Sale
                   </span>
                 </a>
                 {% else %}
-                <a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}">
+                <a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}" class="left-box-main-link-dormant">
                   <span>
                     Items for Sale
                   </span>
@@ -243,7 +246,7 @@
                   {% endif %}
                 </ul>
               </div>
-              <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0;margin-left: 30px;border-top-left-radius: 0;border-top-right-radius: 0;min-width: 205px; "  role="menu" aria-labelledby="category-filter">
+              <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0;margin-left: 30px;border-top-left-radius: 0;border-top-right-radius: 0;min-width: 199px; "  role="menu" aria-labelledby="category-filter">
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/viewrequests">Latest</a></li>
 
                 {% for key,value in cat_dict.iteritems %}

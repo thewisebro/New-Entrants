@@ -75,11 +75,10 @@ a:focus
 .search-icon
 {
   position:absolute;
-  right:5px;
-  top:5px;
+  right:6px;
+  top:6px;
   color: #1081de;
-  width: 15px;
-  height: 15px;
+  width: 12px;
 }
 
 .global-browse
@@ -107,21 +106,22 @@ a:focus
   text-align:center;
   margin-right: 14px;
   padding-top:2px;
-  border:1px solid #cbcbcb;
+  border:1px solid #d07728;
   border-radius:2px;
   font-size:13px;
   position: relative;
   float: right;
   background-color:white;
-  color:#1b8947;
+  color:#d07728;
 }
 
 .global-button:hover
 {
   border-radius:2px;
   font-size:13px;
-  background-color:#1b8947;
+  background-color:#d07728;
   color:white;
+  border: 1px solid #d07728;
 }
 
 .headerBackground
@@ -140,6 +140,12 @@ a:focus
   padding: 0;
   min-width: 765px;
 }
+
+.header-sell-button
+{
+  padding: 2px 24px;
+}
+
 
 .breadcrumb
 {
@@ -187,12 +193,14 @@ a:focus
   margin-right: 0px;
   right: 16px;
   top: 10px;
+  border: 1px solid #CCCCCC;
 }
 
 .watch-button:hover
 {
   background-color:#1081de;
   color:white;
+  border: 1px solid #1081de;
 }
 
 .watch-button:focus
@@ -266,23 +274,33 @@ a:focus
   z-index: 1;
 }
 
+.my-account-left-box
+{
+  padding-top:15px;
+  padding-left:15px;
+}
+
 .left-box-main-link-div a
 {
   display: block;
-  padding: 15px;
+  padding: 10px;
   padding-left: 30px;
-  color: #333333;
-}
-
-.left-box-main-link-div a:hover
-{
-  background-color: #dddddd;
 }
 
 .left-box-main-link-active
 {
-  background-color: #dddddd;
-  border-left: 1px solid #1081DE;
+  background-color: #1081de;
+  color: #ffffff;
+}
+
+.left-box-main-link-active:hover
+{
+   color: #ffffff;
+}
+
+.left-box-main-link-dormant
+{
+  background-color: transparent;
   color: #333333;
 }
 
@@ -442,7 +460,11 @@ input[type="radio"]:checked + label div
   position: relative;
   margin-left: 290px;
   padding-left: 0;
+}
 
+.my-account-page-content
+{
+  margin-top: 10px;
 }
 
 .page-content table tbody tr
@@ -733,6 +755,20 @@ a: focus
   margin-top: -45px;
 }
 
+.upload-without-image-button
+{
+  border: 1px solid #aaaaaa;
+  position: absolute;
+  right: 260px;
+  margin-top: -45px;
+}
+
+.upload-without-image-button:hover
+{
+  background-color: #aaaaaa;
+  color: #ffffff;
+}
+
 .enquire-clicked
 {
   display:none;
@@ -829,13 +865,11 @@ a: focus
 {
   margin: 0px 0px 0px 12px;
   padding:4px 24px 4px 12px;
-  border-left: 1px solid transparent;
 }
 
 .searched-item:hover
 {
   background-color: #ededed;
-  border-left: 1px solid #1081de;
 }
 
 .searched-item-name
@@ -908,7 +942,7 @@ tr
   float: right;
   margin-right: 35px;
   border: 1px solid #1081de;
-  padding-top: 0;
+  padding: 5px 10px 25px 10px;
 }
 
 .watched-main
@@ -1302,17 +1336,18 @@ a:focus
 .sign-in-button
 {
   display: inline;
-  position: fixed;
-  right: 15px;
-  top: 15px;
+  position: relative;
+  float: right;
+  margin-right: -15px;
   background-color: #1081DE;
-  color: #ffffff;
+  color: #FFF;
   padding: 3px 10px;
   font-size: 13px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
   cursor: pointer;
+  top: -25px;
 }
 
 .sign-in-request-text
@@ -1379,7 +1414,7 @@ a:focus
   margin: 20px auto 12px -12px;
   text-align: left;
   font-weight: bold;
-  padding-left: 35px;
+  padding-left: 30px;
   display: inline-block;
 }
 
@@ -1448,7 +1483,7 @@ a:focus
 
 .phone-no-visibility-info-text
 {
-  padding: 0 25px;
+  padding: 0 20px;
   font-size: 13px;
   font-style: italic;
   color: #7D7D7D;
@@ -1792,7 +1827,7 @@ border-bottom: 1px solid #EEE;
 .active-category
 {
   margin-left: 30px;
-  width: 80%;
+  width: 77%;
   border: 1px solid transparent;
   padding: 5px 0;
   cursor: pointer;
@@ -1883,6 +1918,18 @@ border-bottom: 1px solid #EEE;
   position: relative;
   float: left;
   margin-top: 4px;
+}
+
+.header-logo-image
+{
+  height: 30px;
+}
+
+.e-bazaar-text
+{
+  margin-left: 25px;
+  font-weight: bold;
+  font-size: 13px;
 }
 
 .browse-button-div

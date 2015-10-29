@@ -58,7 +58,8 @@
 
     <div class="header-logo-div">
       <a href="/buyandsell/buy">
-        <h1 class="logo">Buy & Sell</h1>
+        <img src="{{STATIC_URL}}images/buyandsell/logo.png" class="header-logo-image">
+
       </a>
     </div>
     <!--Search box HTML starts here-->
@@ -135,9 +136,11 @@
     <div id="header-options">
       <div class="sign-in-button" onclick="open_login_dialog(from_buyandsell=true)">Sign In</div>
     </div>
+    <!--
     <div class="sign-in-request-text">
       Sign in to have a better experience
     </div>
+    -->
 
 
     {% endif %}

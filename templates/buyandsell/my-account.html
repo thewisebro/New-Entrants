@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="full-page-transparent-overlay"></div>
-<div class="container" style="min-width: 765px; padding-left: 23px;">
+<div class="container" style="min-width: 765px; ">
   {% if messages %}
   {% for message in messages %}
   <div class="alert alert-{{ message.tags }}">{{ message }} </div>
@@ -28,7 +28,7 @@
   {% block leftbox %}
   <div class="row">
     <div>
-      <div class="left-box">
+      <div class="left-box my-account-left-box">
         <div class="row">
           <div class="col-md-12">
 
@@ -42,7 +42,7 @@
             </div>
             <div id="show_contact" class="phone-no-visibility-toggle-button"></div>
             <p class="phone-no-visibility-info-text">Decide whether people can see your phone number.</p>
-            <div class="left-division-line"></div>
+            <div class="left-division-line" style="margin-left: -15px; width: 258px;"></div>
 
             {% else %}
             <p class="your-phone-no">My Phone No.</p>
@@ -77,16 +77,16 @@
             </ul>
 
             {% if not watched_cat_dict %}
-            <p class="you-are-not-watching">You are not watching any category.</p>
+            <p class="you-are-not-watching">Get notified for updates in the categories you watch.</p>
             {% endif %}
 
-            <button type="button" onclick="manage()"  class="global-browse manage-watched-button">Manage</button>
+            <button type="button" onclick="manage()"  class="global-browse manage-watched-button">Choose Categories</button>
           </div>
         </div>
       </div>
     </div>
     {% endblock %}
-    <div class="page-content">
+    <div class="page-content my-account-page-content">
 
       <p class="my-account-page-headings">Added for Sale</p>
       <div class="row">
