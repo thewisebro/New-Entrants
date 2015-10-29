@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.view.View;
 
 
 public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
@@ -150,38 +149,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         db.close();
     }
 
-    public void displayBlog(View view, int tag){
-        SQLiteDatabase db= getReadableDatabase();
-        Blog_Model blog=new Blog_Model();
-        Cursor cursor;
-        switch (tag){
-            case 0:cursor=db.rawQuery("select * from blogs order by tag;", null);
-                break;
-            default:cursor=db.rawQuery("select * from blogs order by tag;", null);
-                break;
-        }
-        cursor.moveToFirst();
-        for(int i=0;i<cursor.getCount(); i++){
-            blog.author=cursor.getString(0);
-            blog.topic=cursor.getString(1);
-            blog.tag=cursor.getString(2);
-            blog.text=cursor.getString(3);
-            blog.date=cursor.getString(4);
-        }
-    }
 
-    public void addBlog(Blog_Model blog){
-
-        SQLiteDatabase db=this.getWritableDatabase();
-
-        ContentValues values=new ContentValues();
-        values.put(KEY_AUTHOR, blog.author);
-        values.put(KEY_TOPIC, blog.topic);
-        values.put(KEY_TAG, blog.tag);
-        values.put(KEY_TEXT, blog.text);
-
-
-        db.insert(TABLE_BLOGS, null, values);
-    }
 
 }

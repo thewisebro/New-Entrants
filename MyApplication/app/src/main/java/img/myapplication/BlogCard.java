@@ -4,5 +4,6 @@ public class BlogCard {
     public String topic;
     public String shortInfo;
     public String author;
-    public String tag;
+    public String category;
+    public String date;
 }

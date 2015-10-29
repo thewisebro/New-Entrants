@@ -7,7 +7,7 @@
     android:paddingRight="15dp"
     android:descendantFocusability="beforeDescendants">
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,22 +22,39 @@
             android:id="@+id/topic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Text line 1"/>
+            android:text="Text line 1"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
         <TextView
             android:id="@+id/shortInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Text line 2"/>
+            android:text="Text line 2"
+            android:layout_below="@id/topic"
+            android:layout_centerHorizontal="true"/>
         <TextView
             android:id="@+id/author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Text line 1"/>
+            android:text="Text line 1"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/shortInfo"/>
         <TextView
-            android:id="@+id/tag"
+            android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Text line 1"/>
+            android:text="Text line 1"
+            android:layout_below="@id/shortInfo"
+            android:paddingLeft="5dp"
+            android:layout_toRightOf="@id/author"/>
+        <TextView
+            android:id="@+id/category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text line 1"
+            android:layout_below="@id/author"
 
-    </LinearLayout>
+            android:layout_centerHorizontal="true"/>
+
+    </RelativeLayout>
 </FrameLayout>
