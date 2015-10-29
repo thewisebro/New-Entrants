@@ -1,5 +1,5 @@
 import os.path
-
+import hashlib
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator
 
@@ -226,6 +226,21 @@ class Results(models.Model):
   def __unicode__(self):
     return str(self.student) + str(self.company)
 
+class ResumeStudentMap(models.Model):
+  """This model contains mapping of students with resume name. This will be used in Resume Preview"""
+
+  plac_person = models.ForeignKey(PlacementPerson, unique=True)
+  resume_name = models.CharField(max_length=44)
+
+  def __init__(self, *args, **kwargs):
+    super(ResumeStudentMap, self).__init__(*args, **kwargs)
+    self.plac_person = kwargs.pop('plac_person')
+    self.resume_name = hashlib.sha1(str(self.plac_person.student.user.username)+'a random string').hexdigest()
+
+  def __unicode__(self):
+    return str(self.plac_person)+" "+str(self.resume_name)
+
+
 class PpoRejection(models.Model):
   """
     This model contains information regarding students who has accepted PPO.
@@ -305,6 +320,7 @@ class Notices(models.Model):
     filename = filename.replace('__',' ')
     filename = '.'.join(filename.split('.')[:-1])
     return filename
+
 # Miscellaneous models start.
 class CompanySlot(models.Model):
     """
@@ -371,6 +387,7 @@ class CompanyContactInfo(models.Model):
 
     def __unicode__(self):
         return str(self.name)+str(self.status)
+
 class ContactPerson(models.Model):
     """
         Details of person inside the company whom campus contact would be

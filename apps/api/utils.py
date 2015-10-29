@@ -40,6 +40,15 @@ def dialog_login_required(view):
       return render(request, 'dialog_base.html')
   return wrapped_view
 
+def dialog_login_required_buyandsell(view):
+  @wraps(view)
+  def wrapped_view(request, *args, **kwargs):
+    if request.user.is_authenticated():
+      return view(request, *args, **kwargs)
+    else:
+      return render(request, 'dialog_base_buyandsell.html')
+  return wrapped_view
+
 def ajax_login_required(view):
   @wraps(view)
   def wrapped_view(request, *args, **kwargs):

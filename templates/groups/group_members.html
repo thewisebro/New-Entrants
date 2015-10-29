@@ -2,7 +2,7 @@
 
 {% block members-tab-class %}content-tab-active{% endblock%}
 
-{% block group_content %}      
+{% block group_content %}
     <div class="groups-info">
       <div class="groups-about-content">
         {% for members in membership %}
@@ -11,13 +11,13 @@
               <img src="/photo/{{members.student.user.username}}/" class='member-pic'>
             </div>
             <div class="member-tab-info">
-              <div class="member-tab-person">  
+              <div class="member-tab-person">
                 {{members.student.user.html_name}}
               </div>
-              <div class="member-tab-post">  
+              <div class="member-tab-post">
                 {{members.post}}
               </div>
-            </div>  
+            </div>
           </div>
         {% endfor %}
         <div class="clear-both"></div>

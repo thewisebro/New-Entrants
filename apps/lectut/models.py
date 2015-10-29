@@ -75,6 +75,7 @@ class Post(models.Model):
 
   def delete_post(self):
     self.deleted = True
+    Notification.delete_notification('lectut',self)
     self.save()
     return None
  

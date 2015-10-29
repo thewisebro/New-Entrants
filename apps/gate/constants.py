@@ -1,6 +1,7 @@
 #type of scholarship
 
 WEEKS= (
+    ('None','None'),
     ('WEEK1','January 30-31, 2016'),
     ('WEEK2','February 06-07, 2016'),
     )
@@ -9,7 +10,10 @@ WEEKS= (
 #payment choice of student in case if SC/ST scholarship
 
 CITIES=(
+    ('None','None'),
+    ('Any Exam City', 'Any Exam City '),
     ('Amritsar','Amritsar'),
+    ('Ambala','Ambala'),
      ('Bathinda','Bathinda'),
      ('Chandigarh-Mohali-Fatehgarh Sahib','Chandigarh-Mohali-Fatehgarh Sahib'),
      ('Dehradun','Dehradun'),

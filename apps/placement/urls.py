@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = patterns('placement.views',
   (r'^$', 'index'),
+  (r'^preview_resume/$','preview_resume'),
   (r'^resume/$','resume'),
   (r'^resume_nik/$','resume_nik'),
   (r'^toggle/$','toggle'),
@@ -39,7 +40,7 @@ urlpatterns += patterns('placement.views_img',
                        (r'^registration/$','generate_registration_no'),
                        (r'^contact_manager/$','placement_manager_view'),
                        (r'^contact_manager/contactperson_data/$','placement_manager_contact_person_data'),
-                       (r'^contact_manager/contactperson_data_export/$','placement_manager_contact_person_data_export'),
+                       (r'^contact_manager/contactperson_data_export/$','contact_person_data_export'),
                        (r'^company_coordinator/$', 'company_coordinator_view'),
                        (r'^contact_manager/(?P<user_id>\d+)/$', 'company_coordinator_view'),
                        (r'^company_coordinator/contactperson_data/$','company_coordinator_contact_person_data'),
@@ -57,7 +58,7 @@ urlpatterns += patterns('placement.views_img',
                        (r'^contact_manager/add/$', 'add_company_coordinator'),
                        (r'^contact_manager/person_search/$', 'person_search'),
                        (r'^contact_manager/company_search/$', 'company_search'),
-#                      (r'^contact_manager/generate_xls/$', 'generate_company_contact_xls'),
+                       (r'^contact_manager/import/$', 'import_contacts_excel'),
     )
 
 # Admin urls

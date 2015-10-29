@@ -2,7 +2,7 @@ from nucleus.models import Batch, Course, User, Student, Faculty
 from regol.models import RegisteredCourses, CourseDetails
 
 count = 0
-reg_courses = RegisteredCourses.objects.filter(semester_type = 'A').filter(year=2015).all()
+reg_courses = RegisteredCourses.objects.filter(semester_type = 'A').filter(year=2015).filter(cleared_status='CUR').all()
 for some_course in reg_courses:
   try:
     some_student = some_course.student

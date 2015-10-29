@@ -1,0 +1,457 @@
+{% extends "buyandsell/base.html" %}
+
+{% block content %}
+
+<div class="full-page-transparent-overlay"></div>
+<div class="container" style="min-width: 765px;">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">{{ message }} </div>
+  {% endfor %}
+  {% endif %}
+  <div class="row sub-header">
+    <div>
+      <ol class="breadcrumb">
+        <li class="active"><a href="#">My Account</a></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-9">
+      <div class="division-line">
+      </div>
+    </div>
+  </div>
+  {% block leftbox %}
+  <div class="row">
+    <div>
+      <div class="left-box">
+        <div class="row">
+          <div class="col-md-12">
+
+            {% if show_contact %}
+            <p class="your-phone-no">My Phone No.</p>
+            <div class="phone-no-visibility-toggle">
+              <div class="phone-no-visibility-toggle-slider">
+                <div  id="contact_hidden" class="phone-no-visibility-toggle-options phone-no-hidden">HIDDEN</div>
+                <div id="contact_visible" class="phone-no-visibility-toggle-options phone-no-visible">VISIBLE</div>
+              </div>
+            </div>
+            <div id="show_contact" class="phone-no-visibility-toggle-button"></div>
+            <p class="phone-no-visibility-info-text">Decide whether people can see your phone number.</p>
+            <div class="left-division-line"></div>
+
+            {% else %}
+            <p class="your-phone-no">My Phone No.</p>
+            <div class="phone-no-visibility-toggle">
+              <div  class="phone-no-visibility-toggle-slider phone-no-visibility-toggle-slider-hidden">
+                <div id="contact_hidden" class="phone-no-visibility-toggle-options phone-no-hidden">HIDDEN</div>
+                <div id="contact_visible" class="phone-no-visibility-toggle-options phone-no-visible">VISIBLE</div>
+              </div>
+            </div>
+            <div id="show_contact" class="phone-no-visibility-toggle-button phone-no-visibility-toggle-button-hidden"></div>
+            <p id="contact_txt"class="phone-no-visibility-info-text">Decide whether people can see your phone number.</p>
+            <div class="left-division-line"></div>
+
+            {% endif %}
+
+          </div>
+
+          <div class="col-md-12 watched-categories">
+            <p class="categories-you-are-watching">Categories you are Watching</p>
+
+            <ul>
+              {% for main_cat,cat_list in watched_cat_dict.iteritems %}
+              <li class="watched-main">{{ main_cat }}
+                <ul class="watched-sub-in-main" >
+                  {% for cat in cat_list %}
+                  <li>{{ cat }}</li>
+                  {% endfor %}
+                </ul>
+
+              </li>
+              {% endfor %}
+            </ul>
+
+            {% if not watched_cat_dict %}
+            <p class="you-are-not-watching">You are not watching any category.</p>
+            {% endif %}
+
+            <button type="button" onclick="manage()"  class="global-browse manage-watched-button">Manage</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+    <div class="page-content">
+
+      <p class="my-account-page-headings">Items you've Added for Sale</p>
+      <div class="row">
+        {% for row in sell_items %}
+        {% if row.is_active %}
+        <div class="col-xs-6 col-sm-6 col-md-3" id = "sell{{row.pk}}">
+          <div class="thumbnailBG thumbnailBG-my-account">
+            <div class="thumbnail">
+              {% if row.itempic.pic %}
+              <img class="item-for-sale-image" src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
+              {% else %}
+              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buyandsell/default.png" alt="Generic placeholder thumbnail">
+              {% endif %}
+
+
+            </div>
+            <div class="caption">
+              <div class="itemName" style="display: inline-bloxk; white-space: nowrap; width: 100px; overflow: hidden; text-overflow: ellipsis;">{{row.item_name}}</div>
+              <span class="price">
+                <img class="rupee-icon rupee-icon-item-for-sale" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">
+                {{row.cost}}
+              </span>
+              <div class="expiresIn">Expires in {{row.expiry_date|timeuntil}}</div>
+            </div>
+            <div class="dropdown item-options-dropdown" style="display:inline">
+              <button class="btn btn-default item-options-button dropdown-toggle" type="button" id="my-account-object-options" data-toggle="dropdown">
+                <img src="../../static/images/buyandsell/my-account-item-options.png" class="item-options-button-image">
+              </button>
+              <ul class="dropdown-menu item-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
+                <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-12.5%"></div>
+                <div class="arrow-up-front" style="margin-left:75%; margin-top:-11.5%"></div>
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1"onclick = "transaction_form('sell', {{ row.pk }})">
+                    <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/mark-done.png">
+                    <span>Mark Sold</span>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a onclick ="edit_sell({{ row.pk }})">
+                    <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/edit-button.png">
+                    <span>Edit</span>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a data-toggle="modal" onclick = "assign_id({{row.id}},'sell')" data-target="#remove-item-confirm-modal" class="">
+                    <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
+                    <span>Remove</span>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1" onclick = "upload_image('buyandsell_pic', {{ row.pk }},from_accounts = true)">
+                    <img class="change-image-icon" src="{{STATIC_URL}}images/buyandsell/change-image-icon.png">
+                    <span>Change Image</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {% else %}
+        <div class="col-xs-6 col-sm-6 col-md-3" id = "sell{{row.pk}}">
+          <div class="thumbnailBG thumbnailBG-my-account expired-item">
+            <div class="thumbnail">
+
+              {% if row.itempic.pic %}
+              <img class="item-for-sale-image" src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
+              {% else %}
+              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buyandsell/default.png" alt="Generic placeholder thumbnail">
+              {% endif %}
+
+              <div class="fading-rectangle">
+                <img class="expired-icon item-expired-icon" src="{{STATIC_URL}}images/buyandsell/expired-icon.png">
+                <span class="item-expired-text" >Expired</span>
+              </div>
+            </div>
+            <div class="caption">
+              <span class="itemName">{{ row.item_name }}</span>
+              <span class="price">Rs. {{row.cost}}</span>
+              <div class="row">
+                <div class="col-md-12">
+
+                </div>
+              </div>
+            </div>
+
+            <div class="dropdown item-options-dropdown" style="display:inline">
+              <button class="btn btn-default item-options-button dropdown-toggle" type="button" id="my-account-object-options" data-toggle="dropdown">
+                <img src="{{STATIC_URL}}images/buyandsell/my-account-item-options.png" class="item-options-button-image">
+              </button>
+              <ul class="dropdown-menu item-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
+                <div class="request-arrow-up-behind" style="margin-left:74.5%; margin-top:-15.5%"></div>
+                <div class="request-arrow-up-front" style="margin-left:75%; margin-top:-13.5%"></div>
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1"onclick = "transaction_form('sell', {{ row.pk }})">
+                    <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/mark-done.png">
+                    <span>Mark Sold</span>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a onclick ="edit_sell({{ row.pk }})">
+                    <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/edit-button.png">
+                    <span>Edit</span>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a data-toggle="modal" onclick = "assign_id({{row.id}},'sell')" data-target="#remove-item-confirm-modal" class="">
+                    <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
+                    <span>Remove</span>
+                  </a>
+                </li>
+
+                <li role="presentation"><a role="menuitem" tabindex="-1"onclick = "transaction_form('sell', {{ row.pk }})">Mark Sold</a></li>
+  <li role="presentation"><a role="menuitem" tabindex="-1" onclick = "upload_image('buyandsell_pic', {{ row.pk }},from_accounts = true)">Change Image</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% if succ_sold_items %}
+        {% for row in succ_sold_items %}
+        <div class="col-xs-6 col-sm-6 col-md-3" id = "sell{{row.pk}}">
+          <div class="thumbnailBG thumbnailBG-my-account sold-item">
+            <div class="thumbnail">
+              {% if row.itempic.pic %}
+              <img class="item-for-sale-image" src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
+              {% else %}
+              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+              {% endif %}
+
+              <div class="fading-rectangle">
+                <img class="item-sold-icon" src="{{STATIC_URL}}images/buyandsell/mark-done.png">
+                <span class="item-sold-text" >Sold</span>
+              </div>
+            </div>
+            <div class="caption">
+              <span class="itemName">{{ row.item_name }}</span>
+              <span class="price">Rs. {{row.cost}}</span>
+            </div>
+
+            <div class="dropdown item-options-dropdown" style="display:inline">
+              <button class="btn btn-default item-options-button dropdown-toggle" type="button" id="my-account-object-options" data-toggle="dropdown">
+                <img src="{{STATIC_URL}}images/buyandsell/my-account-item-options.png" class="item-options-button-image">
+              </button>
+              <ul class="dropdown-menu item-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
+                <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-15.5%"></div>
+                <div class="arrow-up-front" style="margin-left:75%; margin-top:-13.5%"></div>
+                <li role="presentation">
+                  <a data-toggle="modal" onclick = "assign_id({{row.id}},'sell')" data-target="#remove-item-confirm-modal" class="">
+                  <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
+                  <span> Remove </span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+        {% endif %}
+
+        {% if not sell_items %}
+        <p class="you-have-not-added-any">You haven't added any Item for Sale.</p>
+        {% endif %}
+
+      </div>
+      <div class="row">
+        <div class="division-line"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <p class="my-account-page-headings">Items you've Requested</p>
+
+          {% if request_items %}
+
+          <table class="table table-striped my-account-requests-table">
+            <thead>
+            <tr data-toggle="modal" data-target="#request-item-modal" class="request">
+              <th>Item</th>
+              <th>Max Price ( <img class="rupee-icon rupee-icon-item-for-sale" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png"> )</th>
+              <th>Expires in / Status</th>
+            </tr>
+            </thead>
+            <tbody>
+
+
+            {% for row in request_items %}
+{% if row.is_active %}
+            <tr id = "request{{ row.pk }}" class="request">
+              <td class="requested-item-name">{{ row.item_name }}</td>
+              <td class="requested-item-price">{{ row.price_upper}}</td>
+              <td>{{ row.expiry_date|timeuntil }}</td>
+              <td>
+                <div class="dropdown request-options-dropdown" style="display:inline">
+                  <button class="btn btn-default request-options-button dropdown-toggle" type="button" id="my-account-object-options" data-toggle="dropdown">
+                    <img src="{{STATIC_URL}}images/buyandsell/my-account-request-options.png" class="request-options-button-image">
+                  </button>
+                  <ul class="dropdown-menu request-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
+                    <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-10%"></div>
+                    <div class="arrow-up-front" style="margin-left:75%; margin-top:-9.5%"></div>
+                    <li role="presentation">
+                      <a onclick="edit_request({{row.id}})" class="edit-button">
+                        <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/edit-button.png">
+                        <span>Edit</span>
+                      </a>
+                    </li>
+                    <li role="presentation">
+                      <a data-toggle="modal" data-target="#remove-request-confirm-modal" onclick = "assign_id({{row.id}},'request')">
+                        <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
+                        <span>Remove</span>
+                      </a>
+                    </li>
+                    <li role="presentation">
+                      <a onclick="transaction_form('request',{{row.id}})" class="edit-button">
+                        <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/mark-done.png">
+                        <span>Mark Successfull</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+
+{% else %}
+
+            <tr id = "request{{ row.pk }}" class="request">
+              <td class="requested-item-name">{{ row.item_name }}</td>
+              <td class="requested-item-price">{{ row.price_upper}}</td>
+              <td>
+                <div>
+                  <img class="expired-icon request-expired-icon" src="{{STATIC_URL}}images/buyandsell/expired-icon-light.png">
+                  <span class="request-expired-text" >Expired</span>
+                </div>
+              </td>
+               <td>
+                <div class="dropdown request-options-dropdown" style="display:inline">
+                  <button class="btn btn-default request-options-button dropdown-toggle" type="button" id="my-account-object-options" data-toggle="dropdown">
+                    <img src="{{STATIC_URL}}images/buyandsell/my-account-request-options.png" class="request-options-button-image">
+                  </button>
+                  <ul class="dropdown-menu request-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
+                    <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-10%"></div>
+                    <div class="arrow-up-front" style="margin-left:75%; margin-top:-9.5%"></div>
+                    <li role="presentation">
+                      <a onclick="edit_request({{row.id}})" class="edit-button">
+                        <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/edit-button.png">
+                        <span>Edit</span>
+                      </a>
+                    </li>
+                    <li role="presentation">
+                      <a data-toggle="modal" data-target="#remove-request-confirm-modal" onclick = "assign_id({{row.id}},'request')">
+                        <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
+                        <span>Remove</span>
+                      </a>
+                    </li>
+                    <li role="presentation">
+                      <a onclick="transaction_form('request',{{row.id}})" class="edit-button">
+                        <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/mark-done.png">
+                        <span>Mark Successfull</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+{% endif %}
+            {% endfor %}
+
+{% if succ_request_items %}
+   {% for row in succ_request_items %}
+            <tr id = "request{{ row.pk }}" class="request">
+              <td class="requested-item-name">{{ row.item_name }}</td>
+              <td class="requested-item-price">{{ row.price_upper}}</td>
+              <td>
+                <div>
+                  <img class="expired-icon request-expired-icon" src="{{STATIC_URL}}images/buyandsell/mark-done.png">
+                  <span class="request-successful-text" >Successful</span>
+                </div>
+              </td>
+             <td>
+                <div class="dropdown request-options-dropdown" style="display:inline">
+                  <button class="btn btn-default request-options-button dropdown-toggle" type="button" id="my-account-object-options" data-toggle="dropdown">
+                    <img src="{{STATIC_URL}}images/buyandsell/my-account-request-options.png" class="request-options-button-image">
+                  </button>
+                  <ul class="dropdown-menu request-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
+                    <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-10%"></div>
+                    <div class="arrow-up-front" style="margin-left:75%; margin-top:-9.5%"></div>
+                    <li role="presentation">
+                      <a data-toggle="modal" data-target="#remove-request-confirm-modal" onclick = "assign_id({{row.id}},'request')">
+                        <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
+                        <span>Remove</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+    {% endfor %}
+{% endif %}
+
+            </tbody>
+          </table>
+          {% else %}
+          <p class="you-have-not-added-any">You haven't added any Request.</p>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="space-maker" style="height: 100px;"></div>
+  </div>
+</div>
+
+<div class="modal fade" id="remove-item-confirm-modal" tabindex="-1" role="dialog" aria-labelledby="remove-item-confirm-modal-Label" aria-hidden="true">
+  <div class="modal-dialog" style="width:500px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color:white; width:20px; height:20px">&times;</span></button>
+        <h4 class="modal-title" id="modal-title">Are you Sure?</h4>
+      </div>
+      <div class="modal-body">
+        <p class="item-removal-confirmation-text">Are you sure you want to remove this item? <br/> This cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+
+          <a title="Remove" id = "modal-delete" class="item-remove-text" data-dismiss = "modal">
+            <button type="button" class="btn btn-primary remove-item-confirm-yes" style="margin-right: -20px;">
+              Yes
+            </button>
+          </a>
+        </button>
+        <button type="button" class="btn btn-primary remove-item-confirm-no" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="remove-request-confirm-modal" tabindex="-1" role="dialog" aria-labelledby="remove-item-confirm-modal-Label" aria-hidden="true">
+  <div class="modal-dialog" style="width:520px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color:white; width:20px; height:20px">&times;</span></button>
+        <h4 class="modal-title" id="modal-title">Are you Sure?</h4>
+      </div>
+      <div class="modal-body">
+        <p class="item-removal-confirmation-text">Are you sure you want to remove this request? <br/> This cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <a title="Remove" id = "modal-delete-request" class="item-remove-text" data-dismiss = "modal">
+          <button type="button" class="btn btn-primary remove-item-confirm-yes" style="margin-right: -20px;">
+            Yes
+          </button>
+        </a>
+        <button type="button" class="btn btn-primary remove-item-confirm-no" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+
+
