@@ -522,7 +522,7 @@ def selldetails(request,pk,notif_flag = None):
     if not notif_flag:
       return render(request,'buyandsell/selldetails.html')
     else:
-      return render(request,'buyandsell/selldetails_notif.html')
+      return render(request,'buyandsell/selldetails_notif.html',{'login_flag':login_flag,'user':request.user if login_flag else None})
 
   self_flag = 0
   user = request.user
@@ -580,7 +580,7 @@ def requestdetails(request,pk , notif_flag = None):
     if not notif_flag:
       return render(request,'buyandsell/requestdetails.html')
     else:
-      return render(request,'buyandsell/requestdetails_notif.html')
+      return render(request,'buyandsell/requestdetails_notif.html',{'login_flag':login_flag,'user':request.user if login_flag else None})
 
 
   self_flag=0
