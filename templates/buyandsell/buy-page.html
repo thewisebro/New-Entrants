@@ -85,27 +85,37 @@
       <div class="left-box">
         <div class="row">
           <div class="col-md-12">
-            <form action="" class="input-group-addon view-what">
-              <div>
-                <input type="radio" name="radio" id="items-for-sale" class="radio" checked >
-                <label for="items-for-sale">
-                  {% if search_flag %}
-                  <a href="/buyandsell/see_all/sell/?{% if queries %}{{queries.urlencode}}{% endif %}"><div></div>Items for Sale</a>
-                  {% else %}
-                  <a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}"><div></div>Items for Sale</a>
-                  {% endif %}
-                </label>
+            <form action="" class="input-group-addon view-what" style="padding: 0;">
+              <div class="left-box-main-link-div">
+                {% if search_flag %}
+                <a href="/buyandsell/see_all/sell/?{% if queries %}{{queries.urlencode}}{% endif %}" class="left-box-main-link-active">
+                  <span>
+                    Items for Sale
+                  </span>
+                </a>
+                {% else %}
+                <a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}" class="left-box-main-link-active">
+                  <span>
+                    Items for Sale
+                  </span>
+                </a>
+                {% endif %}
               </div>
 
-              <div>
-                <input type="radio" name="radio" id="requests" class="radio"/>
-                <label for="requests">
-                  {% if search_flag %}
-                  <a href="/buyandsell/see_all/requests/?{% if queries %}{{queries.urlencode}}{% endif %}"><div></div>Requests</a>
-                  {% else %}
-                  <a href="/buyandsell/viewrequests{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}"><div></div>Requests</a>
-                  {% endif %}
-                </label>
+              <div class="left-box-main-link-div">
+                {% if search_flag %}
+                <a href="/buyandsell/see_all/requests/?{% if queries %}{{queries.urlencode}}{% endif %}" class="left-box-main-link-dormant">
+                  <span>
+                    Requests
+                  </span>
+                </a>
+                {% else %}
+                <a href="/buyandsell/viewrequests{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}" class="left-box-main-link-dormant">
+                  <span>
+                    Requests
+                  </span>
+                </a>
+                {% endif %}
               </div>
             </form>
             <div class="left-division-line">
@@ -137,7 +147,7 @@
                   {% endif %}
                 </ul>
               </div>
-              <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0;margin-left: 20px;border-top-left-radius: 0;border-top-right-radius: 0;min-width: 198px; " role="menu" aria-labelledby="category-filter">
+              <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0;margin-left: 30px;border-top-left-radius: 0;border-top-right-radius: 0;min-width: 199px; " role="menu" aria-labelledby="category-filter">
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/buy">Latest</a></li>
                 {% for key,value in cat_dict.iteritems %}
                 <li role="presentation" class="dropdown-submenu">
@@ -215,8 +225,8 @@
                     <img class="rupee-icon input-box-rupee-icon-min" src="{{STATIC_URL}}images/buyandsell/rupee-icon-with-white-bg.png">
                     <img class="rupee-icon input-box-rupee-icon-max" src="{{STATIC_URL}}images/buyandsell/rupee-icon-with-white-bg.png">
                     <input type="hidden"  name="keyword"  value="{% if search_string %}{{search_string}}{% endif %}">
-                    <input type="text" id="low" class="price-range-text-input" value="{% if ll %}{{ll}}{% endif %}" name="ll">
-                    <input type="text" id="high" class="price-range-text-input" value="{% if ul %}{{ul}}{% endif %}" name="ul">
+                    <input type="number" id="low" class="price-range-text-input" value="{% if ll %}{{ll}}{% endif %}" name="ll">
+                    <input type="number" id="high" class="price-range-text-input" value="{% if ul %}{{ul}}{% endif %}" name="ul">
                   </div>
                   <button class="global-browse price-range-submit">
                     <img class="price-range-submit-button-image"
@@ -256,8 +266,8 @@
         </div>
         {% endfor %}
 
-        {% if not items %}
-        <p>No items in this category</p>
+        {% if not table_data %}
+        <p class="nothing-in-this-category" style="margin-left: 15px;">No items to show</p>
         {% endif %}
       </div>
 

@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="full-page-transparent-overlay"></div>
-<div class="container" style="min-width: 765px; padding-left: 23px;">
+<div class="container" style="min-width: 765px; ">
   {% if messages %}
   {% for message in messages %}
   <div class="alert alert-{{ message.tags }}">{{ message }} </div>
@@ -28,7 +28,7 @@
   {% block leftbox %}
   <div class="row">
     <div>
-      <div class="left-box">
+      <div class="left-box my-account-left-box">
         <div class="row">
           <div class="col-md-12">
 
@@ -42,7 +42,7 @@
             </div>
             <div id="show_contact" class="phone-no-visibility-toggle-button"></div>
             <p class="phone-no-visibility-info-text">Decide whether people can see your phone number.</p>
-            <div class="left-division-line"></div>
+            <div class="left-division-line" style="margin-left: -15px; width: 258px;"></div>
 
             {% else %}
             <p class="your-phone-no">My Phone No.</p>
@@ -77,16 +77,16 @@
             </ul>
 
             {% if not watched_cat_dict %}
-            <p class="you-are-not-watching">You are not watching any category.</p>
+            <p class="you-are-not-watching">Get notified for updates in the categories you watch.</p>
             {% endif %}
 
-            <button type="button" onclick="manage()"  class="global-browse manage-watched-button">Manage</button>
+            <button type="button" onclick="manage()"  class="global-browse manage-watched-button">Choose Categories</button>
           </div>
         </div>
       </div>
     </div>
     {% endblock %}
-    <div class="page-content">
+    <div class="page-content my-account-page-content">
 
       <p class="my-account-page-headings">Added for Sale</p>
       <div class="row">
@@ -164,7 +164,7 @@
               </div>
             </div>
             <div class="caption">
-              <span class="itemName">{{ row.item_name }}</span>
+              <div class="itemName" style="display: inline-bloxk; white-space: nowrap; width: 100px; overflow: hidden; text-overflow: ellipsis;">{{ row.item_name }}</div>
               <span class="price">Rs. {{row.cost}}</span>
               <div class="row">
                 <div class="col-md-12">
@@ -178,8 +178,8 @@
                 <img src="{{STATIC_URL}}images/buyandsell/my-account-item-options.png" class="item-options-button-image">
               </button>
               <ul class="dropdown-menu item-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
-                <div class="request-arrow-up-behind" style="margin-left:74.5%; margin-top:-15.5%"></div>
-                <div class="request-arrow-up-front" style="margin-left:75%; margin-top:-13.5%"></div>
+                <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-12.5%"></div>
+                <div class="arrow-up-front" style="margin-left:75%; margin-top:-11.5%"></div>
                 <li role="presentation">
                   <a role="menuitem" tabindex="-1"onclick = "transaction_form('sell', {{ row.pk }})">
                     <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/mark-done.png">
@@ -198,14 +198,7 @@
                     <span>Remove</span>
                   </a>
                 </li>
-               <li role="presentation">
-                  <a role="menuitem" tabindex="-1" onclick = "upload_image('buyandsell_pic', {{ row.pk }},from_accounts = true)">
-                    <img class="change-image-icon" src="{{STATIC_URL}}images/buyandsell/change-image-icon.png">
-                    <span>Change Image</span>
-                  </a>
-                </li>
-
-              </ul>
+</ul>
             </div>
           </div>
         </div>
@@ -228,7 +221,7 @@
               </div>
             </div>
             <div class="caption">
-              <span class="itemName">{{ row.item_name }}</span>
+              <div class="itemName" style="display: inline-bloxk; white-space: nowrap; width: 100px; overflow: hidden; text-overflow: ellipsis;">{{row.item_name}}</div>
               <span class="price">Rs. {{row.cost}}</span>
             </div>
 
@@ -237,8 +230,8 @@
                 <img src="{{STATIC_URL}}images/buyandsell/my-account-item-options.png" class="item-options-button-image">
               </button>
               <ul class="dropdown-menu item-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
-                <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-15.5%"></div>
-                <div class="arrow-up-front" style="margin-left:75%; margin-top:-13.5%"></div>
+                <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-12.5%"></div>
+                <div class="arrow-up-front" style="margin-left:75%; margin-top:-11.5%"></div>
                 <li role="presentation">
                   <a data-toggle="modal" onclick = "assign_id({{row.id}},'sell')" data-target="#remove-item-confirm-modal" class="">
                   <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">

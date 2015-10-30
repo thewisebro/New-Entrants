@@ -6,11 +6,7 @@
       parent.$(".ui-dialog-titlebar-close").css("display","none");
     }
    */
-    if ($("body").height() > $(window).height())
-    {
-      $("body").css("margin-right",'15px');
-      $("").css("margin-right",'15px');
-    }
+
 
     //this function removes the bug in which item options of my-account page behaved improperly and their visibility toggled irrationally
 
@@ -45,13 +41,15 @@
     if(subHeaderWidth >= 1100)
     {
       $(".item-for-sale-image").css("height",160+"px");
-      $(".search-area").css("margin-left",35+"px");
+      $(".search-area").css("margin-left",30+"px");
+      $(".search-area").css("width",41.5+"%");
     }
 
     else if(subHeaderWidth >= 900)
     {
       $(".item-for-sale-image").css("height",120+"px");
-      $(".search-area").css("margin-left",35+"px");
+      $(".search-area").css("margin-left",30+"px");
+      $(".search-area").css("width",41.5+"%");
       $(".itemName").css("width",80+"px");
     }
 
@@ -59,6 +57,7 @@
     {
       $(".item-for-sale-image").css("height",181+"px");
       $(".search-area").css("margin-left",-120+"px");
+      $(".search-area").css("width",55+"%");
       $(".itemName").css("width",80+"px");
     }
 
@@ -74,18 +73,21 @@
         if(subHeaderWidth >= 1100)
         {
           $(".item-for-sale-image").css("height",160+"px");
-          $(".search-area").css("margin-left",35+"px");
+          $(".search-area").css("margin-left",30+"px");
+          $(".search-area").css("width",41.5+"%");
         }
         else if(subHeaderWidth >= 900)
         {
           $(".item-for-sale-image").css("height",120+"px");
-          $(".search-area").css("margin-left",35+"px");
+          $(".search-area").css("margin-left",30+"px");
+          $(".search-area").css("width",41.5+"%");
           $(".itemName").css("width",80+"px");
         }
         else if(subHeaderWidth >= 750)
         {
           $(".item-for-sale-image").css("height",181+"px");
           $(".search-area").css("margin-left",-120+"px");
+          $(".search-area").css("width",55+"%");
           $(".itemName").css("width",80+"px");
         }
 
@@ -117,6 +119,8 @@
       }
     );
 
+
+
     $(document).click
     (
       function ()
@@ -131,9 +135,6 @@
           $(".dropdown-arrow",$(this)).removeClass("dropdown-arrow-pointing-down")
           $(".active-category",$(this)).removeClass("active-category-dropdown-active");
         }
-
-
-
       }
     );
 
@@ -232,6 +233,8 @@
         $(".send").css("display","none");
       }
     );
+
+    $("#slider-range a:first-child").css("z-index","2");
 
 
     $(document).mouseup

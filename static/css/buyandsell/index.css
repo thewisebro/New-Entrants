@@ -75,11 +75,10 @@ a:focus
 .search-icon
 {
   position:absolute;
-  right:5px;
-  top:5px;
+  right:6px;
+  top:6px;
   color: #1081de;
-  width: 15px;
-  height: 15px;
+  width: 12px;
 }
 
 .global-browse
@@ -107,21 +106,22 @@ a:focus
   text-align:center;
   margin-right: 14px;
   padding-top:2px;
-  border:1px solid #cbcbcb;
+  border:1px solid #d07728;
   border-radius:2px;
   font-size:13px;
   position: relative;
   float: right;
   background-color:white;
-  color:#1b8947;
+  color:#d07728;
 }
 
 .global-button:hover
 {
   border-radius:2px;
   font-size:13px;
-  background-color:#1b8947;
+  background-color:#d07728;
   color:white;
+  border: 1px solid #d07728;
 }
 
 .headerBackground
@@ -141,6 +141,12 @@ a:focus
   min-width: 765px;
 }
 
+.header-sell-button
+{
+  padding: 2px 24px;
+}
+
+
 .breadcrumb
 {
   padding-left:0px;
@@ -155,7 +161,7 @@ a:focus
 .breadcrumb li a
 {
   position: relative;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: bold;
 }
 
@@ -187,12 +193,14 @@ a:focus
   margin-right: 0px;
   right: 16px;
   top: 10px;
+  border: 1px solid #CCCCCC;
 }
 
 .watch-button:hover
 {
   background-color:#1081de;
   color:white;
+  border: 1px solid #1081de;
 }
 
 .watch-button:focus
@@ -243,9 +251,9 @@ a:focus
 
 .left-division-line
 {
-  width:80%;
+  width:100%;
   height:2px;
-  margin-left:20px;
+  margin-left:0px;
   border-top:1px solid #dcdcdc;
   border-bottom:1px solid #fefefe;
   margin-top: 20px;
@@ -258,12 +266,47 @@ a:focus
   border-radius:2px;
   margin-top: -30px;
   background-color: #ffffff;
-  padding-top:10px;
-  padding-left:10px;
+  padding-top:0px;
+  padding-left:0px;
   position: fixed;
   width: 260px;
   border: 1px solid #dedede;
   z-index: 1;
+}
+
+.my-account-left-box
+{
+  padding-top:15px;
+  padding-left:15px;
+}
+
+.left-box-main-link-div a
+{
+  display: block;
+  padding: 10px;
+  padding-left: 30px;
+}
+
+.left-box-main-link-active
+{
+  background-color: #1081de;
+  color: #ffffff;
+}
+
+.left-box-main-link-active:hover
+{
+   color: #ffffff;
+}
+
+.left-box-main-link-dormant
+{
+  background-color: transparent;
+  color: #333333;
+}
+
+.view-what
+{
+  padding-left:30px;
 }
 
 .price-line-height
@@ -273,7 +316,7 @@ a:focus
 
 .price-filter p
 {
-  margin-left:20px;
+  margin-left:30px;
   font-size: 14px;
   font-weight: bold;
 }
@@ -287,7 +330,7 @@ a:focus
 
 .price-range-text-input
 {
-  width:36%;
+  width:80px;
   margin:1px;
   text-align:right;
   padding: 2px 4px 2px 4px;
@@ -300,7 +343,7 @@ a:focus
   border: none;
   margin-left: 2px;
   position: absolute;
-  left: 206px;
+  left: 215px;
 }
 
 #slider-range
@@ -315,7 +358,6 @@ a:focus
 {
   background-color: #FFFFFF;
   border:0px;
-  padding-left:20px;
   text-align:left;
 }
 
@@ -418,7 +460,11 @@ input[type="radio"]:checked + label div
   position: relative;
   margin-left: 290px;
   padding-left: 0;
+}
 
+.my-account-page-content
+{
+  margin-top: 10px;
 }
 
 .page-content table tbody tr
@@ -522,7 +568,7 @@ input[type="radio"]:checked + label div
   position: absolute;
   margin-top: 12px;
   margin-left: -110px;
-  min-width: 130px;
+  min-width: 148px;
   display: none;
 }
 
@@ -709,6 +755,20 @@ a: focus
   margin-top: -45px;
 }
 
+.upload-without-image-button
+{
+  border: 1px solid #aaaaaa;
+  position: absolute;
+  right: 260px;
+  margin-top: -45px;
+}
+
+.upload-without-image-button:hover
+{
+  background-color: #aaaaaa;
+  color: #ffffff;
+}
+
 .enquire-clicked
 {
   display:none;
@@ -805,13 +865,11 @@ a: focus
 {
   margin: 0px 0px 0px 12px;
   padding:4px 24px 4px 12px;
-  border-left: 1px solid transparent;
 }
 
 .searched-item:hover
 {
   background-color: #ededed;
-  border-left: 1px solid #1081de;
 }
 
 .searched-item-name
@@ -863,6 +921,12 @@ textarea
   margin-bottom: 30px;
 }
 
+tr
+{
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #DDD !important;
+}
+
 .my-account-requests-table tbody tr
 {
   cursor: default !important;
@@ -878,7 +942,7 @@ textarea
   float: right;
   margin-right: 35px;
   border: 1px solid #1081de;
-  padding-top: 0;
+  padding: 5px 10px 25px 10px;
 }
 
 .watched-main
@@ -951,9 +1015,9 @@ textarea
 {
   position: absolute;
   height: 6px;
-  width: 23px;
+  width: 21px;
   background-color: #1081de;
-  left: 210px;
+  left: 222px;
   top: 43px;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
@@ -1238,6 +1302,11 @@ a:focus
   transition: ease-out 100ms;
 }
 
+.table-striped tbody tr:last-child
+{
+  border-bottom: 1px solid #dddddd;
+}
+
 .table-striped tbody tr:hover
 {
   background-color: white;
@@ -1267,17 +1336,18 @@ a:focus
 .sign-in-button
 {
   display: inline;
-  position: fixed;
-  right: 15px;
-  top: 15px;
+  position: relative;
+  float: right;
+  margin-right: -15px;
   background-color: #1081DE;
-  color: #ffffff;
+  color: #FFF;
   padding: 3px 10px;
   font-size: 13px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
   cursor: pointer;
+  top: -25px;
 }
 
 .sign-in-request-text
@@ -1344,7 +1414,7 @@ a:focus
   margin: 20px auto 12px -12px;
   text-align: left;
   font-weight: bold;
-  padding-left: 35px;
+  padding-left: 30px;
   display: inline-block;
 }
 
@@ -1413,7 +1483,7 @@ a:focus
 
 .phone-no-visibility-info-text
 {
-  padding: 0 25px;
+  padding: 0 20px;
   font-size: 13px;
   font-style: italic;
   color: #7D7D7D;
@@ -1435,6 +1505,11 @@ a:focus
   margin-top: 15px;
 }
 
+.item-details-dialog-container .row .col-xs-8 .item-details-table tbody tr
+{
+  border: none !important;
+}
+
 .item-details-table tbody tr td
 {
   padding: 5px;
@@ -1452,6 +1527,10 @@ a:focus
   padding: 0;
 }
 
+.request-details-dialog-container .col-xs-12 .request-details-table tbody tr
+{
+  border: none !important;
+}
 
 .request-details-table tbody tr td
 {
@@ -1741,14 +1820,14 @@ border-bottom: 1px solid #EEE;
 
 .filter-by-category-heading
 {
-  margin-left: 20px;
+  margin-left: 30px;
   font-weight: bold;
 }
 
 .active-category
 {
-  margin-left: 20px;
-  width: 80%;
+  margin-left: 30px;
+  width: 77%;
   border: 1px solid transparent;
   padding: 5px 0;
   cursor: pointer;
@@ -1841,6 +1920,18 @@ border-bottom: 1px solid #EEE;
   margin-top: 4px;
 }
 
+.header-logo-image
+{
+  height: 30px;
+}
+
+.e-bazaar-text
+{
+  margin-left: 25px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
 .browse-button-div
 {
   position: relative;
@@ -1911,9 +2002,15 @@ border-bottom: 1px solid #EEE;
   font-weight: bold;
 }
 
-#sell_  feedback
+#sell_feedback
 {
   padding: 2px 2px;
+}
+
+.nothing-in-this-category
+{
+  font-size: 35px;
+  color: #CACACA;
 }
 
 
@@ -1936,4 +2033,10 @@ border-bottom: 1px solid #EEE;
   src: url(../../fonts/OpenSans-SemiboldItalic.ttf);
   font-weight: bold;
   font-style: italic, oblique;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
