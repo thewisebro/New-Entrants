@@ -9,14 +9,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class Login extends AppCompatActivity {
+public class StudentLogin extends AppCompatActivity {
     private EditText Enr_No;
     private EditText Password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login2);
+        setContentView(R.layout.activity_student_login);
 
     }
     public void login(View view){
@@ -24,10 +24,10 @@ public class Login extends AppCompatActivity {
         Enr_No=(EditText) findViewById(R.id.et_Enr_No);
         Password=(EditText) findViewById(R.id.et_Password);
 
-       MySQLiteHelper db=new MySQLiteHelper(this);
-      User_Model user=db.getUser(Enr_No.getText().toString(),Password.getText().toString());
-      if(db.checkUser(Enr_No.getText().toString(), Password.getText().toString()) == true)
-      {
+        MySQLiteHelper db=new MySQLiteHelper(this);
+        User_Model user=db.getUser(Enr_No.getText().toString(),Password.getText().toString());
+        if(db.checkUser(Enr_No.getText().toString(), Password.getText().toString()) == true)
+        {
             Intent intent =new Intent(this, Navigation.class);
             Bundle mBundle=new Bundle();
             mBundle.putSerializable("user",user);
@@ -37,11 +37,7 @@ public class Login extends AppCompatActivity {
         }
         else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();
     }
-    public void register_click(View view){
-        Intent intent = new Intent(this, Register.class);
-        startActivity(intent);
-     //   finish();
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

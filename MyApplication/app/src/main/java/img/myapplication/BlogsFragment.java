@@ -1,6 +1,7 @@
 package img.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,10 @@ public class BlogsFragment extends Fragment {
 
         return view;
     }
-    public class BlogCardArrayAdapter  extends ArrayAdapter<BlogCard> {
+    public void displayBlog(int position){
+        Toast.makeText(getContext(), "Invalid valid email address", Toast.LENGTH_SHORT).show();
+    }
+    public class BlogCardArrayAdapter  extends ArrayAdapter<BlogCard> implements View.OnClickListener {
 
         private List<BlogCard> cardList = new ArrayList<BlogCard>();
 
@@ -55,7 +60,16 @@ public class BlogsFragment extends Fragment {
             TextView author;
             TextView category;
             TextView date;
+            int position;
         }
+
+        @Override
+        public void onClick(View view) {
+            int pos= ((CardViewHolder) view.getTag()).position;
+            
+
+        }
+
 
         public BlogCardArrayAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
@@ -90,7 +104,8 @@ public class BlogsFragment extends Fragment {
                 viewHolder.author = (TextView) row.findViewById(R.id.author);
                 viewHolder.category = (TextView) row.findViewById(R.id.category);
                 viewHolder.date = (TextView) row.findViewById(R.id.date);
-
+                viewHolder.position=position;
+                row.findViewById(R.id.cardTop).setOnClickListener(this);
                 row.setTag(viewHolder);
             } else {
                 viewHolder = (CardViewHolder)row.getTag();

@@ -9,25 +9,25 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class Login extends AppCompatActivity {
-    private EditText Enr_No;
+public class NewEntrantLogin extends AppCompatActivity {
+    private EditText id;
     private EditText Password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login2);
+        setContentView(R.layout.activity_new_entrant_login);
 
     }
     public void login(View view){
 
-        Enr_No=(EditText) findViewById(R.id.et_Enr_No);
+        id=(EditText) findViewById(R.id.et_id);
         Password=(EditText) findViewById(R.id.et_Password);
 
-       MySQLiteHelper db=new MySQLiteHelper(this);
-      User_Model user=db.getUser(Enr_No.getText().toString(),Password.getText().toString());
-      if(db.checkUser(Enr_No.getText().toString(), Password.getText().toString()) == true)
-      {
+        MySQLiteHelper db=new MySQLiteHelper(this);
+        User_Model user=db.getUser(id.getText().toString(),Password.getText().toString());
+        if(db.checkUser(id.getText().toString(), Password.getText().toString()) == true)
+        {
             Intent intent =new Intent(this, Navigation.class);
             Bundle mBundle=new Bundle();
             mBundle.putSerializable("user",user);
@@ -40,7 +40,7 @@ public class Login extends AppCompatActivity {
     public void register_click(View view){
         Intent intent = new Intent(this, Register.class);
         startActivity(intent);
-     //   finish();
+        finish();
     }
 
     @Override

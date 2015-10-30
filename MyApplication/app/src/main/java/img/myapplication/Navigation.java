@@ -48,9 +48,9 @@ public class Navigation extends ActionBarActivity
                 break;
             case 1:fragment = new BlogsFragment();
                  break;
-            case 2:fragment = new ConnectFragment(1);
+            case 2:fragment = new PConnectFragment();
                 break;
-            case 3:fragment = new ConnectFragment(0);
+            case 3:fragment = new SConnectFragment();
                 break;
             case 4 :fragment= new EditInfoFragment(user);
                 break;
@@ -120,12 +120,7 @@ public class Navigation extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
-    public void addBlog(View view){
 
-    }
-    public void sortBlog(View view){
-
-    }
 
 
 }
