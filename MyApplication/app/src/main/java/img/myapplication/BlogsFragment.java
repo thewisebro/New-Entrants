@@ -35,7 +35,7 @@ public class BlogsFragment extends Fragment {
 
         for (int i = 0; i < 10; i++) {
             //Card card = new Card("Card " + (i+1) + " Line 1", "Card " + (i+1) + " Line 2");
-            BlogCard card= new BlogCard();
+            BlogModel card= new BlogModel();
             card.topic="lololol";
             card.shortInfo="test";
             card.author="ankush";
@@ -47,36 +47,25 @@ public class BlogsFragment extends Fragment {
 
         return view;
     }
-    public void displayBlog(int position){
-        Toast.makeText(getContext(), "Invalid valid email address", Toast.LENGTH_SHORT).show();
-    }
-    public class BlogCardArrayAdapter  extends ArrayAdapter<BlogCard> implements View.OnClickListener {
+    public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
-        private List<BlogCard> cardList = new ArrayList<BlogCard>();
+        private List<BlogModel> cardList = new ArrayList<BlogModel>();
 
-        class CardViewHolder {
+        public class CardViewHolder {
             TextView topic;
             TextView shortInfo;
             TextView author;
             TextView category;
             TextView date;
-            int position;
+            public BlogModel model;
         }
-
-        @Override
-        public void onClick(View view) {
-            int pos= ((CardViewHolder) view.getTag()).position;
-            
-
-        }
-
 
         public BlogCardArrayAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
         }
 
         @Override
-        public void add(BlogCard object) {
+        public void add(BlogModel object) {
             cardList.add(object);
             super.add(object);
         }
@@ -87,35 +76,38 @@ public class BlogsFragment extends Fragment {
         }
 
         @Override
-        public BlogCard getItem(int index) {
+        public BlogModel getItem(int index) {
             return this.cardList.get(index);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = convertView;
-            CardViewHolder viewHolder;
+            BlogCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 row = inflater.inflate(R.layout.list_item_card, parent, false);
-                viewHolder = new CardViewHolder();
+                viewHolder = new BlogCardViewHolder();
                 viewHolder.topic = (TextView) row.findViewById(R.id.topic);
                 viewHolder.shortInfo = (TextView) row.findViewById(R.id.shortInfo);
                 viewHolder.author = (TextView) row.findViewById(R.id.author);
                 viewHolder.category = (TextView) row.findViewById(R.id.category);
                 viewHolder.date = (TextView) row.findViewById(R.id.date);
-                viewHolder.position=position;
-                row.findViewById(R.id.cardTop).setOnClickListener(this);
-                row.setTag(viewHolder);
+                viewHolder.model=new BlogModel();
+                //viewHolder.position=position;
+                //row.findViewById(R.id.cardTop).setOnClickListener(this);
+                //row.setTag(viewHolder);
             } else {
-                viewHolder = (CardViewHolder)row.getTag();
+                viewHolder = (BlogCardViewHolder)row.getTag();
             }
-            BlogCard card = getItem(position);
+            BlogModel card = getItem(position);
             viewHolder.topic.setText(card.topic);
             viewHolder.shortInfo.setText(card.shortInfo);
             viewHolder.author.setText(card.author);
             viewHolder.category.setText(card.category);
             viewHolder.date.setText(card.date);
+            viewHolder.model=card;
+            row.setTag(viewHolder);
             return row;
         }
 

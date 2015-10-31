@@ -38,11 +38,20 @@ public class Navigation extends ActionBarActivity
         startActivity(intent);
         finish();
     }
+    public void displayBlog(View view){
+       // Toast.makeText(this, "Invalid valid email address", Toast.LENGTH_SHORT).show();
+       BlogCardViewHolder viewHolder=(BlogCardViewHolder) view.getTag();
+        BlogModel model=viewHolder.model;
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new BlogPage(new BlogModel())).commit();
+    }
+    public void fromCategory(View view){
+
+    }
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
         mCurrentPosition=position;
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        //FragmentManager fragmentManager = getSupportFragmentManager();
         switch(position) {
             case -1: fragment = new OpeningFragment();
                 break;
@@ -59,7 +68,7 @@ public class Navigation extends ActionBarActivity
             default: fragment=new ProfileFragment(user);
                 break;
         }
-       fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+       getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 
 
     }

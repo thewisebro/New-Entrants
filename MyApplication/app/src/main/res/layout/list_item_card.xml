@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="15dp"
         android:paddingTop="15dp"
-
+        android:onClick="displayBlog"
         android:paddingRight="15dp"
 
         android:descendantFocusability="afterDescendants"
@@ -25,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 1"
+
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
         <TextView
@@ -32,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 2"
+
             android:layout_below="@id/topic"
             android:layout_centerHorizontal="true"/>
 
@@ -74,6 +76,7 @@
             android:layout_height="wrap_content"
             android:text="Text line 1"
             android:layout_below="@id/author"
+            android:onClick="fromCategory"
             android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
