@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -23,7 +24,16 @@ public class SeniorPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_senior_page, container, false);
+        View view= inflater.inflate(R.layout.fragment_senior_page, container, false);
+        TextView name= (TextView) view.findViewById(R.id.name);
+        TextView year= (TextView) view.findViewById(R.id.year);
+        TextView branch= (TextView) view.findViewById(R.id.branch);
+
+        name.setText(senior.name);
+        year.setText(senior.year);
+        branch.setText(senior.branch);
+
+        return view;
     }
 
 
