@@ -184,7 +184,8 @@ def edit(request, company_id) :
         return HttpResponseRedirect(reverse('placement.views_company.admin_list'))
     else :
       # XXX: Manage frontend compatibility for DateTimeField so as not to fail while saving in specified format
-      company.last_date_of_applying = company.last_date_of_applying.strftime('%d-%m-%Y %H:%M')
+      if company.last_date_of_applying:
+        company.last_date_of_applying = company.last_date_of_applying.strftime('%d-%m-%Y %H:%M')
       form = forms.CompanyForm(instance = company)
       if company.brochure :
         # Change the url of brochure
