@@ -154,7 +154,7 @@ def index(request):
     print 'yoyo'
 #    import ipdb;ipbd.set_trace()
     print person.user.birth_date
-#  if fac.saved==False: #to be included for one time form filling
+  if fac.saved==False: #to be included for one time form filling
     if fac.declaration==True:
       birth_date = person.user.birth_date
       join_date = person.date_of_joining
@@ -188,8 +188,8 @@ def index(request):
       return render_to_response('gate/index1.html',{'form' : form,'curr_date':curr_date},context_instance = RequestContext(request))
     else:
       return HttpResponseRedirect('/gate/gate1')
-# else:
-#     return render_to_response('gate/gate_success.html',context_instance = RequestContext(request))
+  else:
+    return render_to_response('gate/gate_success.html',context_instance = RequestContext(request))
 
 @login_required
 def gate_print_pdf(request):
