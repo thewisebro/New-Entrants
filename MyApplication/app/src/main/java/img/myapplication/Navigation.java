@@ -41,10 +41,15 @@ public class Navigation extends ActionBarActivity
     public void displayBlog(View view){
        // Toast.makeText(this, "Invalid valid email address", Toast.LENGTH_SHORT).show();
        BlogCardViewHolder viewHolder=(BlogCardViewHolder) view.getTag();
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new BlogPage(viewHolder.model)).commit();
+       getSupportFragmentManager().beginTransaction().replace(R.id.container,new BlogPage(viewHolder.model)).commit();
     }
-    public void fromCategory(View view){
-
+    public void displayPeer(View view){
+        PeerCardViewHolder viewHolder=(PeerCardViewHolder) view.getTag();
+        getSupportFragmentManager().beginTransaction().add(R.id.container,new PeerPage(viewHolder.model)).commit();
+    }
+    public void displaySenior(View view){
+        SeniorCardViewHolder viewHolder=(SeniorCardViewHolder) view.getTag();
+        getSupportFragmentManager().beginTransaction().add(R.id.container,new SeniorPage(viewHolder.model)).commit();
     }
     @Override
     public void onNavigationDrawerItemSelected(int position) {

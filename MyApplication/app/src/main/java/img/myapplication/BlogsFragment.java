@@ -34,7 +34,7 @@ public class BlogsFragment extends Fragment {
         cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_item_card);
 
         for (int i = 0; i < 10; i++) {
-            //Card card = new Card("Card " + (i+1) + " Line 1", "Card " + (i+1) + " Line 2");
+
             BlogModel card= new BlogModel();
             card.topic="lololol";
             card.shortInfo="test";

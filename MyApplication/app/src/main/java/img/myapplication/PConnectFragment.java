@@ -1,6 +1,7 @@
 package img.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.List;
 public class PConnectFragment extends Fragment {
 
 
-    private BlogCardArrayAdapter cardArrayAdapter;
+    private PeerCardArrayAdapter cardArrayAdapter;
     private ListView listView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
@@ -29,40 +31,30 @@ public class PConnectFragment extends Fragment {
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
 
-        cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_item_card);
+        cardArrayAdapter = new PeerCardArrayAdapter(getContext(), R.layout.list_peer_card);
 
         for (int i = 0; i < 10; i++) {
-            //Card card = new Card("Card " + (i+1) + " Line 1", "Card " + (i+1) + " Line 2");
-            BlogCard card= new BlogCard();
-            card.topic="lololol";
-            card.shortInfo="test";
-            card.author="ankush";
-            card.category="example";
-            card.date="2015-10-27";
+
+            PeerModel card= new PeerModel();
+            card.name="abc";
+            card.state="utk";
+            card.town="roorkee";
             cardArrayAdapter.add(card);
         }
         listView.setAdapter(cardArrayAdapter);
 
         return view;
     }
-    public class BlogCardArrayAdapter  extends ArrayAdapter<BlogCard> {
+    public class PeerCardArrayAdapter  extends ArrayAdapter<PeerModel> {
 
-        private List<BlogCard> cardList = new ArrayList<BlogCard>();
+        private List<PeerModel> cardList = new ArrayList<PeerModel>();
 
-        class CardViewHolder {
-            TextView topic;
-            TextView shortInfo;
-            TextView author;
-            TextView category;
-            TextView date;
-        }
-
-        public BlogCardArrayAdapter(Context context, int textViewResourceId) {
+        public PeerCardArrayAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
         }
 
         @Override
-        public void add(BlogCard object) {
+        public void add(PeerModel object) {
             cardList.add(object);
             super.add(object);
         }
@@ -73,34 +65,36 @@ public class PConnectFragment extends Fragment {
         }
 
         @Override
-        public BlogCard getItem(int index) {
+        public PeerModel getItem(int index) {
             return this.cardList.get(index);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = convertView;
-            CardViewHolder viewHolder;
+            PeerCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 row = inflater.inflate(R.layout.list_peer_card, parent, false);
-                viewHolder = new CardViewHolder();
-                viewHolder.topic = (TextView) row.findViewById(R.id.topic);
-                viewHolder.shortInfo = (TextView) row.findViewById(R.id.shortInfo);
-                viewHolder.author = (TextView) row.findViewById(R.id.author);
-                viewHolder.category = (TextView) row.findViewById(R.id.category);
-                viewHolder.date = (TextView) row.findViewById(R.id.date);
+                viewHolder = new PeerCardViewHolder();
+                viewHolder.name = (TextView) row.findViewById(R.id.name);
+                viewHolder.town = (TextView) row.findViewById(R.id.town);
+                viewHolder.state = (TextView) row.findViewById(R.id.state);
 
-                row.setTag(viewHolder);
+                viewHolder.model=new PeerModel();
+                //viewHolder.position=position;
+                //row.findViewById(R.id.cardTop).setOnClickListener(this);
+                //row.setTag(viewHolder);
             } else {
-                viewHolder = (CardViewHolder)row.getTag();
+                viewHolder = (PeerCardViewHolder)row.getTag();
             }
-            BlogCard card = getItem(position);
-            viewHolder.topic.setText(card.topic);
-            viewHolder.shortInfo.setText(card.shortInfo);
-            viewHolder.author.setText(card.author);
-            viewHolder.category.setText(card.category);
-            viewHolder.date.setText(card.date);
+            PeerModel card = getItem(position);
+            viewHolder.name.setText(card.name);
+            viewHolder.town.setText(card.town);
+            viewHolder.state.setText(card.state);
+
+            viewHolder.model.copy(card);
+            row.setTag(viewHolder);
             return row;
         }
 

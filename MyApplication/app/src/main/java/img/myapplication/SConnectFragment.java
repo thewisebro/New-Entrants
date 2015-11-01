@@ -1,6 +1,7 @@
 package img.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.List;
 public class SConnectFragment extends Fragment {
 
 
-    private BlogCardArrayAdapter cardArrayAdapter;
+    private SeniorCardArrayAdapter cardArrayAdapter;
     private ListView listView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
@@ -29,40 +31,30 @@ public class SConnectFragment extends Fragment {
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
 
-        cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_item_card);
+        cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_senior_card);
 
         for (int i = 0; i < 10; i++) {
-            //Card card = new Card("Card " + (i+1) + " Line 1", "Card " + (i+1) + " Line 2");
-            BlogCard card= new BlogCard();
-            card.topic="lololol";
-            card.shortInfo="test";
-            card.author="ankush";
-            card.category="example";
-            card.date="2015-10-27";
+
+            SeniorModel card= new SeniorModel();
+            card.name="abc";
+            card.branch="ee";
+            card.year="2";
             cardArrayAdapter.add(card);
         }
         listView.setAdapter(cardArrayAdapter);
 
         return view;
     }
-    public class BlogCardArrayAdapter  extends ArrayAdapter<BlogCard> {
+    public class SeniorCardArrayAdapter  extends ArrayAdapter<SeniorModel> {
 
-        private List<BlogCard> cardList = new ArrayList<BlogCard>();
+        private List<SeniorModel> cardList = new ArrayList<SeniorModel>();
 
-        class CardViewHolder {
-            TextView topic;
-            TextView shortInfo;
-            TextView author;
-            TextView category;
-            TextView date;
-        }
-
-        public BlogCardArrayAdapter(Context context, int textViewResourceId) {
+        public SeniorCardArrayAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
         }
 
         @Override
-        public void add(BlogCard object) {
+        public void add(SeniorModel object) {
             cardList.add(object);
             super.add(object);
         }
@@ -73,34 +65,36 @@ public class SConnectFragment extends Fragment {
         }
 
         @Override
-        public BlogCard getItem(int index) {
+        public SeniorModel getItem(int index) {
             return this.cardList.get(index);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = convertView;
-            CardViewHolder viewHolder;
+            SeniorCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 row = inflater.inflate(R.layout.list_senior_card, parent, false);
-                viewHolder = new CardViewHolder();
-                viewHolder.topic = (TextView) row.findViewById(R.id.topic);
-                viewHolder.shortInfo = (TextView) row.findViewById(R.id.shortInfo);
-                viewHolder.author = (TextView) row.findViewById(R.id.author);
-                viewHolder.category = (TextView) row.findViewById(R.id.category);
-                viewHolder.date = (TextView) row.findViewById(R.id.date);
+                viewHolder = new SeniorCardViewHolder();
+                viewHolder.name = (TextView) row.findViewById(R.id.name);
+                viewHolder.year = (TextView) row.findViewById(R.id.year);
+                viewHolder.branch = (TextView) row.findViewById(R.id.branch);
 
-                row.setTag(viewHolder);
+                viewHolder.model=new SeniorModel();
+                //viewHolder.position=position;
+                //row.findViewById(R.id.cardTop).setOnClickListener(this);
+                //row.setTag(viewHolder);
             } else {
-                viewHolder = (CardViewHolder)row.getTag();
+                viewHolder = (SeniorCardViewHolder)row.getTag();
             }
-            BlogCard card = getItem(position);
-            viewHolder.topic.setText(card.topic);
-            viewHolder.shortInfo.setText(card.shortInfo);
-            viewHolder.author.setText(card.author);
-            viewHolder.category.setText(card.category);
-            viewHolder.date.setText(card.date);
+            SeniorModel card = getItem(position);
+            viewHolder.name.setText(card.name);
+            viewHolder.year.setText(card.year);
+            viewHolder.branch.setText(card.branch);
+
+            viewHolder.model.copy(card);
+            row.setTag(viewHolder);
             return row;
         }
 
