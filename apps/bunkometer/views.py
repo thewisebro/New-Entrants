@@ -158,6 +158,7 @@ def getBunks(request,username):
       data = {}
       json['course'] = {}
       json['course']['code'] = bunk.course_code
+      json['course']['name'] = Course.objects.get(student = student, course_code = bunk.course_code).course_name
       data['lec'] = bunk.lec_bunk
       data['lecTotal'] = bunk.lec_total
       data['tut'] = bunk.tut_bunk
@@ -166,14 +167,14 @@ def getBunks(request,username):
       data['pracTotal'] = bunk.prac_total
       json['bunk'] = data
       ans['bunks'].append(json)
-    ans['sucess'] = 'YES'  
+    ans['success'] = 'YES'  
     return JsonResponse(ans)
   except Exception as e:
     return JsonResponse(ans)
 
 @csrf_exempt
 def saveTimeTable(request,username):
-   ans = {'sucess':'NO'}
+   ans = {'success':'NO'}
    try:
      student = Student.objects.get(user__username=username)
      TimeTable.objects.filter(student__user__username=username).delete()
