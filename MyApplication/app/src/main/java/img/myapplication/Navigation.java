@@ -41,8 +41,7 @@ public class Navigation extends ActionBarActivity
     public void displayBlog(View view){
        // Toast.makeText(this, "Invalid valid email address", Toast.LENGTH_SHORT).show();
        BlogCardViewHolder viewHolder=(BlogCardViewHolder) view.getTag();
-        BlogModel model=viewHolder.model;
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new BlogPage(new BlogModel())).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new BlogPage(viewHolder.model)).commit();
     }
     public void fromCategory(View view){
 

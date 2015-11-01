@@ -106,7 +106,7 @@ public class BlogsFragment extends Fragment {
             viewHolder.author.setText(card.author);
             viewHolder.category.setText(card.category);
             viewHolder.date.setText(card.date);
-            viewHolder.model=card;
+            viewHolder.model.copy(card);
             row.setTag(viewHolder);
             return row;
         }

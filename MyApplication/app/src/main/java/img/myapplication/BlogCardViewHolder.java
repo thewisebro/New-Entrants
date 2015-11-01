@@ -11,5 +11,6 @@ public class BlogCardViewHolder {
     public  TextView author;
     public  TextView category;
     public  TextView date;
+
     public BlogModel model;
 }
