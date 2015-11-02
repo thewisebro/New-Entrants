@@ -3,6 +3,7 @@ package img.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -52,6 +53,9 @@ public class Navigation extends ActionBarActivity
     }
     public void requestSenior(View view){
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new RequestSenior()).commit();
+    }
+    public void request(View view){
+
     }
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -112,7 +116,16 @@ public class Navigation extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
-
+    @Override
+    public void onBackPressed(){
+        /*if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }*/
+        FragmentManager fm = this.getSupportFragmentManager();
+        fm.popBackStack();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
