@@ -33,7 +33,7 @@ public class Login extends AppCompatActivity {
             mBundle.putSerializable("user",user);
             intent.putExtras(mBundle);
             startActivity(intent);
-            finish();
+           // finish();
         }
         else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();
     }

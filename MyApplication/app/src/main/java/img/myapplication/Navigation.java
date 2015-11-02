@@ -3,7 +3,6 @@ package img.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -45,11 +44,14 @@ public class Navigation extends ActionBarActivity
     }
     public void displayPeer(View view){
         PeerCardViewHolder viewHolder=(PeerCardViewHolder) view.getTag();
-        getSupportFragmentManager().beginTransaction().add(R.id.container,new PeerPage(viewHolder.model)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new PeerPage(viewHolder.model)).commit();
     }
     public void displaySenior(View view){
         SeniorCardViewHolder viewHolder=(SeniorCardViewHolder) view.getTag();
-        getSupportFragmentManager().beginTransaction().add(R.id.container,new SeniorPage(viewHolder.model)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new SeniorPage(viewHolder.model)).commit();
+    }
+    public void requestSenior(View view){
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new RequestSenior()).commit();
     }
     @Override
     public void onNavigationDrawerItemSelected(int position) {

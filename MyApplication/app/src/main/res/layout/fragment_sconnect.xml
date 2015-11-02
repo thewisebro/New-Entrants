@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -15,4 +15,18 @@
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
         android:dividerHeight="10dp" />
-</LinearLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_request"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:ellipsize="marquee"
+        android:src="@android:drawable/btn_plus"
+        android:longClickable="true"
+        android:background="@null"
+        android:onClick="requestSenior" />
+
+</RelativeLayout>

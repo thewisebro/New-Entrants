@@ -6,7 +6,8 @@
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
     android:onClick="displayPeer"
-    android:descendantFocusability="beforeDescendants">
+    android:descendantFocusability="beforeDescendants"
+    android:longClickable="true">
 
     <RelativeLayout
         android:orientation="vertical"
