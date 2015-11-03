@@ -379,7 +379,7 @@ def sell(request):
         watch_user_list = new_item.category.watch_users.all()
         notif_text = str(new_item.item_name)+" has been added to the category "+str(new_item.category.name)
         notif_text += " that you have watched"
-        url = '/buyandsell/sell_details/' + str(new_item.pk)
+        url = '/buyandsell/sell_details/' + str(new_item.pk) + '/notif'
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
         pic =ItemPic( item = new_item )
         pic.save()
@@ -447,7 +447,7 @@ def requestitem(request):
         watch_user_list=new_item.category.watch_users.all()
         notif_text=str(new_item.item_name)+" has been requested in the category "+str(new_item.category.name)
         notif_text+=" that you have watched"
-        url = '/buyandsell/sell_details/' + str(new_item.pk)
+        url = '/buyandsell/request_details/' + str(new_item.pk) + '/notif'
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
         return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/viewrequests/'})
       else:
@@ -659,7 +659,7 @@ def sendmail(request, type_of_mail, id_pk):
         notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
       if qryst[0].email:
         notif_text += 'Email at ' + str(user.email) + '.'
-      url = '/buyandsell/sell_details/' + str(id_pk)   #this page is to be made
+      url = '/buyandsell/sell_details/' + str(id_pk) + '/notif'
       users = [qryst[0].user]
       Notification.save_notification(app, notif_text, url, users, qryst[0])
 
@@ -686,7 +686,7 @@ def sendmail(request, type_of_mail, id_pk):
         notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
       if qryst[0].email:
         notif_text += 'Email at ' + str(user.email) + '.'
-      url = '/buyandsell/request_details/' + str(id_pk)
+      url = '/buyandsell/request_details/' + str(id_pk) + '/notif'
       users = [qryst[0].user]
       Notification.save_notification(app, notif_text, url, users, qryst[0])
 
@@ -1099,7 +1099,7 @@ def edit(request,form_type,pk):
             watch_user_list=edited_item.category.watch_users.all()
             notif_text=str(edited_item.item_name)+"has been added in the category"+str(edited_item.category.name)
             notif_text+="that you have watched"
-            url = '/buyandsell/sell_details/' + str(edited_item.pk)
+            url = '/buyandsell/sell_details/' + str(edited_item.pk) + '/notif'
             Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)
           return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/my-account/'})
         else:
@@ -1158,7 +1158,7 @@ def edit(request,form_type,pk):
             watch_user_list=edited_item.category.watch_users.all()
             notif_text=str(edited_item.item_name)+"has been requested in the category"+str(edited_item.category.name)
             notif_text+="that you have watched"
-            url = '/buyandsell/sell_details/' + str(edited_item.pk)
+            url = '/buyandsell/request_details/' + str(edited_item.pk) + '/notif'
             Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)
           return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/my-account/'})
         else:
