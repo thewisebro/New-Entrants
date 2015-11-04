@@ -23,10 +23,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:ellipsize="marquee"
-        android:src="@android:drawable/btn_plus"
         android:longClickable="true"
+        android:onClick="requestSenior"
         android:background="@null"
-        android:onClick="requestSenior" />
+        android:src="@android:drawable/btn_plus" />
+
 
 </RelativeLayout>
