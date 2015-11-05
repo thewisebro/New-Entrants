@@ -41,7 +41,10 @@
         {% if not_viewed_notifications_count == 0 %}
           <div id="notifications-count" class="notifications-count-inact">0</div>
         {% else %}
-          <div id="notifications-count">{{ not_viewed_notifications_count }}</div>
+          <div id="notifications-count">
+            <i class="fa fa-bell"></i>
+            {{ not_viewed_notifications_count }}
+          </div>
         {% endif %}
         <div id="user-name">{{ user.name }}</div>
         {% if user.username == "admin" %}
