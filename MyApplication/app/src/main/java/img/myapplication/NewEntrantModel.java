@@ -6,6 +6,8 @@ package img.myapplication;
 public class NewEntrantModel {
     public String id;
     public String name;
+    public String username;
+    public String password;
     public String town;
     public String state;
     public String branch;

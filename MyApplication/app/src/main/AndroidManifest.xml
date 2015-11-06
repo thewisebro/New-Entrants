@@ -41,6 +41,18 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" >
         </activity>
+        <activity
+            android:name=".NavigationStudent"
+            android:label="@string/title_activity_navigation_student" >
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+        <activity
+            android:name=".fghfh"
+            android:label="@string/title_activity_fghfh" >
+        </activity>
     </application>
 
 </manifest>

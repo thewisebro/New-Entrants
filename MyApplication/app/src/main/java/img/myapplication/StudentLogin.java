@@ -28,7 +28,7 @@ public class StudentLogin extends AppCompatActivity {
         User_Model user=db.getUser(Enr_No.getText().toString(),Password.getText().toString());
         if(db.checkUser(Enr_No.getText().toString(), Password.getText().toString()) == true)
         {
-            Intent intent =new Intent(this, Navigation.class);
+            Intent intent =new Intent(this, NavigationStudent.class);
             Bundle mBundle=new Bundle();
             mBundle.putSerializable("user",user);
             intent.putExtras(mBundle);
