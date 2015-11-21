@@ -465,12 +465,12 @@ def deleteFile(request , file_id):
 
     if user.in_group('faculty') or user == fileToDelete.post.upload_user:
       try:
-        fileToDelete.delete()
+        fileToDelete.delete_file()
         msg = 'File has been deleted'
         lectut_status = 100
         counter = Uploadedfile.file_objects.all().filter(post = post).count()
         if counter ==0 and post.content =='':
-          post.delete()
+          post.delete_post()
           msg = 'The post has been deleted as well'
       except:
         msg = 'Some error Occured'
@@ -493,10 +493,10 @@ def deletePost(request , post_id):
     postToDelete = Post.objects.get(pk=post_id)
     if user.in_group('faculty') or user == postToDelete.upload_user:
       try:
-        postToDelete.delete()
+        postToDelete.delete_post()
         files = Uploadedfile.file_objects.all().filter(post=postToDelete)
         for afile in files:
-          afile.delete()
+          afile.delete_file()
         msg = 'Post has been deleted'
         lectut_status = 100
       except:
@@ -617,7 +617,6 @@ def post_comments(request , post_id):
 @csrf_exempt
 @CORS_allow
 def add_comment(request , post_id):
-  import pdb;pdb.set_trace()
   post = Post.post_objects.get(id = post_id)
   return null
 
