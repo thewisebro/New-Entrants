@@ -26,7 +26,7 @@ public class StudentLogin extends AppCompatActivity {
 
         MySQLiteHelper db=new MySQLiteHelper(this);
         User_Model user=db.getUser(Enr_No.getText().toString(),Password.getText().toString());
-        if(db.checkUser(Enr_No.getText().toString(), Password.getText().toString()) == true)
+        if(db.checkUser(Enr_No.getText().toString(), Password.getText().toString()))
         {
             Intent intent =new Intent(this, NavigationStudent.class);
             Bundle mBundle=new Bundle();

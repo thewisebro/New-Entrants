@@ -38,8 +38,6 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
-    public NavigationDrawerFragment() {
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,9 +77,12 @@ public class NavigationDrawerFragment extends Fragment {
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 getResources().getStringArray(R.array.tabs)
-                ));
+        ));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
+    }
+    public void set(int type){
+
     }
 
     public boolean isDrawerOpen() {

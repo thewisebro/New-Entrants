@@ -8,6 +8,13 @@
     <string name="tab4">Senior Connect</string>
     <string name="tab5">Edit Info</string>
     <string name="tab6">Logout</string>
+    <string-array name="studenttabs">
+        <item>Profile</item>
+        <item>Blogs</item>
+        <item>Requests</item>
+        <item>Edit Profile</item>
+        <item>Logout</item>
+    </string-array>
     <string-array name="tabs">
         <item>Profile</item>
         <item>Blogs</item>
