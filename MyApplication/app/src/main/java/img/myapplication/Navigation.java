@@ -1,6 +1,5 @@
 package img.myapplication;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,14 +28,13 @@ public class Navigation extends ActionBarActivity
         mCurrentPosition=-1;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mNavigationDrawerFragment.set(1);
        // mTitle = getTitle();
         user=(User_Model) getIntent().getSerializableExtra("user");
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
     public void logout(){
-        Intent intent=new Intent(this, Login.class);
-        startActivity(intent);
-        finish();
+
     }
     public void displayBlog(View view){
        // Toast.makeText(this, "Invalid valid email address", Toast.LENGTH_SHORT).show();

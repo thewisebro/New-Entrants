@@ -37,10 +37,10 @@ public class NewEntrantLogin extends AppCompatActivity {
         }
         else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();
     }
-    public void register_click(View view){
+    public void register(View view){
         Intent intent = new Intent(this, Register.class);
         startActivity(intent);
-        finish();
+
     }
 
     @Override

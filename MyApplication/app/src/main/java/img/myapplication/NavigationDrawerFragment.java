@@ -72,17 +72,25 @@ public class NavigationDrawerFragment extends Fragment {
 
             }
         });
+
+        return mDrawerListView;
+    }
+    public void set(int type){
+        String[] tabs=null;
+        if(type==2) {
+            tabs = getResources().getStringArray(R.array.studenttabs);
+        }
+        if(type==1){
+            tabs=getResources().getStringArray(R.array.entrantstabs);
+        }
+
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                getResources().getStringArray(R.array.tabs)
+                tabs
         ));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
-    }
-    public void set(int type){
-
     }
 
     public boolean isDrawerOpen() {

@@ -3,21 +3,18 @@ package img.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
 
 public class NavigationStudent extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    private User_Model user;
+    private User_Model student;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
     private CharSequence mTitle;
@@ -30,9 +27,10 @@ public class NavigationStudent extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.set(2);
-        // mTitle = getTitle();
-        user=(User_Model) getIntent().getSerializableExtra("user");
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        // mTitle = getTitle();
+        student=(User_Model) getIntent().getSerializableExtra("user");
+
     }
     public void logout(){
         Intent intent=new Intent(this, Login.class);
@@ -61,7 +59,7 @@ public class NavigationStudent extends ActionBarActivity
 
 
     }
-    public void update(View view) {
+/*    public void update(View view) {
         MySQLiteHelper db = new MySQLiteHelper(this);
 
 
@@ -79,6 +77,7 @@ public class NavigationStudent extends ActionBarActivity
         }
 
     }
+*/
     public void getPageTitle(){
 
         String[] mTitleArray = getResources().getStringArray(R.array.studenttabs);

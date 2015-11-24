@@ -19,11 +19,7 @@
         <activity
             android:name=".Login"
             android:label="Login" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Register"
@@ -40,19 +36,17 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".NavigationStudent"
             android:label="@string/title_activity_navigation_student" >
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
-        </activity>
-        <activity
-            android:name=".fghfh"
-            android:label="@string/title_activity_fghfh" >
-        </activity>
+
     </application>
 
 </manifest>
