@@ -42,7 +42,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
     private static String CREATE_STUDENTS_TABLE=
             "create table if not exists students ( "+
                 "name varchar,"+
-                "enr_no char(8),"+
+                "enr_no char(8) primary key,"+
                 "password varchar,"+
                 "branch varchar,"+
                 "year char(1),"+
@@ -53,7 +53,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
 
     private static String CREATE_ENTRANTS_TABLE=
             "create table if not exists entrants ( "+
-                    "id varchar,"+
+                    "id varchar primary key,"+
                     "name varchar,"+
                     "username varchar,"+
                     "password varchar,"+
@@ -181,7 +181,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         }
         return student;
 
-
     }
     public boolean checkStudent(String enr_no, String password){
         SQLiteDatabase db= this.getReadableDatabase();
@@ -191,5 +190,77 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         else return true;
     }
 
+    public void addEntrant(NewEntrantModel entrant){
+        SQLiteDatabase db=this.getWritableDatabase();
 
+        db.execSQL(CREATE_ENTRANTS_TABLE);
+
+
+        ContentValues values=new ContentValues();
+        values.put("id", entrant.id);
+        values.put("name", entrant.name);
+        values.put("username", entrant.username);
+        values.put("password", entrant.password);
+        values.put("email", entrant.email);
+        values.put("branch", entrant.branch);
+        values.put("town", entrant.town);
+        values.put("state", entrant.state);
+        values.put("about", entrant.about);
+        values.put("mobile", entrant.mobile);
+        db.insert(TABLE_ENTRANTS, null, values);
+
+        db.close();
+    }
+    public boolean checkEntrant(String username, String password){
+        SQLiteDatabase db= this.getReadableDatabase();
+        Cursor cursor=db.rawQuery("select * from entrants where username='" + username + "' and password ='" + password + "';", null);
+
+        if(cursor.getCount()==0) return false;
+        else return true;
+    }
+    public NewEntrantModel getEntrant(String username, String password){
+        SQLiteDatabase db= this.getReadableDatabase();
+        NewEntrantModel entrant=new NewEntrantModel();
+
+        Cursor cursor=db.rawQuery("select * from entrants where username='" + username + "' and password ='" + password + "';", null);
+        if (cursor.getCount()!=0) {
+            cursor.moveToFirst();
+
+            entrant.id = cursor.getString(0);
+            entrant.name = cursor.getString(1);
+            entrant.username = cursor.getString(2);
+            entrant.password = cursor.getString(3);
+            entrant.branch = cursor.getString(4);
+            entrant.town = cursor.getString(5);
+            entrant.state = cursor.getString(6);
+            entrant.about = cursor.getString(7);
+            entrant.email = cursor.getString(8);
+            entrant.mobile = cursor.getString(9);
+        }
+        return entrant;
+
+
+    }
+
+    public int updateEntrant(NewEntrantModel entrant){
+        SQLiteDatabase db=this.getWritableDatabase();
+
+        ContentValues values= new ContentValues();
+
+        values.put("id", entrant.id);
+        values.put("name", entrant.name);
+        values.put("username", entrant.username);
+        values.put("password", entrant.password);
+        values.put("email", entrant.email);
+        values.put("branch", entrant.branch);
+        values.put("town", entrant.town);
+        values.put("state", entrant.state);
+        values.put("about", entrant.about);
+        values.put("mobile", entrant.mobile);
+
+        int i=db.update(TABLE_USERS, values, " id = ? ", new String[]{entrant.id});
+
+        return i;
+
+    }
 }

@@ -1,9 +1,11 @@
 package img.myapplication;
 
+import java.io.Serializable;
+
 /**
  * Created by ankush on 10/30/15.
  */
-public class StudentModel {
+public class StudentModel implements Serializable {
     public  String name;
     public String enr_no;
     public String password;

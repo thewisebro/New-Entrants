@@ -7,10 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class NewEntrantLogin extends AppCompatActivity {
-    private EditText id;
+    private EditText Username;
     private EditText Password;
 
     @Override
@@ -21,21 +20,21 @@ public class NewEntrantLogin extends AppCompatActivity {
     }
     public void login(View view){
 
-        id=(EditText) findViewById(R.id.et_id);
+        Username=(EditText) findViewById(R.id.et_username);
         Password=(EditText) findViewById(R.id.et_Password);
 
         MySQLiteHelper db=new MySQLiteHelper(this);
-        User_Model user=db.getUser(id.getText().toString(),Password.getText().toString());
-        if(db.checkUser(id.getText().toString(), Password.getText().toString()) == true)
+        NewEntrantModel entrant=db.getEntrant(Username.getText().toString(),Password.getText().toString());
+        /*if(db.checkEntrant(Username.getText().toString(), Password.getText().toString()) == true)
         {
             Intent intent =new Intent(this, Navigation.class);
             Bundle mBundle=new Bundle();
-            mBundle.putSerializable("user",user);
+            mBundle.putSerializable("entrant",entrant);
             intent.putExtras(mBundle);
             startActivity(intent);
             finish();
         }
-        else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();
+        else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();*/
     }
     public void register(View view){
         Intent intent = new Intent(this, Register.class);

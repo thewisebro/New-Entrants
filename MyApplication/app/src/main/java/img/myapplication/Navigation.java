@@ -16,7 +16,7 @@ import android.widget.Toast;
 public class Navigation extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    private User_Model user;
+    private NewEntrantModel entrant;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
     private CharSequence mTitle;
@@ -30,7 +30,7 @@ public class Navigation extends ActionBarActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.set(1);
        // mTitle = getTitle();
-        user=(User_Model) getIntent().getSerializableExtra("user");
+        entrant=(NewEntrantModel) getIntent().getSerializableExtra("entrant");
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
     public void logout(){
@@ -69,11 +69,13 @@ public class Navigation extends ActionBarActivity
                 break;
             case 3:fragment = new SConnectFragment();
                 break;
-            case 4 :fragment= new EditInfoFragment(user);
+            /*case 4 :fragment= new EditInfoFragment(user);
                 break;
             case 5: logout();
                 break;
             default: fragment=new ProfileFragment(user);
+                break;*/
+            default:fragment = new BlogsFragment();
                 break;
         }
        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
@@ -87,13 +89,13 @@ public class Navigation extends ActionBarActivity
         EditText et_email = (EditText) findViewById(R.id.edit_email);
         EditText et_number = (EditText) findViewById(R.id.edit_number);
 
-        user.Email = et_email.getText().toString();
-        user.Mobile = et_number.getText().toString();
+        entrant.email = et_email.getText().toString();
+        entrant.mobile = et_number.getText().toString();
 
-        if(db.updateUser(user)>0){
+        if(db.updateEntrant(entrant)>0){
             Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
         }
-        else if(db.updateUser(user)==0){
+        else if(db.updateEntrant(entrant)==0){
             Toast.makeText(getApplicationContext(),"No update", Toast.LENGTH_SHORT).show();
         }
 
