@@ -446,7 +446,7 @@ def scholarship_data_listing(request):
 def download_scholarship_data(request):
   degree = request.GET.get('degree')
   scholarship_type = request.GET.get('scholarship_type')
-  persons = MCM.objects.filter(scholar_type = scholarship_type, student__branch__degree = degree, check = True, datetime__gt=datetime.date(2014,8,1))
+  persons = MCM.objects.filter(scholar_type = scholarship_type, student__branch__degree = degree, check = True, datetime__gt=datetime.date(2015,7,1))
   persons = persons.order_by('student__branch__code')
   departments = persons.values_list('student__branch').distinct()
 
