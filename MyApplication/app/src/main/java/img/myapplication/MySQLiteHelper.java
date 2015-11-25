@@ -53,16 +53,17 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
 
     private static String CREATE_ENTRANTS_TABLE=
             "create table if not exists entrants ( "+
-                    "id varchar primary key,"+
-                    "name varchar,"+
-                    "username varchar,"+
-                    "password varchar,"+
-                    "branch varchar,"+
-                    "town varchar,"+
-                    "state varchar,"+
+                    "id text primary key,"+
+                    "name text,"+
+                    "username text,"+
+                    "password text,"+
+                    "branch text,"+
+                    "town text,"+
+                    "state text,"+
                     "about text,"+
-                    "email varchar,"+
-                    "mobile varchar );";
+                    "email text,"+
+                    "mobile text );";
+
 
     public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -170,10 +171,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
             student.enr_no= cursor.getString(1);
             student.name= cursor.getString(0);
             student.password= cursor.getString(2);
-            student.branch= cursor.getString(3);
+            //student.branch= cursor.getString(3);
             student.year= cursor.getString(4);
             student.town= cursor.getString(5);
-            student.state= cursor.getString(6);
+            //student.state= cursor.getString(6);
             student.email= cursor.getString(7);
             student.mobile= cursor.getString(8);
 
@@ -202,10 +203,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         values.put("username", entrant.username);
         values.put("password", entrant.password);
         values.put("email", entrant.email);
-        values.put("branch", entrant.branch);
+        //values.put("branch", entrant.branch);
         values.put("town", entrant.town);
-        values.put("state", entrant.state);
-        values.put("about", entrant.about);
+        //.put("state", entrant.state);
+        //values.put("about", entrant.about);
         values.put("mobile", entrant.mobile);
         db.insert(TABLE_ENTRANTS, null, values);
 
@@ -230,10 +231,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
             entrant.name = cursor.getString(1);
             entrant.username = cursor.getString(2);
             entrant.password = cursor.getString(3);
-            entrant.branch = cursor.getString(4);
+            //entrant.branch = cursor.getString(4);
             entrant.town = cursor.getString(5);
-            entrant.state = cursor.getString(6);
-            entrant.about = cursor.getString(7);
+            //entrant.state = cursor.getString(6);
+            //entrant.about = cursor.getString(7);
             entrant.email = cursor.getString(8);
             entrant.mobile = cursor.getString(9);
         }
@@ -252,13 +253,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         values.put("username", entrant.username);
         values.put("password", entrant.password);
         values.put("email", entrant.email);
-        values.put("branch", entrant.branch);
+        //values.put("branch", entrant.branch);
         values.put("town", entrant.town);
-        values.put("state", entrant.state);
-        values.put("about", entrant.about);
+        //values.put("state", entrant.state);
+        //values.put("about", entrant.about);
         values.put("mobile", entrant.mobile);
 
-        int i=db.update(TABLE_USERS, values, " id = ? ", new String[]{entrant.id});
+        int i=db.update(TABLE_ENTRANTS, values, " id = ? ", new String[]{entrant.id});
 
         return i;
 
