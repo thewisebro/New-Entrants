@@ -193,6 +193,23 @@
       }
     );
 
+    $(".get-shareable-url-button").click
+    (
+      function()
+      {
+        $(this).css("display","none")
+        $(".shareable-url-text-box").css("display", "inline");
+        $(".shareable-url-text-box").select();
+      }
+    );
+    $(".shareable-url-text-box").click
+    (
+      function()
+      {
+        $(this).select();
+      }
+    );
+
     $(".enquire").click
     (
       function()

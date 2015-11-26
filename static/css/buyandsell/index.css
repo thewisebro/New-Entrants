@@ -480,6 +480,12 @@ input[type="radio"]:checked + label div
   border-left: 1px solid transparent;
 }
 
+.request-details-table tbody tr
+{
+  border-right: none;
+  border-left: none !important;
+}
+
 .user-photo
 {
   width:30px;
@@ -761,6 +767,7 @@ a: focus
   position: absolute;
   right: 260px;
   margin-top: -45px;
+  background-color: #ffffff;
 }
 
 .upload-without-image-button:hover
@@ -772,7 +779,10 @@ a: focus
 .enquire-clicked
 {
   display:none;
+  margin-left: 5px;
+  margin-top: 10px;
 }
+
 .sell-form-image-box
 {
   height: 200px;
@@ -782,6 +792,7 @@ a: focus
   border: 1px solid #ccc;
   border-radius:2px;
 }
+
 .sell-form-body
 {
   width:auto;
@@ -1548,6 +1559,33 @@ a:focus
 {
   text-align: justify;
   font-size: 14px;
+}
+
+.get-shareable-url-button
+{
+  padding: 0;
+  background-color: transparent;
+  color: #1081de;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.get-shareable-url-button:hover
+{
+  color: #2fa1ff;
+}
+
+.shareable-url-text-box
+{
+  border: 1px solid #cccccc;
+  color: #555555;
+  border-radius: 2px;
+  padding: 5px 0 5px 5px;
+  overflow: hidden;
+  margin: -10px 0 15px 5px;
+  margin-top: -10px;
+  width: 100%;
+  display: none;
 }
 
 .dialog-password-field
