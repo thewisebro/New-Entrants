@@ -684,7 +684,7 @@ def branch_details_xls(request, branch_code) :
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def insert_shortlist(request):
     if request.method == 'POST':
-        students = request.POST['students'].strip().split(",")
+        students = request.POST['students'].strip().split("\n")
         company_id = request.POST['company'].strip()
         message = ""
         is_success = True
