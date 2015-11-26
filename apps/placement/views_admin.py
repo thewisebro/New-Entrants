@@ -695,7 +695,6 @@ def branch_details_xls(request, branch_code) :
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def insert_shortlist(request):
-    import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         students = request.POST['students'].strip().split("\n")
         company_id = request.POST['company'].strip()
@@ -706,7 +705,6 @@ def insert_shortlist(request):
           for student in students:
             person = Student.objects.get(user__username=int(student))
             plac_person = PlacementPerson.objects.get_or_create(student=person)[0]
-            import ipdb; ipdb.set_trace()
             c_map,created = CompanyApplicationMap.objects.get_or_create(plac_person=plac_person,company=company)
             if created:
               pdf = get_resume_binary(RequestContext(request), person, company.sector)
