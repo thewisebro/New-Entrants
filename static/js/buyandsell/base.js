@@ -617,7 +617,7 @@ $(document).ready
       function()
       {
         $(".edit-button", $(this)).css('opacity', 1);
-        $(".dropdown", $(this)).show();
+        $(".dropdown", $(this)).toggle();
         //$(".item-options-dropdown", $(this)).css('display', 'block');
       }
     );
@@ -628,11 +628,8 @@ $(document).ready
       function()
       {
         $(".edit-button", $(this)).css('opacity', 0);
-        //$(".item-options-dropdown", $(this)).removeClass('open');
-        if(!$(".dropdown", $(this)).hasClass("open"))
-        {
-          $(".dropdown", $(this)).hide();
-        }
+        $(".item-options-dropdown", $(this)).removeClass('open');
+        $(".dropdown", $(this)).toggle();
       }
     );
 

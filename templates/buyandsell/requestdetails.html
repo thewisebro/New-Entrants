@@ -51,6 +51,10 @@
       {% endif %}
       </tbody>
     </table>
+
+    <button class="btn get-shareable-url-button">Get shareable url</button>
+    <input class="shareable-url-text-box" type="text" value=https://channeli.in{% url 'requestdetails' item.pk 'notif' %}/>
+
   </div>
 
   {% if not self_flag and login_flag %}

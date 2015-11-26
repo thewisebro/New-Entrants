@@ -10,6 +10,26 @@
 
 <div class="container item-details-dialog-container" style="padding-top: 80px; padding-left: 0; margin-top: 0;">
   <div class="row">
+    <div>
+      <ol class="breadcrumb notif-breadcrumb">
+        <li>
+          <a class="active" href="/buyandsell/buy/">Items for Sale</a>
+        </li>
+        <li>
+          <a  href="/buyandsell/buy/{{item.category.main_category}}">{{item.category.main_category}}</a>
+        </li>
+        <li>
+          <a class="active" href="/buyandsell/buy/{{item.category.main_category}}/{{item.category.code}}">{{ item.category}}</a>
+        </li>
+        <li>
+          <span class="disabled" href="#">{{ item.item_name }}</span>
+        </li>
+
+      </ol>
+
+    </div>
+  </div>
+  <div class="row">
     <div class="col-xs-4">
       <div>
         {% if item.itempic.pic %}
