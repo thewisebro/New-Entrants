@@ -171,6 +171,11 @@ a:focus
   padding: 0 4px;
 }
 
+.notif-breadcrumb
+{
+  margin: -20px 0 10px 15px;
+}
+
 .watch-button-anchor
 {
   position: relative;
