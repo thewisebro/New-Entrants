@@ -27,9 +27,10 @@ urlpatterns = patterns('placement.views',
 urlpatterns += patterns('placement.views_slots',
                        (r'^slots/$', 'view_all_slots'),
                        (r'^slot/(?P<slot_id>\d+)/$', 'view_slot'),
+                       (r'^slot/delete/(?P<slot_id>\d+)/$', 'delete_slot'),
                        (r'^slot/create/$', 'create_slot'),
                        (r'^slot/edit/(?P<slot_id>\d+)/$', 'edit_slot'),
-                       (r'^slot/generate_xls/(?P<slot_id>\d+)/$', 'import_slot_data'),
+                       (r'^slot/generate_xls/(?P<slot_id>\d+)/$', 'export_slot_data'),
                        (r'^company_search/','company_search'),
 )
 

@@ -53,7 +53,7 @@ def create_slot(request):
         slot.save()
         messages.success(request, "Slot created successfully")
       except:
-        messages.error(request, "Some error occured. Please try again")
+        messages.error(request, "Please select company from autocomplete option.")
         slot.delete()
     except Exception as e:
       messages.error(request, "Some error occured. Please try again")
@@ -66,6 +66,18 @@ def create_slot(request):
       'dates': dates,
 #   'error_msg':message,
       },context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def delete_slot(request, slot_id):
+  try:
+    slot = CompanySlot.objects.get(id=slot_id)
+    slot.delete()
+    messages.success(request, "Slot deleted successfully.")
+  except CompanySlot.DoesNotExist:
+    messages.error(request, "Slot does not exist.")
+  return HttpResponseRedirect(reverse('placement.views_slots.create_slot'))
+
 
 
 @login_required
@@ -240,52 +252,51 @@ def view_all_slots(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
-def import_slot_data(request, slot_id):
-  if request.method == 'POST':
-    company_priority = CompanyPlacementPriority.objects.filter(slots__id=slot_id)
-    student_list = [l.student for l in company_priority]
-    student_list = list(set(student_list))
+def export_slot_data(request, slot_id):
+  company_priority = CompanyPlacementPriority.objects.filter(slots__id=slot_id)
+  student_list = [l.student for l in company_priority]
+  student_list = list(set(student_list))
 
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('sheet 1')
+  wb = xlwt.Workbook(encoding='utf-8')
+  ws = wb.add_sheet('sheet 1')
 
-    headers = ['Enrollment No', ' Name', 'CGPA', 'Email']
-    slot = CompanySlot.objects.get(pk=slot_id)
-    companies_count = slot.company.all().count()
-    companies = slot.company.all()
-    for count in range(companies_count):
-        headers.append("Priority "+str(count+1))
-    new_lst = []
-    for people in student_list:
-      try:
-        priority = CompanyPlacementPriority.objects.filter(slots__id=slot_id,student=people).order_by('priority')
-        company_pri = [x.company.name for x in priority]
-        while len(company_pri) < companies_count:
-          company_pri.append('-')
-        a = [people.user.username, people.user.name, people.cgpa, people.user.email]
-        a.extend(company_pri)
-        new_lst.append(a)
-      except Exception as e:
-        print str(e)
-        message = "Some error occured while generating xls"
+  headers = ['Enrollment No', ' Name', 'CGPA', 'Email']
+  slot = CompanySlot.objects.get(pk=slot_id)
+  companies_count = slot.company.all().count()
+  companies = slot.company.all()
+  for count in range(companies_count):
+      headers.append("Priority "+str(count+1))
+  new_lst = []
+  for people in student_list:
     try:
-      lst_len = len(new_lst[0])
-    except IndexError:
-      lst_len = 0
-    print new_lst
-    for (col, heading) in enumerate(headers):
-       ws.write(2, col+1, heading)
-    row = 3
-    for data in new_lst:
-     for r in range(len(data)):
-       ws.write(row, r+1, data[r])
-     row +=1
+      priority = CompanyPlacementPriority.objects.filter(slots__id=slot_id,student=people).order_by('priority')
+      company_pri = [x.company.name for x in priority]
+      while len(company_pri) < companies_count:
+        company_pri.append('-')
+      a = [people.user.username, people.user.name, people.cgpa, people.user.email]
+      a.extend(company_pri)
+      new_lst.append(a)
+    except Exception as e:
+      print str(e)
+      message = "Some error occured while generating xls"
+  try:
+    lst_len = len(new_lst[0])
+  except IndexError:
+    lst_len = 0
+  print new_lst
+  for (col, heading) in enumerate(headers):
+     ws.write(2, col+1, heading)
+  row = 3
+  for data in new_lst:
+   for r in range(len(data)):
+     ws.write(row, r+1, data[r])
+   row +=1
 
-    file_name = str(str(slot.start_date)+'--'+str(slot.end_date))
-    response = HttpResponse(content_type='application/vnd.ms-excel')
-    response['Content-Disposition'] = 'attachment; filename=%s.xls'%file_name
-    wb.save(response)
-    return response
+  file_name = str(str(slot.start_date)+'--'+str(slot.end_date))
+  response = HttpResponse(content_type='application/vnd.ms-excel')
+  response['Content-Disposition'] = 'attachment; filename=%s.xls'%file_name
+  wb.save(response)
+  return response
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
