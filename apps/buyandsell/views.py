@@ -377,10 +377,9 @@ def sell(request):
         new_item.save()
         app = 'buyandsell'
         watch_user_list = new_item.category.watch_users.all()
-        print watch_user_list
         notif_text = str(new_item.item_name)+" has been added to the category "+str(new_item.category.name)
         notif_text += " that you have watched"
-        url = '/buyandsell/sell_details/' + str(new_item.pk)
+        url = '/buyandsell/sell_details/' + str(new_item.pk) + '/notif'
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
         pic =ItemPic( item = new_item )
         pic.save()
@@ -448,7 +447,7 @@ def requestitem(request):
         watch_user_list=new_item.category.watch_users.all()
         notif_text=str(new_item.item_name)+" has been requested in the category "+str(new_item.category.name)
         notif_text+=" that you have watched"
-        url = '/buyandsell/sell_details/' + str(new_item.pk)
+        url = '/buyandsell/request_details/' + str(new_item.pk) + '/notif'
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
         return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/viewrequests/'})
       else:
@@ -523,7 +522,7 @@ def selldetails(request,pk,notif_flag = None):
     if not notif_flag:
       return render(request,'buyandsell/selldetails.html')
     else:
-      return render(request,'buyandsell/selldetails_notif.html')
+      return render(request,'buyandsell/selldetails_notif.html',{'login_flag':login_flag,'user':request.user if login_flag else None})
 
   self_flag = 0
   user = request.user
@@ -581,7 +580,7 @@ def requestdetails(request,pk , notif_flag = None):
     if not notif_flag:
       return render(request,'buyandsell/requestdetails.html')
     else:
-      return render(request,'buyandsell/requestdetails_notif.html')
+      return render(request,'buyandsell/requestdetails_notif.html',{'login_flag':login_flag,'user':request.user if login_flag else None})
 
 
   self_flag=0
@@ -660,7 +659,7 @@ def sendmail(request, type_of_mail, id_pk):
         notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
       if qryst[0].email:
         notif_text += 'Email at ' + str(user.email) + '.'
-      url = '/buyandsell/sell_details/' + str(id_pk)   #this page is to be made
+      url = '/buyandsell/sell_details/' + str(id_pk) + '/notif'
       users = [qryst[0].user]
       Notification.save_notification(app, notif_text, url, users, qryst[0])
 
@@ -687,7 +686,7 @@ def sendmail(request, type_of_mail, id_pk):
         notif_text += 'Contact '+pronoun+' at ' + str(contact) + '. '
       if qryst[0].email:
         notif_text += 'Email at ' + str(user.email) + '.'
-      url = '/buyandsell/request_details/' + str(id_pk)
+      url = '/buyandsell/request_details/' + str(id_pk) + '/notif'
       users = [qryst[0].user]
       Notification.save_notification(app, notif_text, url, users, qryst[0])
 
@@ -1098,10 +1097,9 @@ def edit(request,form_type,pk):
           if edited_item.category !=  old_category:
             app='buyandsell'
             watch_user_list=edited_item.category.watch_users.all()
-            print watch_user_list
             notif_text=str(edited_item.item_name)+"has been added in the category"+str(edited_item.category.name)
             notif_text+="that you have watched"
-            url = '/buyandsell/sell_details/' + str(edited_item.pk)
+            url = '/buyandsell/sell_details/' + str(edited_item.pk) + '/notif'
             Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)
           return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/my-account/'})
         else:
@@ -1158,10 +1156,9 @@ def edit(request,form_type,pk):
           if edited_item.category !=  old_category:
             app='buyandsell'
             watch_user_list=edited_item.category.watch_users.all()
-            print watch_user_list
             notif_text=str(edited_item.item_name)+"has been requested in the category"+str(edited_item.category.name)
             notif_text+="that you have watched"
-            url = '/buyandsell/sell_details/' + str(edited_item.pk)
+            url = '/buyandsell/request_details/' + str(edited_item.pk) + '/notif'
             Notification.save_notification(app, notif_text, url, watch_user_list, edited_item)
           return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/my-account/'})
         else:
@@ -1391,7 +1388,6 @@ def  get_watched_categories(request):
       del watched_cat_dict[main_cat]
     elif count == cat_len:
       main_watched_cat.append(main_cat)
-  print watched_cat_dict
   return main_watched_cat,sub_watched_cat,watched_cat_dict
 
 
