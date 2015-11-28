@@ -170,10 +170,21 @@ def view_slot(request, slot_id):
     company_info = []
     for company in companies:
       data = company.ctc_remark
+      if request.user.student.branch.graduation == 'UG':
+        ctc = company.package_ug
+      elif request.user.student.branch.graduation == 'PG':
+        ctc = company.package_pg
+      elif request.user.student.branch.graduation == 'PHD':
+        ctc = company.package_phd
+      else:
+        ctc = None
+      if not ctc:
+        ctc = '-'
       if not company.ctc_remark:
         data = "-"
       l = {'Name': company.name,
-           'CTC': data}
+           'CTC_remark': data,
+           'ctc':ctc }
       company_info.append(l)
 
     company_eligible_list = []

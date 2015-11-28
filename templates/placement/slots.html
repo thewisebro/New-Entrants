@@ -106,16 +106,19 @@
   <thead>
     <tr>
       <th>Company</th>
-      <th> CTC Remarks</th>
+      <th>CTC</th>
+      <th>CTC Remarks</th>
     </tr>
   </thead>
   <tbody>
     {% for company in info %}
     <tr>
       <td>{{company.Name}}</td>
-      <td>{{company.CTC}}</td>
+      <td>{{company.ctc}}</td>
+      <td>{{company.CTC_remark}}</td>
     </tr>
     {% endfor %}
+  </tbody>
   </table>
  {% endif %}
 {% endif %}
