@@ -443,13 +443,13 @@ def insert(request, company_id, branch_code = None) :
   """
   try :
     l.info(request.user.username + ': Inserting results for ' + str(company_id) )
-    company = get_object_or_404(Company, pk = company_id, year = current_session_year() )
+    company = get_object_or_404(Company, pk = company_id, year = current_session_year())
     if request.method == 'POST':
       # PlacementPerson.objects.filter(pk__in = request.POST.getlist('selected_students')).update(status='SEL')
       # Can a student be selected for placement in two companies? Ans: a student can be selected in a max of two companies.
       # create entry in Results
       students = PlacementPerson.objects.filter(pk__in = request.POST.getlist('selected_students'))
-      for plac_person in students :
+      for plac_person in students:
         if len(Results.objects.filter(student = plac_person.student, company = company)) != 0:
           continue
         Results.objects.create(student = plac_person.student, company = company)
@@ -461,6 +461,9 @@ def insert(request, company_id, branch_code = None) :
            plac_person.no_of_companies_placed += 1
            plac_person.placed_company_category = policy.get_higher_category(plac_person.placed_company_category, company.category)
         plac_person.save()
+        application = CompanyApplicationMap.objects.get(plac_person = plac_person, company = company)
+        application.status = 'SEL'
+        application.save()
         l.info(request.user.username + ': Successfully inserted results for ' + str(company_id))
       messages.success(request, 'The marked students are selected for placement in ' + company.name + '.')
       return HttpResponseRedirect(reverse('placement.views_company.admin_list'))

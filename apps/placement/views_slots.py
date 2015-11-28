@@ -160,7 +160,7 @@ def view_slot(request, slot_id):
       'message': message
       }, context_instance=RequestContext(request))
   message=""
-  company_maps = CompanyApplicationMap.objects.filter(plac_person=placement_person, shortlisted=True)
+  company_maps = CompanyApplicationMap.objects.filter(plac_person=placement_person, shortlisted=True, status='FIN')
   company_eligible = [l.company for l in company_maps]
 
   company_data = []
