@@ -271,7 +271,7 @@ def export_slot_data(request, slot_id):
   wb = xlwt.Workbook(encoding='utf-8')
   ws = wb.add_sheet('sheet 1')
 
-  headers = ['Enrollment No', ' Name', 'CGPA', 'Email']
+  headers = ['Enrollment No', ' Name', 'Contact No', 'Email']
   slot = CompanySlot.objects.get(pk=slot_id)
   companies_count = slot.company.all().count()
   companies = slot.company.all()
@@ -284,7 +284,7 @@ def export_slot_data(request, slot_id):
       company_pri = [x.company.name for x in priority]
       while len(company_pri) < companies_count:
         company_pri.append('-')
-      a = [people.user.username, people.user.name, people.cgpa, people.user.email]
+      a = [people.user.username, people.user.name, people.user.contact_no, people.user.email]
       a.extend(company_pri)
       new_lst.append(a)
     except Exception as e:
