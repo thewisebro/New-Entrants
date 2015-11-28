@@ -137,15 +137,28 @@ def fill(request) :
         Feedback.objects.create(student = student, company = company, feedback = feedback_text)
         l.info(request.user.username + ': Successfully gave feedback for ' + str(company.id))
         messages.success(request, 'Your feedback for "' + company.name + '" was saved successfully.')
+        if request.GET:
+          next_url = request.GET['next']
+          if next_url:
+            return HttpResponseRedirect(next_url)
         return HttpResponseRedirect(reverse('placement.views_feedback.company', args=[str(company.id)]))
     else :
-      form = forms.Feedback()
+      initial = None
+      if request.method == 'GET':
+        next_url = request.GET['next']
+        if next_url:
+          messages.success(request, 'Congratulations! You have been selected in '+Results.objects.get(student__user=request.user).company.name+'. Please share your experience with us. It can be valuable guidance for future generations.')
+          initial = {'company':Results.objects.get(student__user=request.user).company.id}
+        else:
+          initial = None
+      form = forms.Feedback(initial=initial)
+
     # Set questions as labels in the form.
     for i in range(1,7) :
       form.fields['feedback'+str(i)].label=PC.FEEDBACK_QUESTIONS[i-1]
     return render_to_response('placement/feedback_add.html', {
         'form' : form,
-        'action' : reverse('placement.views_feedback.fill')
+        'action': '?next='+next_url
         }, context_instance = RequestContext(request))
   except Exception as e:
     l.info(request.user.username + ': Exception in giving feedback.')
