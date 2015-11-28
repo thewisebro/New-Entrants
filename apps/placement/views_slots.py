@@ -148,7 +148,7 @@ def edit_slot(request, slot_id):
 @csrf_exempt
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
-@user_passes_test(lambda u: u.username in SLOTS_TESTING_PERMISSION, login_url=login_url)
+#@user_passes_test(lambda u: u.username in SLOTS_TESTING_PERMISSION, login_url=login_url)
 def view_slot(request, slot_id):
 
   user = request.user
@@ -240,7 +240,7 @@ def view_slot(request, slot_id):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
-@user_passes_test(lambda u: u.username in SLOTS_TESTING_PERMISSION, login_url=login_url)
+#@user_passes_test(lambda u: u.username in SLOTS_TESTING_PERMISSION, login_url=login_url)
 def view_all_slots(request):
   student = request.user.student
   plac_person = PlacementPerson.objects.get(student=student)
