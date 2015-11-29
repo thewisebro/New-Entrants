@@ -299,8 +299,9 @@ class Feedback(models.Model):
   # All fields req
   student = models.ForeignKey(Student)
   company = models.ForeignKey(Company)
+  profile_offered = models.CharField(max_length=MC.TEXT_LENGTH, null=True)
   feedback = models.TextField()
-  date = models.DateField()
+  date = models.DateField()  #Date of Placement
   email = models.EmailField(max_length=MC.TEXT_LENGTH, null = True)
   contact_no = models.CharField(max_length=15, null = True)  # Requirement is added in Forms
   def __unicode__(self):
