@@ -300,7 +300,9 @@ class Feedback(models.Model):
   student = models.ForeignKey(Student)
   company = models.ForeignKey(Company)
   feedback = models.TextField()
-  date = models.DateField(auto_now_add=True)
+  date = models.DateField()
+  email = models.EmailField(max_length=MC.TEXT_LENGTH, null = True)
+  contact_no = models.CharField(max_length=15, null = True)  # Requirement is added in Forms
   def __unicode__(self):
     return str(self.company) + str(self.student) + str(self.date)
 
