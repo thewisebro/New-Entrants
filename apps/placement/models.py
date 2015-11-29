@@ -292,7 +292,7 @@ class ForumReply(models.Model):
   def __unicode__(self):
     return str(self.post) + str(self.content) + str(self.date)
 
-class Feedback(models.Model):
+class OldFeedback(models.Model):
   """
     This contains all the information regarding the feedback given by a student."
   """
