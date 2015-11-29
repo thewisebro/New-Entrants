@@ -69,6 +69,13 @@ def index(request):
         applications = CompanyApplicationMap.objects.filter(plac_person = plac_person, company__year__contains = current_session_year())
       else :
         applications = None
+      try:
+        if Results.objects.get_or_none(student=student):
+          if not Feedback.objects.filter(student = student, company=Results.objects.get(student=student).company).exists():
+            return HttpResponseRedirect(reverse('placement.views_feedback.fill'))
+      except:
+        pass
+
       return render_to_response('placement/index.html', {
           'student' : student,
           'plac_person' : plac_person,
