@@ -83,17 +83,37 @@ class NoticesForm(forms.ModelForm) :
 class VerifySearch(forms.Form) :
   search_string = forms.CharField(label='Name/Enrollment No')
 
-class Feedback(forms.Form) :
+class Feedback(forms.ModelForm) :
   company = forms.ModelChoiceField(queryset = models.Company.objects.filter(year = current_session_year()).order_by('name'))
-  feedback1 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
-  feedback2 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
-  feedback3 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
-  feedback4 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
-  feedback5 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
-  feedback6 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
-#  feedback7 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
-#  feedback8 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic'}))
+  feedback1 = forms.CharField(required = False)
+  feedback2 = forms.CharField(widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
+  feedback3 = forms.CharField(required = False)
+  feedback4 = forms.CharField(widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
+  feedback5 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
+  feedback6 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
+  feedback7 = forms.CharField(widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
+  feedback8 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
+  feedback9 = forms.CharField(widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
+  feedback10 = forms.CharField(widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
+  feedback11 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
+  feedback12 = forms.CharField(widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
+  feedback13 = forms.CharField(widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
+  feedback14 = forms.CharField(widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
 
+  class Meta:
+    model = models.Feedback
+    exclude = ('student', 'feedback', 'company')
+    widets = {
+              'date' : forms.DateInput(attrs={'class':'iDateField'}),
+    }
+
+  def is_valid(self):
+    valid = super(Feedback, self).is_valid()
+    cleaned_data = super(Feedback,self).clean()
+    if not cleaned_data.has_key('profile_offered') or not cleaned_data.has_key('date') or not cleaned_data.has_key('email') or not cleaned_data.has_key('contact_no'):
+      raise forms.ValidationError("Please fill all mandatory fields.")
+    return valid
+      
 class Profile(forms.ModelForm):
   class Meta:
     model = StudentInfo

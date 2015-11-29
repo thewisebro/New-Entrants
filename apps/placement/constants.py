@@ -61,18 +61,19 @@ FEEDBACK_QUESTIONS_OLD = (
 
 FEEDBACK_QUESTIONS = (
   '1. Test Sections',
-  '2. Test Experience',
+  '2. Test Experience',# *
   '3. Group Discussion Topic',
-  '4. Group Discussion experience',
-  '5. Interviews Questions',
-  '6. List of Technical Questions',
-  '7. Technical Interview Experience',
-  '8. Tips for Technical Interview',
-  '9. List of HR Questions',
-  '10. HR Interview Experience',
-  '11. Tips for HR Interview',
-  '12. Tips for developing skills',
-  '13. Overall Advice/Tips for Juniors',
+  '4. Group Discussion experience', 
+  '5. Case Interviews Questions',
+  '6. Case Interview Experience',
+  '7. List of Technical Questions',# *
+  '8. Technical Interview Experience',
+  '9. Tips for Technical Interview',# *
+  '10. List of HR Questions',# *
+  '11. HR Interview Experience',
+  '12. Tips for HR Interview',#*
+  '13. Tips for developing skills',#*
+  '14. Overall Advice/Tips for Juniors',#*
 )  # Updated for 2015-16 session onwards
 
 LANGUAGE_PROFICIENCY_CHOICES = (
