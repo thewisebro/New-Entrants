@@ -13,13 +13,6 @@
 {#{% include "placement/generic_form.html" with action=action form=form %} #}
 {{ form.media }}
 {% if form.errors %}
-    {% for field in form %}
-        {% for error in field.errors %}
-            <div class="alert alert-error">
-                <strong>{{ error|escape }}</strong>
-            </div>
-        {% endfor %}
-    {% endfor %}
     {% for error in form.non_field_errors %}
         <div class="alert alert-error">
             <strong>{{ error|escape }}</strong>
@@ -29,30 +22,35 @@
 <form action='{{ action }}' method='POST' class='form_itself' id='{{ name|default:"generic_form" }}'>
    {% csrf_token %}
     <div id="div_{{form.company.id_for_label}}" class="ctrlHolder">
+      {{ form.company.errors }}
       <label for="{{form.company.id_for_label}}" class="requiredField">
         Company*
       </label>
       {{ form.company }}
     </div>
     <div id="div_{{form.profile_offered.id_for_label}}" class="ctrlHolder">
+      {{ form.profile_offered.errors }}
       <label for="{{form.profile_offered.id_for_label}}" class="requiredField">
         Profile Offered*
       </label>
       {{ form.profile_offered }}
     </div>
     <div id="div_{{form.date.id_for_label}}" class="ctrlHolder">
+      {{ form.date.errors }}
       <label for="{{form.date.id_for_label}}" class="requiredField">
         Date of Placement*
       </label>
       {{ form.date }}
     </div>
     <div id="div_{{form.email.id_for_label}}" class="ctrlHolder">
+      {{ form.email.errors }}
       <label for="{{form.email.id_for_label}}" class="requiredField">
         Email*
       </label>
       {{ form.email }}
     </div>
     <div id="div_{{form.contact_no.id_for_label}}" class="ctrlHolder">
+      {{ form.contact_no.errors }}
       <label for="{{form.contact_no.id_for_label}}" class="requiredField">
         Contact No.*
       </label>
@@ -61,68 +59,82 @@
     <hr>
     <h3>Round1: Test</h3>
     <div id="div_{{form.feedback1.id_for_label}}" class="ctrlHolder">
+      {{ form.feedback1.errors }}
       <label for="{{form.feedback1.id_for_label}}">1. Test Sections</label>
       {{form.feedback1}}
     </div>
     <div id="div_{{form.feedback2.id_for_label}}" class="ctrlHolder">
-      <label for="{{form.feedback2.id_for_label}}">2. Test Experience</label>
+      {{ form.feedback2.errors }}
+      <label for="{{form.feedback2.id_for_label}}">2. Test Experience*</label>
       {{form.feedback2}}
     </div>
     <hr>
     <h3>Round2: Group Discussion (if any)</h3>
     <div id="div_{{form.feedback3.id_for_label}}" class="ctrlHolder">
+      {{ form.feedback3.errors }}
       <label for="{{form.feedback3.id_for_label}}">3. Group Discussion Topic</label>
       {{form.feedback3}}
     </div>
     <div id="div_{{form.feedback4.id_for_label}}" class="ctrlHolder">
+      {{ form.feedback4.errors }}
       <label for="{{form.feedback4.id_for_label}}">4. Group Discussion experience</label>
       {{form.feedback4}}
     </div>
     <hr>
     <h3>Round3: Case Interview (if any)</h3>
     <div id="div_{{form.feedback5.id_for_label}}" class="ctrlHolder">
+      {{ form.feedback5.errors }} 
       <label for="{{form.feedback5.id_for_label}}">5. Case Interviews Questions</label>
       {{form.feedback5}}
     </div>
     <div id="div_{{form.feedback6.id_for_label}}" class="ctrlHolder">
-      <label for="{{form.feedback6.id_for_label}}">6. Case Interview Experience</label>
+       {{ form.feedback6.errors }}
+       <label for="{{form.feedback6.id_for_label}}">6. Case Interview Experience</label>
       {{form.feedback6}}
     </div>
     <hr>
     <h3>Round4: Final Interview</h3>
     <div id="div_{{form.feedback7.id_for_label}}" class="ctrlHolder">
+      {{ form.feedback7.errors }}
       <label for="{{form.feedback7.id_for_label}}">7. List of Technical Questions*</label>
       {{form.feedback7}}
     </div>
     <div id="div_{{form.feedback8.id_for_label}}" class="ctrlHolder">
+      {{ form.feedback8.errors }}
       <label for="{{form.feedback8.id_for_label}}">8. Technical Interview Experience</label>
       {{form.feedback8}}
     </div>
     <div id="div_{{form.feedback9.id_for_label}}" class="ctrlHolder">
+      {{ form.feedback9.errors }}
       <label for="{{form.feedback9.id_for_label}}">9. Tips for Technical Interview*</label>
       {{form.feedback9}}
     </div>
     <div id="div_{{form.feedback10.id_for_label}}" class="ctrlHolder">
+      {{ form.feedback10.errors }}
       <label for="{{form.feedback10.id_for_label}}">10. List of HR Questions*</label>
       {{form.feedback10}}
     </div>
     <div id="div_{{form.feedback11.id_for_label}}" class="ctrlHolder">
+      {{ form.feedback11.errors }}
       <label for="{{form.feedback11.id_for_label}}">11. HR Interview Experience</label>
       {{form.feedback11}}
     </div>
     <div id="div_{{form.feedback12.id_for_label}}" class="ctrlHolder">
+      {{ form.feedback12.errors }}
       <label for="{{form.feedback12.id_for_label}}">12. Tips for HR Interview*</label>
       {{form.feedback12}}
     </div>
     <hr>
     <h3>Key skills tested by Company</h3>
     <div id="div_{{form.feedback13.id_for_label}}" class="ctrlHolder">
+      {{ form.feedback13.errors }}
       <label for="{{form.feedback13.id_for_label}}">13. Tips for developing skills*</label>
       {{form.feedback13}}
     </div>
     <hr>
     <h3>Overall Advice/Tips for Juniors*</h3>
     <div id="div_{{form.feedback14.id_for_label}}" class="ctrlHolder">
+      {{ form.feedback14.errors }}
       <label for="{{form.feedback14.id_for_label}}"></label>
       {{form.feedback14}}
     </div>
