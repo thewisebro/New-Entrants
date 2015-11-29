@@ -72,7 +72,7 @@ def index(request):
       try:
         if Results.objects.get_or_none(student=student):
           if not Feedback.objects.filter(student = student, company=Results.objects.get(student=student).company).exists():
-            return HttpResponseRedirect(reverse('placement.views_feedback.fill'))
+            return HttpResponseRedirect(reverse('placement.views_feedback.fill')+'?next=/placement/')
       except:
         pass
 
