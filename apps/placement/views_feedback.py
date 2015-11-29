@@ -171,6 +171,8 @@ def fill(request) :
             initial = None
         except:
           pass
+      initial['email'] = request.user.email
+      initial['contact_no'] = request.user.contact_no
       form = forms.Feedback(initial=initial)
 
     # Set questions as labels in the form.
