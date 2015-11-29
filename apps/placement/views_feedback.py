@@ -154,6 +154,7 @@ def fill(request) :
     else :
       initial = None
       action_url = ''
+      selection_company = None
       if request.method == 'GET':
         try:
           next_url = request.GET['next']
