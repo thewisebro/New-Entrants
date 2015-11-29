@@ -40,7 +40,7 @@ COMPANY_RESUME_CHOICES = (
       ('COR','Core Engineering'),
     )
 
-FEEDBACK_QUESTIONS_OLD = (
+FEEDBACK_QUESTIONS_OLD_OLD = (
   '1. What was the profile offered by the company and for which branches was the company open ?',
   '2. How many rounds were there and what was the time alloted for each round?',
   '3. Briefly explain the preliminary process (Written/Online/Subjective/Objective test) and type of questions asked.',
@@ -49,7 +49,7 @@ FEEDBACK_QUESTIONS_OLD = (
   '6. Other suggestions/advice that you think may be helpful.',
   )
 
-FEEDBACK_QUESTIONS = (
+FEEDBACK_QUESTIONS_OLD = (
   '1. Your preparations (in general) i.e. all three aspects - Technical, Aptitude and HR. The material you used, the websites you went through, the amount of time you devoted to preparations - anything and everything you would like to share',
   '2. Your Preparations (Specific to the company) - Something you did extra/different for this particular company.',
   '3. Selection Process followed by your company? Initial Screening - Written test/ Group Discussions/ CG based cut-offs; Further Rounds... ',
@@ -58,6 +58,22 @@ FEEDBACK_QUESTIONS = (
   '6. Some tips/advice to your juniors .',
   '7. Anything else.. Something we might have missed to ask but you still want to share...and any feedback to Central Placement Team -Criticism, Appreciation, Suggestions - everything is welcome :)',
   )
+
+FEEDBACK_QUESTIONS = (
+  '1. Test Sections',
+  '2. Test Experience',
+  '3. Group Discussion Topic',
+  '4. Group Discussion experience',
+  '5. Interviews Questions',
+  '6. List of Technical Questions',
+  '7. Technical Interview Experience',
+  '8. Tips for Technical Interview',
+  '9. List of HR Questions',
+  '10. HR Interview Experience',
+  '11. Tips for HR Interview',
+  '12. Tips for developing skills',
+  '13. Overall Advice/Tips for Juniors',
+)  # Updated for 2015-16 session onwards
 
 LANGUAGE_PROFICIENCY_CHOICES = (
       ('SRW', 'Speak, Read and Write'),
