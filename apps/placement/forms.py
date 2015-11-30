@@ -85,7 +85,7 @@ class VerifySearch(forms.Form) :
 
 class Feedback(forms.ModelForm) :
   company = forms.ModelChoiceField(queryset = models.Company.objects.filter(year = current_session_year()).order_by('name'))
-  feedback1 = forms.CharField(required = False)
+  feedback1 = forms.CharField(required = False, widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
   feedback2 = forms.CharField(widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))
   feedback3 = forms.CharField(required = False)
   feedback4 = forms.CharField(widget=CKEditorWidget(config={'toolbar':'Basic', 'width':'auto'}))

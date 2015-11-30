@@ -157,7 +157,7 @@ def fill(request) :
 #          return HttpResponseRedirect(reverse('placement.views_feedback.fill'))
         pass
     else :
-      initial = None
+      initial = {}
       action_url = ''
       selection_company = None
       if request.method == 'GET':
@@ -168,7 +168,7 @@ def fill(request) :
             selection_company = Results.objects.get(student__user=request.user).company.name
             initial = {'company':Results.objects.get(student__user=request.user).company.id}
           else:
-            initial = None
+            initial = {}
         except:
           pass
       initial['email'] = request.user.email
