@@ -70,7 +70,7 @@ def index(request):
       else :
         applications = None
       try:
-        if Results.objects.get_or_none(student=student):
+        if Results.objects.get_or_none(student=student, company__year__gte=2015):
           if not Feedback.objects.filter(student = student, company=Results.objects.get(student=student).company).exists():
             return HttpResponseRedirect(reverse('placement.views_feedback.fill')+'?next=/placement/')
       except:
