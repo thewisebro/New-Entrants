@@ -353,6 +353,7 @@ def sell(request):
       cost = form.cleaned_data['cost']
       name = form.cleaned_data['item_name']
       detail = form.cleaned_data['detail']
+      upload_pic = request.POST.get('upload_pic')
       if phone.isdigit():
         digcheck = 1
       try:
@@ -383,7 +384,10 @@ def sell(request):
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
         pic =ItemPic( item = new_item )
         pic.save()
-        return TemplateResponse(request, 'buyandsell/helper.html', {'redirect_url':'/buyandsell/buy/','id':new_item.id})
+        if upload_pic == 'yes':
+          return TemplateResponse(request, 'buyandsell/helper.html', {'redirect_url':'/buyandsell/buy/','id':new_item.id})
+        else:
+          return TemplateResponse(request, 'buyandsell/helper1.html', {'redirect_url':'/buyandsell/buy/'})
       else:
         if  not splcheck:
           messages.error(request , "Special characters not allowed")
@@ -1091,10 +1095,10 @@ def edit(request,form_type,pk):
         if special_match(name) and special_match(detail):
           splcheck = 1
         if digcheck and negcheck and zercheck and lencheck and splcheck and limcheck :
-          edited_item=form.save(commit=False)
-          expiry_date=post_date+timedelta(days=form.cleaned_data['days_till_expiry'])
-          edited_item.post_date=post_date
-          edited_item.expiry_date=expiry_date
+          edited_item = form.save(commit=False)
+          expiry_date = post_date + timedelta(days = form.cleaned_data['days_till_expiry'])
+          edited_item.post_date = post_date
+          edited_item.expiry_date = expiry_date
           if edited_item.expiry_date > post_date:
             edited_item.is_active = True
           edited_item.save()
@@ -1264,7 +1268,7 @@ def transaction(request,item_type,pk,ignore_flag = None):
     if itm_user != user:
       messages.error(request,"This item is not added by you,you you cannot fill it's transaction form.\
                               You can only fill the form for the items in your account")
-      return render(request , 'dialog_base_buyandsell.html')
+      return HttpResponseRedirect('/buyandsell/succ_trans/sell/'+pk+'/')
 
 
     if request.method == "POST":
@@ -1324,7 +1328,8 @@ def transaction(request,item_type,pk,ignore_flag = None):
     if itm_user != user:
       messages.error(request,"This request is not added by you,you you cannot fill it's transaction form\
           .You can only fill the form for the items in your account")
-      return render(request , 'dialog_base_buyandsell.html')
+      return HttpResponseRedirect('/buyandsell/succ_trans/request/'+pk+'/')
+
 
     if request.method=="POST":
       try:

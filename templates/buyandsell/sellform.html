@@ -10,7 +10,7 @@
   {% endfor %}
   {% endif %}
 
-  <form class="form-horizontal" action="" method = "post">
+  <form class="form-horizontal" action="" method = "post" id = "sell_form">
     {% csrf_token %}
     <div class="form-group">
       <label class="col-xs-4 control-label" style="text-align: left" for="name">Item Name</label>
@@ -21,7 +21,7 @@
 
     {% if form.item_name.errors %}
     <div style="margin:10px 0px 0px 30px;" >
-      <div >{{ form.item_name.errors }}</div>
+      <div>{{ form.item_name.errors }}</div>
     </div>
     {% endif %}
 
@@ -129,11 +129,14 @@
       <div class="entries_error">{{ form.contact.errors }}</div>
     </div>
     {% endif %}
+    <input type = "hidden" value = "yes" name = "upload_pic">
 
 </div>
 </div>
 
-<button class="btn upload-without-image-button" value="Upload without image">Upload without image</button>
+{% if not edit_flag %}
+<button class="btn upload-without-image-button" onclick = "pic_upload()"  value="Upload without image">Upload without image</button>
+{% endif %}
 <input class="btn btn-primary done-button" type="submit" value=" {% if edit_flag %}  Done {% else %} Proceed to Upload Image {% endif %}" >
 
 

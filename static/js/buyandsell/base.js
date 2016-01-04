@@ -44,7 +44,6 @@ function watch_cat(url)
     url : url,
     success: function (data)
     {
-     console.log(data);
      if(data['success'] == 'false'){
           window.location.reload();
           }
@@ -211,7 +210,6 @@ function lookup(val,type)
         }
 
 
-        console.log(html);
         $(".search-result-box").html(html);
       }
     });
@@ -589,19 +587,23 @@ opened_dialog = 'upload_image_dialog';
 }
 
 function special_submit(id,type) {
-  console.log("done");
-    var form = $("#trans_form")
+    var form = $("#trans_form");
       form.attr("action" , "/buyandsell/succ_trans/" + type + "/" + id + "/ni/");
-      form.submit()
+      form.submit();
       }
 
-function bring_subcats() {
+function pic_upload(){
+    var form = $("#sell_form");
+    $("input[name = upload_pic]").val("no");
+    form.submit(); 
+}
 
+
+function bring_subcats() {
 $("select#id_category").click(function (){
       var category = $(this).val();
       var url = "/buyandsell/bring_subcats/" + category +"/";
       $.get(url, function(data){
-        console.log(data);
          $("select#sub_category").html(data);
         });
       });
@@ -661,13 +663,11 @@ $(document).ready
 
         if($(".item-options-button").attr('aria-expanded')== 'false')
         {
-          console.log("false tha wo");
           $(this).hide();
         }
 
         else if($(".item-options-button").attr('aria-expanded')== 'true')
         {
-          console.log("nahi nahi true tha wo");
           $(this).hide();
         }
 
