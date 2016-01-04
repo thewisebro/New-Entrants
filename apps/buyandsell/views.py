@@ -1112,7 +1112,7 @@ def edit(request,form_type,pk):
           elif not limcheck:
             messages.error(request , "Price cannt be greater than 50000")
           elif not lencheck:
-          messages.error(request , "Phone number should be atleast 10 digits long")
+            messages.error(request , "Phone number should be atleast 10 digits long")
           else:
             messages.error(request , "Form wrongly filled")
           return render(request,'buyandsell/sellform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
@@ -1173,7 +1173,7 @@ def edit(request,form_type,pk):
           elif not limcheck:
             messages.error(request , " Maximum Price cannt be greater than 50000")
           elif not lencheck:
-          messages.error(request , "Phone number should be atleast 10 digits long")
+            messages.error(request , "Phone number should be atleast 10 digits long")
           else:
             messages.error(request , "Form wrongly filled")
           return render(request,'buyandsell/requestform.html',{'form':form,'main_cats':main_categories,'sub_cats':sub_categories})
