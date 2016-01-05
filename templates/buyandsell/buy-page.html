@@ -227,7 +227,9 @@
                   <div class="price-range-text-input-group">
                     <img class="rupee-icon input-box-rupee-icon-min" src="{{STATIC_URL}}images/buyandsell/rupee-icon-with-white-bg.png">
                     <img class="rupee-icon input-box-rupee-icon-max" src="{{STATIC_URL}}images/buyandsell/rupee-icon-with-white-bg.png">
+                    {% if search_string %}
                     <input type="hidden"  name="keyword"  value="{% if search_string %}{{search_string}}{% endif %}">
+                    {% endif %} 
                     <input type="number" id="low" class="price-range-text-input" value="{% if ll %}{{ll}}{% endif %}" name="ll">
                     <input type="number" id="high" class="price-range-text-input" value="{% if ul %}{{ul}}{% endif %}" name="ul">
                   </div>

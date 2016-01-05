@@ -95,11 +95,12 @@
         {
           $(".pagination").addClass("pagination-bottom-aligned");
         }
-        else
+   /*     else
         {
           $(".pagination-customized").css("margin-left","40%");
         }
-      }
+  */
+        }
     );
 
     //Give bottom shadow to header-background on scrolldown

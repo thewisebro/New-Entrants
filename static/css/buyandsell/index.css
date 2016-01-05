@@ -990,7 +990,8 @@ tr
 
 .pagination-customized
 {
-  margin-left: 20%;
+  display: table;
+  margin: auto;
 }
 
 .pagination-bottom-aligned

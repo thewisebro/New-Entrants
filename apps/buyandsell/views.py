@@ -17,8 +17,7 @@ from django.utils.html import strip_tags
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
-from api.utils import get_client_ip, pagelet_login_required,\
-                      ajax_login_required, dialog_login_required_buyandsell
+from api.utils import ajax_login_required, dialog_login_required_buyandsell
 
 logger = logging.getLogger('buyandsell')
 
@@ -541,7 +540,7 @@ def selldetails(request,pk,notif_flag = None):
   if request.method=='POST':
     password=request.POST.get('password')
 
-    if login_flag == True and user.check_password(password):
+    if login_flag  and user.check_password(password) and not self_flag:
       sendmail(request,'buy',pk)
 
     elif login_flag == True and  password=='':
@@ -600,7 +599,7 @@ def requestdetails(request,pk , notif_flag = None):
   if request.method=='POST':
     password=request.POST.get('password')
 
-    if login_flag and user.check_password(password):
+    if login_flag and user.check_password(password) and not self_flag:
       sendmail(request,'request',pk)
 
     elif login_flag and password=='':
@@ -717,11 +716,9 @@ def search(request,search_type):
     queryset=[]
     un_queryset = {}
     count = {}
-    print words
     for word in words:
       result = RequestedItems.items.filter(item_name__icontains=word,is_active=True)
       for temp in result:
-        print word
         if temp.id in un_queryset:
           count[temp.id] = count[temp.id]+1
         else:
@@ -920,9 +917,9 @@ def seeall(request,search_type):
             }
       return render(request,'buyandsell/requests.html',context)
 
-    paginator = Paginator(queryset, 10)
+    paginator = Paginator(queryset, 16)
     page = request.GET.get('page', 1)
-    page_list = _get_page_list(page, paginator.num_pages, 10)
+    page_list = _get_page_list(page, paginator.num_pages, 16)
     try:
       table_data = paginator.page(page)
     except PageNotAnInteger:
@@ -1028,9 +1025,9 @@ def seeall(request,search_type):
             }
       return render(request,'buyandsell/buy-page.html',context)
 
-    paginator = Paginator(queryset, 10)
+    paginator = Paginator(queryset, 16)
     page = request.GET.get('page', 1)
-    page_list = _get_page_list(page, paginator.num_pages, 10)
+    page_list = _get_page_list(page, paginator.num_pages, 16)
     try:
       table_data = paginator.page(page)
     except PageNotAnInteger:
