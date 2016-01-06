@@ -69,6 +69,13 @@ def index(request):
         applications = CompanyApplicationMap.objects.filter(plac_person = plac_person, company__year__contains = current_session_year())
       else :
         applications = None
+      try:
+        if Results.objects.get_or_none(student=student, company__year__gte=2015):
+          if not Feedback.objects.filter(student = student, company=Results.objects.get(student=student).company).exists():
+            return HttpResponseRedirect(reverse('placement.views_feedback.fill')+'?next=/placement/')
+      except:
+        pass
+
       return render_to_response('placement/index.html', {
           'student' : student,
           'plac_person' : plac_person,
@@ -81,6 +88,38 @@ def index(request):
     # Can't use handle_exc here because it redirects here. To avoid infinite loop, redirect to a static page.
     messages.error(request, 'Unknown error has occured. Please try again later. The issue has beeen reported.')
     return render_to_response('placement/error.html', context_instance=RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+def preview_resume(request) :
+  """
+  Current resume of the user.
+  """
+  try :
+    student = request.user.student
+    l.info (request.user.username+': Generated Resume')
+    resume_map = ResumeStudentMap.objects.get_or_none(plac_person = student.placementperson)
+    if not resume_map:
+      resume_map = ResumeStudentMap(plac_person = student.placementperson)
+
+    pdf = get_resume_binary(RequestContext(request), student, 'VER')
+    if pdf['err'] :
+      l.exception(request.user.username+': Error occured while generating resume')
+      messages.error(request, 'An error occured while generating the PDF file.')
+      return HttpResponseRedirect(reverse('placement.views.index'))
+    filepath = os.path.join(settings.MEDIA_ROOT, 'placement', 'resume_preview', resume_map.resume_name+'.pdf')
+    # Make sure that the parent directory of filepath exists
+    parent = os.path.split(filepath)[0]
+    if not os.path.exists(parent) :
+      os.makedirs(parent)
+    resume = open(filepath, 'w')
+    resume.write(pdf['content'])
+    resume.close()
+    return render_to_response('placement/resume_preview.html',{"filename":resume_map.resume_name})
+  except Exception as e :
+    logger.info(request.user.username+': got an exception in generating resume.')
+    logger.exception(e)
+    return handle_exc(e, request)
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
@@ -323,7 +362,7 @@ def forum_post(request) :
       messages.error(request, 'Please fill in the Question before submitting.')
       return HttpResponseRedirect(reverse('placement.views.forum', args=[ request.POST['forum_type'] ]))
     elif request.method == 'POST' :
-      if not request.user.groups.filter(name='Student'):
+      if request.user.groups.filter(name='Student'):
         student = request.user.student
         ForumPost.objects.create(enrollment_no = student.user.username,
                                person_name = student.user.name,

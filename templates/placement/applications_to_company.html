@@ -16,29 +16,29 @@
     {% if task == "finalize" %}
     <li class="active">
       <a>
-        Finalize
+        Applied
       </a>
     </li>
     <li>
       <a href="{% url 'placement.views_admin.unfinalize' company.id %}">
-        Unfinalize
+        Finalized
       </a>
     </li>
     {% else %}
     <li>
       <a href="{% url 'placement.views_admin.finalize' company.id %}">
-        Finalize
+        Applied
       </a>
     </li>
     <li class="active">
       <a>
-        Unfinalize
+        Finalized
       </a>
     </li>
     {% endif %}
     <li>
       <a href="{% url 'placement.views_admin.shortlist' company.id %}">
-        Shortlist
+        Shortlisted
       </a>
     </li>
   </ul>
@@ -110,7 +110,7 @@
       {% for application in applications %}
       <tr class="category{{ application.plac_person.placed_company_category|default:'' }}">
         <td>{{ forloop.counter }}</td>
-        <td><input type="checkbox" name="selected_applications" value="{{ application.id }}"/></td>
+        <td><input type="checkbox" name="selected_applications" value="{{ application.id }}" {% if application.shortlisted %}checked=True{%endif%} /></td>
         <td>{{ application.plac_person.student.user.username }}</td>
         <td>{{ application.plac_person.student.name }}</td>
         <td>{{ application.plac_person.student.branch.name }}</td>
@@ -125,7 +125,12 @@
     </tbody>
   </table>
   <div class="submit_button">
-    <input type="submit" class="btn btn-primary" value="Submit"/>
+    {% if task == "finalize" %}
+      <input type="submit" class="btn btn-primary" value="Finalize"/>
+    {% elif task == "unfinalize" %}
+      <input type="submit" class="btn btn-primary" value="Unfinalize"/>
+      <input type="submit" class="btn btn-primary" formaction="{% url 'placement.views_admin.shortlist' company_id=company.id %}" value="Shortlist"/>
+    {% endif %}
   </div>
 </form>
 {% else %}

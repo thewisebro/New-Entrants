@@ -39,7 +39,8 @@ channeli_apps = {
   'peoplesearch' : {'name':'People Search', 'url':'/peoplesearch/'},
   'research' : {'name':'Research Assistant', 'url':'/research_assistant/'},
   'facultyfilemanager' : {'name':'File Manager', 'url':'/settings/filemanager/'},
-  'acad' : {'name':'Academics', 'url':'/acad/'},
+# XXX: App has been discarded for now due to shoft of work to ERP by Academics section
+#  'acad' : {'name':'Academics', 'url':'/acad/'},
   'acad_course_students' : {'name':'Course Students', 'url':'/acad/course_students/'},
   'responses' : {'name':'Response Forms', 'url':'/acad/responses/'},
   'iereg' : {'name':'Elective Registration', 'url':'/acad/ie_reg/'},
@@ -47,11 +48,11 @@ channeli_apps = {
   'dc++' : {'name':'DC++', 'url':'/dc++/'},
 }
 
-student_apps = ['acad','lectut','jukebox','dc++','placement',
+student_apps = ['lectut','jukebox','dc++','placement',
                 'buysell', 'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research']
 
-student_apps_feedback = ['acad','lectut','jukebox','dc++','placement',
+student_apps_feedback = ['lectut','jukebox','dc++','placement',
                 'buysell', 'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research', 'androidnotices']
 
@@ -69,6 +70,7 @@ external_links = {
   'antivirus' : {'name':'Anti virus',
     'url':'http://www.iitr.ac.in/centers/ISC/pages/Antivirus_Solution_for_Campus.html'
   },
+  'acad' : {'name':'Academics', 'url':'http://acad.iitr.ac.in/'}
 }
 
 login_page_links = ['library','webmail','notices','iitr','antivirus']
@@ -87,7 +89,7 @@ channeli_links = [
   #{'name':'Scholarship Form','url':'/mcm/mcm/'},
 ]
 
-channeli_links = map(lambda n:external_links[n],['iitr','webmail','library']) + channeli_links
+channeli_links = map(lambda n:external_links[n],['iitr','webmail','library','acad']) + channeli_links
 
 img_tools = [
   {'name': 'IMG Wiki', 'url': 'http://wiki.channeli.in', 'icon':'wiki.ico'},

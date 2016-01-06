@@ -456,7 +456,6 @@ HAYSTACK_CONNECTIONS = {
       # 'URL': 'http://127.0.0.1:8983/solr/mysite',
     }
 }
-
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 from .admin_settings import *

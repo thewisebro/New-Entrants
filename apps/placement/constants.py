@@ -40,7 +40,7 @@ COMPANY_RESUME_CHOICES = (
       ('COR','Core Engineering'),
     )
 
-FEEDBACK_QUESTIONS_OLD = (
+FEEDBACK_QUESTIONS_OLD_OLD = (
   '1. What was the profile offered by the company and for which branches was the company open ?',
   '2. How many rounds were there and what was the time alloted for each round?',
   '3. Briefly explain the preliminary process (Written/Online/Subjective/Objective test) and type of questions asked.',
@@ -49,7 +49,7 @@ FEEDBACK_QUESTIONS_OLD = (
   '6. Other suggestions/advice that you think may be helpful.',
   )
 
-FEEDBACK_QUESTIONS = (
+FEEDBACK_QUESTIONS_OLD = (
   '1. Your preparations (in general) i.e. all three aspects - Technical, Aptitude and HR. The material you used, the websites you went through, the amount of time you devoted to preparations - anything and everything you would like to share',
   '2. Your Preparations (Specific to the company) - Something you did extra/different for this particular company.',
   '3. Selection Process followed by your company? Initial Screening - Written test/ Group Discussions/ CG based cut-offs; Further Rounds... ',
@@ -58,6 +58,23 @@ FEEDBACK_QUESTIONS = (
   '6. Some tips/advice to your juniors .',
   '7. Anything else.. Something we might have missed to ask but you still want to share...and any feedback to Central Placement Team -Criticism, Appreciation, Suggestions - everything is welcome :)',
   )
+
+FEEDBACK_QUESTIONS = (
+  '1. Test Sections',
+  '2. Test Experience',# *
+  '3. Group Discussion Topic',
+  '4. Group Discussion experience', 
+  '5. Case Interviews Questions',
+  '6. Case Interview Experience',
+  '7. List of Technical Questions',# *
+  '8. Technical Interview Experience',
+  '9. Tips for Technical Interview',# *
+  '10. List of HR Questions',# *
+  '11. HR Interview Experience',
+  '12. Tips for HR Interview',#*
+  '13. Tips for developing skills',#*
+  '14. Overall Advice/Tips for Juniors',#*
+)  # Updated for 2015-16 session onwards
 
 LANGUAGE_PROFICIENCY_CHOICES = (
       ('SRW', 'Speak, Read and Write'),
@@ -185,3 +202,15 @@ COMPANY_COORDI_CHOICES = (
         ('13811014', '13811014 Megha Mittal'),
         ('13611015', '13611015 Sakshi Ganotra'),
     )
+
+#SLOTS_TESTING_PERMISSION = [
+#        '12112021',
+#        '14535030',
+#        '12119004',
+#        '12113090',
+#        '11311016',
+#        '11312018',
+#        '12112003',
+#        '11213014',
+#        '12117017',
+#        ]

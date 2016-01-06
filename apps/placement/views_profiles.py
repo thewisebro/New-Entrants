@@ -33,6 +33,7 @@ login_url = '/placement/'
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: not Results.objects.get_or_none(student__user=u, company__year__gte=2015) or Feedback.objects.filter(student__user = u, company=Results.objects.get(student__user=u).company).exists(), login_url='/placement/feedback/add/')
 #@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def photo(request):
   try :
@@ -79,6 +80,7 @@ def photo(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: not Results.objects.get_or_none(student__user=u, company__year__gte=2015) or Feedback.objects.filter(student__user = u, company=Results.objects.get(student__user=u).company).exists(), login_url='/placement/feedback/add/')
 #@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def personal_information(request):
   """
@@ -139,6 +141,7 @@ def personal_information(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: not Results.objects.get_or_none(student__user=u, company__year__gte=2015) or Feedback.objects.filter(student__user = u, company=Results.objects.get(student__user=u).company).exists(), login_url='/placement/feedback/add/')
 #@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def contact(request):
   """
@@ -183,6 +186,7 @@ def contact(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: not Results.objects.get_or_none(student__user=u, company__year__gte=2015) or Feedback.objects.filter(student__user = u, company=Results.objects.get(student__user=u).company).exists(), login_url='/placement/feedback/add/')
 #@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def educational_details(request):
   """
@@ -300,6 +304,7 @@ def educational_details(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: not Results.objects.get_or_none(student__user=u, company__year__gte=2015) or Feedback.objects.filter(student__user = u, company=Results.objects.get(student__user=u).company).exists(), login_url='/placement/feedback/add/')
 #@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def placement_information(request) :
   """
@@ -362,6 +367,7 @@ def placement_information(request) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: not Results.objects.get_or_none(student__user=u, company__year__gte=2015) or Feedback.objects.filter(student__user = u, company=Results.objects.get(student__user=u).company).exists(), login_url='/placement/feedback/add/')
 #@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def editset(request, model_name):
   """

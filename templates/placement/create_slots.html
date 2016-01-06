@@ -40,22 +40,44 @@
     <button class="btn btn-primary" onclick="change_value()" type="submit">Create</button>
 </form>
 
-<ul>
+<table class="table table-striped table-bordered table-condensed" id="t1">
+  <thead>
+    <tr>
+      <th>S. No.</th>
+      <th>Slot Start Time</th>
+      <th>Slot End Time</th>
+      <th>Export</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
   {% for slot in slots %}
+  {% comment %}
     {% with start_date=slot.start_date|date %}
-    <li>
-        {% for l in dates %}
-           {% if l == start_date %}
-             {{l}}
-           {% endif %}
-        {% endfor %}
-
-        <a href="{% url 'placement.views_slots.edit_slot' slot.id %}">{{slot.start_date}} -- {{slot.end_date}}</a>
-
-    {% endwith %}
-    </li>
+      <li>
+          {% for l in dates %}
+             {% if l == start_date %}
+               {{l}}
+            {% endif %}
+          {% endfor %}
+  {% endcomment %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ slot.start_date }}</td>
+      <td>{{ slot.end_date }}</td>
+      <td>
+        <a href="{% url 'placement.views_slots.export_slot_data' slot.id%}">
+          <span class='icon icon-download-alt' id='remove' style='cursor:pointer;'></span>
+        </a>
+      </td>
+      <td><a href="{% url 'placement.views_slots.edit_slot' slot.id %}"><span class='icon icon-pencil' id='edit' style='cursor:pointer;'></span></a></td>
+      <td><span class='icon icon-remove' id='remove' style='cursor:pointer;' onclick='confirmfn({{ slot.id }})'</span></td>
+    </tr>
+  {% comment %}  {% endwith %} {%endcomment %}
   {% endfor %}
-</ul>
+  </tbody>
+  </table>
 {% endblock %}
 
 {% block app_scripts %}
@@ -102,5 +124,11 @@
       $( "#id_start_date" ).datetimepicker({ dateFormat: "yy-mm-dd"});
       $( "#id_end_date" ).datetimepicker({ dateFormat: "yy-mm-dd"});
       });
+  </script>
+  <script>
+  function confirmfn(id){
+    var a = confirm("Are you sure?");
+    if (a==true){window.location='/placement/slot/delete/'+id+'/';}
+  }
   </script>
 {% endblock %}

@@ -15,17 +15,17 @@
   <ul class="nav nav-tabs">
     <li>
       <a href="{% url 'placement.views_admin.finalize' company.id %}">
-        Finalize
+        Applied
       </a>
     </li>
     <li>
       <a href="{% url 'placement.views_admin.unfinalize' company.id %}">
-        Unfinalize
+        Finalized
       </a>
     </li>
     <li class="active">
       <a>
-        Shortlist
+        Shortlisted
       </a>
     </li>
   </ul>
@@ -86,7 +86,8 @@
     </tbody>
   </table>
   <div class="submit_button">
-    <input type="submit" class="btn btn-primary" value="Shortlist & Download XLS list" onclick="document.getElementsByTagName('form')[0].action='xlslist/';"/>
+    <input type="submit" class="btn btn-primary" value="Remove from Shortlist" formaction='{% url 'placement.views_admin.remove_shortlist' company_id=company.id %}'/>
+    <input type="submit" class="btn btn-primary" value="Download XLS list" onclick="document.getElementsByTagName('form')[0].action='xlslist/';"/>
     <input type="submit" class="btn btn-primary" value="Download Resumes"  onclick="document.getElementsByTagName('form')[0].action='resumes/';"/>
   </div>
 </form>

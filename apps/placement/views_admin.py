@@ -81,6 +81,7 @@ def unfinalize(request, company_id, degree = 'UG') :
   """
   if request.method == "POST" :
       CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(status='APP')
+      CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(shortlisted=False)
       messages.success(request, 'The selected applications are unfinalized for the placement procedure.')
       l.info(request.user.username + ': Redirecting to company.admin_list after unfinalizing applications')
       return HttpResponseRedirect(reverse('placement.views_admin.unfinalize', args=(company_id, degree)))
@@ -94,7 +95,7 @@ def unfinalize(request, company_id, degree = 'UG') :
       applications += list(CompanyApplicationMap.objects.filter(company = company,
                                                                 plac_person__student__semester__startswith = degree,
                                                                 plac_person__placed_company_category = category,
-                                                                status='FIN'))
+                                                                status='FIN',shortlisted=False))
     return render_to_response('placement/applications_to_company.html', {
         'company' : company,
         'degree' : degree,
@@ -112,7 +113,7 @@ def shortlist(request, company_id, task = None) :
   company = Company.objects.get(pk = company_id)
   if request.method == "POST" :
     # update shortlist
-    CompanyApplicationMap.objects.filter(company = company).update(shortlisted = False)
+#    CompanyApplicationMap.objects.filter(company = company).update(shortlisted = False)
     CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(shortlisted = True)
     l.info(request.user.username + ': updated shortlist for company ' + company_id)
     applications = CompanyApplicationMap.objects.filter(company = company, shortlisted = True)
@@ -153,7 +154,7 @@ def shortlist(request, company_id, task = None) :
       response['Content-Disposition'] = 'attachment; filename=' + sanitise_for_download(company.name) + '_Applications.xls'
       wbk.save(response)
       return response
-    else : # resumes' zip file
+    elif task=='resumes': # resumes' zip file
       in_memory = StringIO.StringIO()
       zip = ZipFile(in_memory, 'a')
       for application in applications :
@@ -172,17 +173,28 @@ def shortlist(request, company_id, task = None) :
       response['Content-Disposition'] = 'attachment; filename=' + sanitise_for_download(company.name) + '_Resumes.zip'
       response['Content-Length'] = in_memory.tell()
       return response
-  else :
-    company = Company.objects.get(pk = company_id)
-    applications = []
-    for category in (None, 'C', 'U', 'B', 'A') :
-      applications += list(CompanyApplicationMap.objects.filter(company = company,
-                                                                plac_person__placed_company_category = category,
-                                                                status='FIN'))
-    return render_to_response('placement/shortlist.html', {
-        'company' : company,
-        'applications' : applications,
-        }, context_instance = RequestContext(request))
+  company = Company.objects.get(pk = company_id)
+  applications = []
+  for category in (None, 'C', 'U', 'B', 'A') :
+    applications += list(CompanyApplicationMap.objects.filter(company = company,
+                                                              plac_person__placed_company_category = category,
+                                                              status='FIN', shortlisted=True))
+  return render_to_response('placement/shortlist.html', {
+      'company' : company,
+      'applications' : applications,
+      }, context_instance = RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def remove_shortlist(request, company_id) :
+  """
+  Remove from shortlist of a company.
+  """
+  company = Company.objects.get(pk = company_id)
+  if request.method == "POST" :
+    CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(shortlisted = False)
+    l.info(request.user.username + ': updated shortlist for company ' + company_id)
+    return HttpResponseRedirect(reverse('placement.views_admin.unfinalize', args=(company_id,)))
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
@@ -684,7 +696,7 @@ def branch_details_xls(request, branch_code) :
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def insert_shortlist(request):
     if request.method == 'POST':
-        students = request.POST['students'].strip().split(",")
+        students = request.POST['students'].strip().split("\n")
         company_id = request.POST['company'].strip()
         message = ""
         is_success = True
@@ -694,21 +706,21 @@ def insert_shortlist(request):
             person = Student.objects.get(user__username=int(student))
             plac_person = PlacementPerson.objects.get_or_create(student=person)[0]
             c_map,created = CompanyApplicationMap.objects.get_or_create(plac_person=plac_person,company=company)
-            pdf = get_resume_binary(RequestContext(request), person, company.sector)
-            if pdf['err'] :
-              return HttpResponse('Resume for %s cannot be generated. Please contact IMG immediately.'%str(person.user.username))
-            filepath = os.path.join(settings.MEDIA_ROOT, 'placement', 'applications', 'company'+str(company_id), str(person.user.username)+'.pdf')
-            # Make sure that the parent directory of filepath exists
-            parent = os.path.split(filepath)[0]
-            if not os.path.exists(parent) :
-              os.makedirs(parent)
+            if created:
+              pdf = get_resume_binary(RequestContext(request), person, company.sector)
+              if pdf['err'] :
+                return HttpResponse('Resume for %s cannot be generated. Please contact IMG immediately.'%str(person.user.username))
+              filepath = os.path.join(settings.MEDIA_ROOT, 'placement', 'applications', 'company'+str(company_id), str(person.user.username)+'.pdf')
+              # Make sure that the parent directory of filepath exists
+              parent = os.path.split(filepath)[0]
+              if not os.path.exists(parent) :
+                os.makedirs(parent)
               resume = open(filepath, 'w')
               resume.write(pdf['content'])
               resume.close()
-            if created:
-              c_map.status = 'FIN'
-              c_map.shortlisted = True
-              c_map.save()
+            c_map.status = 'FIN'
+            c_map.shortlisted = True
+            c_map.save()
         except Company.DoesNotExist:
           message = "Given Company does not exist. Please try again."
           is_success = False
