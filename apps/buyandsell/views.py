@@ -378,7 +378,7 @@ def sell(request):
         app = 'buyandsell'
         watch_user_list = new_item.category.watch_users.all()
         notif_text = str(new_item.item_name)+" has been added to the category "+str(new_item.category.name)
-        notif_text += " that you have watched"
+        notif_text += " that you have watched."
         url = '/buyandsell/sell_details/' + str(new_item.pk) + '/notif'
         Notification.save_notification(app, notif_text, url, watch_user_list, new_item)
         pic =ItemPic( item = new_item )

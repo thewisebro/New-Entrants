@@ -480,6 +480,7 @@ function sell_details(pk,item_name){
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
   }
+  $('.search-result-box').hide();
   dialog_iframe({
     name:'sell_detail_dialog',
     title:item_name,
@@ -495,6 +496,7 @@ function request_details(pk,item_name){
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
   }
+  $('.search-result-box').hide();
   dialog_iframe({
     name:'request_detail_dialog',
     title:item_name,
