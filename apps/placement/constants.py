@@ -2,6 +2,7 @@ COMPANY_APPLICATION_STATUS = (
       ('APP','Applied'),
       ('FIN','Finalized'),
       ('SEL', 'Selected'),
+      ('ACC', 'Accepted'),
     )
 
 WORKSHOP_OPTIONS = (

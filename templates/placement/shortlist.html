@@ -28,6 +28,11 @@
         Shortlisted
       </a>
     </li>
+    <li>
+      <a href="{% url 'placement.views_admin.select' company.id %}">
+        Selected
+      </a>
+    </li>
   </ul>
 </div>
 
@@ -89,6 +94,7 @@
     <input type="submit" class="btn btn-primary" value="Remove from Shortlist" formaction='{% url 'placement.views_admin.remove_shortlist' company_id=company.id %}'/>
     <input type="submit" class="btn btn-primary" value="Download XLS list" onclick="document.getElementsByTagName('form')[0].action='xlslist/';"/>
     <input type="submit" class="btn btn-primary" value="Download Resumes"  onclick="document.getElementsByTagName('form')[0].action='resumes/';"/>
+    <input type="submit" class="btn btn-primary" value="Declare Results" formaction='{% url 'placement.views_admin.select' company_id=company.id %}'/>
   </div>
 </form>
 {% else %}

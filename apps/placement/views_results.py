@@ -202,93 +202,94 @@ def branch_company(request, branch_code, year = None) :
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def declare(request, company_id) :
-  """
-  Declare results for the company.
-  """
-  try :
-    company = get_object_or_404(Company, pk = company_id, year = current_session_year() )
-    l.info(request.user.username + ': Declaring results for ' + str(company_id))
-    if request.method == 'POST':
-      # set status of selected application to SELECTED
-      CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(status='SEL')
-      # Can a student be selected for placement in two companies? Ans: a student can be selected in a max of two companies.
-      # create entry in Results
-      for application in CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')) :
-        plac_person = application.plac_person
-        Results.objects.create(student = plac_person.student, company = company)
-        # Update PlacementPerson of the persons just placed.
-        if plac_person.no_of_companies_placed == 0 :
-          plac_person.no_of_companies_placed = 1
-          plac_person.placed_company_category = company.category
-        else :
-          plac_person.no_of_companies_placed += 1
-          plac_person.placed_company_category = policy.get_higher_category(plac_person.placed_company_category, company.category)
-        plac_person.save()
-      l.info(request.user.username + ': Successfully Declared results for ' + str(company_id))
-      messages.success(request, 'The marked students are selected for placement in ' + company.name + '.')
-      return HttpResponseRedirect(reverse('placement.views_company.admin_list'))
-    else :
-      applications = CompanyApplicationMap.objects.filter(company = company, status = 'FIN', shortlisted=True)
-      return render_to_response('placement/declare_results.html', {
-          'company' : company,
-          'applications' : applications,
-          }, context_instance = RequestContext(request))
-  except Exception as e:
-    l.info(request.user.username + ': Encountered Exception while declaring results for ' + str(company_id))
-    l.exception(e)
-    return handle_exc(e, request)
+  pass
+#  """
+#  Declare results for the company.
+#  """
+#  try :
+#    company = get_object_or_404(Company, pk = company_id, year = current_session_year() )
+#    l.info(request.user.username + ': Declaring results for ' + str(company_id))
+#    if request.method == 'POST':
+#      # set status of selected application to SELECTED
+#      CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(status='SEL')
+#      # Can a student be selected for placement in two companies? Ans: a student can be selected in a max of two companies.
+#      # create entry in Results
+#      for application in CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')) :
+#        plac_person = application.plac_person
+#        Results.objects.create(student = plac_person.student, company = company)
+#        # Update PlacementPerson of the persons just placed.
+#        if plac_person.no_of_companies_placed == 0 :
+#          plac_person.no_of_companies_placed = 1
+#          plac_person.placed_company_category = company.category
+#        else :
+#          plac_person.no_of_companies_placed += 1
+#          plac_person.placed_company_category = policy.get_higher_category(plac_person.placed_company_category, company.category)
+#        plac_person.save()
+#      l.info(request.user.username + ': Successfully Declared results for ' + str(company_id))
+#      messages.success(request, 'The marked students are selected for placement in ' + company.name + '.')
+#      return HttpResponseRedirect(reverse('placement.views_company.admin_list'))
+#    else :
+#      applications = CompanyApplicationMap.objects.filter(company = company, status = 'FIN', shortlisted=True)
+#      return render_to_response('placement/declare_results.html', {
+#          'company' : company,
+#          'applications' : applications,
+#          }, context_instance = RequestContext(request))
+#  except Exception as e:
+#    l.info(request.user.username + ': Encountered Exception while declaring results for ' + str(company_id))
+#    l.exception(e)
+#    return handle_exc(e, request)
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
-def drop(request, company_id) :
-  """
-  Drop some results from the results that were earlier declared for the company.
-  """
-  try :
-    company = get_object_or_404(Company, pk = company_id, year = current_session_year() )
-    l.info(request.user.username + ': Dropping results for ' + str(company_id))
-    if request.method == 'POST' :
-      # TODO : use transaction to make sure all the queries run properly
-      results = Results.objects.filter(pk__in = request.POST.getlist('selected_results'))
-      # persons' list for whom the results are to be dropped
-      persons = results.values_list('student', flat = True)
-      # Update the application to show that the student is not selected in this company
-      CompanyApplicationMap.objects.filter(company = company, plac_person__student__in = persons).update(status = 'FIN')
-      # Update PlacementPerson of the student.
-      for result in results :
-        plac_person = PlacementPerson.objects.get(student = result.student)
-        if plac_person.no_of_companies_placed == 1 :
-          plac_person.no_of_companies_placed = 0
-          plac_person.placed_company_category = None
-        else :
-          plac_person.no_of_companies_placed -= 1
-          person_placed = Results.objects.filter(student = plac_person.student)
-          # TODO : What if the student was placed in 3 companies? this logic fails to restore the
-          # placed_company_category properly. FIXME
-          if person_placed[0].company == company :
-            old_placed = person_placed[1]
-          else :
-            old_placed = person_placed[0]
-          plac_person.placed_company_category = old_placed.company.category
-        plac_person.save()
-      # delete the results
-      results.delete()
-      l.info(request.user.username + ': Successfully dropped results for ' + str(company_id))
-      messages.success(request, 'The selected results were dropped successfully.')
-      return HttpResponseRedirect(reverse('placement.views_company.admin_list'))
-    else :
-      # Do not use CompanyApplicationMap to show list of selected students as admin
-      # can directly insert results.
-      results = Results.objects.filter(company = company)
-      # TODO : Convert code to human readable value
-      return render_to_response('placement/drop_results.html', {
-          'company' : company,
-          'results' : results
-          }, context_instance = RequestContext(request))
-  except Exception as e:
-    l.info(request.user.username + ': Encountered Exception while dropping results for ' + str(company_id))
-    l.exception(e)
-    return handle_exc(e, request)
+#@login_required
+#@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+#def drop(request, company_id) :
+#  """
+#  Drop some results from the results that were earlier declared for the company.
+#  """
+#  try :
+#    company = get_object_or_404(Company, pk = company_id, year = current_session_year() )
+#    l.info(request.user.username + ': Dropping results for ' + str(company_id))
+#    if request.method == 'POST' :
+#      # TODO : use transaction to make sure all the queries run properly
+#      results = Results.objects.filter(pk__in = request.POST.getlist('selected_results'))
+#      # persons' list for whom the results are to be dropped
+#      persons = results.values_list('student', flat = True)
+#      # Update the application to show that the student is not selected in this company
+#      CompanyApplicationMap.objects.filter(company = company, plac_person__student__in = persons).update(status = 'FIN')
+#      # Update PlacementPerson of the student.
+#      for result in results :
+#        plac_person = PlacementPerson.objects.get(student = result.student)
+#        if plac_person.no_of_companies_placed == 1 :
+#          plac_person.no_of_companies_placed = 0
+#          plac_person.placed_company_category = None
+#        else :
+#          plac_person.no_of_companies_placed -= 1
+#          person_placed = Results.objects.filter(student = plac_person.student)
+#          # TODO : What if the student was placed in 3 companies? this logic fails to restore the
+#          # placed_company_category properly. FIXME
+#          if person_placed[0].company == company :
+#            old_placed = person_placed[1]
+#          else :
+#            old_placed = person_placed[0]
+#          plac_person.placed_company_category = old_placed.company.category
+#        plac_person.save()
+#      # delete the results
+#      results.delete()
+#      l.info(request.user.username + ': Successfully dropped results for ' + str(company_id))
+#      messages.success(request, 'The selected results were dropped successfully.')
+#      return HttpResponseRedirect(reverse('placement.views_company.admin_list'))
+#    else :
+#      # Do not use CompanyApplicationMap to show list of selected students as admin
+#      # can directly insert results.
+#      results = Results.objects.filter(company = company)
+#      # TODO : Convert code to human readable value
+#      return render_to_response('placement/drop_results.html', {
+#          'company' : company,
+#          'results' : results
+#          }, context_instance = RequestContext(request))
+#  except Exception as e:
+#    l.info(request.user.username + ': Encountered Exception while dropping results for ' + str(company_id))
+#    l.exception(e)
+#    return handle_exc(e, request)
 
 # Departmentwise results start
 # Here degree can be UG/PG/PHD
