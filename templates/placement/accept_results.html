@@ -94,7 +94,7 @@
     </tbody>
   </table>
   <div class="submit_button">
-{%comment%}<input type="submit" class="btn btn-primary" value="Remove from Selected list" formaction='{% url 'placement.views_admin.remove_accept' company_id=company.id %}'/> {%endcomment%}
+    <input type="submit" class="btn btn-primary" value="Remove from Accepted list" formaction='{% url 'placement.views_admin.remove_accept' company_id=company.id %}'/>
   </div>
 </form>
 {% else %}

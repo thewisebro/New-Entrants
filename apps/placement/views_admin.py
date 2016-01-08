@@ -201,36 +201,6 @@ def remove_shortlist(request, company_id) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
-def accept(request, company_id):
-  """
-    To change the status of results to ACC
-  """
-  try:
-    company = get_object_or_404(Company, pk = company_id, year = current_session_year())
-    l.info(request.user.username + ': Adding the accepted applications')
-    if request.method == 'POST':
-      applications = CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications'))
-      applications.update(status='ACC')
-      
-      persons = applications.values_list('plac_person__student', flat = True)
-      Results.objects.get(student__in = persons, company = company).update(accepted = True)
-      messages.success(request, 'The applications successfully moved to Accepted list.')
-      l.info(request.user.username+': Change the result and application status')
-      return HttpResponseRedirect(reverse('placement.views_admin.accept', args=(company_id,)))
-    applications = CompanyApplicationMap.objects.filter(company = company, status = 'ACC')
-    return render_to_response('placement/accept_results.html', {
-          'company' : company,
-          'applications' : applications,
-          }, context_instance = RequestContext(request))
-  except Exception as e:
-    l.info(request.user.username + ': Encountered Exception while declaring results for ' + str(company_id))
-    l.exception(e)
-    return handle_exc(e, request)
-
-
-
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def select(request, company_id) :
   """
   Declare results for the company.
@@ -258,7 +228,7 @@ def select(request, company_id) :
       messages.success(request, 'The marked students are selected for placement in ' + company.name + '.')
       return HttpResponseRedirect(reverse('placement.views_admin.select', args=(company.id,)))
     else :
-      applications = CompanyApplicationMap.objects.filter(company = company, status = 'SEL', shortlisted=True)
+      applications = CompanyApplicationMap.objects.filter(company = company, status = 'SEL')
       return render_to_response('placement/declare_results.html', {
           'company' : company,
           'applications' : applications,
@@ -267,7 +237,7 @@ def select(request, company_id) :
     l.info(request.user.username + ': Encountered Exception while declaring results for ' + str(company_id))
     l.exception(e)
     return handle_exc(e, request)
-
+ 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def remove_select(request, company_id) :
@@ -310,6 +280,52 @@ def remove_select(request, company_id) :
     l.info(request.user.username + ': Encountered Exception while dropping results for ' + str(company_id))
     l.exception(e)
     return handle_exc(e, request)
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def accept(request, company_id):
+  """
+    To change the status of results to ACC
+  """
+  try:
+    company = get_object_or_404(Company, pk = company_id, year = current_session_year())
+    l.info(request.user.username + ': Adding the accepted applications')
+    if request.method == 'POST':
+      applications = CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications'))
+      applications.update(status='ACC')
+      
+      persons = applications.values_list('plac_person__student', flat = True)
+      Results.objects.filter(student__in = persons, company = company).accepted = True
+      messages.success(request, 'The applications successfully moved to Accepted list.')
+      l.info(request.user.username+': Change the result and application status')
+      return HttpResponseRedirect(reverse('placement.views_admin.accept', args=(company_id,)))
+    applications = CompanyApplicationMap.objects.filter(company = company, status = 'ACC')
+    return render_to_response('placement/accept_results.html', {
+          'company' : company,
+          'applications' : applications,
+          }, context_instance = RequestContext(request))
+  except Exception as e:
+    l.info(request.user.username + ': Encountered Exception while declaring results for ' + str(company_id))
+    l.exception(e)
+    return handle_exc(e, request)
+
+def remove_accept(request, company_id):
+  """Remove applications from accepted list"""
+  try:
+    l.info(request.user.username + ': Remove from accepted list')
+    company = Company.objects.get(pk = company_id)
+    if request.method == "POST" :
+      applications = CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications'))
+      applications.update(status='SEL')
+      Results.objects.filter(student__in = applications.values_list('plac_person__student', flat=True), company=company).update(accepted=False)
+      messages.success(request, 'Selected applications removed from Accepted list.') 
+      l.info(request.user.username + ': removed from accepted list for company ' + company_id)
+      return HttpResponseRedirect(reverse('placement.views_admin.select', args=(company_id,)))
+  except Exception as e:
+    l.info(request.user.username + ': Encountered Exception while declaring results for ' + str(company_id))
+    l.exception(e)
+    return handle_exc(e, request)
+
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)

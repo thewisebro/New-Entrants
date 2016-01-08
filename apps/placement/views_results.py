@@ -464,6 +464,7 @@ def insert(request, company_id, branch_code = None) :
         plac_person.save()
         application = CompanyApplicationMap.objects.get(plac_person = plac_person, company = company)
         application.status = 'SEL'
+        application.shortlisted = True
         application.save()
         l.info(request.user.username + ': Successfully inserted results for ' + str(company_id))
       messages.success(request, 'The marked students are selected for placement in ' + company.name + '.')
