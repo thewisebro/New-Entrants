@@ -223,6 +223,7 @@ class Results(models.Model):
   """
   student = models.ForeignKey(Student)
   company = models.ForeignKey(Company)
+  accepted = models.BooleanField(default=False)
   def __unicode__(self):
     return str(self.student) + str(self.company)
 

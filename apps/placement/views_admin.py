@@ -201,6 +201,36 @@ def remove_shortlist(request, company_id) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def accept(request, company_id):
+  """
+    To change the status of results to ACC
+  """
+  try:
+    company = get_object_or_404(Company, pk = company_id, year = current_session_year())
+    l.info(request.user.username + ': Adding the accepted applications')
+    if request.method == 'POST':
+      applications = CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications'))
+      applications.update(status='ACC')
+      
+      persons = applications.values_list('plac_person__student', flat = True)
+      Results.objects.get(student__in = persons, company = company).update(accepted = True)
+      messages.success(request, 'The applications successfully moved to Accepted list.')
+      l.info(request.user.username+': Change the result and application status')
+      return HttpResponseRedirect(reverse('placement.views_admin.accept', args=(company_id,)))
+    applications = CompanyApplicationMap.objects.filter(company = company, status = 'ACC')
+    return render_to_response('placement/accept_results.html', {
+          'company' : company,
+          'applications' : applications,
+          }, context_instance = RequestContext(request))
+  except Exception as e:
+    l.info(request.user.username + ': Encountered Exception while declaring results for ' + str(company_id))
+    l.exception(e)
+    return handle_exc(e, request)
+
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def select(request, company_id) :
   """
   Declare results for the company.
