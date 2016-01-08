@@ -1,0 +1,457 @@
+*
+{
+    font-family: "Myriad-Pro" , Arial;
+    line-height: 1.67 !important;
+}
+
+/* CSS for home page starts */
+
+.banner-image
+{
+    vertical-align: middle;
+    position: fixed;
+    z-index: -1;
+    width: 100%;
+}
+
+#home-red-head
+{
+    background: linear-gradient(90deg, rgba(33, 89, 90, 0.8) 10%, rgba(24, 90, 157, 0.8) 90%);
+    /* background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fe6f5d), to(#b43c14)); */
+}
+
+.logo
+{
+    display: inline;
+}
+
+.header-logo
+{
+    height: 36px;
+    margin-top: 25px;
+}
+
+.mobile-navigation-hamburger
+{
+    display: none;
+}
+
+.header-menu-items
+{
+    display: inline-block;
+    float: right;
+}
+
+.header-menu-items li
+{
+    float: right;
+    font-size: 15px;
+    margin-top: 36px;
+    margin-left: 60px;
+    list-style-type: none;
+}
+
+.header-menu-items li:last-child 
+{
+    margin-left: 0;
+}
+
+.header-menu-items li a
+{
+    color: #4b4b4b;
+}
+
+.home-header-menu-items li a
+{
+    color: #ffffff;
+}
+
+.header-menu-items li a:hover
+{
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.jumbo-text
+{
+    font-size: 60px;
+    color: #fff;
+    text-align: center;
+    margin-top: 180px;
+}
+
+.sub-text-to-jumbo-text
+{
+    text-align: center;
+    margin-bottom: 180px;
+    color: #ffffff;
+    opacity: 0;
+    -webkit-transition: opacity 500ms;
+    transition: opacity 2s;
+}
+
+.home-white-1
+{
+    background-color: #ffffff;
+}
+
+.how-to-join
+{
+    color: #5d5d5d;
+    margin-top: 72px;
+    text-align: center;
+}
+
+.how-to-join-subtext
+{
+    margin-top: 36px;
+    text-align: center;
+}
+
+.how-to-join-h4
+{
+    text-align: center;
+    margin-top: 24px;
+}
+
+.assignment-will-be-uploaded
+{
+    color: #10827F;
+    text-align: center;
+    display: table;
+    padding: 16px 24px;
+    margin: 24px auto 0 auto;
+    background-color: transparent;
+    font-size: 18px;
+    border: 1px solid transparent;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px
+}
+
+.how-to-join-button
+{
+    display: table;
+    margin: auto;
+    padding: 12px 48px;
+    margin-top: 24px;
+    margin-bottom: 0;
+    background-color: #2a3c49;
+    font-size: 18px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+}
+
+.how-to-join-button:hover
+{
+    background-color: #10827F;
+}
+
+.download-assignment-icon
+{
+    height: 12px;
+}
+
+.also-open-to
+{
+    margin: 48px auto 96px auto;
+    text-align: center;
+}
+
+.home-red-why-img
+{
+    background-color: rgba(30,42,53,0.8);
+}
+
+.why-img-heading
+{
+    margin-top: 120px;
+    color: #ffffff;
+}
+
+.why-img-text
+{
+    margin-top: 36px;
+    color: #ffffff;
+
+}
+
+.know-more-about-img
+{
+    margin-top: 24px;
+    margin-bottom: 120px;
+}
+
+.know-more-about-img a
+{
+    font-size: 18px;
+}
+
+.know-more-about-img a:hover
+{
+    color: #10827f;
+}
+
+.why-img-photo
+{
+    margin-top: 60px;
+    height: 360px;
+    float: right;
+}
+
+.why-img-heading , .why-img-text , .know-more-about-img , .know-more-about-img a
+{
+    text-align: center;
+}
+
+.footer
+{
+    background-color: #ffffff;
+}
+
+.footer-content
+{
+    margin-top: 72px;
+    margin-bottom: 72px;
+}
+
+.footer-follow-us-text
+{
+    font-size: 18px;
+}
+
+.footer-copyright-img-text
+{
+    float: right;
+    font-size: 18px;
+}
+
+.footer-copyright-img-text a:hover
+{
+    color: #10827f;
+}
+
+.footer-navigation
+{
+    margin-top: 36px;
+}
+
+.footer-navigation ul li
+{
+    list-style-type: none;
+    float: right;
+    margin-left: 36px;
+}
+
+.footer-navigation ul li a
+{
+    color: #1e2a35;
+    font-size: 12px;
+}
+
+.social-links ul
+{
+    display: inline;
+    padding-left: 0;
+}
+
+.social-links ul li
+{
+    list-style-type: none;
+    display: inline-block;
+    margin-top: 24px;
+    margin-right: 24px;
+}
+
+.footer-social-link-icon
+{
+    height: 36px;
+}
+
+/* CSS for home page ends */
+
+
+/* CSS for Updates page starts */
+
+.header
+{
+    background-color: #ffffff;
+    padding-bottom: 12px;
+}
+
+.general-body-white
+{
+    background-color: #ffffff;
+    padding-bottom: 36px;
+}
+
+.page-heading
+{
+    margin-top: 48px;
+    margin-bottom: 12px;
+    color: #4b4b4b;
+}
+
+.general-heading
+{
+    margin-top: 36px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: #10827F;
+}
+
+.general-body-text
+{
+    margin-bottom: 18px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #5d5d5d;
+}
+
+.update-body-text
+{
+    display: none;
+}
+
+.remaining-text
+{
+    display: none;
+}
+
+.update-time
+{
+    margin-top: 18px;
+    font-size: 16px;
+    color: #8d8d8d;
+}
+
+.read-more-button
+{
+    margin-top: 0;
+    float: right;
+    font-size: 16px;
+    color: #10827f;
+    cursor: pointer;
+    display: none;
+}
+
+.read-more-button:hover
+{
+    text-decoration: underline;
+}
+
+.division-line
+{
+    width: 100%;
+    height: 1px;
+    background-color: #dddddd;
+    margin: 36px 0 0 0;
+}
+
+li[class="active"]
+{
+    font-weight: bold;
+}
+
+/* CSS for Updates page ends */
+
+
+/* CSS for contact page (for Google map to be more specific) starts here */
+
+.contact-general-heading
+{
+    display: inline-block;
+    margin-left: 12px;
+}
+
+.contact-page-icons
+{
+    margin-top: -6px;
+    height: 20px;
+}
+
+#google-map-div
+{
+    margin: 24px 0;
+    height: 360px;
+    background-color: #ccc;
+}
+
+/* CSS for contact page (for Google map to be more specific) ends here */
+
+
+/* CSS for about page starts here */
+
+.about-us-jumbo-text
+{
+    font-size: 60px;
+    color: #fff;
+    text-align: center;
+    margin-top: 180px;
+}
+
+.sub-text-to-about-us-jumbo-text
+{
+    text-align: center;
+    margin-bottom: 180px;
+    color: #ffffff;
+
+}
+
+.we-make-simple-description
+{
+    margin: 36px auto 72px auto;
+    text-align: center;
+
+}
+
+.work-hard-party-harder
+{
+    margin-top: 84px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.sub-text-to-work-hard
+{
+    margin-top: 36px;
+
+    text-align: center;
+    color: #ffffff;
+}
+
+.nitesh-blog-link
+{
+    margin: 36px auto 108px auto;
+    text-align: center;
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.perks-main-heading
+{
+    margin-top: 84px;
+    text-align: center;
+    color: #555555;
+}
+
+.perk-div
+{
+    margin-top: 48px;
+}
+
+.perk-text
+{
+    margin-top: 18px;
+    font-size: 18px;
+    color: #555555;
+}
+
+/* CSS for about page starts here */
+
+@font-face
+{
+    font-family: "Myriad-Pro";
+    src: url("../fonts/MyriadPro-Regular.otf");
+}
