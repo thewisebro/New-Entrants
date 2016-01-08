@@ -1000,6 +1000,11 @@ tr
   bottom: 25px;
 }
 
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover
+{
+  z-index: 1;
+}
+
 .watched-categories ul li
 {
   list-style: none;
