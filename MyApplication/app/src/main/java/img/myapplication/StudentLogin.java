@@ -14,11 +14,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class StudentLogin extends AppCompatActivity {
     private EditText Enr_No;
@@ -89,12 +93,7 @@ public class StudentLogin extends AppCompatActivity {
         }
         @Override
         protected String doInBackground(String... urls) {
-/*
-            person = new Person();
-            person.setName(etName.getText().toString());
-            person.setCountry(etCountry.getText().toString());
-            person.setTwitter(etTwitter.getText().toString());
-*/
+
             return POST(urls[0],user);
         }
         // onPostExecute displays the results of the AsyncTask.
@@ -105,10 +104,9 @@ public class StudentLogin extends AppCompatActivity {
     }
 
     private static String POST(String url,JSONObject userobj){
-        InputStream is=null;
         String result="";
         try{
-            HttpClient client=new DefaultHttpClient();
+            /*HttpClient client=new DefaultHttpClient();
             HttpPost httpPost=new HttpPost(url);
 
             String user=userobj.toString();
@@ -117,18 +115,18 @@ public class StudentLogin extends AppCompatActivity {
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
             HttpResponse httpResponse=client.execute(httpPost);
-            is=httpResponse.getEntity().getContent();
+            is=httpResponse.getEntity().getContent();*/
+            URL urlobj=new URL(url);
+            URLConnection conn=urlobj.openConnection();
+            OutputStreamWriter wr=new OutputStreamWriter(conn.getOutputStream());
+            wr.write(userobj.toString());
+            wr.flush();
 
-            if(is != null){
-                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(is));
-                String line = "";
-                while((line = bufferedReader.readLine()) != null)
-                    result += line;
-
-                is.close();
-            }
-            else
-                result = "Did not work!";
+            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            while((line = bufferedReader.readLine()) != null)
+                result += line;
+            bufferedReader.close();
 
         } catch (Exception e) {
             Log.d("InputStream", e.getLocalizedMessage());
