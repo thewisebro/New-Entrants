@@ -14,11 +14,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
@@ -63,9 +62,14 @@ public class StudentLogin extends AppCompatActivity {
         else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();
 
         JSONObject userobj=new JSONObject();
-        userobj.put("Enr_No",Enr_No.getText().toString());
-        userobj.put("Password",Password.getText().toString());
-        new HttpAsyncTask(userobj).execute();
+        try {
+            userobj.put("Enr_No",Enr_No.getText().toString());
+
+            userobj.put("Password",Password.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //new HttpAsyncTask(userobj).execute();
     }
 
     @Override
