@@ -1,13 +1,24 @@
 package img.myapplication;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class StudentLogin extends AppCompatActivity {
     private EditText Enr_No;
@@ -17,7 +28,17 @@ public class StudentLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_login);
-
+        if(!isConnected()){
+            Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
     }
     public void login(View view){
 
@@ -36,8 +57,12 @@ public class StudentLogin extends AppCompatActivity {
             finish();
         }
         else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();
-    }
 
+        JSONObject userobj=new JSONObject();
+        userobj.put("Enr_No",Enr_No.getText().toString());
+        userobj.put("Password",Password.getText().toString());
+        new HttpAsyncTask(userobj).execute();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,6 +81,60 @@ public class StudentLogin extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
+        JSONObject user;
+        public HttpAsyncTask(JSONObject userobj){
+            user=userobj;
+        }
+        @Override
+        protected String doInBackground(String... urls) {
+/*
+            person = new Person();
+            person.setName(etName.getText().toString());
+            person.setCountry(etCountry.getText().toString());
+            person.setTwitter(etTwitter.getText().toString());
+*/
+            return POST(urls[0],user);
+        }
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private static String POST(String url,JSONObject userobj){
+        InputStream is=null;
+        String result="";
+        try{
+            HttpClient client=new DefaultHttpClient();
+            HttpPost httpPost=new HttpPost(url);
+
+            String user=userobj.toString();
+            StringEntity se= new StringEntity(user);
+            httpPost.setEntity(se);
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+            HttpResponse httpResponse=client.execute(httpPost);
+            is=httpResponse.getEntity().getContent();
+
+            if(is != null){
+                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(is));
+                String line = "";
+                while((line = bufferedReader.readLine()) != null)
+                    result += line;
+
+                is.close();
+            }
+            else
+                result = "Did not work!";
+
+        } catch (Exception e) {
+            Log.d("InputStream", e.getLocalizedMessage());
+        }
+
+        return result;
     }
 
 }
