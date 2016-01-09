@@ -251,6 +251,13 @@
     font-size: 12px;
 }
 
+.footer-navigation ul li a:hover
+{
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
 .social-links ul
 {
     display: inline;
@@ -428,6 +435,21 @@ li[class="active"]
     text-align: center;
     font-size: 18px;
     color: #ffffff;
+}
+
+.nitesh-blog-link a
+{
+    color: #F29A27;
+}
+
+.nitesh-blog-link a:hover
+{
+    color: #10827F;
+}
+
+.shubham-blog-link a:hover
+{
+    color: #10827F;
 }
 
 .perks-main-heading
