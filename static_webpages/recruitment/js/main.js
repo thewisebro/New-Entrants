@@ -108,7 +108,7 @@ function collapser(content)  //function to trim content at updates page
 
 function initialize()
 {
-    var position = new google.maps.LatLng(29.8623002, 77.8960259);
+    var position = new google.maps.LatLng(29.8627129, 77.8964149);
     var mapCanvas = document.getElementById('google-map-div');
     var mapOptions =
     {
