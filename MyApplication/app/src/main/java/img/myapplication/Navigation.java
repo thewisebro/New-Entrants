@@ -68,11 +68,10 @@ public class Navigation extends ActionBarActivity
                 break;
             case 3:fragment = new SConnectFragment();
                 break;
-            case 4 :fragment= new EditInfoFragment(entrant);
-                break;
+
             case 5: logout();
                 break;
-            default: fragment=new ProfileFragment(entrant);
+            default: fragment=new EditInfoFragment(entrant);
                 break;
         }
        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();

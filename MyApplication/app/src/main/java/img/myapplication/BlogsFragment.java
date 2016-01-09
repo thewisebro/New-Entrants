@@ -1,7 +1,6 @@
 package img.myapplication;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,8 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +37,11 @@ public class BlogsFragment extends Fragment {
 
         cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_item_card);
 
+
         for (int i = 0; i < 10; i++) {
 
             BlogModel card= new BlogModel();
+
             card.topic="lololol";
             card.shortInfo="test";
             card.author="ankush";
@@ -46,6 +52,23 @@ public class BlogsFragment extends Fragment {
         listView.setAdapter(cardArrayAdapter);
 
         return view;
+    }
+    public void getCardList(){
+
+        URL url=new URL();
+        HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+        conn.setDoOutput(true);
+        conn.setDoInput(true);
+        BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+        String line = "";
+        while((line = bufferedReader.readLine()) != null)
+            cardArrayAdapter.add(getCardfromString(line));
+        bufferedReader.close();
+
+    }
+    public BlogModel getCardfromString(String line){
+        BlogModel card=new BlogModel();
+        return card;
     }
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 

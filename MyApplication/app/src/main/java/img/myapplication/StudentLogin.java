@@ -50,7 +50,7 @@ public class StudentLogin extends AppCompatActivity {
 
         MySQLiteHelper db=new MySQLiteHelper(this);
         StudentModel user=db.getStudent(Enr_No.getText().toString(),Password.getText().toString());
-        if(db.checkUser(Enr_No.getText().toString(), Password.getText().toString()))
+        if(db.checkEntrant(Enr_No.getText().toString(), Password.getText().toString()))
         {
             Intent intent =new Intent(this, NavigationStudent.class);
             Bundle mBundle=new Bundle();
