@@ -237,7 +237,7 @@ def select(request, company_id) :
     l.info(request.user.username + ': Encountered Exception while declaring results for ' + str(company_id))
     l.exception(e)
     return handle_exc(e, request)
- 
+
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
 def remove_select(request, company_id) :
@@ -292,13 +292,27 @@ def accept(request, company_id):
     l.info(request.user.username + ': Adding the accepted applications')
     if request.method == 'POST':
       applications = CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications'))
-      applications.update(status='ACC')
-      
-      persons = applications.values_list('plac_person__student', flat = True)
-      Results.objects.filter(student__in = persons, company = company).accepted = True
-      messages.success(request, 'The applications successfully moved to Accepted list.')
+      string_temp = ''
+      atleast_one_moved = False
+      for app in applications:
+        if CompanyApplicationMap.objects.filter(plac_person=app.plac_person, status='ACC').exists():
+          messages.error(request, app.plac_person.student.user.name+' has been accepted in '+CompanyApplicationMap.objects.filter(plac_person=app.plac_person, status='ACC')[0].company.name)
+          string_temp = 'Other'
+        else:
+          applications.update(status='ACC')
+          persons = applications.values_list('plac_person__student', flat = True)
+          Results.objects.filter(student__in = persons, company = company).update(accepted = True)
+          atleast_one_moved = True
+      if string_temp != 'Other':
+          string_temp = 'All'
+      if atleast_one_moved:
+        messages.success(request, string_temp+' applications has been successfully moved to Accepted list.')
       l.info(request.user.username+': Change the result and application status')
-      return HttpResponseRedirect(reverse('placement.views_admin.accept', args=(company_id,)))
+      if string_temp == 'Other':
+          redirect = 'placement.views_admin.select'
+      else:
+          redirect = 'placement.views_admin.accept'
+      return HttpResponseRedirect(reverse(redirect, args=(company_id,)))
     applications = CompanyApplicationMap.objects.filter(company = company, status = 'ACC')
     return render_to_response('placement/accept_results.html', {
           'company' : company,
