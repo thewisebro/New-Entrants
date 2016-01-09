@@ -30,6 +30,24 @@ from hashlib import sha1
 import logging
 logger = logging.getLogger('channel-i_logger')
 
+def return_details(request):
+  c=[]
+  result = {"msg":"NO","_name":"","info":"","session_variable":"", "enrollment_no":""}
+  username = request.GET.get("username")
+  user = User.objects.get_or_none(username=username)
+  if not user:
+    webmail_account = get_webmail_account(username)
+    if webmail_account:
+      username = webmail_account.user.username
+      user = webmail_account.user
+  if user:
+    result["msg"] = "YES"
+    result["_name"] = user.name.encode('utf-8')
+    result["info"] = user.info.encode('utf-8')
+    result["enrollment_no"] = user.username.encode('utf-8')
+  c.append(result)
+  return HttpResponse(c)
+
 def make_user_login(request,user):
   user.backend='django.contrib.auth.backends.ModelBackend'
   auth_login(request, user)
