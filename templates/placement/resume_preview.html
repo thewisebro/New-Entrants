@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Resume</title>
+<style>
+body {
+  overflow:hidden;
+}
+#footer{
+  color:0;
+  padding:3px 0;
+  background-image:url('/static/images/FooterShadow.png');
+  background-position:top center;
+  background-repeat:no-repeat;
+  text-align:center;
+}
+</style>
+</head>
+<body style='margin:8px;'>
+<embed height="95%" width="100%" name="plugin" src="/media/placement/resume_preview/{{filename}}.pdf"  type="application/pdf">
+<div id="footer">
+  &copy; {% now "Y" %} Information Management Group
+</div> {# End footer div #}
+</body>
+</html>

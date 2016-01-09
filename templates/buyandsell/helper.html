@@ -1,0 +1,17 @@
+<html>
+<head>
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+<script src="{{ STATIC_URL }}js/common.js"></script>
+<script type="text/javascript" src="/static/js/buyandsell/base.js"></script>
+<script>
+{% if redirect_url %}
+//close_dialog(parent.current_dialog);
+parent.upload_image_buyandsell('buyandsell_pic',{{id}});
+{% endif %}
+</script>
+</head>
+<body>
+</form>
+</body>
+</html>

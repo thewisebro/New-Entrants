@@ -98,7 +98,7 @@
         e.stopPropagation();
       }
     });
-    $('#notifications-count').click(function(){
+    $('#notifications-container').click(function(){
       location.hash = 'notifications';
     });
   }

@@ -202,7 +202,7 @@ def index(request):
 #check session
 #student search
   if role == "stud":
-    students = Student.objects.all()
+    students = Student.objects.filter(~Q(passout_year = 0), passout_year__isnull = True)
     a=2*int('0'+year)
     b=2*int('0'+year)-1
     if srch_str != "":
@@ -307,7 +307,7 @@ def index(request):
 #all search
   if role == "all":
     if srch_str != "":
-      students = Student.objects.all()
+      students = Student.objects.filter(~Q(passout_year = 0), passout_year__isnull = True)
       students = students.filter(user__name__icontains = srch_str)
       count_stud = students.count()
       faculties = Faculty.objects.all()

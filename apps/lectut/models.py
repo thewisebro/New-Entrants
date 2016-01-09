@@ -73,10 +73,12 @@ class Post(models.Model):
       post = super(Post , self).save(*args, **kwargs)
     return post
 
-  def delete(self):
+  def delete_post(self):
     self.deleted = True
+    Notification.delete_notification('lectut',self)
     self.save()
-
+    return None
+ 
   def as_dict(self):
     ct = ContentType.objects.get_for_model(Post)
     count = Comment.objects.filter(content_type=ct,object_pk=self.id).count()
@@ -140,7 +142,7 @@ class Uploadedfile(BaseUpload):
   def __unicode__(self):
     return str(self.upload_file)
 
-  def delete(self):
+  def delete_file(self):
     self.deleted = True
     self.save()
     return None

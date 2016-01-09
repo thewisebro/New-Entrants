@@ -328,8 +328,8 @@ def placement_manager_contact_person_data(request):
   return HttpResponse(simplejson.dumps(data_to_send),'application/json')
 
 @login_required
-@user_passes_test(lambda u:u.groups.filter(name='Placement Manager').exists() , login_url=login_url)
-def placement_manager_contact_person_data_export(request):
+@user_passes_test(lambda u:u.groups.filter(name__in=['Placement Manager', 'Company Coordinator']).exists() , login_url=login_url)
+def contact_person_data_export(request):
   if request.method == 'POST':
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('sheet 1')
@@ -347,8 +347,11 @@ def placement_manager_contact_person_data_export(request):
     ws.write(0, 10, 'When to Contact' )
     ws.write(0, 11, 'Recent Comment')
 
-    company = CompanyContactInfo.objects.all()
-    contactPerson_lst = ContactPerson.objects.all().order_by('company_contact__name','is_primary')
+    if (not request.user.groups.filter(name='Placement Manager').exists()) or request.POST['PM'] == '0':
+      contactPerson_lst = ContactPerson.objects.filter(id__in=CampusContact.objects.filter(student = request.user).values_list('contact_person')).order_by('company_contact__name','is_primary')
+    elif request.POST['PM'] == '1':
+      company = CompanyContactInfo.objects.all()
+      contactPerson_lst = ContactPerson.objects.all().order_by('company_contact__name','is_primary')
     comment_lst = CompanyContactComments.objects.filter(campus_contact__contact_person__in=contactPerson_lst)
     i = 1
     date_style=xlwt.easyxf(num_format_str="dd/mm/yyyy")
