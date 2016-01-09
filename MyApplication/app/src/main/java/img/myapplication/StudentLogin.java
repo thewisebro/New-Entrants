@@ -49,7 +49,7 @@ public class StudentLogin extends AppCompatActivity {
         Password=(EditText) findViewById(R.id.et_Password);
 
         MySQLiteHelper db=new MySQLiteHelper(this);
-        User_Model user=db.getUser(Enr_No.getText().toString(),Password.getText().toString());
+        StudentModel user=db.getStudent(Enr_No.getText().toString(),Password.getText().toString());
         if(db.checkUser(Enr_No.getText().toString(), Password.getText().toString()))
         {
             Intent intent =new Intent(this, NavigationStudent.class);

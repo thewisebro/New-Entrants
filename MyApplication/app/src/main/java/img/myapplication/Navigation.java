@@ -2,7 +2,6 @@ package img.myapplication;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -69,13 +68,11 @@ public class Navigation extends ActionBarActivity
                 break;
             case 3:fragment = new SConnectFragment();
                 break;
-            /*case 4 :fragment= new EditInfoFragment(user);
+            case 4 :fragment= new EditInfoFragment(entrant);
                 break;
             case 5: logout();
                 break;
-            default: fragment=new ProfileFragment(user);
-                break;*/
-            default:fragment = new BlogsFragment();
+            default: fragment=new ProfileFragment(entrant);
                 break;
         }
        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
@@ -116,16 +113,6 @@ public class Navigation extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
-    @Override
-    public void onBackPressed(){
-        /*if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }*/
-        FragmentManager fm = this.getSupportFragmentManager();
-        fm.popBackStack();
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {

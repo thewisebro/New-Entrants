@@ -50,7 +50,7 @@ public class NewEntrantLogin extends AppCompatActivity {
 
         MySQLiteHelper db=new MySQLiteHelper(this);
         NewEntrantModel entrant=db.getEntrant(Username.getText().toString(),Password.getText().toString());
-        /*if(db.checkEntrant(Username.getText().toString(), Password.getText().toString()) == true)
+        if(db.checkEntrant(Username.getText().toString(), Password.getText().toString()) == true)
         {
             Intent intent =new Intent(this, Navigation.class);
             Bundle mBundle=new Bundle();
@@ -59,7 +59,7 @@ public class NewEntrantLogin extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();*/
+        else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();
 
         JSONObject userobj=new JSONObject();
         try {

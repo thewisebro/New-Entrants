@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 public class ProfileFragment extends Fragment {
 
-    private User_Model profile;
+    private StudentModel profile;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
 
         View myView= inflater.inflate(R.layout.fragment_profile, container, false);
@@ -31,7 +31,7 @@ public class ProfileFragment extends Fragment {
 
         return myView;
     }
-    public ProfileFragment(User_Model user){
+    public ProfileFragment(StudentModel user){
         profile=user;
     }
 }
