@@ -20,8 +20,8 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 public class NewEntrantLogin extends AppCompatActivity {
     private EditText Username;
@@ -115,7 +115,11 @@ public class NewEntrantLogin extends AppCompatActivity {
         String result="";
         try{
             URL urlobj=new URL(url);
-            URLConnection conn=urlobj.openConnection();
+            HttpURLConnection conn=(HttpURLConnection) urlobj.openConnection();
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            //conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             OutputStreamWriter wr=new OutputStreamWriter(conn.getOutputStream());
             wr.write(userobj.toString());
             wr.flush();
