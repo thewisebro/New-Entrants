@@ -998,6 +998,7 @@ tr
 {
   position: fixed;
   bottom: 25px;
+  margin-left: 15%; 
 }
 
 .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover
@@ -2060,6 +2061,8 @@ border-bottom: 1px solid #EEE;
 {
   font-size: 35px;
   color: #CACACA;
+  display: table;
+  margin: 150px auto; 
 }
 
 #login_dialog-div
