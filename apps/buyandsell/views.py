@@ -704,7 +704,7 @@ def sendmail(request, type_of_mail, id_pk):
     try:
       send_mail(subject, msg, 'buysell@iitr.ernet.in', receiver, fail_silently = True)
       email_sent_msg = qryst[0].user.name +\
-  ' has been sent a mail with your contact information. He may contact you shortly. If not, go ahead and contact '+pronoun+' youself!'
+  ' has been sent a mail with your contact information. He may contact you shortly. If not, go ahead and contact '+pronoun+' yourself!'
       messages.success(request, email_sent_msg)
     except Exception as e:
       messages.error(request, 'Email has not been sent to ' + qryst[0].user.name + '. Error occured and reported.' )

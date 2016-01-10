@@ -54,7 +54,7 @@ function watch_cat(url)
 
 function search() {
   var timer;
-  $("#id_item_name").keyup(function() {
+ /* $("#id_item_name").keyup(function() {
     clearTimeout(timer);
     var ms = 200;
     var val = this.value;
@@ -62,6 +62,7 @@ function search() {
     var type= window.location.href.split("/")[4];
     timer = setTimeout(function() { lookup(val,type);}, ms);
   });
+  */
   $(".search-form").keyup(function() {
     clearTimeout(timer);
     var ms = 200;
@@ -597,12 +598,12 @@ function special_submit(id,type) {
 function pic_upload(){
     var form = $("#sell_form");
     $("input[name = upload_pic]").val("no");
-    form.submit(); 
+    form.submit();
 }
 
 
 function bring_subcats() {
-$("select#id_category").click(function (){
+$("#id_category").change(function (){
       var category = $(this).val();
       var url = "/buyandsell/bring_subcats/" + category +"/";
       $.get(url, function(data){
