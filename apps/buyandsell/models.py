@@ -117,3 +117,11 @@ class ItemPic(models.Model):
                            blank = True,
                            null = True,
           )
+
+class OldBuyMap(models.Model):
+  buy_id = models.IntegerField(primary_key=True)
+  item = models.ForeignKey(SaleItems)
+
+class OldRequestMap(models.Model):
+  request_id = models.IntegerField(primary_key=True)
+  item = models.ForeignKey(RequestedItems)

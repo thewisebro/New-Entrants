@@ -19,6 +19,8 @@ from buysell.models import *
 from buysell.constants import *
 from notifications.models import Notification
 
+from buyandsell.models import OldBuyMap, OldRequestMap
+
 MEDIA_ROOT = settings.MEDIA_ROOT
 MEDIA_URL = settings.MEDIA_URL
 
@@ -718,3 +720,18 @@ def buy_item_details(request,item_id):
 def special_match(strg):
   pattern = r'[A-z0-9\s]'
   return bool(re.match(pattern, strg))
+
+def transfer_buy(request,item_id):
+#import pdb; pdb.set_trace()
+  try:
+    old = OldBuyMap.objects.get(buy_id=item_id)
+    return HttpResponseRedirect('/buyandsell/sell_details/'+str(old.item.pk)+'/notif/')
+  except:
+    return HttpResponseRedirect('/buyandsell/')
+
+def transfer_request(request,item_id):
+  try:
+    old = OldRequestMap.objects.get(request_id=item_id)
+    return HttpResponseRedirect('/buyandsell/request_details/'+str(old.item.pk)+'/notif/')
+  except:
+    return HttpResponseRedirect('/buyandsell/')
