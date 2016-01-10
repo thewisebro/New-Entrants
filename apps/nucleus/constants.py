@@ -23,6 +23,7 @@ channeli_apps = {
   'thinktank' : {'name':'Thinktank', 'url':'/thinktank/'},
   'lostfound' : {'name':'Lost & Found', 'url':'/lostfound/'},
   'buysell' : {'name':'Buy & Sell', 'url':'/buysell/'},
+  'buyandsell' : {'name':'Buy & Sell', 'url':'/buyandsell/'},
   'ebooks' : {'name':'E-Books', 'url':'/ebooks/'},
   'vle' : {'name':'VLE', 'url':'/vle/'},
   'games' : {'name':'Games', 'url':'/games/'},
