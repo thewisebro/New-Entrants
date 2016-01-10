@@ -10,7 +10,6 @@ import os.path
 
 def move_requests():
   items_to_move = ItemsRequested.objects.all()
-  import pdb;pdb.set_trace();
   for item in items_to_move:
     new_item = RequestedItems()
     new_item.user = item.user
@@ -50,7 +49,7 @@ def move_mails():
       new_mail.save()
 
 def move_sellitems():
-  items_to_move = ItemsForSale.objects.filter()
+  items_to_move = ItemsForSale.objects.all()
   for item in items_to_move:
     new_item = SaleItems()
     new_item.user = item.user
@@ -93,7 +92,10 @@ def move_sellitems():
        new_item.category = BuySellCategory.objects.get(pk = 4 )
 
     elif sc == 'BC':
-       new_item.category = BuySellCategory.objects.get(pk = 10 )
+       new_item.category = BuySellCategory.objects.get(pk = 10 )\
+
+    if timezone.now().date() > new_item.expiry_date:
+      new_item.is_active = False
 
     new_item.save()
     new_pic = ItemPic(item = new_item)
@@ -101,10 +103,12 @@ def move_sellitems():
     file_url = os.path.join(MEDIA_ROOT , item.item_image.url)
     if file_url !=  '/static/images/buysell/default.png':
 #  print file_url
-      if os.path.exists(file_url):
+      try:
         name = item.item_image.name
         new_item.itempic.pic.save(name,item.item_image,save=True)
         new_item.save()  #for notification
+      except:
+        pass
 
 
 
