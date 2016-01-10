@@ -39,7 +39,7 @@ logger = logging.getLogger('buysell')
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url='/login/')
 def buysell(request):
   logger.info(request.user.username+": in homepage.")
-  return HttpResponseRedirect('/buysell/buy/')
+  return HttpResponseRedirect('/buyandsell/')
 
 @login_required
 def sell(request):
