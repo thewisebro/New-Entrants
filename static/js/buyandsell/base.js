@@ -673,10 +673,6 @@ $(document).ready
           $(this).hide();
         }
 
-        else
-        {
-          console.log("kuchh nahi hua");
-        }
 
         /*
         if (".dropdown", $(this).hasClass("open"))
