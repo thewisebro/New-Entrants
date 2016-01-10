@@ -58,7 +58,8 @@
 
     <div class="header-logo-div">
       <a href="/buyandsell/buy">
-        <h1 class="logo">Buy & Sell</h1>
+        <img src="{{STATIC_URL}}images/buyandsell/logo.png" class="header-logo-image">
+
       </a>
     </div>
     <!--Search box HTML starts here-->
@@ -74,6 +75,8 @@
         </div>
       </form>
     </div>
+
+    <!--
     <div class="browse-button-div">
       <div class="dropdown" style="display:inline">
         <button type="button" class="btn dropdown-toggle global-browse" id="menu2" data-toggle="dropdown">
@@ -101,6 +104,7 @@
         </ul>
       </div>
     </div>
+    -->
 
     {% if login_flag %}
 
@@ -114,7 +118,7 @@
         <div class="arrow-up-behind" style="margin-left:81.5%; margin-top:-11.5%"></div>
         <div class="arrow-up-front" style="margin-left:82%; margin-top:-10.5%"></div>
         <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/my-account">My Account</a></li>
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Channel- i</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://channeli.in">Channel- i</a></li>
         <li role="presentation"><a role="menuitem" tabindex="-1" onclick="logout(from_buyandsell = true)">Logout</a>
         </li>
       </ul>
@@ -132,9 +136,11 @@
     <div id="header-options">
       <div class="sign-in-button" onclick="open_login_dialog(from_buyandsell=true)">Sign In</div>
     </div>
+    <!--
     <div class="sign-in-request-text">
       Sign in to have a better experience
     </div>
+    -->
 
 
     {% endif %}
@@ -155,11 +161,12 @@
   {
     $(".pagination").addClass("pagination-bottom-aligned");
   }
-
+/*
   else
   {
     $(".pagination-customized").css("margin-left","40%");
   }
+ */
 </script>
 
 </body>
