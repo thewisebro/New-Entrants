@@ -49,12 +49,12 @@ channeli_apps = {
   'dc++' : {'name':'DC++', 'url':'/dc++/'},
 }
 
-student_apps = ['lectut','jukebox','dc++','placement',
-                'buysell', 'thinktank','lostfound','softwares',
+student_apps = ['buyandsell', 'lectut','jukebox','dc++','placement',
+                'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research']
 
-student_apps_feedback = ['lectut','jukebox','dc++','placement',
-                'buysell', 'thinktank','lostfound','softwares',
+student_apps_feedback = ['buyandsell', 'lectut','jukebox','dc++','placement',
+                'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research', 'androidnotices']
 
 faculty_apps = ['responses','acad_course_students','facapp','lectut','placement', 'research',

@@ -12,6 +12,6 @@
 Added {{ instance.item_name }} for sale.
 <div style='clear:both'></div>
   {% if instance.itempic.pic  %}
-   <img src="{{ STATIC_URL }">
+   <img src="{{ instance.itempic.pic.url }}">
   {% endif %}
 {% endblock %}
