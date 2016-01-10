@@ -69,7 +69,7 @@
         $(".headerBackground").css("width",newWidthOfWindow+"px");
         var subHeaderWidth= $(".sub-header").width();
         $(".page-content").css("width",subHeaderWidth-275+"px");
-        console.log(subHeaderWidth);
+        //console.log(subHeaderWidth);
         if(subHeaderWidth >= 1100)
         {
           $(".item-for-sale-image").css("height",160+"px");

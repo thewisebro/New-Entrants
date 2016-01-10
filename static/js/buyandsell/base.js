@@ -58,7 +58,7 @@ function search() {
     clearTimeout(timer);
     var ms = 200;
     var val = this.value;
-    console.log(val);
+    //console.log(val);
     var type= window.location.href.split("/")[4];
     timer = setTimeout(function() { lookup(val,type);}, ms);
   });
@@ -67,7 +67,7 @@ function search() {
     clearTimeout(timer);
     var ms = 200;
     var val = this.value;
-    console.log(val);
+    //console.log(val);
     var type= "main";
     timer = setTimeout(function() { lookup(val,type);}, ms);
   });
@@ -102,7 +102,7 @@ function lookup(val,type)
           html+="<li onclick=\"request_details("+data[i].id+")\">"+data[i].name+"</li>";
         }
         html+="</ul>";
-        console.log(html);
+        //console.log(html);
         $("#insert").html(html);
       }
     });
@@ -230,7 +230,7 @@ function lookup(val,type)
           html+="<li onclick=\"sell_details("+data[i].id+")\">"+data[i].name+"</li>";
         }
         html+="</ul>";
-        console.log(html);
+        //console.log(html);
         $("#insert").html(html);
       }
     });
@@ -250,7 +250,7 @@ function bring_search_url(val)
     else
       t++;
   }
-  console.log(query+"query");
+  //console.log(query+"query");
   for(var i=0; i<query.length; i++)
   { if(i!=query.length-1)
   {
@@ -261,13 +261,13 @@ function bring_search_url(val)
       url+=query[i];
     }
   }
-  console.log(url);
+  //console.log(url);
   return url;
 }
 function search_form()
 {
   var form=$("#search_form");
-  console.log(form.attr("action"));
+  //console.log(form.attr("action"));
 
   $("body").on("click","#see_all_req",
     function(){
@@ -319,7 +319,7 @@ function show_contact()
           url : "/buyandsell/show_contact/no/",
           success: function (data)
           {
-            console.log("dont show contact");
+            //console.log("dont show contact");
 
           }
         });
@@ -332,7 +332,7 @@ function show_contact()
           url : "/buyandsell/show_contact/yes/",
           success: function (data)
           {
-            console.log("show contact")
+            //console.log("show contact")
           }
         });
       }
@@ -345,7 +345,7 @@ function show_contact()
           url : "/buyandsell/show_contact/yes/",
           success: function (data)
           {
-            console.log("show contact");
+            //console.log("show contact");
 
           }
         });
@@ -356,7 +356,7 @@ function show_contact()
           url : "/buyandsell/show_contact/no/",
           success: function (data)
           {
-            console.log("dont show contact");
+            //console.log("dont show contact");
 
           }
         });
@@ -378,7 +378,7 @@ function watch_subs(id,len_sub)
         $("#" + id + "_" + i).prop("checked", chk);
         $("#" + id + "_" + i).addClass("checkbox-custom-to-buyandsell-checked");
       }
-      console.log($(this).class)
+      //console.log($(this).class)
     }
     else
     {
@@ -450,7 +450,7 @@ function sell_form(){
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
   }
-  console.log("kanav");
+  //console.log("kanav");
   dialog_iframe({
     name:'sell_form_dialog',
     title:'Sell an Item',
@@ -540,7 +540,7 @@ function edit_request(pk){
 }
 
 function manage(){
-  console.log(user.is_authenticated);
+  //console.log(user.is_authenticated);
   check_user_data(user.is_authenticated,user.username);
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
@@ -674,10 +674,6 @@ $(document).ready
           $(this).hide();
         }
 
-        else
-        {
-          console.log("kuchh nahi hua");
-        }
 
         /*
         if (".dropdown", $(this).hasClass("open"))
