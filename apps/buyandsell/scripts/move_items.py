@@ -24,6 +24,9 @@ def move_requests():
     if timezone.now().date() > new_item.expiry_date:
       new_item.is_active = False
     new_item.save()
+    mapped_entry = OldRequestMap(request_id = item.pk ,item= new_item)
+    mapped_entry.save()
+
 
 def move_mails():
   requests_to_move = ItemsRequested.objects.filter()
@@ -109,7 +112,9 @@ def move_sellitems():
         new_item.save()  #for notification
       except:
         pass
-
+    mapped_entry = OldBuyMap(buy_id = item.pk ,item= new_item)
+    mapped_entry.save()
+    
 
 
 
