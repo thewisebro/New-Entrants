@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     url(r'^channeli_login/','peoplesearch.views.channeli_login'),
     url(r'^check_session/','peoplesearch.views.check_session'),
     url(r'^logout/','peoplesearch.views.logout_user'),
+    url(r'^return_details/','peoplesearch.views.return_details'),
 )
