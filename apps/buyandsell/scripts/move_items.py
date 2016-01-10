@@ -20,7 +20,7 @@ def move_requests():
     new_item.days_till_expiry = (item.expiry_date-item.post_date).days
     new_item.contact = item.contact
     new_item.email = item.email
-    new_item.category = BuySellCategory.objects.get(pk = 11)
+    new_item.category = BuySellCategory.objects.get(pk = 10)
     if timezone.now().date() > new_item.expiry_date:
       new_item.is_active = False
     new_item.save()
@@ -66,33 +66,33 @@ def move_sellitems():
     mc = item.category
 
     if sc == 'LP':
-       new_item.category = BuySellCategory.objects.get(pk = 2 )
+       new_item.category = BuySellCategory.objects.get(pk = 1 )
 
     elif sc == 'MO':
-       new_item.category = BuySellCategory.objects.get(pk = 6 )
+       new_item.category = BuySellCategory.objects.get(pk = 2 )
 
     elif sc == 'OT':
        if mc == 'EL':
-         new_item.category = BuySellCategory.objects.get(pk = 5 )
+         new_item.category = BuySellCategory.objects.get(pk = 3 )
        elif mc == 'BK':
-         new_item.category = BuySellCategory.objects.get(pk = 9 )
+         new_item.category = BuySellCategory.objects.get(pk = 7 )
        elif mc == 'MS':
-         new_item.category = BuySellCategory.objects.get(pk = 11)
+         new_item.category = BuySellCategory.objects.get(pk = 10)
 
     elif sc == 'ED':
-       new_item.category = BuySellCategory.objects.get(pk = 7 )
-
-    elif sc == 'CS':
-       new_item.category = BuySellCategory.objects.get(pk = 8 )
-
-    elif sc == 'FC':
-       new_item.category = BuySellCategory.objects.get(pk = 3 )
-
-    elif sc == 'TR':
        new_item.category = BuySellCategory.objects.get(pk = 4 )
 
+    elif sc == 'CS':
+       new_item.category = BuySellCategory.objects.get(pk = 6 )
+
+    elif sc == 'FC':
+       new_item.category = BuySellCategory.objects.get(pk = 5 )
+
+    elif sc == 'TR':
+       new_item.category = BuySellCategory.objects.get(pk = 9 )
+
     elif sc == 'BC':
-       new_item.category = BuySellCategory.objects.get(pk = 10 )\
+       new_item.category = BuySellCategory.objects.get(pk = 8 )\
 
     if timezone.now().date() > new_item.expiry_date:
       new_item.is_active = False
