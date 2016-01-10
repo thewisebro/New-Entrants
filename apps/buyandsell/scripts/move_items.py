@@ -1,5 +1,6 @@
 from nucleus.models import *
 from buyandsell.models import *
+from django.utils import timezone
 from buysell.models import *
 from datetime import datetime
 from django.conf import settings
@@ -8,7 +9,8 @@ import os.path
 
 
 def move_requests():
-  items_to_move = ItemsRequested.objects.filter()
+  items_to_move = ItemsRequested.objects.all()
+  import pdb;pdb.set_trace();
   for item in items_to_move:
     new_item = RequestedItems()
     new_item.user = item.user
@@ -19,19 +21,22 @@ def move_requests():
     new_item.days_till_expiry = (item.expiry_date-item.post_date).days
     new_item.contact = item.contact
     new_item.email = item.email
+    new_item.category = BuySellCategory.objects.get(pk = 11)
+    if timezone.now().date() > new_item.expiry_date:
+      new_item.is_active = False
     new_item.save()
 
 def move_mails():
   requests_to_move = ItemsRequested.objects.filter()
   sellitems_to_move = ItemsForSale.objects.filter()
-#for request in requests_to_move:
-#   mails = RequestMailsSent.objects.filter(item = request)
+  for request in requests_to_move:
+   mails = RequestMailsSent.objects.filter(item = request)
 
-#   for mail in mails:
-#     new_mail = RequestMails()
-#     new_mail.item = request
-#     new_mail.by_user = mail.by_user
-#     new_mail.save()
+   for mail in mails:
+     new_mail = RequestMails()
+     new_mail.item = request
+     new_mail.by_user = mail.by_user
+     new_mail.save()
 
   for sell in sellitems_to_move:
     mails = BuyMailsSent.objects.filter(item = sell)

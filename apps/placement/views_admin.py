@@ -19,6 +19,7 @@ from django.contrib import messages
 from nucleus.models import StudentInfo, Branch, Student
 from placement.forms import BaseModelFormFunction
 from placement import forms, utils
+from placement import policy
 from placement.policy import current_session_year
 from placement.models import *
 from placement.utils import *
@@ -115,6 +116,7 @@ def shortlist(request, company_id, task = None) :
     # update shortlist
 #    CompanyApplicationMap.objects.filter(company = company).update(shortlisted = False)
     CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(shortlisted = True)
+    messages.success(request, 'Shortlists added for company '+str(company.name))
     l.info(request.user.username + ': updated shortlist for company ' + company_id)
     applications = CompanyApplicationMap.objects.filter(company = company, shortlisted = True)
     # now download xls list of students or zip file of resumes as per the request
@@ -193,8 +195,151 @@ def remove_shortlist(request, company_id) :
   company = Company.objects.get(pk = company_id)
   if request.method == "POST" :
     CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(shortlisted = False)
+    messages.success(request, 'Selected shortlists removed') 
     l.info(request.user.username + ': updated shortlist for company ' + company_id)
     return HttpResponseRedirect(reverse('placement.views_admin.unfinalize', args=(company_id,)))
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def select(request, company_id) :
+  """
+  Declare results for the company.
+  """
+  try :
+    company = get_object_or_404(Company, pk = company_id, year = current_session_year() )
+    l.info(request.user.username + ': Declaring results for ' + str(company_id))
+    if request.method == 'POST':
+      # set status of selected application to SELECTED
+      CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')).update(status='SEL')
+      # Can a student be selected for placement in two companies? Ans: a student can be selected in a max of two companies.
+      # create entry in Results
+      for application in CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications')) :
+        plac_person = application.plac_person
+        Results.objects.create(student = plac_person.student, company = company)
+        # Update PlacementPerson of the persons just placed.
+        if plac_person.no_of_companies_placed == 0 :
+          plac_person.no_of_companies_placed = 1
+          plac_person.placed_company_category = company.category
+        else :
+          plac_person.no_of_companies_placed += 1
+          plac_person.placed_company_category = policy.get_higher_category(plac_person.placed_company_category, company.category)
+        plac_person.save()
+      l.info(request.user.username + ': Successfully Declared results for ' + str(company_id))
+      messages.success(request, 'The marked students are selected for placement in ' + company.name + '.')
+      return HttpResponseRedirect(reverse('placement.views_admin.select', args=(company.id,)))
+    else :
+      applications = CompanyApplicationMap.objects.filter(company = company, status = 'SEL')
+      return render_to_response('placement/declare_results.html', {
+          'company' : company,
+          'applications' : applications,
+          }, context_instance = RequestContext(request))
+  except Exception as e:
+    l.info(request.user.username + ': Encountered Exception while declaring results for ' + str(company_id))
+    l.exception(e)
+    return handle_exc(e, request)
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def remove_select(request, company_id) :
+  """
+  Drop some results from the results that were earlier declared for the company.
+  """
+  try :
+    company = get_object_or_404(Company, pk = company_id, year = current_session_year() )
+    l.info(request.user.username + ': Dropping results for ' + str(company_id))
+    if request.method == 'POST' :
+      # TODO : use transaction to make sure all the queries run properly
+      applications = CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications'))
+      # persons' list for whom the results are to be dropped
+      persons = applications.values_list('plac_person__student', flat = True)
+      # Update the application to show that the student is not selected in this company
+      applications.update(status = 'FIN')
+      # Update PlacementPerson of the student.
+      for app in applications :
+        plac_person = app.plac_person
+        if plac_person.no_of_companies_placed == 1 :
+          plac_person.no_of_companies_placed = 0
+          plac_person.placed_company_category = None
+        else :
+          plac_person.no_of_companies_placed -= 1
+          person_placed = Results.objects.filter(student = plac_person.student)
+          # TODO : What if the student was placed in 3 companies? this logic fails to restore the
+          # placed_company_category properly. FIXME
+          if person_placed[0].company == company :
+            old_placed = person_placed[1]
+          else :
+            old_placed = person_placed[0]
+          plac_person.placed_company_category = old_placed.company.category
+        plac_person.save()
+      # delete the results
+        Results.objects.get(company=app.company, student=app.plac_person.student).delete()
+      l.info(request.user.username + ': Successfully dropped results for ' + str(company_id))
+      messages.success(request, 'The selected results were dropped successfully.')
+      return HttpResponseRedirect(reverse('placement.views_admin.shortlist', args=(company.id,)))
+  except Exception as e:
+    l.info(request.user.username + ': Encountered Exception while dropping results for ' + str(company_id))
+    l.exception(e)
+    return handle_exc(e, request)
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
+def accept(request, company_id):
+  """
+    To change the status of results to ACC
+  """
+  try:
+    company = get_object_or_404(Company, pk = company_id, year = current_session_year())
+    l.info(request.user.username + ': Adding the accepted applications')
+    if request.method == 'POST':
+      applications = CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications'))
+      string_temp = ''
+      atleast_one_moved = False
+      for app in applications:
+        if CompanyApplicationMap.objects.filter(plac_person=app.plac_person, status='ACC').exists():
+          messages.error(request, app.plac_person.student.user.name+' has been accepted in '+CompanyApplicationMap.objects.filter(plac_person=app.plac_person, status='ACC')[0].company.name)
+          string_temp = 'Other'
+        else:
+          applications.update(status='ACC')
+          persons = applications.values_list('plac_person__student', flat = True)
+          Results.objects.filter(student__in = persons, company = company).update(accepted = True)
+          atleast_one_moved = True
+      if string_temp != 'Other':
+          string_temp = 'All'
+      if atleast_one_moved:
+        messages.success(request, string_temp+' applications has been successfully moved to Accepted list.')
+      l.info(request.user.username+': Change the result and application status')
+      if string_temp == 'Other':
+          redirect = 'placement.views_admin.select'
+      else:
+          redirect = 'placement.views_admin.accept'
+      return HttpResponseRedirect(reverse(redirect, args=(company_id,)))
+    applications = CompanyApplicationMap.objects.filter(company = company, status = 'ACC')
+    return render_to_response('placement/accept_results.html', {
+          'company' : company,
+          'applications' : applications,
+          }, context_instance = RequestContext(request))
+  except Exception as e:
+    l.info(request.user.username + ': Encountered Exception while declaring results for ' + str(company_id))
+    l.exception(e)
+    return handle_exc(e, request)
+
+def remove_accept(request, company_id):
+  """Remove applications from accepted list"""
+  try:
+    l.info(request.user.username + ': Remove from accepted list')
+    company = Company.objects.get(pk = company_id)
+    if request.method == "POST" :
+      applications = CompanyApplicationMap.objects.filter(pk__in = request.POST.getlist('selected_applications'))
+      applications.update(status='SEL')
+      Results.objects.filter(student__in = applications.values_list('plac_person__student', flat=True), company=company).update(accepted=False)
+      messages.success(request, 'Selected applications removed from Accepted list.') 
+      l.info(request.user.username + ': removed from accepted list for company ' + company_id)
+      return HttpResponseRedirect(reverse('placement.views_admin.select', args=(company_id,)))
+  except Exception as e:
+    l.info(request.user.username + ': Encountered Exception while declaring results for ' + str(company_id))
+    l.exception(e)
+    return handle_exc(e, request)
+
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
@@ -231,7 +376,7 @@ def resume_archive(request, company_id) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Placement Admin').exists(), login_url=login_url)
-def selected_students(request, company_id) :
+def finalized_students(request, company_id) :
   """
   Download an excel file of students who has been finalized for the company in XLS format.
   """
