@@ -17,8 +17,8 @@
       <th colspan="2">Company</th>
       <th>Status</th>
       <th>Last Date of Applying</th>
-      <th colspan="4">Applications</th>
-      <th colspan="3">Results</th>
+      <th colspan="3">Applications</th>
+      <th colspan="2">Results</th>
     </tr>
   </thead>
   <tbody>
@@ -44,17 +44,17 @@
         <a href="{% url 'placement.views_admin.resume_archive' company.id %}">Resumes</a>
       </td>
       <td>
-        <a href="{% url 'placement.views_admin.selected_students' company.id %}">XLS list</a>
+        <a href="{% url 'placement.views_admin.finalized_students' company.id %}">XLS list</a>
       </td>
-      <td>
-        <a href="{% url 'placement.views_results.declare' company.id %}">Declare Result</a>
-      </td>
+{%comment%}      <td>
+        <a href="{% url 'placement.views_admin.select' company.id %}">Declare Result</a>
+      </td>{%endcomment%}
       <td>
         <a href="{% url 'placement.views_results.insert' company.id %}">Insert Result</a> 
       </td>
-      <td>
-        <a href="{% url 'placement.views_results.drop' company.id %}">Drop Results</a>
-      </td>
+{%comment%}      <td>
+        <a href="{% url 'placement.views_admin.remove_select' company.id %}">Drop Results</a>
+      </td> {%endcomment%}
       <td {% if forloop.last %}class="rightbottomcurve"{% endif %}>
         <a href="{% url 'placement.views_results.company' company.id %}">View Results</a> 
       </td>

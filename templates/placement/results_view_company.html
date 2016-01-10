@@ -16,6 +16,7 @@
       {% if group.name == "Placement Admin"  %}
       <th>Contact No.</th>
       <th>Email Id</th>
+      <th>Accepted</th>
       {% endif %}
       {% endfor %}
     </tr>
@@ -33,6 +34,7 @@
       {% if group.name == "Placement Admin" %}
       <td>{{ result.student.user.contact_no }}</td>
       <td>{{ result.student.user.email }}</td>
+      <td>{{ result.accepted|yesno:"Yes, No" }}</td>
       {% endif %}
       {% endfor %}
     </tr>

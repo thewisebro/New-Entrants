@@ -1,5 +1,6 @@
 from nucleus.models import *
 from buyandsell.models import *
+from django.utils import timezone
 from buysell.models import *
 from datetime import datetime
 from django.conf import settings
@@ -8,7 +9,7 @@ import os.path
 
 
 def move_requests():
-  items_to_move = ItemsRequested.objects.filter()
+  items_to_move = ItemsRequested.objects.all()
   for item in items_to_move:
     new_item = RequestedItems()
     new_item.user = item.user
@@ -19,19 +20,25 @@ def move_requests():
     new_item.days_till_expiry = (item.expiry_date-item.post_date).days
     new_item.contact = item.contact
     new_item.email = item.email
+    new_item.category = BuySellCategory.objects.get(pk = 11)
+    if timezone.now().date() > new_item.expiry_date:
+      new_item.is_active = False
     new_item.save()
+    mapped_entry = OldRequestMap(request_id = item.pk ,item= new_item)
+    mapped_entry.save()
+
 
 def move_mails():
   requests_to_move = ItemsRequested.objects.filter()
   sellitems_to_move = ItemsForSale.objects.filter()
-#for request in requests_to_move:
-#   mails = RequestMailsSent.objects.filter(item = request)
+  for request in requests_to_move:
+   mails = RequestMailsSent.objects.filter(item = request)
 
-#   for mail in mails:
-#     new_mail = RequestMails()
-#     new_mail.item = request
-#     new_mail.by_user = mail.by_user
-#     new_mail.save()
+   for mail in mails:
+     new_mail = RequestMails()
+     new_mail.item = request
+     new_mail.by_user = mail.by_user
+     new_mail.save()
 
   for sell in sellitems_to_move:
     mails = BuyMailsSent.objects.filter(item = sell)
@@ -45,7 +52,7 @@ def move_mails():
       new_mail.save()
 
 def move_sellitems():
-  items_to_move = ItemsForSale.objects.filter()
+  items_to_move = ItemsForSale.objects.all()
   for item in items_to_move:
     new_item = SaleItems()
     new_item.user = item.user
@@ -88,7 +95,10 @@ def move_sellitems():
        new_item.category = BuySellCategory.objects.get(pk = 4 )
 
     elif sc == 'BC':
-       new_item.category = BuySellCategory.objects.get(pk = 10 )
+       new_item.category = BuySellCategory.objects.get(pk = 10 )\
+
+    if timezone.now().date() > new_item.expiry_date:
+      new_item.is_active = False
 
     new_item.save()
     new_pic = ItemPic(item = new_item)
@@ -96,11 +106,15 @@ def move_sellitems():
     file_url = os.path.join(MEDIA_ROOT , item.item_image.url)
     if file_url !=  '/static/images/buysell/default.png':
 #  print file_url
-      if os.path.exists(file_url):
+      try:
         name = item.item_image.name
         new_item.itempic.pic.save(name,item.item_image,save=True)
         new_item.save()  #for notification
-
+      except:
+        pass
+    mapped_entry = OldBuyMap(buy_id = item.pk ,item= new_item)
+    mapped_entry.save()
+    
 
 
 

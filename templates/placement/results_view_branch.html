@@ -11,6 +11,7 @@
       <th>Enrollment No.</th>
       <th>Name</th>
       <th>Company</th>
+      <th>Accepted</th>
     </tr>
   </thead>
   <tbody>
@@ -21,6 +22,7 @@
       <td>{{ result.student.user.username }}</td>
       <td>{{ result.student.user.name }}</td>
       <td>{{ result.company.name }}</td>
+      <td>{{ result.accepted|yesno:"Yes, No" }}</td>
     </tr>
     {% endfor %}
 
