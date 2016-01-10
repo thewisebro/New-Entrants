@@ -1,6 +1,6 @@
 {% extends "buyandsell/base.html" %}
 {% block content %}
-<body>
+<body style="overflow-y: scroll;">
 <div class="container" style="min-width: 765px;">
   {% if messages %}
   {% for message in messages %}
@@ -10,6 +10,9 @@
   <div class="row sub-header">
     <div>
       <ol class="breadcrumb">
+        <li>
+          <a class="active" href="/buyandsell/buy/">Items for Sale</a>
+        </li>
         {% if not mc and not category and not search_flag %}
         <li>
           <a class="active" href="/buyandsell/buy">Latest</a>
@@ -45,11 +48,11 @@
 
     {% if mc and not category %}
     {% if mc in main_watched %}
-    <button type="button" id="watch_btn" class="btn global-button watch-button watch-button-watching" onclick='watch("{{mc}}","{{c}}" )'>
+    <button type="button" id="watch_btn" class="btn global-button watch-button watch-button-watching" onclick='watch_new("{{mc}}","{{c}}" )'>
       Watching
     </button>
     {% else %}
-    <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch("{{mc}}","{{c}}" )'>
+    <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch_new("{{mc}}","{{c}}" )'>
       Watch this category
     </button>
     {% endif %}
@@ -57,11 +60,11 @@
 
     {% if mc and  category %}
     {% if category in sub_watched %}
-    <button type="button" id="watch_btn" class="btn global-button watch-button watch-button-watching" onclick='watch("{{mc}}","{{c}}" )'>
+    <button type="button" id="watch_btn" class="btn global-button watch-button watch-button-watching" onclick='watch_new("{{mc}}","{{c}}" )'>
       Watching
     </button>
     {% else %}
-    <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch("{{mc}}","{{c}}" )'>
+    <button type="button" id="watch_btn" class="btn global-button watch-button" onclick='watch_new("{{mc}}","{{c}}" )'>
       Watch this category
     </button>
     {% endif %}
@@ -85,27 +88,37 @@
       <div class="left-box">
         <div class="row">
           <div class="col-md-12">
-            <form action="" class="input-group-addon view-what">
-              <div>
-                <input type="radio" name="radio" id="items-for-sale" class="radio" checked >
-                <label for="items-for-sale">
-                  {% if search_flag %}
-                  <a href="/buyandsell/see_all/sell/?{% if queries %}{{queries.urlencode}}{% endif %}"><div></div>Items for Sale</a>
-                  {% else %}
-                  <a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}"><div></div>Items for Sale</a>
-                  {% endif %}
-                </label>
+            <form action="" class="input-group-addon view-what" style="padding: 0;">
+              <div class="left-box-main-link-div">
+                {% if search_flag %}
+                <a href="/buyandsell/see_all/sell/?{% if queries %}{{queries.urlencode}}{% endif %}" class="left-box-main-link-active">
+                  <span>
+                    Items for Sale
+                  </span>
+                </a>
+                {% else %}
+                <a href="/buyandsell/buy{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}" class="left-box-main-link-active">
+                  <span>
+                    Items for Sale
+                  </span>
+                </a>
+                {% endif %}
               </div>
 
-              <div>
-                <input type="radio" name="radio" id="requests" class="radio"/>
-                <label for="requests">
-                  {% if search_flag %}
-                  <a href="/buyandsell/see_all/requests/?{% if queries %}{{queries.urlencode}}{% endif %}"><div></div>Requests</a>
-                  {% else %}
-                  <a href="/buyandsell/viewrequests{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}"><div></div>Requests</a>
-                  {% endif %}
-                </label>
+              <div class="left-box-main-link-div">
+                {% if search_flag %}
+                <a href="/buyandsell/see_all/requests/?{% if queries %}{{queries.urlencode}}{% endif %}" class="left-box-main-link-dormant">
+                  <span>
+                    Requests
+                  </span>
+                </a>
+                {% else %}
+                <a href="/buyandsell/viewrequests{% if mc %}/{{mc}}{% endif %}{% if c %}/{{c}}{% endif %}" class="left-box-main-link-dormant">
+                  <span>
+                    Requests
+                  </span>
+                </a>
+                {% endif %}
               </div>
             </form>
             <div class="left-division-line">
@@ -137,7 +150,7 @@
                   {% endif %}
                 </ul>
               </div>
-              <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0; margin-left: 30px; " role="menu" aria-labelledby="category-filter">
+              <ul class="dropdown-menu used-dropdown-menu" style="margin-top: 0;margin-left: 30px;border-top-left-radius: 0;border-top-right-radius: 0;min-width: 199px; " role="menu" aria-labelledby="category-filter">
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/buy">Latest</a></li>
                 {% for key,value in cat_dict.iteritems %}
                 <li role="presentation" class="dropdown-submenu">
@@ -214,9 +227,11 @@
                   <div class="price-range-text-input-group">
                     <img class="rupee-icon input-box-rupee-icon-min" src="{{STATIC_URL}}images/buyandsell/rupee-icon-with-white-bg.png">
                     <img class="rupee-icon input-box-rupee-icon-max" src="{{STATIC_URL}}images/buyandsell/rupee-icon-with-white-bg.png">
+                    {% if search_string %}
                     <input type="hidden"  name="keyword"  value="{% if search_string %}{{search_string}}{% endif %}">
-                    <input type="text" id="low" class="price-range-text-input" value="{% if ll %}{{ll}}{% endif %}" name="ll">
-                    <input type="text" id="high" class="price-range-text-input" value="{% if ul %}{{ul}}{% endif %}" name="ul">
+                    {% endif %} 
+                    <input type="number" id="low" class="price-range-text-input" value="{% if ll %}{{ll}}{% endif %}" name="ll">
+                    <input type="number" id="high" class="price-range-text-input" value="{% if ul %}{{ul}}{% endif %}" name="ul">
                   </div>
                   <button class="global-browse price-range-submit">
                     <img class="price-range-submit-button-image"
@@ -229,13 +244,12 @@
         </div>
       </div>
     </div>
-
     {% endblock %}
     <div class="page-content">
       <div class="row">
         {% for row in table_data %}
         <div class="col-xs-6 col-sm-6 col-md-3">
-          <a onclick="sell_details({{row.pk}},'{{row.item_name}}')"  class="item">
+          <a onclick='sell_details({{row.pk}},"{{row.item_name}}")'  class="item">
             <div class="thumbnailBG">
               <div class="thumbnail">
                 {% if row.itempic.pic %}
@@ -245,7 +259,7 @@
                 {% endif %}
               </div>
               <div class="caption">
-                <div class="itemName" style="display: inline-block; white-space: nowrap; width: 100px; overflow: hidden; text-overflow: ellipsis;">{{row.item_name}}</div>
+             <div class="itemName" style="display: inline-block; white-space: nowrap; width: 100px; overflow: hidden; text-overflow: ellipsis;">{{row.item_name}}</div>
                 <span class="price">
                   <img class="rupee-icon rupee-icon-item-for-sale" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">
                   {{row.cost}}
@@ -256,6 +270,10 @@
           </a>
         </div>
         {% endfor %}
+
+        {% if not table_data %}
+        <p class="nothing-in-this-category" style="margin-left: 15px;">No items to show</p>
+        {% endif %}
       </div>
 
       {% if paginator %}

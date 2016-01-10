@@ -43,6 +43,14 @@
         </tr>
         <tr>
           <td class="item-details-headings">
+            Expires in
+          </td>
+          <td>
+            <span> {{ item.expiry_date|timeuntil }}</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="item-details-headings">
             Owner
           </td>
           <td>
@@ -61,6 +69,9 @@
         {% endif %}
         </tbody>
       </table>
+
+      <button class="btn get-shareable-url-button">Get shareable url</button>
+      <input class="shareable-url-text-box" type="text" value=https://channeli.in{% url 'selldetails' item.pk 'notif' %}/>
 
       {% if not self_flag and login_flag %}
 
