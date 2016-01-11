@@ -1,6 +1,30 @@
 {% extends "buyandsell/base.html" %}
 
 {% block header %}
+<head>
+  <style>
+    ul
+    {
+      z-index: 1;
+      top: 131px;
+      left: 324.578px;
+      display: none;
+      height: 240px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      width: 410px;
+    }
+    #buyer
+    {
+      padding-left: 0;
+    }
+    #id_username
+    {
+      padding-left: 5px;
+    }
+  </style>
+</head>
+
 <body style="background-color: #ffffff;">
 
 {% if messages %}
@@ -12,8 +36,8 @@
 <form id="trans_form"  class="form-horizontal transaction-form-body" action="" method="post">
   {% csrf_token %}
   <div class="form-group">
-    <label class="col-xs-4 control-label" for="buyer">Whom did you sell this Item ?</label>
-    <select class="col-xs-8" id="buyer" name="buyer_username">
+    <label class="col-xs-5 control-label" for="buyer">Who did you sell this item to ?</label>
+    <select class="col-xs-7" id="buyer" name="buyer_username">
       <option value="" selected>-----------</option>
       {% for obj in mail_list %}
       <option value="{{ obj.by_user.username }}">{{ obj.by_user.name }}</option>
@@ -23,8 +47,8 @@
   </div>
 
   <div id="other-person-option-clicked" class="form-group">
-    <label class="col-xs-4 control-label" for="buyer">Please type in the name</label>
-    <input class="col-xs-8" type="text" id="id_username"></input><br>
+    <label class="col-xs-5 control-label" for="buyer">Please type in the name</label>
+    <input class="col-xs-7" type="text" id="id_username"></input><br>
     <input type="hidden" id="enroll" name="username_other">
   </div>
 
@@ -34,22 +58,22 @@
 
   <div class="form-group your-experience">
     <label class="radio-inline">
-      <input type="radio" >Excellent
+      <input type="radio" name="experience" >Excellent
     </label>
     <label class="radio-inline">
-      <input type="radio" >Good
+      <input type="radio" name="experience" >Good
     </label>
     <label class="radio-inline">
-      <input type="radio" >Fair
+      <input type="radio" name="experience" >Fair
     </label>
     <label class="radio-inline">
-      <input type="radio" >Poor
+      <input type="radio" name="experience" >Poor
     </label>
   </div>
 
   <div class="form-group">
-    <label class="col-xs-4 control-label" for="feedback">Comments/ Suggestions</label>
-    <textarea class="col-xs-8" id="sell_feedback" name="feedback" rows="5"></textarea>
+    <label class="col-xs-5 control-label" for="feedback">Comments/ Suggestions</label>
+    <textarea class="col-xs-7" id="sell_feedback" name="feedback" rows="5" style="padding: 2px;"></textarea>
   </div>
 
   <div class="form-group">
@@ -62,8 +86,8 @@
 <form id="trans_form"  class="form-horizontal transaction-form-body" action="" method="post">
   {% csrf_token %}
   <div class="form-group">
-    <label class="col-xs-4 control-label" for="seller">Whom did you buy this item from ?</label>
-    <select class="col-xs-8" id="buyer" name="seller_username">
+    <label class="col-xs-5 control-label" for="seller">Who did you buy this item from ?</label>
+    <select class="col-xs-7" id="buyer" name="seller_username">
       <option value="" selected>-----------</option>
       {% for obj in mail_list %}
       <option value="{{ obj.by_user.username }}">{{ obj.by_user.name }}</option>
@@ -73,8 +97,8 @@
   </div>
 
   <div id="other-person-option-clicked" class="form-group">
-    <label class="col-xs-4 control-label" for="buyer">Please type in the name</label>
-    <input class="col-xs-8" type="text" id="id_username"></input><br>
+    <label class="col-xs-5 control-label" for="buyer">Please type in the name</label>
+    <input class="col-xs-7" type="text" id="id_username"></input><br>
     <input type="hidden" id="enroll" name="username_other">
   </div>
 
@@ -84,22 +108,22 @@
 
   <div class="form-group your-experience">
     <label class="radio-inline">
-      <input type="radio" >Excellent
+      <input name="experience" type="radio" >Excellent
     </label>
     <label class="radio-inline">
-      <input type="radio" >Good
+      <input name="experience" type="radio" >Good
     </label>
     <label class="radio-inline">
-      <input type="radio" >Fair
+      <input name="experience" type="radio" >Fair
     </label>
     <label class="radio-inline">
-      <input type="radio" >Poor
+      <input name="experience" type="radio" >Poor
     </label>
   </div>
 
   <div class="form-group">
-    <label class="col-xs-4 control-label" for="feedback">Comments/ Suggestions</label>
-    <textarea class="col-xs-8" id="sell_feedback" name="feedback" rows="5"></textarea>
+    <label class="col-xs-5 control-label" for="feedback">Comments/ Suggestions</label>
+    <textarea class="col-xs-7" id="sell_feedback" name="feedback" rows="5"></textarea>
   </div>
 
   <div class="form-group">

@@ -19,13 +19,13 @@ function upload_image(unique_name, id ,from_accounts){
 function cropping_done(image_url){
   close_dialog('upload_image_dialog');
   $('#'+uname+'-img').attr('src',image_url);
+
   if (uname == 'buyandsell_pic')
-  {  console.log(from_buyandsell_accounts);
+  {
     if (from_buyandsell_accounts == true)
       window.location.reload();
     else
-    window.top.location = "/buyandsell/buy";
-
+      window.top.location = "/buyandsell/buy";
   }
 }
 

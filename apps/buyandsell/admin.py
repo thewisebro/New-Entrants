@@ -4,7 +4,7 @@ from django.contrib import admin
 
 class ItemsForSaleAdmin(admin.ModelAdmin):
   list_display = ('id','item_name','cost','user','category')
-  search_fields = ['item__name']
+  search_fields = ['item_name']
 
 class ItemsRequestedAdmin(admin.ModelAdmin):
   list_display = ('id','item_name','user','price_upper','category')
