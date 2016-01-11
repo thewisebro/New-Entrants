@@ -159,14 +159,18 @@ def fill(request) :
     else :
       initial = {}
       action_url = ''
-      selection_company = None
+      selection_company_name = ''
       if request.method == 'GET':
         try:
           next_url = request.GET['next']
           if next_url:
             action_url = '?next='+next_url
-            selection_company = Results.objects.get(student__user=request.user).company.name
-            initial = {'company':Results.objects.get(student__user=request.user).company.id}
+            for r in Results.objects.filter(student__user=request.user, company__year__gte=2015):
+              if not Feedback.objects.filter(company=r.company, student = request.user.student).exists():
+                selection_company = r.company
+                selection_company_name = r.company.name
+                initial = {'company':selection_company.id}
+                break
           else:
             initial = {}
         except:
@@ -181,7 +185,7 @@ def fill(request) :
     return render_to_response('placement/feedback_add.html', {
         'form' : form,
         'action': action_url,
-        'selection_company': selection_company
+        'selection_company': selection_company_name
         }, context_instance = RequestContext(request))
   except Exception as e:
     l.info(request.user.username + ': Exception in giving feedback.')
