@@ -3,7 +3,7 @@ from placement.models import *
 from placement.utils import *
 from upload_xls import ExcelParser
 
-rows = ExcelParser('PG-07.01.2016.xlsx')
+rows = ExcelParser('PG-07.01.2016.xlsx', 'Sheet1')
 
 failed = []
 for l in rows:
