@@ -364,3 +364,12 @@ def plac_person_search(request):
     data = 'fail'
   return data
 
+def feedback_condition(u):
+  if not Results.objects.filter(student__user=u, company__year__gte=2015).exists():
+    return True
+  res = Results.objects.filter(student__user=u, company__year__gte=2015)
+  for r in res:
+    if Feedback.objects.filter(student__user = u, company=r.company):
+      continue
+    return False
+  return True

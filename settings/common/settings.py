@@ -54,7 +54,6 @@ DATABASES = {
     'PASSWORD': 'channeli',
 
     'HOST': '192.168.121.187',                           # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-
     'PORT': '',                           # Set to empty string for default.
   }
 }
@@ -273,6 +272,7 @@ CHANNELI_APPS = (
   'buysell',
   'utilities',
   'bunkometer',
+  'buyandsell',
   'birthday',
   'messmenu',
   'placement',
@@ -297,6 +297,7 @@ FEED_APPS = (
   'buysell',
   'lectut',
   'phpapps',
+  'buyandsell'
 )
 
 REDACTOR_OPTIONS = {
@@ -457,7 +458,6 @@ HAYSTACK_CONNECTIONS = {
       # 'URL': 'http://127.0.0.1:8983/solr/mysite',
     }
 }
-
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 from .admin_settings import *

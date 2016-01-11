@@ -73,16 +73,20 @@ class Post(models.Model):
       post = super(Post , self).save(*args, **kwargs)
     return post
 
-  def delete(self):
+  def delete_post(self):
     self.deleted = True
+    Notification.delete_notification('lectut',self)
     self.save()
-
+    return None
+ 
   def as_dict(self):
     ct = ContentType.objects.get_for_model(Post)
     count = Comment.objects.filter(content_type=ct,object_pk=self.id).count()
     postData={
       'id':self.id,
       'upload_user': str(self.upload_user.name),
+      'upload_user_id': str(self.upload_user.id),
+      'userType' : str(self.getUserType(self.upload_user)),
       'user_image': str(self.upload_user.photo_url),
       'datetime_created':str(self.datetime_created),
       'batch':self.batch_dict(),
@@ -105,8 +109,18 @@ class Post(models.Model):
                  }
     return batch_info
 
+  def getUserType(self , user):
+    try:
+      if user.in_group('student'):
+        return "0"
+      elif user.in_group('faculty'):
+        return "1"
+      else:
+        return "2"
+    except:
+        return "2"
 
-#  Gives path where uploaded file is saved
+# Gives path where uploaded file is saved
 def upload_path(instance , filename ):
   return ('lectut/'+instance.post.batch.course.code+'/'+instance.file_type+'/'+filename)
 #  return os.path.join('lectut/',instance.file_type,'/')
@@ -128,7 +142,7 @@ class Uploadedfile(BaseUpload):
   def __unicode__(self):
     return str(self.upload_file)
 
-  def delete(self):
+  def delete_file(self):
     self.deleted = True
     self.save()
     return None

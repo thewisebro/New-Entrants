@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buy & Sell</title>
+
+  <!-- Bootstrap -->
+  {% block css %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/buyandsell/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/buyandsell/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/buyandsell/jquery-ui.css">
+  <link href="{{ STATIC_URL }}jquery/custom.css" type="text/css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/buyandsell/toggles.css">
+  <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/buyandsell/themes/toggles-light.css">
+  <link href="{{ STATIC_URL }}css/buyandsell/index.css" type="text/css" rel="stylesheet">
+  {% endblock %}
+  {% block scripts_head %}
+
+  <script>
+    var static_url = "{{ STATIC_URL }}";
+  </script>
+
+
+  <script type="text/javascript" src="{{ STATIC_URL }}js/buyandsell/2.1.3jquery.min.js"></script>
+
+  <script src="{{ STATIC_URL }}js/buyandsell/bootstrap.min.js"></script>
+  <script src="{{ STATIC_URL }}js/buyandsell/sliderJquery.js"></script>
+  <script src="{{ STATIC_URL }}js/buyandsell/sliderJqueryUi.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/buyandsell/temp.js"></script>
+
+
+
+  <script src="{{ STATIC_URL }}js/common.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/buyandsell/1.7.2.jquery.min.js"></script>
+  <script type='text/javascript' src='{{ STATIC_URL }}js/buyandsell/jquery-ui.min.js'></script>
+  <script> var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %}; console.log(user);</script>
+</head>
+
+{% endblock %}
+<!--
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  -->
+<!--jquery and css for price range selector -->
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+
+
+
+{% block header %}
+
+<body>
+<div class="headerBackground">
+  <header class="header container header-container">
+
+    <div class="header-logo-div">
+      <a href="/buyandsell/buy">
+        <img src="{{STATIC_URL}}images/buyandsell/logo.png" class="header-logo-image">
+
+      </a>
+    </div>
+    <!--Search box HTML starts here-->
+
+    <div class="search-area">
+      <form action="#" id="search_form">
+        <input class="search-form" type="search" maxlength="50" name="keyword"
+               placeholder="What are you looking for... " autocomplete="off">
+        <img class="search-icon" src="{{STATIC_URL}}images/buyandsell/search-icon.png">
+
+        <div class="search-result-box">
+
+        </div>
+      </form>
+    </div>
+
+    <!--
+    <div class="browse-button-div">
+      <div class="dropdown" style="display:inline">
+        <button type="button" class="btn dropdown-toggle global-browse" id="menu2" data-toggle="dropdown">
+          Browse
+
+        </button>
+        <ul class="dropdown-menu used-dropdown-menu" style="margin-top:42%; margin-left:-188%;" role="menu"
+            aria-labelledby="menu2">
+          <div class="arrow-up-behind" style="margin-left:69.5%; margin-top:-11.5%"></div>
+          <div class="arrow-up-front" style="margin-left:70.5%; margin-top:-10.5%"></div>
+
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/buy">Latest</a></li>
+          {% for key,value in cat_dict.iteritems %}
+          <li role="presentation" class="dropdown-submenu">
+            <a role="menuitem" tabindex="-1" href="/buyandsell/buy/{{key}}">{{ key }}</a>
+            <ul class="dropdown-menu used-dropdown-menu" role="menu" aria-labelledby="menu2">
+              {% for row in value %}
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/buy/{{row.main_category}}/{{row.code}}">{{row.name}}</a>
+              </li>
+              </li>
+              {% endfor %}
+            </ul>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    -->
+
+    {% if login_flag %}
+
+    <div class="dropdown" style=" display:inline; float: right; margin-right: -15px;">
+      <button class="btn btn-default dropdown-toggle user-photo-button user-photo-circle-converter" type="button"
+              id="menu1" data-toggle="dropdown">
+        <img src="{{ user.photo_url }}" class="user-photo">
+        <span class="caret user-photo-caret"></span>
+      </button>
+      <ul class="dropdown-menu header-user-photo-dropdown-menu" role="menu" aria-labelledby="menu1">
+        <div class="arrow-up-behind" style="margin-left:81.5%; margin-top:-11.5%"></div>
+        <div class="arrow-up-front" style="margin-left:82%; margin-top:-10.5%"></div>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/my-account">My Account</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://channeli.in">Channel- i</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" onclick="logout(from_buyandsell = true)">Logout</a>
+        </li>
+      </ul>
+    </div>
+    <button type="button" onclick= "request_form()" class="btn global-button header-request-button">
+      Request
+    </button>
+    <button type="button" onclick = "sell_form()" class="btn global-button header-sell-button">
+      Sell
+    </button>
+
+
+    {% else %}
+
+    <div id="header-options">
+      <div class="sign-in-button" onclick="open_login_dialog(from_buyandsell=true)">Sign In</div>
+    </div>
+    <!--
+    <div class="sign-in-request-text">
+      Sign in to have a better experience
+    </div>
+    -->
+
+
+    {% endif %}
+
+  </header>
+</div>
+{% endblock %}
+{% block content %}
+{% endblock %}
+{% block scripts_foot %}
+<script src="{{ STATIC_URL }}js/buyandsell/main.js"></script>
+<script src="{{ STATIC_URL }}js/buyandsell/base.js"></script>
+<script src="{{ STATIC_URL }}js/crop_image/crop_image.js"></script>
+{% endblock %}
+
+<script>
+  if ($(".page-content").height() < $(window).height() - 181 )
+  {
+    $(".pagination").addClass("pagination-bottom-aligned");
+  }
+/*
+  else
+  {
+    $(".pagination-customized").css("margin-left","40%");
+  }
+ */
+</script>
+
+</body>
+</html>

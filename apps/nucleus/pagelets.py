@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from nucleus.constants import tabs, DEFAULT_PASSWORD
 
+
 def header_sidebar(request):
   if request.user.is_authenticated():
     group_names = request.user.groups.values_list('name', flat=True)
@@ -20,6 +21,7 @@ def header_sidebar(request):
     context.update({
       'pass_change': request.user.check_password(DEFAULT_PASSWORD),
       'not_viewed_notifications_count': request.user.usernotification_set\
-        .filter(viewed=False).count()
+        .filter(viewed=False).count(),
+      'email_verified': request.user.useremail_set.filter(user=request.user, verified=True).count()!=0,
     })
   return render(request, 'nucleus/pagelets/header_sidebar.html', context)

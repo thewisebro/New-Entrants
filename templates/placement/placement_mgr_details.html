@@ -46,7 +46,7 @@
           </tr>
           <tr>
             <td>Assigned to:</td>
-            <td>{{ contactperson.campuscontact.student.user.name }}</td>
+            <td><a href={% url 'placement.views_img.company_coordinator_view' user_id=contactperson.campuscontact.student.user.id %}>{{ contactperson.campuscontact.student.user.name }}</a></td>
           </tr>
           <tr>
             <td>Last Contact:</td>

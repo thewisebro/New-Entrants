@@ -41,10 +41,11 @@
  $osSB: 'opensans_semibold';
  $osSBI: 'opensans_semibolditalic';
   
-  $th1: #3498db;
+ $th1: #3498db;
 
 
-  // font awesome colors
+
+// font awesome colors
 .fa-file-video-o{
   color:#e67e22 !important;
 }
@@ -225,7 +226,7 @@ body {
   .topSearchBox{
     .homeTab{
        float: right;
-       margin-right: -70px;
+       margin-right: 4px;
        font-size: 14px;
        line-height:49px;
        font-family: opensans_semibold;
@@ -295,6 +296,9 @@ body {
       font-size: 13px;
       background: #F1F1F1;
       padding: 2px 8px;
+      >span{
+        text-transform: lowercase;
+      }
     }
     .subSearchContent{
 
@@ -305,6 +309,7 @@ body {
         color: #848484;
         border-bottom: 1px solid #EEE;
         padding: 10px 8px;
+        position:relative;
         &:hover{
           color: white;
           background: #3498db;
@@ -318,6 +323,7 @@ body {
         span{
           line-height: 40px;
           padding-left: 10px;
+          position:absolute;
         }
       }
       .courseSearchIndi{
@@ -800,12 +806,13 @@ body {
            .createPost{
             //padding:20px 0px;
             //padding-right:0px;
-            min-height: 150px;
+            //min-height: 150px;
             //border: 1px solid $g6;
             border-top:0px;
             //background-color: #fafafa;
             .uploadBox{
               position: relative;
+              min-height: 150px;
             }
             .cPPic{
                float: left;
@@ -1021,9 +1028,9 @@ body {
                         padding: 7px 10px;
                         text-align: center;
                         border-radius: 3px;
-                        -webkit-transition: all .1s;
-                        -o-transition: all .1s;
-                        transition: all .1s;
+                        -webkit-transition: background-color .1s;
+                        -o-transition: background-color .1s;
+                        transition: background-color .1s;
                         &:hover{
                           background-color: #0085C7;
                         }
@@ -1141,6 +1148,14 @@ body {
                               //text-decoration:underline;
                               //color: $g19;
                             }
+                            >a{
+                              color: $th1;
+                              text-decoration:none;
+                              &:hover{
+                                text-decoration:underline;
+                                //color: $g19;
+                              }
+                            }
                          }
                          .removeFeedPost{
                             color: rgb(177, 177, 177);
@@ -1155,15 +1170,23 @@ body {
                       .postTime{
                         font-size: 12px;
                         color: $g13;
-                        cursor: pointer;
                         > a{
                           color: $g13;
                           text-decoration: none;
+                          &:hover{
+                            text-decoration:underline;
+                            color:$g14;
+                            cursor: pointer;
+                          }
                         }
-                        &:hover{
-                          text-decoration:underline;
-                          color:$g14;
+                        > span{
+                          color: $g13;
+                          text-decoration: none;
+                          &:hover{
+                            color:$g14;
+                          }
                         }
+                        
                       }
                   }
               }
@@ -1264,16 +1287,16 @@ body {
                               >a{
                                 color: #545454 !important;
                                 text-decoration: blink;
-                              }
-                              &:hover{
-                                text-decoration: underline;
+                                cursor: pointer;
+                                &:hover{
+                                  text-decoration: underline;
+                                }
                               }
                               width:100%;
                               overflow: hidden;
                               text-overflow: ellipsis;
                               //important for stable structure
                               white-space: nowrap;
-                              cursor: pointer;
                             }
                             .fileType{
                               font-family: $osR;
@@ -1374,6 +1397,7 @@ outline: 0px;
 }
 
 #courseFilterType{
+max-width:220px;
 position: absolute;
 top: 20px;
 right: 151px;
@@ -1416,12 +1440,12 @@ outline: 0px;
   padding-left: 10px;
 }
 .timeFile{
-  color: #BBBBBB;
+  color: #8E8E8E;
   font-size: 13px;
 }
 .course_name_in_datatable{
   font-size: 13px;
-  color: #BBBBBB;
+  color: #8E8E8E;
 }
 .dt-loading{
   color: rgb(185, 185, 185);
@@ -1445,13 +1469,13 @@ table.dataTable span a {
 
 table.dataTable tbody tr{
   &:hover .fileShowUser{
-    color:#AAA;
+    color:#777;
   }
   &:hover .fileShowDownloads{
-    color:#AAA;
+    color:#777;
   }
   &:hover .timeFile{
-    color:#AAA;
+    color: #777;
   }
 }
 table.dataTable tbody th, table.dataTable tbody td{
@@ -1467,6 +1491,7 @@ table.dataTable {
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate{
   float: left;
   margin-left: 20px;
+  font-size: 13px;
 }
 
 table.dataTable thead th,
@@ -1526,7 +1551,6 @@ table.dataTable tfoot td {
   >label{
     font-size:14px;
     color: $g13;
-    margin-left:20px; 
     select{
       border-radius: 13px;
       height: 25px;
@@ -1608,6 +1632,27 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
 table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border tbody tr:first-child td, table.dataTable.display tbody tr:first-child th, table.dataTable.display tbody tr:first-child td {
   border-top: none;
   border-top: 1px solid #EEE;
+}
+
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+  color:#9E9E9E !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+        color: #333 !important;
+    border: 1px solid #cacaca;
+    border-radius: 47px;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, white), color-stop(100%, #dcdcdc));
+    background: -webkit-linear-gradient(top, white 0%, #dcdcdc 100%);
+    background: -moz-linear-gradient(top, white 0%, #dcdcdc 100%);
+    background: -ms-linear-gradient(top, white 0%, #dcdcdc 100%);
+    background: -o-linear-gradient(top, white 0%, #dcdcdc 100%);
+    background: linear-gradient(to bottom, white 0%, #dcdcdc 100%);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+  border-radius: 300px;
 }
 // members display
 
@@ -1998,6 +2043,8 @@ ul.comment-list-wrapper ul.comment-list-wrapper {
   .comments-form textarea {
     height: 30px;
     padding: 3px;
+    max-width: 500px;
+    max-height: 80px;
     color: #797979; }
   .comments-form label {
     float: left;
@@ -2217,3 +2264,19 @@ border: 1px solid #D9D9D9;
     font-size: 18px;
 }
 
+.nameLectut{
+  
+}
+
+.viewProfile{
+  margin-top: 15px;
+  >a{
+    padding: 4px 15px;
+    background-color: #292E38;
+    color: whitesmoke;
+    text-decoration: none;
+    border-radius: 22px;
+    font-size: 12px;
+    font-family: opensans_regular;
+  }
+}

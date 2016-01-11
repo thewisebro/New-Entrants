@@ -70,9 +70,9 @@ function dialog_iframe(data){
       height = $(window).height()-2*margin;
     }
     $('body').append("<div id='"+data.name+"-div'></div>");
-    dialog_options = {
+    var dialog_options = {
       autoOpen: false,
-      dialogClass: 'dialog-class',
+      dialogClass: 'dialog-class buyandsell-dialog',
       title: data.title,
       position: ['center',margin],
       width: data.width,
@@ -103,7 +103,7 @@ function dialog_iframe(data){
   current_dialog = $dialog;
 }
 
-function open_login_dialog(){
+function open_login_dialog(from_buyandsell){
   dialog_iframe({
     name: 'login_dialog',
     title: 'Sign In',
@@ -119,6 +119,8 @@ function open_login_dialog(){
       if(user.is_authenticated) {
         $(document).trigger("login");
       }
+      if ( typeof(from_buyandsell) != 'undefined' && from_buyandsell == true )
+       window.top.location.reload();
     }
   });
 }
@@ -154,9 +156,44 @@ function check_user_data(is_authenticated, username){
     if(is_authenticated)
       $(document).trigger('login');
     else
+    {
       $(document).trigger('logout');
+    }
   }
 }
+
+function check_user_data_buyandsell(is_authenticated, username){
+  if(!(is_authenticated === true || is_authenticated === false))
+    return;
+  if(user.is_authenticated != is_authenticated ||
+      (user.is_authenticated && user.username != username)){
+    if(is_authenticated){
+      user = {
+        is_authenticated: true,
+        username: username
+      };
+    }
+    else{
+      user = {
+        is_authenticated: false
+      };
+    }
+    if(current_dialog){
+      try{
+        current_dialog.dialog('close');
+      } catch(e){}
+    }
+    console.log('is_authenticated: '+is_authenticated);
+    console.log('username: '+username);
+    if(is_authenticated)
+      $(document).trigger('login');
+    else
+    {
+      logout(from_buyandsell = true);
+    }
+  }
+}
+
 
 function load_pagelets(dom_elem){
   $(dom_elem).find('.pagelet').each(function(){
@@ -261,13 +298,16 @@ function display_messages(messages){
     $('#messages-div').html('');
 }
 
-function logout(){
+function logout(from_buyandsell){
   $.get('/logout_ajax/',{
     },function(data){
       user = {
         is_authenticated: false
       };
       $(document).trigger("logout");
+      if ( typeof(from_buyandsell) != 'undefined' && from_buyandsell == true )
+       window.top.location.reload();
+
   });
 }
 

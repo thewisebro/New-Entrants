@@ -1,0 +1,17 @@
+{% extends "feeds/base.html" %}
+
+{% block link %}
+  {{ instance.link }}
+{% endblock %}
+
+{% block feed_line %}
+  {{ instance.user.html_name }}
+{% endblock %}
+
+{% block feed_detail %}
+Added {{ instance.item_name }} for sale.
+<div style='clear:both'></div>
+  {% if instance.itempic.pic  %}
+   <img src="{{ instance.itempic.pic.url }}">
+  {% endif %}
+{% endblock %}

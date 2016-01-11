@@ -7,7 +7,7 @@
       width:300px;
     }
     #submit{
-      width:50px;
+      width:60px;
     }
   </style>
 
@@ -37,7 +37,7 @@
     {% usekwacro editable_field_div form.company %}
     </br><div class="edit-row" style="float: none;margin-top: 30px;margin-left:
     165px;">
-      <input class="field input-button" id="submit" value="Submit">
+      <input class="field input-button" id="submit" type=button value="Submit">
     </div>
     <input type="hidden" id="company_ids" value="" />
 </form>
@@ -61,6 +61,8 @@
     {
       var company = $("#company_ids").val();
       var students = $("#id_student").val();
+      $(".success").css("display","None");
+      $(".error").css("display","None");
       var data_dict = {'students':students,'company':company};
       $.ajax
       ({
@@ -73,18 +75,18 @@
             $(".error").css("display","None");
             $(".success").html(data["message"]);
             $(".success").css("display","Block");
-            setTimeout(function() {
+/*            setTimeout(function() {
               $(".success").css("display", "None")
-            }, 2000);
-          }
+            }, 20000);
+  */        }
           else{
             $(".success").css("display","None");
             $(".error").html(data["message"]);
             $(".error").css("display","Block");
-            setTimeout(function() {
+       /*     setTimeout(function() {
               $(".error").css("display", "None")
-            }, 4000);
-          }
+            }, 40000);
+         */ }
         }
       });
     });

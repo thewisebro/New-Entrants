@@ -33,6 +33,8 @@ def upload_image(request, unique_name, pk):
         image_field.save(fname,f,save=True)
         image_url = Class.get_image_url(image_field)
         crop = True
+      if unique_name == "buyandsell_pic":
+        instance.item.save()
       return render(request, 'crop_image/upload_image.html', {
                     'photoform': photoform,
                     'crop': crop,
@@ -59,6 +61,8 @@ def upload_image(request, unique_name, pk):
         img = im.crop((rx,ry,rx + rw,ry + rh))
         img.thumbnail((Class.width, Class.height), Image.ANTIALIAS)
         img.save(image_field.path, quality=100)
+        if unique_name == "buyandsell_pic":
+          instance.item.save()
         return render(request, 'crop_image/upload_image.html', {
                       'photoform': photoform,
                       'cropping_done': True,

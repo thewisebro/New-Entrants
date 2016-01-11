@@ -29,7 +29,7 @@ login_url = '/placement/'
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
-#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
+@user_passes_test(lambda u: feedback_condition(u), login_url='/placement/feedback/add/')
 def list(request) :
   """
   Displays the list of companies to student. The student can apply to a company if that company
@@ -78,6 +78,7 @@ def list(request) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name__in=('Student', 'Placement Admin')).exists(), login_url=login_url)
+@user_passes_test(lambda u: feedback_condition(u), login_url='/placement/feedback/add/')
 def info(request, company_id) :
   try :
     l.info(request.user.username + ': viewed company info for ' + company_id)
@@ -95,6 +96,7 @@ def info(request, company_id) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: feedback_condition(u), login_url='/placement/feedback/add/')
 #@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def open_to(request, company_id) :
   """
@@ -183,6 +185,9 @@ def edit(request, company_id) :
         messages.success(request, 'Updated the company.')
         return HttpResponseRedirect(reverse('placement.views_company.admin_list'))
     else :
+      # XXX: Manage frontend compatibility for DateTimeField so as not to fail while saving in specified format
+      if company.last_date_of_applying:
+        company.last_date_of_applying = company.last_date_of_applying.strftime('%d-%m-%Y %H:%M')
       form = forms.CompanyForm(instance = company)
       if company.brochure :
         # Change the url of brochure
@@ -391,10 +396,11 @@ def workshop_registration_export(request):
   ws.write(0, 2, 'Name')
   ws.write(0, 3, 'Branch')
   ws.write(0, 4, 'Contact No')
-  ws.write(0, 5, 'Selected Option')
-  ws.write(0, 6, 'Reason')
+  ws.write(0, 5, 'Email')
+  ws.write(0, 6, 'Selected Option')
+  ws.write(0, 7, 'Reason')
 
-  lst = registered_lst.values_list('placement_person__student__user__username', 'placement_person__student__user__name', 'placement_person__student__branch__name', 'placement_person__student__user__contact_no', 'options', 'reason')
+  lst = registered_lst.values_list('placement_person__student__user__username', 'placement_person__student__user__name', 'placement_person__student__branch__name', 'placement_person__student__user__contact_no', 'placement_person__student__user__email', 'options', 'reason')
   for row, rowdata in enumerate(lst):
     ws.write(row+1, 0, row+1)
     for col, val in enumerate(rowdata):

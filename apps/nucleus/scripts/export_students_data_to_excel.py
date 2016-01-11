@@ -1,12 +1,12 @@
 import xlwt
-from common.models import Person
+from nucleus.models import *
 #from nucleus.models import PersonInfo
 
 #def generate_excel_from_list(filename, sheets, ):
 
 
 def export():
-  ps = StudentInfo.objects.filter(student__admission_year__lt=2016)
+  ps = Student.objects.filter(admission_year__lt=2016)
   #response = HttpResponse(mimetype='application/ms-excel')
   #response['Content-Disposition'] = 'attachment; filename=Students_UG_BArch_IV_19/8/2014.xls'
   wb = xlwt.Workbook(encoding='utf-8')
@@ -33,17 +33,24 @@ def export():
       #pi = PersonInfo.objects.get(person=p)
     #except:
       #pass
+    try:
+       info = StudentInfo.objects.get(student=p)
+       cat = info.category
+    except:
+       cat = ''
     row_num += 1
     row = [
-      str(p.student.user.username),
-      str(p.student.name),
-      str(p.student.branch.name),
-      str(p.category),
-      str(p.student.user.gender)
+      str(p.user.username),
+      str(p.name),
+      str(p.branch.name),
+      str(cat),
+      str(p.user.gender)
     ]
+    print row
     for col_num in xrange(len(row)):
       ws.write(row_num, col_num, row[col_num], font_style)
   wb.save('StudentsData_overall.xls')
   #return response
   #export_xls.short_description = u"Export XLS"
 
+export()

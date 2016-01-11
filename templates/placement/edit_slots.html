@@ -40,10 +40,7 @@
   <button class="btn btn-primary" onclick="change_value();"type="submit">Submit</button>
 </form>
 
-  <form class="form" enctype="multipart/form-data" method="post" action="{% url 'placement.views_slots.import_slot_data' slot.id%}">
-  {% csrf_token %}
-  <button class="btn btn-primary" type="submit">Export</button>
-  </form>
+  <button class="btn btn-primary" type="submit" onclick="javascript:location.href='{% url 'placement.views_slots.export_slot_data' slot.id%}'">Export</button>
 {% comment %}{% autoescape off %}{% endcomment %}
 
 {% endblock %}
