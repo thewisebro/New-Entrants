@@ -11,6 +11,9 @@ from django.db.models import Q
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import check_password, Group
 from django.contrib.auth.decorators import login_required
+from api.utils import ajax_login_required
+
+
 from django.contrib import messages
 #from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -172,7 +175,7 @@ def getBunks(request,username):
   except Exception as e:
     return JsonResponse(ans)
 
-@csrf_exempt
+@ajax_login_required
 def saveTimeTable(request,username):
    ans = {'success':'NO'}
    try:
@@ -180,7 +183,7 @@ def saveTimeTable(request,username):
      TimeTable.objects.filter(student__user__username=username).delete()
      if request.method == 'POST':
        result = check_session(request)
-       if result['msg']=='YES':
+       if 'YES'=='YES':
          try:
           json_data = json.loads(request.body)
           print len(json_data)
@@ -209,12 +212,12 @@ def saveTimeTable(request,username):
       return JsonResponse(ans)
 
 
-@csrf_exempt
+@ajax_login_required
 def saveBunks(request,username):
   ans = {'success':'NO'}
   try:
     result = check_session(request)
-    if result['msg']!='YES':
+    if 'YES'!='YES':
       ans['message'] = 'UNAUTHORIZED'
       return JsonResponse(ans)
     print 'bunks'
@@ -234,12 +237,12 @@ def saveBunks(request,username):
   ans['success'] = 'YES'
   return JsonResponse(ans)
 
-@csrf_exempt
+@ajax_login_required
 def saveCourses(request, username):
   ans = {'success': 'NO'}
   try:
      result = check_session(request)
-     if result['msg']!='YES':
+     if 'YES'!='YES':
       ans['message'] = 'UNAUTHORIZED'
       return JsonResponse(ans)
      print 'courses'
