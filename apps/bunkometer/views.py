@@ -175,7 +175,7 @@ def getBunks(request,username):
   except Exception as e:
     return JsonResponse(ans)
 
-@ajax_login_required
+@csrf_exempt
 def saveTimeTable(request,username):
    ans = {'success':'NO'}
    try:
@@ -212,7 +212,7 @@ def saveTimeTable(request,username):
       return JsonResponse(ans)
 
 
-@ajax_login_required
+@csrf_exempt
 def saveBunks(request,username):
   ans = {'success':'NO'}
   try:
@@ -237,7 +237,7 @@ def saveBunks(request,username):
   ans['success'] = 'YES'
   return JsonResponse(ans)
 
-@ajax_login_required
+@csrf_exempt
 def saveCourses(request, username):
   ans = {'success': 'NO'}
   try:
