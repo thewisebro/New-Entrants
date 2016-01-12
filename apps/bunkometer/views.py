@@ -181,7 +181,7 @@ def saveTimeTable(request,username):
    try:
      student = Student.objects.get(user__username=username)
      TimeTable.objects.filter(student__user__username=username).delete()
-     if request.method == 'GET':
+     if request.method == 'POST':
        result = check_session(request)
        if 'YES'=='YES':
          try:
