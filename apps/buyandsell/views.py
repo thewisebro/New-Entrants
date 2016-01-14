@@ -522,10 +522,13 @@ def selldetails(request,pk,notif_flag = None):
   login_flag = False
   if request.user is not None and request.user.is_authenticated():
    login_flag = True
-
   show_contact=1
   try:
     item = SaleItems.items.get(pk=pk)
+    if notif_flag:
+      if not item.is_active or SuccessfulTransaction.objects.filter(is_requested = False,sell_item = item).exists():
+        messages.error(request , "This item is expired or sold")
+        return HttpResponseRedirect('/buyandsell/buy')
   except:
     messages.error(request , "OOps!, this item is either expired ,sold or deleted")
     if not notif_flag:
@@ -584,6 +587,10 @@ def requestdetails(request,pk , notif_flag = None):
   show_contact=1
   try:
     item=RequestedItems.items.get(pk=pk)
+    if notif_flag:
+      if not item.is_active or SuccessfulTransaction.objects.filter(is_requested = True,request_item = item).exists():
+        messages.error(request , "This item is expired or sold")
+        return HttpResponseRedirect('/buyandsell/buy')
   except:
     messages.error(request , "OOps!, this request is either expired ,sold or deleted")
     if not notif_flag:
