@@ -68,7 +68,7 @@ public class NavigationStudent extends ActionBarActivity
                 break;
             case 1:fragment = new BlogsFragment();
                 break;
-            case 2: fragment=new RequestSenior();
+            case 2: fragment=new RequestsFragment();
                 break;
             default:fragment=new ProfileFragment(student);
 

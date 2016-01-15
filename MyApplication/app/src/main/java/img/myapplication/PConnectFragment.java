@@ -1,7 +1,6 @@
 package img.myapplication;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,8 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,30 @@ public class PConnectFragment extends Fragment {
         listView.setAdapter(cardArrayAdapter);
 
         return view;
+    }
+    public void getCardList(){
+
+
+        try {
+            URL url= null;
+            url = new URL("www.google.com");
+            HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            while((line = bufferedReader.readLine()) != null)
+                cardArrayAdapter.add(getCardfromString(line));
+            bufferedReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+    public PeerModel getCardfromString(String line){
+        PeerModel card=new PeerModel();
+        return card;
     }
     public class PeerCardArrayAdapter  extends ArrayAdapter<PeerModel> {
 
@@ -82,9 +108,6 @@ public class PConnectFragment extends Fragment {
                 viewHolder.state = (TextView) row.findViewById(R.id.state);
 
                 viewHolder.model=new PeerModel();
-                //viewHolder.position=position;
-                //row.findViewById(R.id.cardTop).setOnClickListener(this);
-                //row.setTag(viewHolder);
             } else {
                 viewHolder = (PeerCardViewHolder)row.getTag();
             }

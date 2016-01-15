@@ -15,7 +15,6 @@ public class RequestSenior extends Fragment {
 
 
     public RequestSenior() {
-        // Required empty public constructor
     }
 
 

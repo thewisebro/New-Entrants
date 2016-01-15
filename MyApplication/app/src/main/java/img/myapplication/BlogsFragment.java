@@ -12,8 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -55,15 +53,22 @@ public class BlogsFragment extends Fragment {
     }
     public void getCardList(){
 
-        URL url=new URL();
-        HttpURLConnection conn=(HttpURLConnection) url.openConnection();
-        conn.setDoOutput(true);
-        conn.setDoInput(true);
-        BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-        String line = "";
-        while((line = bufferedReader.readLine()) != null)
-            cardArrayAdapter.add(getCardfromString(line));
-        bufferedReader.close();
+
+        try {
+            URL url= null;
+            url = new URL("www.google.com");
+            HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            while((line = bufferedReader.readLine()) != null)
+                cardArrayAdapter.add(getCardfromString(line));
+            bufferedReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
     public BlogModel getCardfromString(String line){

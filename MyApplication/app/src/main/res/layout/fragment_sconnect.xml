@@ -26,7 +26,8 @@
         android:longClickable="true"
         android:onClick="requestSenior"
         android:background="@null"
-        android:src="@android:drawable/btn_plus" />
+        android:src="@android:drawable/btn_plus"
+        android:nestedScrollingEnabled="true" />
 
 
 </RelativeLayout>

@@ -36,7 +36,6 @@ public class Navigation extends ActionBarActivity
 
     }
     public void displayBlog(View view){
-       // Toast.makeText(this, "Invalid valid email address", Toast.LENGTH_SHORT).show();
        BlogCardViewHolder viewHolder=(BlogCardViewHolder) view.getTag();
        getSupportFragmentManager().beginTransaction().replace(R.id.container,new BlogPage(viewHolder.model)).commit();
     }
@@ -49,7 +48,7 @@ public class Navigation extends ActionBarActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new SeniorPage(viewHolder.model)).commit();
     }
     public void requestSenior(View view){
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new RequestSenior()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container,new RequestSenior()).commit();
     }
     public void request(View view){
 
@@ -69,14 +68,23 @@ public class Navigation extends ActionBarActivity
             case 3:fragment = new SConnectFragment();
                 break;
 
-            case 5: logout();
+            case 4: logout();
                 break;
             default: fragment=new EditInfoFragment(entrant);
                 break;
         }
-       getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+       getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
 
 
+    }
+    @Override
+    public void onBackPressed(){
+        if (getSupportFragmentManager().getBackStackEntryCount()==0){
+            super.onBackPressed();
+        }
+        else {
+            getSupportFragmentManager().popBackStack();
+        }
     }
     public void update(View view) {
         MySQLiteHelper db = new MySQLiteHelper(this);

@@ -22,12 +22,12 @@ public class ProfileFragment extends Fragment {
         TextView mobile=(TextView) myView.findViewById(R.id.number);
         TextView email=(TextView) myView.findViewById(R.id.email);
 
-        name.setText(profile.Name);
-        enr.setText(profile.Enr_No);
+        name.setText(profile.name);
+        enr.setText(profile.enr_no);
         //branch.setText(profile.Branch);
         //state.setText(profile.State);
-        mobile.setText(profile.Mobile);
-        email.setText(profile.Email);
+        mobile.setText(profile.mobile);
+        email.setText(profile.email);
 
         return myView;
     }

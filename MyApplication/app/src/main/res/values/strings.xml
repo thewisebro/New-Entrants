@@ -13,14 +13,14 @@
         <item>Blogs</item>
         <item>Peer Connect</item>
         <item>Senior Connect</item>
-        <item>Edit Info</item>
+
         <item>Logout</item>
     </string-array>
     <string-array name="studenttabs">
         <item>Profile</item>
         <item>Blogs</item>
         <item>Requests</item>
-        <item>Edit Profile</item>
+
         <item>Logout</item>
     </string-array>
     <string-array name="tabs">
