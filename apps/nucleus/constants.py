@@ -57,7 +57,7 @@ student_apps_feedback = ['buyandsell', 'lectut','jukebox','dc++','placement',
                 'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research', 'androidnotices']
 
-faculty_apps = ['responses','acad_course_students','facapp','lectut','placement', 'research',
+faculty_apps = ['facapp','lectut','placement', 'research',
                 'thinktank','lostfound','softwares','peoplesearch']
 
 other_apps = ['lectut','jukebox','dc++','thinktank',
