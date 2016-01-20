@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from core.models import Count,Q
-
+from django.core import serializers
 from taggit.models import Tag,TaggedItem
 from forum.models import *
 from forum.forms import *
@@ -10,9 +10,23 @@ from forum.forms import *
 import json as simplejson
 
 
+def index(request):
+  questions = Question.objects.all().order_by('datetime_modified')
+  user = request.user
+  u_name = user.name
+  u_photo = user.photo_url
+
+  json_data = simplejson.dumps({
+    'ques':serializers.serialize('json',questions),
+    'name':u_name,
+    'pic':u_photo,
+    })
+  return HttpResponse(json_data,content_type='application/json')
+
 @login_required
 def ask_question(request):
   if request.method == 'POST':
+    import ipdb;ipdb.set_trace()
     form = Ask_Question_Form(request.POST)
     if form.is_valid():
       print request.POST['tags']
