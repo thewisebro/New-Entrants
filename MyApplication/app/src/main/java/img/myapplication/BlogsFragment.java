@@ -12,6 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -53,7 +56,7 @@ public class BlogsFragment extends Fragment {
     }
     public void getCardList(){
 
-
+        String result=null;
         try {
             URL url= null;
             url = new URL("www.google.com");
@@ -61,34 +64,40 @@ public class BlogsFragment extends Fragment {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+            StringBuilder sb=new StringBuilder();
             String line = "";
             while((line = bufferedReader.readLine()) != null)
-                cardArrayAdapter.add(getCardfromString(line));
+                sb.append(line + '\n');
+            result=sb.toString();
+            JSONObject jObject=new JSONObject(result);
+            JSONArray jArray=jObject.getJSONArray("blogs");
+            for(int i=0; i<jArray.length();i++){
+                try {
+                    JSONObject object=jArray.getJSONObject(i);
+                    BlogModel card= new BlogModel();
+
+                    card.topic="lololol";
+                    card.shortInfo="test";
+                    card.author="ankush";
+                    card.category="example";
+                    card.date="2015-10-27";
+                    cardArrayAdapter.add(card);
+                } catch (Exception e){
+
+                }
+
+
+            }
             bufferedReader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-    }
-    public BlogModel getCardfromString(String line){
-        BlogModel card=new BlogModel();
-        return card;
     }
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
         private List<BlogModel> cardList = new ArrayList<BlogModel>();
 
-        public class CardViewHolder {
-            TextView topic;
-            TextView shortInfo;
-            TextView author;
-            TextView category;
-            TextView date;
-            public BlogModel model;
-        }
-
-        public BlogCardArrayAdapter(Context context, int textViewResourceId) {
+                public BlogCardArrayAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
         }
 

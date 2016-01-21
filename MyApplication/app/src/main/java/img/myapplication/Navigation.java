@@ -1,5 +1,9 @@
 package img.myapplication;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -14,7 +18,7 @@ import android.widget.Toast;
 
 public class Navigation extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-
+    private int fragmentCount;
     private NewEntrantModel entrant;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
@@ -25,64 +29,92 @@ public class Navigation extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         mCurrentPosition=-1;
+        fragmentCount=0;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.set(1);
        // mTitle = getTitle();
         entrant=(NewEntrantModel) getIntent().getSerializableExtra("entrant");
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        if(!isConnected()){
+            Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
     }
     public void logout(){
-
+        Intent intent=new Intent(this, Login.class);
+        startActivity(intent);
+        finish();
     }
     public void displayBlog(View view){
        BlogCardViewHolder viewHolder=(BlogCardViewHolder) view.getTag();
-       getSupportFragmentManager().beginTransaction().replace(R.id.container,new BlogPage(viewHolder.model)).commit();
+        loadFragment(new BlogPage(viewHolder.model));
     }
     public void displayPeer(View view){
         PeerCardViewHolder viewHolder=(PeerCardViewHolder) view.getTag();
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new PeerPage(viewHolder.model)).commit();
+        loadFragment(new PeerPage(viewHolder.model));
     }
     public void displaySenior(View view){
         SeniorCardViewHolder viewHolder=(SeniorCardViewHolder) view.getTag();
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new SeniorPage(viewHolder.model)).commit();
+        loadFragment(new SeniorPage(viewHolder.model));
     }
     public void requestSenior(View view){
-        getSupportFragmentManager().beginTransaction().add(R.id.container,new RequestSenior()).commit();
+        loadFragment(new RequestSenior());
     }
     public void request(View view){
 
+    }
+    public void TryAgain(){
+        if (isConnected()){
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,new OpeningFragment()).commit();
+        }
     }
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
         mCurrentPosition=position;
-        //FragmentManager fragmentManager = getSupportFragmentManager();
-        switch(position) {
-            case -1: fragment = new OpeningFragment();
-                break;
-            case 1:fragment = new BlogsFragment();
-                 break;
-            case 2:fragment = new PConnectFragment();
-                break;
-            case 3:fragment = new SConnectFragment();
-                break;
+        if (isConnected()){
+            switch(position) {
+                case -1: fragment = new OpeningFragment();
+                    break;
+                case 1:fragment = new BlogsFragment();
+                    break;
+                case 2:fragment = new PConnectFragment();
+                    break;
+                case 3:fragment = new SConnectFragment();
+                    break;
 
-            case 4: logout();
-                break;
-            default: fragment=new EditInfoFragment(entrant);
-                break;
+                case 4: logout();
+                    break;
+                default: fragment=new EditInfoFragment(entrant);
+                    break;
+            }
         }
-       getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+        else {
+            fragment= new NetworkErrorFragment();
+        }
+
+       loadFragment(fragment);
 
 
     }
+    private void loadFragment(Fragment fragment){
+        if (fragmentCount!=0)
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+        else
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
+        fragmentCount++;
+    }
     @Override
     public void onBackPressed(){
-        if (getSupportFragmentManager().getBackStackEntryCount()==0){
-            super.onBackPressed();
-        }
-        else {
+        if (getSupportFragmentManager().getBackStackEntryCount()!=0){
             getSupportFragmentManager().popBackStack();
         }
     }

@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 public class NavigationStudent extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-
+    private int fragmentCount;
     private StudentModel student;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
@@ -28,6 +28,7 @@ public class NavigationStudent extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         mCurrentPosition=-1;
+        fragmentCount=0;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.set(2);
@@ -47,55 +48,59 @@ public class NavigationStudent extends ActionBarActivity
         else
             return false;
     }
+    public void TryAgain(){
+        if (isConnected()){
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,new OpeningFragment()).commit();
+        }
+    }
     public void logout(){
         Intent intent=new Intent(this, Login.class);
         startActivity(intent);
         finish();
     }
     public void displayBlog(View view){
-        // Toast.makeText(this, "Invalid valid email address", Toast.LENGTH_SHORT).show();
         BlogCardViewHolder viewHolder=(BlogCardViewHolder) view.getTag();
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new BlogPage(viewHolder.model)).commit();
+        loadFragment(new BlogPage(viewHolder.model));
     }
-
+    private void loadFragment(Fragment fragment){
+        if (fragmentCount!=0)
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+        else
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
+        fragmentCount++;
+    }
+    @Override
+    public void onBackPressed(){
+        if (getSupportFragmentManager().getBackStackEntryCount()!=0){
+            getSupportFragmentManager().popBackStack();
+        }
+    }
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
         mCurrentPosition=position;
         //FragmentManager fragmentManager = getSupportFragmentManager();
-        switch(position) {
-            case -1: fragment = new OpeningFragment();
-                break;
-            case 1:fragment = new BlogsFragment();
-                break;
-            case 2: fragment=new RequestsFragment();
-                break;
-            default:fragment=new ProfileFragment(student);
+        if (isConnected()){
+            switch(position) {
+                case -1: fragment = new OpeningFragment();
+                    break;
+                case 1:fragment = new BlogsFragment();
+                    break;
+                case 2: fragment=new RequestsFragment();
+                    break;
+                case 3: logout();
+                    break;
+                default:fragment=new ProfileFragment(student);
 
+            }
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        else {
+            fragment=new NetworkErrorFragment();
+        }
 
-
+        loadFragment(fragment);
     }
-/*    public void update(View view) {
-        MySQLiteHelper db = new MySQLiteHelper(this);
 
-
-        EditText et_email = (EditText) findViewById(R.id.edit_email);
-        EditText et_number = (EditText) findViewById(R.id.edit_number);
-
-        user.Email = et_email.getText().toString();
-        user.Mobile = et_number.getText().toString();
-
-        if(db.updateUser(user)>0){
-            Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
-        }
-        else if(db.updateUser(user)==0){
-            Toast.makeText(getApplicationContext(),"No update", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-*/
     public void getPageTitle(){
 
         String[] mTitleArray = getResources().getStringArray(R.array.studenttabs);

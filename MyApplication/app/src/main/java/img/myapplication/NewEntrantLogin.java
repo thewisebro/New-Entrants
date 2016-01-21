@@ -69,7 +69,7 @@ public class NewEntrantLogin extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //new HttpAsyncTask(userobj).execute();
+        //POST("",userobj);
     }
     public void register(View view){
         Intent intent = new Intent(this, Register.class);
@@ -95,23 +95,8 @@ public class NewEntrantLogin extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
-        JSONObject user;
-        public HttpAsyncTask(JSONObject userobj){
-            user=userobj;
-        }
-        @Override
-        protected String doInBackground(String... urls) {
 
-            return POST(urls[0],user);
-        }
-        @Override
-        protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private static String POST(String url,JSONObject userobj){
+    private static NewEntrantModel POST(String url,JSONObject userobj){
         String result="";
         try{
             URL urlobj=new URL(url);
@@ -125,16 +110,29 @@ public class NewEntrantLogin extends AppCompatActivity {
             wr.flush();
 
             BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+            StringBuilder sb=new StringBuilder();
             String line = "";
             while((line = bufferedReader.readLine()) != null)
-                result += line;
+                sb.append(line + '\n');
+            result=sb.toString();
             bufferedReader.close();
-
+            JSONObject object=new JSONObject(result);
+            NewEntrantModel model=new NewEntrantModel();
+            model.name=object.getString("name");
+            model.id=object.getString("id");
+            model.town=object.getString("town");
+            model.branch=object.getString("branch");
+            model.email=object.getString("email");
+            model.mobile=object.getString("mobile");
+            model.state=object.getString("state");
+            model.username=object.getString("username");
+            model.password=object.getString("password");
+            return model;
         } catch (Exception e) {
             Log.d("InputStream", e.getLocalizedMessage());
         }
 
-        return result;
+
     }
 
 }
