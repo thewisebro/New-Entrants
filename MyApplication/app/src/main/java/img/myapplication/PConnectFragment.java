@@ -12,6 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -49,7 +52,7 @@ public class PConnectFragment extends Fragment {
     }
     public void getCardList(){
 
-
+        String result=null;
         try {
             URL url= null;
             url = new URL("www.google.com");
@@ -57,15 +60,31 @@ public class PConnectFragment extends Fragment {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+            StringBuilder sb=new StringBuilder();
             String line = "";
             while((line = bufferedReader.readLine()) != null)
-                cardArrayAdapter.add(getCardfromString(line));
+                sb.append(line + '\n');
+            result=sb.toString();
+            JSONObject jObject=new JSONObject(result);
+            JSONArray jArray=jObject.getJSONArray("peers");
+            for(int i=0; i<jArray.length();i++){
+                try {
+                    JSONObject object=jArray.getJSONObject(i);
+                    PeerModel card= new PeerModel();
+                    card.name="abc";
+                    card.state="utk";
+                    card.town="roorkee";
+                    cardArrayAdapter.add(card);
+                } catch (Exception e){
+
+                }
+
+
+            }
             bufferedReader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
     public PeerModel getCardfromString(String line){
         PeerModel card=new PeerModel();

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -98,6 +97,7 @@ public class NewEntrantLogin extends AppCompatActivity {
 
     private static NewEntrantModel POST(String url,JSONObject userobj){
         String result="";
+        NewEntrantModel model=new NewEntrantModel();
         try{
             URL urlobj=new URL(url);
             HttpURLConnection conn=(HttpURLConnection) urlobj.openConnection();
@@ -117,7 +117,7 @@ public class NewEntrantLogin extends AppCompatActivity {
             result=sb.toString();
             bufferedReader.close();
             JSONObject object=new JSONObject(result);
-            NewEntrantModel model=new NewEntrantModel();
+
             model.name=object.getString("name");
             model.id=object.getString("id");
             model.town=object.getString("town");
@@ -132,7 +132,7 @@ public class NewEntrantLogin extends AppCompatActivity {
             Log.d("InputStream", e.getLocalizedMessage());
         }
 
-
+        return model;
     }
 
 }

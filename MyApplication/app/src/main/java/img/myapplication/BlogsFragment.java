@@ -131,9 +131,7 @@ public class BlogsFragment extends Fragment {
                 viewHolder.category = (TextView) row.findViewById(R.id.category);
                 viewHolder.date = (TextView) row.findViewById(R.id.date);
                 viewHolder.model=new BlogModel();
-                //viewHolder.position=position;
-                //row.findViewById(R.id.cardTop).setOnClickListener(this);
-                //row.setTag(viewHolder);
+
             } else {
                 viewHolder = (BlogCardViewHolder)row.getTag();
             }

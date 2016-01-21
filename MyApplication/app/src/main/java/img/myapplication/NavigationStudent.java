@@ -54,7 +54,7 @@ public class NavigationStudent extends ActionBarActivity
         }
     }
     public void logout(){
-        Intent intent=new Intent(this, Login.class);
+        Intent intent=new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

@@ -49,7 +49,7 @@ public class Navigation extends ActionBarActivity
             return false;
     }
     public void logout(){
-        Intent intent=new Intent(this, Login.class);
+        Intent intent=new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
