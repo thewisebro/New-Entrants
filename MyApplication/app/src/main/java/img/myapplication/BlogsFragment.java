@@ -1,8 +1,11 @@
 package img.myapplication;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,9 +16,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -54,44 +60,81 @@ public class BlogsFragment extends Fragment {
 
         return view;
     }
+    public boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
+    }
     public void getCardList(){
+        if (isConnected()){
+            try {
+                URL url= null;
+                url = new URL("www.google.com");
+                HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb=new StringBuilder();
+                String line = "";
+                while((line = bufferedReader.readLine()) != null)
+                    sb.append(line + '\n');
+                String result=sb.toString();
+                cardsFromString(result);
 
-        String result=null;
-        try {
-            URL url= null;
-            url = new URL("www.google.com");
-            HttpURLConnection conn=(HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-            StringBuilder sb=new StringBuilder();
-            String line = "";
-            while((line = bufferedReader.readLine()) != null)
-                sb.append(line + '\n');
-            result=sb.toString();
-            JSONObject jObject=new JSONObject(result);
-            JSONArray jArray=jObject.getJSONArray("blogs");
-            for(int i=0; i<jArray.length();i++){
-                try {
-                    JSONObject object=jArray.getJSONObject(i);
-                    BlogModel card= new BlogModel();
+                FileOutputStream fos = getContext().openFileOutput("blogs.txt",Context.MODE_PRIVATE);
+                fos.write(result.getBytes());
+                fos.close();
+                bufferedReader.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                FileInputStream fis;
+                fis = getContext().openFileInput("blogs.txt");
+                StringBuffer fileContent = new StringBuffer("");
 
-                    card.topic="lololol";
-                    card.shortInfo="test";
-                    card.author="ankush";
-                    card.category="example";
-                    card.date="2015-10-27";
-                    cardArrayAdapter.add(card);
-                } catch (Exception e){
-
+                byte[] buffer = new byte[1024];
+                int n;
+                while ((n = fis.read(buffer)) != -1)
+                {
+                    fileContent.append(new String(buffer, 0, n));
                 }
+                String blogString=fileContent.toString();
+                cardsFromString(blogString);
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void cardsFromString(String result){
+        JSONObject jObject= null;
+        try {
+            jObject = new JSONObject(result);
+            JSONArray jArray=jObject.getJSONArray("blogs");
 
+            for(int i=0; i<jArray.length();i++){
+
+                JSONObject object=jArray.getJSONObject(i);
+                BlogModel card= new BlogModel();
+
+                card.topic="lololol";
+                card.shortInfo="test";
+                card.author="ankush";
+                card.category="example";
+                card.date="2015-10-27";
+                cardArrayAdapter.add(card);
 
             }
-            bufferedReader.close();
-        } catch (Exception e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
     }
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 

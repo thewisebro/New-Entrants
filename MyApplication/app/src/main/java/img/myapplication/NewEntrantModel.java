@@ -1,6 +1,7 @@
 package img.myapplication;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by ankush on 10/30/15.
@@ -16,4 +17,5 @@ public class NewEntrantModel implements Serializable {
     public String about;
     public String mobile;
     public String email;
+    public ArrayList<String> acceptedSeniors;
 }
