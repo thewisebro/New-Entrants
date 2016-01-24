@@ -8,7 +8,7 @@ from nucleus.models import *
 
 remove,add = 0,0
 curr_stud = '12117027'
-workbook = xlrd.open_workbook("/home/harshit/channeli/apps/lectut/scripts/subject.xlsx")
+workbook = xlrd.open_workbook("apps/lectut/scripts/subject.xlsx")
 worksheet = workbook.sheet_by_name('Sheet2')
 num_rows = worksheet.nrows-1
 
