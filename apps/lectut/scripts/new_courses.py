@@ -5,7 +5,6 @@ import os
 import xlrd
 import xlwt
 
-os.chdir('media/lectut')
 workbook = xlrd.open_workbook("apps/lectut/scripts/subject.xlsx")
 worksheet = workbook.sheet_by_name('Sheet2')
 num_rows = worksheet.nrows-1
@@ -19,7 +18,7 @@ ws.write(1,1,'Course Code')
 ws.write(1,2,'Course Name')
 ws.write(1,3,'Error')
 
-
+os.chdir('media/lectut')
 for i in range(num_rows):
   code = worksheet.cell_value(i,3)
   if not Course.objects.filter(code = code).exists():
@@ -28,8 +27,8 @@ for i in range(num_rows):
       credits = worksheet.cell_value(i,6)
       courseToAdd = Course(code = code, name = name, credits = credits, year = 2016)
       courseToAdd.save()
-      os.mkdir(course.code)
-      os.chdir(course.code)
+      os.mkdir(code)
+      os.chdir(code)
       os.mkdir('image')
       os.mkdir('video')
       os.mkdir('ppt')
