@@ -3,20 +3,22 @@ from placement.models import *
 from placement.utils import *
 from upload_xls import ExcelParser
 
-rows = ExcelParser('SGPA_PG.xlsx')
+rows = ExcelParser('PG-07.01.2016.xlsx', 'Sheet1')
 
 failed = []
 for l in rows:
   try:
     student = Student.objects.get(user__username=l['roll'])
+    student.cgpa = l['cgpa']
+    student.save()
   except Student.DoesNotExist:
     failed.append(l)
     continue
-  if int(l['sem_no'])==0:
-    course='PG10'
-    year = '2014'
-  if int(l['sem_no'])==1:
-    course='PG11'
+  if int(l['sem_no'])==220:
+    course='PG20'
+    year = '2015'
+  if int(l['sem_no'])==230:
+    course='PG30'
     year='2015'
   try:
    edu = EducationalDetails.objects.get(student=student,course=course)
@@ -34,21 +36,4 @@ for l in rows:
      edu.cgpa = l['cgpa']
      print student
      edu.save()
-
-#print previous_sem("UG10")
-#print previous_sem("UG11")
-#print previous_sem("UG20")
-#print previous_sem("UG21")
-#print previous_sem("PG10")
-#print previous_sem("PG20")
-#print previous_sem("UG41")
-#print previous_sem("PG11")
-#print previous_sem("PG21")
-#print previous_sem("PHD10")
-#print previous_sem("PHD11")
-#print previous_sem("PHD51")
-#print previous_sem("")
-#print previous_sem("0")
-#print previous_sem("UG0")
-#print previous_sem("PG0")
-#print previous_sem("PHD0")
+print failed

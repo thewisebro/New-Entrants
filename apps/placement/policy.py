@@ -76,12 +76,12 @@ def ppo_rejected(plac_person, company_applying):
   if apply_package[0] == 0.0:
     return False
   if ppo_package[1] == apply_package[1]:
-    return ppo_package[0] > apply_package[0]
+    return ppo_package[0] >= apply_package[0]
   else:
     if ppo_package[1] == 'USD':
-      return ppo_package[0]*INR_USD_request() > apply_package[0]
+      return ppo_package[0]*INR_USD_request() >= apply_package[0]
     else:
-      return ppo_package[0] > apply_package[0]*INR_USD_request()
+      return ppo_package[0] >= apply_package[0]*INR_USD_request()
 
 def get_higher_category(cat1, cat2) :
   """

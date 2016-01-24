@@ -214,6 +214,7 @@ TEMPLATE_DIRS = (
 )
 
 DJANGO_CONTRIB_APPS = (
+ 
   'django.contrib.auth',
   'django.contrib.contenttypes',
   'django.contrib.sessions',
@@ -270,6 +271,7 @@ CHANNELI_APPS = (
   'games',
   'buysell',
   'utilities',
+  'bunkometer',
   'buyandsell',
   'birthday',
   'messmenu',
@@ -456,7 +458,6 @@ HAYSTACK_CONNECTIONS = {
       # 'URL': 'http://127.0.0.1:8983/solr/mysite',
     }
 }
-
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 from .admin_settings import *

@@ -121,31 +121,71 @@ def fill(request) :
       l.info(request.user.username + ': Giving feedback for a company, but user not Verified')
       raise Http404
     if request.method == 'POST' :
+      action_url = ''
+      selection_company = None
       form = forms.Feedback(request.POST)
-      if form.is_valid() :
-        company = form.cleaned_data['company']
-        # A student cannot fill feedback for a company multiple times?
-        if Feedback.objects.filter(student = student, company = company).exists() :
-          messages.error(request, 'You have already given feedback for "' + company.name + '"')
+      try:
+        if form.is_valid() :
+          profile = form.cleaned_data['profile_offered']
+          date = form.cleaned_data['date']
+          email = form.cleaned_data['email']
+          company = form.cleaned_data['company']
+          contact_no = form.cleaned_data['contact_no']
+          # A student cannot fill feedback for a company multiple times?
+          if Feedback.objects.filter(student = student, company = company).exists() :
+            messages.error(request, 'You have already given feedback for "' + company.name + '"')
+            return HttpResponseRedirect(reverse('placement.views_feedback.company', args=[str(company.id)]))
+          feedback_text = ''
+          for i in range(1,15) :
+            if form.cleaned_data['feedback'+str(i)] :
+              feedback_text = feedback_text + '<p class="feedback_question">' + PC.FEEDBACK_QUESTIONS[i-1] + '</p>'
+              feedback_text = feedback_text + '<p class="feedback_answer">' + form.cleaned_data['feedback'+str(i)] + '</p>'
+          feedback_text = feedback_text.replace('\n',' ').replace('\r','').replace('\t',' ')
+          Feedback.objects.create(student = student, company = company, feedback = feedback_text, profile_offered = profile, date=date, email=email, contact_no = contact_no)
+          l.info(request.user.username + ': Successfully gave feedback for ' + str(company.id))
+          messages.success(request, 'Your feedback for "' + company.name + '" was saved successfully.')
+          if request.GET:
+            try:
+              next_url = request.GET['next']
+              if next_url:
+                return HttpResponseRedirect(next_url)
+            except:
+              pass
           return HttpResponseRedirect(reverse('placement.views_feedback.company', args=[str(company.id)]))
-        feedback_text = ''
-        for i in range(1,7) :
-          if form.cleaned_data['feedback'+str(i)] :
-            feedback_text = feedback_text + '<p class="feedback_question">' + PC.FEEDBACK_QUESTIONS[i-1] + '</p>'
-            feedback_text = feedback_text + '<p class="feedback_answer">' + form.cleaned_data['feedback'+str(i)] + '</p>'
-        feedback_text = feedback_text.replace('\n',' ').replace('\r','').replace('\t',' ')
-        Feedback.objects.create(student = student, company = company, feedback = feedback_text)
-        l.info(request.user.username + ': Successfully gave feedback for ' + str(company.id))
-        messages.success(request, 'Your feedback for "' + company.name + '" was saved successfully.')
-        return HttpResponseRedirect(reverse('placement.views_feedback.company', args=[str(company.id)]))
+      except ValidationError as e:
+#          messages.error(request, str(e[0]))
+#          return HttpResponseRedirect(reverse('placement.views_feedback.fill'))
+        pass
     else :
-      form = forms.Feedback()
+      initial = {}
+      action_url = ''
+      selection_company_name = ''
+      if request.method == 'GET':
+        try:
+          next_url = request.GET['next']
+          if next_url:
+            action_url = '?next='+next_url
+            for r in Results.objects.filter(student__user=request.user, company__year__gte=2015):
+              if not Feedback.objects.filter(company=r.company, student = request.user.student).exists():
+                selection_company = r.company
+                selection_company_name = r.company.name
+                initial = {'company':selection_company.id}
+                break
+          else:
+            initial = {}
+        except:
+          pass
+      initial['email'] = request.user.email
+      initial['contact_no'] = request.user.contact_no
+      form = forms.Feedback(initial=initial)
+
     # Set questions as labels in the form.
-    for i in range(1,7) :
+    for i in range(1,15) :
       form.fields['feedback'+str(i)].label=PC.FEEDBACK_QUESTIONS[i-1]
     return render_to_response('placement/feedback_add.html', {
         'form' : form,
-        'action' : reverse('placement.views_feedback.fill')
+        'action': action_url,
+        'selection_company': selection_company_name
         }, context_instance = RequestContext(request))
   except Exception as e:
     l.info(request.user.username + ': Exception in giving feedback.')

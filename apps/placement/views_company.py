@@ -29,7 +29,7 @@ login_url = '/placement/'
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
-#@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
+@user_passes_test(lambda u: feedback_condition(u), login_url='/placement/feedback/add/')
 def list(request) :
   """
   Displays the list of companies to student. The student can apply to a company if that company
@@ -78,6 +78,7 @@ def list(request) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name__in=('Student', 'Placement Admin')).exists(), login_url=login_url)
+@user_passes_test(lambda u: feedback_condition(u), login_url='/placement/feedback/add/')
 def info(request, company_id) :
   try :
     l.info(request.user.username + ': viewed company info for ' + company_id)
@@ -95,6 +96,7 @@ def info(request, company_id) :
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Student').exists(), login_url=login_url)
+@user_passes_test(lambda u: feedback_condition(u), login_url='/placement/feedback/add/')
 #@user_passes_test(lambda u: WorkshopRegistration.objects.filter(placement_person__student__user = u).exists() or u.student.placementperson.status != 'VRF', login_url='/placement/workshop_registration')
 def open_to(request, company_id) :
   """

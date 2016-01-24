@@ -223,6 +223,7 @@ class Results(models.Model):
   """
   student = models.ForeignKey(Student)
   company = models.ForeignKey(Company)
+  accepted = models.BooleanField(default=False)
   def __unicode__(self):
     return str(self.student) + str(self.company)
 
@@ -299,8 +300,11 @@ class Feedback(models.Model):
   # All fields req
   student = models.ForeignKey(Student)
   company = models.ForeignKey(Company)
+  profile_offered = models.CharField(max_length=MC.TEXT_LENGTH, null=True)
   feedback = models.TextField()
-  date = models.DateField(auto_now_add=True)
+  date = models.DateField()  #Date of Placement
+  email = models.EmailField(max_length=MC.TEXT_LENGTH, null = True)
+  contact_no = models.CharField(max_length=15, null = True)  # Requirement is added in Forms
   def __unicode__(self):
     return str(self.company) + str(self.student) + str(self.date)
 

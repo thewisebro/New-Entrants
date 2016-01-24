@@ -1,0 +1,107 @@
+.header-menu-items
+{
+    display: none;
+}
+
+.mobile-navigation-hamburger
+{
+    display: block;
+    position: absolute;
+    right: 0;
+    top: -30px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.navigation-dropdown-menu
+{
+    margin-top: 12px;
+
+}
+
+.navigation-dropdown-menu li a
+{
+    padding: 12px 24px;
+}
+
+.dropdown-menu
+{
+    min-width: 240px;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li:hover
+{
+    background-color: #10827F;
+    color: #ffffff;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus
+{
+    background-image: none;
+    background-color: #10827F;
+    color: #ffffff;
+    border: none;
+}
+
+.banner-image
+{
+    width: auto;
+    height: 100%;
+}
+
+.jumbo-text
+{
+    font-size: 36px;
+    margin-top: 108px;
+}
+
+.sub-text-to-jumbo-text
+{
+    margin-bottom: 108px;
+    font-size: 18px;
+}
+
+.why-img-photo
+{
+    display: none;
+}
+
+.social-links .footer-follow-us-text
+{
+    display: table;
+    margin: auto;
+}
+
+.social-links ul
+{
+    display: table;
+    padding-left: 0;
+    margin: auto;
+    margin-bottom: 36px;
+}
+
+.footer-navigation-row
+{
+    display: none;
+}
+
+.footer-copyright-img-text
+{
+    float: none;
+    display: table;
+    margin: auto;
+    margin-top: 12px;
+}
+
+
+.about-us-jumbo-text
+{
+    font-size: 36px;
+    margin-top: 108px;
+}
+
+.sub-text-to-about-us-jumbo-text
+{
+    margin-bottom: 108px;
+    font-size: 18px;
+}

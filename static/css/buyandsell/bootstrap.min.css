@@ -7737,9 +7737,7 @@ button.close {
   border: 0
 }
 
-.modal-open {
-  overflow: hidden
-}
+body.modal-open { overflow:inherit; padding-right:inherit !important; }
 
 .modal {
   position: fixed;

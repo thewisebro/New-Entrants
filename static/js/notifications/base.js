@@ -7,6 +7,9 @@ var notifications_per_request = 20;
 var more_notifications = true;
 var notifications_pulling_interval = 60*1000; // 1 minute
 
+  $(document).ready(function(){
+    update_notifications('first');
+  })
 
 $(document).on("load_app_notifications", function(e){
   if(!user.is_authenticated){
@@ -120,11 +123,19 @@ function notification_html(notification){
 
 function show_not_viewed_count(not_viewed){
   var elem = $('#notifications-count');
+  var elemcontainer = $('#notifications-container');
   elem.html(not_viewed);
   if(not_viewed>0)
-    elem.removeClass('notifications-count-inact');
+  {
+    elem.removeClass('notifications-count-x');
+    elemcontainer.removeClass('notifications-container-inact');
+  }
   else
-    elem.addClass('notifications-count-inact');
+  {
+    elem.addClass('notifications-count-inaction');
+    elemcontainer.addClass('notifications-container-inact');
+  }
+  //variable elemcontainer is used for the div in which the bell icon and the notification count is placed
 }
 
 function notification_clicked(notification_id){
