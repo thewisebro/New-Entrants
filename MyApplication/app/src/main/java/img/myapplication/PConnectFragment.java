@@ -20,8 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -79,16 +77,18 @@ public class PConnectFragment extends Fragment {
                     sb.append(line + '\n');
                 String result=sb.toString();
                 cardsFromString(result);
-
+/*
                 FileOutputStream fos = getContext().openFileOutput("peers.txt",Context.MODE_PRIVATE);
                 fos.write(result.getBytes());
                 fos.close();
                 bufferedReader.close();
+                */
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         else {
+            /*
             try {
                 FileInputStream fis;
                 fis = getContext().openFileInput("peers.txt");
@@ -105,6 +105,7 @@ public class PConnectFragment extends Fragment {
             } catch (java.io.IOException e) {
                 e.printStackTrace();
             }
+            */
         }
     }
     private void cardsFromString(String result){
@@ -116,11 +117,11 @@ public class PConnectFragment extends Fragment {
             for(int i=0; i<jArray.length();i++){
 
                 JSONObject object=jArray.getJSONObject(i);
-                PeerModel card= new PeerModel();
-                card.name="abc";
-                card.state="utk";
-                card.town="roorkee";
-                cardArrayAdapter.add(card);
+                PeerModel model= new PeerModel();
+                model.name="abc";
+                model.state="utk";
+                model.town="roorkee";
+                cardArrayAdapter.add(model);
 
             }
         } catch (JSONException e) {

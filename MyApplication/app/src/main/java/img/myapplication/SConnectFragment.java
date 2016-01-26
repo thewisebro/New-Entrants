@@ -20,8 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -44,6 +42,11 @@ public class SConnectFragment extends Fragment {
 
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_senior_card);
 
+        if (isConnected()){
+            updateSeniors();
+        }
+        getCardList();
+
         for (int i = 0; i < 10; i++) {
 
             SeniorModel card= new SeniorModel();
@@ -64,6 +67,54 @@ public class SConnectFragment extends Fragment {
         else
             return false;
     }
+    public void updateSeniors(){
+        try {
+            URL url= null;
+            url = new URL("www.google.com");
+            HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+            StringBuilder sb=new StringBuilder();
+            String line = "";
+            while((line = bufferedReader.readLine()) != null)
+                sb.append(line + '\n');
+            String result=sb.toString();
+            updateSeniorsTable(result);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void updateSeniorsTable(String result){
+        JSONObject jObject= null;
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        try {
+            jObject = new JSONObject(result);
+            JSONArray jArray=jObject.getJSONArray("seniors");
+
+            for(int i=0; i<jArray.length();i++){
+
+                JSONObject object=jArray.getJSONObject(i);
+                SeniorModel model= new SeniorModel();
+                model.name="abc";
+                model.branch="ee";
+                model.year="2";
+                db.addSenior(model);
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void getCardList(){
+        List<SeniorModel> seniorList=db.getSeniors();
+        for (int i=0; i<seniorList.size(); i++){
+            cardArrayAdapter.add(seniorList.get(i));
+        }
+    }
+ /*
     public void getCardList(){
         if (isConnected()){
             try {
@@ -80,15 +131,12 @@ public class SConnectFragment extends Fragment {
                 String result=sb.toString();
                 cardsFromString(result);
 
-                FileOutputStream fos = getContext().openFileOutput("seniors.txt",Context.MODE_PRIVATE);
-                fos.write(result.getBytes());
-                fos.close();
-                bufferedReader.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         else {
+
             try {
                 FileInputStream fis;
                 fis = getContext().openFileInput("seniors.txt");
@@ -105,6 +153,7 @@ public class SConnectFragment extends Fragment {
             } catch (java.io.IOException e) {
                 e.printStackTrace();
             }
+
         }
     }
     private void cardsFromString(String result){
@@ -116,19 +165,19 @@ public class SConnectFragment extends Fragment {
             for(int i=0; i<jArray.length();i++){
 
                 JSONObject object=jArray.getJSONObject(i);
-                SeniorModel card= new SeniorModel();
-                card.name="abc";
-                card.branch="ee";
-                card.year="2";
-                cardArrayAdapter.add(card);
+                SeniorModel model= new SeniorModel();
+                model.name="abc";
+                model.branch="ee";
+                model.year="2";
+                cardArrayAdapter.add(model);
 
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-
     }
+*/
     public class SeniorCardArrayAdapter  extends ArrayAdapter<SeniorModel> {
 
         private List<SeniorModel> cardList = new ArrayList<SeniorModel>();
