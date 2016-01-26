@@ -43,7 +43,10 @@ public class BlogsFragment extends Fragment {
         listView.addFooterView(new View(getContext()));
 
         cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_item_card);
-
+        if (isConnected()){
+            updateBlogs();
+        }
+        getCardList();
 
         for (int i = 0; i < 10; i++) {
 
@@ -68,7 +71,56 @@ public class BlogsFragment extends Fragment {
         else
             return false;
     }
+    public void updateBlogs(){
+        try {
+            URL url= null;
+            url = new URL("www.google.com");
+            HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+            StringBuilder sb=new StringBuilder();
+            String line = "";
+            while((line = bufferedReader.readLine()) != null)
+                sb.append(line + '\n');
+            String result=sb.toString();
+            updateBlogsTable(result);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void updateBlogsTable(String result){
+        JSONObject jObject= null;
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        try {
+            jObject = new JSONObject(result);
+            JSONArray jArray=jObject.getJSONArray("blogs");
+
+            for(int i=0; i<jArray.length();i++){
+
+                JSONObject object=jArray.getJSONObject(i);
+                BlogModel model= new BlogModel();
+
+                model.topic="lololol";
+                model.shortInfo="test";
+                model.author="ankush";
+                model.category="example";
+                model.date="2015-10-27";
+
+                db.addBlog(model);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     public void getCardList(){
+        List<BlogModel> blogList=db.getBlogs();
+        for (int i=0; i<blogList.size(); i++){
+            cardArrayAdapter.add(blogList.get(i));
+        }
+    }
+/*    public void getCardList(){
         if (isConnected()){
             try {
                 URL url= null;
@@ -136,6 +188,7 @@ public class BlogsFragment extends Fragment {
 
 
     }
+    */
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
         private List<BlogModel> cardList = new ArrayList<BlogModel>();

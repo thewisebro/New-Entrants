@@ -72,6 +72,7 @@ public class RequestSenior extends Fragment {
                     OutputStreamWriter osw=new OutputStreamWriter(conn.getOutputStream());
                     osw.write(option);
                     osw.flush();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new SConnectFragment()).commit();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

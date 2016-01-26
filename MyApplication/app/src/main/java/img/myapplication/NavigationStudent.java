@@ -18,7 +18,7 @@ import android.widget.Toast;
 public class NavigationStudent extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     private int fragmentCount;
-    private StudentModel student;
+    public StudentModel student;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
     private CharSequence mTitle;
@@ -62,7 +62,7 @@ public class NavigationStudent extends ActionBarActivity
         BlogCardViewHolder viewHolder=(BlogCardViewHolder) view.getTag();
         loadFragment(new BlogPage(viewHolder.model));
     }
-    private void loadFragment(Fragment fragment){
+    public void loadFragment(Fragment fragment){
         if (fragmentCount!=0)
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
         else

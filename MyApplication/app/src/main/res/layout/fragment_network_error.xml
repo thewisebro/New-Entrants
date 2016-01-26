@@ -18,7 +18,7 @@
         android:layout_below="@+id/topic"
         android:layout_centerHorizontal="true"
         android:text="Try Again"
-        android:onClick="TryAgain" />
+        android:id="@+id/bt_tryAgain"/>
 
 
 </FrameLayout>
