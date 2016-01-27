@@ -334,7 +334,7 @@ def sendmail(request, type_of_mail, pk_id):
       msg += ' in the channel-i database.'
     template='lostfound/all_lost_items.html'
 
-    notif_text = user.html_name() + ' found your lost item ' + escape(qryst[0].item_lost) + '. '
+    notif_text = user.html_name + ' found your lost item ' + escape(qryst[0].item_lost) + '. '
     if contact:
       notif_text += 'Contact him/her at ' + escape(str(contact)) + '. '
     if user.email:
@@ -357,7 +357,7 @@ def sendmail(request, type_of_mail, pk_id):
       msg += ' in the channel-i database.'
     template='lostfound/all_found_items.html'
 
-    notif_text = user.html_name() + ' has claimed your found item ' + escape(qryst[0].item_found) + '. '
+    notif_text = user.html_name + ' has claimed your found item ' + escape(qryst[0].item_found) + '. '
     if contact:
       notif_text += 'Contact him/her at ' + escape(str(contact)) + '. '
     if user.email:
