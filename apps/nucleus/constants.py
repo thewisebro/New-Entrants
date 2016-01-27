@@ -23,6 +23,7 @@ channeli_apps = {
   'thinktank' : {'name':'Thinktank', 'url':'/thinktank/'},
   'lostfound' : {'name':'Lost & Found', 'url':'/lostfound/'},
   'buysell' : {'name':'Buy & Sell', 'url':'/buysell/'},
+  'buyandsell' : {'name':'Buy & Sell', 'url':'/buyandsell/'},
   'ebooks' : {'name':'E-Books', 'url':'/ebooks/'},
   'vle' : {'name':'VLE', 'url':'/vle/'},
   'games' : {'name':'Games', 'url':'/games/'},
@@ -48,15 +49,15 @@ channeli_apps = {
   'dc++' : {'name':'DC++', 'url':'/dc++/'},
 }
 
-student_apps = ['lectut','jukebox','dc++','placement',
-                'buysell', 'thinktank','lostfound','softwares',
+student_apps = ['buyandsell', 'lectut','jukebox','dc++','placement',
+                'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research']
 
-student_apps_feedback = ['lectut','jukebox','dc++','placement',
-                'buysell', 'thinktank','lostfound','softwares',
+student_apps_feedback = ['buyandsell', 'lectut','jukebox','dc++','placement',
+                'thinktank','lostfound','softwares',
                 'peoplesearch','messmenu','research', 'androidnotices']
 
-faculty_apps = ['responses','acad_course_students','facapp','lectut','placement', 'research',
+faculty_apps = ['facapp','lectut','placement', 'research',
                 'thinktank','lostfound','softwares','peoplesearch']
 
 other_apps = ['lectut','jukebox','dc++','thinktank',

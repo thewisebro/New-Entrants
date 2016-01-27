@@ -6,9 +6,9 @@ from django.contrib.contenttypes import generic
 from core import models
 from nucleus.models import User
 
-
 class Notification(models.Model):
   app = models.CharField(max_length=15)
+  event_datetime = models.DateTimeField(null=True, blank=True, default = None)  #When notification is for events or similar objects where date is compulsory.
   content_type = models.ForeignKey(ContentType)
   object_id = models.PositiveIntegerField()
   content = generic.GenericForeignKey('content_type', 'object_id')

@@ -114,6 +114,11 @@
     margin-top: 24px;
 }
 
+.how-to-join-year-heading {
+   text-align: center;
+   margin-top: 18px;
+}
+
 .assignment-will-be-uploaded
 {
     color: #10827F;
@@ -155,7 +160,7 @@
 
 .also-open-to
 {
-    margin: 48px auto 96px auto;
+    margin: 24px auto 96px auto;
     text-align: center;
 }
 
@@ -186,6 +191,7 @@
 .know-more-about-img a
 {
     font-size: 18px;
+	color: #F29A27;
 }
 
 .know-more-about-img a:hover
@@ -249,6 +255,13 @@
     color: #1e2a35;
     font-size: 12px;
 }
+
+.footer-navigation ul li a:hover
+{
+  text-decoration: none;
+  font-weight: bold;
+}
+
 
 .social-links ul
 {
@@ -427,6 +440,21 @@ li[class="active"]
     text-align: center;
     font-size: 18px;
     color: #ffffff;
+}
+
+.nitesh-blog-link a
+{
+    color: #F29A27;
+}
+
+.nitesh-blog-link a:hover
+{
+    color: #10827F;
+}
+
+.shubham-blog-link a:hover
+{
+    color: #10827F;
 }
 
 .perks-main-heading

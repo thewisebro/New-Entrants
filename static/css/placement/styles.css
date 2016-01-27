@@ -61,10 +61,15 @@
     padding:0px;
     width:34px;
 }
-.sel {
+
+/*.sel {
     background-color:#95efff;
 }
 
+.acc {
+    background-color:#80d0ff;
+}
+*/
 .form_itself label {
     width:150px;
     float:left;

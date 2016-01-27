@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="full-page-transparent-overlay"></div>
-<div class="container" style="min-width: 765px;">
+<div class="container" style="min-width: 765px; ">
   {% if messages %}
   {% for message in messages %}
   <div class="alert alert-{{ message.tags }}">{{ message }} </div>
@@ -28,7 +28,7 @@
   {% block leftbox %}
   <div class="row">
     <div>
-      <div class="left-box">
+      <div class="left-box my-account-left-box">
         <div class="row">
           <div class="col-md-12">
 
@@ -42,7 +42,7 @@
             </div>
             <div id="show_contact" class="phone-no-visibility-toggle-button"></div>
             <p class="phone-no-visibility-info-text">Decide whether people can see your phone number.</p>
-            <div class="left-division-line"></div>
+            <div class="left-division-line" style="margin-left: -15px; width: 258px;"></div>
 
             {% else %}
             <p class="your-phone-no">My Phone No.</p>
@@ -77,18 +77,18 @@
             </ul>
 
             {% if not watched_cat_dict %}
-            <p class="you-are-not-watching">You are not watching any category.</p>
+            <p class="you-are-not-watching">Get notified for updates in the categories you watch.</p>
             {% endif %}
 
-            <button type="button" onclick="manage()"  class="global-browse manage-watched-button">Manage</button>
+            <button type="button" onclick="manage()"  class="global-browse manage-watched-button">Choose Categories</button>
           </div>
         </div>
       </div>
     </div>
     {% endblock %}
-    <div class="page-content">
+    <div class="page-content my-account-page-content">
 
-      <p class="my-account-page-headings">Items you've Added for Sale</p>
+      <p class="my-account-page-headings">Added for Sale</p>
       <div class="row">
         {% for row in sell_items %}
         {% if row.is_active %}
@@ -104,7 +104,7 @@
 
             </div>
             <div class="caption">
-              <div class="itemName" style="display: inline-bloxk; white-space: nowrap; width: 100px; overflow: hidden; text-overflow: ellipsis;">{{row.item_name}}</div>
+              <div class="itemName" style="display: inline-bloxk; white-space: nowrap; width: 100px; overflow: hidden; text-overflow: ellipsis;" title = "{{row.item_name}}">{{row.item_name}}</div>
               <span class="price">
                 <img class="rupee-icon rupee-icon-item-for-sale" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">
                 {{row.cost}}
@@ -164,7 +164,7 @@
               </div>
             </div>
             <div class="caption">
-              <span class="itemName">{{ row.item_name }}</span>
+              <div class="itemName" style="display: inline-bloxk; white-space: nowrap; width: 100px; overflow: hidden; text-overflow: ellipsis;" title = "{{row.item_name}}">{{ row.item_name }}</div>
               <span class="price">Rs. {{row.cost}}</span>
               <div class="row">
                 <div class="col-md-12">
@@ -178,8 +178,8 @@
                 <img src="{{STATIC_URL}}images/buyandsell/my-account-item-options.png" class="item-options-button-image">
               </button>
               <ul class="dropdown-menu item-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
-                <div class="request-arrow-up-behind" style="margin-left:74.5%; margin-top:-15.5%"></div>
-                <div class="request-arrow-up-front" style="margin-left:75%; margin-top:-13.5%"></div>
+                <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-12.5%"></div>
+                <div class="arrow-up-front" style="margin-left:75%; margin-top:-11.5%"></div>
                 <li role="presentation">
                   <a role="menuitem" tabindex="-1"onclick = "transaction_form('sell', {{ row.pk }})">
                     <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/mark-done.png">
@@ -198,10 +198,7 @@
                     <span>Remove</span>
                   </a>
                 </li>
-
-                <li role="presentation"><a role="menuitem" tabindex="-1"onclick = "transaction_form('sell', {{ row.pk }})">Mark Sold</a></li>
-  <li role="presentation"><a role="menuitem" tabindex="-1" onclick = "upload_image('buyandsell_pic', {{ row.pk }},from_accounts = true)">Change Image</a></li>
-              </ul>
+</ul>
             </div>
           </div>
         </div>
@@ -215,7 +212,7 @@
               {% if row.itempic.pic %}
               <img class="item-for-sale-image" src="{{row.itempic.pic.url}}" alt="Generic placeholder thumbnail">
               {% else %}
-              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buysell/default.png" alt="Generic placeholder thumbnail">
+              <img class="item-for-sale-image" src="{{STATIC_URL}}images/buyandsell/default.png" alt="Generic placeholder thumbnail">
               {% endif %}
 
               <div class="fading-rectangle">
@@ -224,7 +221,7 @@
               </div>
             </div>
             <div class="caption">
-              <span class="itemName">{{ row.item_name }}</span>
+              <div class="itemName" style="display: inline-bloxk; white-space: nowrap; width: 100px; overflow: hidden; text-overflow: ellipsis;" title = "{{row.item_name}}">{{row.item_name}}</div>
               <span class="price">Rs. {{row.cost}}</span>
             </div>
 
@@ -233,8 +230,8 @@
                 <img src="{{STATIC_URL}}images/buyandsell/my-account-item-options.png" class="item-options-button-image">
               </button>
               <ul class="dropdown-menu item-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
-                <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-15.5%"></div>
-                <div class="arrow-up-front" style="margin-left:75%; margin-top:-13.5%"></div>
+                <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-12.5%"></div>
+                <div class="arrow-up-front" style="margin-left:75%; margin-top:-11.5%"></div>
                 <li role="presentation">
                   <a data-toggle="modal" onclick = "assign_id({{row.id}},'sell')" data-target="#remove-item-confirm-modal" class="">
                   <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
@@ -249,7 +246,7 @@
         {% endfor %}
         {% endif %}
 
-        {% if not sell_items %}
+        {% if not sell_items and not succ_sold_items %}
         <p class="you-have-not-added-any">You haven't added any Item for Sale.</p>
         {% endif %}
 
@@ -260,9 +257,7 @@
 
       <div class="row">
         <div class="col-md-12">
-          <p class="my-account-page-headings">Items you've Requested</p>
-
-          {% if request_items %}
+          <p class="my-account-page-headings">Requested</p>
 
           <table class="table table-striped my-account-requests-table">
             <thead>
@@ -270,6 +265,7 @@
               <th>Item</th>
               <th>Max Price ( <img class="rupee-icon rupee-icon-item-for-sale" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png"> )</th>
               <th>Expires in / Status</th>
+              <th></th>
             </tr>
             </thead>
             <tbody>
@@ -287,8 +283,8 @@
                     <img src="{{STATIC_URL}}images/buyandsell/my-account-request-options.png" class="request-options-button-image">
                   </button>
                   <ul class="dropdown-menu request-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
-                    <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-10%"></div>
-                    <div class="arrow-up-front" style="margin-left:75%; margin-top:-9.5%"></div>
+                    <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-11%"></div>
+                    <div class="arrow-up-front" style="margin-left:75%; margin-top:-10.5%"></div>
                     <li role="presentation">
                       <a onclick="edit_request({{row.id}})" class="edit-button">
                         <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/edit-button.png">
@@ -329,8 +325,8 @@
                     <img src="{{STATIC_URL}}images/buyandsell/my-account-request-options.png" class="request-options-button-image">
                   </button>
                   <ul class="dropdown-menu request-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
-                    <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-10%"></div>
-                    <div class="arrow-up-front" style="margin-left:75%; margin-top:-9.5%"></div>
+                    <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-11%"></div>
+                    <div class="arrow-up-front" style="margin-left:75%; margin-top:-10.5%"></div>
                     <li role="presentation">
                       <a onclick="edit_request({{row.id}})" class="edit-button">
                         <img class="edit-button-image" src="{{STATIC_URL}}images/buyandsell/edit-button.png">
@@ -373,8 +369,8 @@
                     <img src="{{STATIC_URL}}images/buyandsell/my-account-request-options.png" class="request-options-button-image">
                   </button>
                   <ul class="dropdown-menu request-options-dropdown-menu" role="menu" aria-labelledby="my-account-object-options">
-                    <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-10%"></div>
-                    <div class="arrow-up-front" style="margin-left:75%; margin-top:-9.5%"></div>
+                    <div class="arrow-up-behind" style="margin-left:74.5%; margin-top:-11%"></div>
+                    <div class="arrow-up-front" style="margin-left:75%; margin-top:-10.5%"></div>
                     <li role="presentation">
                       <a data-toggle="modal" data-target="#remove-request-confirm-modal" onclick = "assign_id({{row.id}},'request')">
                         <img class="request-remove-button-image" src="{{STATIC_URL}}images/buyandsell/close-button.png">
@@ -390,7 +386,7 @@
 
             </tbody>
           </table>
-          {% else %}
+          {% if not request_items and not succ_request_items  %}
           <p class="you-have-not-added-any">You haven't added any Request.</p>
           {% endif %}
 

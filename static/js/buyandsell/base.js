@@ -1,7 +1,7 @@
 //watch("ELECTRONICS");
 var opened_dialog="";  //variable to keep check of the opened dialog
 
-function watch(main_category,category)
+function watch_new(main_category,category)
 {
 
   if($("#watch_btn").hasClass("watch-button-watching"))
@@ -44,7 +44,6 @@ function watch_cat(url)
     url : url,
     success: function (data)
     {
-     console.log(data);
      if(data['success'] == 'false'){
           window.location.reload();
           }
@@ -55,19 +54,20 @@ function watch_cat(url)
 
 function search() {
   var timer;
-  $("#id_item_name").keyup(function() {
+ /* $("#id_item_name").keyup(function() {
     clearTimeout(timer);
     var ms = 200;
     var val = this.value;
-    console.log(val);
+    //console.log(val);
     var type= window.location.href.split("/")[4];
     timer = setTimeout(function() { lookup(val,type);}, ms);
   });
+  */
   $(".search-form").keyup(function() {
     clearTimeout(timer);
     var ms = 200;
     var val = this.value;
-    console.log(val);
+    //console.log(val);
     var type= "main";
     timer = setTimeout(function() { lookup(val,type);}, ms);
   });
@@ -102,7 +102,7 @@ function lookup(val,type)
           html+="<li onclick=\"request_details("+data[i].id+")\">"+data[i].name+"</li>";
         }
         html+="</ul>";
-        console.log(html);
+        //console.log(html);
         $("#insert").html(html);
       }
     });
@@ -211,7 +211,6 @@ function lookup(val,type)
         }
 
 
-        console.log(html);
         $(".search-result-box").html(html);
       }
     });
@@ -231,7 +230,7 @@ function lookup(val,type)
           html+="<li onclick=\"sell_details("+data[i].id+")\">"+data[i].name+"</li>";
         }
         html+="</ul>";
-        console.log(html);
+        //console.log(html);
         $("#insert").html(html);
       }
     });
@@ -251,7 +250,7 @@ function bring_search_url(val)
     else
       t++;
   }
-  console.log(query+"query");
+  //console.log(query+"query");
   for(var i=0; i<query.length; i++)
   { if(i!=query.length-1)
   {
@@ -262,13 +261,13 @@ function bring_search_url(val)
       url+=query[i];
     }
   }
-  console.log(url);
+  //console.log(url);
   return url;
 }
 function search_form()
 {
   var form=$("#search_form");
-  console.log(form.attr("action"));
+  //console.log(form.attr("action"));
 
   $("body").on("click","#see_all_req",
     function(){
@@ -320,7 +319,7 @@ function show_contact()
           url : "/buyandsell/show_contact/no/",
           success: function (data)
           {
-            console.log("dont show contact");
+            //console.log("dont show contact");
 
           }
         });
@@ -333,7 +332,7 @@ function show_contact()
           url : "/buyandsell/show_contact/yes/",
           success: function (data)
           {
-            console.log("show contact")
+            //console.log("show contact")
           }
         });
       }
@@ -346,7 +345,7 @@ function show_contact()
           url : "/buyandsell/show_contact/yes/",
           success: function (data)
           {
-            console.log("show contact");
+            //console.log("show contact");
 
           }
         });
@@ -357,7 +356,7 @@ function show_contact()
           url : "/buyandsell/show_contact/no/",
           success: function (data)
           {
-            console.log("dont show contact");
+            //console.log("dont show contact");
 
           }
         });
@@ -379,7 +378,7 @@ function watch_subs(id,len_sub)
         $("#" + id + "_" + i).prop("checked", chk);
         $("#" + id + "_" + i).addClass("checkbox-custom-to-buyandsell-checked");
       }
-      console.log($(this).class)
+      //console.log($(this).class)
     }
     else
     {
@@ -451,12 +450,12 @@ function sell_form(){
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
   }
-  console.log("kanav");
+  //console.log("kanav");
   dialog_iframe({
     name:'sell_form_dialog',
     title:'Sell an Item',
-    width:800,
-    height:730,
+    width:600,
+    height:770,
     src:'/buyandsell/sell/',
     close:function(){opened_dialog=""}
   });
@@ -482,6 +481,7 @@ function sell_details(pk,item_name){
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
   }
+  $('.search-result-box').hide();
   dialog_iframe({
     name:'sell_detail_dialog',
     title:item_name,
@@ -497,11 +497,12 @@ function request_details(pk,item_name){
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
   }
+  $('.search-result-box').hide();
   dialog_iframe({
     name:'request_detail_dialog',
     title:item_name,
-    width:600,
-    height:400,
+    width:650,
+    height:485,
     src:'/buyandsell/request_details/'+pk+'/',
     close:function(){opened_dialog=""}
   });
@@ -515,8 +516,8 @@ function edit_sell(pk){
   dialog_iframe({
     name:'edit_sell_dialog',
     title:'Edit',
-    width:800,
-    height:730,
+    width:600,
+    height:770,
     src:'/buyandsell/edit/sell/'+pk+'/',
     close:function(){opened_dialog=""}
   });
@@ -539,7 +540,7 @@ function edit_request(pk){
 }
 
 function manage(){
-  console.log(user.is_authenticated);
+  //console.log(user.is_authenticated);
   check_user_data(user.is_authenticated,user.username);
   if(opened_dialog !=""){
     close_dialog(opened_dialog);
@@ -589,19 +590,23 @@ opened_dialog = 'upload_image_dialog';
 }
 
 function special_submit(id,type) {
-  console.log("done");
-    var form = $("#trans_form")
+    var form = $("#trans_form");
       form.attr("action" , "/buyandsell/succ_trans/" + type + "/" + id + "/ni/");
-      form.submit()
+      form.submit();
       }
 
-function bring_subcats() {
+function pic_upload(){
+    var form = $("#sell_form");
+    $("input[name = upload_pic]").val("no");
+    form.submit();
+}
 
-$("select#id_category").click(function (){
+
+function bring_subcats() {
+$("#id_category").change(function (){
       var category = $(this).val();
       var url = "/buyandsell/bring_subcats/" + category +"/";
       $.get(url, function(data){
-        console.log(data);
          $("select#sub_category").html(data);
         });
       });
@@ -654,6 +659,38 @@ $(document).ready
       }
     );
 
+    $(document).click
+    (
+      function()
+      {
+
+        if($(".item-options-button").attr('aria-expanded')== 'false')
+        {
+          $(this).hide();
+        }
+
+        else if($(".item-options-button").attr('aria-expanded')== 'true')
+        {
+          $(this).hide();
+        }
+
+
+        /*
+        if (".dropdown", $(this).hasClass("open"))
+        {
+          $(this).hide();
+        }
+        else
+        {
+          // not inside
+        }
+        */
+      }
+    );
+
+
+
+
  /*   $(".request").mouseover
     (
       function()
@@ -671,6 +708,8 @@ $(document).ready
       }
     );
 */
+
+    /*
     $(".thumbnailBG-my-account").click
     (
       function() //opens light box with details for the clicked item-for-sale
@@ -686,6 +725,7 @@ $(document).ready
         $(".modal-price").html(modalPrice);
       }
     );
+    */
 
   }
 );

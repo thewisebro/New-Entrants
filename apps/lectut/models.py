@@ -40,6 +40,7 @@ Act_Types = {
             'other':'other'
 }
 
+''' Handles delete '''
 class DeleteManager(models.Manager):
   def get_query_set(self):
     return super(DeleteManager, self).get_query_set().filter(deleted = False)

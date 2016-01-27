@@ -27,6 +27,6 @@ urlpatterns = patterns('',
     url(r'^edit/([^/]+)/([^/]+)/$', edit),
     url(r'^editsave/([^/]+)/([^/]+)/$', editsave),
     url(r'^delete/([^/]+)/([^/]+)/$', deleteEntry),
-    url(r'^requested_item_details/(?P<item_id>\w+)/?$',requested_item_details),
-    url(r'^buy_item_details/(?P<item_id>\w+)/?$',buy_item_details),
+    url(r'^requested_item_details/(?P<item_id>\w+)/?$',transfer_request),
+    url(r'^buy_item_details/(?P<item_id>\w+)/?$',transfer_buy),
 )

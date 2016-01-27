@@ -2,7 +2,8 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <title>Buy & Sell</title>
+  <link rel = "icon" href = "{{ STATIC_URL }}images/buyandsell/favicon.png" type = "image/gif">
 
   <!-- Bootstrap -->
   {% block css %}
@@ -20,16 +21,19 @@
     var static_url = "{{ STATIC_URL }}";
   </script>
 
-  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-  <script src="{{ STATIC_URL }}js/buyandsell/bootstrap.min.js"></script>
 
+  <script type="text/javascript" src="{{ STATIC_URL }}js/buyandsell/2.1.3jquery.min.js"></script>
+
+  <script src="{{ STATIC_URL }}js/buyandsell/bootstrap.min.js"></script>
   <script src="{{ STATIC_URL }}js/buyandsell/sliderJquery.js"></script>
   <script src="{{ STATIC_URL }}js/buyandsell/sliderJqueryUi.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/buyandsell/temp.js"></script>
+
 
 
   <script src="{{ STATIC_URL }}js/common.js"></script>
-  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-  <script type="text/javascript" src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/buyandsell/1.7.2.jquery.min.js"></script>
+  <script type='text/javascript' src='{{ STATIC_URL }}js/buyandsell/jquery-ui.min.js'></script>
   <script> var user = {% if user.is_authenticated %}{{ user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %}; console.log(user);</script>
 </head>
 
@@ -58,7 +62,8 @@
 
     <div class="header-logo-div">
       <a href="/buyandsell/buy">
-        <h1 class="logo">Buy & Sell</h1>
+        <img src="{{STATIC_URL}}images/buyandsell/logo.png" class="header-logo-image">
+
       </a>
     </div>
     <!--Search box HTML starts here-->
@@ -74,6 +79,8 @@
         </div>
       </form>
     </div>
+
+    <!--
     <div class="browse-button-div">
       <div class="dropdown" style="display:inline">
         <button type="button" class="btn dropdown-toggle global-browse" id="menu2" data-toggle="dropdown">
@@ -101,6 +108,7 @@
         </ul>
       </div>
     </div>
+    -->
 
     {% if login_flag %}
 
@@ -114,7 +122,7 @@
         <div class="arrow-up-behind" style="margin-left:81.5%; margin-top:-11.5%"></div>
         <div class="arrow-up-front" style="margin-left:82%; margin-top:-10.5%"></div>
         <li role="presentation"><a role="menuitem" tabindex="-1" href="/buyandsell/my-account">My Account</a></li>
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Channel- i</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://channeli.in">Channel- i</a></li>
         <li role="presentation"><a role="menuitem" tabindex="-1" onclick="logout(from_buyandsell = true)">Logout</a>
         </li>
       </ul>
@@ -132,9 +140,11 @@
     <div id="header-options">
       <div class="sign-in-button" onclick="open_login_dialog(from_buyandsell=true)">Sign In</div>
     </div>
+    <!--
     <div class="sign-in-request-text">
       Sign in to have a better experience
     </div>
+    -->
 
 
     {% endif %}
@@ -155,11 +165,12 @@
   {
     $(".pagination").addClass("pagination-bottom-aligned");
   }
-
+/*
   else
   {
     $(".pagination-customized").css("margin-left","40%");
   }
+ */
 </script>
 
 </body>
