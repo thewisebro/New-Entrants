@@ -20,8 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -115,6 +113,7 @@ public class BlogsFragment extends Fragment {
         }
     }
     public void getCardList(){
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
         List<BlogModel> blogList=db.getBlogs();
         for (int i=0; i<blogList.size(); i++){
             cardArrayAdapter.add(blogList.get(i));

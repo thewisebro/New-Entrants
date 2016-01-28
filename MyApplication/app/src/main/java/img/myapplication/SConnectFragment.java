@@ -89,6 +89,7 @@ public class SConnectFragment extends Fragment {
     public void updateSeniorsTable(String result){
         JSONObject jObject= null;
         MySQLiteHelper db=new MySQLiteHelper(getContext());
+
         try {
             jObject = new JSONObject(result);
             JSONArray jArray=jObject.getJSONArray("seniors");

@@ -68,7 +68,8 @@ public class NewEntrantLogin extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //POST("",userobj);
+        //entrant=POST("",userobj);
+        //db.addEntrant(entrant);
     }
     public void register(View view){
         Intent intent = new Intent(this, Register.class);
