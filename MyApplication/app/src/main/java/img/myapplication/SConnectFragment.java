@@ -109,6 +109,7 @@ public class SConnectFragment extends Fragment {
 
     }
     public void getCardList(){
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
         List<SeniorModel> seniorList=db.getSeniors();
         for (int i=0; i<seniorList.size(); i++){
             cardArrayAdapter.add(seniorList.get(i));

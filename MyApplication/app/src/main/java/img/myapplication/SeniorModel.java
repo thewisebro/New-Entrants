@@ -7,6 +7,7 @@ public class SeniorModel {
     public String name;
     public String branch;
     public String year;
+    public String state;
     public void copy(SeniorModel model){
         this.name=model.name;
         this.year=model.year;
