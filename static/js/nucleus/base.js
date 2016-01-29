@@ -91,7 +91,7 @@
   $(window).resize(on_resize);
 
   function attach_bindings_on_header_sidebar(){
-    $('#user-account').click(function(e){
+    $('#user-account-options').click(function(e){
       if(!account_navigation_open){
         $('#account-navigation').show();
         account_navigation_open = true;
