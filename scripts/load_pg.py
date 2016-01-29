@@ -20,7 +20,7 @@ admission_year = 2015
 admission_semester = 'A'
 ok = False
 
-for i in range(1,20):
+for i in range(1,157):
   row = sheet.row_values(i)
   try:
     enr_no = str(row[22])
