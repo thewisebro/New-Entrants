@@ -52,28 +52,41 @@ $background-color: #edeef3
     #login.div-button
       margin-top: 7px
 
-  #user-account
+  #user-account-options
     float: right
     margin-right: 20px
     cursor: pointer
 
-    #user-thumbnail
+    #options-thumbnail
       float: right
-      width: 25px
-      height: 25px
+      width: auto
+      height: auto
       margin-top: 8px
+      padding: 5px
+      background-color: #edeef3
+      &:hover
+        background-color: #ededed
 
-      img
-        width: auto
-        height: 100%
-        border-radius: 2px
+
+      i
+        font-size: 14px
+        display: table
+        margin: auto
 
   #user-name
     float: right
     font-size: 14px
-    margin-right: 10px
     font-weight: bold
     color: #555
+    margin-right: 8px
+
+  #user-photo-thumbnail
+    float: right
+    margin: 8px
+    height: 25px
+
+    img
+      height: 100% 
 
   #account-navigation
     position: fixed

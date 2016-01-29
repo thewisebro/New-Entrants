@@ -31,8 +31,8 @@
     {% endcomment %}
     <div id="header-options">
       {% if user.is_authenticated %}
-        <div id="user-account">
-          <div id="user-thumbnail"><img src="{{ user.photo_url }}"/></div>
+        <div id="user-account-options" title="Options">
+          <div id="options-thumbnail"><!--img src="{{ user.photo_url }}"/--><i class="fa fa-bars"></i></div>
         </div>
         {% if not email_verified %}
         <div id='email_verification' class='email_verification_email' style='float:left; margin-right: 15px; margin-top:-4px;'>
@@ -40,12 +40,12 @@
         </div>
         {% endif %}
         {% if not_viewed_notifications_count == 0 %}
-         <div id="notifications-container"> 
+         <div id="notifications-container" title="Notifications"> 
           <div id="notifications-count" class="notifications-count-inact">0</div>
           <i class="fa fa-bell"></i>
         </div>
         {% else %}
-        <div id="notifications-container">
+        <div id="notifications-container" title="Notifications">
           <div id="notifications-count">
             {{ not_viewed_notifications_count }}
           </div>
@@ -53,6 +53,9 @@
         </div>
         {% endif %}
         <div id="user-name">{{ user.name }}</div>
+        <div id="user-photo-thumbnail">
+          <img src="{{ user.photo_url }}">
+        </div> 
         {% if user.username == "admin" %}
           <div class='header-option'><a href='/admin/'>Admin portal</a></div>
         {% endif %}
