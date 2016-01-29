@@ -23,6 +23,7 @@ public class Navigation extends ActionBarActivity
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
     private CharSequence mTitle;
+    private MySQLiteHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +34,9 @@ public class Navigation extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.set(1);
-       // mTitle = getTitle();
-        entrant=(NewEntrantModel) getIntent().getSerializableExtra("entrant");
+        db=new MySQLiteHelper(this);
+        entrant=db.getEntrant();
+        //entrant=(NewEntrantModel) getIntent().getSerializableExtra("entrant");
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
         if(!isConnected()){
             Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
@@ -49,6 +51,7 @@ public class Navigation extends ActionBarActivity
             return false;
     }
     public void logout(){
+        db.deleteEntrant();
         Intent intent=new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
@@ -67,9 +70,6 @@ public class Navigation extends ActionBarActivity
     }
     public void requestSenior(View view){
         loadFragment(new RequestSenior());
-    }
-    public void request(View view){
-
     }
     public void TryAgain(){
         if (isConnected()){
@@ -119,9 +119,6 @@ public class Navigation extends ActionBarActivity
         }
     }
     public void update(View view) {
-        MySQLiteHelper db = new MySQLiteHelper(this);
-
-
         EditText et_email = (EditText) findViewById(R.id.edit_email);
         EditText et_number = (EditText) findViewById(R.id.edit_number);
 
@@ -134,7 +131,6 @@ public class Navigation extends ActionBarActivity
         else if(db.updateEntrant(entrant)==0){
             Toast.makeText(getApplicationContext(),"No update", Toast.LENGTH_SHORT).show();
         }
-
     }
     public void getPageTitle(){
 

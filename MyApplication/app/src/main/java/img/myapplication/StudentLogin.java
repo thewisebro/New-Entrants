@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -49,6 +48,7 @@ public class StudentLogin extends AppCompatActivity {
         Password=(EditText) findViewById(R.id.et_Password);
 
         MySQLiteHelper db=new MySQLiteHelper(this);
+        /*
         StudentModel user=db.getStudent(Enr_No.getText().toString(),Password.getText().toString());
         if(db.checkEntrant(Enr_No.getText().toString(), Password.getText().toString()))
         {
@@ -60,16 +60,22 @@ public class StudentLogin extends AppCompatActivity {
             finish();
         }
         else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();
-
+        */
         JSONObject userobj=new JSONObject();
         try {
             userobj.put("Enr_No",Enr_No.getText().toString());
-
             userobj.put("Password",Password.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //new HttpAsyncTask(userobj).execute();
+        StudentModel student=POST("",userobj);
+        if (student.valid){
+            db.addStudent(student);
+            Intent intent=new Intent(this, NavigationStudent.class);
+            startActivity(intent);
+            finish();
+        }
+        else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -90,36 +96,12 @@ public class StudentLogin extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
-        JSONObject user;
-        public HttpAsyncTask(JSONObject userobj){
-            user=userobj;
-        }
-        @Override
-        protected String doInBackground(String... urls) {
 
-            return POST(urls[0],user);
-        }
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private static String POST(String url,JSONObject userobj){
+    private static StudentModel POST(String url,JSONObject userobj){
         String result="";
+        StudentModel model=new StudentModel();
         try{
-            /*HttpClient client=new DefaultHttpClient();
-            HttpPost httpPost=new HttpPost(url);
 
-            String user=userobj.toString();
-            StringEntity se= new StringEntity(user);
-            httpPost.setEntity(se);
-            httpPost.setHeader("Accept", "application/json");
-            httpPost.setHeader("Content-type", "application/json");
-            HttpResponse httpResponse=client.execute(httpPost);
-            is=httpResponse.getEntity().getContent();*/
             URL urlobj=new URL(url);
             HttpURLConnection conn=(HttpURLConnection) urlobj.openConnection();
             conn.setDoInput(true);
@@ -135,12 +117,27 @@ public class StudentLogin extends AppCompatActivity {
             while((line = bufferedReader.readLine()) != null)
                 result += line;
             bufferedReader.close();
+            JSONObject object=new JSONObject(result);
+            if (result !=null){
+                model.name=object.getString("name");
+                model.enr_no=object.getString("enr_no");
+                model.password=object.getString("password");
+                model.town=object.getString("town");
+                model.branch=object.getString("branch");
+                model.email=object.getString("email");
+                model.mobile=object.getString("mobile");
+                model.state=object.getString("state");
+                model.year=object.getString("year");
+                model.valid=true;
+            }
+            else model.valid=false;
+            return model;
 
         } catch (Exception e) {
             Log.d("InputStream", e.getLocalizedMessage());
         }
 
-        return result;
+        return model;
     }
 
 }

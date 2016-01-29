@@ -18,6 +18,7 @@ import android.widget.Toast;
 public class NavigationStudent extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     private int fragmentCount;
+    private MySQLiteHelper db;
     public StudentModel student;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
@@ -33,8 +34,9 @@ public class NavigationStudent extends ActionBarActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.set(2);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-        // mTitle = getTitle();
-        student=(StudentModel) getIntent().getSerializableExtra("user");
+        db=new MySQLiteHelper(this);
+        student=db.getStudent();
+        //student=(StudentModel) getIntent().getSerializableExtra("user");
 
         if(!isConnected()){
             Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
@@ -54,6 +56,7 @@ public class NavigationStudent extends ActionBarActivity
         }
     }
     public void logout(){
+        db.deleteStudent();
         Intent intent=new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
@@ -79,7 +82,7 @@ public class NavigationStudent extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
         mCurrentPosition=position;
-        //FragmentManager fragmentManager = getSupportFragmentManager();
+
         if (isConnected()){
             switch(position) {
                 case -1: fragment = new OpeningFragment();
@@ -97,7 +100,6 @@ public class NavigationStudent extends ActionBarActivity
         else {
             fragment=new NetworkErrorFragment();
         }
-
         loadFragment(fragment);
     }
 

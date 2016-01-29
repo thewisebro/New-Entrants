@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
+public class MySQLiteHelper extends SQLiteOpenHelper {
+    // Database Version
     private static final int DATABASE_VERSION = 1;
     // Database Name
     public static final String DATABASE_NAME = "Entrants_Data";
@@ -70,7 +71,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
                     "email text,"+
                     "mobile text );";
 
-
+    public static String TEMP_ENTRANT=
+            "insert into entrants values ('1','singh','asd','asd','ee','roorkee','uk','asdasdasd','a@a.a','123');";
+    public static String TEMP_STUDENT=
+            "insert into entrants values ('ankush','14115019','asd','ee','2','roorkee','uk','asdasdasd','a@a.a','123');";
     public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
@@ -80,6 +84,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         db.execSQL(CREATE_ENTRANTS_TABLE);
         db.execSQL(CREATE_SENIORS_TABLE);
         db.execSQL(CREATE_BLOGS_TABLE);
+        db.execSQL(TEMP_ENTRANT);
+        db.execSQL(TEMP_STUDENT);
     }
 
     @Override
@@ -89,6 +95,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         db.execSQL(CREATE_STUDENTS_TABLE);
         db.execSQL(CREATE_ENTRANTS_TABLE);
         db.execSQL(CREATE_BLOGS_TABLE);
+        db.execSQL(TEMP_ENTRANT);
+        db.execSQL(TEMP_STUDENT);
     }
 
     @Override
@@ -101,11 +109,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         this.onCreate(db);
     }
 
-    public StudentModel getStudent(String enr_no, String password){
+    public StudentModel getStudent(){
         SQLiteDatabase db= this.getReadableDatabase();
         StudentModel student=new StudentModel();
 
-        Cursor cursor=db.rawQuery("select * from students where enr_no='" + enr_no + "' and password ='" + password + "';", null);
+        Cursor cursor=db.rawQuery("select * from students;", null);
         if (cursor.getCount()!=0) {
             cursor.moveToFirst();
 
@@ -130,8 +138,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         if(cursor.getCount()==0) return false;
         else return true;
     }
+    public boolean loggedStudent(){
+        SQLiteDatabase db= this.getReadableDatabase();
+        Cursor cursor=db.rawQuery("select * from students ;", null);
+
+        if(cursor.getCount()==0) return false;
+        else return true;
+    }
     public void addStudent(StudentModel student){
         SQLiteDatabase db=this.getWritableDatabase();
+        deleteStudent();
         db.execSQL(CREATE_STUDENTS_TABLE);
         ContentValues values=new ContentValues();
         values.put("name",student.name);
@@ -149,7 +165,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
     public void addEntrant(NewEntrantModel entrant){
         SQLiteDatabase db=this.getWritableDatabase();
         db.execSQL(CREATE_ENTRANTS_TABLE);
-
+        deleteEntrant();
         ContentValues values=new ContentValues();
         values.put("id", entrant.id);
         values.put("name", entrant.name);
@@ -201,6 +217,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         if(cursor.getCount()==0) return false;
         else return true;
     }
+    public boolean loggedEntrant(){
+        SQLiteDatabase db= this.getReadableDatabase();
+        Cursor cursor=db.rawQuery("select * from entrants ;", null);
+
+        if(cursor.getCount()==0) return false;
+        else return true;
+    }
     public boolean checkBlog(BlogModel blog){
         SQLiteDatabase db= this.getReadableDatabase();
         Cursor cursor=db.rawQuery("select * from blogs where topic='" + blog.topic + "' and date ='" + blog.date +"';", null);
@@ -215,11 +238,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {// Database Version
         if(cursor.getCount()==0) return false;
         else return true;
     }
-    public NewEntrantModel getEntrant(String username, String password){
+    public NewEntrantModel getEntrant(){
         SQLiteDatabase db= this.getReadableDatabase();
         NewEntrantModel entrant=new NewEntrantModel();
 
-        Cursor cursor=db.rawQuery("select * from entrants where username='" + username + "' and password ='" + password + "';", null);
+        Cursor cursor=db.rawQuery("select * from entrants;", null);
         if (cursor.getCount()!=0) {
             cursor.moveToFirst();
 

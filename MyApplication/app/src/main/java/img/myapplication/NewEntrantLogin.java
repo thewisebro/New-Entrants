@@ -48,6 +48,7 @@ public class NewEntrantLogin extends AppCompatActivity {
         Password=(EditText) findViewById(R.id.et_Password);
 
         MySQLiteHelper db=new MySQLiteHelper(this);
+        /*
         NewEntrantModel entrant=db.getEntrant(Username.getText().toString(),Password.getText().toString());
         if(db.checkEntrant(Username.getText().toString(), Password.getText().toString()) == true)
         {
@@ -59,7 +60,7 @@ public class NewEntrantLogin extends AppCompatActivity {
             finish();
         }
         else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();
-
+        */
         JSONObject userobj=new JSONObject();
         try {
             userobj.put("Username",Username.getText().toString());
@@ -68,15 +69,21 @@ public class NewEntrantLogin extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //entrant=POST("",userobj);
-        //db.addEntrant(entrant);
+        NewEntrantModel entrant=POST("",userobj);
+        if (entrant.valid){
+            db.addEntrant(entrant);
+            Intent intent=new Intent(this, Navigation.class);
+            startActivity(intent);
+            finish();
+        }
+        else Toast.makeText(getApplicationContext(), "Wrong Username or Password", Toast.LENGTH_SHORT).show();
     }
+    /*
     public void register(View view){
         Intent intent = new Intent(this, Register.class);
         startActivity(intent);
-
     }
-
+    */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -118,16 +125,19 @@ public class NewEntrantLogin extends AppCompatActivity {
             result=sb.toString();
             bufferedReader.close();
             JSONObject object=new JSONObject(result);
-
-            model.name=object.getString("name");
-            model.id=object.getString("id");
-            model.town=object.getString("town");
-            model.branch=object.getString("branch");
-            model.email=object.getString("email");
-            model.mobile=object.getString("mobile");
-            model.state=object.getString("state");
-            model.username=object.getString("username");
-            model.password=object.getString("password");
+            if (result !=null){
+                model.name=object.getString("name");
+                model.id=object.getString("id");
+                model.town=object.getString("town");
+                model.branch=object.getString("branch");
+                model.email=object.getString("email");
+                model.mobile=object.getString("mobile");
+                model.state=object.getString("state");
+                model.username=object.getString("username");
+                model.password=object.getString("password");
+                model.valid=true;
+            }
+            else model.valid=false;
             return model;
         } catch (Exception e) {
             Log.d("InputStream", e.getLocalizedMessage());

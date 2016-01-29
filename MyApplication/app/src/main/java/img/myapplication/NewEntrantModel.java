@@ -17,5 +17,6 @@ public class NewEntrantModel implements Serializable {
     public String about;
     public String mobile;
     public String email;
+    public boolean valid;
     public ArrayList<String> acceptedSeniors;
 }

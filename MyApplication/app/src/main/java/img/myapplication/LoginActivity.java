@@ -12,6 +12,18 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MySQLiteHelper db=new MySQLiteHelper(this);
+
+        if (db.loggedEntrant()){
+            Intent intent=new Intent(this, Navigation.class);
+            startActivity(intent);
+            finish();
+        }
+        if (db.loggedStudent()){
+            Intent intent=new Intent(this,NavigationStudent.class);
+            startActivity(intent);
+            finish();
+        }
         setContentView(R.layout.activity_login);
     }
     public void StudentLogin(View view) {
