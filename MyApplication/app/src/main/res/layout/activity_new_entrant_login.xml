@@ -56,7 +56,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-<!--    <Button
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register Now"
@@ -65,5 +65,5 @@
         android:layout_alignTop="@+id/bt_SignIn"
         android:layout_alignLeft="@+id/tv_Password"
         android:layout_alignStart="@+id/tv_Password" />
--->
+
 </RelativeLayout>

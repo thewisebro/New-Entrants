@@ -19,7 +19,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        if (db.loggedStudent()){
+        else if (db.loggedStudent()){
             Intent intent=new Intent(this,NavigationStudent.class);
             startActivity(intent);
             finish();
