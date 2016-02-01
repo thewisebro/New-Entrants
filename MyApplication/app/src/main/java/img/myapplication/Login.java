@@ -15,12 +15,9 @@ import android.widget.EditText;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 
 public class Login extends ActionBarActivity {
@@ -80,26 +77,24 @@ public class Login extends ActionBarActivity {
     private void peopleLogin(JSONObject userobj){
         HttpURLConnection urlConnection = null;
         try {
-            URL url=new URL("");
+            String csrftoken=null;
+            String CHANNELI_SESSID=null;
+            URL url=new URL("http://people.iitr.ernet.in/login/");
             urlConnection = (HttpURLConnection) url.openConnection();
-
-            // Set cookies in requests
             CookieManager cookieManager = CookieManager.getInstance();
+            urlConnection.setRequestMethod("GET");
             String cookie = cookieManager.getCookie(urlConnection.getURL().toString());
-            if (cookie != null) {
-                urlConnection.setRequestProperty("Cookie", cookie);
-            }
+            csrftoken=(getValues(cookie))[0];
+            cookieManager.setCookie("http://people.iitr.ernet.in/login/", "csrftoken=" + csrftoken);
+            urlConnection.connect();
+            cookie = cookieManager.getCookie(urlConnection.getURL().toString());
+            String values[]=getValues(cookie);
+            csrftoken=values[0];
+            CHANNELI_SESSID=values[1];
+            cookieManager.setCookie("http://people.iitr.ernet.in/login/","csrftoken="+csrftoken+";CHANNELI_SESSID="+CHANNELI_SESSID);
+            urlConnection.setRequestMethod("POST");
             urlConnection.connect();
 
-            // Get cookies from responses and save into the cookie manager
-            List cookieList = urlConnection.getHeaderFields().get("Set-Cookie");
-            if (cookieList != null) {
-                for (String cookieTemp : cookieList) {
-                    cookieManager.setCookie(urlConnection.getURL().toString(), cookieTemp);
-                }
-            }
-
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -107,6 +102,20 @@ public class Login extends ActionBarActivity {
                 urlConnection.disconnect();
             }
         }
+    }
+    private String[] getValues(String cookie){
+        String[] values=cookie.split(";");
+        String v[]=new String[2];
+        for(String temp : values){
+            String[] list=temp.split("=");
+            if (list[0].equals("csrftoken")){
+                v[0]=list[1];
+            }
+            else if (list[0].equals("CHANNELI_SESSID")){
+               v[1]=list[1];
+            }
+        }
+        return v;
     }
 
     public void register(View view){
