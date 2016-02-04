@@ -59,7 +59,7 @@ public class Login extends ActionBarActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        peopleLogin(userobj);
+       // peopleLogin(userobj);
     }
  /*   private void peopleLogin(JSONObject userobj){
         try {
@@ -94,6 +94,11 @@ public class Login extends ActionBarActivity {
             cookieManager.setCookie("http://people.iitr.ernet.in/login/","csrftoken="+csrftoken+";CHANNELI_SESSID="+CHANNELI_SESSID);
             urlConnection.setRequestMethod("POST");
             urlConnection.connect();
+            cookie = cookieManager.getCookie(urlConnection.getURL().toString());
+
+            String headers[]=getValues(cookie);
+            csrftoken=headers[0];
+            CHANNELI_SESSID=headers[1];
 
         } catch (IOException e) {
             e.printStackTrace();

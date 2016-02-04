@@ -1,11 +1,7 @@
 package img.myapplication;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,8 +38,8 @@ public class Register extends AppCompatActivity {
     public void register(View view){
         entrant.id= ((EditText) findViewById(R.id.new_id)).getText().toString().trim();
         entrant.name= ((EditText) findViewById(R.id.new_name)).getText().toString().trim();
-        entrant.username= ((EditText) findViewById(R.id.new_username)).getText().toString().trim();
-        entrant.password= ((EditText) findViewById(R.id.new_password)).getText().toString().trim();
+        //entrant.username= ((EditText) findViewById(R.id.new_username)).getText().toString().trim();
+        //entrant.password= ((EditText) findViewById(R.id.new_password)).getText().toString().trim();
         entrant.town= ((EditText) findViewById(R.id.new_town)).getText().toString().trim();
         entrant.email= ((EditText) findViewById(R.id.new_email)).getText().toString().trim();
         entrant.mobile= ((EditText) findViewById(R.id.new_mobile)).getText().toString().trim();

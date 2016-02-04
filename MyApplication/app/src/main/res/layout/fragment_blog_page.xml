@@ -12,7 +12,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
             android:id="@+id/topic"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
@@ -21,42 +20,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:id="@+id/shortInfo"
+            android:id="@+id/date"
             android:layout_marginTop="52dp"
             android:layout_below="@+id/topic"
             android:layout_centerHorizontal="true" />
-
+<!--
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/image"
             android:layout_below="@+id/shortInfo"
             android:layout_centerHorizontal="true" />
+-->
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
             android:id="@+id/blogText"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/blogText"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp">
-
-        </RelativeLayout>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/info1"
+            android:id="@+id/group"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="43dp" />

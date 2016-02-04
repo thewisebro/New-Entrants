@@ -121,13 +121,14 @@ public class StudentLogin extends AppCompatActivity {
             if (result !=null){
                 model.name=object.getString("name");
                 model.enr_no=object.getString("enr_no");
-                model.password=object.getString("password");
+                //model.password=object.getString("password");
                 model.town=object.getString("town");
                 model.branch=object.getString("branch");
                 model.email=object.getString("email");
                 model.mobile=object.getString("mobile");
                 model.state=object.getString("state");
                 model.year=object.getString("year");
+                model.fb_link=object.getString("fb_link");
                 model.valid=true;
             }
             else model.valid=false;

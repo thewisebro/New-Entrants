@@ -24,16 +24,19 @@ public class BlogPage extends Fragment {
         View view= inflater.inflate(R.layout.fragment_blog_page, container, false);
 
         TextView topic= (TextView) view.findViewById(R.id.topic);
-        TextView shortInfo= (TextView) view.findViewById(R.id.shortInfo);
+        //TextView shortInfo= (TextView) view.findViewById(R.id.shortInfo);
+        TextView date= (TextView) view.findViewById(R.id.date);
         TextView blogText= (TextView) view.findViewById(R.id.blogText);
-        TextView author= (TextView) view.findViewById(R.id.info1);
+        TextView group= (TextView) view.findViewById(R.id.group);
        // TextView topic= (TextView) view.findViewById(R.id.topic);
        // TextView topic= (TextView) view.findViewById(R.id.topic);
 
         topic.setText(blog.topic);
-        shortInfo.setText(blog.shortInfo);
+        //shortInfo.setText(blog.shortInfo);
         blogText.setText(blog.blogText);
-        author.setText(blog.author);
+        date.setText(blog.date);
+        group.setText(blog.group);
+        //author.setText(blog.author);
         return view;
     }
 

@@ -46,17 +46,19 @@ public class BlogsFragment extends Fragment {
         }
         getCardList();
 
-        for (int i = 0; i < 10; i++) {
+        /*for (int i = 0; i < 10; i++) {
 
             BlogModel card= new BlogModel();
 
             card.topic="lololol";
-            card.shortInfo="test";
-            card.author="ankush";
-            card.category="example";
+            //card.shortInfo="test";
+            //card.author="ankush";
+            //card.category="example";
+            card.group="abcGrp";
+            card.blogText="Life is beautiful!";
             card.date="2015-10-27";
             cardArrayAdapter.add(card);
-        }
+        }*/
         listView.setAdapter(cardArrayAdapter);
 
         return view;
@@ -101,9 +103,11 @@ public class BlogsFragment extends Fragment {
                 BlogModel model= new BlogModel();
 
                 model.topic="lololol";
-                model.shortInfo="test";
-                model.author="ankush";
-                model.category="example";
+                //model.shortInfo="test";
+                //model.author="ankush";
+                //model.category="example";
+                model.group="abcGrp";
+                model.blogText="Life is beautiful!";
                 model.date="2015-10-27";
 
                 db.addBlog(model);
@@ -221,9 +225,11 @@ public class BlogsFragment extends Fragment {
                 row = inflater.inflate(R.layout.list_item_card, parent, false);
                 viewHolder = new BlogCardViewHolder();
                 viewHolder.topic = (TextView) row.findViewById(R.id.topic);
-                viewHolder.shortInfo = (TextView) row.findViewById(R.id.shortInfo);
-                viewHolder.author = (TextView) row.findViewById(R.id.author);
-                viewHolder.category = (TextView) row.findViewById(R.id.category);
+                //viewHolder.shortInfo = (TextView) row.findViewById(R.id.shortInfo);
+                //viewHolder.author = (TextView) row.findViewById(R.id.author);
+                //viewHolder.category = (TextView) row.findViewById(R.id.category);
+                viewHolder.blogText= (TextView) row.findViewById(R.id.blogText);
+                viewHolder.group= (TextView) row.findViewById(R.id.group);
                 viewHolder.date = (TextView) row.findViewById(R.id.date);
                 viewHolder.model=new BlogModel();
 
@@ -232,9 +238,11 @@ public class BlogsFragment extends Fragment {
             }
             BlogModel card = getItem(position);
             viewHolder.topic.setText(card.topic);
-            viewHolder.shortInfo.setText(card.shortInfo);
-            viewHolder.author.setText(card.author);
-            viewHolder.category.setText(card.category);
+            //viewHolder.shortInfo.setText(card.shortInfo);
+            //viewHolder.author.setText(card.author);
+            //viewHolder.category.setText(card.category);
+            viewHolder.group.setText(card.group);
+            viewHolder.blogText.setText(card.blogText);
             viewHolder.date.setText(card.date);
             viewHolder.model.copy(card);
             row.setTag(viewHolder);

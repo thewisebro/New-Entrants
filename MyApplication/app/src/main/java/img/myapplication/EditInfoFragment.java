@@ -27,7 +27,7 @@ public class EditInfoFragment extends Fragment {
         db=new MySQLiteHelper(getContext());
         View view= inflater.inflate(R.layout.fragment_edit_info, container, false);
         et_name=(EditText) view.findViewById(R.id.edit_name);
-        et_town=(EditText) view.findViewById(R.id.enr_no);
+        //et_town=(EditText) view.findViewById(R.id.enr_no);
         et_email=(EditText) view.findViewById(R.id.edit_email);
         et_number=(EditText) view.findViewById(R.id.edit_number);
 

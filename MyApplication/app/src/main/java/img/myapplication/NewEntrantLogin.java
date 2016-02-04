@@ -133,8 +133,11 @@ public class NewEntrantLogin extends AppCompatActivity {
                 model.email=object.getString("email");
                 model.mobile=object.getString("mobile");
                 model.state=object.getString("state");
-                model.username=object.getString("username");
-                model.password=object.getString("password");
+                //model.username=object.getString("username");
+                //model.password=object.getString("password");
+                model.fb_link=object.getString("fb_link");
+                model.phone_privacy=object.getInt("phone_privacy") > 0;
+                model.profile_privacy=object.getInt("profile_privacy") > 0;
                 model.valid=true;
             }
             else model.valid=false;

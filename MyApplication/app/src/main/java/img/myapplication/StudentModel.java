@@ -8,13 +8,14 @@ import java.io.Serializable;
 public class StudentModel implements Serializable {
     public  String name;
     public String enr_no;
-    public String password;
+    //public String password;
     public String branch;
     public String year;
     public String town;
     public String state;
     public String email;
     public String mobile;
+    public String fb_link;
     public boolean valid;
 
 }

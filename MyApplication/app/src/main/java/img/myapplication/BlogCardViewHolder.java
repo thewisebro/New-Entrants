@@ -7,9 +7,11 @@ import android.widget.TextView;
  */
 public class BlogCardViewHolder {
     public  TextView topic;
-    public TextView shortInfo;
-    public  TextView author;
-    public  TextView category;
+    //public TextView shortInfo;
+    //public  TextView author;
+    //public  TextView category;
+    public TextView group;
+    public TextView blogText;
     public  TextView date;
 
     public BlogModel model;
