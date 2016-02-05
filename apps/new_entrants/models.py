@@ -1,11 +1,10 @@
 from core import models
-from nucleus.models import User, Branch
+from nucleus.models import User
 from groups.models import Group
 from api import model_constants as MC
 
 class Student_profile(models.Model):
     user = models.OneToOneField(User)
-    branch = models.ForeignKey(Branch, blank = True)
     email = models.EmailField(max_length = 75)
     fb_link = models.CharField(max_length = 200)
     state = models.CharField(max_length = 3, choices = MC.STATE_CHOICES, blank = True)
@@ -18,7 +17,6 @@ class Student_profile(models.Model):
 
 class Senior_profile(models.Model):
     user = models.OneToOneField(User)
-    branch = models.ForeignKey(Branch)
     email = models.EmailField(max_length = 75)
     hometown = models.CharField(max_length = 100, blank = True)
     state = models.CharField(max_length = 3, choices = MC.STATE_CHOICES, blank = True)
@@ -27,15 +25,26 @@ class Senior_profile(models.Model):
     def __unicode__(self):
         return str(self.user.name)
 
-class Blogs(models.Model):
+class Blog(models.Model):
+    title = models.CharField(max_length = 100, unique=True)
     group = models.ForeignKey(Group)
+    description = models.TextField(max_length = 500, blank = True, null = True)
     content = models.TextField()
-    title = models.CharField(max_length = 200)
     date_published = models.DateTimeField(auto_now_add = True)
-    def __unicode__(self):
-        return "%s : %s" % str(self.group.nickname),str(self.title)
+    slug = models.SlugField(max_length = 150)
 
-class Requests(models.Model):
-    student_profile = models.ForeignKey(Student_profile)
-    senior_profile = models.ForeignKey(Senior_profile)
+    def save(self, *args, **kwargs):
+      self.slug=self.title.replace(' ','-')
+      super(Blog, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return str(self.group.user.username) + ": " + str(self.title)
+
+class Request(models.Model):
+    sender = models.ForeignKey(User, related_name='from')
+    acceptor = models.ForeignKey(User, related_name='to')
     is_accepted = models.BooleanField(default = False)
+    category = models.CharField(max_length='6')
+
+    class Meta:
+      ordering = ('category','-datetime_created')
