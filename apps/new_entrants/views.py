@@ -11,6 +11,7 @@ from django.conf import settings
 from django.contrib import messages
 
 from new_entrants.models import *
+from nucleus.models import Branch, User
 from api import model_constants as MC
 
 def get_domain():
@@ -19,52 +20,78 @@ def get_domain():
   else:
     return 'http://people.iitr.ernet.in/'
 
-@login_required
-def create_user(request):
-  data = request.POST
-  user = request.user
-  email = data.get('email','')
-  try:
-    validate_email(email)
-  except:
-    return HttpResponse(simplejson.dumps({'error':'email'}), content_type='application/json')
-  fb_link = data.get('fb_link','')
-  if fb_link == '':
-    return HttpResponse(simplejson.dumps({'error':'fb_link'}), content_type='application/json')
-  state = data.get('state','')
-  if state == '' or state not in dict(MC.STATE_CHOICES):
-    return HttpResponse(simplejson.dumps({'error':'state'}), content_type='application/json')
-  hometown = data.get('hometown','')
-  phone_no = data.get('phone_no','').trim()
-  if phone_no == '':
-    return HttpResponse(simplejson.dumps({'error':'phone_no'}), content_type='application/json')
-  phone_privacy = data.get('phone_privacy','')
-  profile_privacy = data.get('profile_privacy','')
-  if user.groups.filter(name='New Entrant').exists():
-    junior = Student_profile()
-    junior.user=user
-    junior.email=email
-    junior.fb_link=fb_link
-    junior.state=state
-    junior.hometown=hometown
-    junior.phone_no=phone_no
-    junior.phone_privacy = (phone_privacy == 'True')
-    junior.profile_privacy = (profile_privacy == 'True')
-    junior.save()
-  else :
-    senior = Senior_profile()
-    senior.user=user
-    senior.email=email
-    senior.fb_link=fb_link
-    senior.state=state
-    senior.hometown=hometown
-    senior.phone_no=phone_no
-    senior.save()
-  data = {'status':'success'}
-  data['category'] = 'peer' if user.groups.filter(name='New Entrant').exists() else 'senior'
-  return HttpResponse(simplejson.dumps(data), content_type='application/json')
+def get_junior_contact(junior):
+  if junior.phone_privacy == True:
+    return ''
+  else:
+    return junior.phone_no
 
-def blogs(request):
+def get_junior_branch(junior):
+  if junior.is_branch == True:
+    return {'code':junior.user.student.branch.code,'name':junior.user.student.branch.name}
+  else :
+    return {'code':'','name':''}
+
+def register(request):    #coded
+  if request.method == 'POST':
+    data = request.POST
+    user = request.user
+    email = data.get('email','')
+    try:
+      validate_email(email)
+    except:
+      return HttpResponse(simplejson.dumps({'error':'email'}), content_type='application/json')
+    state = data.get('state','')
+    if state not in dict(MC.STATE_CHOICES):
+      return HttpResponse(simplejson.dumps({'error':'state'}), content_type='application/json')
+    fb_link = data.get('fb_link','')
+    hometown = data.get('hometown','')
+    phone_no = data.get('phone_no','')
+    phone_privacy = data.get('phone_privacy','')
+    profile_privacy = data.get('profile_privacy','')
+    if user.groups.filter(name='New Entrant').exists():
+      phone_privacy = data.get('phone_privacy','')
+      profile_privacy = data.get('profile_privacy','')
+      junior = Student_profile()
+      try:
+        branch_name = data.get('branch','')
+        branch = Branch.objects.get(name=branch_name)
+        student = Student()
+        student.user = user
+        student.branch = branch
+        student.semester = 'UG10'
+        student.semester_no = 1
+        student.admission_year = 2016
+        student.admission_semtype = 'A'
+        student.save()
+        junior.is_branch = True
+      except:
+        pass
+      junior.user=user
+      junior.email=email
+      junior.fb_link=fb_link
+      junior.state=state
+      junior.hometown=hometown
+      junior.phone_no=phone_no
+      junior.phone_privacy = (phone_privacy == 'True')
+      junior.profile_privacy = (profile_privacy == 'True')
+      junior.save()
+    else :
+      senior = Senior_profile()
+      senior.user=user
+      senior.email=email
+      senior.fb_link=fb_link
+      senior.state=state
+      senior.hometown=hometown
+      senior.phone_no=phone_no
+      senior.save()
+    data = {'status':'success'}
+    data['category'] = 'junior' if user.groups.filter(name='New Entrant').exists() else 'senior'
+    return HttpResponse(simplejson.dumps(data), content_type='application/json')
+  else:
+    return HttpResponse(simplejson.dumps({'error':''}), content_type='application/json')
+
+def blogs(request):     #coded
   def blog_dict(blog):
     return {
       'title':blog.title,
@@ -79,7 +106,7 @@ def blogs(request):
   data = simplejson.dumps(map(blog_dict,query_set))
   return HttpResponse(data, content_type='application/json')
 
-def blogs_group(request, group_id=None):
+def blogs_group(request, group_id=None):      #coded
   def blog_dict(blog):
     return {
       'title':blog.title,
@@ -96,9 +123,9 @@ def blogs_group(request, group_id=None):
     data = simplejson.dumps(map(blog_dict,query_set))
     return HttpResponse(data, content_type='application/json')
   except:
-    return HttpResponseRedirect('/new_entrants/blogs')
+    return blogs(request)
 
-def blogs_view(request, group_id=None, slug=None):
+def blogs_view(request, group_id=None, slug=None):      #coded
   def blog_dict(blog):
     return {
       'title':blog.title,
@@ -116,49 +143,55 @@ def blogs_view(request, group_id=None, slug=None):
       data = simplejson.dumps(blog_dict(query_set))
       return HttpResponse(data, content_type='application/json')
     except:
-      return HttpResponseRedirect('/new_entrants/blogs/'+group_id)
+      return blogs_group(request,group_id)
   except:
-    return HttpResponseRedirect('/new_entrants/blogs/')
+    return blogs(request)
 
-def request_connect(request):       #untested
+@login_required
+def request_connect(request):       #coded
   data = {'status':'fail'}
-  try:
-    accept_id = request.GET.get('to','')
-    sender = request.user
-    if not sender.groups.filter(name='New Entrant').exists():
-      raise Exception('Request sent by senior')
-    acceptor = User.objects.get(user__username=accept_id)
-    if Request.objects.filter(sender=sender,acceptor=acceptor).exists()
-      raise Exception('Request already exists')
-    r = Request()
-    r.sender = sender
-    r.acceptor = acceptor
-    r.category = 'peer' if acceptor.groups.filter(name='New Entrant').exists() else 'senior'
-    r.save()
-    data['status'] = 'success'
-  except:
-    pass
-  data = simplejson.dumps(data)
-  return HttpResponse(data, content_type='application/json')
-
-def accept_connect(request):        #untested
-  data = {'status':'fail'}
-  try:
-    accept_id = request.GET.get('from','')
-    acceptor = request.user
-    sender = User.objects.get(user__username=accept_id)
-    category = 'peer' if acceptor.groups.filter(name='New Entrant').exists() else 'senior'
-    r = Request.objects.get(sender=sender,acceptor=acceptor,category=category)
-    r.is_accepted=True
-    r.save()
-    data['status'] = 'success'
-  except:
-    pass
+  if request.method == 'POST':
+    try:
+      user = request.user
+      if not user.groups.filter(name='New Entrant').exists():
+        raise Exception('Request sent by senior')
+      junior = Student_profile.objects.get(user=user)
+      senior_id = request.POST.get('to','')
+      senior = Senior_profile.objects.get(user__username=senior_id)
+      if Request.objects.filter(senior=senior,junior=junior).exists():
+        raise Exception('Request already exists')
+      r = Request()
+      r.senior = senior
+      r.junior = junior
+      r.save()
+      data['status'] = 'success'
+    except:
+      pass
   data = simplejson.dumps(data)
   return HttpResponse(data, content_type='application/json')
 
 @login_required
-def pending_requests(request):      #untested
+def accept_connect(request):        #coded
+  data = {'status':'fail'}
+  if request.method == 'POST':
+    try:
+      user = request.user
+      if user.groups.filter(name='New Entrant').exists():
+        raise Exception('Request sent by junior')
+      senior = Senior_profile.objects.get(user=user)
+      junior_id = request.POST.get('from','')
+      junior = Student_profile.objects.get(user__username=junior_id)
+      r = Request.objects.get(senior=senior,junior=junior)
+      r.is_accepted = True
+      r.save()
+      data['status'] = 'success'
+    except:
+      pass
+  data = simplejson.dumps(data)
+  return HttpResponse(data, content_type='application/json')
+
+@login_required
+def pending_requests(request):
   def user_dict(req):
     return {  #check for branch
       'user':req.sender.username,
@@ -179,50 +212,52 @@ def pending_requests(request):      #untested
   return HttpResponse(data, content_type='application/json')
 
 @login_required
-def accepted(request):        #untested #complete
-  def senior_dict(req):
+def accepted(request):      #coded
+  def senior_dict(senior):
     return {
-      'name':req.senior_profile.user.name,
-      'state':req.senior_profile.state,
-      'hometown':req.senior_profile.hometown,
-      'branch_code':req.senior_profile.branch.code,
-      'branch':req.senior_profile.branch.name,
-      'fb_link':req.senior_profile.fb_link,
-      'email':req.senior_profile.email,
-      'contact':req.senior_profile.phone_no
+      'name':senior.user.name,
+      'state':senior.state,
+      'hometown':senior.hometown,
+      'branch_code':senior.user.student.branch.code,    #check if code required or name
+      'branch':senior.user.student.branch.name,
+      'fb_link':senior.fb_link,
+      'email':senior.email,
+      'contact':senior.phone_no
     }
 
-  def student_dict(req):
+  def student_dict(junior):
     return {
-      'name':req.student_profile.user.name,
-      'state':req.student_profile.state,
-      'hometown':req.student_profile.hometown,
-      'branch_code':req.student_profile.branch.code,
-      'branch':req.student_profile.branch.name,
-      'fb_link':req.student_profile.fb_link,
+      'name':junior.user.name,
+      'state':junior.state,
+      'hometown':junior.hometown,
+      'branch':get_junior_branch(junior),   #check if code required or name
+      'fb_link':junior.fb_link,
       'email':req.student_profile.email,
-      'contact':req.student_profile.phone_no
+      'contact':get_junior_contact(junior)
     }
 
 
   user = request.user
   data = {'status':'fail'}
-  try:
-    sort_by = request.POST.get('sort_by','')
-    category = request.POST.get('category','')
-    if sort_by == 'branch':
-      query_set = Request.objects.filter(sender=user,category=category,is_accepted=True).order_by(acceptor__user__branch)
-    else if sort_by == 'location':
-      query_set =  Request.objects.filter(sender=user,category=category,is_accepted=True).order_by(acceptor__hometown)
-    else:
-      query_set = Request.objects.filter(sender=user,category=category,is_accepted=True)
-    if category = 'peer':
-      query_users = [lambda user: Student_profile.objects.get(user=user) for user in query_set]
-      data = simplejson.dumps(map(student_dict,query_users))
-    else:
-      query_users = [lambda user: Senior_profile.objects.get(user=user) for user in query_set]
-      data = simplejson.dumps(map(senior_dict,query_users))
-  except:
-    data = simplejson.dumps(data)
-    pass
+  if request.method == 'POST':
+    try:
+      sort_by = request.POST.get('sort_by','')   #options are 'location' and 'branch'
+      if user.groups.filter(name='New Entrant').exists():
+        junior = Student_profile.objects.get(user=user)
+        if junior.is_branch and sort_by == 'branch':
+          branch = junior.user.student.branch
+          query_set = Request.objects.filter(junior=junior,is_accepted=True,senior__user__student__branch=branch)
+        elif sort_by == 'location':
+          state = junior.state
+          query_set = Request.objects.filter(junior=junior,is_accepted=True,senior__state=state)
+        else:
+          query_set = Request.objects.filter(junior=junior,is_accepted=True)
+        data = simplejson.dumps(map(senior_dict,query_set))
+      else:
+        senior = Senior_profile.objects.get(user=user)
+        query_set = Request.objects.filter(senior=senior,is_accepted=True)
+        data = simplejson.dumps(map(student_dict,query_users))
+    except:
+      data = simplejson.dumps(data)
+      pass
   return HttpResponse(data, content_type='application/json')
