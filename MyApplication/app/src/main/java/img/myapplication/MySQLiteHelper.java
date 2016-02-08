@@ -92,10 +92,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_ENTRANTS_TABLE);
         db.execSQL(CREATE_SENIORS_TABLE);
         db.execSQL(CREATE_BLOGS_TABLE);
-        //db.execSQL(TEMP_ENTRANT);
+        /*db.execSQL(TEMP_ENTRANT);
         db.execSQL(TEMP_STUDENT);
         db.execSQL(TEMP_BLOG);
-        db.execSQL(TEMP_SENIOR);
+        db.execSQL(TEMP_SENIOR);*/
     }
 
     @Override
@@ -205,11 +205,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
             ContentValues values=new ContentValues();
             values.put("topic", blog.topic);
-            //values.put("shortinfo",blog.shortInfo);
-            //values.put("author",blog.author);
-            //values.put("category",blog.category);
+            values.put("shortinfo",blog.shortInfo);
             values.put("author",blog.group);
-            values.put("date",blog.date);
+            values.put("date_published",blog.date);
             values.put("blogtext",blog.blogText);
 
             db.insert(TABLE_BLOGS,null,values);
@@ -245,7 +243,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
     public boolean checkBlog(BlogModel blog){
         SQLiteDatabase db= this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("select * from blogs where topic='" + blog.topic + "' and date ='" + blog.date +"';", null);
+        Cursor cursor=db.rawQuery("select * from blogs where topic='" + blog.topic + "' and date_published ='" + blog.date +"';", null);
 
         if(cursor.getCount()==0) return false;
         else return true;
@@ -291,13 +289,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             for (int i=0;i<len;i++){
                 BlogModel blog=new BlogModel();
-                blog.topic=cursor.getString(0);
-                //blog.shortInfo=cursor.getString(1);
-                //blog.author=cursor.getString(2);
-                //blog.category=cursor.getString(3);
+                /*blog.topic=cursor.getString(0);
+                blog.shortInfo=cursor.getString(1);
                 blog.group=cursor.getString(2);
                 blog.date=cursor.getString(3);
-                blog.blogText=cursor.getString(4);
+                blog.blogText=cursor.getString(4);*/
+                blog.topic= "topic";
+                blog.shortInfo= "short info";
+                blog.group= "group";
+                blog.date= "asd";
+                blog.blogText="asd";
                 blogs.add(blog);
                 cursor.moveToNext();
             }
@@ -352,6 +353,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void deleteStudent(){
         SQLiteDatabase db=this.getWritableDatabase();
         db.execSQL("DELETE FROM students");
+        db.close();
+    }
+    public void deleteBlogs(){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL("DELETE FROM blogs");
+        db.close();
+    }
+    public void deleteSeniors(){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL("DELETE FROM seniors");
         db.close();
     }
 }

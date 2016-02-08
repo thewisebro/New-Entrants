@@ -29,7 +29,6 @@ import java.util.List;
 
 public class SConnectFragment extends Fragment {
 
-
     private SeniorCardArrayAdapter cardArrayAdapter;
     private ListView listView;
 
@@ -47,14 +46,14 @@ public class SConnectFragment extends Fragment {
         }
         getCardList();
 
-        for (int i = 0; i < 10; i++) {
+       /* for (int i = 0; i < 10; i++) {
 
             SeniorModel card= new SeniorModel();
             card.name="abc";
             card.branch="ee";
             card.year="2";
             cardArrayAdapter.add(card);
-        }
+        }*/
         listView.setAdapter(cardArrayAdapter);
 
         return view;

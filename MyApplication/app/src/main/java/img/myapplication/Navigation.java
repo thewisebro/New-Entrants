@@ -52,7 +52,9 @@ public class Navigation extends ActionBarActivity
     }
     public void logout(){
         db.deleteEntrant();
-        Intent intent=new Intent(this, LoginActivity.class);
+        db.deleteBlogs();
+        db.deleteSeniors();
+        Intent intent=new Intent(this, Login.class);
         startActivity(intent);
         finish();
     }
@@ -80,7 +82,7 @@ public class Navigation extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
         mCurrentPosition=position;
-        if (isConnected()){
+        //if (isConnected()){
             switch(position) {
                 case -1: fragment = new OpeningFragment();
                     break;
@@ -96,10 +98,10 @@ public class Navigation extends ActionBarActivity
                 default: fragment=new EditInfoFragment(entrant);
                     break;
             }
-        }
-        else {
+
+       /*else {
             fragment= new NetworkErrorFragment();
-        }
+        }*/
 
        loadFragment(fragment);
 

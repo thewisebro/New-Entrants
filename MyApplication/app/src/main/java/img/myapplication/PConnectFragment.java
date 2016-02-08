@@ -34,6 +34,10 @@ public class PConnectFragment extends Fragment {
     private ListView listView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
+        if (!isConnected()){
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+        }
+
         View view=inflater.inflate(R.layout.fragment_pconnect, container, false);
         listView = (ListView) view.findViewById(R.id.card_listView);
 

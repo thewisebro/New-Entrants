@@ -57,7 +57,8 @@ public class NavigationStudent extends ActionBarActivity
     }
     public void logout(){
         db.deleteStudent();
-        Intent intent=new Intent(this, LoginActivity.class);
+        db.deleteBlogs();
+        Intent intent=new Intent(this, Login.class);
         startActivity(intent);
         finish();
     }
@@ -89,7 +90,7 @@ public class NavigationStudent extends ActionBarActivity
                     break;
                 case 1:fragment = new BlogsFragment();
                     break;
-                case 2: fragment=new RequestsFragment();
+                case 2: fragment=new ConnectFragment();
                     break;
                 case 3: logout();
                     break;

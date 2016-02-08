@@ -51,7 +51,7 @@ public class BlogsFragment extends Fragment {
             BlogModel card= new BlogModel();
 
             card.topic="lololol";
-            //card.shortInfo="test";
+            card.shortInfo="test";
             //card.author="ankush";
             //card.category="example";
             card.group="abcGrp";
@@ -225,11 +225,9 @@ public class BlogsFragment extends Fragment {
                 row = inflater.inflate(R.layout.list_item_card, parent, false);
                 viewHolder = new BlogCardViewHolder();
                 viewHolder.topic = (TextView) row.findViewById(R.id.topic);
-                //viewHolder.shortInfo = (TextView) row.findViewById(R.id.shortInfo);
-                //viewHolder.author = (TextView) row.findViewById(R.id.author);
-                //viewHolder.category = (TextView) row.findViewById(R.id.category);
-                viewHolder.blogText= (TextView) row.findViewById(R.id.blogText);
-                viewHolder.group= (TextView) row.findViewById(R.id.group);
+                viewHolder.shortInfo = (TextView) row.findViewById(R.id.shortInfo);
+                //viewHolder.blogText= (TextView) row.findViewById(R.id.blogText);
+                viewHolder.group= (TextView) row.findViewById(R.id.author);
                 viewHolder.date = (TextView) row.findViewById(R.id.date);
                 viewHolder.model=new BlogModel();
 
@@ -238,11 +236,9 @@ public class BlogsFragment extends Fragment {
             }
             BlogModel card = getItem(position);
             viewHolder.topic.setText(card.topic);
-            //viewHolder.shortInfo.setText(card.shortInfo);
-            //viewHolder.author.setText(card.author);
-            //viewHolder.category.setText(card.category);
+            viewHolder.shortInfo.setText(card.shortInfo);
             viewHolder.group.setText(card.group);
-            viewHolder.blogText.setText(card.blogText);
+            //viewHolder.blogText.setText(card.blogText);
             viewHolder.date.setText(card.date);
             viewHolder.model.copy(card);
             row.setTag(viewHolder);
