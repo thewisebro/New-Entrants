@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,17 +17,26 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.CookieManager;
 import java.net.CookieStore;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 
 public class Login extends ActionBarActivity {
     public JSONObject userobj;
+    public String usernameText;
+    public String passwordText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +70,8 @@ public class Login extends ActionBarActivity {
         else {
             EditText Username=(EditText) findViewById(R.id.et_username);
             EditText Password=(EditText) findViewById(R.id.et_Password);
-            String usernameText= Username.getText().toString();
-            String passwordText= Password.getText().toString();
+            usernameText= Username.getText().toString();
+            passwordText= Password.getText().toString();
             if (usernameText.matches("")){
                 Toast.makeText(getApplicationContext(),"Enter username", Toast.LENGTH_SHORT).show();
             }
@@ -99,46 +109,81 @@ public class Login extends ActionBarActivity {
             urlConnectionGet.setRequestMethod("GET");
             urlConnectionGet.connect();
             cookiesHeader=urlConnectionGet.getHeaderField(COOKIES_HEADER);
-            //Map<String, List<String>> headerFields = urlConnection.getHeaderFields();
-            //List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
 
             if(cookiesHeader != null)
             {
-                /*
-                for (String cookie : cookiesHeader)
-                {
-                    cookieStore.add(null, HttpCookie.parse(cookie).get(0));
-                }
-                */
                 cookieStore.add(null, HttpCookie.parse(cookiesHeader).get(0));
             }
             else return null;
-
             csrftoken=cookieStore.getCookies().get(0).getValue().toString();
             try {
                 userobj.put("csrfmiddlewaretoken",csrftoken);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            //urlConnection.disconnect();
-            urlConnectionPost= (HttpURLConnection) new URL("http://people.iitr.ernet.in/login/channeli_login").openConnection();
+            urlConnectionGet.disconnect();
+
+
+            urlConnectionPost= (HttpURLConnection) new URL("http://people.iitr.ernet.in/login").openConnection();
             urlConnectionPost.setDoOutput(true);
             urlConnectionPost.setRequestMethod("POST");
-            urlConnectionPost.setRequestProperty("Cookie", "csrftoken=" + csrftoken);
-            urlConnectionPost.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            //urlConnection.setRequestProperty("Accept", "application/json");
-/*
-            OutputStreamWriter osw=new OutputStreamWriter(urlConnectionPost.getOutputStream(), "UTF-8");
-            osw.write(userobj.toString());
+            urlConnectionPost.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
+            cookieStore.removeAll();
+
+            urlConnectionPost.setRequestProperty("Content-Type", "application/json");
+            urlConnectionPost.setRequestProperty("Accept", "application/json");
+
+            Writer writer = new BufferedWriter(new OutputStreamWriter(urlConnectionPost.getOutputStream(), "UTF-8"));
+            writer.write(String.valueOf(userobj));
+            writer.close();
+
+            /*String charset="UTF-8";
+            String query="username="+ URLEncoder.encode(usernameText,charset)+
+                    "&password="+URLEncoder.encode(passwordText,charset)+
+                    "&csrfmiddlewaretoken="+URLEncoder.encode(csrftoken,charset);
+            urlConnectionPost.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+            */
+            /*
+            String query="username="+usernameText+"&password="+passwordText+"&csrfmiddlewaretoken="+csrftoken;
+            urlConnectionPost.connect();
+            OutputStreamWriter osw=new OutputStreamWriter(urlConnectionPost.getOutputStream());
+            osw.write(query);
             osw.flush();
-*/
-            OutputStream os= urlConnectionPost.getOutputStream();
-            byte[] objInBytes = userobj.toString().getBytes("UTF-8");
-            os.write(objInBytes);
-            os.close();
+            osw.close();
+            */
+
+
 
             int responseCode=urlConnectionPost.getResponseCode();
-            StringBuilder sb=new StringBuilder();
+            InputStream inputStream = urlConnectionPost.getInputStream();
+//input stream
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream == null) {
+                // Nothing to do.
+                return null;
+            }
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            String inputLine;
+            while ((inputLine = reader.readLine()) != null)
+                buffer.append(inputLine + "\n");
+            if (buffer.length() == 0) {
+                // Stream was empty. No point in parsing.
+                return null;
+            }
+
+
+            Map<String, List<String>> headerFields = urlConnectionPost.getHeaderFields();
+            List<String> cookiesHeaders = headerFields.get(COOKIES_HEADER);
+
+            if(cookiesHeaders != null)
+            {
+                for (String cookie : cookiesHeaders)
+                {
+                    cookieStore.add(null,HttpCookie.parse(cookie).get(0));
+                }
+            }
+            csrftoken=cookieStore.getCookies().get(0).getValue().toString();
+            CHANNELI_SESSID=cookieStore.getCookies().get(1).getValue().toString();
 
 
         } catch (IOException e) {
