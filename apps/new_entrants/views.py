@@ -11,6 +11,7 @@ from django.conf import settings
 from django.contrib import messages
 
 from new_entrants.models import *
+from new_entrants.forms import *
 from nucleus.models import Branch, User
 from api import model_constants as MC
 
@@ -32,7 +33,21 @@ def get_junior_branch(junior):
   else :
     return {'code':'','name':''}
 
-def register(request):    #coded
+def register(request):      #for new entrants
+  if not request.user.is_authenticated():
+    if request.method == 'POST':
+      data = {'status':'fail'}
+      form = RegisterForm(request.POST)
+      if form.is_valid():      #process the data in form.cleaned_data as required
+        data['status']='success'
+      return HttpResponse(simplejson.dumps(data), content_type='application/json')
+    else:
+      form = RegisterForm()
+      return render(request, 'new_entrants/register.html', {'form': form.as_p() })
+  else:
+    return HttpResponseRedirect('/new_entrants/')
+
+def update(request):    #coded
   if request.method == 'POST':
     data = request.POST
     user = request.user

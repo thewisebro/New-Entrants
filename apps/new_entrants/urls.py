@@ -2,8 +2,8 @@ from django.conf.urls import patterns, url
 from new_entrants.views import *
 
 urlpatterns = [
-#    url(r'^seniors/$', seniors_list),
-    url(r'^register$', register),  #true
+#    url(r'^seniors/$', seniors_list)i,
+    url(r'^register/$', register),
     url(r'^blogs/$', blogs),  #true
     url(r'^blogs/(?P<group_id>\w+)/$', blogs_group),  #true
     url(r'blogs/(?P<group_id>\w+)/(?P<slug>[\w\-\(\)\&\:\,\?\!\.]+)/$', blogs_view),  #true

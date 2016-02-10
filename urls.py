@@ -48,6 +48,7 @@ actual_urlpatterns = patterns('',
   url(r'^gate/', include('gate.urls')),
   url(r'^genforms/', include('genforms.urls')),
   url(r'^app_form/', include('application_form.urls')),
+  url(r'^new_entrants/', include('new_entrants.urls')),
 )
 
 urlpatterns = patterns('',
