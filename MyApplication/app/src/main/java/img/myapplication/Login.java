@@ -1,9 +1,9 @@
 package img.myapplication;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -22,8 +22,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.CookieManager;
 import java.net.CookieStore;
 import java.net.HttpCookie;
@@ -42,7 +42,7 @@ public class Login extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MySQLiteHelper db=new MySQLiteHelper(this);
-
+/*
         if (db.loggedEntrant()){
             Intent intent=new Intent(this, Navigation.class);
             startActivity(intent);
@@ -52,7 +52,7 @@ public class Login extends ActionBarActivity {
             Intent intent=new Intent(this,NavigationStudent.class);
             startActivity(intent);
             finish();
-        }
+        }*/
         setContentView(R.layout.activity_login2);
     }
     public boolean isConnected(){
@@ -118,45 +118,72 @@ public class Login extends ActionBarActivity {
             csrftoken=cookieStore.getCookies().get(0).getValue().toString();
             try {
                 userobj.put("csrfmiddlewaretoken",csrftoken);
+                userobj.put("remember_me","on");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             urlConnectionGet.disconnect();
 
 
-            urlConnectionPost= (HttpURLConnection) new URL("http://people.iitr.ernet.in/login").openConnection();
+            urlConnectionPost= (HttpURLConnection) new URL("http://people.iitr.ernet.in/login/").openConnection();
+            //urlConnectionPost= (HttpURLConnection) new URL("http://172.25.55.156:8000/login/").openConnection();
             urlConnectionPost.setDoOutput(true);
+            urlConnectionPost.setDoInput(true);
             urlConnectionPost.setRequestMethod("POST");
             urlConnectionPost.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
             cookieStore.removeAll();
 
-            urlConnectionPost.setRequestProperty("Content-Type", "application/json");
-            urlConnectionPost.setRequestProperty("Accept", "application/json");
+/*
+            urlConnectionPost.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            urlConnectionPost.setRequestProperty("Accept", "application/json");*/
+            //urlConnectionPost.connect();
 
-            Writer writer = new BufferedWriter(new OutputStreamWriter(urlConnectionPost.getOutputStream(), "UTF-8"));
+           /* Writer writer = new BufferedWriter(new OutputStreamWriter(urlConnectionPost.getOutputStream(), "UTF-8"));
             writer.write(String.valueOf(userobj));
-            writer.close();
+            writer.flush();*/
 
-            /*String charset="UTF-8";
-            String query="username="+ URLEncoder.encode(usernameText,charset)+
+            String charset="UTF-8";
+/*            String query=URLEncoder.encode("username",charset)+"="+ URLEncoder.encode(usernameText, charset)+
                     "&password="+URLEncoder.encode(passwordText,charset)+
-                    "&csrfmiddlewaretoken="+URLEncoder.encode(csrftoken,charset);
-            urlConnectionPost.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-            */
-            /*
-            String query="username="+usernameText+"&password="+passwordText+"&csrfmiddlewaretoken="+csrftoken;
+                    "&csrfmiddlewaretoken="+URLEncoder.encode(csrftoken,charset)+
+                    "&remember_me=on";
+            urlConnectionPost.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            PrintWriter writer= new PrintWriter(urlConnectionPost.getOutputStream());
+            writer.write(query);
+            writer.flush();
+*/
+/*            StringBuilder sb=new StringBuilder();
+            sb.append(URLEncoder.encode("username", charset) + "=" + URLEncoder.encode(usernameText, charset));
+            sb.append("&"+URLEncoder.encode("password",charset)+"=" + URLEncoder.encode(passwordText, charset));
+            sb.append("&"+URLEncoder.encode("csrfmiddlewaretoken",charset)+"=" + URLEncoder.encode(csrftoken, charset));
+            sb.append("&"+URLEncoder.encode("remember_me",charset)+"=" + URLEncoder.encode("ok", charset));
+            String query=sb.toString();
+*/
+            urlConnectionPost.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            urlConnectionPost.setRequestProperty("Host","people.iitr.ernet.in");
+            urlConnectionPost.setRequestProperty("Origin","http://people.iitr.ernet.in");
+            urlConnectionPost.setRequestProperty("Referer","http://people.iitr.ernet.in/login/");
+            urlConnectionPost.setRequestProperty("Accept","application/xml");
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter("username", usernameText)
+                    .appendQueryParameter("password", passwordText)
+                    .appendQueryParameter("csrfmiddlewaretoken", csrftoken)
+                    .appendQueryParameter("remember_me","on");
+            String query = builder.build().getEncodedQuery();
             urlConnectionPost.connect();
-            OutputStreamWriter osw=new OutputStreamWriter(urlConnectionPost.getOutputStream());
-            osw.write(query);
-            osw.flush();
-            osw.close();
-            */
 
-
+            OutputStream os = urlConnectionPost.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            writer.write(query);
+            writer.flush();
+            writer.close();
+            os.close();
 
             int responseCode=urlConnectionPost.getResponseCode();
+            String msg=urlConnectionPost.getResponseMessage();
             InputStream inputStream = urlConnectionPost.getInputStream();
-//input stream
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
                 // Nothing to do.
@@ -166,10 +193,11 @@ public class Login extends ActionBarActivity {
             String inputLine;
             while ((inputLine = reader.readLine()) != null)
                 buffer.append(inputLine + "\n");
-            if (buffer.length() == 0) {
+
+           // if (buffer.length() == 0) {
                 // Stream was empty. No point in parsing.
-                return null;
-            }
+           //     return null;
+           // }
 
 
             Map<String, List<String>> headerFields = urlConnectionPost.getHeaderFields();
@@ -193,20 +221,7 @@ public class Login extends ActionBarActivity {
         //return cookiesHeader;
         return null;
     }
-    private String[] getValues(String cookie){
-        String[] values=cookie.split(";");
-        String v[]=new String[2];
-        for(String temp : values){
-            String[] list=temp.split("=");
-            if (list[0].equals("csrftoken")){
-                v[0]=list[1];
-            }
-            else if (list[0].equals("CHANNELI_SESSID")){
-               v[1]=list[1];
-            }
-        }
-        return v;
-    }
+
     private class LoginTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
