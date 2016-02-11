@@ -15,8 +15,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.CookieHandler;
@@ -33,6 +38,7 @@ public class Login extends ActionBarActivity {
     public Map<String,String> params;
     public Map<String,String> SESSION_VALUES;
     public CookieManager cookieManager;
+    public JSONObject userJSON;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,12 +161,32 @@ public class Login extends ActionBarActivity {
         CookieStore cookieStore=cookieManager.getCookieStore();
         try {
 
-            HttpURLConnection conn = (HttpURLConnection) new URL("http://people.iitr.ernet.in/return_details/").openConnection();
+            HttpURLConnection conn = (HttpURLConnection) new URL("http://people.iitr.ernet.in/peoplesearch/return_details/?username="+params.get("username")).openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
-            Object obj = conn.getContent();
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("Accept", "application/xml");
+
+            //Object obj = conn.getContent();
+            BufferedReader reader= new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuffer buffer=new StringBuffer();
+            String inputLine;
+            while ((inputLine = reader.readLine()) != null)
+                buffer.append(inputLine+"\n");
+            parseUserData(buffer.toString());
             int responseCode=conn.getResponseCode();
         }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void parseUserData(String userDetails){
+        try {
+            userJSON= new JSONObject(userDetails);
+            userJSON.remove("msg");
+            userJSON.remove("session_variable");
+            userJSON.put("username", params.get("username"));
+            userJSON.put("password",params.get("password"));
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
@@ -185,6 +211,8 @@ public class Login extends ActionBarActivity {
         protected void onPostExecute(String result) {
             if (SESSION_VALUES.size()>0){
                 Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
+                MySQLiteHelper db=new MySQLiteHelper(getApplication());
+
             }
             else {
                 Toast.makeText(getApplicationContext(),"Enter correct Username or Password", Toast.LENGTH_SHORT).show();
