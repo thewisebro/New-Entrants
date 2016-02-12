@@ -1,4 +1,4 @@
-package img.myapplication;
+package features;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import img.myapplication.MySQLiteHelper;
+import img.myapplication.R;
+import models.NewEntrantModel;
 
 
 public class EditInfoFragment extends Fragment {

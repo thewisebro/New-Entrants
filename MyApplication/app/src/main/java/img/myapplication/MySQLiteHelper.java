@@ -9,6 +9,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.BlogModel;
+import models.NewEntrantModel;
+import models.SeniorModel;
+import models.StudentModel;
+
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Version
@@ -92,10 +97,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_ENTRANTS_TABLE);
         db.execSQL(CREATE_SENIORS_TABLE);
         db.execSQL(CREATE_BLOGS_TABLE);
-        /*db.execSQL(TEMP_ENTRANT);
-        db.execSQL(TEMP_STUDENT);
-        db.execSQL(TEMP_BLOG);
-        db.execSQL(TEMP_SENIOR);*/
+        //db.execSQL(TEMP_ENTRANT);
+        //db.execSQL(TEMP_STUDENT);
+        //db.execSQL(TEMP_BLOG);
+        //db.execSQL(TEMP_SENIOR);
     }
 
     @Override

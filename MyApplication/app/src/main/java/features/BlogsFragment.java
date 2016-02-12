@@ -1,4 +1,4 @@
-package img.myapplication;
+package features;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,32 +26,42 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import img.myapplication.MySQLiteHelper;
+import img.myapplication.R;
+import models.BlogCardViewHolder;
+import models.BlogModel;
 
-public class SConnectFragment extends Fragment {
 
-    private SeniorCardArrayAdapter cardArrayAdapter;
+public class BlogsFragment extends Fragment {
+
+
+    private BlogCardArrayAdapter cardArrayAdapter;
     private ListView listView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
-        View view=inflater.inflate(R.layout.fragment_sconnect, container, false);
+        View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         listView = (ListView) view.findViewById(R.id.card_listView);
 
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
 
-        cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_senior_card);
-
+        cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_item_card);
         if (isConnected()){
-            updateSeniors();
+            updateBlogs();
         }
         getCardList();
 
-       /* for (int i = 0; i < 10; i++) {
+        /*for (int i = 0; i < 10; i++) {
 
-            SeniorModel card= new SeniorModel();
-            card.name="abc";
-            card.branch="ee";
-            card.year="2";
+            BlogModel card= new BlogModel();
+
+            card.topic="lololol";
+            card.shortInfo="test";
+            //card.author="ankush";
+            //card.category="example";
+            card.group="abcGrp";
+            card.blogText="Life is beautiful!";
+            card.date="2015-10-27";
             cardArrayAdapter.add(card);
         }*/
         listView.setAdapter(cardArrayAdapter);
@@ -66,7 +76,7 @@ public class SConnectFragment extends Fragment {
         else
             return false;
     }
-    public void updateSeniors(){
+    public void updateBlogs(){
         try {
             URL url= null;
             url = new URL("www.google.com");
@@ -79,44 +89,46 @@ public class SConnectFragment extends Fragment {
             while((line = bufferedReader.readLine()) != null)
                 sb.append(line + '\n');
             String result=sb.toString();
-            updateSeniorsTable(result);
+            updateBlogsTable(result);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public void updateSeniorsTable(String result){
+    public void updateBlogsTable(String result){
         JSONObject jObject= null;
         MySQLiteHelper db=new MySQLiteHelper(getContext());
-
         try {
             jObject = new JSONObject(result);
-            JSONArray jArray=jObject.getJSONArray("seniors");
+            JSONArray jArray=jObject.getJSONArray("blogs");
 
             for(int i=0; i<jArray.length();i++){
 
                 JSONObject object=jArray.getJSONObject(i);
-                SeniorModel model= new SeniorModel();
-                model.name="abc";
-                model.branch="ee";
-                model.year="2";
-                db.addSenior(model);
+                BlogModel model= new BlogModel();
 
+                model.topic="lololol";
+                //model.shortInfo="test";
+                //model.author="ankush";
+                //model.category="example";
+                model.group="abcGrp";
+                model.blogText="Life is beautiful!";
+                model.date="2015-10-27";
+
+                db.addBlog(model);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
     public void getCardList(){
         MySQLiteHelper db=new MySQLiteHelper(getContext());
-        List<SeniorModel> seniorList=db.getSeniors();
-        for (int i=0; i<seniorList.size(); i++){
-            cardArrayAdapter.add(seniorList.get(i));
+        List<BlogModel> blogList=db.getBlogs();
+        for (int i=0; i<blogList.size(); i++){
+            cardArrayAdapter.add(blogList.get(i));
         }
     }
- /*
-    public void getCardList(){
+/*    public void getCardList(){
         if (isConnected()){
             try {
                 URL url= null;
@@ -132,15 +144,18 @@ public class SConnectFragment extends Fragment {
                 String result=sb.toString();
                 cardsFromString(result);
 
+                FileOutputStream fos = getContext().openFileOutput("blogs.txt",Context.MODE_PRIVATE);
+                fos.write(result.getBytes());
+                fos.close();
+                bufferedReader.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         else {
-
             try {
                 FileInputStream fis;
-                fis = getContext().openFileInput("seniors.txt");
+                fis = getContext().openFileInput("blogs.txt");
                 StringBuffer fileContent = new StringBuffer("");
 
                 byte[] buffer = new byte[1024];
@@ -154,7 +169,6 @@ public class SConnectFragment extends Fragment {
             } catch (java.io.IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
     private void cardsFromString(String result){
@@ -166,29 +180,33 @@ public class SConnectFragment extends Fragment {
             for(int i=0; i<jArray.length();i++){
 
                 JSONObject object=jArray.getJSONObject(i);
-                SeniorModel model= new SeniorModel();
-                model.name="abc";
-                model.branch="ee";
-                model.year="2";
-                cardArrayAdapter.add(model);
+                BlogModel card= new BlogModel();
+
+                card.topic="lololol";
+                card.shortInfo="test";
+                card.author="ankush";
+                card.category="example";
+                card.date="2015-10-27";
+                cardArrayAdapter.add(card);
 
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+
     }
-*/
-    public class SeniorCardArrayAdapter  extends ArrayAdapter<SeniorModel> {
+    */
+    public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
-        private List<SeniorModel> cardList = new ArrayList<SeniorModel>();
+        private List<BlogModel> cardList = new ArrayList<BlogModel>();
 
-        public SeniorCardArrayAdapter(Context context, int textViewResourceId) {
+                public BlogCardArrayAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
         }
 
         @Override
-        public void add(SeniorModel object) {
+        public void add(BlogModel object) {
             cardList.add(object);
             super.add(object);
         }
@@ -199,31 +217,34 @@ public class SConnectFragment extends Fragment {
         }
 
         @Override
-        public SeniorModel getItem(int index) {
+        public BlogModel getItem(int index) {
             return this.cardList.get(index);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = convertView;
-            SeniorCardViewHolder viewHolder;
+            BlogCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.list_senior_card, parent, false);
-                viewHolder = new SeniorCardViewHolder();
-                viewHolder.name = (TextView) row.findViewById(R.id.name);
-                viewHolder.year = (TextView) row.findViewById(R.id.year);
-                viewHolder.branch = (TextView) row.findViewById(R.id.branch);
+                row = inflater.inflate(R.layout.list_item_card, parent, false);
+                viewHolder = new BlogCardViewHolder();
+                viewHolder.topic = (TextView) row.findViewById(R.id.topic);
+                viewHolder.shortInfo = (TextView) row.findViewById(R.id.shortInfo);
+                //viewHolder.blogText= (TextView) row.findViewById(R.id.blogText);
+                viewHolder.group= (TextView) row.findViewById(R.id.author);
+                viewHolder.date = (TextView) row.findViewById(R.id.date);
+                viewHolder.model=new BlogModel();
 
-                viewHolder.model=new SeniorModel();
             } else {
-                viewHolder = (SeniorCardViewHolder)row.getTag();
+                viewHolder = (BlogCardViewHolder)row.getTag();
             }
-            SeniorModel card = getItem(position);
-            viewHolder.name.setText(card.name);
-            viewHolder.year.setText(card.year);
-            viewHolder.branch.setText(card.branch);
-
+            BlogModel card = getItem(position);
+            viewHolder.topic.setText(card.topic);
+            viewHolder.shortInfo.setText(card.shortInfo);
+            viewHolder.group.setText(card.group);
+            //viewHolder.blogText.setText(card.blogText);
+            viewHolder.date.setText(card.date);
             viewHolder.model.copy(card);
             row.setTag(viewHolder);
             return row;

@@ -1,4 +1,4 @@
-package img.myapplication;
+package models;
 
 import java.io.Serializable;
 

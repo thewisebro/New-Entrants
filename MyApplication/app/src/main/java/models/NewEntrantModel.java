@@ -1,4 +1,4 @@
-package img.myapplication;
+package models;
 
 import java.io.Serializable;
 
@@ -8,8 +8,8 @@ import java.io.Serializable;
 public class NewEntrantModel implements Serializable {
     public String id;
     public String name;
-    //public String username;
-    //public String password;
+    public String username;
+    public String password;
     public String town;
     public String state;
     public String branch;

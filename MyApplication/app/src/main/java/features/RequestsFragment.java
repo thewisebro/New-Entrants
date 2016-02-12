@@ -1,4 +1,4 @@
-package img.myapplication;
+package features;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,6 +18,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import img.myapplication.R;
+import models.NewEntrantModel;
+import models.RequestCardViewHolder;
 
 
 public class RequestsFragment extends Fragment {

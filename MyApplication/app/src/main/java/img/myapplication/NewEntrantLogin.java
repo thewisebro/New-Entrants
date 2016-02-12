@@ -22,6 +22,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import models.NewEntrantModel;
+
 public class NewEntrantLogin extends AppCompatActivity {
     private EditText Username;
     private EditText Password;

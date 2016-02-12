@@ -1,4 +1,4 @@
-package img.myapplication;
+package models;
 
 public class BlogModel {
     public String topic;

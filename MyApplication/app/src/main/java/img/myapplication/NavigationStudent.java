@@ -2,6 +2,7 @@ package img.myapplication;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -13,6 +14,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import features.BlogPage;
+import features.BlogsFragment;
+import features.ConnectFragment;
+import features.ProfileFragment;
+import models.BlogCardViewHolder;
+import models.StudentModel;
 
 
 public class NavigationStudent extends ActionBarActivity
@@ -27,6 +35,7 @@ public class NavigationStudent extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_navigation);
         mCurrentPosition=-1;
         fragmentCount=0;

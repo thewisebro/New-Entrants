@@ -2,6 +2,7 @@ package img.myapplication;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -31,6 +33,7 @@ import java.net.CookieStore;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 
@@ -38,11 +41,12 @@ public class Login extends ActionBarActivity {
     public Map<String,String> params;
     public Map<String,String> SESSION_VALUES;
     public CookieManager cookieManager;
-    public JSONObject userJSON;
+    public Map<String,String> details;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         MySQLiteHelper db=new MySQLiteHelper(this);
 
         if (db.loggedEntrant()){
@@ -72,6 +76,8 @@ public class Login extends ActionBarActivity {
             Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_SHORT).show();
         }
         else {
+            params.clear();
+            SESSION_VALUES.clear();
             EditText Username=(EditText) findViewById(R.id.et_username);
             EditText Password=(EditText) findViewById(R.id.et_Password);
             String usernameText= Username.getText().toString();
@@ -157,7 +163,7 @@ public class Login extends ActionBarActivity {
         return result;
     }
     private void getUser(){
-        CookieHandler.setDefault(cookieManager);
+        //CookieHandler.setDefault(cookieManager);
         CookieStore cookieStore=cookieManager.getCookieStore();
         try {
 
@@ -181,11 +187,15 @@ public class Login extends ActionBarActivity {
     }
     private void parseUserData(String userDetails){
         try {
-            userJSON= new JSONObject(userDetails);
-            userJSON.remove("msg");
-            userJSON.remove("session_variable");
-            userJSON.put("username", params.get("username"));
-            userJSON.put("password",params.get("password"));
+            JSONObject userJSON= new JSONObject(userDetails);
+            Iterator<String> keys=userJSON.keys();
+            while (keys.hasNext()){
+                String key=keys.next();
+                String val=userJSON.getString(key);
+                if (val!=null){
+                    details.put(key,val);
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -198,6 +208,9 @@ public class Login extends ActionBarActivity {
             // params comes from the execute() call: params[0] is the url.
             try {
                 if (peopleLogin()) {
+                    details=new HashMap<String,String>();
+                    details.put("username",params.get("username"));
+                    details.put("password",params.get("password"));
                     getUser();
                     return "Logged In";
                 }
@@ -211,12 +224,45 @@ public class Login extends ActionBarActivity {
         protected void onPostExecute(String result) {
             if (SESSION_VALUES.size()>0){
                 Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
-                MySQLiteHelper db=new MySQLiteHelper(getApplication());
-
+                getDetails();
+                start();
             }
             else {
                 Toast.makeText(getApplicationContext(),"Enter correct Username or Password", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+    public void getDetails(){
+        CookieStore cookieStore= cookieManager.getCookieStore();
+        try {
+            HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/userinfo/").openConnection();
+            /*Uri.Builder builder = new Uri.Builder().appendQueryParameter("username",params.get("username"));
+            String query = builder.build().getEncodedQuery();
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            writer.write(query);
+            writer.flush();
+            writer.close();
+            os.close();
+            */
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("Accept", "application/xml");
+            Object obj=conn.getContent();
+            InputStream is=conn.getInputStream();
+            BufferedReader reader= new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuffer buffer=new StringBuffer();
+            String inputLine;
+            while ((inputLine = reader.readLine()) != null)
+                buffer.append(inputLine+"\n");
+            parseUserData(buffer.toString());
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -224,8 +270,9 @@ public class Login extends ActionBarActivity {
         /*Intent intent = new Intent(this, Register.class);
         startActivity(intent);*/
     }
+    public void start(){
 
-
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

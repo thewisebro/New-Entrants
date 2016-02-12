@@ -12,7 +12,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="New Entrants"
+        android:label="NewEntrants"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Navigation"

@@ -1,6 +1,7 @@
 package img.myapplication;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -11,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import models.NewEntrantModel;
+
 public class Register extends AppCompatActivity {
 
     public NewEntrantModel entrant;
@@ -19,6 +22,7 @@ public class Register extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         db=new MySQLiteHelper(this);
         entrant=new NewEntrantModel();
         setContentView(R.layout.activity_register);

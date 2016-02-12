@@ -1,4 +1,4 @@
-package img.myapplication;
+package features;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,6 +25,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import img.myapplication.NetworkErrorFragment;
+import img.myapplication.R;
+import models.PeerCardViewHolder;
+import models.PeerModel;
 
 
 public class PConnectFragment extends Fragment {

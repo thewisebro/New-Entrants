@@ -1,4 +1,4 @@
-package img.myapplication;
+package models;
 
 /**
  * Created by ankush on 11/1/15.

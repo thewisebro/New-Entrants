@@ -1,6 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="img.myapplication.SeniorPage"
+    android:layout_height="match_parent" tools:context="features.SeniorPage"
     android:background="#d8d8d8"
     android:visibility="visible"
     android:alpha="60">

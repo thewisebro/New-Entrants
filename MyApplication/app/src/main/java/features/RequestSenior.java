@@ -1,5 +1,4 @@
-package img.myapplication;
-
+package features;
 
 import android.app.Activity;
 import android.net.ConnectivityManager;
@@ -17,6 +16,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import img.myapplication.R;
 
 
 /**
