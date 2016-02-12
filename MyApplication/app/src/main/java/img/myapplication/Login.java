@@ -1,7 +1,6 @@
 package img.myapplication;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -22,7 +21,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -48,7 +46,7 @@ public class Login extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         MySQLiteHelper db=new MySQLiteHelper(this);
-
+/*
         if (db.loggedEntrant()){
             Intent intent=new Intent(this, Navigation.class);
             startActivity(intent);
@@ -58,7 +56,7 @@ public class Login extends ActionBarActivity {
             Intent intent=new Intent(this,NavigationStudent.class);
             startActivity(intent);
             finish();
-        }
+        }*/
         params=new HashMap<String,String>();
         SESSION_VALUES=new HashMap<String,String>();
         setContentView(R.layout.activity_login2);
@@ -106,7 +104,7 @@ public class Login extends ActionBarActivity {
         CookieStore cookieStore=cookieManager.getCookieStore();
         try {
 
-            HttpURLConnection conn= (HttpURLConnection) new URL("http://people.iitr.ernet.in/login/").openConnection();
+            HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/login/").openConnection();
             conn.setRequestMethod("GET");
             Object obj = conn.getContent();
 
@@ -114,7 +112,7 @@ public class Login extends ActionBarActivity {
             params.put("csrfmiddlewaretoken",csrftoken);
             params.put("remember_me","on");
 
-            urlConnectionPost= (HttpURLConnection) new URL("http://people.iitr.ernet.in/login/").openConnection();
+            urlConnectionPost= (HttpURLConnection) new URL("http://192.168.121.187:8080/login/").openConnection();
             urlConnectionPost.setDoOutput(true);
             urlConnectionPost.setDoInput(true);
             urlConnectionPost.setRequestMethod("POST");
@@ -160,6 +158,9 @@ public class Login extends ActionBarActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        finally {
+            urlConnectionPost.disconnect();
+        }
         return result;
     }
     private void getUser(){
@@ -167,13 +168,12 @@ public class Login extends ActionBarActivity {
         CookieStore cookieStore=cookieManager.getCookieStore();
         try {
 
-            HttpURLConnection conn = (HttpURLConnection) new URL("http://people.iitr.ernet.in/peoplesearch/return_details/?username="+params.get("username")).openConnection();
+            HttpURLConnection conn = (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/userinfo/?username="+params.get("username")).openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestProperty("Accept", "application/xml");
 
-            //Object obj = conn.getContent();
             BufferedReader reader= new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuffer buffer=new StringBuffer();
             String inputLine;
@@ -183,6 +183,9 @@ public class Login extends ActionBarActivity {
             int responseCode=conn.getResponseCode();
         }catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+
         }
     }
     private void parseUserData(String userDetails){
@@ -210,8 +213,9 @@ public class Login extends ActionBarActivity {
                 if (peopleLogin()) {
                     details=new HashMap<String,String>();
                     details.put("username",params.get("username"));
-                    details.put("password",params.get("password"));
-                    getUser();
+                    details.put("password", params.get("password"));
+                    //getUser();
+                    getDetails();
                     return "Logged In";
                 }
                 else return null;
@@ -224,7 +228,6 @@ public class Login extends ActionBarActivity {
         protected void onPostExecute(String result) {
             if (SESSION_VALUES.size()>0){
                 Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
-                getDetails();
                 start();
             }
             else {
@@ -233,34 +236,22 @@ public class Login extends ActionBarActivity {
         }
     }
     public void getDetails(){
-        CookieStore cookieStore= cookieManager.getCookieStore();
+        CookieStore cookieStore=cookieManager.getCookieStore();
         try {
-            HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/userinfo/").openConnection();
-            /*Uri.Builder builder = new Uri.Builder().appendQueryParameter("username",params.get("username"));
-            String query = builder.build().getEncodedQuery();
 
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(query);
-            writer.flush();
-            writer.close();
-            os.close();
-            */
+            HttpURLConnection conn = (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/userinfo/").openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestProperty("Accept", "application/xml");
-            Object obj=conn.getContent();
-            InputStream is=conn.getInputStream();
+
             BufferedReader reader= new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuffer buffer=new StringBuffer();
             String inputLine;
             while ((inputLine = reader.readLine()) != null)
                 buffer.append(inputLine+"\n");
             parseUserData(buffer.toString());
-
-
+            int responseCode=conn.getResponseCode();
         } catch (Exception e) {
             e.printStackTrace();
         }
