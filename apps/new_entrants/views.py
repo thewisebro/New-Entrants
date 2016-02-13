@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group as GG
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -33,13 +33,90 @@ def get_junior_branch(junior):
   else :
     return {'code':'','name':''}
 
-def register(request):      #for new entrants
+def userinfo(request):
+  data = {'status':'fail'}
+  if request.user.is_authenticated():
+    user = request.user
+    if user.groups.filter(name='New Entrant').exists():
+      data['name'] = user.name
+      data['category'] = 'junior'
+      junior = Student_profile.objects.get(user=user)
+      data['branch'] = get_junior_branch(junior)
+      data['email'] = junior.email
+      data['fb_link'] = junior.fb_link
+      data['phone'] = junior.phone_no
+      data['state'] = junior.get_state_display()
+      data['hometown'] = junior.hometown
+      data['phone_privacy'] = junior.phone_privacy
+      data['profile_privacy'] = junior.profile_privacy
+      data['status'] = 'success'
+    else:
+      data['name'] = user.name
+      data['category'] = 'senior'
+      senior = Senior_profile.objects.get(user=user)
+      data['branch'] = {'code':senior.user.student.branch.code,'name':senior.user.student.branch.name}
+      data['year'] = (senior.user.student.semester_no+1)/2
+      data['email'] = senior.email
+      data['fb_link'] = senior.fb_link
+      data['phone'] = senior.phone_no
+      data['state'] = senior.get_state_display()
+      data['hometown'] = senior.hometown
+      data['enrollment_no'] = user.username
+      data['status'] = 'success'
+  return HttpResponse(simplejson.dumps(data), content_type='application/json')
+
+def register(request):      #for new entrants   #coded    #tested browser
   if not request.user.is_authenticated():
     if request.method == 'POST':
+      print request.POST
       data = {'status':'fail'}
       form = RegisterForm(request.POST)
-      if form.is_valid():      #process the data in form.cleaned_data as required
-        data['status']='success'
+      if form.is_valid():
+        rec = form.cleaned_data
+        username = rec['username']
+        if not User.objects.filter(username=username).exists():
+          password = rec['password1']
+          name = rec['name']
+          email = rec['email']
+          user = User.objects.create_user(username=username,password=password,email=email,name=name)
+          group = GG.objects.get(name='Student')
+          group.user_set.add(user)
+          group = GG.objects.get(name='New Entrant')
+          group.user_set.add(user)
+          fb_link = rec['fb_link']
+          phone = rec['phone_no']
+          state = rec['state']
+          branch = rec['branch']
+          hometown = rec['hometown']
+          profile_privacy = rec['profile_privacy']
+          phone_privacy = rec['phone_privacy']
+          junior = Student_profile()
+          try:
+            branch = Branch.objects.get(code=branch)
+            student = Student()
+            student.user = user
+            student.branch = branch
+            student.semester = 'UG10'
+            student.semester_no = 1
+            student.admission_year = 2016
+            student.admission_semtype = 'A'
+            student.save()
+            junior.is_branch = True
+          except:
+            junior.is_branch = False
+            pass
+          junior.user=user
+          junior.email=email
+          junior.fb_link=fb_link
+          junior.state=state
+          junior.hometown=hometown
+          junior.phone_no=phone
+          junior.phone_privacy = phone_privacy
+          junior.profile_privacy = profile_privacy
+          junior.save()
+          data['status'] = 'success'
+        else:
+          data['error'] = 'Username already exists.'
       return HttpResponse(simplejson.dumps(data), content_type='application/json')
     else:
       form = RegisterForm()

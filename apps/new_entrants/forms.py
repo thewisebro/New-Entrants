@@ -6,6 +6,12 @@ from api import model_constants as MC
 from nucleus.models import User, Branch, Student
 from new_entrants.models import *
 
+def branch_choices():
+  t = (('None','None'),)
+  for branch in Branch.objects.all():
+    t+=(branch.code,branch.name + ' (' + branch.degree + ')'),
+  return t
+
 class RegisterForm(forms.Form):
   alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
 
@@ -13,6 +19,7 @@ class RegisterForm(forms.Form):
   username = forms.CharField(label='Username', max_length=30, validators=[alphanumeric])
   password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
   password2 = forms.CharField(label='Re-enter Password', widget=forms.PasswordInput)
+  branch = forms.ChoiceField(label='Branch', choices=branch_choices())
   email = forms.EmailField(label='Email id', max_length=75, validators=[validate_email])
   fb_link = forms.CharField(label='Facebook link', max_length=200, required=False)
   state = forms.ChoiceField(label='State', choices=MC.STATE_CHOICES)
@@ -28,7 +35,8 @@ class RegisterForm(forms.Form):
       return valid
 
     if (self.cleaned_data['password1'] != self.cleaned_data['password2']):
-      print "password caught"
+      print "password not same"
       return False
 
     return True
+
