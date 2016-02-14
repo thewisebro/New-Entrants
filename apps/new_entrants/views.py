@@ -191,11 +191,15 @@ def blogs(request):     #coded
       'dp_link':get_domain() + 'photo/' + str(blog.group.user.username),
       'description':blog.description,
       'date':blog.date_published.strftime('%Y-%m-%d %H:%M:%S'),
-      'blog_url':get_domain() + 'new_entrants/' + str(blog.group.user.username) + '/' + blog.slug
+      'blog_url':get_domain() + 'new_entrants/' + str(blog.group.user.username) + '/' + blog.slug,
+      'id':blog.pk
     }
 
   query_set = Blog.objects.all().order_by('-date_published')
-  data = simplejson.dumps(map(blog_dict,query_set))
+  action = request.GET.get('action','')
+  if action == 'next':
+    query_set = query_set.filter(pk__gt = request.GET['id'])
+  data = simplejson.dumps({'blogs':map(blog_dict,query_set[:10]),'more':int(query_set.count()>10)})
   return HttpResponse(data, content_type='application/json')
 
 def blogs_group(request, group_id=None):      #coded
@@ -206,15 +210,20 @@ def blogs_group(request, group_id=None):      #coded
       'dp_link':get_domain() + 'photo/' + str(blog.group.user.username),
       'description':blog.description,
       'date':blog.date_published.strftime('%Y-%m-%d %H:%M:%S'),
-      'blog_url':get_domain() + 'new_entrants/' + str(blog.group.user.username) + '/' + blog.slug
+      'blog_url':get_domain() + 'new_entrants/' + str(blog.group.user.username) + '/' + blog.slug,
+      'id':blog.pk
     }
 
   try:
     group = Group.objects.get(user__username=group_id)
     query_set = Blog.objects.filter(group=group).order_by('-date_published')
-    data = simplejson.dumps(map(blog_dict,query_set))
+    action = request.GET.get('action','')
+    if action == 'next':
+      query_set = query_set.filter(pk__gt = request.GET['id'])
+    data = simplejson.dumps({'blogs':map(blog_dict,query_set[:10]),'more':int(query_set.count()>10)})
     return HttpResponse(data, content_type='application/json')
-  except:
+  except Exception as e:
+    print str(e)
     return blogs(request)
 
 def blogs_view(request, group_id=None, slug=None):      #coded
