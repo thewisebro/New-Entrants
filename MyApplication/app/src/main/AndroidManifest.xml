@@ -13,7 +13,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="NewEntrants"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
         <activity
             android:name=".Navigation"
             android:label="Navigation" >

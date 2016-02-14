@@ -8,7 +8,8 @@ import java.io.Serializable;
 public class StudentModel implements Serializable {
     public  String name;
     public String enr_no;
-    //public String password;
+    public String username;
+    public String password;
     public String branch;
     public String year;
     public String town;

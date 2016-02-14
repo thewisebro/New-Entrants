@@ -1,6 +1,7 @@
 package img.myapplication;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -34,6 +35,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import models.NewEntrantModel;
+import models.StudentModel;
+
 
 public class Login extends ActionBarActivity {
     public Map<String,String> params;
@@ -46,8 +50,8 @@ public class Login extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         MySQLiteHelper db=new MySQLiteHelper(this);
-/*
-        if (db.loggedEntrant()){
+
+        /*if (db.loggedEntrant()){
             Intent intent=new Intent(this, Navigation.class);
             startActivity(intent);
             finish();
@@ -257,12 +261,52 @@ public class Login extends ActionBarActivity {
         }
     }
 
-    public void register(View view){
-        /*Intent intent = new Intent(this, Register.class);
-        startActivity(intent);*/
-    }
     public void start(){
 
+        if (details.get("category").equals("senior")){
+            StudentModel student=new StudentModel();
+            student.name=details.get("name");
+            student.enr_no=details.get("enr_no");
+            student.username=details.get("username");
+            student.password=details.get("password");
+            student.branch=details.get("branch");
+            student.year=details.get("year");
+            student.town=details.get("town");
+            student.state=details.get("state");
+            student.email=details.get("email");
+            student.mobile=details.get("mobile");
+            student.fb_link=details.get("fb_link");
+            MySQLiteHelper db=new MySQLiteHelper(this);
+            db.addStudent(student);
+            db.close();
+            startActivity(new Intent(this, NavigationStudent.class));
+            finish();
+        }
+        else if (details.get("category").equals("junior")){
+            NewEntrantModel entrant= new NewEntrantModel();
+            entrant.id=details.get("id");
+            entrant.name=details.get("name");
+            entrant.username=details.get("username");
+            entrant.password=details.get("password");
+            entrant.town=details.get("town");
+            entrant.state=details.get("state");
+            entrant.branch=details.get("branch");
+            entrant.mobile=details.get("mobile");
+            entrant.email=details.get("email");
+            entrant.fb_link=details.get("fb_link");
+            entrant.profile_privacy=Integer.parseInt(details.get("profile_privacy"))>0;
+            entrant.phone_privacy=Integer.parseInt(details.get("phone_privacy"))>0;
+            MySQLiteHelper db=new MySQLiteHelper(this);
+            db.addEntrant(entrant);
+            db.close();
+            startActivity(new Intent(this, Navigation.class));
+            finish();
+        }
+    }
+
+    public void register(View view){
+        Intent intent = new Intent(this, Register.class);
+        startActivity(intent);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
