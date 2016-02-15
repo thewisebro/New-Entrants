@@ -15,7 +15,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.CookieHandler;
@@ -38,6 +43,8 @@ public class Register extends AppCompatActivity {
     public String csrftoken;
     public Spinner state;
     public Spinner branch;
+    public int pos_state;
+    public int pos_branch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,20 +66,22 @@ public class Register extends AppCompatActivity {
 
     }
 
-    public void register(View view){
-
+    public void register(View view) throws IllegalAccessException {
+        pos_branch=branch.getSelectedItemPosition();
+        pos_state=state.getSelectedItemPosition();
+        entrant.name= ((EditText) findViewById(R.id.new_name)).getText().toString().trim();
+        entrant.username= ((EditText) findViewById(R.id.new_username)).getText().toString().trim();
+        entrant.password= ((EditText) findViewById(R.id.new_password)).getText().toString().trim();
+        entrant.town= ((EditText) findViewById(R.id.new_town)).getText().toString().trim();
+        entrant.email= ((EditText) findViewById(R.id.new_email)).getText().toString().trim();
+        entrant.mobile= ((EditText) findViewById(R.id.new_mobile)).getText().toString().trim();
+        entrant.fb_link= ((EditText) findViewById(R.id.new_fblink)).getText().toString().trim();
+        entrant.branch=branch.getSelectedItem().toString().trim();
+        entrant.state= state.getSelectedItem().toString().trim();
+        entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibilty)).isChecked();
+        entrant.profile_privacy= ((CheckBox) findViewById(R.id.profile_visibilty)).isChecked();
         if(validate()) {
-            entrant.name= ((EditText) findViewById(R.id.new_name)).getText().toString().trim();
-            entrant.username= ((EditText) findViewById(R.id.new_username)).getText().toString().trim();
-            entrant.password= ((EditText) findViewById(R.id.new_password)).getText().toString().trim();
-            entrant.town= ((EditText) findViewById(R.id.new_town)).getText().toString().trim();
-            entrant.email= ((EditText) findViewById(R.id.new_email)).getText().toString().trim();
-            entrant.mobile= ((EditText) findViewById(R.id.new_mobile)).getText().toString().trim();
-            entrant.fb_link= ((EditText) findViewById(R.id.new_fblink)).getText().toString().trim();
-            entrant.branch=branch.getSelectedItem().toString().trim();
-            entrant.state= state.getSelectedItem().toString().trim();
-            entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibilty)).isChecked();
-            entrant.profile_privacy= ((CheckBox) findViewById(R.id.profile_visibilty)).isChecked();
+            //setParams();
             new RegisterTask().execute();
         }
         else {
@@ -93,32 +102,38 @@ public class Register extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Invalid Mobile Number", Toast.LENGTH_SHORT).show();
             flag=false;
         }
-        if(!(entrant.id).matches(idPattern)){
-            Toast.makeText(getApplicationContext(),"Invalid ID", Toast.LENGTH_SHORT).show();
-            flag=false;
-        }
         if(!(entrant.name).matches(namePattern)){
             Toast.makeText(getApplicationContext(),"Enter a proper Name", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        if(!(entrant.password).equals(((EditText)findViewById(R.id.re_password)).getText().toString())){
+            Toast.makeText(getApplicationContext(),"Passwords do not match", Toast.LENGTH_SHORT).show();
             flag=false;
         }
         return flag;
     }
     private void setParams() throws IllegalAccessException {
         params=new HashMap<String,String>();
-
+        //String[] state_codes=getResources().getStringArray(R.array.state_codes);
+        //String[] branch_codes=getResources().getStringArray(R.array.branch_codes);
         params.put("csrfmiddlewaretoken",csrftoken);
         params.put("name",entrant.name);
         params.put("username",entrant.username);
         params.put("password1",entrant.password);
         params.put("password2",entrant.password);
-        params.put("branch",getResources().getStringArray(R.array.branch_codes)[branch.getSelectedItemPosition()]);
+        //params.put("branch",(getResources().getStringArray(R.array.branch_codes))[pos_branch]);
+        params.put("branch","EE");
         params.put("email",entrant.email);
         params.put("fb_link",entrant.fb_link);
-        params.put("state",getResources().getStringArray(R.array.state_codes)[state.getSelectedItemPosition()]);
+        params.put("state",(getResources().getStringArray(R.array.state_codes))[pos_state]);
         params.put("hometown",entrant.town);
         params.put("phone_no",entrant.mobile);
-        params.put("phone_privacy",entrant.phone_privacy.toString());
-        params.put("profile_privacy",entrant.profile_privacy.toString());
+        if (entrant.phone_privacy)
+            params.put("phone_privacy","on");
+
+        if (entrant.profile_privacy)
+            params.put("profile_privacy","on");
+
     }
     private void registerNow(){
 
@@ -160,7 +175,13 @@ public class Register extends AppCompatActivity {
             writer.close();
             os.close();
 
-            obj=urlConnectionPost.getContent();
+            //obj=urlConnectionPost.getContent();
+            BufferedReader reader= new BufferedReader(new InputStreamReader(urlConnectionPost.getInputStream()));
+            StringBuffer buffer=new StringBuffer();
+            String inputLine;
+            while ((inputLine = reader.readLine()) != null)
+                buffer.append(inputLine+"\n");
+            getResult(buffer.toString());
             int responseCode=urlConnectionPost.getResponseCode();
 
         } catch (Exception e) {
@@ -168,6 +189,21 @@ public class Register extends AppCompatActivity {
         }
         finally {
             urlConnectionPost.disconnect();
+        }
+    }
+    public void getResult(String result){
+        try {
+            JSONObject rObj=new JSONObject(result);
+            String status=rObj.get("status").toString();
+            if (status.equals("success")){
+                Toast.makeText(getApplicationContext(),"Registration Successful!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            else {
+                Toast.makeText(getApplicationContext(),"Registraation Failed!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
     private class RegisterTask extends AsyncTask<String, Void, String> {

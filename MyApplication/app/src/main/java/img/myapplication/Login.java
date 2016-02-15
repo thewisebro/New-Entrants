@@ -51,7 +51,7 @@ public class Login extends ActionBarActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         MySQLiteHelper db=new MySQLiteHelper(this);
 
-        /*if (db.loggedEntrant()){
+        if (db.loggedEntrant()){
             Intent intent=new Intent(this, Navigation.class);
             startActivity(intent);
             finish();
@@ -60,7 +60,7 @@ public class Login extends ActionBarActivity {
             Intent intent=new Intent(this,NavigationStudent.class);
             startActivity(intent);
             finish();
-        }*/
+        }
         params=new HashMap<String,String>();
         SESSION_VALUES=new HashMap<String,String>();
         setContentView(R.layout.activity_login2);
