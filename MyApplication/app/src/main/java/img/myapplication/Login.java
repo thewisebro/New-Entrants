@@ -50,7 +50,7 @@ public class Login extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         MySQLiteHelper db=new MySQLiteHelper(this);
-
+/*
         if (db.loggedEntrant()){
             Intent intent=new Intent(this, Navigation.class);
             startActivity(intent);
@@ -61,10 +61,12 @@ public class Login extends ActionBarActivity {
             startActivity(intent);
             finish();
         }
+*/
         params=new HashMap<String,String>();
         SESSION_VALUES=new HashMap<String,String>();
         setContentView(R.layout.activity_login2);
     }
+    //public TextView blogText;
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();

@@ -149,7 +149,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         else return true;
     }
     public boolean loggedStudent(){
-        SQLiteDatabase db= this.getReadableDatabase();
+        SQLiteDatabase db= this.getWritableDatabase();
+        db.execSQL(CREATE_STUDENTS_TABLE);
+        db.close();
+        db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("select * from students ;", null);
 
         if(cursor.getCount()==0) return false;
@@ -231,7 +234,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         else return true;
     }
     public boolean loggedEntrant(){
-        SQLiteDatabase db= this.getReadableDatabase();
+        SQLiteDatabase db= this.getWritableDatabase();
+        db.execSQL(CREATE_ENTRANTS_TABLE);
+        db.close();
+        db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("select * from entrants ;", null);
 
         if(cursor.getCount()==0) return false;

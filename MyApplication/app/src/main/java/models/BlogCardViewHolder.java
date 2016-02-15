@@ -1,5 +1,6 @@
 package models;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -9,8 +10,8 @@ public class BlogCardViewHolder {
     public  TextView topic;
     public TextView shortInfo;
     public TextView group;
-    //public TextView blogText;
     public  TextView date;
+    public ImageView img;
 
     public BlogModel model;
 }

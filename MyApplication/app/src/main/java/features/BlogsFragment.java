@@ -51,19 +51,6 @@ public class BlogsFragment extends Fragment {
         }
         getCardList();
 
-        /*for (int i = 0; i < 10; i++) {
-
-            BlogModel card= new BlogModel();
-
-            card.topic="lololol";
-            card.shortInfo="test";
-            //card.author="ankush";
-            //card.category="example";
-            card.group="abcGrp";
-            card.blogText="Life is beautiful!";
-            card.date="2015-10-27";
-            cardArrayAdapter.add(card);
-        }*/
         listView.setAdapter(cardArrayAdapter);
 
         return view;
@@ -78,11 +65,9 @@ public class BlogsFragment extends Fragment {
     }
     public void updateBlogs(){
         try {
-            URL url= null;
-            url = new URL("www.google.com");
+            URL url= new URL("192.168.121.187:8080/new_entrants/blogs/");
             HttpURLConnection conn=(HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
+            conn.setRequestMethod("GET");
             BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
             StringBuilder sb=new StringBuilder();
             String line = "";
@@ -106,14 +91,13 @@ public class BlogsFragment extends Fragment {
 
                 JSONObject object=jArray.getJSONObject(i);
                 BlogModel model= new BlogModel();
-
-                model.topic="lololol";
-                //model.shortInfo="test";
-                //model.author="ankush";
-                //model.category="example";
-                model.group="abcGrp";
-                model.blogText="Life is beautiful!";
-                model.date="2015-10-27";
+                model.topic=object.getString("title");
+                model.blogurl=object.getString("blog_url");
+                model.imageurl=object.getString("dp_link");
+                model.group=object.getString("group");
+                model.shortInfo=object.getString("description");
+                model.date=object.getString("date");
+                model.id=object.getInt("id");
 
                 db.addBlog(model);
             }

@@ -114,8 +114,6 @@ public class Register extends AppCompatActivity {
     }
     private void setParams() throws IllegalAccessException {
         params=new HashMap<String,String>();
-        //String[] state_codes=getResources().getStringArray(R.array.state_codes);
-        //String[] branch_codes=getResources().getStringArray(R.array.branch_codes);
         params.put("csrfmiddlewaretoken",csrftoken);
         params.put("name",entrant.name);
         params.put("username",entrant.username);
@@ -135,8 +133,8 @@ public class Register extends AppCompatActivity {
             params.put("profile_privacy","on");
 
     }
-    private void registerNow(){
-
+    private String registerNow(){
+        String result=null;
         HttpURLConnection urlConnectionPost=null;
         cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
@@ -181,7 +179,7 @@ public class Register extends AppCompatActivity {
             String inputLine;
             while ((inputLine = reader.readLine()) != null)
                 buffer.append(inputLine+"\n");
-            getResult(buffer.toString());
+            result=getResult(buffer.toString());
             int responseCode=urlConnectionPost.getResponseCode();
 
         } catch (Exception e) {
@@ -190,21 +188,18 @@ public class Register extends AppCompatActivity {
         finally {
             urlConnectionPost.disconnect();
         }
+        return result;
     }
-    public void getResult(String result){
+    public String getResult(String result){
+        String status=null;
         try {
             JSONObject rObj=new JSONObject(result);
-            String status=rObj.get("status").toString();
-            if (status.equals("success")){
-                Toast.makeText(getApplicationContext(),"Registration Successful!", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-            else {
-                Toast.makeText(getApplicationContext(),"Registraation Failed!", Toast.LENGTH_SHORT).show();
-            }
+            status=rObj.get("status").toString();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return status;
     }
     private class RegisterTask extends AsyncTask<String, Void, String> {
         @Override
@@ -212,8 +207,7 @@ public class Register extends AppCompatActivity {
 
             // params comes from the execute() call: params[0] is the url.
             try {
-                registerNow();
-                return null;
+                return registerNow();
             } catch (Exception e) {
                 return "Unable to retrieve web page. URL may be invalid.";
             }
@@ -221,7 +215,13 @@ public class Register extends AppCompatActivity {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-
+            if (result.equals("success")){
+                Toast.makeText(getApplicationContext(),"Registration Successful!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            else {
+                Toast.makeText(getApplicationContext(),"Registration Failed!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
