@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">New Entrants</string>
+    <string name="title_activity_navigation">Navigation</string>
+
+    <string name="tab1">Profile</string>
+    <string name="tab2">Blogs</string>
+    <string name="tab3">Peer Connect</string>
+    <string name="tab4">Senior Connect</string>
+    <string name="tab5">Edit Info</string>
+    <string name="tab6">Logout</string>
+    <string-array name="tabs">
+        <item>Profile</item>
+        <item>Blogs</item>
+        <item>Peer Connect</item>
+        <item>Senior Connect</item>
+        <item>Edit Info</item>
+        <item>Logout</item>
+    </string-array>
+    <string-array name="tabs_logged_in">
+        <item>Signup</item>
+        <item>Login</item>
+    </string-array>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">NewEntrants</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_senior_connect">SConnect</string>
+    <string name="pc1">Peers</string>
+    <string name="pc2">Request</string>
+    <string name="sc1">Requested</string>
+    <string name="sc2">Accepted</string>
+    <string-array name="sctabs">
+        <item>Requested</item>
+        <item>Accepted</item>
+    </string-array>
+    <string name="request_button">Request a Senior</string>
+    <string-array name="branches">
+        <item>Electrical</item>
+        <item>Mechanical</item>
+        <item>Computer Science</item>
+    </string-array>
+    <string-array name="locations">
+        <item>New-Delhi</item>
+        <item>Roorkee</item>
+        <item>Mumbai</item>
+    </string-array>
+
+    <string name="title_activity_sconnect">Senior Connect</string>
+    <string name="title_activity_peer_connect">Peer Connect</string>
+    <string name="title_activity_edit__info">Edit Info</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_blogs">Blogs</string>
+    <string name="title_activity_profile">Profile</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+
+</resources>

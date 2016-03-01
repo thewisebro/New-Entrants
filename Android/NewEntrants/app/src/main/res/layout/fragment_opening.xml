@@ -1,0 +1,23 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="img.newentrants.OpeningFragment">
+
+    <TextView
+        android:layout_width="171dp"
+        android:layout_height="76dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="NewEntrants App"
+        android:id="@+id/textView2"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical|center_horizontal" />
+
+    <TextView
+        android:layout_width="322dp"
+        android:layout_height="312dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="balksbndjasbkdjbasjkbdjkasbdjasbdjkasbkjdbaskjdbasjkbdkjasbdjkbajksdjbasd"
+        android:id="@+id/textView3"
+        android:layout_gravity="center"
+        android:gravity="center_vertical|center_horizontal" />
+
+</FrameLayout>
