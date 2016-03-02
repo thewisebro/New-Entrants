@@ -13,7 +13,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="NewEntrants"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+        android:theme="@style/CustomActionBarTheme" >
         <activity
             android:name=".Navigation"
             android:label="Navigation" >
@@ -21,19 +21,6 @@
         <activity
             android:name=".Register"
             android:label="@string/title_activity_register" >
-        </activity>
-        <activity
-            android:name=".StudentLogin"
-            android:label="@string/title_activity_student_login" >
-        </activity>
-        <activity
-            android:name=".NewEntrantLogin"
-            android:label="@string/title_activity_new_entrant_login" >
-        </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login" >
-
         </activity>
         <activity
             android:name=".NavigationStudent"

@@ -45,16 +45,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             "create table if not exists blogs ( "+
                     "topic varchar,"+
                     "shortinfo varchar,"+
-                    "author varchar,"+
+                    "group varchar,"+
                     "date_published text,"+
-                    "blogtext text );";
+                    "blogtext text,"+
+                    "imageurl text,"+
+                    "blogurl text,"+
+                    "id int(2) );";
     private static String CREATE_STUDENTS_TABLE=
             "create table if not exists students ( "+
                 "name varchar,"+
                 "enr_no char(8) primary key,"+
-                "username varchar unique"+
+                "username varchar,"+
                 "password varchar,"+
-                "branch varchar,"+
+                "branchname varchar,"+"branchcode varchar,"+
                 "year char(1),"+
                 "town varchar,"+
                 "state varchar,"+
@@ -68,7 +71,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "name text,"+
                     "username text,"+
                     "password text,"+
-                    "branch text,"+
+                    "branchname text,"+"branchcode text,"+
                     "town text,"+
                     "state text,"+
                     "email text,"+
@@ -90,14 +93,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         SQLiteDatabase db=this.getWritableDatabase();
-        /*db.execSQL("DROP TABLE IF EXISTS seniors");
-        db.execSQL("DROP TABLE IF EXISTS students");
-        db.execSQL("DROP TABLE IF EXISTS entrants");
-        db.execSQL("DROP TABLE IF EXISTS blogs");*/
+        //db.execSQL("DROP TABLE IF EXISTS seniors");
+        //db.execSQL("DROP TABLE IF EXISTS students");
+        //db.execSQL("DROP TABLE IF EXISTS entrants");
+        //db.execSQL("DROP TABLE IF EXISTS blogs");
         db.execSQL(CREATE_STUDENTS_TABLE);
         db.execSQL(CREATE_ENTRANTS_TABLE);
         db.execSQL(CREATE_SENIORS_TABLE);
-        db.execSQL(CREATE_BLOGS_TABLE);
+        //db.execSQL(CREATE_BLOGS_TABLE);
         //db.execSQL(TEMP_ENTRANT);
         //db.execSQL(TEMP_STUDENT);
         //db.execSQL(TEMP_BLOG);
@@ -130,13 +133,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             student.name= cursor.getString(0);
             student.username=cursor.getString(2);
             student.password= cursor.getString(3);
-            student.branch= cursor.getString(4);
-            student.year= cursor.getString(5);
-            student.town= cursor.getString(6);
-            student.state= cursor.getString(7);
-            student.email= cursor.getString(8);
-            student.mobile= cursor.getString(9);
-            student.fb_link=cursor.getString(10);
+            student.branchname= cursor.getString(4);
+            student.branchcode=cursor.getString(5);
+            student.year= cursor.getString(6);
+            student.town= cursor.getString(7);
+            student.state= cursor.getString(8);
+            student.email= cursor.getString(9);
+            student.mobile= cursor.getString(10);
+            student.fb_link=cursor.getString(11);
 
         }
         return student;
@@ -167,7 +171,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("enr_no",student.enr_no);
         values.put("username",student.username);
         values.put("password",student.password);
-        values.put("branch",student.branch);
+        values.put("branchname",student.branchname);
+        values.put("branchcode",student.branchcode);
         values.put("year",student.year);
         values.put("town",student.town);
         values.put("state",student.state);
@@ -180,14 +185,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void addEntrant(NewEntrantModel entrant){
         SQLiteDatabase db=this.getWritableDatabase();
         //db.execSQL(CREATE_ENTRANTS_TABLE);
-        deleteEntrant();
+        //deleteEntrant();
         ContentValues values=new ContentValues();
         values.put("id", entrant.id);
         values.put("name", entrant.name);
         values.put("username", entrant.username);
         values.put("password", entrant.password);
         values.put("email", entrant.email);
-        values.put("branch", entrant.branch);
+        values.put("branchname", entrant.branchname);
+        values.put("branchcode",entrant.branchcode);
         values.put("town", entrant.town);
         values.put("state", entrant.state);
         values.put("mobile", entrant.mobile);
@@ -200,14 +206,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void addBlog(BlogModel blog){
         if (!checkBlog(blog)){
             SQLiteDatabase db=this.getWritableDatabase();
-            //db.execSQL(CREATE_BLOGS_TABLE);
 
             ContentValues values=new ContentValues();
             values.put("topic", blog.topic);
             values.put("shortinfo",blog.shortInfo);
-            values.put("author",blog.group);
+            values.put("group",blog.group);
             values.put("date_published",blog.date);
             values.put("blogtext",blog.blogText);
+            values.put("imageurl",blog.imageurl);
+            values.put("blogurl",blog.blogurl);
+            values.put("id",blog.id);
 
             db.insert(TABLE_BLOGS,null,values);
             db.close();
@@ -269,15 +277,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             entrant.name = cursor.getString(1);
             entrant.username = cursor.getString(2);
             entrant.password = cursor.getString(3);
-            entrant.branch = cursor.getString(4);
-            entrant.town = cursor.getString(5);
-            entrant.state = cursor.getString(6);
-            //entrant.about = cursor.getString(7);
-            entrant.email = cursor.getString(7);
-            entrant.mobile = cursor.getString(8);
-            entrant.fb_link=cursor.getString(9);
-            entrant.phone_privacy=cursor.getInt(10) >0;
-            entrant.profile_privacy=cursor.getInt(11) > 0;
+            entrant.branchname = cursor.getString(4);
+            entrant.branchcode=cursor.getString(5);
+            entrant.town = cursor.getString(6);
+            entrant.state = cursor.getString(7);
+            entrant.email = cursor.getString(8);
+            entrant.mobile = cursor.getString(9);
+            entrant.fb_link=cursor.getString(10);
+            entrant.phone_privacy=cursor.getInt(11) >0;
+            entrant.profile_privacy=cursor.getInt(12) > 0;
 
         }
         return entrant;
@@ -295,7 +303,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 blog.shortInfo=cursor.getString(1);
                 blog.group=cursor.getString(2);
                 blog.date=cursor.getString(3);
-                blog.blogText=cursor.getString(4);*/
+                blog.blogText=cursor.getString(4);
+                blog.imageurl=cursor.getString(5);
+                blog.blogurl=cursor.getString(6);
+                blog.id=cursor.getInt(7);*/
                 blog.topic= "topic";
                 blog.shortInfo= "short info";
                 blog.group= "group";

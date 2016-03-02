@@ -75,7 +75,7 @@ public class Navigation extends ActionBarActivity
     }
     public void displayBlog(View view){
        BlogCardViewHolder viewHolder=(BlogCardViewHolder) view.getTag();
-        loadFragment(new BlogPage(viewHolder.model));
+        loadFragment(new BlogPage(viewHolder.blogUrl));
     }
     public void displayPeer(View view){
         PeerCardViewHolder viewHolder=(PeerCardViewHolder) view.getTag();

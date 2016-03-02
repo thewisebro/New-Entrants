@@ -76,7 +76,7 @@ public class Register extends AppCompatActivity {
         entrant.email= ((EditText) findViewById(R.id.new_email)).getText().toString().trim();
         entrant.mobile= ((EditText) findViewById(R.id.new_mobile)).getText().toString().trim();
         entrant.fb_link= ((EditText) findViewById(R.id.new_fblink)).getText().toString().trim();
-        entrant.branch=branch.getSelectedItem().toString().trim();
+        entrant.branchname=branch.getSelectedItem().toString().trim();
         entrant.state= state.getSelectedItem().toString().trim();
         entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibilty)).isChecked();
         entrant.profile_privacy= ((CheckBox) findViewById(R.id.profile_visibilty)).isChecked();
@@ -119,7 +119,6 @@ public class Register extends AppCompatActivity {
         params.put("username",entrant.username);
         params.put("password1",entrant.password);
         params.put("password2",entrant.password);
-        //params.put("branch",(getResources().getStringArray(R.array.branch_codes))[pos_branch]);
         params.put("branch","EE");
         params.put("email",entrant.email);
         params.put("fb_link",entrant.fb_link);

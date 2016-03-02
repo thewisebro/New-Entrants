@@ -6,12 +6,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,13 +23,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import img.myapplication.MySQLiteHelper;
+import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.BlogCardViewHolder;
 import models.BlogModel;
@@ -37,7 +41,7 @@ public class BlogsFragment extends Fragment {
 
     private BlogCardArrayAdapter cardArrayAdapter;
     private ListView listView;
-
+    private int blogsCount;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -45,12 +49,26 @@ public class BlogsFragment extends Fragment {
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
 
+        SwipeRefreshLayout swipeLayout= (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new LoadBlogTask().execute();
+            }
+        });
+
         cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_item_card);
-        if (isConnected()){
+        blogsCount=0;
+/*        if (isConnected()){
             updateBlogs();
         }
         getCardList();
-
+*/
+        if (isConnected())
+            new LoadBlogTask().execute();
+        else
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
         listView.setAdapter(cardArrayAdapter);
 
         return view;
@@ -63,7 +81,69 @@ public class BlogsFragment extends Fragment {
         else
             return false;
     }
-    public void updateBlogs(){
+    private class LoadBlogTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                loadBlogs();
+                return "success";
+            } catch (Exception e) {
+                return "Unable to retrieve web page. URL may be invalid.";
+            }
+        }
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            if (result.equals("success")){
+                cardArrayAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+    public void loadBlogs(){
+        try {
+            URL url= new URL("http://192.168.121.187:8080/new_entrants/blogs?action=next&id="+blogsCount);
+            HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+            StringBuilder sb=new StringBuilder();
+            String line = "";
+            while((line = bufferedReader.readLine()) != null)
+                sb.append(line + '\n');
+            String result=sb.toString();
+            getBlogs(result);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void getBlogs(String result){
+        try {
+            JSONObject jObject = new JSONObject(result);
+            JSONArray jArray=jObject.getJSONArray("blogs");
+
+            //JSONObject object=null;
+            int len=jArray.length();
+
+            for(int i=0; i<len;i++){
+                JSONObject object=jArray.getJSONObject(i);
+                BlogModel model= new BlogModel();
+                model.topic=object.getString("title");
+                model.blogurl=object.getString("blog_url");
+                model.imageurl=object.getString("dp_link");
+                model.group=object.getString("group");
+                model.shortInfo=object.getString("description");
+                model.date=object.getString("date");
+                model.id=Integer.parseInt(object.getString("id"));
+                model.blogText=null;
+                cardArrayAdapter.add(model);
+                blogsCount+=1;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+/*    public void updateBlogs(){
         try {
             URL url= new URL("192.168.121.187:8080/new_entrants/blogs/");
             HttpURLConnection conn=(HttpURLConnection) url.openConnection();
@@ -81,15 +161,17 @@ public class BlogsFragment extends Fragment {
         }
     }
     public void updateBlogsTable(String result){
-        JSONObject jObject= null;
         MySQLiteHelper db=new MySQLiteHelper(getContext());
+        db.deleteBlogs();
         try {
-            jObject = new JSONObject(result);
+            JSONObject jObject = new JSONObject(result);
             JSONArray jArray=jObject.getJSONArray("blogs");
+
+            JSONObject object=null;
 
             for(int i=0; i<jArray.length();i++){
 
-                JSONObject object=jArray.getJSONObject(i);
+                object=jArray.getJSONObject(i);
                 BlogModel model= new BlogModel();
                 model.topic=object.getString("title");
                 model.blogurl=object.getString("blog_url");
@@ -98,7 +180,7 @@ public class BlogsFragment extends Fragment {
                 model.shortInfo=object.getString("description");
                 model.date=object.getString("date");
                 model.id=object.getInt("id");
-
+                model.blogText=null;
                 db.addBlog(model);
             }
         } catch (JSONException e) {
@@ -112,75 +194,7 @@ public class BlogsFragment extends Fragment {
             cardArrayAdapter.add(blogList.get(i));
         }
     }
-/*    public void getCardList(){
-        if (isConnected()){
-            try {
-                URL url= null;
-                url = new URL("www.google.com");
-                HttpURLConnection conn=(HttpURLConnection) url.openConnection();
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
-                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-                StringBuilder sb=new StringBuilder();
-                String line = "";
-                while((line = bufferedReader.readLine()) != null)
-                    sb.append(line + '\n');
-                String result=sb.toString();
-                cardsFromString(result);
-
-                FileOutputStream fos = getContext().openFileOutput("blogs.txt",Context.MODE_PRIVATE);
-                fos.write(result.getBytes());
-                fos.close();
-                bufferedReader.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            try {
-                FileInputStream fis;
-                fis = getContext().openFileInput("blogs.txt");
-                StringBuffer fileContent = new StringBuffer("");
-
-                byte[] buffer = new byte[1024];
-                int n;
-                while ((n = fis.read(buffer)) != -1)
-                {
-                    fileContent.append(new String(buffer, 0, n));
-                }
-                String blogString=fileContent.toString();
-                cardsFromString(blogString);
-            } catch (java.io.IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    private void cardsFromString(String result){
-        JSONObject jObject= null;
-        try {
-            jObject = new JSONObject(result);
-            JSONArray jArray=jObject.getJSONArray("blogs");
-
-            for(int i=0; i<jArray.length();i++){
-
-                JSONObject object=jArray.getJSONObject(i);
-                BlogModel card= new BlogModel();
-
-                card.topic="lololol";
-                card.shortInfo="test";
-                card.author="ankush";
-                card.category="example";
-                card.date="2015-10-27";
-                cardArrayAdapter.add(card);
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-    */
+*/
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
         private List<BlogModel> cardList = new ArrayList<BlogModel>();
@@ -215,10 +229,11 @@ public class BlogsFragment extends Fragment {
                 viewHolder = new BlogCardViewHolder();
                 viewHolder.topic = (TextView) row.findViewById(R.id.topic);
                 viewHolder.shortInfo = (TextView) row.findViewById(R.id.shortInfo);
-                //viewHolder.blogText= (TextView) row.findViewById(R.id.blogText);
                 viewHolder.group= (TextView) row.findViewById(R.id.author);
                 viewHolder.date = (TextView) row.findViewById(R.id.date);
-                viewHolder.model=new BlogModel();
+                viewHolder.img = (ImageView) row.findViewById(R.id.card_img);
+                //viewHolder.model=new BlogModel();
+                viewHolder.blogUrl="";
 
             } else {
                 viewHolder = (BlogCardViewHolder)row.getTag();
@@ -227,16 +242,48 @@ public class BlogsFragment extends Fragment {
             viewHolder.topic.setText(card.topic);
             viewHolder.shortInfo.setText(card.shortInfo);
             viewHolder.group.setText(card.group);
-            //viewHolder.blogText.setText(card.blogText);
             viewHolder.date.setText(card.date);
-            viewHolder.model.copy(card);
+            //viewHolder.model.copy(card);
+            viewHolder.blogUrl=card.blogurl;
+            new ImageLoadTask(card.imageurl,viewHolder.img);
             row.setTag(viewHolder);
             return row;
         }
 
-        public Bitmap decodeToBitmap(byte[] decodedByte) {
-            return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
+
+        private String url;
+        private ImageView imageView;
+
+        public ImageLoadTask(String url, ImageView imageView) {
+            this.url = url;
+            this.imageView = imageView;
         }
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            try {
+                URL urlConnection = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) urlConnection
+                        .openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                return myBitmap;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            super.onPostExecute(result);
+            imageView.setImageBitmap(result);
+        }
+
     }
 
 }

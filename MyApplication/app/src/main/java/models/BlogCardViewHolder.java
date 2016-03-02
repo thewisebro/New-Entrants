@@ -12,6 +12,6 @@ public class BlogCardViewHolder {
     public TextView group;
     public  TextView date;
     public ImageView img;
-
+    public String blogUrl;
     public BlogModel model;
 }
