@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -44,4 +45,52 @@
             android:layout_below="@+id/town"/>
 
     </RelativeLayout>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:onClick="displayPeer"
+    android:descendantFocusability="beforeDescendants"
+    android:longClickable="true">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="15dp"
+        android:background="@drawable/card_background_selector"
+        android:descendantFocusability="afterDescendants">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text line 1"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:id="@+id/town"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text line 2"
+            android:layout_below="@+id/name"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text line 1"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/town"/>
+
+    </RelativeLayout>
+>>>>>>> 50782eb17d1d54b622a4c31b082817173c845682
 </FrameLayout>

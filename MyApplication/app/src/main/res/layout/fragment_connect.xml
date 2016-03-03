@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pager"
@@ -9,4 +10,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"/>
 
+=======
+<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.PagerTabStrip
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"/>
+
+>>>>>>> 50782eb17d1d54b622a4c31b082817173c845682
 </android.support.v4.view.ViewPager>

@@ -7,6 +7,7 @@ import android.widget.TextView;
  */
 public class SeniorCardViewHolder {
     public TextView name;
+<<<<<<< HEAD
     public TextView branchname;
     public TextView branchcode;
     public TextView year;
@@ -15,5 +16,9 @@ public class SeniorCardViewHolder {
     public TextView mobile;
     public TextView email;
     public TextView fb_link;
+=======
+    public TextView branch;
+    public TextView year;
+>>>>>>> 50782eb17d1d54b622a4c31b082817173c845682
     public SeniorModel model;
 }
