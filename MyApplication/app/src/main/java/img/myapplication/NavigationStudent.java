@@ -73,7 +73,7 @@ public class NavigationStudent extends ActionBarActivity
     }
     public void displayBlog(View view){
         BlogCardViewHolder viewHolder=(BlogCardViewHolder) view.getTag();
-        loadFragment(new BlogPage(viewHolder.model));
+        loadFragment(new BlogPage(viewHolder.blogUrl));
     }
     public void loadFragment(Fragment fragment){
         if (fragmentCount!=0)

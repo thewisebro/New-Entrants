@@ -86,9 +86,7 @@ public class BlogsFragment extends Fragment {
         protected String doInBackground(String... params) {
 
             try {
-                String action="";
-                if (blogsCount==0) action="more";
-                loadBlogs(action);
+                loadBlogs();
                 return "success";
             } catch (Exception e) {
                 return "Unable to retrieve web page. URL may be invalid.";
@@ -102,9 +100,9 @@ public class BlogsFragment extends Fragment {
             }
         }
     }
-    public void loadBlogs(String action){
+    public void loadBlogs(){
         try {
-            URL url= new URL("192.168.121.187:8080/new_entrants/blogs/?id="+blogsCount+"&action="+action);
+            URL url= new URL("http://192.168.121.187:8080/new_entrants/blogs?action=next&id="+blogsCount);
             HttpURLConnection conn=(HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
@@ -124,10 +122,11 @@ public class BlogsFragment extends Fragment {
             JSONObject jObject = new JSONObject(result);
             JSONArray jArray=jObject.getJSONArray("blogs");
 
-            JSONObject object=null;
+            //JSONObject object=null;
+            int len=jArray.length();
 
-            for(int i=0; i<jArray.length();i++){
-                object=jArray.getJSONObject(i);
+            for(int i=0; i<len;i++){
+                JSONObject object=jArray.getJSONObject(i);
                 BlogModel model= new BlogModel();
                 model.topic=object.getString("title");
                 model.blogurl=object.getString("blog_url");
@@ -135,10 +134,10 @@ public class BlogsFragment extends Fragment {
                 model.group=object.getString("group");
                 model.shortInfo=object.getString("description");
                 model.date=object.getString("date");
-                model.id=object.getInt("id");
+                model.id=Integer.parseInt(object.getString("id"));
                 model.blogText=null;
                 cardArrayAdapter.add(model);
-                blogsCount++;
+                blogsCount+=1;
             }
         } catch (JSONException e) {
             e.printStackTrace();

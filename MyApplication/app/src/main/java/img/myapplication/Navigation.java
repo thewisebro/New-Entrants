@@ -16,6 +16,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import features.BlogPage;
 import features.BlogsFragment;
 import features.EditInfoFragment;
@@ -38,7 +41,7 @@ public class Navigation extends ActionBarActivity
     private int mCurrentPosition;
     private CharSequence mTitle;
     private MySQLiteHelper db;
-
+    public Map<String,String> userParams;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +54,9 @@ public class Navigation extends ActionBarActivity
         mNavigationDrawerFragment.set(1);
         db=new MySQLiteHelper(this);
         entrant=db.getEntrant();
-        //entrant=(NewEntrantModel) getIntent().getSerializableExtra("entrant");
+        userParams=new HashMap<>();
+        userParams.put("state",entrant.state);
+        userParams.put("branchcode",entrant.branchcode);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
         if(!isConnected()){
             Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
@@ -105,7 +110,7 @@ public class Navigation extends ActionBarActivity
                     break;
                 case 2:fragment = new PConnectFragment();
                     break;
-                case 3:fragment = new SConnectFragment();
+                case 3:fragment = new SConnectFragment(userParams);
                     break;
 
                 case 4: logout();

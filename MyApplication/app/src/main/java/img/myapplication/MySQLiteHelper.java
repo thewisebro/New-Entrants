@@ -38,9 +38,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static String CREATE_SENIORS_TABLE=
             "create table if not exists seniors ( "+
                     "name varchar," +
-                    "branch varchar,"+
-                    "year char(1),"+
-                    "state varchar );";
+                    "branchname varchar,"+
+                    "branchcode varchar,"+
+                    "state varchar,"+
+                    "hometown varchar,"+
+                    "mobile varchar,"+
+                    "email varchar,"+
+                    "fb_link varchar);";
     private static String CREATE_BLOGS_TABLE=
             "create table if not exists blogs ( "+
                     "topic varchar,"+
@@ -57,7 +61,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "enr_no char(8) primary key,"+
                 "username varchar,"+
                 "password varchar,"+
-                "branch varchar,"+
+                "branchname varchar,"+"branchcode varchar,"+
                 "year char(1),"+
                 "town varchar,"+
                 "state varchar,"+
@@ -71,7 +75,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "name text,"+
                     "username text,"+
                     "password text,"+
-                    "branch text,"+
+                    "branchname text,"+"branchcode text,"+
                     "town text,"+
                     "state text,"+
                     "email text,"+
@@ -93,14 +97,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         SQLiteDatabase db=this.getWritableDatabase();
-        /*db.execSQL("DROP TABLE IF EXISTS seniors");
-        db.execSQL("DROP TABLE IF EXISTS students");
-        db.execSQL("DROP TABLE IF EXISTS entrants");
-        db.execSQL("DROP TABLE IF EXISTS blogs");*/
+        //db.execSQL("DROP TABLE IF EXISTS seniors");
+        //db.execSQL("DROP TABLE IF EXISTS students");
+        //db.execSQL("DROP TABLE IF EXISTS entrants");
+        //db.execSQL("DROP TABLE IF EXISTS blogs");
         db.execSQL(CREATE_STUDENTS_TABLE);
         db.execSQL(CREATE_ENTRANTS_TABLE);
         db.execSQL(CREATE_SENIORS_TABLE);
-        db.execSQL(CREATE_BLOGS_TABLE);
+        //db.execSQL(CREATE_BLOGS_TABLE);
         //db.execSQL(TEMP_ENTRANT);
         //db.execSQL(TEMP_STUDENT);
         //db.execSQL(TEMP_BLOG);
@@ -133,13 +137,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             student.name= cursor.getString(0);
             student.username=cursor.getString(2);
             student.password= cursor.getString(3);
-            student.branch= cursor.getString(4);
-            student.year= cursor.getString(5);
-            student.town= cursor.getString(6);
-            student.state= cursor.getString(7);
-            student.email= cursor.getString(8);
-            student.mobile= cursor.getString(9);
-            student.fb_link=cursor.getString(10);
+            student.branchname= cursor.getString(4);
+            student.branchcode=cursor.getString(5);
+            student.year= cursor.getString(6);
+            student.town= cursor.getString(7);
+            student.state= cursor.getString(8);
+            student.email= cursor.getString(9);
+            student.mobile= cursor.getString(10);
+            student.fb_link=cursor.getString(11);
 
         }
         return student;
@@ -170,7 +175,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("enr_no",student.enr_no);
         values.put("username",student.username);
         values.put("password",student.password);
-        values.put("branch",student.branch);
+        values.put("branchname",student.branchname);
+        values.put("branchcode",student.branchcode);
         values.put("year",student.year);
         values.put("town",student.town);
         values.put("state",student.state);
@@ -183,14 +189,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void addEntrant(NewEntrantModel entrant){
         SQLiteDatabase db=this.getWritableDatabase();
         //db.execSQL(CREATE_ENTRANTS_TABLE);
-        deleteEntrant();
+        //deleteEntrant();
         ContentValues values=new ContentValues();
         values.put("id", entrant.id);
         values.put("name", entrant.name);
         values.put("username", entrant.username);
         values.put("password", entrant.password);
         values.put("email", entrant.email);
-        values.put("branch", entrant.branch);
+        values.put("branchname", entrant.branchname);
+        values.put("branchcode",entrant.branchcode);
         values.put("town", entrant.town);
         values.put("state", entrant.state);
         values.put("mobile", entrant.mobile);
@@ -219,17 +226,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         }
     }
     public void addSenior(SeniorModel senior){
-        if (!checkSenior(senior)){
             SQLiteDatabase db=this.getWritableDatabase();
             //db.execSQL(CREATE_SENIORS_TABLE);
             ContentValues values=new ContentValues();
             values.put("name",senior.name);
-            values.put("branch",senior.branch);
-            values.put("year",senior.year);
+            values.put("branchname",senior.branchname);
+            values.put("branchcode",senior.branchcode);
             values.put("state", senior.state);
+            values.put("hometown",senior.hometown);
+            values.put("mobile",senior.mobile);
+            values.put("email",senior.email);
+            values.put("fb_link",senior.fb_link);
             db.insert(TABLE_SENIORS, null, values);
             db.close();
-        }
     }
     public boolean checkEntrant(String username, String password){
         SQLiteDatabase db= this.getReadableDatabase();
@@ -255,13 +264,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         if(cursor.getCount()==0) return false;
         else return true;
     }
-    public boolean checkSenior(SeniorModel senior){
-        SQLiteDatabase db= this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("select * from seniors where name='" + senior.name + "' and branch ='" + senior.branch + "' and year='"+senior.year+"';", null);
-
-        if(cursor.getCount()==0) return false;
-        else return true;
-    }
     public NewEntrantModel getEntrant(){
         SQLiteDatabase db= this.getReadableDatabase();
         NewEntrantModel entrant=new NewEntrantModel();
@@ -274,15 +276,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             entrant.name = cursor.getString(1);
             entrant.username = cursor.getString(2);
             entrant.password = cursor.getString(3);
-            entrant.branch = cursor.getString(4);
-            entrant.town = cursor.getString(5);
-            entrant.state = cursor.getString(6);
-            //entrant.about = cursor.getString(7);
-            entrant.email = cursor.getString(7);
-            entrant.mobile = cursor.getString(8);
-            entrant.fb_link=cursor.getString(9);
-            entrant.phone_privacy=cursor.getInt(10) >0;
-            entrant.profile_privacy=cursor.getInt(11) > 0;
+            entrant.branchname = cursor.getString(4);
+            entrant.branchcode=cursor.getString(5);
+            entrant.town = cursor.getString(6);
+            entrant.state = cursor.getString(7);
+            entrant.email = cursor.getString(8);
+            entrant.mobile = cursor.getString(9);
+            entrant.fb_link=cursor.getString(10);
+            entrant.phone_privacy=cursor.getInt(11) >0;
+            entrant.profile_privacy=cursor.getInt(12) > 0;
 
         }
         return entrant;
@@ -315,19 +317,31 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         }
         return blogs;
     }
-    public List<SeniorModel> getSeniors(){
+    public List<SeniorModel> getSeniors(int opt, String param){
         SQLiteDatabase db=this.getReadableDatabase();
         List<SeniorModel> seniors=new ArrayList<SeniorModel>();
-        Cursor cursor=db.rawQuery("select * from seniors;",null);
+        String query=null;
+        switch (opt){
+            case 1: query="select * from seniors where state='"+param+"';";
+                break;
+            case 2: query="select * from seniors where branchcode='"+param+"';";
+                break;
+            default: query="select * from seniors;";
+        }
+        Cursor cursor=db.rawQuery(query,null);
         int len=cursor.getCount();
         if (len!=0) {
             cursor.moveToFirst();
             for (int i=0;i<len;i++){
                 SeniorModel senior=new SeniorModel();
                 senior.name=cursor.getString(0);
-                senior.branch=cursor.getString(1);
-                senior.year=cursor.getString(2);
+                senior.branchname=cursor.getString(1);
+                senior.branchcode=cursor.getString(2);
                 senior.state=cursor.getString(3);
+                senior.hometown=cursor.getString(4);
+                senior.mobile=cursor.getString(5);
+                senior.email=cursor.getString(6);
+                senior.fb_link=cursor.getString(7);
                 seniors.add(senior);
                 cursor.moveToNext();
             }

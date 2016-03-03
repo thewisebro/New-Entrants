@@ -126,9 +126,9 @@ public class Login extends ActionBarActivity {
             cookieStore.removeAll();
 
             urlConnectionPost.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            urlConnectionPost.setRequestProperty("Host","people.iitr.ernet.in");
-            urlConnectionPost.setRequestProperty("Origin","http://people.iitr.ernet.in");
-            urlConnectionPost.setRequestProperty("Referer","http://people.iitr.ernet.in/login/");
+            //urlConnectionPost.setRequestProperty("Host","people.iitr.ernet.in");
+            //urlConnectionPost.setRequestProperty("Origin","http://people.iitr.ernet.in");
+            //urlConnectionPost.setRequestProperty("Referer","http://people.iitr.ernet.in/login/");
             urlConnectionPost.setRequestProperty("Accept","application/xml");
             urlConnectionPost.setInstanceFollowRedirects(true);
 
@@ -169,31 +169,7 @@ public class Login extends ActionBarActivity {
         }
         return result;
     }
-    private void getUser(){
-        //CookieHandler.setDefault(cookieManager);
-        CookieStore cookieStore=cookieManager.getCookieStore();
-        try {
 
-            HttpURLConnection conn = (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/userinfo/?username="+params.get("username")).openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            conn.setRequestProperty("Accept", "application/xml");
-
-            BufferedReader reader= new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuffer buffer=new StringBuffer();
-            String inputLine;
-            while ((inputLine = reader.readLine()) != null)
-                buffer.append(inputLine+"\n");
-            parseUserData(buffer.toString());
-            int responseCode=conn.getResponseCode();
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-
-        }
-    }
     private void parseUserData(String userDetails){
         try {
             JSONObject userJSON= new JSONObject(userDetails);
@@ -264,6 +240,16 @@ public class Login extends ActionBarActivity {
     }
 
     public void start(){
+        String branchname = null;
+        String branchcode=null;
+
+        try {
+            JSONObject object=new JSONObject(details.get("branch"));
+            branchcode=object.getString("code");
+            branchname=object.getString("name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         if (details.get("category").equals("senior")){
             StudentModel student=new StudentModel();
@@ -271,7 +257,8 @@ public class Login extends ActionBarActivity {
             student.enr_no=details.get("enr_no");
             student.username=details.get("username");
             student.password=details.get("password");
-            student.branch=details.get("branch");
+            student.branchname=branchname;
+            student.branchcode=branchcode;
             student.year=details.get("year");
             student.town=details.get("town");
             student.state=details.get("state");
@@ -292,12 +279,13 @@ public class Login extends ActionBarActivity {
             entrant.password=details.get("password");
             entrant.town=details.get("town");
             entrant.state=details.get("state");
-            entrant.branch=details.get("branch");
+            entrant.branchname=branchname;
+            entrant.branchcode=branchcode;
             entrant.mobile=details.get("mobile");
             entrant.email=details.get("email");
             entrant.fb_link=details.get("fb_link");
-            entrant.profile_privacy=Integer.parseInt(details.get("profile_privacy"))>0;
-            entrant.phone_privacy=Integer.parseInt(details.get("phone_privacy"))>0;
+            entrant.profile_privacy=details.get("profile_privacy").equals("true");
+            entrant.phone_privacy=details.get("phone_privacy").equals("true");
             MySQLiteHelper db=new MySQLiteHelper(this);
             db.addEntrant(entrant);
             db.close();

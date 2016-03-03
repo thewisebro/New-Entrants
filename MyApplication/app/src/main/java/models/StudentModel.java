@@ -10,7 +10,8 @@ public class StudentModel implements Serializable {
     public String enr_no;
     public String username;
     public String password;
-    public String branch;
+    public String branchname;
+    public String branchcode;
     public String year;
     public String town;
     public String state;

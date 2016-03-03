@@ -7,14 +7,18 @@
     android:layout_height="match_parent"
     android:background="#e2e4fe">
 
-    <ListView
-        android:id="@+id/card_listView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:listSelector="@android:color/transparent"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@null"
-        android:dividerHeight="10dp" />
+        android:layout_height="match_parent">
+        <ListView
+            android:id="@+id/card_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:listSelector="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@null"
+            android:dividerHeight="10dp" />
+    </ScrollView>
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -28,6 +32,47 @@
         android:background="@null"
         android:src="@android:drawable/btn_plus"
         android:nestedScrollingEnabled="true" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/bt_request"
+        android:layout_toStartOf="@+id/bt_request">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SORT:"
+            android:id="@+id/bt_sort" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/group_sort">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:id="@+id/rb_location" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rb_branch"
+                android:text="Branch" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All"
+                android:checked="true"
+                android:id="@+id/rb_all" />
+        </RadioGroup>
+    </LinearLayout>
 
 
 </RelativeLayout>
