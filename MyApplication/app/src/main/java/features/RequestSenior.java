@@ -12,11 +12,6 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import img.myapplication.R;
 
 
@@ -66,15 +61,7 @@ public class RequestSenior extends Fragment {
             private void request(String option){
 
                 try {
-                    URL url=new URL("www.google.com");
-                    HttpURLConnection conn= (HttpURLConnection) url.openConnection();
-                    conn.setDoOutput(true);
-                    conn.setRequestMethod("POST");
-                    OutputStreamWriter osw=new OutputStreamWriter(conn.getOutputStream());
-                    osw.write(option);
-                    osw.flush();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new SConnectFragment()).commit();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

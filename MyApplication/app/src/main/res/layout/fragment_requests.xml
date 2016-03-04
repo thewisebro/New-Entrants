@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout
@@ -17,23 +16,3 @@
         android:divider="@null"
         android:dividerHeight="10dp" />
 </LinearLayout>
-=======
-<?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#e2e4fe">
-
-    <ListView
-        android:id="@+id/card_listView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:listSelector="@android:color/transparent"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@null"
-        android:dividerHeight="10dp" />
-</LinearLayout>
->>>>>>> 50782eb17d1d54b622a4c31b082817173c845682

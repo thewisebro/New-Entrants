@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <resources>
     <string name="app_name">New Entrants</string>
     <string name="title_activity_navigation">Navigation</string>
@@ -51,7 +50,6 @@
     </string-array>
     <string name="request_button">Request a Senior</string>
     <string-array name="branches">
-            <item >None</item >
             <item >Advanced Chemical Analysis (M.Tech.)</item >
             <item >Geophysical Technology (M.Tech.)</item >
             <item >Alternate Hydro Energy Centre (PHD)</item >
@@ -172,6 +170,124 @@
             <item >Water Resources Development and Management  (PHD)</item >
     </string-array>
     <string-array name="branch_codes">
+            <item >"ACA"</item>
+            <item >"AGPT"</item>
+            <item >"AHEC"</item>
+            <item >"AHES"</item>
+            <item >"AR"</item>
+            <item >"ARCD"</item>
+            <item >"ASED"</item>
+            <item >"BST"</item>
+            <item >"BT"</item>
+            <item >"BTD"</item>
+            <item >"BTMS"</item>
+            <item >"CAG"</item>
+            <item >"CAPPD"</item>
+            <item >"CCR"</item>
+            <item >"CDM"</item>
+            <item >"CE"</item>
+            <item >"CED"</item>
+            <item >"CES"</item>
+            <item >"CH"</item>
+            <item >"CHED"</item>
+            <item >"CHH"</item>
+            <item >"CHMS"</item>
+            <item >"CNT"</item>
+            <item >"CRE"</item>
+            <item >"CSAE"</item>
+            <item >"CSE"</item>
+            <item >"CSEC"</item>
+            <item >"CSED"</item>
+            <item >"CSI"</item>
+            <item >"CT"</item>
+            <item >"CYD"</item>
+            <item >"DMM"</item>
+            <item >"DWRD"</item>
+            <item >"ECE"</item>
+            <item >"ECED"</item>
+            <item >"ECW"</item>
+            <item >"EDPE'</item>
+            <item >"EE"</item>
+            <item >"EED"</item>
+            <item >"EEG"</item>
+            <item >"EMRL"</item>
+            <item >"EPE"</item>
+            <item >"EPH"</item>
+            <item >"EQD"</item>
+            <item >"ESD"</item>
+            <item >"GE"</item>
+            <item >"GPT"</item>
+            <item >"GT"</item>
+            <item >"GTE"</item>
+            <item >"GWH"</item>
+            <item >"HENG"</item>
+            <item >"HSD"</item>
+            <item >"HSEM"</item>
+            <item >"HY"</item>
+            <item >"HYD"</item>
+            <item >"IFS"</item>
+            <item >"II"</item>
+            <item >"IN"</item>
+            <item >"INM"</item>
+            <item >"IPA"</item>
+            <item >"ISHM"</item>
+            <item >"ISP"</item>
+            <item >"IT"</item>
+            <item >"IWM"</item>
+            <item >"MAD"</item>
+            <item >"MAR"</item>
+            <item >"MBA"</item>
+            <item >"MCA"</item>
+            <item >"MDE"</item>
+            <item >"ME"</item>
+            <item >"MES"</item>
+            <item >"MEV"</item>
+            <item >"MGLT"</item>
+            <item >"MGPT"</item>
+            <item >"MHY"</item>
+            <item >"MIED"</item>
+            <item >"MMED"</item>
+            <item >"MMT"</item>
+            <item >"MSAM"</item>
+            <item >"MSC"</item>
+            <item >"MSCPH"</item>
+            <item >"MSD"</item>
+            <item >"MSIM"</item>
+            <item >"MSM"</item>
+            <item >"MSP"</item>
+            <item >"MT"</item>
+            <item >"MURP"</item>
+            <item >"NT"</item>
+            <item >"PEM"</item>
+            <item >"PHD"</item>
+            <item >"PHM"</item>
+            <item >"PISE"</item>
+            <item >"PKG"</item>
+            <item >"PP"</item>
+            <item >"PPE"</item>
+            <item >"PPED"</item>
+            <item >"PS"</item>
+            <item >"PSE"</item>
+            <item >"PST"</item>
+            <item >"PTD"</item>
+            <item >"RFM"</item>
+            <item >"SAC"</item>
+            <item >"SD"</item>
+            <item >"SDV"</item>
+            <item >"SE"</item>
+            <item >"SMC"</item>
+            <item >"SSEM"</item>
+            <item >"STD"</item>
+            <item >"SVRA"</item>
+            <item >"SWH"</item>
+            <item >"TE"</item>
+            <item >"TEMI"</item>
+            <item >"TPH"</item>
+            <item >"TSE"</item>
+            <item >"WEMI"</item>
+            <item >"WM"</item>
+            <item >"WRD"</item>
+            <item >"WRDMD"</item>
 
     </string-array>
     <string-array name="states">
@@ -261,267 +377,3 @@
 
 
 </resources>
-=======
-<resources>
-    <string name="app_name">New Entrants</string>
-    <string name="title_activity_navigation">Navigation</string>
-
-    <string name="tab1">Profile</string>
-    <string name="tab2">Blogs</string>
-    <string name="tab3">Peer Connect</string>
-    <string name="tab4">Senior Connect</string>
-    <string name="tab5">Edit Info</string>
-    <string name="tab6">Logout</string>
-    <string-array name="entrantstabs">
-        <item>Profile</item>
-        <item>Blogs</item>
-        <item>Peer Connect</item>
-        <item>Senior Connect</item>
-
-        <item>Logout</item>
-    </string-array>
-    <string-array name="studenttabs">
-        <item>Profile</item>
-        <item>Blogs</item>
-        <item>Requests</item>
-
-        <item>Logout</item>
-    </string-array>
-    <string-array name="tabs">
-        <item>Profile</item>
-        <item>Blogs</item>
-        <item>Peer Connect</item>
-        <item>Senior Connect</item>
-        <item>Edit Info</item>
-        <item>Logout</item>
-    </string-array>
-    <string-array name="tabs_logged_in">
-        <item>Signup</item>
-        <item>Login</item>
-    </string-array>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_senior_connect">SConnect</string>
-    <string name="pc1">Peers</string>
-    <string name="pc2">Request</string>
-    <string name="sc1">Requested</string>
-    <string name="sc2">Accepted</string>
-    <string-array name="sctabs">
-        <item>Requested</item>
-        <item>Accepted</item>
-    </string-array>
-    <string name="request_button">Request a Senior</string>
-    <string-array name="branches">
-            <item >None</item >
-            <item >Advanced Chemical Analysis (M.Tech.)</item >
-            <item >Geophysical Technology (M.Tech.)</item >
-            <item >Alternate Hydro Energy Centre (PHD)</item >
-            <item >Alternate Hydro Energy Systems (M.Tech.)</item >
-            <item >Architecture and Planning (B.Arch.)</item >
-            <item >Architecture Department (PHD)</item >
-            <item >Applied Science and Engineering Department (PHD)</item >
-            <item >Building Technology (M.Tech.)</item >
-            <item >Biotechnology (B.Tech.)</item >
-            <item >Biotechnology Department (PHD)</item >
-            <item >Biotechnology (MSc)</item >
-            <item >Control &amp; Guidance (M.Tech.)</item >
-            <item >Computer Aided Process Plant Design (M.Tech.)</item >
-            <item >CAD,CAM &amp; Robotics (M.Tech.)</item >
-            <item >Disaster Management and Mitigation (PHD)</item >
-            <item >Civil Engineering (B.Tech.)</item >
-            <item >Civil Engineering Department (PHD)</item >
-            <item >Civil Engineering with specialisation in Structures (IDD)</item >
-            <item >Chemical Engineering (B.Tech.)</item >
-            <item >Chemical Engineering Department (PHD)</item >
-            <item >B. Tech. (Chemical Engineering) and M. Tech. (Hydrocarbon Engineering) (IDD)</item >
-            <item >Chemistry (MSc)</item >
-            <item >Centre of Nanotechnology (PHD)</item >
-            <item >Corrosion Engineering (M.Tech.)</item >
-            <item >Computer Science &amp; Engineering (M.Tech.)</item >
-            <item >Computer Science and Engineering (B.Tech.)</item >
-            <item >Communication Systems  (M.Tech.)</item >
-            <item >Computer Science and Engineering Department (PHD)</item >
-            <item >B. Tech. (Computer Science &amp; Engineering) and M. Tech. (Information Technology) (IDD)</item >
-            <item >Centre for Transportation Systems (PHD)</item >
-            <item >Chemistry Department (PHD)</item >
-            <item >Disaster Mitigation and Management (M.Tech.)</item >
-            <item >Water Resources Development (PGDip)</item >
-            <item >Electronics &amp; Communication Engineering (B.Tech.)</item >
-            <item >Electronics and Communication Engineering (PHD)</item >
-            <item >B. Tech. (Electronics &amp; Communication Engineering) and M. Tech. (Wireless Communication) (IDD)</item >
-            <item >Electric Drives and Power Electronics (M.Tech.)</item >
-            <item >Electrical Engineering (B.Tech.)</item >
-            <item >Electrical Engineering Department (PHD)</item >
-            <item >Environmental Engineering (M.Tech.)</item >
-            <item >Environmental Management of Rivers and Lakes (M.Tech.)</item >
-            <item >B. Tech. (Electrical Engineering) and M.Tech. (Power Electronics) (IDD)</item >
-            <item >Engineering Physics (B.Tech.)</item >
-            <item >Earthquake Department (PHD)</item >
-            <item >Earth Sciences Department (PHD)</item >
-            <item >Geomatics Engineering (M.Tech.)</item >
-            <item >Geophysical Technology (IMT)</item >
-            <item >Geological Technology (IMT)</item >
-            <item >Geotechnical Engineering (M.Tech.)</item >
-            <item >Ground Water Hydrology (M.Tech.)</item >
-            <item >Hydraulics Engineering (M.Tech.)</item >
-            <item >Humanities and Social Sciences Department (PHD)</item >
-            <item >Hydroelectric System Engineering and Management (PGDip)</item >
-            <item >Hydrology (PGDip)</item >
-            <item >Hydrology Department (PHD)</item >
-            <item >Infrastructure Systems (M.Tech.)</item >
-            <item >Institute Instrumentation (PHD)</item >
-            <item >Production and Industrial Engineering (B.Tech.)</item >
-            <item >Industrial Metallurgy (M.Tech.)</item >
-            <item >Industrial Pollution Abatement (M.Tech.)</item >
-            <item >Industrial Safety and Hazards Management (M.Tech.)</item >
-            <item >Instrumentation and Signal Processing (M.Tech.)</item >
-            <item >Information Technology (M.Tech.)</item >
-            <item >Irrigation Water Management (M.Tech.)</item >
-            <item >Mathematics Department (PHD)</item >
-            <item >Architecture and Planning (M.Arch.)</item >
-            <item >Management and Business Administration (MBA)</item >
-            <item >Master of Computer Application (MCA)</item >
-            <item >Machine Design Engineering (M.Tech.)</item >
-            <item >Mechanical Engineering (B.Tech.)</item >
-            <item >Applied Geology (MSc)</item >
-            <item >Micro Electronic and VLSI (M.Tech.)</item >
-            <item >Geological Technology (M.Tech.)</item >
-            <item >Geophysical Technology (M.Tech.)</item >
-            <item >Hydrology (M.Tech.)</item >
-            <item >Mechanical and Industrial Engineering  (PHD)</item >
-            <item >Metallurgical and Materials Engineering (PHD)</item >
-            <item >Metallurgy Dual (IDD)</item >
-            <item >Applied Mathematics (MSc)</item >
-            <item >Chemistry (IMSc)</item >
-            <item >Physics (MSc)</item >
-            <item >Management Studies  (PHD)</item >
-            <item >M.sc Industrial Mathematics and Informatics (MSc)</item >
-            <item >Applied Mathematics (IMSc)</item >
-            <item >Physics (IMSc)</item >
-            <item >Metallurgical &amp; Materials Engineering (B.Tech.)</item >
-            <item >Master of Urban and Regional Planning (M.Arch.)</item >
-            <item >Nanotechnology (M.Tech.)</item >
-            <item >B. Tech. (Process Engineering) and M.B.A. (IDD)</item >
-            <item >Physics  (PHD)</item >
-            <item >Physical Metallurgy (M.Tech.)</item >
-            <item >Production &amp; Industrial Systems Engineering (M.Tech.)</item >
-            <item >Packaging Technology (M.Tech.)</item >
-            <item >Pulp &amp; Paper Technology (B.Tech.)</item >
-            <item >Pulp &amp; Paper Engineering (M.Tech.)</item >
-            <item >Polymer and Process Engineering Department (PHD)</item >
-            <item >Polymer Science and Technology (B.Tech.)</item >
-            <item >Power System Engineering (M.Tech.)</item >
-            <item >Polymer Science and Technology (IMT)</item >
-            <item >Paper Technology Department (PHD)</item >
-            <item >RF and Microwave Engineering (M.Tech.)</item >
-            <item >System and Control (M.Tech.)</item >
-            <item >Soil Dynamics (M.Tech.)</item >
-            <item >Semiconductor Design and VLSI Technology (M.Tech.)</item >
-            <item >Structural Engineering (M.Tech.)</item >
-            <item >System Modelling and Control (M.Tech.)</item >
-            <item >Solid State Electronic Materials (M.Tech.)</item >
-            <item >Structural Dynamics (M.Tech.)</item >
-            <item >Seismic Vulnerability &amp; Risk Assessment (M.Tech.)</item >
-            <item >Surface Water Hydrology (M.Tech.)</item >
-            <item >Transportation Engineering (M.Tech.)</item >
-            <item >Thermal Engineering (M.Tech.)</item >
-            <item >Civil Engineering with specialisation in Structures (IDD)</item >
-            <item >Thermal Systems Engineering (M.Tech.)</item >
-            <item >Welding Engineering (M.Tech.)</item >
-            <item >Watershed Management (M.Tech.)</item >
-            <item >Water Resources Development (M.Tech.)</item >
-            <item >Water Resources Development and Management  (PHD)</item >
-    </string-array>
-    <string-array name="branch_codes">
-
-    </string-array>
-    <string-array name="states">
-            <item>Andhra Pradesh</item>
-            <item>Arunachal Pradesh</item>
-            <item>Assam</item>
-            <item>Bihar</item>
-            <item>Chhattisgarh</item>
-            <item>Delhi</item>
-            <item>Goa</item>
-            <item>Gujarat</item>
-            <item>Haryana</item>
-            <item>Himachal Pradesh</item>
-            <item>Jammu and Kashmir</item>
-            <item>Jharkhand</item>
-            <item>Karnataka</item>
-            <item>Kerala</item>
-            <item>Madya Pradesh</item>
-            <item>Maharashtra</item>
-            <item>Manipur</item>
-            <item>Meghalaya</item>
-            <item>Mizoram</item>
-            <item>Nagaland</item>
-            <item>Orissa</item>
-            <item>Punjab</item>
-            <item>Rajasthan</item>
-            <item>Sikkim</item>
-            <item>Tamil Nadu</item>
-            <item>Telangana</item>
-            <item>Tripura</item>
-            <item>Uttaranchal</item>
-            <item>Uttar Pradesh</item>
-            <item>West Bengal</item>
-    </string-array>
-    <string-array name="state_codes">
-            <item >ADP</item>
-            <item >ARP</item>
-            <item >ASM</item>
-            <item >BHR</item>
-            <item >CHG</item>
-            <item >DEL</item>
-            <item >GOA</item>
-            <item >GUJ</item>
-            <item >HAR</item>
-            <item >HMP</item>
-            <item >JNK</item>
-            <item >JHK</item>
-            <item >KAR</item>
-            <item >KRL</item>
-            <item >MDP</item>
-            <item >MAH</item>
-            <item >MNP</item>
-            <item >MGY</item>
-            <item >MIZ</item>
-            <item >NGL</item>
-            <item >ORS</item>
-            <item >PJB</item>
-            <item >RAJ</item>
-            <item >SIK</item>
-            <item >TAN</item>
-            <item >TLG</item>
-            <item >TRP</item>
-            <item >UTA</item>
-            <item >UTP</item>
-            <item >WSB</item>
-    </string-array>
-    <string name="title_activity_register">Register</string>
-
-    <string name="title_activity_student_login">StudentLogin</string>
-    <string name="title_activity_new_entrant_login">NewEntrantLogin</string>
-    <string name="title_activity_login">LoginActivity</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_navigation_student">NavigationStudent</string>
-
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_fghfh">fghfh</string>
-
-    <string name="hello_world">Hello world!</string>
-
-
-
-
-
-</resources>
->>>>>>> 50782eb17d1d54b622a4c31b082817173c845682

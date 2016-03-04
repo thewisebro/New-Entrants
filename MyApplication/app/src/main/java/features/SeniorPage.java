@@ -1,5 +1,6 @@
 package features;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,11 +15,12 @@ import models.SeniorModel;
 /**
  * A simple {@link Fragment} subclass.
  */
+@SuppressLint("ValidFragment")
 public class SeniorPage extends Fragment {
     private SeniorModel senior;
 
     public SeniorPage(SeniorModel model) {
-        senior=model;
+        this.senior=model;
     }
 
 
@@ -33,7 +35,7 @@ public class SeniorPage extends Fragment {
 
         name.setText(senior.name);
         year.setText(senior.year);
-        branch.setText(senior.branch);
+        branch.setText(senior.branchname);
 
         return view;
     }

@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="#e2e4fe">
 
-<<<<<<< HEAD
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,16 +19,6 @@
             android:divider="@null"
             android:dividerHeight="10dp" />
     </ScrollView>
-=======
-    <ListView
-        android:id="@+id/card_listView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:listSelector="@android:color/transparent"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@null"
-        android:dividerHeight="10dp" />
->>>>>>> 50782eb17d1d54b622a4c31b082817173c845682
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -44,7 +33,6 @@
         android:src="@android:drawable/btn_plus"
         android:nestedScrollingEnabled="true" />
 
-<<<<<<< HEAD
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
@@ -86,7 +74,5 @@
         </RadioGroup>
     </LinearLayout>
 
-=======
->>>>>>> 50782eb17d1d54b622a4c31b082817173c845682
 
 </RelativeLayout>

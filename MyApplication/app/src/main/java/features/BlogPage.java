@@ -71,13 +71,8 @@ public class BlogPage extends Fragment {
             try {
                 HttpURLConnection conn= (HttpURLConnection) new URL(url).openConnection();
                 conn.setRequestMethod("GET");
-<<<<<<< HEAD
                 //conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 //conn.setRequestProperty("Accept", "application/json");
-=======
-                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                conn.setRequestProperty("Accept", "application/xml");
->>>>>>> 50782eb17d1d54b622a4c31b082817173c845682
 
                 BufferedReader reader= new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuffer buffer=new StringBuffer();
@@ -99,20 +94,12 @@ public class BlogPage extends Fragment {
     private void displayBlog(String result){
         try {
             JSONObject object= new JSONObject(result);
-<<<<<<< HEAD
             topic.setText(object.getString("title"));
-=======
-            topic.setText(object.getString("topic"));
->>>>>>> 50782eb17d1d54b622a4c31b082817173c845682
             date.setText(object.getString("date"));
             description.setText(object.getString("description"));
             content.setText(object.getString("content"));
             group.setText(object.getString("group"));
-<<<<<<< HEAD
             new ImageLoadTask(object.getString("dp_link"),image);
-=======
-            new ImageLoadTask(object.getString("imageurl"),image);
->>>>>>> 50782eb17d1d54b622a4c31b082817173c845682
 
         } catch (JSONException e) {
             e.printStackTrace();

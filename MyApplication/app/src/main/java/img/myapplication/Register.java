@@ -77,6 +77,7 @@ public class Register extends AppCompatActivity {
         entrant.mobile= ((EditText) findViewById(R.id.new_mobile)).getText().toString().trim();
         entrant.fb_link= ((EditText) findViewById(R.id.new_fblink)).getText().toString().trim();
         entrant.branchname=branch.getSelectedItem().toString().trim();
+        entrant.branchcode=(getResources().getStringArray(R.array.state_codes))[pos_branch];
         entrant.state= state.getSelectedItem().toString().trim();
         entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibilty)).isChecked();
         entrant.profile_privacy= ((CheckBox) findViewById(R.id.profile_visibilty)).isChecked();

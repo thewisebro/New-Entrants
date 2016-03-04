@@ -40,6 +40,7 @@ public class BlogsFragment extends Fragment {
 
 
     private BlogCardArrayAdapter cardArrayAdapter;
+    private List<BlogModel> items;
     private ListView listView;
     private int blogsCount;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
@@ -58,6 +59,7 @@ public class BlogsFragment extends Fragment {
             }
         });
 
+        items=new ArrayList<BlogModel>();
         cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_item_card);
         blogsCount=0;
 /*        if (isConnected()){
@@ -69,6 +71,7 @@ public class BlogsFragment extends Fragment {
             new LoadBlogTask().execute();
         else
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+
         listView.setAdapter(cardArrayAdapter);
 
         return view;
@@ -96,7 +99,10 @@ public class BlogsFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             if (result.equals("success")){
-                cardArrayAdapter.notifyDataSetChanged();
+                //cardArrayAdapter.notifyDataSetChanged();
+
+                cardArrayAdapter.refresh();
+                items.clear();
             }
         }
     }
@@ -121,8 +127,6 @@ public class BlogsFragment extends Fragment {
         try {
             JSONObject jObject = new JSONObject(result);
             JSONArray jArray=jObject.getJSONArray("blogs");
-
-            //JSONObject object=null;
             int len=jArray.length();
 
             for(int i=0; i<len;i++){
@@ -134,9 +138,10 @@ public class BlogsFragment extends Fragment {
                 model.group=object.getString("group");
                 model.shortInfo=object.getString("description");
                 model.date=object.getString("date");
-                model.id=Integer.parseInt(object.getString("id"));
+                model.id = Integer.parseInt(object.getString("id"));
                 model.blogText=null;
-                cardArrayAdapter.add(model);
+                items.add(model);
+                //cardArrayAdapter.notifyDataSetChanged();
                 blogsCount+=1;
             }
         } catch (JSONException e) {
@@ -197,6 +202,12 @@ public class BlogsFragment extends Fragment {
 */
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
+        public void refresh(){
+            this.cardList.clear();
+            this.cardList.addAll(items);
+            notifyDataSetChanged();
+        }
+
         private List<BlogModel> cardList = new ArrayList<BlogModel>();
 
                 public BlogCardArrayAdapter(Context context, int textViewResourceId) {
@@ -250,7 +261,8 @@ public class BlogsFragment extends Fragment {
             return row;
         }
 
-    }
+
+}
     public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
         private String url;
