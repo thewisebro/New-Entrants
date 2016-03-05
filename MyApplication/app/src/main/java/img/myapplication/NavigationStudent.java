@@ -15,6 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import features.BlogPage;
 import features.BlogsFragment;
 import features.ConnectFragment;
@@ -31,6 +34,7 @@ public class NavigationStudent extends ActionBarActivity
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
     private CharSequence mTitle;
+    private Map<String,String> userParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +49,8 @@ public class NavigationStudent extends ActionBarActivity
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
         db=new MySQLiteHelper(this);
         student=db.getStudent();
-        //student=(StudentModel) getIntent().getSerializableExtra("user");
+        userParams=new HashMap<String,String>();
+        userParams.put("category","student");
 
         if(!isConnected()){
             Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
@@ -103,7 +108,7 @@ public class NavigationStudent extends ActionBarActivity
                     break;
                 case 3: logout();
                     break;
-                default:fragment=new ProfileFragment(student);
+                default:fragment=new ProfileFragment(student,userParams.get("category"));
 
             }
         }

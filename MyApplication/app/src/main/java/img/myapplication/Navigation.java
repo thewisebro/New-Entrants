@@ -54,9 +54,10 @@ public class Navigation extends ActionBarActivity
         mNavigationDrawerFragment.set(1);
         db=new MySQLiteHelper(this);
         entrant=db.getEntrant();
-        userParams=new HashMap<>();
+        userParams=new HashMap<String,String>();
         userParams.put("state",entrant.state);
         userParams.put("branchcode",entrant.branchcode);
+        userParams.put("category","entrant");
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
         if(!isConnected()){
             Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
