@@ -1,8 +1,11 @@
 package features;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,12 +34,12 @@ import img.myapplication.R;
 public class BlogPage extends Fragment {
     //private BlogModel blog;
     private String url;
-    private TextView topic;
-    private TextView description;
-    private TextView date;
-    private TextView content;
-    private TextView group;
-    private ImageView image;
+    public TextView topic;
+    public TextView description;
+    public TextView date;
+    public TextView content;
+    public TextView group;
+    public ImageView image;
     public BlogPage(String blogUrl){
         this.url=blogUrl;
         //this.blog=model;
@@ -46,7 +49,6 @@ public class BlogPage extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_blog_page, container, false);
-
         topic= (TextView) view.findViewById(R.id.topic);
         description= (TextView) view.findViewById(R.id.shortInfo);
         date= (TextView) view.findViewById(R.id.date);
@@ -60,8 +62,17 @@ public class BlogPage extends Fragment {
         date.setText(blog.date);
         group.setText(blog.group);
         //author.setText(blog.author);*/
-        new BlogTask().execute();
+        if (isConnected())
+            new BlogTask().execute();
         return view;
+    }
+    public boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
     }
 
     private class BlogTask extends AsyncTask<String,Void,String>{
@@ -79,7 +90,8 @@ public class BlogPage extends Fragment {
                 String inputLine;
                 while ((inputLine = reader.readLine()) != null)
                     buffer.append(inputLine+"\n");
-                displayBlog(buffer.toString());
+
+                return buffer.toString();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -88,18 +100,19 @@ public class BlogPage extends Fragment {
         }
         @Override
         protected void onPostExecute(String result){
-
+            displayBlog(result);
         }
     }
     private void displayBlog(String result){
         try {
             JSONObject object= new JSONObject(result);
+
             topic.setText(object.getString("title"));
             date.setText(object.getString("date"));
             description.setText(object.getString("description"));
             content.setText(object.getString("content"));
             group.setText(object.getString("group"));
-            new ImageLoadTask(object.getString("dp_link"),image);
+            new ImageLoadTask(object.getString("dp_link"),image).execute();
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -148,58 +148,7 @@ public class BlogsFragment extends Fragment {
             e.printStackTrace();
         }
     }
-/*    public void updateBlogs(){
-        try {
-            URL url= new URL("192.168.121.187:8080/new_entrants/blogs/");
-            HttpURLConnection conn=(HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-            StringBuilder sb=new StringBuilder();
-            String line = "";
-            while((line = bufferedReader.readLine()) != null)
-                sb.append(line + '\n');
-            String result=sb.toString();
-            updateBlogsTable(result);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void updateBlogsTable(String result){
-        MySQLiteHelper db=new MySQLiteHelper(getContext());
-        db.deleteBlogs();
-        try {
-            JSONObject jObject = new JSONObject(result);
-            JSONArray jArray=jObject.getJSONArray("blogs");
-
-            JSONObject object=null;
-
-            for(int i=0; i<jArray.length();i++){
-
-                object=jArray.getJSONObject(i);
-                BlogModel model= new BlogModel();
-                model.topic=object.getString("title");
-                model.blogurl=object.getString("blog_url");
-                model.imageurl=object.getString("dp_link");
-                model.group=object.getString("group");
-                model.shortInfo=object.getString("description");
-                model.date=object.getString("date");
-                model.id=object.getInt("id");
-                model.blogText=null;
-                db.addBlog(model);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-    public void getCardList(){
-        MySQLiteHelper db=new MySQLiteHelper(getContext());
-        List<BlogModel> blogList=db.getBlogs();
-        for (int i=0; i<blogList.size(); i++){
-            cardArrayAdapter.add(blogList.get(i));
-        }
-    }
-*/
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
         public void refresh(){
@@ -256,7 +205,7 @@ public class BlogsFragment extends Fragment {
             viewHolder.date.setText(card.date);
             //viewHolder.model.copy(card);
             viewHolder.blogUrl=card.blogurl;
-            new ImageLoadTask(card.imageurl,viewHolder.img);
+            new ImageLoadTask(card.imageurl,viewHolder.img).execute();
             row.setTag(viewHolder);
             return row;
         }
