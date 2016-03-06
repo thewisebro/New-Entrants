@@ -50,6 +50,7 @@
     </string-array>
     <string name="request_button">Request a Senior</string>
     <string-array name="branches">
+            <item>Select</item>
             <item >Advanced Chemical Analysis (M.Tech.)</item >
             <item >Geophysical Technology (M.Tech.)</item >
             <item >Alternate Hydro Energy Centre (PHD)</item >
@@ -170,6 +171,7 @@
             <item >Water Resources Development and Management  (PHD)</item >
     </string-array>
     <string-array name="branch_codes">
+            <item>Select</item>
             <item >"ACA"</item>
             <item >"AGPT"</item>
             <item >"AHEC"</item>
@@ -291,6 +293,7 @@
 
     </string-array>
     <string-array name="states">
+            <item>Select</item>
             <item>Andhra Pradesh</item>
             <item>Arunachal Pradesh</item>
             <item>Assam</item>
@@ -323,6 +326,7 @@
             <item>West Bengal</item>
     </string-array>
     <string-array name="state_codes">
+            <item>Select</item>
             <item >ADP</item>
             <item >ARP</item>
             <item >ASM</item>
