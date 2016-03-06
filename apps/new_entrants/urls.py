@@ -2,7 +2,8 @@ from django.conf.urls import patterns, url
 from new_entrants.views import *
 
 urlpatterns = patterns('',
-#    url(r'^seniors/$', seniors_list)i,
+    url(r'^$', index),
+    url(r'^userexists/$',userexists),
     url(r'^register/$', register),
     url(r'^userinfo/$', userinfo),
     url(r'^blogs/$', blogs),  #true
@@ -11,5 +12,5 @@ urlpatterns = patterns('',
     url(r'^connect/$', request_connect),  #true
     url(r'^accept/$', accept_connect),  #true
     url(r'^pending/$', pending_requests),
-    url(r'^accepted/$',accepted),  #truw
+    url(r'^accepted/$', accepted),  #true
     )
