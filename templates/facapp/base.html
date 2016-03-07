@@ -1,0 +1,133 @@
+{% extends "facapp/nucleus/home_faculty.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/facapp/styles.css">
+{% endblock %}
+
+{% block profile_pic %}
+{% if user.faculty.photo %}
+<img src="{{ user.faculty.photo.url }}" />
+{% else %}
+<img src="/photo/" />
+{% endif %}
+{% endblock %}
+
+{% block header_text %}
+Faculty Profile
+{% endblock %}
+{# End profile_pic block #}
+
+{% block header_links %}
+<div id="header_app_links">
+  <nav>
+    <a href="{% url 'facapp.views.index' %}">Home</a>
+    &nbsp;|&nbsp;
+    <a href="/">Channel i</a>
+    &nbsp;|&nbsp;
+    <a href="{% url 'nucleus.views.logout' %}">Logout</a>
+ </nav>
+</div>
+{% endblock %}
+{% block contents %}
+<div id ="messages-div" class="message"></div>
+<div class="buttons">
+  <a href="http://cms.channeli.in/nova/index.php?r=dynamicPage/preview&name={{user.username}}&type=fa" target="_blank"><button class="btn" type="button">Preview</button></a>
+  <button class="btn btn-success" type="button" data-toggle="tooltip"
+    title="Click here to reflect the changes made here on Department's website"
+    onclick="send_request('{{user.username}}');">Publish Profile on IITR
+    Website</button>
+
+{% comment "Uncomment the next tag and comment the previous one when publish button is under maintainance" %}
+<!--
+  <button class="btn btn-success" type="button" data-toggle="tooltip"
+    title="Click here to reflect the changes made here on Department's website"
+    onclick="under_maintenance();">Publish Profile on IITR Website</button>-->
+{% endcomment %}
+</div>
+{% endblock %}
+{% block left_sidebar %}
+<div id="content_left">
+<nav id = "menus">
+  <ul>
+    <li id="home_li"><a href="/facapp/">Home</a></li>
+    <li id="educational_details_li"><a href="/facapp/add/EducationalDetails/">Educational Details</a></li> 
+    {# "1" is passed so that it passes the urls.py condition. #}
+    <li id="general_information_li"><a href="/facapp/update/Faculty/1/">General Information</a></li>
+    <li id="administrative_background_li"><a href="/facapp/add/AdministrativeBackground/">Administrative Background</a></li>
+    <li id="honors_li"><a href="/facapp/add/Honors/">Honors</a></li>
+    <li id="membership_li"><a href="/facapp/add/Membership/">Membership</a></li>
+    <li id="professional_background_li"><a href="/facapp/add/ProfessionalBackground/">Professional Background</a></li>
+    <li id="participation_seminar_li"><a href="/facapp/add/ParticipationSeminar/">Participation Seminar</a></li>
+    <li id="miscellaneous_li"><a href="/facapp/add/Miscellaneous/">Miscellaneous</a></li>
+    <li id="collaboration_li"><a href="/facapp/add/Collaboration/">Collaboration</a></li>
+    <li id="invitations_li"><a href="/facapp/add/Invitations/">Invitations</a></li>
+    <li id="multiple_posts_li"><a href="/facapp/add/MultiplePost/">Multiple Posts</a></li>
+    <li id="teaching_engagements_li"><a href="/facapp/add/TeachingEngagement/">Teaching Engagements</a></li>
+    <li id="sponsored_research_projects_li"><a href="/facapp/add/SponsoredResearchProjects/">Sponsored Research Projects</a></li>
+    <li id="project_and_thesis_supervision_li"><a href="/facapp/add/ProjectAndThesisSupervision/">Project And Thesis Supervision</a></li>
+    <li id="phd_supervised_li"><a href="/facapp/add/PhdSupervised/">Phd Supervised</a></li>
+    <li id="research_scholar_group_li"><a href="/facapp/add/ResearchScholarGroup/">Research Scholar Group</a></li>
+    <li id="interests_li"><a href="/facapp/add/Interests/">Interests</a></li>
+    <li id="visits_li"><a href="/facapp/add/Visits/">Visits</a></li>
+    <li id="participation_short_term_courses_li"><a href="/facapp/add/ParticipationInShorttermCourses/">Participation In Short Term Courses</a></li>
+    <li id="organised_conference_li"><a href="/facapp/add/OrganisedConference/">Organised Conference</a></li>
+    <li id="special_lectures_delivered_li"><a href="/facapp/add/SpecialLecturesDelivered/">Special Lectures Delivered</a></li>
+    <li id="books_authored_li"><a href="/facapp/books_authored/">Books Authored</a></li>
+    <li id="refreed_journal_papers_li"><a href="/facapp/refereed_journal_papers/">Refereed Journal Papers</a></li>
+    <li id="website_li"><a href="/facapp/website_page/">Website</a></li>
+    <li><a href="/facapp/filemanagerhelp/">FacSpace</a></li>
+  <!--  <li id="mass_mailer_li"><a href="/facapp/mass_mailer/">Mass Mailer</a></li> -->
+  </ul>
+</nav>
+</div>
+{% endblock %} {# End left_sidebar block #}
+
+  
+{% block app_content %}
+  <h3>{{ model_name_space_separated }}</h3>
+  {% if model_to_delete %}
+    <h4>Are you sure you want to delete this entry?</h4>
+    {% block model_details_to_delete %} {% endblock %}
+    {% include "facapp/generic_form.html" %}
+
+  {% else %}
+    <link rel='stylesheet' href='{{ STATIC_URL }}css/facapp/generic_form.css' type='text/css'/>
+    {% include "facapp/generic_form.html" %}
+    {% if list %}
+      <h4>{{ model_name_space_separated }}:</h4>
+      <ul>
+        {% for l in list %}
+          {% block model_details %} {% endblock %}
+          <li class="action"><a href="/facapp/update/{{ model_name }}/{{ l.id }}/">Update</a>, <a href="/facapp/delete/{{ model_name }}/{{ l.id }}/">Delete</a></li>
+	      {% endfor %}
+      </ul>
+      </table>
+    {% else %}
+      <h4>No {{ model_name_space_separated }} entered.</h4>
+    {% endif %}  {# End list if #}
+
+  {% endif %}  {# End model_to_delete if. #}
+{% endblock %} {# End app_content block. #}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/tabs.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/publish_request.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/facapp/csrf.js"></script>
+<!--
+<script>
+  function under_maintenance(){
+      $("#messages-div").addClass("error");
+      $("#messages-div").css("width","330px");
+      $("#messages-div").css("margin","0 auto");
+      $("#messages-div").html("Website is under maintenance. Please try again later.");
+      setTimeout(function() {
+              $("#messages-div").html("")
+              $("#messages-div").removeAttr( 'style' )
+              $("#messages-div").removeClass("error")
+            }, 2000);
+    }
+</script>
+-->
+{% endblock scripts %}
+

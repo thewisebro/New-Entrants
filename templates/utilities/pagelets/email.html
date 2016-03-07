@@ -1,0 +1,93 @@
+{% extends "pagelet_base.html" %}
+
+{% block styles %}
+  {{ emailform.media.css }}
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}jquery/onoffswitch.css"/>
+  <style type="text/css">
+    #id_subscribed
+    {
+        display: none;
+    }
+    #id_email_subscribed
+    {
+        display: none;
+    }
+    #events-subscription-heading
+    {
+      height: 50px !important;
+      line-height: 60px !important;
+    }
+    #notices-subscription-heading
+    {
+      height: 50px !important;
+      line-height: 60px !important;
+    }
+    .onoffswitch
+    {
+       margin-top: 18px;
+       margin-left: 20px;
+       float: left;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class='form-div'>
+  <form id='events-subscription-form' class='uniForm' method='POST' action=''>{% csrf_token %}
+    <div class="sub-heading">
+      <div style='float:left;'>Email Settings</div>
+    </div>
+    {{ emailform.uniform }}
+
+
+    <div class="sub-heading" id="notices-subscription-heading">
+      <div style='float:left;'>Notices Subscription</div>
+        <div class="onoffswitch">
+          <input type="checkbox" name="onoffswitch1" class="onoffswitch-checkbox"
+             id="myonoffswitch1" onchange="switch_clicked(0)" {% if notice_subscribed %}checked{% endif %}>
+          <label class="onoffswitch-label" style="width: 65px !important" for="myonoffswitch1">
+            <span class="onoffswitch-inner"></span>
+            <span class="onoffswitch-switch"></span>
+          </label>
+        </div>
+    </div>
+    {{ noticeform.subscribed }}
+    <div {% if not noticeform.subscribed.value %}style='display:none;'{% endif %}>
+      <div id='calendars-checkboxes'>
+        {{ noticeform.categories }}
+        <script>
+          {% for mc in notice_subscribed_categories %}
+            $("input[value='{{mc}}']")[0].checked=true;
+          {% endfor %}
+        </script>
+      </div>
+    </div>
+    <div class="clear-both"></div>
+
+    <div class="sub-heading" id="events-subscription-heading">
+      <div style='float:left;'>Events Subscription</div>
+        <div class="onoffswitch">
+          <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+             id="myonoffswitch" onchange="switch_clicked(1)" {% if email_subscribed %}checked{% endif %}>
+          <label class="onoffswitch-label" style="width: 65px !important" for="myonoffswitch">
+            <span class="onoffswitch-inner"></span>
+            <span class="onoffswitch-switch"></span>
+          </label>
+        </div>
+    </div>
+    {{ events_subscribe_form.email_subscribed }}
+    <div {% if not events_subscribe_form.email_subscribed.value %}style='display:none;'{% endif %}>
+      <div id='calendars-checkboxes'>
+        {{ events_subscribe_form.calendars }}
+      </div>
+    </div>
+    <div class="clear-both"></div>
+    <input style='margin-left:10px' id='events-subscription-submit' class="input-button" type='submit' name='submit' value='Submit'/>
+  </form>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src='{{ STATIC_URL }}js/utilities/email.js'></script>
+  {{ emailform.media.js }}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% block styles %}
+{{form.media.css}}
+{% endblock %}
+
+{% block body %}
+{% if privelege %}
+  <form action="" method="post" class='uniForm'>{% csrf_token %}
+    <div id='div_id_category' class='ctrlHolder'>
+    <label for='id_category' class='field-label-big'>Category : </label><div class='field'><select id='id_category' name='category_name' onchange="$('input[name=reset]').click();">
+    <option value=''> ---------- </option>
+    {% for cat in categories %}
+      <option value='{{ cat.name }}' {% if cat.name == category.name %}selected='selected'{% endif %}>{{ cat.name }}</option>
+    {% endfor %}
+    </select></div>
+    </div>
+    <input type="submit" name="reset" style="display:none;"/>
+    {% if category %}
+      {{ form.uniform }}
+      <input type="submit" name="Submit" value="Upload"></input>
+    {% endif %}
+  </form>
+{% else %}
+<p>You are not authorised.</p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{{form.media.js}}
+{% endblock %}

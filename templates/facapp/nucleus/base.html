@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load macros %}
+
+{% block head %}
+  <script type="text/javascript">
+    var channeli_apps = {{ channeli_apps }};
+    var tabs = Array();
+    var not_viewed_notifications_count = {% not_viewed_notifications_count user %};
+    var tab_initial = '{% block tab_initial %}apps{% endblock %}';
+    var json_messages = {{ django_messages }};
+  </script>
+{% endblock head %}
+
+{% block styles %}    
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/nucleus/normalize.css" type="text/css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/nucleus/base.css" type="text/css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/nucleus/style.css" type="text/css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/nucleus/fonts.css" type="text/css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/include.css" type="text/css">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/smoothness/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/smoothness/custom-jquery-ui.css"/>
+  <![if !IE]>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/smoothness/nanoscroller.css"/>
+  <![endif]>
+  <!--[if gt IE 7]>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/smoothness/nanoscroller.css"/>
+  <![endif]-->
+
+  <style type="text/css">
+    {{ background_style|safe }}
+  </style>
+  {# App specific css files here #}
+  {% block app_styles %} {% endblock %}
+{% endblock styles %}
+
+{% block scripts %}
+  <!--[if lte IE 7]>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery.ba-hashchange.js"></script>
+  <![endif]-->
+  <script type="text/javascript" src="{{ STATIC_URL }}js/csrf.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery-ui.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/nucleus/base.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/include.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery.nanoscroller.min.js"></script>
+  {# application specific scripts #}
+  {% block app_scripts %} {% endblock %} 
+{% endblock scripts%}
+
+{% block body %}
+<div id="container">
+  
+  <div id="bg" class="bg"></div>
+  <div id="bg-right"></div>
+  <div id="bg-up" class="bg"></div>
+  <div id="content-back"></div>
+  <!--div id="loading-div"><div>Loading..</div></div-->
+  <div id="header">
+    <div id="logo"><a href="{% url root %}">{% block header_title %}Channel i{% endblock %}</a></div>
+    <div id="account-options">
+      <a href="/logout/" id="logout" class="account-option">Sign Out</a>
+      <a href="/helpcenter/" class="account-option" id="help_center">Help Center</a>
+      <div class="account-option" onclick="take_feedback();" id="feedback">Feedback</div>
+    </div>
+  </div>
+
+  <div id = "flyout">
+    <div id ="flyout-header">
+      <div id ="header-left">
+        Notifications
+      </div>
+      <div id="header-right">
+        View all
+      </div>
+    </div>
+    <div id="flyout-content">
+      <div id="flyout-listbox">
+        <div class="notification">
+          <div class="notification-left">
+            <div class="notification-img">
+            </div>
+          </div> 
+          <div class="notification-text">
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div> 
+
+  
+  <div id="banner">
+    <div id="banner-left">
+      <img id="profile-pic" src="{{ user.get_photo_url }}" width="auto" height="76px"></img>
+    </div>
+    
+    <div id="banner-mid">
+      <div id="nav-bar">
+        <a href="/" id="home-button" class={% block active-home %}""{% endblock %} title="Home">
+          <div id="home-pic"></div>
+        </a>
+        <!--div class="mid-buttons" title="Profile">
+          <div id="account-pic"></div>
+        </div>
+        <div class="mid-buttons" title="Notifications">
+          <div id="message-pic"></div>
+        </div-->
+        <a href="/settings/" id="settings-button" class={% block active-settings %}""{% endblock %} title="Settings">
+          <div id="settings-pic"></div>
+        </a>
+      </div>
+      
+      <div id="detail-cluster">
+        <div id="person-name">{% block banner_name %}{% endblock %}</div>
+        <div id="person-branch">{% block banner_info %}{% endblock %}</div>
+      </div>
+      
+      <div id="messages-div">
+      </div>
+      
+      <div id="day-n-date">
+        <div id="day">{% currentday %}</div>
+        <div id="date">{% now "jS M" %}</div>
+      </div>
+      
+    </div>
+  </div>
+  <div id="left-column-up">
+    {% macro tab-div arg %}
+      <div id="{{arg}}-tab" class="tab" onclick="tab_clicked('{{arg}}');">
+        <script type="text/javascript">
+          tabs.push("{{arg}}");
+        </script>
+        <div id="{{arg}}" class="tab-pic"></div>
+        <div class="tab-name tab-color">{{arg|upper}}</div>
+      </div>
+    {% endmacro %}  
+     
+    {% usemacro tab-div "apps" %}
+    {% if user|in_group:"Student" %}
+      {% usemacro tab-div "games" %}
+    {% endif %}
+    {% usemacro tab-div "groups" %}
+    {% usemacro tab-div "links" %}
+    {% if user_in_img %}
+      {% usemacro tab-div "tools" %}
+    {% endif %}
+    <div id="tab-arrow"><div></div></div>
+  </div>
+  <div id="left-column"></div>
+   
+  <div id="list-box">
+    <div class="nano">
+      <div class="content">
+        <div class="applist" id="apps-list">
+          {% block apps-list %}
+          {% endblock %}  
+        </div>
+        {% if user|in_group:"Student"%}
+          <div class="applist" id="games-list">
+            {% for game,game_dict in channeli_games %}
+              <div class="appbox">
+                <img class="app-pic" src="{{ STATIC_URL }}images/games/icons/{{ game }}.png"/>
+                <div class="app-name"><a target="_blank" href="/games/{{ game_dict.url }}">{{ game_dict.name }}</a></div>
+              </div>
+            {% endfor %} 
+          </div>
+        {% endif %}
+        <div class="applist" id="groups-list">
+          {% block groups-list %}
+          {% endblock %}  
+        </div>
+        <div class="applist" id="links-list">
+          {% block links-list %}
+          {% endblock %}  
+        </div>
+        {% if user_in_img %}
+          <div class="applist" id="tools-list">
+            {% block imgtools-list %}
+            {% endblock %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div id="vertical-sep"></div>
+  
+  <div id="content">
+    {% block horizontal_tabs_block %}
+      <div id="content-top-bar">
+        {% block horizontal_tabs %}
+          {% macro horizontal_tab arg %}
+          <div class="content-tab" id="{{arg}}-content-tab" onclick="location.hash='{{arg}}'">{{arg|capfirst}}</div>
+          {% endmacro %}
+          {% usemacro horizontal_tab "feeds"%}
+          {% usemacro horizontal_tab "events"%}
+          <div class="content-tab" id="notifications-content-tab" onclick="location.hash='notifications'">
+            <div id="content-tab-notifications">Notifications</div>
+            <div id="notifications-count" class="notifications-count-inact">0</div>
+          </div>
+        {% endblock %}
+      </div>
+      <div id="content-top-space">
+      </div>
+    {% endblock %}
+ 
+    <div id="content-down">
+    {% block content %}
+    {% endblock %}
+    </div>
+  {% include "footer.html" %}
+  </div>
+  <div id="right-column">
+    <div class="nano">
+      <div class="content">
+        <div id="calendar-div">
+          {% block calendar_div %}
+          {% endblock %}
+        </div>
+        {% if user|in_group:"Faculty" %}
+          <div id="eb-wrapper">
+            <div id="notify-students" onclick="notify_students();">Notifiy your students</div>
+            <script type="text/javascript">
+              function notify_students(){
+                dialog_iframe({
+                  title:'Notify your students',
+                  name:'notify_students_dialog',
+                  width:650,
+                  height:400,
+                  src:'/settings/notify',
+                });
+              }  
+            </script>
+            <div id="events-birthdays">
+            </div>
+          </div>  
+        {% else %}
+          <div id="events-birthdays">
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}

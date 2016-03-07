@@ -1,0 +1,97 @@
+body,html,.container{
+  min-height:100%;
+}
+.container
+{
+  background-color:#f9f9f9;
+  padding-bottom:10px;
+}
+
+#middle{
+
+  padding:0 10px;
+}
+
+input[type='text']{
+  min-height:25px;
+}
+
+input[type='email']{
+  min-height:28px;
+}
+
+.header
+{
+  background-color:black;
+}
+
+form
+{
+margin:0 auto;
+}
+
+.partB_options{
+  background-color:lightgray;
+  font-size:17px; 
+}
+
+.partC_options{
+  background-color:rgb(212,223,207);
+  font-size:17px;
+}
+.partD_options{
+  background-color:rgb(200,214,168);
+  font-size:17px;
+}
+.partE_options{
+  background-color:rgb(198,206,206);
+  font-size:17px;
+}
+
+.waste_td{
+  background-color:rgb(247,240,240);
+}
+
+.question_1{
+  font-size:17px;
+}
+
+#footer{
+  background-color:#444;
+  width:100%;
+  min-height: 60px;
+  margin-top:;
+}
+
+#footer a{
+  color:#fefefe;
+  font-family:Verdana;
+  font-size:14px;
+}
+
+#footer a:hover {
+  text-decoration:underline;
+}
+
+#footer_content{
+  //height:50px;
+  line-height:0px;
+  vertical-align:middle;
+  //text-align:center;
+  color:#fefefe;
+  font-size:14px;
+  font-family:Verdana;
+  width:450px;
+  margin:0 auto;
+  padding:10px 0px;
+}
+
+.footer_img{
+  margin-bottom:-7px;
+  margin-left:1px;
+}
+
+.footer_text{
+  line-height:20px;
+  padding-left:9px;
+}

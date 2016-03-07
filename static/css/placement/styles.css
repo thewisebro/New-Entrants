@@ -1,0 +1,399 @@
+/* Styles related to placement only should be placed here. */
+/* This file is included in all the pages. */
+
+
+/***********************************************************/
+/* The right content div is hidden in placement and the    */
+/* middle content div spans over it.                       */
+/***********************************************************/
+#content_right {
+    display:none;
+}
+#content_middle {
+    width:813px;
+    margin-bottom: 20px;
+    min-height: 20px;
+    padding: 19px;
+}
+/********************************************/
+/* End of general css for placement online. */
+/********************************************/
+
+/*******************************************************************/
+/* Hide common elements of channel-i.(Temporary override)          */
+/* This is done as placement online is to be launched on it's own. */
+/* Remove this css while merging placement online with channel-i.  */
+/*******************************************************************/
+
+
+/* TODO : Change the header of all pages from Placement Online to
+   Channel-i in base.html */
+#login_box_top_links, #lower, #main_menu, #top_right {
+    display:none;
+}
+
+#box_login label {
+    float:none;
+}
+
+#id_username {
+    width:150px;
+}
+
+#id_password {
+    width:150px;
+}
+
+#box_login #generic_form_submit input[type=button] {
+    display:none;
+}
+#box_login #generic_form_submit input[type=submit] {
+    margin-top:0px;
+}
+
+/*******************************/
+/* End of temporary overrides. */
+/*******************************/
+
+.table select {
+    margin:0px;
+    height:20px;
+    padding:0px;
+    width:34px;
+}
+
+/*.sel {
+    background-color:#95efff;
+}
+
+.acc {
+    background-color:#80d0ff;
+}
+*/
+.form_itself label {
+    width:150px;
+    float:left;
+}
+
+.form_itself {
+    clear:both;
+    margin-bottom:20px;
+    padding-top:20px;
+}
+
+.form_itself input[type="radio"], .form_itself input[type="checkbox"] {
+    margin-bottom:20px;
+}
+
+input, textarea {
+    width:370px;
+}
+
+select {
+    width:380px;
+}
+
+td button {
+    width:90px;
+}
+ol, ul {
+    margin-left:0;
+}
+.error label {
+    width:125px;
+}
+
+.faq_question {
+    font-weight:bold;
+}
+
+.faq_answer {
+}
+
+.header a {
+    color:#FFF;
+}
+
+.imp_points {
+  padding-left:16px;
+  padding-top:30px;
+}
+
+.imp_points li {
+  padding:5px;
+}
+/*****************************************************/
+/* Display the upload pic widget in a good style     */
+/*****************************************************/
+#div_photo #photo-clear_id {
+    float:left;
+}
+label[for=photo-clear_id] {
+    margin-bottom:0px;
+}
+/*****************************************************/
+/*          End of upload pic widget                 */
+/*****************************************************/
+
+/*****************************************************/
+/* Override styles in disciplines list in            */
+/* company addition form.                            */
+/*****************************************************/
+#div_open_for_disciplines label {
+    float:none;
+    width:auto;
+}
+#div_open_for_disciplines input[type=checkbox] {
+    margin-bottom:0px;
+    margin-top:0px;
+}
+#div_open_for_disciplines li {
+    list-style:none;
+}
+#div_open_for_disciplines ul {
+    margin-left:50px;
+}
+input[class=iCurrencyField] {
+    float:left;
+    width:160px;
+}
+select[class=iCurrencyField] {
+    width:95px;
+    margin-left:10px;
+}
+#company_add_check_buttons {
+    padding-left:66px;
+}
+
+/* colour codes in 'open for disciplines' */
+.AHEC, .CDM, .ESD, .MIED, .WRDMD{
+  color: #a01c1c;
+}
+
+.ARCD, .CNT, .CYD, .EED, .MAD{
+  color: #0e34a0;
+}
+
+.CED, .ECED, .PHD, .MSD{
+  color: #0c4907;
+}
+
+.BTD, .CT, .HSD, .MMED{
+  color: #ff9d02;
+}
+
+.CHED, .EQD, .HYD, .PTD{
+  color: #7c00c3;
+}
+
+  
+/* end of colour codes */
+
+/*****************************************************/
+/*           END of company addition form            */
+/*****************************************************/
+
+/*****************************************************/
+/*           Forum CSS                               */
+/*****************************************************/
+#forum_header{
+  color: #434343;
+  background-image:url('/static/images/placement/Placement_Forums_logo.png');
+  background-repeat:no-repeat;
+  height: 65px;
+  font-weight:bold;
+  padding: 10px 0px 10px 105px;
+}
+
+#forum_ask{
+  background-color:#ebebeb;
+  padding: 10px;
+}
+
+#forum_ask form{
+  margin:0px;
+}
+
+.forum_input{
+  margin-bottom: 10px;
+  width: 780px;
+}
+
+#forum_submit_button{
+  width:130px;
+  height:36px;
+  margin: 0 0 0 660px;
+}
+
+.forum_unit{
+  background-color:#ebebeb;
+  color:#414141;
+  padding: 10px 10px 5px 10px;
+  margin-top:20px; 
+}
+
+.forum_question
+{
+  background-image:url('/static/images/placement/Placement_Forums_Question.png');
+  background-repeat:no-repeat;
+  padding: 5px 0 15px 50px;
+  color:#3f3f3f;
+  font-weight:bold;
+  font-size:16px;
+  min-height:30px;
+}
+
+.forum_question_content
+{
+  background-color:#fcfcfc;
+  padding: 10px;
+}
+
+.forum_question_content hr{
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.forum_light{
+  margin-top:8px;
+  color:#666666;
+}
+
+.forum_reply
+{
+  padding: 20px 0 0 20px;
+}
+
+.forum_reply hr{
+  margin: 0;
+  padding: 0;
+}
+
+#forum_reply_post_button{
+  width:80px;
+  height:36px;
+  margin: 10px 0 5px 710px;
+  color:#ffffff;
+}
+
+#forum_reply_post_button a{
+  color:#ffffff;
+  text-decoration:none;
+}
+
+/*****************************************************/
+/*           Forum CSS ends                          */
+/*****************************************************/
+
+/*****************************************************/
+/*           FAQ CSS                               */
+/*****************************************************/
+
+#faq_header{
+  color: #434343;
+  background-image:url('/static/images/placement/Placement_Forums_logo.png');
+  background-repeat:no-repeat;
+  height: 65px;
+  font-weight:bold;
+  padding: 10px 0px 0px 105px;
+}
+
+#faq_ask{
+  background-color:#ebebeb;
+  padding: 10px;
+}
+
+#faq_ask form{
+  margin:0px;
+}
+
+.faq_input{
+  margin-bottom: 10px;
+  width: 780px;
+}
+
+#faq_submit_button{
+  width:130px;
+  height:36px;
+  margin: 0 0 0 660px;
+}
+
+.faq_unit{
+  background-color:#ebebeb;
+  color:#414141;
+padding: 10px 10px 15px 10px;
+  margin-top:20px; 
+}
+
+
+
+.faq_question
+{
+  background-image:url('/static/images/placement/Placement_Forums_Question.png');
+  background-repeat:no-repeat;
+  padding: 5px 0 0 50px;
+  color:#3f3f3f;
+  font-weight:bold;
+  font-size:16px;
+  height:45px;
+}
+
+.faq_question_content
+{
+  background-color:#fcfcfc;
+  padding-bottom: 10px;
+}
+
+.faq_question_content hr{
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.faq_light{
+  margin-top:8px;
+  color:#666666;
+}
+
+.faq_reply
+{
+  padding: 10px 0 0 10px;
+}
+
+.faq_reply_alter
+{
+  padding: 10px 0 0 10px;
+  margin-top:20px;
+}
+.faq_reply hr{
+  margin: 0;
+  padding: 0;
+}
+
+#faq_reply_post_button{
+  width:80px;
+  height:36px;
+  margin: 10px 0 5px 710px;
+  color:#ffffff;
+}
+
+#faq_reply_post_button a{
+  color:#ffffff;
+  text-decoration:none;
+}
+
+
+/*****************************************************/
+/*           FAQ CSS ends                              */
+/*****************************************************/
+
+
+/****************************************************/
+/*          CSS overrides for Contact form          */
+/****************************************************/
+#id_bhawan, #id_gender {
+  width:380px;
+  height:26px;
+}
+/****************************************************/
+/*      End of CSS overrides for Contact Form       */
+/****************************************************/

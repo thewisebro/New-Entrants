@@ -1,0 +1,74 @@
+{% extends "placement/base.html" %}
+
+{% block app_content %}
+
+{% if error_msg %}
+{{ error_msg }}
+{% endif %}
+<h3>Admin</h3>
+<hr/>
+<div align="right" style="margin:10px;">
+  <a href="{% url 'placement.views_company.add' %}"><button><div class="text">Add a company</div></button></a>
+</div>
+<table class="sortable table table-striped table-bordered table-condensed" id="t1">
+  <thead>
+    <tr>
+      <th>S.No.</th>
+      <th colspan="2">Company</th>
+      <th>Status</th>
+      <th>Last Date of Applying</th>
+      <th colspan="3">Applications</th>
+      <th colspan="2">Results</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for company in companies %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td class="company-name">
+        <a href="{% url 'placement.views_company.edit' company.id %}">{{ company.name }}</a>
+      </td>
+      <td>
+        <a href="{% url 'placement.views_company.delete' company.id %}" class="company-delete-anchor">Delete</a>
+      </td>
+      <td>
+        {{ company.get_status_display }}
+      </td>
+      <td>
+        {{ company.last_date_of_applying|default:'-' }}
+      </td>
+      <td>
+        <a href="{% url 'placement.views_admin.finalize' company.id %}">Applications</a>
+      </td>
+      <td>
+        <a href="{% url 'placement.views_admin.resume_archive' company.id %}">Resumes</a>
+      </td>
+      <td>
+        <a href="{% url 'placement.views_admin.finalized_students' company.id %}">XLS list</a>
+      </td>
+{%comment%}      <td>
+        <a href="{% url 'placement.views_admin.select' company.id %}">Declare Result</a>
+      </td>{%endcomment%}
+      <td>
+        <a href="{% url 'placement.views_results.insert' company.id %}">Insert Result</a> 
+      </td>
+{%comment%}      <td>
+        <a href="{% url 'placement.views_admin.remove_select' company.id %}">Drop Results</a>
+      </td> {%endcomment%}
+      <td {% if forloop.last %}class="rightbottomcurve"{% endif %}>
+        <a href="{% url 'placement.views_results.company' company.id %}">View Results</a> 
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="popup" id="confirm-company-delete" title="Remove the Company?" style="display:none;">
+  <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+  Are you sure you want to permanently delete <span style="font-weight:bold;color:RED;" id="companyname"></span>?
+</div>
+
+{% endblock %}
+
+{% block app_scripts %}
+<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/placement/company_delete_confirm.js"></script>
+{% endblock %}

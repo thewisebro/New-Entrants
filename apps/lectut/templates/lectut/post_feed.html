@@ -1,0 +1,19 @@
+{% extends "feeds/base.html" %}
+
+{% block link %}
+  {{ instance.link }}
+{% endblock %}
+
+{% block feed_line %}
+  {{ instance.upload_user.html_name }}
+{% endblock %}
+
+{% block feed_detail %}
+Uploaded {{ instance.count }} files in {{ instance.batch.course.name }}.
+{% for file in files %}
+<br>
+<a href = {{file.link}}>{{file.file_name}}</a>
+{% endfor %}
+
+{% endblock %}
+

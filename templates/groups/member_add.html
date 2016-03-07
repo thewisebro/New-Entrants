@@ -1,0 +1,37 @@
+{% extends "groups/members_edit.html" %}
+
+{% block gtab_add_member %}gtabbox-selected{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery-ui.js"></script>
+<script type="text/javascript">
+  $('body').ready(function(){
+        $('#id_username').autocomplete({
+            source:'/settings/person_search/',
+            minLength:1
+           });
+       });
+</script>
+{% endblock %}
+
+{% block right_content %}
+    <div class="page_info">
+      <p>{{page_info}}</p>
+    </div>
+    {% if form.errors %}
+     <p style = "color: red;">
+       Please Correct the error below.
+     </p>
+    {% endif %}
+    <form action = "" method = "post" class="uniForm">
+       {% csrf_token %}
+       <div class="edit-categories">
+         {{ form.uniform }}
+         <input class="input-button" type = "submit" name ="submit_button" value = "Submit">
+         <input class="input-button" type="button" name="reset" value="Reset" onclick="location='';">
+
+       </div>
+    </form>
+    {{ form.media }}
+{% endblock %}

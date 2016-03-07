@@ -1,0 +1,126 @@
+{% extends "placement/base.html" %}
+
+{% block app_styles %}
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/jquery-timepicker.css">
+    <link rel="stylesheet" href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css">
+<style>
+  #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+  #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em;
+    font-size: 1.4em; height: 18px; }
+  #sortable li span { position: absolute; margin-left: -1.3em; }
+  .header_text
+  {
+    font-size:20px;
+  }
+</style>
+{% endblock %}
+
+{% block app_scripts %}
+    <script src="{{STATIC_URL}}bootstrap/js/bootstrap.min.js"></script>
+    <script src="{{ STATIC_URL }}jquery/jquery-timepicker.js"></script>
+    <script>
+    $(function() {
+      $( "#id_start_date" ).datetimepicker({ dateFormat: "yy-mm-dd"});
+      $( "#id_end_date" ).datetimepicker({ dateFormat: "yy-mm-dd"});
+      });
+  </script>
+  <script>
+    $(function() {
+      $( "#sortable" ).sortable();
+      $( "#sortable" ).disableSelection();
+    });
+    $('#submit').click(function()
+    {
+      var values = $('#sortable').sortable('toArray');
+      var dataArray = [];
+      for (var x in values){
+        var item = {
+          "priority": x,
+           "id": values[x],
+           };
+           dataArray.push(item);
+           }
+      myJSON = JSON.stringify(dataArray);
+      $.ajax
+      ({
+        url: '',
+        data: myJSON,
+        type: 'POST',
+        success: function(data)
+        {
+          if(data["is_success"]){
+            $(".error").css("display","None");
+            $(".success").html(data["message"]);
+            $(".success").css("display","Block");
+            setTimeout(function() {
+              $(".success").css("display", "None")
+            }, 2000);
+          }
+          else{
+            $(".success").css("display","None");
+            $(".error").html(data["message"]);
+            $(".error").css("display","Block");
+            setTimeout(function() {
+              $(".error").css("display", "None")
+            }, 2000);
+          }
+        }
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block app_content %}
+<div id="content_success">
+  <p class="success" style="display:none"></p>
+  <p class="error" style="display:none"></p>
+</div>
+{% if message %}
+  {{ message }}
+{% else %}
+
+  <p>
+  <h3>Slot: {{slot.start_date}} -- {{slot.end_date}}</h3>
+  <p/>
+    {% if no_data_msg %}
+     <div style="margin-top: 10px;" > {{no_data_msg}}</div>
+    {% else %}
+    <ul id="sortable" style="font-size: 10px;">
+    {% for priority_map in data %}
+    <li id="{{priority_map.company.id}}" class="ui-state-default"><span class="ui-icon-arrowthick-2-n-s"></span>{{priority_map.company}}</li>
+    {% endfor %}
+    </ul>
+    <p/>
+    {% if slot.status %}
+      <input id ="submit" type="submit" value="Submit" class="btn btn-primary" style="margin-top:10px;width:60px;" >
+      {% else %}
+      <p style="margin-top:10px;">Preference filling for this slot is closed now.</p>
+      {% endif %}
+    <p/>
+    {% endif %}
+  {% if info %}
+  <h3 style="margin-top: 35px;">Company Info:</h3>
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>CTC</th>
+      <th>CTC Remarks</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for company in info %}
+    <tr>
+      <td>{{company.Name}}</td>
+      <td>{{company.ctc}}</td>
+      <td>{{company.CTC_remark}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  </table>
+ {% endif %}
+{% endif %}
+
+{% endblock %}

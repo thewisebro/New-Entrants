@@ -1,0 +1,107 @@
+.arrow-top
+  position: relative
+  //background: #d5c782
+  //border: 1px solid #c2e1f5
+  &:after, &:before
+    bottom: 100%
+    left: 50%
+    border: solid transparent
+    content: " "
+    height: 0
+    width: 0
+    position: absolute
+    pointer-events: none
+  &:after
+    border-color: rgba(213, 199, 130, 0)
+    border-bottom-color: #FFF
+    border-width: 9px
+    margin-left: -9px
+  &:before
+    border-color: rgba(194, 225, 245, 0)
+    border-bottom-color: #CECECE
+    border-width: 11px
+    margin-left: -11px
+
+.arrow-right
+  position: relative
+  //background: #d5c782
+  //border: 1px solid #c2e1f5
+  &:after, &:before
+    top: 50%
+    left: 100%
+    border: solid transparent
+    content: " "
+    height: 0
+    width: 0
+    position: absolute
+    pointer-events: none
+  &:after
+    border-color: rgba(213, 199, 130, 0)
+    border-left-color: #FFF
+    border-width: 9px
+    margin-top: -9px
+  &:before
+    border-color: rgba(194, 225, 245, 0)
+    border-left-color: #CECECE
+    border-width: 11px
+    margin-top: -11px
+
+.arrow-left
+  position: relative
+  //background: #d5c782
+  //border: 1px solid #c2e1f5
+  &:after, &:before
+    right: 100%
+    top: 50%
+    border: solid transparent
+    content: " "
+    height: 0
+    width: 0
+    position: absolute
+    pointer-events: none
+  &:after
+    border-color: rgba(213, 199, 130, 0)
+    border-right-color: #FFF
+    border-width: 9px
+    margin-top: -9px
+  &:before
+    border-color: rgba(194, 225, 245, 0)
+    border-right-color: #CECECE
+    border-width: 11px
+    margin-top: -11px
+
+.arrow-bottom
+  position: relative
+  //background: #d5c782
+  //border: 1px solid #c2e1f5
+  &:after, &:before
+    top: 100%
+    left: 50%
+    border: solid transparent
+    content: " "
+    height: 0
+    width: 0
+    position: absolute
+    pointer-events: none
+  &:after
+    border-color: rgba(213, 199, 130, 0)
+    border-top-color: #FFF
+    border-width: 9px
+    margin-left: -9px
+  &:before
+    border-color: rgba(194, 225, 245, 0)
+    border-top-color: #CECECE
+    border-width: 11px
+    margin-left: -11px
+
+
+.arrow-top-right
+  &:after, &:before
+    left: 85% !important
+
+
+.arrow-top-left
+  &:after, &:before
+    left: 10px !important
+
+

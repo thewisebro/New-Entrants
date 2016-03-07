@@ -1,0 +1,210 @@
+/*======= Compose Post Styles =======*/
+//begin -- .lightbox
+.lightbox {
+	position: fixed;
+	width: calc(100vw - 200px);
+	height: 100vh;
+	top: 0;
+  left: 200px;
+	background: rgba(255, 255, 255, 0.85);
+	z-index: 1001;
+	.post-form {
+		position: relative;
+		width: 880px;
+    padding: 40px;
+		margin: 0 auto;
+		max-height: 100%;
+		text-align: center;
+	}
+	.tag-input-box {
+    position: relative;
+    width: 385px;
+    float: left;
+    border: 2px solid rgba(255, 255, 255, 0);
+    border-bottom: 2px solid $dark-grey;
+    &:nth-of-type(2) {
+      float: right;
+    }
+	  i.inline {
+		  color: $dark-grey;
+      float: left;
+      font-size: $big;
+      padding: 13px;
+	  }
+    tags-input {
+      width: 327px;
+      float: left;
+      padding: 7px 0;
+      .autocomplete {
+        border-radius: 3px;
+        .suggestion-item {
+          padding: 7px 14px;
+          color: $black;
+          text-align: left;
+          &.selected {
+            color: $white;
+            background-color: $primary;
+            em {
+              background-color: $primary;
+            }
+          }
+        }
+      }
+      .host {
+        margin: 0;
+      }
+      .tags {
+        padding: 0;
+        background-color: rgba(255, 255, 255, 0);
+        border: 0;
+        box-shadow: 0 0 0 0 $white;
+        .input {
+          background: rgba(255, 255, 255, 0);
+          font-size: $med;
+          width: 220px !important;
+        }
+        .tag-item {
+          height: auto;
+          border: 1px solid darken($primary, 3);
+          background: $primary;
+          color: $white;
+          .remove-button {
+            color: $white;
+          }
+        }
+      }
+    }
+  }
+	//Multiple line input
+	.big-input {
+    position: relative;
+		width: 800px;
+		height: 150px;
+    margin: 35px auto;
+		padding: 7px 10px;
+    background-color: rgba(255, 255, 255, 0);
+    color: $black;
+    border: 2px solid rgba(255, 255, 255, 0);
+    border-bottom: 2px solid $dark-grey;
+    border-radius: 4px;
+    line-height: 1.4;
+    font-size: $med;
+    font-family: "Helvetica Neue", Helvetica, $font-stack; 
+		@include transition(all 300ms ease-out);
+    &:focus {
+      border-color: $primary;
+    }
+    &.error {
+      border-color: #f37b1d;
+    }
+	}
+	//Form button styles
+  div form div div.images-upload-container {
+    float: left;
+  }
+  div form div div.images-upload-container .image-upload-bttn {
+    position: relative;
+    width: 150px;
+    overflow: hidden;
+    padding: 10px 14px;
+    color: $white;
+    background: $primary;
+    margin: 0 0 10px 0;
+    border-radius: 3px;
+    cursor: pointer;
+    &:hover {
+      background: darken($primary, 4);
+    }
+  }
+  div form div div.images-upload-container .thumb {
+    position: relative;
+    width: auto;
+    color: $black;
+    overflow: hidden;
+    margin: 5px 0;
+    height: 40px;
+    padding: 10px;
+    background: $white;
+    text-align: left;
+    border-bottom: 1px solid $grey;
+    i.fa {
+      margin-right: 7px;
+      &.delete {
+        color: $white;
+        border: 0;
+        float: right;
+        margin-top: 3px;
+        margin-left: 20px;
+        cursor: pointer;
+        @include transition(all 150ms ease-out);
+        text-shadow: 0 0 5px $black;
+        &:hover {
+          @include transform(scale(1.1));
+        }
+      }
+    }
+  }
+	.upload-bttn {
+		position: relative;
+		float: right;
+		width: auto;
+		overflow: hidden;
+		padding: 14px 20px;
+		border-radius: 3px;
+		background: $primary;
+		color: $white;
+		cursor: pointer;
+    @include transition(all 300ms ease-out);
+    &:hover {
+      background: darken($primary, 4);
+    }
+    i.fa.fa-spin {
+      overflow: visible;
+      -webkit-animation-duration: 500ms;
+      animation-duration: 500ms;
+      &#loading {
+        display: none;
+      }
+    }
+	}
+	//Close lightbox icon
+	.close-lightbox {
+	color: $black;
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	font-size: $massive;
+	cursor: pointer;
+	}
+}//end -- .lightbox
+
+.progress {
+	display: inline-block;
+	width: 100px;
+	border: 3px groove #CCC;
+}
+
+.progress div {
+	font-size: smaller;
+	background: orange;
+	width: 0;
+}
+
+.thumb {
+	float: left;
+	width: 18px;
+	height: 18px;
+	padding-right: 10px;
+}
+
+form .thumb {
+	width: 24px;
+	height: 24px;
+	float: none;
+	position: relative;
+	top: 7px;
+}
+
+form .progress {
+	line-height: 15px;
+}

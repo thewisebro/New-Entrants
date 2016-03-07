@@ -1,0 +1,209 @@
+<!doctype html>
+<html class="no-js" ng-app="yaadeinApp" ng-controller="YaadeinController">
+  <head>
+    <meta charset="utf-8">
+    <title ng-bind="appname"></title>
+    <!-- build:[href] /yaadein/ -->
+    <base href="/">
+    <!-- /build -->
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/yaadein/data/favicon.ico">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700|Pacifico" rel="stylesheet">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/ng-notify/src/styles/ng-notify.css" />
+    <link rel="stylesheet" href="bower_components/angucomplete-alt/angucomplete-alt.css" />
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="bower_components/nanoscroller/bin/css/nanoscroller.css" />
+    <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.min.css" />
+    <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.css" />
+    <link rel="stylesheet" href="bower_components/sweetalert/lib/sweet-alert.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+
+  </head>
+  <body ng-cloak class="ng-cloak">
+    <!--[if lt IE 10]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div id="inviteBox" class="lightbox fade invite">
+        <div class="close-lightbox icon icon-cancel" ng-click="closeInvite()"></div>
+        <div class="container">
+              <div class="tag-input-box">
+                <i class="inline fa fa-user-plus"></i>
+                <tags-input type="text" ng-model="newPost.user_tags" class="" display-property="value" placeholder="Invite friends" tabindex="0" add-from-autocomplete-only="true" replace-spaces-with-dashes="false" show-focus="true" ng-required="required">
+                   <auto-complete source="loadTags($query, 1)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
+                </tags-input>
+              </div>
+              <button class="invite-button" ng-click="inviteUsers()">Invite</button>
+        </div>
+        </div>
+    </div>
+
+    <div id="searchBox" class="lightbox fade" ng-if="getCurrentNavItem() === 'search'">
+        <div class="close-lightbox icon icon-cancel" ng-click="closeSearch()"></div>
+        <div>
+          <div angucomplete-alt
+              id="person-search"
+              placeholder="Search people, spots..."
+              pause="50"
+              selected-object="personSelected"
+              remote-url="/yaadein_api/search/3/?q="
+              search-fields="value"
+              remote-url-data-field="results"
+              remote-url-response-formatter="addOriginToImageUrl"
+              title-field="value"
+              description-field="label"
+              image-field="profile_pic"
+              minlength="1"
+              match-class="highlight"
+              input-class="search-input"
+              template-url="views/autocomplete.html"
+              text-searching="Searching..."
+              text-no-results="Couldn't find anything.">
+          </div>
+        </div>
+    </div>
+
+    <div id="postBox" class="lightbox fade" ng-if="getCurrentNavItem() === 'post'">
+        <div class="close-lightbox icon icon-cancel" ng-click="closePost()"></div>
+        <div>
+            <form class="post-form" name="postForm">
+              <div class="tag-input-box">
+                <i class="inline fa fa-user-plus"></i>
+                <tags-input type="text" ng-model="newPost.user_tags" class="" display-property="value" placeholder="Tag your friends here" tabindex="0" add-from-autocomplete-only="true" replace-spaces-with-dashes="false" show-focus="true">
+                   <auto-complete source="loadTags($query, 1)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
+                </tags-input>
+              </div>
+              <div class="tag-input-box">
+                <i class="inline fa fa-map-marker"></i>
+                <tags-input type="text" ng-model="newPost.spot" class="" display-property="value" placeholder="Where did this happen?" add-from-autocomplete-only="false" tabindex="1" replace-spaces-with-dashes="false" max-tags="1" on-tag-added="formatSpot($tag)">
+                  <auto-complete source="loadSpots($query)" min-length="1" select-first-match="true" highlight-matched-text="true"></auto-complete>
+                </tags-input>
+              </div>
+                <textarea mentio
+                  id="postMessageInput"
+				          mentio-id="'postMessageInput'"
+                  mentio-macros="macros"
+                  mentio-trigger-char="':'"
+                  mentio-items="emojis"
+                  mentio-template-url="views/emoji-predictions.tpl"
+                  mentio-search="predictEmoji(term)"
+                  mentio-select="getEmojiTextRaw(item)"
+                  mentio-typed-term="typedTerm"
+                  required
+                  name="message"
+                  tabindex="2"
+                  class="big-input" placeholder="Share your memories here... You can also include hashtags and select emojis by typing the : character." style="resize:none;" ng-model="newPost.post_text"></textarea>
+                  <!-- <div class="private-select">
+                    <input type="checkbox" ng-model="postStatus">&nbsp;Private
+                  </div> -->
+                  <div>
+                    <div class="images-upload-container">
+                      <!-- <div class="thumb" ng-repeat="f in files" ng-show="f.dataUrl != null" ng-style="{ 'background-image': 'url(' + f.dataUrl + ')'}"> -->
+                      <div class="image-upload-bttn" type="file" name="images" size="40" ng-file-select ng-model="images" ng-accept="'image/*'" ng-file-change="addImage($files)" ng-multiple="true"><i class="fa fa-camera-retro"></i>&nbsp;&nbsp;Add Photos</div>
+                      <button class="image-upload-bttn" ng-show="images1.imageArray.length > 1" ng-click="deleteAllImages()"><i class="fa fa-times-circle-o fa-lg"></i>&nbsp;&nbsp;Delete All</button>
+                      <ul id="images-list">
+                        <li class="thumb" ng-repeat="f in images1.imageArray">
+                          <i class="fa fa-picture-o"></i>
+                          {~{f.name}~}
+                          <i class="fa fa-times-circle-o fa-lg delete" ng-click="deleteImage($index)"></i>
+                        </li>
+                      </ul>
+                    </div>
+                    <button id="uploadButton" class="upload-bttn" ng-click="upload(images1.imageArray)"><i class="fa fa-pencil-square-o"></i>&nbsp;&nbsp;Post<i id="loading" style="margin-left:30px;" class="fa fa-circle-o-notch fa-spin fa-fw fa-lg"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="left-sidebar">
+    <div>
+        <div id="app-title">
+            <a href="#/" ng-click="setCurrentNavItem(navigationItems[1])"><div id="yaadein-title" ng-bind="appname"></div></a>
+        </div>
+        <div class="nav">
+            <a ng-href="{~{navItem.url}~}" class="nav-link" ng-repeat="navItem in navigationItems" ng-click="setCurrentNavItem(navItem)">
+              <div id="{~{navItem.id}~}" ng-class="{ 'active': isCurrentNavItem(navItem) }"><i class="{~{navItem.class}~}"></i>&nbsp;&nbsp;{~{navItem.hint}~}</div>
+            </a>
+            <div class="credits">Made with <i class="fa fa-heart fa-lg"></i> and <i class="fa fa-code fa-lg"></i> by <a href="http://img.channeli.in/" target="_blank">IMG</a><br>&copy;&nbsp;<span id="year"></span></div>
+        </div>
+    </div>
+    </div>
+
+    <div id="centered" class="center-content">
+        <div class="fade" ng-view autoscroll>
+        </div>
+    </div>
+
+    <div class="right-sidebar" id="ticker">
+        <div class="ticker-content" scrollable>
+            <div class="trending invite">
+              <button class="invite-button" ng-click="showInviteBox()"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Invite</button>
+            </div>
+            <div class="trending">
+              Trending
+            </div>
+            <a ng-href="#/hashtag/{~{hash}~}" class="ticker-element" ng-repeat="hash in trending">
+              #{~{hash}~}
+            </a>
+        </div>
+    </div>
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/ng-notify/src/scripts/ng-notify.js"></script>
+    <script src="bower_components/angucomplete-alt/angucomplete-alt.js"></script>
+    <script src="bower_components/ment.io/dist/mentio.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/angular-moment/angular-moment.js"></script>
+    <script src="bower_components/angular-filter/dist/angular-filter.js"></script>
+    <script src="bower_components/nanoscroller/bin/javascripts/jquery.nanoscroller.js"></script>
+    <script src="bower_components/ng-nanoscroller/src/ng-nanoscroller.js"></script>
+    <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
+    <script src="bower_components/angular-emoji-filter/dist/emoji.min.js"></script>
+    <script src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
+    <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.js"></script>
+    <script src="bower_components/sweetalert/lib/sweet-alert.js"></script>
+    <script src="bower_components/angular-sweetalert/SweetAlert.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js({app,.tmp}) scripts/main.js -->
+        <script src="scripts/main.js"></script>
+        <script type="text/javascript" src="scripts/development.js"></script>
+        <script src="scripts/components/emoji.min.js"></script>
+        <script src="scripts/components/main.config.js"></script>
+        <script src="scripts/components/main.services.js"></script>
+        <script src="scripts/components/main.filters.js"></script>
+        <script src="scripts/components/main.directives.js"></script>
+        <script src="scripts/components/main.controller.js"></script>
+    <!-- endbuild -->
+
+    <script type="text/javascript">
+      (function(){
+        $('#centered').css('width', $(window).innerWidth() - $('.right-sidebar').innerWidth() - $('.left-sidebar').innerWidth());
+        $('#centered').css('height', $(window).innerHeight());
+      });
+      $('#year').html(new Date().getFullYear());
+    </script>
+</body>
+</html>

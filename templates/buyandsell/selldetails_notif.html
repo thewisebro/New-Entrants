@@ -1,0 +1,143 @@
+{% extends "buyandsell/base.html" %}
+{% block content %}
+<body>
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} sell-details-message" style="margin-top:75px;">{{ message }}</div>
+{% endfor %}
+{% endif %}
+
+<div class="container item-details-dialog-container" style="padding-top: 80px; padding-left: 0; margin-top: 0;">
+  <div class="row">
+    <div>
+      <ol class="breadcrumb notif-breadcrumb">
+        <li>
+          <a class="active" href="/buyandsell/buy/">Items for Sale</a>
+        </li>
+        <li>
+          <a  href="/buyandsell/buy/{{item.category.main_category}}">{{item.category.main_category}}</a>
+        </li>
+        <li>
+          <a class="active" href="/buyandsell/buy/{{item.category.main_category}}/{{item.category.code}}">{{ item.category}}</a>
+        </li>
+        <li>
+          <span class="disabled" href="#">{{ item.item_name }}</span>
+        </li>
+
+      </ol>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-4">
+      <div>
+        {% if item.itempic.pic %}
+        <img class="sell-details-image" src="{{item.itempic.pic.url}}" alt="Generic placeholder thumbnail">
+        {% else %}
+        <img class="sell-details-image" src="{{STATIC_URL}}images/buyandsell/default.png" alt="Generic placeholder thumbnail">
+        {% endif %}
+      </div>
+
+    </div>
+    <div class="col-xs-8">
+
+      {% if item %}
+
+      {% if item.detail %}
+
+      <p class="item-name-on-individual-page">
+        {{ item.item_name }}
+      </p>
+
+      <p class="item-description">
+        {{ item.detail }}
+      <div class="visible-division-line"></div>
+      </p>
+      {% endif %}
+
+      <table class="table item-details-table">
+        <tbody>
+        <tr>
+          <td class="item-details-headings">
+            Price
+          </td>
+          <td>
+            <img class="rupee-icon" src="{{STATIC_URL}}images/buyandsell/rupee-icon.png">
+            <span> {{ item.cost }}</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="item-details-headings">
+            Expires in
+          </td>
+          <td>
+            <span> {{ item.expiry_date|timeuntil }}</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="item-details-headings">
+            Owner
+          </td>
+          <td>
+            <span> {{ item.user.name }}</span>
+          </td>
+        </tr>
+        {% if show_contact %}
+        <tr>
+          <td class="item-details-headings">
+            Phone
+          </td>
+          <td>
+            <p> {{ item.contact }}</p>
+          </td>
+        </tr>
+        {% endif %}
+        </tbody>
+      </table>
+
+      {% if not self_flag and login_flag %}
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="enquire-clicked">
+            <p><strong>Following mail will be sent to the Owner</strong></p>
+
+            <p class="mail-to-be-sent">
+              Your item   {{item.item_name}}  has a buyer on Buy and Sell!
+              Your item  {{item.item_name}}  added by you on   {{item.post_date}} has a prospective buyer! {{user.name}} wants to buy your item. You can contact {% if user.gender == 'F' %} her{% else %} him {% endif %} at this number {{ user.contact_no }} or email {% if user.gender == 'F' %} her{% else %} him {% endif %} at {{user.email}}<br>
+              Note: if there is no phone number or email id, that means that {{ user.name}} has not filled in his contact information in the channel-i database.
+
+            </p>
+
+            <form action="" method="POST">
+              {% csrf_token %}
+              <span class="item-details-dialog-password-field-label">Please enter your password:</span>
+              <input class="dialog-password-field item-details-dialog-password-field" type="password" name="password">
+              <input class="send-button" type="submit" value="Send">
+            </form>
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <button type="button" class="btn btn-primary enquire enquire-button" style="margin:0px auto">Enquire</button>
+        </div>
+      </div>
+
+
+      {% endif %}
+
+    </div>
+
+  </div>
+
+  <div class="visible-division-line" style="margin-top: 40px;"></div>
+
+  {% endif %}
+
+</div>
+{% endblock %}
+
+</body>

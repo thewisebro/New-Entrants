@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>New Entrant Registration</title>
+  {% block scripts %}
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+  {% endblock %}
+</head>
+<body>
+  <form id="registration" method="post">
+    {{ form.errors }}
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" name="submit" value="Register"/>
+  </form>
+</body>
+<script type="text/javascript" src="{{ STATIC_URL }}js/new_entrants/register.js"></script>
+</html>

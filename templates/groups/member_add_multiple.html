@@ -1,0 +1,34 @@
+{% extends "groups/members_edit.html" %}
+
+{% block gtab_add_multiple_member %}gtabbox-selected{% endblock %}
+
+{% block right_content %}
+  <div class="page_info">
+    <p>{{page_info}}</p>
+  </div>
+  {% if form.errors %}
+   <p style = "color: red;">
+     Please Correct the error below.
+   </p>
+  {% endif %}
+  {% if msg %}
+   <p class="msg"> {{msg}} </p>
+  {% endif %}
+  {% if results %}
+    {% for a,b in results %}
+    <div class="msg">
+      {{a}}{{b}}</br>
+    </div>
+    {% endfor%}
+ {% endif %}
+
+  <form action = "" method = "post" class="uniForm">
+     {% csrf_token %}
+     <div class="edit-categories">
+       {{ form.uniform }}
+       <input class="input-button" type = "submit" name ="submit_button" value = "Submit">
+       <input class="input-button" type="button" name="reset" value="Reset" onclick="location='';">
+     </div>
+  </form>
+  {{ form.media }}
+{% endblock %}

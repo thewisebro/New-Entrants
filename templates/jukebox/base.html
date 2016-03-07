@@ -1,0 +1,443 @@
+<html>
+  <head>
+    <title>JUKEBOX</title>
+    <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}images/jukebox/jblogo.png"/>
+ <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/fontello.css"> <!-- fontello import -->
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css"><!-- lato regular font import -->
+ <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/main.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/cssmainbody.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artists.css"><!-- artists link -->
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artistslist.css">
+    <!-- font aw -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jukebox/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/nanoscroller/nanoscroller.css">
+
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="./css/font-awesome-ie7.min.css">
+    <![endif]-->
+   <!-- <link href='http://fonts.googleapis.com/css?family=Raleway:500' rel='stylesheet' type='text/css'>-->
+    <!--<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jukebox/artistslist.css">-->
+   <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fonts/jukebox/stylesheet.css">-->
+    <script>
+      var user = {% if jb_user.is_authenticated %}{{ jb_user.serialize|jsonify }}{% else %}{is_authenticated: false}{% endif %};
+      var logged_in = user.is_authenticated;
+    </script>
+
+  </head>
+
+  <body>
+  <div id="loading_line"></div>
+  <!-- <div id="loading_div_spinner">
+  <div id="spinner_div">
+    <i class="icon-spinner icon-spin icon-large"></i>
+  </div>
+  </div> -->
+  <div id="center_trending" style="display:none;"></div>
+  <div id="center_artists" style="display:none;"></div>
+  <div id="center_albums" style="display:none;"></div>
+  <div id="center_playlist" style="display:none;"></div>
+  <div id="center_search" style="display:none;"></div>
+  <!-- login popup-->
+  <div id="login_popup" style="display:none" class="hidden_login">
+    <form>
+    <div id="signin_header">Sign In
+    <div id="signin_cancel"><i class="icon-remove"></i></div>
+    </div>
+    <div>
+      <input type="text" id="jb_username" name="jb_username" placeholder="Username"></input>
+    </div>
+    <div>  
+      <input type="password" id="jb_password" name="jb_password" placeholder="Password"></input>
+    </div>
+    <div id="signin_button_large">Sign In</div>
+    </form>
+  </div>
+
+  <!-- save as playlist box-->
+  <div id="save_playlist_dialog" class="save_as_playlist_close">
+  <div id="save_playlist_header">Save as playlist</div>
+    <div id="as_new_list">
+      <div id="add_new_submit"><i id="icon-check-sign-button" class="icon-check-sign"></i></div> 
+      <div id="add_new_button">Create New +</div>
+      <div id="create_new_input_div" style="display:none">
+        <input type="text" id="create_new_input"></input>
+      </div>
+    </div>
+    <div id="as_prev_list">
+    <div id="as_prev_submit"><i id="icon-check-sign-button" class="icon-check-sign"></i></div>
+    <select id="select_saved_playlist">
+      <option>Save as existing</option>
+    </select>
+    </div>
+    <div id="save_as_playlist_cancel"><i class="icon-remove"></i></div>
+  </div>
+<!-- add to playlist only -->
+  <div id="add_to_playlist_dialog" class="add_to_playlist_close">
+  <div id="add_to_playlist_header">Add to playlist</div>
+    <div id="add_to_playlist_div">
+    <div id="add_to_playlist_submit"><i id="icon-check-sign-button" class="icon-check-sign"></i></div>
+    <select id="add_to_saved_playlist">
+      <option>Select Playlist</option>
+    </select>
+    </div>
+    <div id="add_to_playlist_cancel"><i class="icon-remove"></i></div>
+  </div>
+
+
+  <!-- search div -->
+			<div id="searchDivcss" class="searchLightboxClose">
+				<div id="searchHeader">
+					<div>SEARCH JUKEBOX
+          <i class="icon-remove-circle search-remove" onclick="closeSearch();"></i>
+          <div id="search_esc" style="
+          display: inline;
+margin-top: 1px;
+position: absolute;
+right: 276;
+">Press Esc or </div>
+          </div>
+					<div id="startTyping">Start Typing...</div>
+				</div>
+				<!-- input -->
+				<div id="inputSearchBig">
+					<input id="searchBig" type="text"/></input>
+				</div>
+				<!-- see more results -->
+				<div id="quickResults">
+					<div id="songSearch">
+					</div>
+					<div id="albumSearch">
+					</div>
+					<div id="artistSearch">
+					</div>
+        </div>
+
+				<div id="seeMore">
+					See All Results
+				</div>
+			</div>
+
+  <div id="bigwrapper">
+
+			<div id="sidebar">
+				<div id="logo">
+					<div id="jblogo"></div>
+          <div id="jbtext">JUKE<span>BOX</span></div>
+				</div>
+
+				<div id="navigation">
+        <!--  data-step="1" data-intro="This is the main navigation. Default view is the trending view showing all the trending songs." -->
+          <div class="upper_crease"></div>
+						<a id="trending_link">
+							<div id="trending_icon"><i class="icon-fire"></i></div>
+							<div id="trending_text" >Trending</div>
+              <div id="trending_play_icon"><i class="icon-play"></i></div>
+						</a>
+            <a id="releases_link" >
+              <div id="releases_icon"><i class="icon-bolt"></i></div>
+              <div id="releases_text">New Releases</div>
+            </a>
+						<a id="artists_link" >
+							<div id="artists_icon"><i class="icon-star"></i></div>
+							<div id="artists_text">Artists</div>
+						</a>
+
+						<a id="albums_link" >
+							<div id="albums_icon"><i class="icon-music"></i></div>
+							<div id="albums_text">Albums</div>
+						</a>	
+
+						<!-- <a id="albums_link" onClick="lStumble();">
+							<div id="albums_icon"><i class=" icon-spinner"></i></div>
+							<div id="albums_text">New Releases</div>
+						</a> -->
+           
+				</div>
+        <div id="playlist_navigation">
+        <!--  data-step="2" data-intro="These are the trending songs." data-position="top" -->
+          <div class="upper_crease"></div>
+            <a id="playlists_link">
+              <div id="home_icon"><i class="icon-heart" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
+              <div id="home_text" style="">My Playlists</div>
+            </a>
+            <a id="shared_link">
+              <div id="shared_icon"><i class="icon-share-sign" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
+              <div id="home_text" style="">Shared Playlists</div>
+            </a>
+          
+        </div>  
+
+        <!--
+        <div id="settings_navigation">
+          <div class="upper_crease"></div>
+           <a id="playlists_link">
+              <div id="home_icon"><i class="icon-heart" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
+              <div id="home_text" style="">Settings</div>
+            </a>
+
+				<div id="playlists">	
+						
+							<a id="home_link">
+								  icon-align-justify   icon-bookmark  
+							<div id="home_icon"><i class="icon-heart" style="font-size: 14px;top: -12px;position: absolute;margin-right: 4px;"></i></div>
+							<div id="home_text" style="margin-left: 16px;">My Playlists</div>
+							</a>
+					</div> 
+					<div id="playlist_view">
+						<a href="">Favsongs</a>
+						<a href="">my songs</a>
+						<a href="">happy time</a>
+						<a href="">Favsongs</a>
+					
+							<div id="create_new" >
+								<a style="padding-right:0px;" href="">
+									<div style="font-weight:bold;">Create New</div>
+									<div style="margin-left:5px;">
+									<i class="icon-plus" style="display:inline-block;"></i>
+									</div>
+								</a>
+							</div>
+					</div>
+          
+
+				</div>
+        -->
+			</div>
+<!--    <span id="trending">Trending</span>
+    <span id="artists" >Artists</span>
+    <span id="albums" >Albums</span>
+    <br>
+    {% if user.is_active %}
+      {{ user.username }}
+      <br>
+      <form id="playlist" action="playlist/" method="post">
+      {% csrf_token %}
+        <input type="hidden" name="user" id="username" value="{{ user.username }}">
+        <input type="text" name="name">
+        <input type="checkbox" name="private" checked>Private
+        <input type="submit" value="Create">
+      </form>
+      <span id="playlists" onclick="hash_change('playlists','{{user.username}}');">Playlists</span>
+      <a href="logout/">Logout</a>
+    {% else %}
+      <a href="login/">Login</a>
+    {% endif %}
+-->
+
+<!-- main body data here -->
+
+    <!-- line before rightside -->
+
+
+    <div id="mainbody">
+
+      <div id="centerdata">
+      </div>  <!-- #centerdata ends -->
+    </div> <!-- #mainbody ends -->
+
+
+
+<div id="append">
+</div>
+
+<div id="rightside">    <!-- got to change after clicking -->
+
+<div id="line_before_rightside"></div>
+
+<div id="popular_artists" class="popular_artists_before">
+<span id="play_queue_icon" class="open_queue"><i class="icon-align-justify"></i></span>
+<div id="queue_dropdown" style="display:none;">
+<div id="pointer_queue"></div>
+<ul>
+  <li id="save_as_playlist">Save as playlist</li>
+  <li id="add_to_playlist">Add to playlist</li>
+  <li id="clear_queue">Clear queue</li>
+</ul>
+</ul>
+</ul>
+</ul>
+</div>
+<a id="qa">
+<span id="play_queue" class="open_queue">Play Queue</span>
+</a>
+<span id="queue_trash"><i class="icon-ellipsis-horizontal"></i></span>
+</div>
+<div id="popular_artists_list" class="nano">
+<div id="queue_content" class="content">
+<!--  data-step="3" data-intro="This is your play queue. Played songs are added here. You can manually add songs by dropping here. You can also shuffle songs within the queue by drag-drop." data-position="left" -->
+
+</div>
+
+</div>
+
+</div>   <!-- #rightside ends -->
+</div>
+
+
+<!--bottombar-->
+
+<div id="bottom">
+  <div id="mini_play" >
+    <div id="mini_image">
+    </div>
+    <div id="mini_image">
+    </div>
+    <div id="mini_icons">
+    </div>
+  </div>
+
+
+	<div id="bLeft" >
+		<div id="bLeftLeft">
+			<img src="{{ STATIC_URL }}images/jukebox/icon_new_prev.png">
+		</div>
+		<div id="bLeftPlay">
+			<img src="{{ STATIC_URL }}images/jukebox/icon_new_play.png">
+		</div>
+		<div id="bLeftRight">
+			<img src="{{ STATIC_URL }}images/jukebox/icon_new_next.png">
+		</div>
+	</div>
+	<div id="bMiddle">
+  <!--   data-step="4" data-intro="This is main player." data-position="top" -->
+	<div id="musicbar">
+	<div id="musicPlayerSlider">
+	<div id="musicPlayerInfo">
+	<div id="infoLeft">
+	<div id="ilSong"><b></b></div> - 
+	<div class="ilArtist artist"></div> - 
+	<div class="ilAlbum album"></div>
+	</div>
+  <div id="download_option">
+    <a href="#">Download</a>
+  </div>
+	<div id="timeRight">
+	<span id="timePlayed">0:00</span> / <span id="totalTime">0:00</span>
+	</div>
+	</div>
+
+	<div id="musicSlider">
+    <div id="songLoaded"></div>
+  </div>
+  <div id="borderMusicSlider"></div> 
+
+
+	</div>
+	<div id="divisiondark">
+	<div id="divisionlight"></div>
+	</div>
+	<div id="musicbarSide">
+	<div id="looppic">
+	<img src="{{ STATIC_URL }}images/jukebox/looppic.png">
+  <span></span>
+	</div>
+	<div id="shufflepic">
+	<img src="{{ STATIC_URL }}images/jukebox/shufflepic.png">
+	</div>
+	</div>
+	</div>
+	<div id="bordermusicbar"></div>
+	<!-- search icon -->
+	<div id="searchButton" class="notOpen" onclick="searchView(this);">
+	<i class="icon-search"></i>
+	</div>
+
+	</div>
+	<div id="bRight">
+		<section id="volumesection">    
+		<div id="slider"></div> 
+		<div id="borderVolume"></div> 
+		<span id="volumeicons"><i class="icon-volume-up"></i></span>  
+		</section> 
+   <div id="signin_button">
+    {% if user.is_active %}
+      
+    {% else %}
+     Sign in
+    {% endif %}
+   </div> 
+	</div>
+
+
+
+
+
+  </div> <!-- div #bigwrapper ends -->
+</body>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+      $( window ).load(function() {
+    // $('body').css({'opacity':'1'});
+});
+      </script>
+    <script src="{{ STATIC_URL }}js/csrf.js"></script>
+    <script src="{{ STATIC_URL }}js/common.js"></script>
+    <script src="{{ STATIC_URL }}js/jukebox/fuse.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/keymap.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/keyboard.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery/nanoscroller/jquery.nanoscroller.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/resize.js"></script> 
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/music.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/jquery-ui-1.10.3.custom.js"></script>
+   <!-- <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/soundmanager2.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/soundedit.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/musicplayerbottom.js"></script>
+<!--    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/soundmanager2.js"></script>  
+-->
+<!-- would add after adding music player bottom -->
+    <!-- fix for mozilla -->
+    <style type="text/css">
+    @-moz-document url-prefix() {
+        .list_icon_play{
+          margin-left: -21px;
+        }
+        .searchLightboxOpen{
+          background-color: rgba(255, 255, 255, 0.9);
+        }
+    }
+    </style>
+    
+    <script type="text/javascript">
+    $( document ).ready(function() {
+		    // put id to the large slider to change its color to blue
+
+		    $( "#musicSlider" ).find('.ui-slider-range').attr('id','musicBlueSlider');
+        //play queue css ellipsis
+       // $(".qsong").width($(".qitem").width()-50);
+		    $( "#slider" ).find('a').attr('id','ui-slidersmall-handle');
+		    $( "#musicSlider" ).find('a').attr('id','ui-sliderlarge-handle');
+        $(".nano").nanoScroller();
+		    });
+$('#centerdata').css('width',$(window).width()-180-240);
+// to erase the rightside on homeview and strech the centerdiv
+// $('#centerdata').css('width',$(window).width()-180-240);
+
+</script>
+
+
+
+<!--    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/soundedit.js"></script>   -->
+ <!-- <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
+ <!-- <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>-->
+  
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/smoothscroll.js"></script>
+
+  <script src="{{ STATIC_URL }}js/jukebox/base.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/notify.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jukebox/intro.js"></script>
+  <!--script type="text/javascript" src="{{ STATIC_URL }}js/piwik.js"></script-->
+  <!-- last fm use to get similar artist tracks -->
+<!--  <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfm.api.cache.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfm.api.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfm.api.md5.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/json2.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL}}js/jukebox/lastfmuse.js"></script>
+  -->
+  <!--
+  <script type="text/javascript">
+  introJs().start();
+  </script>
+  -->
+</html>

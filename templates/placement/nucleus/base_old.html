@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/normalize-min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/base.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/style.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/input_styles.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/tabs.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/button.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+    {# App specific css files here #}
+    {% block app_styles %} {% endblock %}
+{% endblock %}
+    <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
+
+    <!-- All JavaScript at the bottom, except this Modernizr build.
+         Modernizr enables HTML5 elements & feature detects for optimal performance.
+         Create your own custom Modernizr build: www.modernizr.com/download/ -->
+{% block pre_scripts %}
+    <script src="{{ STATIC_URL }}js/modernizr.js"></script>
+{% endblock %}
+    <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
+         chromium.org/developers/how-tos/chrome-frame-getting-started -->
+    <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+{% block body %}
+    <header>
+
+      {% block global_header %}
+
+      <div id="header_parent">
+        <div id="header">
+	        <div id="header_text">
+            {% block header_text %}
+              Channel-I
+            {% endblock %}
+          </div>
+
+
+          {% block header_links %}
+          {% endblock %}
+
+        </div>
+      </div>
+      
+      <div id="header_shadow">
+      </div>
+
+      {% endblock %}     {# End global_header block #}
+
+    </header>
+    <div class="shadow">&nbsp;</div>
+    <div role="main" id="main">
+<div id="common-content">
+  <div id="profile_pic">
+    {% block profile_pic %}
+    <img src="{{ STATIC_URL }}images/nucleus/default_dp.png">
+    {% endblock %}
+    <map name="profile_update">
+      <area shape="rect" coords="22,136,111,150" href="/profile/" />
+    </map>
+  </div>
+  <div id="main_menu">
+    <nav id="cen_menu">
+      <li><img src="{{ STATIC_URL }}images/placement/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/placement/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/placement/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/placement/menu1.jpg"></li>
+      <li><img src="{{ STATIC_URL }}images/placement/menu1.jpg"></li>
+      <li class="last_icon"><img src="{{ STATIC_URL }}images/placement/menu1.jpg"></li>
+ </nav>
+  </div>
+  <div id="feeds"></div>
+</div>
+      
+      
+    <div class="clear">&nbsp;</div>
+      <div id="main_content">
+        {% block left_sidebar %} {% endblock %}
+        <div id="content_middle">
+          {% block messages %}
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'form_error error' %}
+              {# As form errors already have html p tag and class='error_field', we need to do this. #}
+              {% autoescape off %}
+                {{ message|safe }}
+              {% endautoescape %}
+            {% else %}
+              {# For those messages that have a tag, the tag name equals the class name. #}
+              {% if message.tags %}
+                <p class="{{ message.tags }}">{{ message|safe }}</p>
+              {% else %}
+                {# For those messages that don't have a tag, class name is 'unknown_message'. #}
+                <p class="unknown_message">{{ message|safe }}</p>
+              {% endif %}
+            {% endif %}
+            {% endfor %}  {# End message for #}
+            {% endif %}  {# End messages if #}
+          {% endblock %} {# End message block #}
+          {% block app_content %}{% endblock %}
+
+        </div>
+        <!--=====================Right side gadgets =========================-->
+        <div id="content_right">
+          {% block content_right %} {% endblock %}
+        </div>
+        <div style="clear:both">      </div>
+
+      </div>
+    </div>
+    <footer>
+
+      {% block footer %}
+      <div id="footer">
+        &copy; {% now "Y" %} Information Management Group
+      </div> {# End footer div #}
+      {% endblock %}
+
+    </footer>
+{% endblock %}
+
+
+{% block scripts %}
+    <!-- JavaScript at the bottom for fast page loading -->
+
+    <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+    <!--  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+    <!--<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>-->
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery-datetimepicker.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery-init.js"></script>
+    <!-- scripts concatenated and minified via build script -->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/placement/login-action.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/placement/plugins.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/placement/tabbed.layout.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/placement/sortable.js"></script>
+    <!--script type="text/javascript" src="{{ STATIC_URL }}js/piwik.js"></script>-->
+    <!-- end scripts -->
+    {% block app_scripts %} {% endblock %}
+{% endblock %}

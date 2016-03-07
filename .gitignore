@@ -1,0 +1,16 @@
+*.sw*
+!*.swf
+*.pyc
+*~
+.sass-cache/*
+trash/*
+node_modules
+dist
+.tmp
+.sass-cache
+bower_components
+.swp
+media/
+build/
+static/excel/*
+apps/lectut/scripts/old_db/

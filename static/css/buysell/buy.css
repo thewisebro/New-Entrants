@@ -1,0 +1,83 @@
+    #content{
+      float: left;
+      width:100%;
+      margin: 0px 0 0 0px;
+    }
+    form p{
+      margin:2px;
+    }
+    .subCat{
+      display:none;
+      margin-left: 20px;
+    }
+#head{
+margin-top:0px;
+height:34px;
+width:100%;
+background-color:#ffffff;
+}
+#heading{
+ font-family:Trebuchet MS;
+ font-size:18px;
+ padding-left:12px;
+ margin-top:0px;
+ padding-top:3px;
+ margin-bottom:0px;
+ color:#0c779a;
+}
+
+#line{
+height:1px;
+margin-left:12px;
+margin-top:0px;margin-bottom:0px;
+width:574px;
+float:center;
+background-color:#ffffff;
+}
+.category{
+-webkit-border-radius: 4px 4px 4px 4px;
+-moz-border-radius: 4px 4px 4px 4px;
+border-radius: 4px 4px 4px 4px;
+text-decoration:none;
+padding:0px;
+margin-left:12px;
+margin-top:0px;
+margin-bottom:2px;
+margin-right:12px;
+list-style:none;
+color:#08c;
+font-family:Times,serif;
+color:#08c;
+ display: block;
+  padding: 8px 15px;
+border: 1px solid #e5e5e5;
+}
+
+.category:visited{
+color:#08c;}
+
+.subCategory{
+ margin-bottom: 2px;
+ border: 1px solid #e5e5e5;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+margin-left:24px;
+margin-top:12px;
+margin-right:12px;
+text-decoration:none;
+font-family:Times,serif;
+padding-left:0px;
+color:#08c;
+font-size:13px;
+display:block;
+padding: 9px 15px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.subCategory:visited{
+color:#08c;}
+
+.div_subCat {
+display:none;
+}

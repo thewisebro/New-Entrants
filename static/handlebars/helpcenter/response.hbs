@@ -1,0 +1,50 @@
+<div class='query-box'>
+  <div class='query-main'>
+    <input class='seen' type='checkbox'
+          {{#ifCond 'resolved' 'in' response }}
+            onchange='checkbox_clicked(this, {{ response.id }});'
+            {{#if response.resolved }}checked='checked'{{/if}}
+          {{else}}
+            style='display:none;'
+          {{/ifCond}}
+    />
+    <div class='query-main-content' onclick='min_max({{ response.id }});'>
+      <img class='profile-pic' src='{{ response.user_photo }}'/>
+      <div class='person-name'>{{{ response.user_name }}} ({{{ response.username }}})</div>
+      <div class='min-max' id='min-max{{ response.id }}'>
+        {{#if close_replies }}&#9660;{{ else }}&#9650;{{/if}}
+      </div>
+      <div class='posted'>{{ response.pretty_datetime }}</div>
+      <div class='posted'>{{ response.response_type }}</div>
+      <div class='query-app-name'>
+      {{#if response.app_name }}
+        <a target='_blank' href='{{ response.app_url }}'
+        >{{ response.app_name }}</a>
+      {{else}}
+        {{ response.app }}
+      {{/if}}
+      </div>
+      <div class='query-text'>{{{ response.text }}}</div>
+    </div>
+  </div>
+  <div id='replies{{ response.id }}' class='replies'
+        {{#if close_replies }}style='display:none'{{/if}}
+  >
+    <div id='main-replies{{ response.id }}'>
+    {{#each response.replies}}
+      {{{ html }}}
+    {{/each}}
+    </div>
+    {{#ifCond (Cond response.username '!=' 'anonymous') '||' (Cond response.replies.length '==' 0)}}
+      <div class='write-reply'>
+        <img class='profile-pic-small' src='{{ reply_pic_url }}'/>
+        <form action='' method='POST' onsubmit='give_reply("{{ response.id }}");return false;'>
+          <textarea id='reply{{ response.id }}' name='reply' class='reply-box' type='text'></textarea>
+          <input class='input-button' type='submit' name='submit' style='margin-top:1px;margin-left:10px;'
+            value={{#ifCond response.username '!=' 'anonymous'}}'Reply'{{else}}'Email'{{/ifCond}}
+          />
+        </form>
+      </div>
+    {{/ifCond}}
+  </div>
+</div>

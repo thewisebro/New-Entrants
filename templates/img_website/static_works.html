@@ -1,0 +1,146 @@
+{% extends "img_website/base.html" %}
+
+{% block head %}
+	<meta name="author" content="">
+
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{% endblock head %}
+
+{% block styles %}
+  {{ block.super }}
+{% endblock styles %}
+
+{% block scripts %}
+  {{ block.super }}
+{% endblock scripts %}
+
+{% block links %}
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/"> HOME </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/works/"><span class="active"> WORKS </span></a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/blog/"> BLOG </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/about/"> ABOUT </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/status/"> STATUS </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/team/"> TEAM </a> </li>
+								<li> <a href="{{ IMG_WEBSITE_BASE_URL }}/contact/"> CONTACT </a> </li>
+{% endblock links %}
+
+{% block body %}
+<!-- CONTENT: WORKS -->
+	<div id="team" class="row strip">
+
+		<div class="container">
+
+			<div class="row">
+
+				<div class="offset1 blackstrip" style="width:157px;">
+
+				</div>
+
+			</div>
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row strip -->
+
+
+	<div class="row heading">
+
+		<div class="container">
+
+				<div class="row">
+
+					<div class="label span2 offset1">
+						<span class="label-text">THINGS WE'VE MADE</span>
+            {% block create_post %}
+            {% endblock create_post %}
+					</div>
+
+					<div class="team-nav1 fr">
+						<!--<span class="team-tab active" id="all">All</span>
+						<span class="team-tab" id="intranet">Intranet</span>
+						<span class="team-tab" id="internet">Internet</span>-->
+					</div>
+
+				</div>
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row heading -->
+
+	<!--------------------------------------------------- RECENT -->
+
+	<div class="row blog">
+
+		<div class="container blog_container fadediv">
+
+			<div class="row">
+
+				<div class="span9 offset1 articles_list shadow2">
+        {% for work in work_list_paged.object_list %}
+					<div class="span9 article-works {{ work.category|lower }}">
+
+						<div class="article_title">
+							<div class="article_title_text">
+              {% block work_title %}
+								<h3>  
+							<a href="{{ IMG_WEBSITE_BASE_URL }}/works/{{ work.slug|urlencode }}/">{{ work.title }}</a></h3>
+              {% endblock work_title %}
+              </div>
+<!-- 							<div class="box_bubble">
+								<div class="box_bubble_text">
+									<span class="month">JAN</span>
+									<span class="date"> 21 </span>
+								</div>
+							</div> -->
+						</div> <!-- end artcle_title -->
+
+						<div class="article_content">
+
+							<div class="article_content_text">
+								<div>{{ work.short_description }}</div>
+
+             {% block pub %}
+							<a href="{{ IMG_WEBSITE_BASE_URL }}/works/{{ work.slug|urlencode }}/" class="read_more"> Read more </a>
+
+						 {% endblock pub %}
+              </div>
+
+							<div class="work-pic">
+
+								<div class="work-pic-content">
+									<img src="{{ MEDIA_URL }}{{ work.image }}" />
+								</div>
+
+							</div>
+
+							<!--<div class="article_content_image">
+
+								</div> -->
+
+
+						</div> <!-- end article_content -->
+
+					<hr class="hr-works"/>
+
+					</div> <!-- end article -->
+        {% endfor %}
+				 <div class="next-previous">
+				    {% if work_list_paged.has_previous %}
+						  <a href="{{ IMG_WEBSITE_BASE_URL }}/works/page/{{ work_list_paged.previous_page_number }}/" class="previous"> Previous Page </a>
+            {% endif %}
+
+						{% if work_list_paged.has_next %}
+						  <a href="{{ IMG_WEBSITE_BASE_URL }}/works/page/{{ work_list_paged.next_page_number }}/" class="nextpost"> Next Page </a>
+            {% endif %}
+
+					</div>
+
+				</div> <!-- end span8 articles_list -->
+
+			</div> <!-- end row -->
+
+		</div> <!-- end container -->
+
+	</div> <!-- end row blog -->
+{% endblock body %}

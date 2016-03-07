@@ -1,0 +1,29 @@
+{% extends "pagelet_base.html" %}
+
+{% block scripts %}
+  <script type="text/javascript">
+    var user_in_img = {{ user_in_img }};
+    var username = '{{ user.username }}';
+  </script>
+{% endblock %}
+
+{% block content %}
+  <div class="app-heading"><a href='/#helpcenter'>Help Center</a></div>
+
+  {% if not user_in_img %}
+    {{ form.media.css }}
+    <div id="give_response">
+      <div class='helpcenter-header' style=''>How can we help you ?</div>
+       <form name="response-form" action="" method="POST" class="uniForm"
+           onsubmit="give_response();return false;">{% csrf_token %}
+           {{ form.uniform }}
+         <input type="submit" class="input-button" name="submit" style="margin-left:10px" value="Submit"/>
+       </form>
+    </div>
+    {% if queries_exists %}
+      <div class='helpcenter-header' style='margin-top:25px'>Previous Queries</div>
+    {% endif %}
+  {% endif %}
+  <div id="responses">
+  </div>
+{% endblock %}

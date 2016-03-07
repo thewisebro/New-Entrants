@@ -1,0 +1,62 @@
+<div>
+<div id="cover" class="cover-pic" ng-style="{ 'background-image': 'url(' + currentUser.coverPic + ')' }">
+    <div ng-show="isLoggedUserProfile()" id="cover-upload" type="file" ng-mouseover="showCoverHint()" ng-mouseleave="hideCoverHint()" ng-file-select ng-model="cp" ng-file-change="uploadCover($files)" ng-accept="'image/*'" ng-multiple="false"><i class="fa fa-camera-retro"></i></div>
+    <div id="cover-upload-hint">Update Cover Photo</div>
+    <div class="profile-user-details">
+    <div>
+        <div class="profile-pic">
+        <div>
+          <div class="pic" ng-style="{ 'background-image': 'url(' + currentUser.profilePic + ')' }"></div>
+        </div>
+        </div>
+        <div class="details">
+          <h1 ng-bind="currentUser.name"></h1>
+          <p><i class="fa" ng-class="{ 'fa-graduation-cap': !currentUser.isSpot, 'fa-star': currentUser.isSpot}"></i> {~{currentUser.label}~}</p>
+        </div>
+    </div>
+    </div>
+</div>
+<div class="padded">
+    <h2 ng-show="!currentUser.posts_data.length" class="page-title" style="margin-top:20px; max-width:600px; font-size:20px">There aren't any posts to display right now... Go on, add some using the <strong>Post</strong> button on the left!</h2>
+    <div class="feed-container fade" ng-repeat="post in currentUser.posts_data">
+    <div>
+        <div class="user-data pull-left">
+        <div>
+            <a ng-href="#/profile/{~{post.post_owner_enrol}~}" ng-click="setCurrentNavItem({})">
+                <div class="user-image" ng-style="{ 'background-image': 'url(' + post.post_owner_pic + ')' }"></div>
+            </a>
+            <p class="info"><i class="fa fa-graduation-cap"></i> {~{post.post_owner_branch}~}</p>
+            <a ng-href="#/profile/{~{post.spot[0].id}~}" ng-show="post.spot[0]" ng-click="setCurrentNavItem({})">
+              <p class="info" style="margin-top:5px;"><i class="fa fa-map-marker"></i> {~{post.spot[0].name}~}</p>
+            </a>
+            <p class="info"><i class="fa fa-clock-o"></i> <span am-time-ago="post.time"></span></p>
+        </div>
+        </div>
+        <div class="post-data pull-left">
+        <div>
+            <button class="delete-post-bttn" ng-if="isLoggedUserPost(post.post_owner_enrol)" ng-click="deleteProfilePost(post.post_id, $index)"><i class="fa fa-close"></i></button>
+            <a ng-href="#/profile/{~{post.post_owner_enrol}~}" ng-click="setCurrentNavItem({})"><h1 ng-bind="post.post_owner"></h1></a>
+            <h2 ng-show="post.taggedUsers.length">With 
+                <span ng-repeat="taggedUser in post.taggedUsers">
+                    <span ng-show="$last && $index"> and </span><a ng-click="setCurrentNavItem({})" ng-href="#/profile/{~{taggedUser.username}~}">{~{taggedUser.name}~}</a><span ng-hide="(post.taggedUsers.length-1==$index)||(post.taggedUsers.length-2==$index)">, </span>
+                </span>
+            </h2>
+            <p ng-bind-html="post.post_text | linky:'_blank' | emoji | hashtags"></p>
+            <div class="images-container">
+                <a ng-if="post.image_url.length > 1" ng-repeat="image in post.image_url" ng-click="enlargeImage(post.image_url, $index, $event)">
+					<div ng-style="{'background':'url(' + image + ')'}"></div>
+                </a>
+				<a class="single-image" ng-if="post.image_url.length === 1" ng-repeat="image in post.image_url" ng-click="enlargeImage(post.image_url, $index, $event)">
+					<img ng-src="{~{image}~}" alt="{~{$index}~}">
+                </a>
+            </div>
+        </div>
+        </div>
+       <!--class="info stars" ng-click="">{~{post.stars}~} <i class="fa fa-star"></i></p>-->
+    </div>
+    </div>
+    <!--<div class="loader">
+        <img src="images/svg-loaders/three-dots.svg" alt="Loading...">
+    </div> -->
+</div>
+</div>

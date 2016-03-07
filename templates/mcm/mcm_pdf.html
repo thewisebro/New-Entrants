@@ -1,0 +1,129 @@
+<html>
+<body style="font-size:14px;">
+<table>
+  <tr>
+    <td style="width:25%"><img src="{{ STATIC_URL }}images/iitrlogo.jpg" style="width:60px; height:60px;"/></td>
+    <td style="width:50%"><p style="text-align:center;">
+          <b>INDIAN INSTITUTE OF TECHNOLOGY ROORKEE</b></p>
+    </td>
+    <td style="width:25%;"></td>
+  </tr>
+</table>
+<p style="text-align:center">APPLICATION FOR GRANT OF {{ title }} FOR THE SESSION 2015-2016</p>
+<hr/>
+
+<table padding=7>
+  <tr>
+    <td>Name:</td>
+    <td> {{ person.name }}</td>
+    <td>Enrollment No:</td>
+    <td> {{ person.user.username }}</td>
+  </tr>
+
+  <tr>
+    <td>Class:</td>
+    <td> {{ person.branch.degree }}</td>
+    <td>Branch:</td>
+    <td> {{ person.branch.code }}</td>
+  </tr>
+  <tr>
+    <td>Semester: </td>
+    <td>{{ person.semester }}</td>
+    <td> Category: </td>
+    <td>{{form_personinfo.get_category_display }}</td>
+  </tr>
+  <tr>
+    <td>SGPA (Last Semester):</td>
+    <td> {{ student.sgpa }}</td>
+    <td>CGPA:</td>
+    <td> {{ student.cgpa }}</td>
+  </tr>
+  {% if student.air %}
+    <tr>
+      <td>JEE Advanced Rank / JAM Rank:</td>
+      <td> {{ student.air }}</td>
+    </tr>
+  {% endif %}
+  <tr>
+    <td>Bhawan:</td>
+    <td>{{ person.bhawan}}</td>
+    <td>Room no: </td>
+    <td>{{ person.room_no}}</td>
+  </tr>
+  <tr>
+    <td>Mobile No:</td>
+    <td>{{ person.user.contact_no }}</td>
+    <td>Email id: </td>
+    <td>{{ person.user.email }}</td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td>Penalised due to unfair means/ indiscipline: {{ student.unfiar_means|yesno:"Yes,No" }} </td>
+  </tr>
+</table>  
+<table>
+  <tr>
+    <td>Bank:</td>
+    <td>{{form_personinfo.bank_name}}</td>
+    <td>Account No.: </td>
+    <td>{{ form_personinfo.bank_account_no}}</td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td style="width:32%">Permanent Address:</td>
+    <td style="padding:3px;">{{ form_personinfo.permanent_address }}</td>
+  </tr>
+</table>
+<b>Father's Information</b><br/>
+<table padding = 1>
+  <tr>
+    <td>Name:</td>
+    <td> {{form_personinfo.fathers_name}}</td>
+    <td>Occupation:</td>
+    <td> {{form_personinfo.fathers_occupation}}</td>
+  </tr>
+  <tr>
+    <td>Annual Family Income : </td>
+    <td>{{ student.family_income}} Rs.</td>
+  </tr>
+</table>
+
+<br/>
+
+{% if student.other_scholarship_details %}
+  <b>Details of other Scholarships/Financial Aid during the current session (2015-2016)</b><br/>
+    {{ student.other_scholarship_details}}
+{% endif %}
+<br/>
+
+{% if flag %}
+  <b>Applying for:</b><br/>
+    {{ pay_choice }}
+{% endif %}
+<br/>
+
+
+
+<p>I declare that the particulars mentioned above are correct. 
+I herewith the latest parental income certificate(Mother and Father both) in the prescribed form. 
+If I get any scholarship/financial aid from any other source, I will intimate the amount of scholarship. 
+I understand that if any of information supplied is found to be incorrect, the amount of scholarship, 
+if any, received by me will have to be refunded and the institute can take any action against me 
+as it may deem fit in the regard.
+</p>
+
+<br/>
+<div style="margin-left: 500px; margin-top: 70px;">
+Signature of Student<br/>{{date}}
+</div>
+<br/>
+Enclosures:<br/>
+1) Hard copy of computer generated application form.<br/>
+2) Affidavit from all family members regarding income.<br/>
+3) Income certificate signed by Revenue officer.<br/>
+4) Photo copy of last semester Grade Sheet.<br/>
+5) JEE Advanced-2015 rank card (only for first year students).<br/>
+</body>
+</html>

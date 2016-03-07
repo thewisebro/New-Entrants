@@ -1,0 +1,115 @@
+{% extends "messmenu/menu_table.html" %}
+{% load mess_tags %}
+
+{% block title %}
+    Mess Menu
+{% endblock %}
+
+{% block time_of_day_1 %}
+    {% for menu_lst in menu|slice:":7" %}
+        <td>
+            <div class='context'>
+                {{ menu_lst.content|easy_escape }}
+            </div>
+        </td>
+    {% endfor %}
+{% endblock %}
+{% block time_of_day_2 %}
+    {% for menu_lst in menu|slice:"7:14" %}
+        <td>
+            <div class='context'>
+                {{ menu_lst.content|easy_escape }}
+            </div>
+        </td>
+    {% endfor %}
+{% endblock %}
+{% block time_of_day_3 %}
+    {% for menu_lst in menu|slice:"14:21" %}
+        <td>
+            <div class='context'>
+                {{ menu_lst.content|easy_escape }}
+            </div>
+        </td>
+    {% endfor %}
+{% endblock %}
+
+{% if not pdf %}
+    {% block above_menu_table %}
+        <div id="bhawan_pdf">
+            <select name="bhawan" id="bhawan_dropdown" class="dropdown">
+                <option class="selected" selected="selected" 
+                value="{% url 'display_menu' bhawan week %}">
+                    {{ bhawans|get_value:bhawan }}
+                </option>
+                {% for bhawan_code, bhawan_name in bhawans.items %}                               {% if bhawan_code != bhawan %}
+                        <option value="{% url 'display_menu' bhawan_code week %}"
+                                class="not_selected">
+                            {{ bhawan_name }}
+                        </option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            
+            {% comment %}
+            <div id="pdf">
+                <a href="{% url generate_pdf 'pdf' bhawan week %}" target="_blank" class="pdf_text">
+                    Generate pdf<img src="{{ IMAGES_URL }}pdf.gif"/>
+                </a>
+            </div>
+            {% endcomment %}
+        </div>
+
+        <div id="previous_next">
+            <div id="previous">
+                {% if week != -2 %}
+                    <a href="{% url 'display_menu' bhawan week|add:-1 %}">
+                        <div style="margin-right:4px">
+                            <img src="{{ IMAGES_URL }}messbox_tl.gif" class="left"/>
+                        </div>
+                        <div id="previous_text">Previous Week</div>
+                    </a>
+                {% else %}
+                    <div style="margin-right:4px">
+                        <img src="{{ IMAGES_URL }}messbox_tlu.gif" class="left "/>
+                    </div>
+                {% endif %}
+            </div>
+            <div id="next">
+                {% if week != 2 %}
+                    <a href="{% url 'display_menu' bhawan week|add:1 %}">
+                        <div id="next_text"> Next Week</div>
+                        <div>
+                            <img src="{{ IMAGES_URL }}messbox_tr.gif" class="right"/>
+                        </div>
+                    </a> 
+                {% else %}
+                    <div>
+                        <img src="{{ IMAGES_URL }}messbox_tru.gif" class="right"/>
+                    </div>
+                {% endif %}
+            </div>
+          
+            <div id="presentbhawan_date">
+                <b>
+                <div id="presentbhawan">
+                    {{ bhawans|get_value:bhawan|upper }} BHAWAN MESS TIME TABLE
+                </div>
+                <div id="date"> 
+                    ({{ date|get_date_1:0 }} - {{ date|get_date_1:6 }})
+                </div>
+                </b>
+            </div>
+        </div>
+    {% endblock %}
+        
+    {% block below_menu_table %}
+        {% if is_mess_secy and user.student.bhawan = bhawan %}
+            <div id="changemenu">
+                <span class="text" id="display_menu_text">
+                    This is your last uploaded time table. To change the time table click on change. 
+                </span>
+                <a href="{% url 'update_menu' bhawan week %}" class="button_1" style="padding: 6px 18px">Change</a>
+            </div>
+        {% endif %}
+    {% endblock %}
+{% endif %}

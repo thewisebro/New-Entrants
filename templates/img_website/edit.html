@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block body %}
+  Welcome {{ person.name }}
+  <br>
+  <a href="{{ IMG_WEBSITE_BASE_URL }}/logout">Log Out</a><br><br>
+  <a href="{{ IMG_WEBSITE_BASE_URL }}/team/add_member">Add/Edit membership</a><br>
+  <a href="{{ IMG_WEBSITE_BASE_URL }}/dynamic_blog">Edit blogs</a><br>
+  <a href="{{ IMG_WEBSITE_BASE_URL }}/dynamic_works">Edit works</a><br>
+  <a href="{{ IMG_WEBSITE_BASE_URL }}/dynamic_status">Edit status</a><br>
+  <a href="{{ IMG_WEBSITE_BASE_URL }}/browse">Media Store</a>
+  <form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" name="deploy" value="Deploy to Github"/>
+  </form>
+  {% if deployed %}
+    <div id="deploy-msg">Deployed</div>
+    <script type="text/javascript">
+      setTimeout(function(){
+        $("#deploy-msg").hide();
+      },3000);
+    </script>
+  {% endif %}
+
+{% endblock body %}

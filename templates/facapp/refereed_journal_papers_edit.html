@@ -1,0 +1,17 @@
+{% extends "facapp/base.html" %}
+
+{% block app_content %}
+  <h3>Refereed Journal Papers</h3>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/ckeditor/ckeditor.js"></script>
+
+  {% include "facapp/generic_form.html" %}
+  <script type="text/javascript">
+    var editor = CKEDITOR.replace( 'papers' ); {# name or id of the textarea that has to be used with CKEditor #}
+  </script>
+  <style>
+  #cke_id_papers{
+    margin-top:20px;
+  }
+  </style>
+{% endblock %} {# End app_content block. #}
+

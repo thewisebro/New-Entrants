@@ -1,0 +1,20 @@
+{% extends "img_website/static_status.html" %}
+
+{% block create_post %}
+<a href="{{ IMG_WEBSITE_BASE_URL }}/dynamic_status/create/" class="create_post create_post_status">Add New Post</a>
+{% endblock create_post %}
+
+{% block pub %}
+							<a href="{{ IMG_WEBSITE_BASE_URL }}/dynamic_status/{{ post.pk }}/update/" class="update_post">Update</a>
+              {% if post.state == "Unpublished" %}
+              <form action='{{ IMG_WEBSITE_BASE_URL }}/status/{{ post.pk }}/publish_now/' method="post">
+              {% csrf_token %}
+              <input type="submit" class="state_post" value="Publish Now">
+              </form>
+              {% else %}
+              <form action='{{ IMG_WEBSITE_BASE_URL }}/status/{{ post.pk }}/unpublish_now/' method="post">
+              {% csrf_token %}
+              <input type="submit" class="state_post" value="Unpublish Now">
+              </form>
+              {% endif %}
+{% endblock pub %}

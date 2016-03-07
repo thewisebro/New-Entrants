@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <style type="text/css">
+      body { font-size : 15px; }
+      .feedback_question { font-weight : bold; }
+    </style>
+  </head>
+  <body>
+    Feedback for : {{ feedback.company_name }}
+    <br/>
+    By : {{ feedback.person_name }}
+    <br/>
+    Session : {{ session }}
+    <hr/>
+    {{ feedback.feedback|safe }}
+  </body>
+</html>

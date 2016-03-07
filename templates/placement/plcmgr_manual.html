@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+{% load kwacros %}
+<html>
+  <head>
+    <title>
+      Contact manager
+    </title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/placement/placement.manager.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/nucleus/style.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}jquery/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css">
+    <script src="{{ STATIC_URL }}jquery/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}jquery/jquery-ui.min.js"></script>
+{{ companyform.media }}
+{{ contactpersonformset.media }}
+    <script>
+    $(function() {
+      $( "#id_when_to_contact" ).datepicker({ dateFormat: "dd-mm-yy" }).val();
+     });
+  </script>
+<script>
+(function($) {
+ $(window).load(function() {
+   $('.ui-autocomplete').enscroll({
+      verticalTrackClass: 'track3',
+      verticalHandleClass: 'handle3',
+      addPaddingToPane: false,
+      pollChanges: true
+    });
+   });
+ })(jQuery);
+
+$('body').ready(function(){
+  $('#hint_id_name').hide();
+  $('#id_name').autocomplete({
+  source:'/placement/contact_manager/company_search/',
+  select: function( event, ui ) {
+  $('#id_name').val(ui.item.id);
+  {% if edit_company_page %}
+  {% else %}
+  $('#hint_id_name').text("Company Name should be unique. Contact respective Company Coordinator or Placement Manager to edit Company Details")
+  $('#hint_id_name').show(100);
+  $('#hint_id_name').css("color",'red');
+  {% endif %}
+  },
+  minLength:2
+});
+});
+</script>
+  </head>
+  <body width="800px">
+    <div class="container" style="width:100%;">
+      <div class="manual-form">
+        <form method="post" action="">
+{% csrf_token %}
+{{ companyform.uniform }}
+<hr>
+{{ contactpersonformset.management_form }}
+{% for form in contactpersonformset %}
+<div style="display:inline-block;margin-left:10px;margin-right:10px;float:left;width:45%;border-bottom:1px solid black;margin-bottom:20px;">
+ {{ form.as_table }}
+ {{ form.id }}
+</div>
+{% endfor %}
+
+
+{% comment %}          {% kwacro editable_field_div field %}
+            <div class="edit-row">
+              <div class="dabba">
+                {{field.errors}}
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                       <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <div class="field-label-big">{{field.label}}</div>
+                <div class="field">{{field}}</div>
+              </div>
+            </div>
+          {% endkwacro %}
+
+          {% for  group in user.groups.all %}
+            {% if group.name == 'Placement Manager' %}
+                {% usekwacro editable_field_div assignform.company_coordinator %}
+            {% endif %}
+          {% endfor %}
+{% endcomment %}
+
+{% comment %}          <div class="edit-row">
+            <div class="dabba">
+              <div class="field-label-big">Change Last Contact</div>
+                <div class="field">
+                  <input type="checkbox" name="changelastcontact" value="1" checked />
+                </div>
+            </div>
+          </div> {% endcomment %}
+          <div class="edit-row">
+            <div class="dabba">
+              <input class="input-button" type="submit" value="Submit" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+   </body>
+</html>
