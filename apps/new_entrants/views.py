@@ -61,7 +61,7 @@ def userinfo(request):
         data['email'] = junior.email
         data['fb_link'] = junior.fb_link
         data['phone'] = junior.phone_no
-        data['state'] = junior.get_state_display()
+        data['state'] = {'code': junior.state,'name': junior.get_state_display()}
         data['hometown'] = junior.hometown
         data['phone_privacy'] = junior.phone_privacy
         data['profile_privacy'] = junior.profile_privacy
@@ -75,13 +75,32 @@ def userinfo(request):
         data['email'] = senior.email
         data['fb_link'] = senior.fb_link
         data['phone'] = senior.phone_no
-        data['state'] = senior.get_state_display()
+        data['state'] = {'code': senior.state,'name': senior.get_state_display()}
         data['hometown'] = senior.hometown
         data['enrollment_no'] = user.username
         data['status'] = 'success'
   except:
     data = {'status': 'fail'}
   return HttpResponse(json.dumps(data), content_type='application/json')
+
+def groupinfo(request, group_id=None):    #coded
+  data = {'status': 'fail'}
+  try:
+    group = Group.objects.get(user__username=group_id)
+    data['group'] = {
+      'name': group.name,
+      'decsription': group.description,
+      'website': group.website,
+      'mission': group.groupinfo.mission,
+      'fb_link': group.groupinfo.facebook_url,
+      'twitter_link': group.groupinfo.twitter_url,
+      'gplus_link': group.groupinfo.gplus_url,
+    }
+    data['status'] = 'success'
+  except:
+    data = {'status': 'fail'}
+  return HttpResponse(json.dumps(data), content_type='application/json')
+
 
 def register(request):      #for new entrants   #coded    #tested browser
   print 'auth: ',request.user.is_authenticated()
@@ -212,10 +231,11 @@ def blogs(request):     #coded
     return {
       'title':blog.title,
       'group':blog.group.name,
-      'dp_link':get_domain() + 'photo/' + str(blog.group.user.username),
+      'dp_link':'https://channeli.in/photo/' + str(blog.group.user.username),  #change to get_domain in prod
       'description':blog.description,
       'date':blog.date_published.strftime('%Y-%m-%d %H:%M:%S'),
       'blog_url':get_domain() + 'new_entrants/blogs/' + str(blog.group.user.username) + '/' + blog.slug,
+      'group_url':get_domain() + 'new_entrants/blogs/' + str(blog.group.user.username) + '/',
       'id':blog.pk
     }
 
@@ -223,7 +243,7 @@ def blogs(request):     #coded
     query_set = Blog.objects.all().order_by('-date_published')
     action = request.GET.get('action','')
     if action == 'next':
-      query_set = query_set.filter(pk__gt = request.GET.get('id',0))
+      query_set = query_set.filter(pk__lt = request.GET.get('id',0))
     data = json.dumps({'blogs':map(blog_dict,query_set[:10]),'more':int(query_set.count()>10),'status':'success'})
   except:
     data = json.dumps({'status': 'fail'})
@@ -234,7 +254,7 @@ def blogs_group(request, group_id=None):      #coded
     return {
       'title':blog.title,
       'group':blog.group.name,
-      'dp_link':get_domain() + 'photo/' + str(blog.group.user.username),
+      'dp_link':'https://channeli.in/photo/' + str(blog.group.user.username),   #change to get_domain in prod
       'description':blog.description,
       'date':blog.date_published.strftime('%Y-%m-%d %H:%M:%S'),
       'blog_url':get_domain() + 'new_entrants/blogs/' + str(blog.group.user.username) + '/' + blog.slug,
@@ -246,7 +266,7 @@ def blogs_group(request, group_id=None):      #coded
     query_set = Blog.objects.filter(group=group).order_by('-date_published')
     action = request.GET.get('action','')
     if action == 'next':
-      query_set = query_set.filter(pk__gt = request.GET.get('id',0))
+      query_set = query_set.filter(pk__lt = request.GET.get('id',0))
     data = json.dumps({'blogs':map(blog_dict,query_set[:10]),'more':int(query_set.count()>10),'status':'success'})
   except:
     data = json.dumps({'status': 'fail'})
@@ -257,7 +277,7 @@ def blogs_view(request, group_id=None, slug=None):      #coded
     return {
       'title':blog.title,
       'group':blog.group.name,
-      'dp_link':get_domain() + 'photo/' + str(blog.group.user.username),
+      'dp_link':'https://channeli.in/photo/' + str(blog.group.user.username),   #change to get_domain in prod
       'description':blog.description,
       'date':blog.date_published.strftime('%Y-%m-%d %H:%M:%S'),
       'content':blog.content
@@ -273,10 +293,79 @@ def blogs_view(request, group_id=None, slug=None):      #coded
   data = json.dumps(data)
   return HttpResponse(data, content_type='application/json')
 
+@login_required
+def s_connect(request):   #coded
+  def senior_dict(senior):
+    return {
+      'username':senior.user.username,
+      'name':senior.user.name,
+      'state': {'code': senior.state,'name': senior.get_state_display()},
+      'hometown':senior.hometown,
+      'branch':{'code':senior.user.student.branch.code,'name':senior.user.student.branch.name},
+    }
+
+  data = {'status': 'fail'}
+  try:
+    user = request.user
+    if user.groups.filter(name='New Entrant').exists():
+      junior = Student_profile.objects.get(user=user)
+      sort_by = request.GET.get('sort','')
+      code = request.GET.get('param','')
+      if sort_by == 'branch':
+        query_set = Senior_profile.objects.filter(user__student__branch__code=code)
+      else:
+        query_set = Senior_profile.objects.filter(state=code)
+      requests_sent = Request.objects.filter(junior=junior)
+      requested_seniors = map(lambda x: x.senior, requests_sent)
+      query_set = [x for x in query_set if x not in requested_seniors]
+      data['students'] = map(senior_dict,query_set)
+      data['status'] = 'success'
+    else:
+      data['error'] = 'Seniors are not allowed to send requests'
+  except Exception as e:
+    data = {'status': 'fail'}
+  data = json.dumps(data)
+  return HttpResponse(data, content_type='application/json')
+
+@login_required
+def p_connect(request):   #coded
+  def peer_dict(junior):
+    return {
+      'name':junior.user.name,
+      'state': {'code': junior.state,'name': junior.get_state_display()},
+      'hometown':junior.hometown,
+      'branch':get_junior_branch(junior),
+      'email':junior.email,
+      'fb_link':junior.fb_link,
+      'contact':get_junior_contact(junior)
+    }
+
+  data = {'status': 'fail'}
+  try:
+    user = request.user
+    if user.groups.filter(name='New Entrant').exists():
+      junior = Student_profile.objects.get(user=user)
+      if not junior.profile_privacy:
+        sort_by = request.GET.get('sort','')
+        if sort_by == 'branch' and junior.is_branch:
+          query_set = Student_profile.objects.filter(is_branch=True)
+          query_set = query_set.filter(user__student__branch=junior.user.student.branch)
+        else:
+          query_set = Student_profile.objects.filter(state=junior.state)
+        data['students'] = map(peer_dict,query_set)
+        data['status'] = 'success'
+      else:
+        data['error'] = 'Turn off profile privacy to view others'
+    else:
+      data['error'] = 'Seniors are not allowed to view new entrants'
+  except:
+    data = {'success': 'fail'}
+  data = json.dumps(data)
+  return HttpResponse(data, content_type='application/json')
 
 @login_required
 def request_connect(request):       #coded
-  data = {'status':'fail'}
+  data = {'status': 'fail'}
   if request.method == 'POST':
     try:
       user = request.user
@@ -318,11 +407,11 @@ def accept_connect(request):        #coded
   return HttpResponse(data, content_type='application/json')
 
 @login_required
-def pending_requests(request):      #coded
+def pending(request):      #coded
   def senior_dict(req):
     return {
       'name':req.senior.user.name,
-      'state':req.senior.state,
+      'state': {'code': req.senior.state,'name': req.senior.get_state_display()},
       'hometown':req.senior.hometown,
       'branch':{'code':req.senior.user.student.branch.code,'name':req.senior.user.student.branch.name},
     }
@@ -330,7 +419,7 @@ def pending_requests(request):      #coded
   def student_dict(req):
     return {
       'name':req.junior.user.name,
-      'state':req.junior.state,
+      'state': {'code': req.junior.state,'name': req.junior.get_state_display()},
       'hometown':req.junior.hometown,
       'branch':get_junior_branch(req.junior)
     }
@@ -341,14 +430,15 @@ def pending_requests(request):      #coded
     if user.groups.filter(name='New Entrant').exists():
       junior = Student_profile.objects.get(user=user)
       query_set = Request.objects.filter(junior=junior,is_accepted=False)
-      data = map(senior_dict,query_set)
+      data['students'] = map(senior_dict,query_set)
     else:
       senior = Senior_profile.objects.get(user=user)
       query_set = Request.objects.filter(senior=senior,is_accepted=False)
       print query_set
       query_set = sorted(query_set, key = lambda req: Request.objects.filter(junior=req.junior, is_accepted=True).count())
       print query_set
-      data = map(student_dict,query_set)
+      data['students'] = map(student_dict,query_set)
+    data['status'] = 'success'
   except:
     data = {'status': 'fail'}
     pass
@@ -360,7 +450,7 @@ def accepted(request):      #coded
   def senior_dict(req):
     return {
       'name':req.senior.user.name,
-      'state':req.senior.state,
+      'state': {'code': req.senior.state,'name': req.senior.get_state_display()},
       'hometown':req.senior.hometown,
       'branch':{'code':req.senior.user.student.branch.code,'name':req.senior.user.student.branch.name},
       'fb_link':req.senior.fb_link,
@@ -371,7 +461,7 @@ def accepted(request):      #coded
   def student_dict(req):
     return {
       'name':req.junior.user.name,
-      'state':req.junior.state,
+      'state': {'code': req.junior.state,'name': req.junior.get_state_display()},
       'hometown':req.junior.hometown,
       'branch':get_junior_branch(req.junior),   #check if code required or name
       'fb_link':req.junior.fb_link,
@@ -383,7 +473,7 @@ def accepted(request):      #coded
   user = request.user
   data = {'status':'fail'}
   try:
-    sort_by = request.GET.get('sort_by','')   #options are 'location' and 'branch'
+    sort_by = request.GET.get('sort','')   #options are 'location' and 'branch'
     if user.groups.filter(name='New Entrant').exists():
       junior = Student_profile.objects.get(user=user)
       if junior.is_branch and sort_by == 'branch':
@@ -394,11 +484,12 @@ def accepted(request):      #coded
         query_set = Request.objects.filter(junior=junior,is_accepted=True,senior__state=state)
       else:
         query_set = Request.objects.filter(junior=junior,is_accepted=True)
-      data = map(senior_dict,query_set)
+      data['students'] = map(senior_dict,query_set)
     else:
       senior = Senior_profile.objects.get(user=user)
       query_set = Request.objects.filter(senior=senior,is_accepted=True)
-      data = map(student_dict,query_set)
+      data['students'] = map(student_dict,query_set)
+    data['status'] = 'success'
   except Exception as e:
     data = {'status': 'fail'}
     print str(e)
