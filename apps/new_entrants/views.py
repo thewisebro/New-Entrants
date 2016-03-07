@@ -50,34 +50,37 @@ def userexists(request):
 
 def userinfo(request):
   data = {'status': 'fail'}
-  if request.user.is_authenticated():
-    user = request.user
-    if user.groups.filter(name='New Entrant').exists():
-      data['name'] = user.name
-      data['category'] = 'junior'
-      junior = Student_profile.objects.get(user=user)
-      data['branch'] = get_junior_branch(junior)
-      data['email'] = junior.email
-      data['fb_link'] = junior.fb_link
-      data['phone'] = junior.phone_no
-      data['state'] = junior.get_state_display()
-      data['hometown'] = junior.hometown
-      data['phone_privacy'] = junior.phone_privacy
-      data['profile_privacy'] = junior.profile_privacy
-      data['status'] = 'success'
-    else:
-      data['name'] = user.name
-      data['category'] = 'senior'
-      senior = Senior_profile.objects.get(user=user)
-      data['branch'] = {'code':senior.user.student.branch.code,'name':senior.user.student.branch.name}
-      data['year'] = (senior.user.student.semester_no+1)/2
-      data['email'] = senior.email
-      data['fb_link'] = senior.fb_link
-      data['phone'] = senior.phone_no
-      data['state'] = senior.get_state_display()
-      data['hometown'] = senior.hometown
-      data['enrollment_no'] = user.username
-      data['status'] = 'success'
+  try:
+    if request.user.is_authenticated():
+      user = request.user
+      if user.groups.filter(name='New Entrant').exists():
+        data['name'] = user.name
+        data['category'] = 'junior'
+        junior = Student_profile.objects.get(user=user)
+        data['branch'] = get_junior_branch(junior)
+        data['email'] = junior.email
+        data['fb_link'] = junior.fb_link
+        data['phone'] = junior.phone_no
+        data['state'] = junior.get_state_display()
+        data['hometown'] = junior.hometown
+        data['phone_privacy'] = junior.phone_privacy
+        data['profile_privacy'] = junior.profile_privacy
+        data['status'] = 'success'
+      else:
+        data['name'] = user.name
+        data['category'] = 'senior'
+        senior = Senior_profile.objects.get(user=user)
+        data['branch'] = {'code':senior.user.student.branch.code,'name':senior.user.student.branch.name}
+        data['year'] = (senior.user.student.semester_no+1)/2
+        data['email'] = senior.email
+        data['fb_link'] = senior.fb_link
+        data['phone'] = senior.phone_no
+        data['state'] = senior.get_state_display()
+        data['hometown'] = senior.hometown
+        data['enrollment_no'] = user.username
+        data['status'] = 'success'
+  except:
+    data = {'status': 'fail'}
   return HttpResponse(json.dumps(data), content_type='application/json')
 
 def register(request):      #for new entrants   #coded    #tested browser
@@ -85,56 +88,59 @@ def register(request):      #for new entrants   #coded    #tested browser
   print 'method; ',request.method
   if not request.user.is_authenticated():
     if request.method == 'POST':
-      print request.POST
-      data = {'status': 'fail'}
-      form = RegisterForm(request.POST)
-      if form.is_valid():
-        rec = form.cleaned_data
-        username = rec['username']
-        if not User.objects.filter(username=username).exists():
-          password = rec['password1']
-          name = rec['name']
-          email = rec['email']
-          user = User.objects.create_user(username=username,password=password,email=email,name=name)
-          group = GG.objects.get(name='Student')
-          group.user_set.add(user)
-          group = GG.objects.get(name='New Entrant')
-          group.user_set.add(user)
-          fb_link = rec['fb_link']
-          phone = rec['phone_no']
-          state = rec['state']
-          branch = rec['branch']
-          hometown = rec['hometown']
-          profile_privacy = rec['profile_privacy']
-          phone_privacy = rec['phone_privacy']
-          junior = Student_profile()
-          try:
-            branch = Branch.objects.get(code=branch)
-            student = Student()
-            student.user = user
-            student.branch = branch
-            student.semester = 'UG10'
-            student.semester_no = 1
-            student.admission_year = 2016
-            student.admission_semtype = 'A'
-            student.save()
-            junior.is_branch = True
-          except:
-            junior.is_branch = False
-            pass
-          junior.user=user
-          junior.email=email
-          junior.fb_link=fb_link
-          junior.state=state
-          junior.hometown=hometown
-          junior.phone_no=phone
-          junior.phone_privacy = phone_privacy
-          junior.profile_privacy = profile_privacy
-          junior.save()
-          data['status'] = 'success'
-          print 'success'
-        else:
-          data['error'] = 'Username already exists.'
+      try:
+        print request.POST
+        data = {'status': 'fail'}
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+          rec = form.cleaned_data
+          username = rec['username']
+          if not User.objects.filter(username=username).exists():
+            password = rec['password1']
+            name = rec['name']
+            email = rec['email']
+            user = User.objects.create_user(username=username,password=password,email=email,name=name)
+            group = GG.objects.get(name='Student')
+            group.user_set.add(user)
+            group = GG.objects.get(name='New Entrant')
+            group.user_set.add(user)
+            fb_link = rec['fb_link']
+            phone = rec['phone_no']
+            state = rec['state']
+            branch = rec['branch']
+            hometown = rec['hometown']
+            profile_privacy = rec['profile_privacy']
+            phone_privacy = rec['phone_privacy']
+            junior = Student_profile()
+            try:
+              branch = Branch.objects.get(code=branch)
+              student = Student()
+              student.user = user
+              student.branch = branch
+              student.semester = 'UG10'
+              student.semester_no = 1
+              student.admission_year = 2016
+              student.admission_semtype = 'A'
+              student.save()
+              junior.is_branch = True
+            except:
+              junior.is_branch = False
+              pass
+            junior.user=user
+            junior.email=email
+            junior.fb_link=fb_link
+            junior.state=state
+            junior.hometown=hometown
+            junior.phone_no=phone
+            junior.phone_privacy = phone_privacy
+            junior.profile_privacy = profile_privacy
+            junior.save()
+            data['status'] = 'success'
+            print 'success'
+          else:
+            data['error'] = 'Username already exists.'
+      except:
+        data = {'status': 'fail'}
       return HttpResponse(json.dumps(data), content_type='application/json')
     else:
       form = RegisterForm()
@@ -213,11 +219,14 @@ def blogs(request):     #coded
       'id':blog.pk
     }
 
-  query_set = Blog.objects.all().order_by('-date_published')
-  action = request.GET.get('action','')
-  if action == 'next':
-    query_set = query_set.filter(pk__gt = request.GET.get('id',0))
-  data = json.dumps({'blogs':map(blog_dict,query_set[:10]),'more':int(query_set.count()>10),'status':'success'})
+  try:
+    query_set = Blog.objects.all().order_by('-date_published')
+    action = request.GET.get('action','')
+    if action == 'next':
+      query_set = query_set.filter(pk__gt = request.GET.get('id',0))
+    data = json.dumps({'blogs':map(blog_dict,query_set[:10]),'more':int(query_set.count()>10),'status':'success'})
+  except:
+    data = json.dumps({'status': 'fail'})
   return HttpResponse(data, content_type='application/json')
 
 def blogs_group(request, group_id=None):      #coded
@@ -239,9 +248,9 @@ def blogs_group(request, group_id=None):      #coded
     if action == 'next':
       query_set = query_set.filter(pk__gt = request.GET.get('id',0))
     data = json.dumps({'blogs':map(blog_dict,query_set[:10]),'more':int(query_set.count()>10),'status':'success'})
-    return HttpResponse(data, content_type='application/json')
-  except Exception as e:
-    return HttpResponse(json.dumps({'status':'fail'}), content_type='application/json')
+  except:
+    data = json.dumps({'status': 'fail'})
+  return HttpResponse(data, content_type='application/json')
 
 def blogs_view(request, group_id=None, slug=None):      #coded
   def blog_dict(blog):
@@ -259,10 +268,11 @@ def blogs_view(request, group_id=None, slug=None):      #coded
     query_set = Blog.objects.get(group=group,slug=slug)
     data = blog_dict(query_set)
     data['status'] = 'success'
-    data = json.dumps(data)
-    return HttpResponse(data, content_type='application/json')
   except:
-    return HttpResponse(json.dumps({'status':'fail'}), content_type='application/json')
+    data = {'status': 'fail'}
+  data = json.dumps(data)
+  return HttpResponse(data, content_type='application/json')
+
 
 @login_required
 def request_connect(request):       #coded
@@ -308,24 +318,41 @@ def accept_connect(request):        #coded
   return HttpResponse(data, content_type='application/json')
 
 @login_required
-def pending_requests(request):
-  def user_dict(req):
-    return {  #check for branch
-      'user':req.sender.username,
-      'name':req.sender.name,
-      'state':req.sender.state,
-      'hometown':req.sender.hometown,
+def pending_requests(request):      #coded
+  def senior_dict(req):
+    return {
+      'name':req.senior.user.name,
+      'state':req.senior.state,
+      'hometown':req.senior.hometown,
+      'branch':{'code':req.senior.user.student.branch.code,'name':req.senior.user.student.branch.name},
+    }
+
+  def student_dict(req):
+    return {
+      'name':req.junior.user.name,
+      'state':req.junior.state,
+      'hometown':req.junior.hometown,
+      'branch':get_junior_branch(req.junior)
     }
 
   user = request.user
-  data = {'status':'fail'}
+  data = {'status': 'fail'}
   try:
-    category = 'peer' if user.groups.filter(name='New Entrant').exists() else 'senior'
-    query_set = Request.objects.filter(acceptor=user,category=category,is_accepted=False)
-    data = json.dumps(map(user_dict,query_set))
+    if user.groups.filter(name='New Entrant').exists():
+      junior = Student_profile.objects.get(user=user)
+      query_set = Request.objects.filter(junior=junior,is_accepted=False)
+      data = map(senior_dict,query_set)
+    else:
+      senior = Senior_profile.objects.get(user=user)
+      query_set = Request.objects.filter(senior=senior,is_accepted=False)
+      print query_set
+      query_set = sorted(query_set, key = lambda req: Request.objects.filter(junior=req.junior, is_accepted=True).count())
+      print query_set
+      data = map(student_dict,query_set)
   except:
-    data = json.dumps(data)
+    data = {'status': 'fail'}
     pass
+  data = json.dumps(data)
   return HttpResponse(data, content_type='application/json')
 
 @login_required
@@ -335,7 +362,7 @@ def accepted(request):      #coded
       'name':req.senior.user.name,
       'state':req.senior.state,
       'hometown':req.senior.hometown,
-      'branch': {'code':req.senior.user.student.branch.code,'name':req.senior.user.student.branch.name},
+      'branch':{'code':req.senior.user.student.branch.code,'name':req.senior.user.student.branch.name},
       'fb_link':req.senior.fb_link,
       'email':req.senior.email,
       'contact':req.senior.phone_no
@@ -357,7 +384,6 @@ def accepted(request):      #coded
   data = {'status':'fail'}
   try:
     sort_by = request.GET.get('sort_by','')   #options are 'location' and 'branch'
-    print sort_by
     if user.groups.filter(name='New Entrant').exists():
       junior = Student_profile.objects.get(user=user)
       if junior.is_branch and sort_by == 'branch':
@@ -372,9 +398,9 @@ def accepted(request):      #coded
     else:
       senior = Senior_profile.objects.get(user=user)
       query_set = Request.objects.filter(senior=senior,is_accepted=True)
-      print query_set
       data = map(student_dict,query_set)
   except Exception as e:
+    data = {'status': 'fail'}
     print str(e)
     pass
   data = json.dumps(data)

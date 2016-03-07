@@ -14,7 +14,7 @@ class Student_profile(models.Model):
     profile_privacy = models.BooleanField(default = False)
     is_branch = models.BooleanField(default = False)
     def __unicode__(self):
-        return str(self.user.name)
+        return str(self.user.username) + ":" + str(self.user.name)
 
 class Senior_profile(models.Model):
     user = models.OneToOneField(User)
@@ -24,7 +24,7 @@ class Senior_profile(models.Model):
     fb_link = models.CharField(max_length = 200, blank = True)
     phone_no = models.CharField(max_length = 20, blank = True)
     def __unicode__(self):
-        return str(self.user.name)
+        return str(self.user.username) + ":" + str(self.user.name)
 
 class Blog(models.Model):
     title = models.CharField(max_length = 100, unique=True)
@@ -39,7 +39,7 @@ class Blog(models.Model):
       super(Blog, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return str(self.group.user.username) + ": " + str(self.title)
+        return str(self.group.user.username) + ":" + str(self.title)
 
 class Request(models.Model):
     senior = models.ForeignKey(Senior_profile, related_name='to')
@@ -48,3 +48,6 @@ class Request(models.Model):
 
     class Meta:
       ordering = ('-datetime_created',)
+
+    def __unicode__(self):
+        return str(self.junior.user.username) + "-->" + str(self.senior.user.username)
