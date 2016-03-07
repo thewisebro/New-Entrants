@@ -21,9 +21,9 @@ import java.util.Map;
 
 import features.BlogPage;
 import features.BlogsFragment;
-import features.EditInfoFragment;
 import features.PConnectFragment;
 import features.PeerPage;
+import features.ProfileFragment;
 import features.RequestSenior;
 import features.SConnectFragment;
 import features.SeniorPage;
@@ -55,7 +55,7 @@ public class Navigation extends ActionBarActivity
         db=new MySQLiteHelper(this);
         entrant=db.getEntrant();
         userParams=new HashMap<String,String>();
-        userParams.put("state",entrant.state);
+        userParams.put("state",entrant.statecode);
         userParams.put("branchcode",entrant.branchcode);
         userParams.put("category","entrant");
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
@@ -73,7 +73,6 @@ public class Navigation extends ActionBarActivity
     }
     public void logout(){
         db.deleteEntrant();
-        db.deleteBlogs();
         db.deleteSeniors();
         Intent intent=new Intent(this, Login.class);
         startActivity(intent);
@@ -116,7 +115,7 @@ public class Navigation extends ActionBarActivity
 
                 case 4: logout();
                     break;
-                default: fragment=new EditInfoFragment(entrant);
+                default: fragment=new ProfileFragment(entrant,userParams.get("category").toString());
                     break;
             }
 

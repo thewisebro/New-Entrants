@@ -15,6 +15,7 @@ public class StudentModel implements Serializable {
     public String year;
     public String town;
     public String state;
+    public String statecode;
     public String email;
     public String mobile;
     public String fb_link;

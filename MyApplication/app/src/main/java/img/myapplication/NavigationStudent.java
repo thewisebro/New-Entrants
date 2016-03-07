@@ -71,7 +71,6 @@ public class NavigationStudent extends ActionBarActivity
     }
     public void logout(){
         db.deleteStudent();
-        db.deleteBlogs();
         Intent intent=new Intent(this, Login.class);
         startActivity(intent);
         finish();

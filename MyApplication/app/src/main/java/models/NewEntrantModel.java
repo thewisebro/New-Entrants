@@ -12,6 +12,7 @@ public class NewEntrantModel implements Serializable {
     public String password;
     public String town;
     public String state;
+    public String statecode;
     public String branchname;
     public String branchcode;
     public String mobile;

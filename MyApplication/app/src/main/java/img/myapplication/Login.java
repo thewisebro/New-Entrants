@@ -242,11 +242,18 @@ public class Login extends ActionBarActivity {
     public void start(){
         String branchname = null;
         String branchcode=null;
+        String statename=null;
+        String statecode=null;
 
         try {
             JSONObject object=new JSONObject(details.get("branch"));
             branchcode=object.getString("code");
             branchname=object.getString("name");
+
+            object=new JSONObject(details.get("state"));
+            statecode=object.getString("code");
+            statename=object.getString("name");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -261,7 +268,8 @@ public class Login extends ActionBarActivity {
             student.branchcode=branchcode;
             student.year=details.get("year");
             student.town=details.get("town");
-            student.state=details.get("state");
+            student.state=statename;
+            student.statecode=statecode;
             student.email=details.get("email");
             student.mobile=details.get("mobile");
             student.fb_link=details.get("fb_link");
@@ -278,7 +286,8 @@ public class Login extends ActionBarActivity {
             entrant.username=details.get("username");
             entrant.password=details.get("password");
             entrant.town=details.get("town");
-            entrant.state=details.get("state");
+            entrant.state=statename;
+            entrant.statecode=statecode;
             entrant.branchname=branchname;
             entrant.branchcode=branchcode;
             entrant.mobile=details.get("mobile");

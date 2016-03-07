@@ -77,12 +77,12 @@ public class Register extends AppCompatActivity {
         entrant.mobile= ((EditText) findViewById(R.id.new_mobile)).getText().toString().trim();
         entrant.fb_link= ((EditText) findViewById(R.id.new_fblink)).getText().toString().trim();
         entrant.branchname=branch.getSelectedItem().toString().trim();
-        entrant.branchcode=(getResources().getStringArray(R.array.state_codes))[pos_branch];
+        entrant.branchcode=(getResources().getStringArray(R.array.branch_codes))[pos_branch];
         entrant.state= state.getSelectedItem().toString().trim();
+        entrant.statecode=(getResources().getStringArray(R.array.state_codes))[pos_state];
         entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibilty)).isChecked();
         entrant.profile_privacy= ((CheckBox) findViewById(R.id.profile_visibilty)).isChecked();
         if(validate()) {
-            //setParams();
             new RegisterTask().execute();
         }
         else {
@@ -120,10 +120,10 @@ public class Register extends AppCompatActivity {
         params.put("username",entrant.username);
         params.put("password1",entrant.password);
         params.put("password2",entrant.password);
-        params.put("branch","EE");
+        params.put("branch",entrant.branchcode);
         params.put("email",entrant.email);
         params.put("fb_link",entrant.fb_link);
-        params.put("state",(getResources().getStringArray(R.array.state_codes))[pos_state]);
+        params.put("state",entrant.statecode);
         params.put("hometown",entrant.town);
         params.put("phone_no",entrant.mobile);
         if (entrant.phone_privacy)
@@ -173,14 +173,12 @@ public class Register extends AppCompatActivity {
             writer.close();
             os.close();
 
-            //obj=urlConnectionPost.getContent();
             BufferedReader reader= new BufferedReader(new InputStreamReader(urlConnectionPost.getInputStream()));
             StringBuffer buffer=new StringBuffer();
             String inputLine;
             while ((inputLine = reader.readLine()) != null)
                 buffer.append(inputLine+"\n");
             result=getResult(buffer.toString());
-            int responseCode=urlConnectionPost.getResponseCode();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -205,7 +203,6 @@ public class Register extends AppCompatActivity {
         @Override
         protected String doInBackground(String... urls) {
 
-            // params comes from the execute() call: params[0] is the url.
             try {
                 return registerNow();
             } catch (Exception e) {

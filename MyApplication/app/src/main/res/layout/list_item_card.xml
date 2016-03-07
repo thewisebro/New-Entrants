@@ -10,85 +10,96 @@
     android:background="@drawable/card_background_selector"
     android:descendantFocusability="beforeDescendants">
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/card_img"
-        android:layout_alignParentTop="true"
-        />
-
-    <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp"
-        android:layout_toRightOf="@+id/card_img"
-        android:paddingRight="15dp"
-
-        android:descendantFocusability="afterDescendants"
-        android:id="@+id/cardTop">
-
-        <TextView
-            android:id="@+id/topic"
-            android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:id="@+id/blogContent">
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Text line 1"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingRight="15dp"
 
+            android:descendantFocusability="afterDescendants"
+            android:id="@+id/cardTop">
+
+            <TextView
+                android:id="@+id/topic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Text line 1"
+
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+            <TextView
+                android:id="@+id/shortInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Text line 2"
+
+                android:layout_below="@id/topic"
+                android:layout_centerHorizontal="true"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingBottom="15dp"
+            android:paddingRight="15dp"
+            android:background="@drawable/card_background_selector"
+            android:descendantFocusability="afterDescendants"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_below="@+id/cardTop"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/cardBottom">
+
+
+            <TextView
+                android:id="@+id/author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Text line 1"
+                android:layout_centerHorizontal="true"
+                />
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Text line 1"
+                android:paddingLeft="5dp"
+                android:layout_toRightOf="@id/author"/>
+            <TextView
+                android:id="@+id/category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Text line 1"
+                android:layout_below="@id/author"
+                android:onClick="fromCategory"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:id="@+id/blogImg"
+        android:layout_toLeftOf="@id/blogContent">
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/card_img"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-        <TextView
-            android:id="@+id/shortInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Text line 2"
-
-            android:layout_below="@id/topic"
-            android:layout_centerHorizontal="true"/>
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:paddingBottom="15dp"
-        android:paddingRight="15dp"
-        android:background="@drawable/card_background_selector"
-        android:descendantFocusability="afterDescendants"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_below="@+id/cardTop"
-        android:layout_toRightOf="@+id/card_img"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/cardBottom">
-
-
-        <TextView
-            android:id="@+id/author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Text line 1"
-            android:layout_centerHorizontal="true"
             />
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Text line 1"
-            android:paddingLeft="5dp"
-            android:layout_toRightOf="@id/author"/>
-        <TextView
-            android:id="@+id/category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Text line 1"
-            android:layout_below="@id/author"
-            android:onClick="fromCategory"
-            android:layout_centerHorizontal="true"/>
-
     </RelativeLayout>
+
+
+
 
 </RelativeLayout>

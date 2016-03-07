@@ -43,6 +43,7 @@ public class BlogsFragment extends Fragment {
     private List<BlogModel> items;
     private ListView listView;
     private int blogsCount;
+    private int lastId;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -62,11 +63,7 @@ public class BlogsFragment extends Fragment {
         items=new ArrayList<BlogModel>();
         cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_item_card);
         blogsCount=0;
-/*        if (isConnected()){
-            updateBlogs();
-        }
-        getCardList();
-*/
+        lastId=0;
         if (isConnected())
             new LoadBlogTask().execute();
         else
@@ -102,13 +99,18 @@ public class BlogsFragment extends Fragment {
                 //cardArrayAdapter.notifyDataSetChanged();
 
                 cardArrayAdapter.refresh();
-                items.clear();
+                //items.clear();
             }
         }
     }
     public void loadBlogs(){
+        String blogUrl=null;
+        if (blogsCount==0)
+            blogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
+        else
+            blogUrl="http://192.168.121.187:8080/new_entrants/blogs?action=next&id="+lastId;
         try {
-            URL url= new URL("http://192.168.121.187:8080/new_entrants/blogs?action=next&id="+blogsCount);
+            URL url= new URL(blogUrl);
             HttpURLConnection conn=(HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
@@ -142,6 +144,7 @@ public class BlogsFragment extends Fragment {
                 model.blogText=null;
                 items.add(model);
                 //cardArrayAdapter.notifyDataSetChanged();
+                lastId =model.id;
                 blogsCount+=1;
             }
         } catch (JSONException e) {
@@ -159,7 +162,7 @@ public class BlogsFragment extends Fragment {
 
         private List<BlogModel> cardList = new ArrayList<BlogModel>();
 
-                public BlogCardArrayAdapter(Context context, int textViewResourceId) {
+        public BlogCardArrayAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
         }
 

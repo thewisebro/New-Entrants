@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.BlogModel;
 import models.NewEntrantModel;
 import models.SeniorModel;
 import models.StudentModel;
@@ -64,7 +63,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "branchname varchar,"+"branchcode varchar,"+
                 "year char(1),"+
                 "town varchar,"+
-                "state varchar,"+
+                "state varchar,"+"statecode varchar,"+
                 "email varchar,"+
                 "mobile varchar,"+
                 "fb_link varchar );";
@@ -72,15 +71,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static String CREATE_ENTRANTS_TABLE=
             "create table if not exists entrants ( "+
                     "id text primary key,"+
-                    "name text,"+
-                    "username text,"+
-                    "password text,"+
-                    "branchname text,"+"branchcode text,"+
-                    "town text,"+
-                    "state text,"+
-                    "email text,"+
-                    "mobile text,"+
-                    "fb_link text,"+
+                    "name varchar,"+
+                    "username varchar,"+
+                    "password varchar,"+
+                    "branchname varchar,"+"branchcode varchar,"+
+                    "town varchar,"+
+                    "state varchar,"+"statecode varchar,"+
+                    "email varchar,"+
+                    "mobile varchar,"+
+                    "fb_link varchar,"+
                     "phone_privacy int(1),"+
                     "profile_privacy int(1) );";
 
@@ -100,15 +99,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         //db.execSQL("DROP TABLE IF EXISTS seniors");
         //db.execSQL("DROP TABLE IF EXISTS students");
         //db.execSQL("DROP TABLE IF EXISTS entrants");
-        //db.execSQL("DROP TABLE IF EXISTS blogs");
         db.execSQL(CREATE_STUDENTS_TABLE);
         db.execSQL(CREATE_ENTRANTS_TABLE);
         db.execSQL(CREATE_SENIORS_TABLE);
-        //db.execSQL(CREATE_BLOGS_TABLE);
-        //db.execSQL(TEMP_ENTRANT);
-        //db.execSQL(TEMP_STUDENT);
-        //db.execSQL(TEMP_BLOG);
-        //db.execSQL(TEMP_SENIOR);
     }
 
     @Override
@@ -142,19 +135,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             student.year= cursor.getString(6);
             student.town= cursor.getString(7);
             student.state= cursor.getString(8);
-            student.email= cursor.getString(9);
-            student.mobile= cursor.getString(10);
-            student.fb_link=cursor.getString(11);
+            student.statecode=cursor.getString(9);
+            student.email= cursor.getString(10);
+            student.mobile= cursor.getString(11);
+            student.fb_link=cursor.getString(12);
 
         }
         return student;
-    }
-    public boolean checkStudent(String username, String password){
-        SQLiteDatabase db= this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("select * from students where username='" + username + "' and password ='" + password + "';", null);
-
-        if(cursor.getCount()==0) return false;
-        else return true;
     }
     public boolean loggedStudent(){
         SQLiteDatabase db= this.getWritableDatabase();
@@ -180,6 +167,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("year",student.year);
         values.put("town",student.town);
         values.put("state",student.state);
+        values.put("statecode",student.statecode);
         values.put("email",student.email);
         values.put("mobile",student.mobile);
         values.put("fb_link", student.fb_link);
@@ -200,30 +188,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("branchcode",entrant.branchcode);
         values.put("town", entrant.town);
         values.put("state", entrant.state);
+        values.put("statecode",entrant.statecode);
         values.put("mobile", entrant.mobile);
         values.put("fb_link",entrant.fb_link);
         values.put("phone_privacy",entrant.phone_privacy);
         values.put("profile_privacy",entrant.profile_privacy);
         db.insert(TABLE_ENTRANTS, null, values);
         db.close();
-    }
-    public void addBlog(BlogModel blog){
-        if (!checkBlog(blog)){
-            SQLiteDatabase db=this.getWritableDatabase();
-
-            ContentValues values=new ContentValues();
-            values.put("topic", blog.topic);
-            values.put("shortinfo",blog.shortInfo);
-            values.put("group",blog.group);
-            values.put("date_published",blog.date);
-            values.put("blogtext",blog.blogText);
-            values.put("imageurl",blog.imageurl);
-            values.put("blogurl",blog.blogurl);
-            values.put("id",blog.id);
-
-            db.insert(TABLE_BLOGS,null,values);
-            db.close();
-        }
     }
     public void addSenior(SeniorModel senior){
             SQLiteDatabase db=this.getWritableDatabase();
@@ -240,26 +211,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             db.insert(TABLE_SENIORS, null, values);
             db.close();
     }
-    public boolean checkEntrant(String username, String password){
-        SQLiteDatabase db= this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("select * from entrants where username='" + username + "' and password ='" + password + "';", null);
-
-        if(cursor.getCount()==0) return false;
-        else return true;
-    }
     public boolean loggedEntrant(){
         SQLiteDatabase db= this.getWritableDatabase();
         db.execSQL(CREATE_ENTRANTS_TABLE);
         db.close();
         db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("select * from entrants ;", null);
-
-        if(cursor.getCount()==0) return false;
-        else return true;
-    }
-    public boolean checkBlog(BlogModel blog){
-        SQLiteDatabase db= this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("select * from blogs where topic='" + blog.topic + "' and date_published ='" + blog.date +"';", null);
 
         if(cursor.getCount()==0) return false;
         else return true;
@@ -280,42 +237,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             entrant.branchcode=cursor.getString(5);
             entrant.town = cursor.getString(6);
             entrant.state = cursor.getString(7);
-            entrant.email = cursor.getString(8);
-            entrant.mobile = cursor.getString(9);
-            entrant.fb_link=cursor.getString(10);
-            entrant.phone_privacy=cursor.getInt(11) >0;
-            entrant.profile_privacy=cursor.getInt(12) > 0;
+            entrant.statecode=cursor.getString(8);
+            entrant.email = cursor.getString(9);
+            entrant.mobile = cursor.getString(10);
+            entrant.fb_link=cursor.getString(11);
+            entrant.phone_privacy=cursor.getInt(12) >0;
+            entrant.profile_privacy=cursor.getInt(13) > 0;
 
         }
         return entrant;
-    }
-    public List<BlogModel> getBlogs(){
-        SQLiteDatabase db=this.getReadableDatabase();
-        List<BlogModel> blogs=new ArrayList<BlogModel>();
-        Cursor cursor=db.rawQuery("select * from blogs;",null);
-        int len=cursor.getCount();
-        if (len!=0) {
-            cursor.moveToFirst();
-            for (int i=0;i<len;i++){
-                BlogModel blog=new BlogModel();
-                /*blog.topic=cursor.getString(0);
-                blog.shortInfo=cursor.getString(1);
-                blog.group=cursor.getString(2);
-                blog.date=cursor.getString(3);
-                blog.blogText=cursor.getString(4);
-                blog.imageurl=cursor.getString(5);
-                blog.blogurl=cursor.getString(6);
-                blog.id=cursor.getInt(7);*/
-                blog.topic= "topic";
-                blog.shortInfo= "short info";
-                blog.group= "group";
-                blog.date= "asd";
-                blog.blogText="asd";
-                blogs.add(blog);
-                cursor.moveToNext();
-            }
-        }
-        return blogs;
     }
     public List<SeniorModel> getSeniors(int opt, String param){
         SQLiteDatabase db=this.getReadableDatabase();
