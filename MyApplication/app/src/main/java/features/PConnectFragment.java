@@ -1,18 +1,22 @@
 package features;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -32,18 +36,26 @@ import models.PeerCardViewHolder;
 import models.PeerModel;
 
 
+@SuppressLint("ValidFragment")
 public class PConnectFragment extends Fragment {
 
 
     private PeerCardArrayAdapter cardArrayAdapter;
     private ListView listView;
+    private List<PeerModel> list = new ArrayList<PeerModel>();
+    private String p_connect_url="http://192.168.121.187:8080/new_entrants/p_connect/";
+    private View view;
+    private String sess_id;
+    public PConnectFragment(String cookie){
+        this.sess_id=cookie;
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         if (!isConnected()){
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
         }
 
-        View view=inflater.inflate(R.layout.fragment_pconnect, container, false);
+        view=inflater.inflate(R.layout.fragment_pconnect, container, false);
         listView = (ListView) view.findViewById(R.id.card_listView);
 
         listView.addHeaderView(new View(getContext()));
@@ -51,14 +63,22 @@ public class PConnectFragment extends Fragment {
 
         cardArrayAdapter = new PeerCardArrayAdapter(getContext(), R.layout.list_peer_card);
 
-        for (int i = 0; i < 10; i++) {
+        Button bt_sort= (Button) view.findViewById(R.id.bt_psort);
+        bt_sort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RadioGroup group = (RadioGroup) view.findViewById(R.id.peer_sort);
+                int bt_id = group.getCheckedRadioButtonId();
+                String url = null;
+                if (bt_id == R.id.rb_pbranch)
+                    url = p_connect_url + "?sort=branch";
+                else
+                    url = p_connect_url;
+                new getPeersTask().execute(url);
 
-            PeerModel card= new PeerModel();
-            card.name="abc";
-            card.state="utk";
-            card.town="roorkee";
-            cardArrayAdapter.add(card);
-        }
+            }
+        });
+        new getPeersTask().execute(p_connect_url);
         listView.setAdapter(cardArrayAdapter);
 
         return view;
@@ -71,75 +91,74 @@ public class PConnectFragment extends Fragment {
         else
             return false;
     }
-    public void getCardList(){
+    public String getCardList(String url){
         if (isConnected()){
             try {
-                URL url= null;
-                url = new URL("www.google.com");
-                HttpURLConnection conn=(HttpURLConnection) url.openConnection();
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
+
+                HttpURLConnection conn=(HttpURLConnection) new URL(url).openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Cookie", "CHANNELI_SESSID="+sess_id);
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
                 String line = "";
                 while((line = bufferedReader.readLine()) != null)
                     sb.append(line + '\n');
-                String result=sb.toString();
-                cardsFromString(result);
-/*
-                FileOutputStream fos = getContext().openFileOutput("peers.txt",Context.MODE_PRIVATE);
-                fos.write(result.getBytes());
-                fos.close();
-                bufferedReader.close();
-                */
+                getCards(sb.toString());
+                return "success";
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        else {
-            /*
-            try {
-                FileInputStream fis;
-                fis = getContext().openFileInput("peers.txt");
-                StringBuffer fileContent = new StringBuffer("");
+        return null;
 
-                byte[] buffer = new byte[1024];
-                int n;
-                while ((n = fis.read(buffer)) != -1)
-                {
-                    fileContent.append(new String(buffer, 0, n));
-                }
-                String blogString=fileContent.toString();
-                cardsFromString(blogString);
-            } catch (java.io.IOException e) {
-                e.printStackTrace();
-            }
-            */
-        }
     }
-    private void cardsFromString(String result){
+    private void getCards(String result){
         JSONObject jObject= null;
         try {
             jObject = new JSONObject(result);
-            JSONArray jArray=jObject.getJSONArray("blogs");
+            JSONArray jArray=jObject.getJSONArray("students");
+            int len=jArray.length();
 
-            for(int i=0; i<jArray.length();i++){
+            for(int i=0; i<len;i++){
 
                 JSONObject object=jArray.getJSONObject(i);
                 PeerModel model= new PeerModel();
-                model.name="abc";
-                model.state="utk";
-                model.town="roorkee";
-                cardArrayAdapter.add(model);
+                model.name=object.getString("name");
+                model.town=object.getString("hometown");
+                model.state=(new JSONObject(object.getString("state"))).getString("name");
+                model.branch=(new JSONObject(object.getString("branch"))).getString("name");
+                model.contact=object.getString("contact");
+                model.email=object.getString("email");
+                model.fblink=object.getString("fb_link");
+                list.add(model);
 
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+    }
+    private class getPeersTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
 
+            return getCardList(params[0]);
+        }
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            if (result.equals("success")){
+                cardArrayAdapter.refresh();
+            }
+        }
     }
     public class PeerCardArrayAdapter  extends ArrayAdapter<PeerModel> {
+
+        public void refresh(){
+            this.cardList.clear();
+            this.cardList.addAll(list);
+            notifyDataSetChanged();
+        }
 
         private List<PeerModel> cardList = new ArrayList<PeerModel>();
 
@@ -171,10 +190,13 @@ public class PConnectFragment extends Fragment {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 row = inflater.inflate(R.layout.list_peer_card, parent, false);
                 viewHolder = new PeerCardViewHolder();
-                viewHolder.name = (TextView) row.findViewById(R.id.name);
-                viewHolder.town = (TextView) row.findViewById(R.id.town);
-                viewHolder.state = (TextView) row.findViewById(R.id.state);
-
+                viewHolder.name = (TextView) row.findViewById(R.id.pname);
+                viewHolder.town = (TextView) row.findViewById(R.id.ptown);
+                viewHolder.state = (TextView) row.findViewById(R.id.pstate);
+                viewHolder.branch= (TextView) row.findViewById(R.id.pbranch);
+                //viewHolder.contact=row.findFocus(R.id.pcontact);
+                //viewHolder.email=row.findViewById(R.id.pemail);
+                //viewHolder.fblink=row.findViewById(R.id.pfblink);
                 viewHolder.model=new PeerModel();
             } else {
                 viewHolder = (PeerCardViewHolder)row.getTag();
@@ -183,8 +205,9 @@ public class PConnectFragment extends Fragment {
             viewHolder.name.setText(card.name);
             viewHolder.town.setText(card.town);
             viewHolder.state.setText(card.state);
+            viewHolder.branch.setText(card.branch);
 
-            viewHolder.model.copy(card);
+            viewHolder.model=card;
             row.setTag(viewHolder);
             return row;
         }

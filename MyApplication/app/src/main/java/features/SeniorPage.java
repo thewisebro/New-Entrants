@@ -33,9 +33,9 @@ public class SeniorPage extends Fragment {
         TextView year= (TextView) view.findViewById(R.id.year);
         TextView branch= (TextView) view.findViewById(R.id.branch);
 
-        name.setText(senior.name);
+/*        name.setText(senior.name);
         year.setText(senior.year);
-        branch.setText(senior.branchname);
+        branch.setText(senior.branchname);*/
 
         return view;
     }

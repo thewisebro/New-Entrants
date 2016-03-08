@@ -1,5 +1,6 @@
 package features;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -29,6 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,8 @@ import models.BlogCardViewHolder;
 import models.BlogModel;
 
 
-public class BlogsFragment extends Fragment {
+@SuppressLint("ValidFragment")
+public class GroupFragment extends Fragment {
 
 
     private BlogCardArrayAdapter cardArrayAdapter;
@@ -47,6 +50,11 @@ public class BlogsFragment extends Fragment {
     private SwipeRefreshLayout swipeLayout;
     private int blogsCount;
     private int lastId;
+    private String groupUrl;
+
+    public GroupFragment(String url){
+        groupUrl=url;
+    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -121,9 +129,9 @@ public class BlogsFragment extends Fragment {
     public void loadBlogs(){
         String blogUrl=null;
         if (blogsCount==0)
-            blogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
+            blogUrl=groupUrl;
         else
-            blogUrl="http://192.168.121.187:8080/new_entrants/blogs?action=next&id="+lastId;
+            blogUrl=groupUrl+lastId;
         try {
             URL url= new URL(blogUrl);
             HttpURLConnection conn=(HttpURLConnection) url.openConnection();
@@ -156,9 +164,10 @@ public class BlogsFragment extends Fragment {
                 model.shortInfo=object.getString("description");
                 model.date=object.getString("date");
                 model.id = Integer.parseInt(object.getString("id"));
-                model.groupurl=object.getString("group_url");
+                model.groupurl=null;
                 model.blogText=null;
                 items.add(model);
+                //cardArrayAdapter.notifyDataSetChanged();
                 lastId =model.id;
                 blogsCount+=1;
             }
@@ -223,19 +232,12 @@ public class BlogsFragment extends Fragment {
             viewHolder.date.setText(card.date);
             viewHolder.blogUrl=card.blogurl;
             new ImageLoadTask(card.imageurl,viewHolder.img).execute();
-            viewHolder.img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String url=card.groupurl;
-                    getFragmentManager().beginTransaction().replace(R.id.container,new GroupFragment(url)).addToBackStack(null).commit();
-                }
-            });
             row.setTag(viewHolder);
             return row;
         }
 
 
-}
+    }
     public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
         private String url;

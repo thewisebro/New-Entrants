@@ -1,8 +1,0 @@
-{% extends "dialog_base.html" %}
-
-{% block pre_scripts %}
-  {{ block.super }}
-  <script type="text/javascript">
-    parent.close_dialog("{{ dialog_name }}");
-  </script>
-{% endblock %}

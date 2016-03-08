@@ -1,8 +1,0 @@
-#!/bin/bash
-cd /home/apps/
-wget --recursive --domains imgsite.channeli.in --page-requisites --html-extension http://imgsite.channeli.in/
-cd imgsite.channeli.in
-git add .
-git commit -m"commit"
-echo $USER
-git push -f origin gh-pages

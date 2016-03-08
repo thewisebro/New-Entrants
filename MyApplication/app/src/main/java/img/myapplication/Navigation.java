@@ -25,7 +25,7 @@ import features.PConnectFragment;
 import features.PeerPage;
 import features.ProfileFragment;
 import features.RequestSenior;
-import features.SConnectFragment;
+import features.SConnectTabFragment;
 import features.SeniorPage;
 import models.BlogCardViewHolder;
 import models.NewEntrantModel;
@@ -47,17 +47,18 @@ public class Navigation extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_navigation);
+        db=new MySQLiteHelper(this);
+        entrant=db.getEntrant();
+        userParams=new HashMap<String,String>();
+        userParams.put("state", entrant.statecode);
+        userParams.put("branch", entrant.branchcode);
+        userParams.put("sess_id",entrant.sess_id);
         mCurrentPosition=-1;
         fragmentCount=0;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.set(1);
-        db=new MySQLiteHelper(this);
-        entrant=db.getEntrant();
-        userParams=new HashMap<String,String>();
-        userParams.put("state",entrant.statecode);
-        userParams.put("branchcode",entrant.branchcode);
-        userParams.put("category","entrant");
+
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
         if(!isConnected()){
             Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
@@ -86,6 +87,9 @@ public class Navigation extends ActionBarActivity
         PeerCardViewHolder viewHolder=(PeerCardViewHolder) view.getTag();
         loadFragment(new PeerPage(viewHolder.model));
     }
+    public void sendRequest(View view){
+
+    }
     public void displaySenior(View view){
         SeniorCardViewHolder viewHolder=(SeniorCardViewHolder) view.getTag();
         loadFragment(new SeniorPage(viewHolder.model));
@@ -108,14 +112,14 @@ public class Navigation extends ActionBarActivity
                     break;
                 case 1:fragment = new BlogsFragment();
                     break;
-                case 2:fragment = new PConnectFragment();
+                case 2:fragment = new PConnectFragment(entrant.sess_id);
                     break;
-                case 3:fragment = new SConnectFragment(userParams);
+                case 3:fragment = new SConnectTabFragment(userParams);
                     break;
 
                 case 4: logout();
                     break;
-                default: fragment=new ProfileFragment(entrant,userParams.get("category").toString());
+                default: fragment=new ProfileFragment(entrant,entrant.category);
                     break;
             }
 
@@ -192,7 +196,6 @@ public class Navigation extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
 }

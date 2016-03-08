@@ -7,10 +7,9 @@ public class PeerModel {
     public String name;
     public String town;
     public String state;
-    public void copy(PeerModel model){
-        this.name=model.name;
-        this.town=model.town;
-        this.state=model.state;
-    }
+    public String contact;
+    public String email;
+    public String fblink;
+    public String branch;
 }
 

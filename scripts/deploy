@@ -1,7 +1,0 @@
-#!/bin/bash
-
-python -Wi manage.py collectstatic --settings=settings.common.deploy_settings --noinput
-python -Wi manage.py cachepages --settings=settings.common.deploy_settings
-touch settings/channeli/wsgi.wsgi
-touch settings/people/wsgi.wsgi
-touch settings/imgsite/wsgi.wsgi

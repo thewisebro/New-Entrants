@@ -1,4 +1,0 @@
-{{ object.title }}
-{{ object.description_text }}
-{{ object.source }}
-{{ object.item }}

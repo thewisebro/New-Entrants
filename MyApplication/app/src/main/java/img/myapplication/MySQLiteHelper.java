@@ -6,11 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import models.NewEntrantModel;
-import models.SeniorModel;
 import models.StudentModel;
 
 
@@ -26,14 +22,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String TABLE_STUDENTS="students";
     private static final String TABLE_ENTRANTS="entrants";
 
-    private static String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS users ( " +
-            " enr_no text primary key,"+
-            "name text,"+
-            "password text,"+
-            "email text ,"+
-            "mobile text ,"+
-            "branch text,"+
-            "state text );" ;
     private static String CREATE_SENIORS_TABLE=
             "create table if not exists seniors ( "+
                     "name varchar," +
@@ -44,16 +32,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "mobile varchar,"+
                     "email varchar,"+
                     "fb_link varchar);";
-    private static String CREATE_BLOGS_TABLE=
-            "create table if not exists blogs ( "+
-                    "topic varchar,"+
-                    "shortinfo varchar,"+
-                    "group varchar,"+
-                    "date_published text,"+
-                    "blogtext text,"+
-                    "imageurl text,"+
-                    "blogurl text,"+
-                    "id int(2) );";
+
     private static String CREATE_STUDENTS_TABLE=
             "create table if not exists students ( "+
                 "name varchar,"+
@@ -66,7 +45,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "state varchar,"+"statecode varchar,"+
                 "email varchar,"+
                 "mobile varchar,"+
-                "fb_link varchar );";
+                "fb_link varchar,"+"sess_id varchar );";
 
     private static String CREATE_ENTRANTS_TABLE=
             "create table if not exists entrants ( "+
@@ -81,7 +60,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "mobile varchar,"+
                     "fb_link varchar,"+
                     "phone_privacy int(1),"+
-                    "profile_privacy int(1) );";
+                    "profile_privacy int(1),"+"sess_id varchar );";
 
     public static String TEMP_ENTRANT=
             "insert into entrants values ('1','singh','asd','asd','ee','roorkee','uk','a@a.a','123','singh@fb.com',1,1);";
@@ -139,6 +118,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             student.email= cursor.getString(10);
             student.mobile= cursor.getString(11);
             student.fb_link=cursor.getString(12);
+            student.sess_id=cursor.getString(13);
 
         }
         return student;
@@ -155,7 +135,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
     public void addStudent(StudentModel student){
         SQLiteDatabase db=this.getWritableDatabase();
-        deleteStudent();
+        //deleteStudent();
         //db.execSQL(CREATE_STUDENTS_TABLE);
         ContentValues values=new ContentValues();
         values.put("name",student.name);
@@ -171,6 +151,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("email",student.email);
         values.put("mobile",student.mobile);
         values.put("fb_link", student.fb_link);
+        values.put("sess_id",student.sess_id);
         db.insert(TABLE_STUDENTS,null,values);
         db.close();
     }
@@ -193,15 +174,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("fb_link",entrant.fb_link);
         values.put("phone_privacy",entrant.phone_privacy);
         values.put("profile_privacy",entrant.profile_privacy);
+        values.put("sess_id",entrant.sess_id);
         db.insert(TABLE_ENTRANTS, null, values);
         db.close();
     }
-    public void addSenior(SeniorModel senior){
+/*    public void addSenior(SeniorModel senior){
             SQLiteDatabase db=this.getWritableDatabase();
             //db.execSQL(CREATE_SENIORS_TABLE);
             ContentValues values=new ContentValues();
             values.put("name",senior.name);
-            values.put("branchname",senior.branchname);
+            values.put("branchname",senior.branch);
             values.put("branchcode",senior.branchcode);
             values.put("state", senior.state);
             values.put("hometown",senior.hometown);
@@ -210,7 +192,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             values.put("fb_link",senior.fb_link);
             db.insert(TABLE_SENIORS, null, values);
             db.close();
-    }
+    }*/
     public boolean loggedEntrant(){
         SQLiteDatabase db= this.getWritableDatabase();
         db.execSQL(CREATE_ENTRANTS_TABLE);
@@ -243,11 +225,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             entrant.fb_link=cursor.getString(11);
             entrant.phone_privacy=cursor.getInt(12) >0;
             entrant.profile_privacy=cursor.getInt(13) > 0;
-
+            entrant.sess_id=cursor.getString(14);
         }
         return entrant;
     }
-    public List<SeniorModel> getSeniors(int opt, String param){
+ /*   public List<SeniorModel> getSeniors(int opt, String param){
         SQLiteDatabase db=this.getReadableDatabase();
         List<SeniorModel> seniors=new ArrayList<SeniorModel>();
         String query=null;
@@ -277,7 +259,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
         }
         return seniors;
-    }
+    }*/
     public int updateEntrant(NewEntrantModel entrant){
         SQLiteDatabase db=this.getWritableDatabase();
 

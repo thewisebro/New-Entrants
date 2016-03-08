@@ -1,9 +1,0 @@
-{% extends "pagelet_base.html" %}
-
-{% load comments %}
-
-{% block content %}
-  {% render_comment_list for instance %}
-  {% render_comment_form for instance %}
-  <script type="text/javascript" src="{{ STATIC_URL }}fluent_comments/js/ajaxcomments.js"></script>
-{% endblock %}

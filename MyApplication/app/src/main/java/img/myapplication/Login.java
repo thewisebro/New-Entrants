@@ -41,7 +41,6 @@ import models.StudentModel;
 
 public class Login extends ActionBarActivity {
     public Map<String,String> params;
-    public Map<String,String> SESSION_VALUES;
     public CookieManager cookieManager;
     public Map<String,String> details;
 
@@ -63,7 +62,6 @@ public class Login extends ActionBarActivity {
         }
 
         params=new HashMap<String,String>();
-        SESSION_VALUES=new HashMap<String,String>();
         setContentView(R.layout.activity_login2);
     }
     //public TextView blogText;
@@ -81,7 +79,6 @@ public class Login extends ActionBarActivity {
         }
         else {
             params.clear();
-            SESSION_VALUES.clear();
             EditText Username=(EditText) findViewById(R.id.et_username);
             EditText Password=(EditText) findViewById(R.id.et_Password);
             String usernameText= Username.getText().toString();
@@ -126,9 +123,6 @@ public class Login extends ActionBarActivity {
             cookieStore.removeAll();
 
             urlConnectionPost.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            //urlConnectionPost.setRequestProperty("Host","people.iitr.ernet.in");
-            //urlConnectionPost.setRequestProperty("Origin","http://people.iitr.ernet.in");
-            //urlConnectionPost.setRequestProperty("Referer","http://people.iitr.ernet.in/login/");
             urlConnectionPost.setRequestProperty("Accept","application/xml");
             urlConnectionPost.setInstanceFollowRedirects(true);
 
@@ -153,8 +147,6 @@ public class Login extends ActionBarActivity {
             if (responseCode== HttpURLConnection.HTTP_OK){
                 obj=urlConnectionPost.getContent();
                 if (cookieStore.getCookies().size()>1){
-                    SESSION_VALUES.put("csrftoken",cookieStore.getCookies().get(0).getValue().toString());
-                    SESSION_VALUES.put("CHANNELI_SESSID",cookieStore.getCookies().get(1).getValue().toString());
                     result=true;
                 }
             }
@@ -196,7 +188,6 @@ public class Login extends ActionBarActivity {
                     details=new HashMap<String,String>();
                     details.put("username",params.get("username"));
                     details.put("password", params.get("password"));
-                    //getUser();
                     getDetails();
                     return "Logged In";
                 }
@@ -208,7 +199,7 @@ public class Login extends ActionBarActivity {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            if (SESSION_VALUES.size()>0){
+            if (cookieManager.getCookieStore().getCookies().size()>0){
                 Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
                 start();
             }
@@ -273,10 +264,11 @@ public class Login extends ActionBarActivity {
             student.email=details.get("email");
             student.mobile=details.get("mobile");
             student.fb_link=details.get("fb_link");
+            student.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
             MySQLiteHelper db=new MySQLiteHelper(this);
             db.addStudent(student);
             db.close();
-            startActivity(new Intent(this, NavigationStudent.class));
+            startActivity(new Intent(this,NavigationStudent.class));
             finish();
         }
         else if (details.get("category").equals("junior")){
@@ -295,10 +287,11 @@ public class Login extends ActionBarActivity {
             entrant.fb_link=details.get("fb_link");
             entrant.profile_privacy=details.get("profile_privacy").equals("true");
             entrant.phone_privacy=details.get("phone_privacy").equals("true");
+            entrant.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
             MySQLiteHelper db=new MySQLiteHelper(this);
             db.addEntrant(entrant);
             db.close();
-            startActivity(new Intent(this, Navigation.class));
+            startActivity(new Intent(this,Navigation.class));
             finish();
         }
     }

@@ -9,5 +9,9 @@ public class PeerCardViewHolder {
     public TextView name;
     public TextView town;
     public TextView state;
+    public TextView branch;
+    public TextView contact;
+    public TextView email;
+    public TextView fblink;
     public PeerModel model;
 }

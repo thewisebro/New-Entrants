@@ -41,16 +41,18 @@ public class NavigationStudent extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_navigation);
+        db=new MySQLiteHelper(this);
+        student=db.getStudent();
+        userParams=new HashMap<String,String>();
+        userParams.put("category", "student");
+
         mCurrentPosition=-1;
         fragmentCount=0;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.set(2);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-        db=new MySQLiteHelper(this);
-        student=db.getStudent();
-        userParams=new HashMap<String,String>();
-        userParams.put("category","student");
+
 
         if(!isConnected()){
             Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
@@ -107,7 +109,7 @@ public class NavigationStudent extends ActionBarActivity
                     break;
                 case 3: logout();
                     break;
-                default:fragment=new ProfileFragment(student,userParams.get("category"));
+                default:fragment=new ProfileFragment(student,student.category);
 
             }
         }

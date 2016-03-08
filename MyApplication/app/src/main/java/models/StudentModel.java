@@ -19,6 +19,8 @@ public class StudentModel implements Serializable {
     public String email;
     public String mobile;
     public String fb_link;
+    public String sess_id;
+    public String category="student";
     public boolean valid;
 
 }

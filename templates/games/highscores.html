@@ -1,9 +1,0 @@
-{% extends "games/base.html" %}
-{% block body %}
-<h4>{{game.gamename}} High Scores</h4>
-<table>
-{% for gamescore in gamescores %}
-<tr><td>{{gamescore.student.user.name}}</td> <td>{{gamescore.score}}</td></tr>
-{% endfor %}
-</table>
-{% endblock %}

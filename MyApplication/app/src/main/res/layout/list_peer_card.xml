@@ -21,27 +21,34 @@
         android:descendantFocusability="afterDescendants">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/pname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 1"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
         <TextView
-            android:id="@+id/town"
+            android:id="@+id/ptown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 2"
-            android:layout_below="@+id/name"
+            android:layout_below="@+id/pname"
             android:layout_centerHorizontal="true"/>
 
         <TextView
-            android:id="@+id/state"
+            android:id="@+id/pstate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 1"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/town"/>
+            android:layout_below="@+id/ptown"/>
+        <TextView
+            android:id="@+id/pbranch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text line 1"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/pstate"/>
 
     </RelativeLayout>
 </FrameLayout>

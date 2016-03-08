@@ -1,9 +1,0 @@
-{% extends "feeds/base.html" %}
-
-{% block feed_line %}
-  {{ instance.group.user.html_name }}
-{% endblock %}
-
-{% block feed_description %}
-  {{ text|safe }}
-{% endblock %}

@@ -1,9 +1,0 @@
-{% extends "facapp/base.html" %}
-
-{% block model_details %}
-	    <li>Awarded with {{ l.award }} in the year {{ l.year }} during the work at {{ l.institute }}. Priority : {{ l.priority }}</li>
-{% endblock %}
-
-{% block model_details_to_delete %}
-	   Awarded with {{ model_to_delete.award }} in the year {{ model_to_delete.year }} during the work at {{ model_to_delete.institute }}
-{% endblock %}

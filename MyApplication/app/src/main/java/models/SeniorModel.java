@@ -5,12 +5,11 @@ package models;
  */
 public class SeniorModel {
     public String name;
-    public String branchname;
-    public String branchcode;
-    public String hometown;
-    public String year;
+    public String town;
     public String state;
-    public String fb_link;
+    public String contact;
     public String email;
-    public String mobile;
+    public String fblink;
+    public String branch;
+    public String username;
 }

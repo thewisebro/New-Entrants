@@ -57,6 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Location"
+                android:checked="true"
                 android:id="@+id/rb_location" />
 
             <RadioButton
@@ -65,12 +66,6 @@
                 android:id="@+id/rb_branch"
                 android:text="Branch" />
 
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="All"
-                android:checked="true"
-                android:id="@+id/rb_all" />
         </RadioGroup>
     </LinearLayout>
 

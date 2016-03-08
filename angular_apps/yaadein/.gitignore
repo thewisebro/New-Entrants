@@ -1,7 +1,0 @@
-node_modules
-.tmp
-.sass-cache
-dist
-bower_components
-.idea
-app/scripts/development.js
