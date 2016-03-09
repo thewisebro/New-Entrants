@@ -43,14 +43,13 @@ public class SConnectFragment extends Fragment {
     private Map<String,String> params;
     private List<SeniorModel> list=new ArrayList<SeniorModel>();
     private View view;
+    private ListView listView;
     private final String s_connect_url="http://192.168.121.187:8080/new_entrants/s_connect/";
-    public SConnectFragment(Map<String,String> userParams){
-        this.params=userParams;
-    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
+        params= (Map<String, String>) getArguments().getSerializable("userParams");
         view=inflater.inflate(R.layout.fragment_sconnect, container, false);
-        ListView listView = (ListView) view.findViewById(R.id.card_listView);
+        listView = (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
 
@@ -60,18 +59,25 @@ public class SConnectFragment extends Fragment {
         bt_sort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RadioGroup group= (RadioGroup) view.findViewById(R.id.group_sort);
-                int bt_id = group.getCheckedRadioButtonId();
-                String url = null;
-                if (bt_id == R.id.rb_branch)
-                    url = s_connect_url + "?sort=branch&param="+params.get("branch").toString();
-                else
-                    url = s_connect_url+"?sort=location&param="+params.get("state").toString();
-                new getSeniorsTask().execute(url);
+                if (isConnected()){
+                    RadioGroup group= (RadioGroup) view.findViewById(R.id.group_sort);
+                    int bt_id = group.getCheckedRadioButtonId();
+                    String url = null;
+                    if (bt_id == R.id.rb_branch)
+                        url = s_connect_url + "?sort=branch&param="+params.get("branch").toString();
+                    else
+                        url = s_connect_url+"?sort=location&param="+params.get("state").toString();
+                    new getSeniorsTask().execute(url);
+                }
+
             }
         });
-        new getSeniorsTask().execute(s_connect_url+"?sort=location&param="+params.get("state").toString());
+        //new getSeniorsTask().execute(s_connect_url+"?sort=location&param="+params.get("state").toString());
+        SeniorModel sm=new SeniorModel();
+        sm.name="asd";
+        cardArrayAdapter.add(sm);
         listView.setAdapter(cardArrayAdapter);
+
 
         return view;
     }
@@ -139,7 +145,6 @@ public class SConnectFragment extends Fragment {
         protected void onPostExecute(String result) {
             if (result.equals("success")){
                 cardArrayAdapter.refresh();
-                list.clear();
             }
         }
     }

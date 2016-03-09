@@ -19,9 +19,7 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/bt_request"
-        android:layout_toStartOf="@+id/bt_request">
+        android:layout_alignParentBottom="true">
 
         <Button
             android:layout_width="wrap_content"
