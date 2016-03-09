@@ -67,14 +67,18 @@ public class PConnectFragment extends Fragment {
         bt_sort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RadioGroup group = (RadioGroup) view.findViewById(R.id.peer_sort);
-                int bt_id = group.getCheckedRadioButtonId();
-                String url = null;
-                if (bt_id == R.id.rb_pbranch)
-                    url = p_connect_url + "?sort=branch";
-                else
-                    url = p_connect_url;
-                new getPeersTask().execute(url);
+                if (isConnected()){
+                    list.clear();
+                    cardArrayAdapter.clear();
+                    RadioGroup group = (RadioGroup) view.findViewById(R.id.peer_sort);
+                    int bt_id = group.getCheckedRadioButtonId();
+                    String url = null;
+                    if (bt_id == R.id.rb_pbranch)
+                        url = p_connect_url + "?sort=branch";
+                    else
+                        url = p_connect_url;
+                    new getPeersTask().execute(url);
+                }
 
             }
         });
@@ -170,6 +174,11 @@ public class PConnectFragment extends Fragment {
         public void add(PeerModel object) {
             cardList.add(object);
             super.add(object);
+        }
+        public void clear(){
+            cardList.clear();
+            super.clear();
+            notifyDataSetChanged();
         }
 
         @Override

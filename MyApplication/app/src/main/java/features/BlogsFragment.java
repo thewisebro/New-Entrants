@@ -47,6 +47,7 @@ public class BlogsFragment extends Fragment {
     private SwipeRefreshLayout swipeLayout;
     private int blogsCount;
     private int lastId;
+    private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -121,9 +122,9 @@ public class BlogsFragment extends Fragment {
     public void loadBlogs(){
         String blogUrl=null;
         if (blogsCount==0)
-            blogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
+            blogUrl=BlogUrl;
         else
-            blogUrl="http://192.168.121.187:8080/new_entrants/blogs?action=next&id="+lastId;
+            blogUrl=BlogUrl+"?action=next&id="+lastId;
         try {
             URL url= new URL(blogUrl);
             HttpURLConnection conn=(HttpURLConnection) url.openConnection();
@@ -150,14 +151,13 @@ public class BlogsFragment extends Fragment {
                 JSONObject object=jArray.getJSONObject(i);
                 BlogModel model= new BlogModel();
                 model.topic=object.getString("title");
-                model.blogurl=object.getString("blog_url");
                 model.imageurl=object.getString("dp_link");
                 model.group=object.getString("group");
-                model.shortInfo=object.getString("description");
+                model.desc=object.getString("description");
                 model.date=object.getString("date");
                 model.id = Integer.parseInt(object.getString("id"));
-                model.groupurl=object.getString("group_url");
-                model.blogText=null;
+                model.group_username=object.getString("group_username");
+                model.slug=object.getString("slug");
                 items.add(model);
                 lastId =model.id;
                 blogsCount+=1;
@@ -210,23 +210,21 @@ public class BlogsFragment extends Fragment {
                 viewHolder.group= (TextView) row.findViewById(R.id.author);
                 viewHolder.date = (TextView) row.findViewById(R.id.date);
                 viewHolder.img = (ImageView) row.findViewById(R.id.card_img);
-                //viewHolder.model=new BlogModel();
-                viewHolder.blogUrl="";
 
             } else {
                 viewHolder = (BlogCardViewHolder)row.getTag();
             }
             final BlogModel card = getItem(position);
             viewHolder.topic.setText(card.topic);
-            viewHolder.shortInfo.setText(card.shortInfo);
+            viewHolder.shortInfo.setText(card.desc);
             viewHolder.group.setText(card.group);
             viewHolder.date.setText(card.date);
-            viewHolder.blogUrl=card.blogurl;
+            viewHolder.blogUrl=BlogUrl+card.group_username+"/"+card.slug;
             new ImageLoadTask(card.imageurl,viewHolder.img).execute();
             viewHolder.img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String url=card.groupurl;
+                    String url=BlogUrl+card.group_username;
                     getFragmentManager().beginTransaction().replace(R.id.container,new GroupFragment(url)).addToBackStack(null).commit();
                 }
             });

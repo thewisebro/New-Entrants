@@ -30,7 +30,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -158,14 +157,13 @@ public class GroupFragment extends Fragment {
                 JSONObject object=jArray.getJSONObject(i);
                 BlogModel model= new BlogModel();
                 model.topic=object.getString("title");
-                model.blogurl=object.getString("blog_url");
                 model.imageurl=object.getString("dp_link");
                 model.group=object.getString("group");
-                model.shortInfo=object.getString("description");
+                model.desc=object.getString("description");
                 model.date=object.getString("date");
                 model.id = Integer.parseInt(object.getString("id"));
-                model.groupurl=null;
-                model.blogText=null;
+                model.group_username=object.getString("group_username");
+                model.slug=object.getString("slug");
                 items.add(model);
                 //cardArrayAdapter.notifyDataSetChanged();
                 lastId =model.id;
@@ -227,10 +225,10 @@ public class GroupFragment extends Fragment {
             }
             final BlogModel card = getItem(position);
             viewHolder.topic.setText(card.topic);
-            viewHolder.shortInfo.setText(card.shortInfo);
+            viewHolder.shortInfo.setText(card.desc);
             viewHolder.group.setText(card.group);
             viewHolder.date.setText(card.date);
-            viewHolder.blogUrl=card.blogurl;
+            viewHolder.blogUrl=groupUrl+"/"+card.slug;
             new ImageLoadTask(card.imageurl,viewHolder.img).execute();
             row.setTag(viewHolder);
             return row;

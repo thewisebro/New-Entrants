@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,12 +73,8 @@ public class SConnectFragment extends Fragment {
 
             }
         });
-        //new getSeniorsTask().execute(s_connect_url+"?sort=location&param="+params.get("state").toString());
-        SeniorModel sm=new SeniorModel();
-        sm.name="asd";
-        cardArrayAdapter.add(sm);
+        new getSeniorsTask().execute(s_connect_url + "?sort=location&param=" + params.get("state").toString());
         listView.setAdapter(cardArrayAdapter);
-
 
         return view;
     }
@@ -191,7 +188,6 @@ public class SConnectFragment extends Fragment {
                 viewHolder.branch = (TextView) row.findViewById(R.id.s_branch);
                 viewHolder.town= (TextView) row.findViewById(R.id.s_town);
                 viewHolder.state= (TextView) row.findViewById(R.id.s_state);
-                viewHolder.model=new SeniorModel();
             } else {
                 viewHolder = (SeniorCardViewHolder)row.getTag();
             }
@@ -200,13 +196,57 @@ public class SConnectFragment extends Fragment {
             viewHolder.branch.setText(card.branch);
             viewHolder.state.setText(card.state);
             viewHolder.town.setText(card.town);
-            viewHolder.model=card;
-            row.setTag(viewHolder);
+            row.setTag(card.username);
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new sendRequestTask().execute(v.getTag().toString());
+                }
+            });
             return row;
         }
 
         public Bitmap decodeToBitmap(byte[] decodedByte) {
             return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+        }
+    }
+    private class sendRequestTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... args) {
+
+            try {
+                HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/connect/?to="+args[0]).openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+params.get("sess_id"));
+
+/*                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write("to="+args[0]);
+                writer.flush();
+                writer.close();
+                os.close();*/
+
+                //int code=conn.getResponseCode();
+                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb=new StringBuilder();
+                String line = "";
+                while((line = bufferedReader.readLine()) != null)
+                    sb.append(line + '\n');
+                JSONObject object=new JSONObject(sb.toString());
+                return (new JSONObject(sb.toString())).getString("status");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            if (result.equals("success")){
+                Toast.makeText(getActivity(), "Request sent", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

@@ -56,12 +56,7 @@ public class BlogPage extends Fragment {
         group= (TextView) view.findViewById(R.id.group);
         image=(ImageView) view.findViewById(R.id.blog_img);
 
-        /*topic.setText(blog.topic);
-        //shortInfo.setText(blog.shortInfo);
-        blogText.setText(blog.blogText);
-        date.setText(blog.date);
-        group.setText(blog.group);
-        //author.setText(blog.author);*/
+
         if (isConnected())
             new BlogTask().execute();
         return view;

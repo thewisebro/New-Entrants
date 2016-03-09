@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
-    android:onClick="sendRequest"
     android:descendantFocusability="beforeDescendants"
     android:longClickable="true">
 

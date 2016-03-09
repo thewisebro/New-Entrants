@@ -8,8 +8,6 @@ import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TabHost;
-import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -42,14 +40,7 @@ private Map<String,String> userParams;
         mTabHost.addTab(mTabHost.newTabSpec("request").setIndicator("Request"),
                 SConnectFragment.class, arg);
         mTabHost.addTab(mTabHost.newTabSpec("accepted").setIndicator("Accepted"),
-                SConnectAcceptFragment.class, null);
-
-        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tabId) {
-                Toast.makeText(getActivity(), "selected " + tabId, Toast.LENGTH_SHORT).show();
-            }
-        });
+                SConnectAcceptFragment.class, arg);
 
         return view;
     }
