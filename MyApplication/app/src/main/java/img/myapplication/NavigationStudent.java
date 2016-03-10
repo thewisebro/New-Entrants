@@ -20,7 +20,7 @@ import java.util.Map;
 
 import features.BlogPage;
 import features.BlogsFragment;
-import features.ConnectFragment;
+import features.JuniorConnect;
 import features.ProfileFragment;
 import models.BlogCardViewHolder;
 import models.StudentModel;
@@ -44,6 +44,7 @@ public class NavigationStudent extends ActionBarActivity
         db=new MySQLiteHelper(this);
         student=db.getStudent();
         userParams=new HashMap<String,String>();
+        userParams.put("sess_id",student.sess_id);
         userParams.put("category", "student");
 
         mCurrentPosition=-1;
@@ -105,7 +106,7 @@ public class NavigationStudent extends ActionBarActivity
                     break;
                 case 1:fragment = new BlogsFragment();
                     break;
-                case 2: fragment=new ConnectFragment();
+                case 2: fragment=new JuniorConnect(userParams.get("sess_id"));
                     break;
                 case 3: logout();
                     break;

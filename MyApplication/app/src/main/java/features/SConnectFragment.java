@@ -25,7 +25,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -73,7 +76,9 @@ public class SConnectFragment extends Fragment {
 
             }
         });
-        new getSeniorsTask().execute(s_connect_url + "?sort=location&param=" + params.get("state").toString());
+        if (isConnected())
+            new getSeniorsTask().execute(s_connect_url + "?sort=location&param=" + params.get("state").toString());
+
         listView.setAdapter(cardArrayAdapter);
 
         return view;
@@ -154,6 +159,7 @@ public class SConnectFragment extends Fragment {
         public void refresh(){
             this.cardList.clear();
             this.cardList.addAll(list);
+            list.clear();
             notifyDataSetChanged();
         }
         public SeniorCardArrayAdapter(Context context, int textViewResourceId) {
@@ -215,19 +221,19 @@ public class SConnectFragment extends Fragment {
         protected String doInBackground(String... args) {
 
             try {
-                HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/connect/?to="+args[0]).openConnection();
-                conn.setRequestMethod("GET");
+                HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/connect/").openConnection();
+                conn.setRequestMethod("POST");
                 conn.setRequestProperty("Cookie","CHANNELI_SESSID="+params.get("sess_id"));
 
-/*                OutputStream os = conn.getOutputStream();
+                OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
                 writer.write("to="+args[0]);
                 writer.flush();
                 writer.close();
-                os.close();*/
+                os.close();
 
-                //int code=conn.getResponseCode();
+                int code=conn.getResponseCode();
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
                 String line = "";
@@ -246,8 +252,12 @@ public class SConnectFragment extends Fragment {
         protected void onPostExecute(String result) {
             if (result.equals("success")){
                 Toast.makeText(getActivity(), "Request sent", Toast.LENGTH_SHORT).show();
+                refreshFragment();
             }
         }
+    }
+    public void refreshFragment(){
+        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
     }
 
 }
