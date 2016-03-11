@@ -161,6 +161,7 @@ public class PConnectFragment extends Fragment {
         public void refresh(){
             this.cardList.clear();
             this.cardList.addAll(list);
+            list.clear();
             notifyDataSetChanged();
         }
 

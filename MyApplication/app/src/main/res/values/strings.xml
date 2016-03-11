@@ -33,6 +33,11 @@
         <item>Signup</item>
         <item>Login</item>
     </string-array>
+    <string-array name="filters">
+                <item>All</item>
+                <item>From the Institute</item>
+                <item>From the Groups</item>
+    </string-array>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -356,6 +361,7 @@
             <item >UTP</item>
             <item >WSB</item>
     </string-array>
+
     <string name="title_activity_register">Register</string>
 
     <string name="title_activity_student_login">StudentLogin</string>
@@ -373,6 +379,7 @@
     <string name="title_activity_fghfh">fghfh</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_update">Update</string>
 
 
 

@@ -10,13 +10,19 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +55,9 @@ public class BlogsFragment extends Fragment {
     private int lastId;
     private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
+        setHasOptionsMenu(true);
+
+
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         listView = (ListView) view.findViewById(R.id.card_listView);
 
@@ -267,6 +276,28 @@ public class BlogsFragment extends Fragment {
             imageView.setImageBitmap(result);
         }
 
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        inflater.inflate(R.menu.menu_blogs,menu);
+        MenuItem item=menu.findItem(R.id.filter_spinner);
+        Spinner spinner= (Spinner) MenuItemCompat.getActionView(item);
+        ArrayAdapter<CharSequence> filters=ArrayAdapter.createFromResource(getContext(),R.array.filters,android.R.layout.simple_spinner_item);
+        filters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(filters);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
 }

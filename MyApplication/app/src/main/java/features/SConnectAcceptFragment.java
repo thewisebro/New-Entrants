@@ -54,7 +54,11 @@ public class SConnectAcceptFragment extends Fragment {
 
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_senior_card);
 
-        getAcceptedSeniors();
+        //getAcceptedSeniors();
+        if (isConnected())
+        {
+            new UpdateAcceptedSeniorsTask().execute();
+        }
 
         listView.setAdapter(cardArrayAdapter);
         return view;
@@ -102,22 +106,22 @@ public class SConnectAcceptFragment extends Fragment {
                     model.town=object.getString("hometown");
                     model.state=(new JSONObject(object.getString("state"))).getString("name");
                     model.branch=(new JSONObject(object.getString("branch"))).getString("name");
-                    model.username=object.getString("username");
+                    //model.username=object.getString("username");
                     list.add(model);
 
                 }
-
                 return "success";
             } catch (Exception e) {
                 return "Unable to retrieve web page. URL may be invalid.";
             }
+
         }
 
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
             if (result.equals("success")) {
-
+                cardArrayAdapter.refresh();
             }
         }
     }
@@ -128,6 +132,7 @@ public class SConnectAcceptFragment extends Fragment {
         public void refresh(){
             this.cardList.clear();
             this.cardList.addAll(list);
+            list.clear();
             notifyDataSetChanged();
         }
         public SeniorCardArrayAdapter(Context context, int textViewResourceId) {
