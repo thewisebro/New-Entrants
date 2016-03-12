@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
+    android:orientation="vertical"
+    android:background="@drawable/card_background_selector"
     android:descendantFocusability="beforeDescendants"
     android:longClickable="true">
 
@@ -16,8 +18,8 @@
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:paddingRight="15dp"
-        android:background="@drawable/card_background_selector"
-        android:descendantFocusability="afterDescendants">
+        android:descendantFocusability="afterDescendants"
+        android:outlineProvider="paddedBounds">
 
         <TextView
             android:id="@+id/s_name"
@@ -49,5 +51,67 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/s_state"/>
 
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/toggleButton"
+            android:background="@drawable/check"
+            android:layout_margin="10dp"
+            android:textOn=""
+            android:textOff=""
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
     </RelativeLayout>
-</FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:outlineProvider="paddedBounds"
+        android:padding="15dp"
+        android:textAlignment="center"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/s_contact"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/blue_grey_300"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/s_email"
+            android:textColor="@color/blue_grey_300"
+            android:layout_below="@+id/s_contact"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/s_fblink"
+            android:textColor="@color/blue_grey_300"
+            android:layout_below="@+id/s_email"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Connect"
+            android:id="@+id/s_connect"
+            android:textColor="@color/blue_grey_300"
+            android:layout_below="@+id/s_fblink"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+</LinearLayout>

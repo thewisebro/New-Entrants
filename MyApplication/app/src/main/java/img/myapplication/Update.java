@@ -4,14 +4,25 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import models.StudentModel;
 
 
 public class Update extends ActionBarActivity {
 
+    private Spinner state;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
+        StudentModel student= (StudentModel) getIntent().getSerializableExtra("student");
+
+        state= (Spinner) findViewById(R.id.u_state);
+        ArrayAdapter<CharSequence> stateList=ArrayAdapter.createFromResource(this,R.array.states,android.R.layout.simple_spinner_item);
+        stateList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        state.setAdapter(stateList);
     }
 
     @Override

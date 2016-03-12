@@ -265,10 +265,18 @@ public class Login extends ActionBarActivity {
             student.mobile=details.get("mobile");
             student.fb_link=details.get("fb_link");
             student.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
-            MySQLiteHelper db=new MySQLiteHelper(this);
-            db.addStudent(student);
-            db.close();
-            startActivity(new Intent(this,NavigationStudent.class));
+            if (student.complete()){
+                MySQLiteHelper db=new MySQLiteHelper(this);
+                db.addStudent(student);
+                db.close();
+                startActivity(new Intent(this,NavigationStudent.class));
+            }
+            else{
+                Intent intent=new Intent(this,Update.class);
+                intent.putExtra("student",student);
+                startActivity(intent);
+            }
+
             finish();
         }
         else if (details.get("category").equals("junior")){

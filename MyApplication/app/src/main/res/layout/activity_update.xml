@@ -40,6 +40,7 @@
                 android:hint="Name"
                 android:ems="10"
                 android:id="@+id/u_name"
+                android:enabled="false"
                 android:layout_weight="1" />
         </TableRow>
 
@@ -57,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:enabled="false"
                 android:id="@+id/u_username"
                 android:layout_weight="1" />
         </TableRow>
@@ -76,6 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:enabled="false"
                 android:id="@+id/u_branch"
                 android:layout_weight="1" />
         </TableRow>
@@ -94,7 +97,7 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/new_state"
+                android:id="@+id/u_state"
                 android:layout_weight="1" />
         </TableRow>
 
@@ -115,7 +118,7 @@
                 android:inputType="textPersonName"
                 android:hint="City"
                 android:ems="10"
-                android:id="@+id/new_town"
+                android:id="@+id/u_town"
                 android:layout_weight="1" />
         </TableRow>
 
@@ -135,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="phone"
                 android:ems="10"
-                android:id="@+id/new_mobile"
+                android:id="@+id/u_mobile"
                 android:layout_weight="1" />
         </TableRow>
 
@@ -155,7 +158,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:ems="10"
-                android:id="@+id/new_email"
+                android:id="@+id/u_email"
                 android:layout_weight="1" />
         </TableRow>
         <TableRow
@@ -174,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:ems="10"
-                android:id="@+id/new_fblink"
+                android:id="@+id/u_fblink"
                 android:layout_weight="1" />
         </TableRow>
 
@@ -184,7 +187,7 @@
             android:text="Submit"
             android:id="@+id/button_submit"
             android:layout_gravity="center_horizontal"
-            android:onClick="register"
+            android:onClick="submit"
             />
 
 
