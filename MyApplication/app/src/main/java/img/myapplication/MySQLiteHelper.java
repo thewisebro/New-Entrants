@@ -135,7 +135,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
     public void addStudent(StudentModel student){
         SQLiteDatabase db=this.getWritableDatabase();
-        deleteStudent();
+        //deleteStudent();
         //db.execSQL(CREATE_STUDENTS_TABLE);
         ContentValues values=new ContentValues();
         values.put("name",student.name);
@@ -158,7 +158,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void addEntrant(NewEntrantModel entrant){
         SQLiteDatabase db=this.getWritableDatabase();
         //db.execSQL(CREATE_ENTRANTS_TABLE);
-        deleteEntrant();
+        //deleteEntrant();
         ContentValues values=new ContentValues();
         values.put("id", entrant.id);
         values.put("name", entrant.name);

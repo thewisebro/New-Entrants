@@ -52,18 +52,18 @@
             android:layout_below="@+id/s_state"/>
 
         <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/toggleButton"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:id="@+id/toggle_senior"
             android:background="@drawable/check"
-            android:layout_margin="10dp"
             android:textOn=""
             android:textOff=""
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
@@ -72,6 +72,7 @@
         android:layout_height="wrap_content"
         android:outlineProvider="paddedBounds"
         android:padding="15dp"
+        android:id="@+id/down_view"
         android:textAlignment="center"
         android:visibility="gone">
 

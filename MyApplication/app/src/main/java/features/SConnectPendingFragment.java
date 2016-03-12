@@ -2,23 +2,23 @@ package features;
 
 
 import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import img.myapplication.MySQLiteHelper;
 import img.myapplication.R;
 import models.SeniorCardViewHolder;
 import models.SeniorModel;
@@ -37,52 +36,29 @@ import models.SeniorModel;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SConnectAcceptFragment extends Fragment {
+public class SConnectPendingFragment extends Fragment {
 
-    private SeniorCardArrayAdapter cardArrayAdapter;
     private Map<String,String> params;
+    private SeniorCardArrayAdapter cardArrayAdapter;
     private List<SeniorModel> list=new ArrayList<SeniorModel>();
-    private ListView listView;
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        params= (Map<String, String>) getArguments().getSerializable("userParams");
-        View view = inflater.inflate(R.layout.fragment_sconnect_accept, container, false);
 
-        listView = (ListView) view.findViewById(R.id.card_listView);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
+        params= (Map<String, String>) getArguments().getSerializable("userParams");
+        View view=inflater.inflate(R.layout.fragment_sconnect_pending, container, false);
+        ListView listView = (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
 
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_senior_card);
 
-      /*  SeniorModel model=new SeniorModel();
-        model.name="asd";
-        model.username="asd";
-        model.state="bhr";
-        model.email="asd";
-        model.branch="cse";
-        model.contact="123";
-        model.town="patna";
-        model.fblink="asfb";
-        cardArrayAdapter.add(model);*/
         if (isConnected())
-        {
-            new UpdateAcceptedSeniorsTask().execute();
-        }
+            new getSeniorsTask().execute();
 
         listView.setAdapter(cardArrayAdapter);
+
         return view;
     }
-    private void getAcceptedSeniors(){
-        if (isConnected()){
-            new UpdateAcceptedSeniorsTask().execute();
-        }
-        MySQLiteHelper db=new MySQLiteHelper(getContext());
-        //list=db.getSeniors();
-        cardArrayAdapter.refresh();
-    }
-
-    public boolean isConnected() {
+    public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected())
@@ -91,50 +67,60 @@ public class SConnectAcceptFragment extends Fragment {
             return false;
     }
 
-    private class UpdateAcceptedSeniorsTask extends AsyncTask<String, Void, String> {
+    private void getCards(String result){
+        JSONObject jObject= null;
+        try {
+            jObject = new JSONObject(result);
+            JSONArray jArray=jObject.getJSONArray("students");
+            int len=jArray.length();
+
+            for(int i=0; i<len;i++){
+
+                JSONObject object=jArray.getJSONObject(i);
+                SeniorModel model= new SeniorModel();
+                model.name=object.getString("name");
+                model.town=object.getString("hometown");
+                model.state=(new JSONObject(object.getString("state"))).getString("name");
+                model.branch=(new JSONObject(object.getString("branch"))).getString("name");
+                list.add(model);
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+    private class getSeniorsTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... args) {
-
             try {
-                HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/accepted/").openConnection();
+
+                HttpURLConnection conn=(HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/pending/").openConnection();
                 conn.setRequestMethod("GET");
-                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+params.get("sess_id").toString());
+                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+params.get("sess_id"));
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
                 String line = "";
                 while((line = bufferedReader.readLine()) != null)
                     sb.append(line + '\n');
-
-                JSONArray jArray=(new JSONObject(sb.toString())).getJSONArray("students");
-                int len=jArray.length();
-
-                for(int i=0; i<len;i++){
-
-                    JSONObject object=jArray.getJSONObject(i);
-                    SeniorModel model= new SeniorModel();
-                    model.name=object.getString("name");
-                    model.town=object.getString("hometown");
-                    model.state=(new JSONObject(object.getString("state"))).getString("name");
-                    model.branch=(new JSONObject(object.getString("branch"))).getString("name");
-                    //model.username=object.getString("username");
-                    list.add(model);
-
-                }
+                getCards(sb.toString());
                 return "success";
             } catch (Exception e) {
-                return "Unable to retrieve web page. URL may be invalid.";
+                e.printStackTrace();
             }
 
+        return null;
         }
-
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            if (result.equals("success")) {
+            if (result.equals("success")){
                 cardArrayAdapter.refresh();
             }
         }
     }
+
+
     public class SeniorCardArrayAdapter  extends ArrayAdapter<SeniorModel> {
 
         private List<SeniorModel> cardList = new ArrayList<SeniorModel>();
@@ -185,20 +171,18 @@ public class SConnectAcceptFragment extends Fragment {
             viewHolder.branch.setText(card.branch);
             viewHolder.state.setText(card.state);
             viewHolder.town.setText(card.town);
-            ToggleButton bt= (ToggleButton) row.findViewById(R.id.toggle_senior);
-            bt.setVisibility(View.VISIBLE);
-            bt.setTag(row.findViewById(R.id.down_view));
-            bt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    RelativeLayout layout = (RelativeLayout) buttonView.getTag();
-                    if (isChecked)
-                        layout.setVisibility(View.VISIBLE);
-                    else
-                        layout.setVisibility(View.GONE);
-                }
-            });
+
             return row;
         }
+
+        public Bitmap decodeToBitmap(byte[] decodedByte) {
+            return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+        }
     }
+
+
 }
+
+
+
+

@@ -37,10 +37,12 @@ private Map<String,String> userParams;
 
         Bundle arg = new Bundle();
         arg.putSerializable("userParams", (Serializable) userParams);
-        mTabHost.addTab(mTabHost.newTabSpec("request").setIndicator("Request"),
+        mTabHost.addTab(mTabHost.newTabSpec("request").setIndicator("Connect"),
                 SConnectFragment.class, arg);
         mTabHost.addTab(mTabHost.newTabSpec("accepted").setIndicator("Accepted"),
                 SConnectAcceptFragment.class, arg);
+        mTabHost.addTab(mTabHost.newTabSpec("pending").setIndicator("Pending"),
+                SConnectPendingFragment.class, arg);
 
         return view;
     }
