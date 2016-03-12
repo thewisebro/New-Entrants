@@ -22,6 +22,7 @@
 
         <TextView
             android:id="@+id/name"
+            android:textColor="@color/yellow_700"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 1"
@@ -29,6 +30,7 @@
             android:layout_centerHorizontal="true" />
         <TextView
             android:id="@+id/town"
+            android:textColor="@color/blue_grey_300"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 2"
@@ -37,6 +39,7 @@
 
         <TextView
             android:id="@+id/state"
+            android:textColor="@color/blue_grey_300"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 1"

@@ -26,6 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 1"
+            android:textColor="@color/yellow_700"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
         <TextView
@@ -33,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 2"
+            android:textColor="@color/blue_grey_300"
             android:layout_below="@+id/s_name"
             android:layout_centerHorizontal="true"/>
 
@@ -41,6 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 1"
+            android:textColor="@color/blue_grey_300"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/s_town"/>
         <TextView
@@ -48,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 1"
+            android:textColor="@color/blue_grey_300"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/s_state"/>
 
@@ -72,6 +76,7 @@
         android:layout_height="wrap_content"
         android:outlineProvider="paddedBounds"
         android:padding="15dp"
+        android:textColor="@color/blue_grey_300"
         android:id="@+id/down_view"
         android:textAlignment="center"
         android:visibility="gone">
@@ -102,16 +107,6 @@
             android:textColor="@color/blue_grey_300"
             android:layout_below="@+id/s_email"
             android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Connect"
-            android:id="@+id/s_connect"
-            android:textColor="@color/blue_grey_300"
-            android:layout_below="@+id/s_fblink"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 

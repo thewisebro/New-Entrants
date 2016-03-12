@@ -26,12 +26,14 @@
             android:layout_height="wrap_content"
             android:text="Text line 1"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/yellow_700" />
         <TextView
             android:id="@+id/ptown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 2"
+            android:textColor="@color/blue_grey_300"
             android:layout_below="@+id/pname"
             android:layout_centerHorizontal="true"/>
 
@@ -40,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 1"
+            android:textColor="@color/blue_grey_300"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/ptown"/>
         <TextView
@@ -47,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 1"
+            android:textColor="@color/blue_grey_300"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/pstate"/>
 
