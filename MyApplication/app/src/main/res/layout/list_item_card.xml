@@ -3,23 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
     android:onClick="displayBlog"
     android:id="@+id/blog_card"
     android:orientation="vertical"
     android:background="@drawable/card_background_selector"
-    android:descendantFocusability="beforeDescendants">
+    android:descendantFocusability="beforeDescendants"
+    android:paddingTop="0dp"
+    android:paddingBottom="15dp">
 
 
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp"
-        android:background="@drawable/gradient"
-        android:paddingRight="15dp"
+        android:layout_height="140dp"
         android:layout_gravity="center_horizontal|top"
         android:descendantFocusability="afterDescendants"
         android:id="@+id/cardTop"
@@ -32,7 +28,16 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
+            android:scaleType="fitXY"
             android:layout_centerHorizontal="true" />
+        <View android:layout_width="match_parent"
+            android:background="@drawable/gradient"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerHorizontal="true"
+            android:layout_height="match_parent"
+            android:alpha="0.5" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -47,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Text line 1"
-
+                android:textColor="#ffffff"
                 android:layout_alignParentTop="false"
                 android:layout_centerHorizontal="true"
                 android:textAlignment="center" />
@@ -57,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Text line 2"
-
+                android:textColor="#ffffff"
                 android:layout_below="@id/topic"
                 android:layout_centerHorizontal="true"
                 android:textAlignment="center" />
@@ -69,6 +74,7 @@
                 android:text="Text line 1"
                 android:paddingLeft="5dp"
                 android:textAlignment="center"
+                android:textColor="#ffffff"
                 android:layout_alignParentBottom="true" />
         </RelativeLayout>
 
@@ -78,10 +84,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:paddingBottom="15dp"
-        android:paddingRight="15dp"
-        android:background="@drawable/card_background_selector"
         android:descendantFocusability="afterDescendants"
         android:layout_gravity="center_horizontal|bottom"
         android:textAlignment="center"
@@ -89,6 +91,7 @@
         android:layout_toRightOf="@+id/card_img"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:paddingTop="5dp"
         android:id="@+id/cardBottom">
 
 

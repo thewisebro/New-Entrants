@@ -1,6 +1,9 @@
 package img.myapplication;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -65,26 +68,37 @@ public class Register extends AppCompatActivity {
         branch.setAdapter(branchList);
 
     }
+    public boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
+    }
 
     public void register(View view) throws IllegalAccessException {
-        pos_branch=branch.getSelectedItemPosition();
-        pos_state=state.getSelectedItemPosition();
-        entrant.name= ((EditText) findViewById(R.id.new_name)).getText().toString().trim();
-        entrant.username= ((EditText) findViewById(R.id.new_username)).getText().toString().trim();
-        entrant.password= ((EditText) findViewById(R.id.new_password)).getText().toString().trim();
-        entrant.town= ((EditText) findViewById(R.id.new_town)).getText().toString().trim();
-        entrant.email= ((EditText) findViewById(R.id.new_email)).getText().toString().trim();
-        entrant.mobile= ((EditText) findViewById(R.id.new_mobile)).getText().toString().trim();
-        entrant.fb_link= ((EditText) findViewById(R.id.new_fblink)).getText().toString().trim();
-        entrant.branchname=branch.getSelectedItem().toString().trim();
-        entrant.branchcode=(getResources().getStringArray(R.array.branch_codes))[pos_branch];
-        entrant.state= state.getSelectedItem().toString().trim();
-        entrant.statecode=(getResources().getStringArray(R.array.state_codes))[pos_state];
-        entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibilty)).isChecked();
-        entrant.profile_privacy= ((CheckBox) findViewById(R.id.profile_visibilty)).isChecked();
-        if(validate()) {
-            new RegisterTask().execute();
+        if (isConnected()){
+            pos_branch=branch.getSelectedItemPosition();
+            pos_state=state.getSelectedItemPosition();
+            entrant.name= ((EditText) findViewById(R.id.new_name)).getText().toString().trim();
+            entrant.username= ((EditText) findViewById(R.id.new_username)).getText().toString().trim();
+            entrant.password= ((EditText) findViewById(R.id.new_password)).getText().toString().trim();
+            entrant.town= ((EditText) findViewById(R.id.new_town)).getText().toString().trim();
+            entrant.email= ((EditText) findViewById(R.id.new_email)).getText().toString().trim();
+            entrant.mobile= ((EditText) findViewById(R.id.new_mobile)).getText().toString().trim();
+            entrant.fb_link= ((EditText) findViewById(R.id.new_fblink)).getText().toString().trim();
+            entrant.branchname=branch.getSelectedItem().toString().trim();
+            entrant.branchcode=(getResources().getStringArray(R.array.branch_codes))[pos_branch];
+            entrant.state= state.getSelectedItem().toString().trim();
+            entrant.statecode=(getResources().getStringArray(R.array.state_codes))[pos_state];
+            entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibilty)).isChecked();
+            entrant.profile_privacy= ((CheckBox) findViewById(R.id.profile_visibilty)).isChecked();
+            if(validate()) {
+                new RegisterTask().execute();
+            }
         }
+
         else {
         }
     }
@@ -94,6 +108,8 @@ public class Register extends AppCompatActivity {
         String mobilePattern="\\d+";
         String idPattern="\\d+";
         String namePattern="[a-zA-Z ]+";
+        String townPattern="^$|^[a-zA-Z ]+$";
+        String fbPattern="^$|^[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+$";
         boolean flag=true;
         if (!(entrant.email).matches(emailPattern)){
             Toast.makeText(getApplicationContext(), "Invalid valid email address", Toast.LENGTH_SHORT).show();
@@ -107,8 +123,20 @@ public class Register extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Enter a proper Name", Toast.LENGTH_SHORT).show();
             flag=false;
         }
-        if(!(entrant.password).equals(((EditText)findViewById(R.id.re_password)).getText().toString())){
+        if(!(entrant.password).equals(((EditText) findViewById(R.id.re_password)).getText().toString())){
             Toast.makeText(getApplicationContext(),"Passwords do not match", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        if(!(entrant.town).matches(townPattern)){
+            Toast.makeText(getApplicationContext(),"Enter a proper City name", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        if (!(entrant.fb_link).matches(fbPattern)){
+            Toast.makeText(getApplicationContext(), "Invalid valid Facebook link", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        if (pos_state==0){
+            Toast.makeText(getApplicationContext(), "Select a State", Toast.LENGTH_SHORT).show();
             flag=false;
         }
         return flag;

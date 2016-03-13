@@ -83,6 +83,8 @@ public class NavigationStudent extends ActionBarActivity
         loadFragment(new BlogPage(viewHolder.blogUrl));
     }
     public void loadFragment(Fragment fragment){
+        if (fragment == null)
+            return;
         if (fragmentCount!=0)
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
         else

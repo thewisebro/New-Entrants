@@ -191,7 +191,8 @@ public class Login extends ActionBarActivity {
                     getDetails();
                     return "Logged In";
                 }
-                else return null;
+                else
+                    return "";
             } catch (IOException e) {
                 return "Unable to retrieve web page. URL may be invalid.";
             }
@@ -199,12 +200,12 @@ public class Login extends ActionBarActivity {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            if (cookieManager.getCookieStore().getCookies().size()>0){
-                Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
-                start();
+            if ("".equals(result)){
+                Toast.makeText(getApplicationContext(),"Enter correct username and password", Toast.LENGTH_SHORT).show();
             }
             else {
-                Toast.makeText(getApplicationContext(),"Enter correct Username or Password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
+                start();
             }
         }
     }
@@ -265,19 +266,20 @@ public class Login extends ActionBarActivity {
             student.mobile=details.get("mobile");
             student.fb_link=details.get("fb_link");
             student.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
-            if (student.complete()) {
+            if (student.state.isEmpty() || student.mobile.isEmpty() || student.email.isEmpty() || student.town.isEmpty()){
+                Intent intent=new Intent(this,Update.class);
+                intent.putExtra("student",student);
+                startActivity(intent);
+                finish();
+            }
+            else {
                 MySQLiteHelper db = new MySQLiteHelper(this);
                 db.addStudent(student);
                 db.close();
                 startActivity(new Intent(this, NavigationStudent.class));
                 finish();
             }
-            else{
-                Intent intent=new Intent(this,Update.class);
-                intent.putExtra("student",student);
-                startActivity(intent);
-                finish();
-            }
+
         }
         else if (details.get("category").equals("junior")){
             NewEntrantModel entrant= new NewEntrantModel();

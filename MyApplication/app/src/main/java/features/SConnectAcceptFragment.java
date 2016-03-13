@@ -177,6 +177,9 @@ public class SConnectAcceptFragment extends Fragment {
                 viewHolder.branch = (TextView) row.findViewById(R.id.s_branch);
                 viewHolder.town= (TextView) row.findViewById(R.id.s_town);
                 viewHolder.state= (TextView) row.findViewById(R.id.s_state);
+                viewHolder.contact= (TextView) row.findViewById(R.id.s_contact);
+                viewHolder.email= (TextView) row.findViewById(R.id.s_email);
+                viewHolder.fblink= (TextView) row.findViewById(R.id.fblink);
             } else {
                 viewHolder = (SeniorCardViewHolder)row.getTag();
             }
@@ -184,7 +187,16 @@ public class SConnectAcceptFragment extends Fragment {
             viewHolder.name.setText(card.name);
             viewHolder.branch.setText(card.branch);
             viewHolder.state.setText(card.state);
-            viewHolder.town.setText(card.town);
+            if (card.town.isEmpty())
+                viewHolder.town.setVisibility(View.GONE);
+            else
+                viewHolder.town.setText(card.town);
+            viewHolder.email.setText(card.email);
+            viewHolder.contact.setText(card.contact);
+            if (card.fblink.isEmpty())
+                viewHolder.fblink.setVisibility(View.GONE);
+            else
+                viewHolder.fblink.setText(card.fblink);
             ToggleButton bt= (ToggleButton) row.findViewById(R.id.toggle_senior);
             bt.setVisibility(View.VISIBLE);
             bt.setTag(row.findViewById(R.id.down_view));

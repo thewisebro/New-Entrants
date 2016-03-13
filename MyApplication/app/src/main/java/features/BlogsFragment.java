@@ -1,12 +1,15 @@
 package features;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -22,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -270,22 +274,28 @@ public class BlogsFragment extends Fragment {
             return null;
         }
 
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @Override
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
             imageView.setImageBitmap(result);
+            GradientDrawable gd=new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP,new int[]{0xFF525252,0xFFA8A6A6,0xFFFFFF});
+            ((RelativeLayout)imageView.getParent()).setBackground(gd);
         }
 
     }
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         inflater.inflate(R.menu.menu_blogs,menu);
         MenuItem item=menu.findItem(R.id.filter_spinner);
         Spinner spinner= (Spinner) MenuItemCompat.getActionView(item);
-        ArrayAdapter<CharSequence> filters=ArrayAdapter.createFromResource(getContext(),R.array.filters,android.R.layout.simple_spinner_item);
-        filters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> filters=ArrayAdapter.createFromResource(getContext(),R.array.filters,R.layout.spinner_item);
+        filters.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(filters);
+        spinner.setPopupBackgroundDrawable(getResources().getDrawable(R.drawable.spinner_background));
+
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

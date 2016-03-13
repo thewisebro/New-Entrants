@@ -10,41 +10,53 @@
     <ListView
         android:id="@+id/card_listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:listSelector="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
+        android:layout_above="@+id/sort_view"
         android:dividerHeight="10dp" />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
+        android:id="@+id/sort_view"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@color/blue_grey_800">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SORT:"
+            android:text="FILTER"
             android:id="@+id/bt_psort" />
 
         <RadioGroup
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:id="@+id/peer_sort">
+            android:id="@+id/peer_sort"
+            android:gravity="center_vertical|center_horizontal">
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Location"
+                android:textColor="@color/yellow_700"
                 android:checked="true"
-                android:id="@+id/rb_plocation" />
+                android:id="@+id/rb_plocation"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:padding="10dp" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/rb_pbranch"
-                android:text="Branch" />
+                android:textColor="@color/yellow_700"
+                android:text="Branch"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:padding="10dp" />
 
         </RadioGroup>
     </LinearLayout>

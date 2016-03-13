@@ -10,5 +10,7 @@ public class SeniorCardViewHolder {
     public TextView town;
     public TextView state;
     public TextView branch;
-    public SeniorModel model;
+    public TextView contact;
+    public TextView email;
+    public TextView fblink;
 }

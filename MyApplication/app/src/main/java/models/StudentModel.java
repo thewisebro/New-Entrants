@@ -22,10 +22,5 @@ public class StudentModel implements Serializable {
     public String sess_id;
     public String category="student";
     public boolean valid;
-    public boolean complete(){
-        if (town.isEmpty() || state.isEmpty() || email.isEmpty() || mobile.isEmpty() || fb_link.isEmpty())
-            return false;
-        return true;
-    }
 
 }
