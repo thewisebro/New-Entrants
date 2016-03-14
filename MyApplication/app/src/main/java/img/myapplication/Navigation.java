@@ -26,11 +26,9 @@ import features.PeerPage;
 import features.ProfileFragment;
 import features.RequestSenior;
 import features.SConnectTabFragment;
-import features.SeniorPage;
 import models.BlogCardViewHolder;
 import models.NewEntrantModel;
 import models.PeerCardViewHolder;
-import models.SeniorCardViewHolder;
 
 
 public class Navigation extends ActionBarActivity
@@ -89,10 +87,6 @@ public class Navigation extends ActionBarActivity
     }
     public void sendRequest(View view){
 
-    }
-    public void displaySenior(View view){
-        SeniorCardViewHolder viewHolder=(SeniorCardViewHolder) view.getTag();
-        loadFragment(new SeniorPage(viewHolder.model));
     }
     public void requestSenior(View view){
         loadFragment(new RequestSenior());

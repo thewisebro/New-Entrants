@@ -91,9 +91,9 @@ public class Login extends ActionBarActivity {
             }
             else {
                 params.put("username",usernameText);
-                params.put("password",passwordText);
+                params.put("password", passwordText);
 
-                new LoginTask().execute();
+               new LoginTask().execute();
             }
         }
     }
@@ -108,7 +108,12 @@ public class Login extends ActionBarActivity {
         try {
 
             HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/login/").openConnection();
+            conn.setConnectTimeout(10000);
+            conn.setReadTimeout(10000);
             conn.setRequestMethod("GET");
+            int rcode=conn.getResponseCode();
+            if (rcode!= HttpURLConnection.HTTP_OK && rcode!=HttpURLConnection.HTTP_ACCEPTED)
+                return false;
             Object obj = conn.getContent();
 
             csrftoken=cookieStore.getCookies().get(0).getValue().toString();
@@ -147,19 +152,16 @@ public class Login extends ActionBarActivity {
             if (responseCode== HttpURLConnection.HTTP_OK){
                 obj=urlConnectionPost.getContent();
                 if (cookieStore.getCookies().size()>1){
-                    result=true;
+                    return true;
                 }
             }
 
 
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        finally {
-            urlConnectionPost.disconnect();
-        }
-        return result;
+        return false;
     }
 
     private void parseUserData(String userDetails){
@@ -179,10 +181,14 @@ public class Login extends ActionBarActivity {
     }
 
     private class LoginTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute(){
+            getSupportFragmentManager().beginTransaction().replace(R.id.login_container,new LoginLoad()).addToBackStack(null).commit();
+            super.onPreExecute();
+        }
         @Override
         protected String doInBackground(String... urls) {
-
-            // params comes from the execute() call: params[0] is the url.
             try {
                 if (peopleLogin()) {
                     details=new HashMap<String,String>();
@@ -197,16 +203,18 @@ public class Login extends ActionBarActivity {
                 return "Unable to retrieve web page. URL may be invalid.";
             }
         }
-        // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
+
             if ("".equals(result)){
+                getSupportFragmentManager().popBackStack();
                 Toast.makeText(getApplicationContext(),"Enter correct username and password", Toast.LENGTH_SHORT).show();
             }
             else {
                 Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
                 start();
             }
+            //getSupportFragmentManager().beginTransaction().remove(fragment);
         }
     }
     public void getDetails(){

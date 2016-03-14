@@ -13,21 +13,25 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="NewEntrants"
-        android:theme="@style/CustomActionBarTheme" >
+         >
         <activity
             android:name=".Navigation"
+            android:theme="@style/CustomActionBarTheme"
             android:label="Navigation" >
         </activity>
         <activity
             android:name=".Register"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:label="@string/title_activity_register" >
         </activity>
         <activity
             android:name=".NavigationStudent"
+            android:theme="@style/CustomActionBarTheme"
             android:label="@string/title_activity_navigation_student" >
         </activity>
         <activity
             android:name=".Login"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:label="NewEntrants" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,6 +41,7 @@
         </activity>
         <activity
             android:name=".Update"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:label="@string/title_activity_update" >
         </activity>
     </application>

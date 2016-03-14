@@ -30,7 +30,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.PeerCardViewHolder;
 import models.PeerModel;
@@ -51,9 +50,6 @@ public class PConnectFragment extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
-        if (!isConnected()){
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
-        }
 
         view=inflater.inflate(R.layout.fragment_pconnect, container, false);
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -82,7 +78,8 @@ public class PConnectFragment extends Fragment {
 
             }
         });
-        new getPeersTask().execute(p_connect_url);
+        if (isConnected())
+            new getPeersTask().execute(p_connect_url);
         listView.setAdapter(cardArrayAdapter);
 
         return view;

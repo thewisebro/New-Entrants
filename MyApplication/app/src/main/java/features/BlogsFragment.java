@@ -50,7 +50,8 @@ import models.BlogModel;
 
 public class BlogsFragment extends Fragment {
 
-
+    public boolean refreshing=false;
+    private LoadBlogTask task;
     private BlogCardArrayAdapter cardArrayAdapter;
     private List<BlogModel> items;
     private ListView listView;
@@ -58,10 +59,16 @@ public class BlogsFragment extends Fragment {
     private int blogsCount;
     private int lastId;
     private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
+
+   @Override
+    public void onStop(){
+
+        super.onStop();
+
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         setHasOptionsMenu(true);
-
-
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         listView = (ListView) view.findViewById(R.id.card_listView);
 
@@ -76,12 +83,15 @@ public class BlogsFragment extends Fragment {
             @Override
             public void onRefresh() {
                 if (isConnected()) {
+
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            new LoadBlogTask().execute();
-                            Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
                             swipeLayout.setRefreshing(false);
+                            refreshing=true;
+                            task = new LoadBlogTask();
+                            task.execute();
+                            Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
                         }
                     }, 5000);
                 }
@@ -129,6 +139,7 @@ public class BlogsFragment extends Fragment {
 
                 cardArrayAdapter.refresh();
                 items.clear();
+                refreshing=false;
             }
         }
     }
@@ -237,8 +248,10 @@ public class BlogsFragment extends Fragment {
             viewHolder.img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String url=BlogUrl+card.group_username;
-                    getFragmentManager().beginTransaction().replace(R.id.container,new GroupFragment(url)).addToBackStack(null).commit();
+                    if (!refreshing) {
+                        String url = BlogUrl + card.group_username;
+                        getFragmentManager().beginTransaction().replace(R.id.container, new GroupFragment(url)).addToBackStack(null).commit();
+                    }
                 }
             });
             row.setTag(viewHolder);
