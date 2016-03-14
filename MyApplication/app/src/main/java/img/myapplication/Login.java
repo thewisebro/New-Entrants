@@ -267,14 +267,14 @@ public class Login extends ActionBarActivity {
             student.branchname=branchname;
             student.branchcode=branchcode;
             student.year=details.get("year");
-            student.town=details.get("town");
+            student.town=details.get("hometown");
             student.state=statename;
             student.statecode=statecode;
             student.email=details.get("email");
-            student.mobile=details.get("mobile");
+            student.mobile=details.get("phone");
             student.fb_link=details.get("fb_link");
             student.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
-            if (student.state.isEmpty() || student.mobile.isEmpty() || student.email.isEmpty() || student.town.isEmpty()){
+            if ("".equals(student.town) || "".equals(student.state) || "".equals(student.email) || "".equals(student.mobile)){
                 Intent intent=new Intent(this,Update.class);
                 intent.putExtra("student",student);
                 startActivity(intent);
@@ -295,12 +295,12 @@ public class Login extends ActionBarActivity {
             entrant.name=details.get("name");
             entrant.username=details.get("username");
             entrant.password=details.get("password");
-            entrant.town=details.get("town");
+            entrant.town=details.get("hometown");
             entrant.state=statename;
             entrant.statecode=statecode;
             entrant.branchname=branchname;
             entrant.branchcode=branchcode;
-            entrant.mobile=details.get("mobile");
+            entrant.mobile=details.get("phone");
             entrant.email=details.get("email");
             entrant.fb_link=details.get("fb_link");
             entrant.profile_privacy=details.get("profile_privacy").equals("true");
