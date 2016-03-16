@@ -15,7 +15,7 @@
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
         android:descendantFocusability="afterDescendants"
         android:id="@+id/cardTop"
@@ -23,7 +23,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="140dp"
             android:id="@+id/card_img"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
@@ -36,7 +36,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_centerHorizontal="true"
-            android:layout_height="match_parent"
+            android:layout_height="140dp"
             android:alpha="0.5" />
 
         <RelativeLayout
@@ -111,6 +111,15 @@
             android:layout_below="@id/author"
             android:onClick="fromCategory"
             android:layout_centerHorizontal="true"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/blog_dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="10dp" />
 
     </RelativeLayout>
 

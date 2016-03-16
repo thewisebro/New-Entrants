@@ -8,6 +8,7 @@ public class BlogModel {
     public String date;
     public String imageurl;
     public String slug;
+    public String dpurl;
     public int id;
 
 }

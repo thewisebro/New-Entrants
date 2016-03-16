@@ -1,13 +1,13 @@
 package img.myapplication;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -119,21 +119,24 @@ public class Update extends ActionBarActivity {
             try {
                 HttpURLConnection connGet= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/update/").openConnection();
                 connGet.setRequestMethod("GET");
+                connGet.setRequestProperty("Cookie","CHANNELI_SESSID="+student.sess_id);
                 Object obj=connGet.getContent();
+                //String csrftoken=cookieStore.getCookies().get(0).getValue();
 
                 HttpURLConnection connPost= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/update/").openConnection();
                 connPost.setRequestMethod("POST");
                 connPost.setDoInput(true);
                 connPost.setDoOutput(true);
-                connPost.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies())+";CHANNELI_SESSID="+student.sess_id);
+                connPost.setRequestProperty("Cookie", "CHANNELI_SESSID=" + student.sess_id);
+                //connPost.setRequestProperty("Cookie", "CHANNELI_SESSID=" + student.sess_id + ";csrftoken=" + csrftoken);
                 getParams();
+                //params.put("csrfmiddlewaretoken",csrftoken);
                 Uri.Builder builder = new Uri.Builder();
                 for (Map.Entry<String, String> entry : params.entrySet()){
                     builder.appendQueryParameter(entry.getKey(),entry.getValue());
                 }
                 String query = builder.build().getEncodedQuery();
                 connPost.setUseCaches(false);
-
                 OutputStream os = connPost.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
@@ -147,8 +150,10 @@ public class Update extends ActionBarActivity {
                 String inputLine;
                 while ((inputLine = reader.readLine()) != null)
                     buffer.append(inputLine+"\n");
+                String result=buffer.toString();
                 JSONObject object=new JSONObject(buffer.toString());
                 return object.getString("status");
+                //return  null;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -167,12 +172,14 @@ public class Update extends ActionBarActivity {
                 db.deleteStudent();
                 db.addStudent(student);
                 db.close();
+                startActivity(new Intent(getApplicationContext(), NavigationStudent.class));
+                finish();
             }
         }
     }
     public void getParams(){
         params.put("email",email.getText().toString().trim());
-        params.put("state",(getResources().getStringArray(R.array.states))[state.getSelectedItemPosition()]);
+        params.put("state",(getResources().getStringArray(R.array.state_codes))[state.getSelectedItemPosition()]);
         params.put("fb_link",fblink.getText().toString().trim());
         params.put("phone_no",mobile.getText().toString().trim());
         params.put("hometown",town.getText().toString().trim());
