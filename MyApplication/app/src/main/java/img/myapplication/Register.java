@@ -94,14 +94,8 @@ public class Register extends AppCompatActivity {
         branch.setAdapter(branchList);
 
     }
- /*   public void pickImage(){
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }*/
     private void pickImage() {
-        final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
+        final CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select Picture");
@@ -111,7 +105,7 @@ public class Register extends AppCompatActivity {
                 if (items[item].equals("Take Photo")) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, REQUEST_CAMERA);
-                } else if (items[item].equals("Choose from Gallery")) {
+                } else if (items[item].equals("Choose from Library")) {
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
@@ -146,19 +140,6 @@ public class Register extends AppCompatActivity {
             ImageView imageView = (ImageView) findViewById(R.id.profile_img);
             imageView.setImageBitmap(bitmap);
         }
-
-/*        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
-            Uri uri = data.getData();
-
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                ImageView imageView = (ImageView) findViewById(R.id.profile_img);
-                imageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
     }
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);

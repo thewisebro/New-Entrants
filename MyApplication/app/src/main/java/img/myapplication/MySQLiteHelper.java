@@ -45,7 +45,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "state varchar,"+"statecode varchar,"+
                 "email varchar,"+
                 "mobile varchar,"+
-                "fb_link varchar,"+"sess_id varchar );";
+                "fb_link varchar,"+"sess_id varchar,"+"img blob );";
 
     private static String CREATE_ENTRANTS_TABLE=
             "create table if not exists entrants ( "+
@@ -60,7 +60,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "mobile varchar,"+
                     "fb_link varchar,"+
                     "phone_privacy int(1),"+
-                    "profile_privacy int(1),"+"sess_id varchar );";
+                    "profile_privacy int(1),"+"sess_id varchar,"+"img blob );";
 
     public static String TEMP_ENTRANT=
             "insert into entrants values ('1','singh','asd','asd','ee','roorkee','uk','a@a.a','123','singh@fb.com',1,1);";
@@ -90,10 +90,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS seniors");
-        db.execSQL("DROP TABLE IF EXISTS users");
         db.execSQL("DROP TABLE IF EXISTS students");
         db.execSQL("DROP TABLE IF EXISTS entrants");
-        db.execSQL("DROP TABLE IF EXISTS blogs");
         this.onCreate(db);
     }
 
@@ -119,7 +117,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             student.mobile= cursor.getString(11);
             student.fb_link=cursor.getString(12);
             student.sess_id=cursor.getString(13);
-
+            student.profile_img=cursor.getBlob(14);
         }
         return student;
     }
@@ -152,6 +150,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("mobile",student.mobile);
         values.put("fb_link", student.fb_link);
         values.put("sess_id",student.sess_id);
+        values.put("img",student.profile_img);
         db.insert(TABLE_STUDENTS,null,values);
         db.close();
     }
@@ -175,6 +174,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("phone_privacy",entrant.phone_privacy);
         values.put("profile_privacy",entrant.profile_privacy);
         values.put("sess_id",entrant.sess_id);
+        values.put("img",entrant.profile_img);
         db.insert(TABLE_ENTRANTS, null, values);
         db.close();
     }
@@ -226,6 +226,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             entrant.phone_privacy=cursor.getInt(12) >0;
             entrant.profile_privacy=cursor.getInt(13) > 0;
             entrant.sess_id=cursor.getString(14);
+            entrant.profile_img=cursor.getBlob(15);
         }
         return entrant;
     }
@@ -289,11 +290,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void deleteStudent(){
         SQLiteDatabase db=this.getWritableDatabase();
         db.execSQL("DELETE FROM students");
-        db.close();
-    }
-    public void deleteBlogs(){
-        SQLiteDatabase db=this.getWritableDatabase();
-        db.execSQL("DELETE FROM blogs");
         db.close();
     }
     public void deleteSeniors(){
