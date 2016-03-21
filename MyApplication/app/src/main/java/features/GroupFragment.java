@@ -164,6 +164,8 @@ public class GroupFragment extends Fragment {
                 model.id = Integer.parseInt(object.getString("id"));
                 model.group_username=object.getString("group_username");
                 model.slug=object.getString("slug");
+                if (object.has("thumbnail"))
+                    model.imageurl=object.getString("thumbnail");
                 items.add(model);
                 //cardArrayAdapter.notifyDataSetChanged();
                 lastId =model.id;
@@ -217,8 +219,7 @@ public class GroupFragment extends Fragment {
                 viewHolder.group= (TextView) row.findViewById(R.id.author);
                 viewHolder.date = (TextView) row.findViewById(R.id.date);
                 viewHolder.img = (ImageView) row.findViewById(R.id.card_img);
-                //viewHolder.model=new BlogModel();
-                viewHolder.blogUrl="";
+                viewHolder.dp= (ImageView) row.findViewById(R.id.blog_dp);
 
             } else {
                 viewHolder = (BlogCardViewHolder)row.getTag();
@@ -228,8 +229,9 @@ public class GroupFragment extends Fragment {
             viewHolder.shortInfo.setText(card.desc);
             viewHolder.group.setText(card.group);
             viewHolder.date.setText(card.date);
-            viewHolder.blogUrl=groupUrl+"/"+card.slug;
-            new ImageLoadTask(card.imageurl,viewHolder.img).execute();
+            new ImageLoadTask(card.dpurl,viewHolder.dp).execute();
+            if (!(card.imageurl.isEmpty()))
+                new ImageLoadTask(card.imageurl,viewHolder.img).execute();
             row.setTag(viewHolder);
             return row;
         }

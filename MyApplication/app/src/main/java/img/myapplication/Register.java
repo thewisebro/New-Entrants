@@ -1,12 +1,19 @@
 package img.myapplication;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -15,6 +22,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -23,6 +31,8 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -46,16 +56,32 @@ public class Register extends AppCompatActivity {
     public String csrftoken;
     public Spinner state;
     public Spinner branch;
+    public ImageView img;
     public int pos_state;
     public int pos_branch;
+    public int PICK_IMAGE_REQUEST=1;
+    public int REQUEST_CAMERA=1;
+    public int SELECT_FILE=2;
+    private String registerURL="http://192.168.121.187:8080/new_entrants/register/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        ActionBar bar=getSupportActionBar();
+        bar.setHomeButtonEnabled(true);
+        bar.setDisplayHomeAsUpEnabled(true);
         db=new MySQLiteHelper(this);
         entrant=new NewEntrantModel();
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.register_new);
+
+        img= (ImageView) findViewById(R.id.profile_img);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickImage();
+            }
+        });
 
         state= (Spinner) findViewById(R.id.new_state);
         ArrayAdapter<CharSequence> stateList=ArrayAdapter.createFromResource(this,R.array.states,android.R.layout.simple_spinner_item);
@@ -67,6 +93,72 @@ public class Register extends AppCompatActivity {
         branchList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         branch.setAdapter(branchList);
 
+    }
+ /*   public void pickImage(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }*/
+    private void pickImage() {
+        final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Picture");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Take Photo")) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                } else if (items[item].equals("Choose from Gallery")) {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_FILE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri uri = data.getData();
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                ImageView imageView = (ImageView) findViewById(R.id.profile_img);
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (requestCode == REQUEST_CAMERA && resultCode == RESULT_OK && data != null) {
+
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            ImageView imageView = (ImageView) findViewById(R.id.profile_img);
+            imageView.setImageBitmap(bitmap);
+        }
+
+/*        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri uri = data.getData();
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                ImageView imageView = (ImageView) findViewById(R.id.profile_img);
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
     }
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
@@ -94,9 +186,12 @@ public class Register extends AppCompatActivity {
             entrant.statecode=(getResources().getStringArray(R.array.state_codes))[pos_state];
             entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibilty)).isChecked();
             entrant.profile_privacy= ((CheckBox) findViewById(R.id.profile_visibilty)).isChecked();
-            if(validate()) {
+            Bitmap imgBitmap= ((BitmapDrawable)((ImageView) findViewById(R.id.profile_img)).getDrawable()).getBitmap();
+            ByteArrayOutputStream baos= new ByteArrayOutputStream();
+            imgBitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
+            entrant.profile_img=baos.toByteArray();
+            if(validate())
                 new RegisterTask().execute();
-            }
         }
 
         else {
@@ -169,13 +264,16 @@ public class Register extends AppCompatActivity {
         CookieStore cookieStore=cookieManager.getCookieStore();
         try {
             cookieStore.removeAll();
-            HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/register/").openConnection();
+            HttpURLConnection conn= (HttpURLConnection) new URL(registerURL).openConnection();
             conn.setRequestMethod("GET");
-            Object obj = conn.getContent();
+            conn.setReadTimeout(5000);
+            if (conn.getResponseCode()== HttpURLConnection.HTTP_OK) {
+                Object obj = conn.getContent();
+            }
 
             csrftoken=cookieStore.getCookies().get(0).getValue().toString();
 
-            urlConnectionPost= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/register/").openConnection();
+            urlConnectionPost= (HttpURLConnection) new URL(registerURL).openConnection();
             urlConnectionPost.setDoOutput(true);
             urlConnectionPost.setDoInput(true);
             urlConnectionPost.setRequestMethod("POST");
@@ -210,9 +308,6 @@ public class Register extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
-            urlConnectionPost.disconnect();
         }
         return result;
     }
@@ -258,6 +353,10 @@ public class Register extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        if (id==android.R.id.home) {
+            finish();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

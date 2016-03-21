@@ -175,13 +175,16 @@ public class BlogsFragment extends Fragment {
                 JSONObject object=jArray.getJSONObject(i);
                 BlogModel model= new BlogModel();
                 model.topic=object.getString("title");
-                model.imageurl=object.getString("dp_link");
+                model.dpurl=object.getString("dp_link");
                 model.group=object.getString("group");
                 model.desc=object.getString("description");
                 model.date=object.getString("date");
                 model.id = Integer.parseInt(object.getString("id"));
                 model.group_username=object.getString("group_username");
                 model.slug=object.getString("slug");
+                //Boolean flag=object.has("thumbnail");
+                if (object.has("thumbnail"))
+                    model.imageurl=object.getString("thumbnail");
                 items.add(model);
                 lastId =model.id;
                 blogsCount+=1;
@@ -234,6 +237,7 @@ public class BlogsFragment extends Fragment {
                 viewHolder.group= (TextView) row.findViewById(R.id.author);
                 viewHolder.date = (TextView) row.findViewById(R.id.date);
                 viewHolder.img = (ImageView) row.findViewById(R.id.card_img);
+                viewHolder.dp= (ImageView) row.findViewById(R.id.blog_dp);
 
             } else {
                 viewHolder = (BlogCardViewHolder)row.getTag();
@@ -244,8 +248,10 @@ public class BlogsFragment extends Fragment {
             viewHolder.group.setText(card.group);
             viewHolder.date.setText(card.date);
             viewHolder.blogUrl=BlogUrl+card.group_username+"/"+card.slug;
-            new ImageLoadTask(card.imageurl,viewHolder.img).execute();
-            viewHolder.img.setOnClickListener(new View.OnClickListener() {
+            new ImageLoadTask(card.dpurl,viewHolder.dp).execute();
+            if (card.imageurl!=null)
+                new ImageLoadTask(card.imageurl,viewHolder.img).execute();
+            viewHolder.dp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (!refreshing) {
