@@ -63,7 +63,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "profile_privacy int(1),"+"sess_id varchar,"+"img blob );";
 
     public static String TEMP_ENTRANT=
-            "insert into entrants values ('1','singh','asd','asd','ee','roorkee','uk','a@a.a','123','singh@fb.com',1,1);";
+            "insert into entrants values ('1','singh','asd','asd','ee','EE','roorkee','uk','UK','a@a.a','123','singh@fb.com',1,1,'asdasd',NULL);";
     public static String TEMP_STUDENT=
             "insert into students values ('ankush','14115019','14115019','asd','ee','2','roorkee','uk','a@a.a','123','spunk@facebook.com');";
     public static String TEMP_BLOG=
@@ -80,6 +80,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         //db.execSQL("DROP TABLE IF EXISTS entrants");
         db.execSQL(CREATE_STUDENTS_TABLE);
         db.execSQL(CREATE_ENTRANTS_TABLE);
+        //db.execSQL(TEMP_ENTRANT);
         db.execSQL(CREATE_SENIORS_TABLE);
     }
 
@@ -210,6 +211,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor=db.rawQuery("select * from entrants;", null);
         if (cursor.getCount()!=0) {
             cursor.moveToFirst();
+
 
             entrant.id = cursor.getString(0);
             entrant.name = cursor.getString(1);

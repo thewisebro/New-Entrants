@@ -182,7 +182,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/u_state"
-                    android:layout_weight="1" />
+                    android:entries="@array/states"
+                    android:drawSelectorOnTop="true"
+                    android:layout_weight="1"
+                    android:spinnerMode="dialog" />
             </TableRow>
         </TableLayout>
 

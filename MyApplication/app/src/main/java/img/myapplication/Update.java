@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -84,11 +83,7 @@ public class Update extends ActionBarActivity {
         mobile= (EditText) findViewById(R.id.u_mobile);
         email= (EditText) findViewById(R.id.u_email);
         fblink= (EditText) findViewById(R.id.u_fblink);
-
         state= (Spinner) findViewById(R.id.u_state);
-        ArrayAdapter<CharSequence> stateList=ArrayAdapter.createFromResource(this,R.array.states,android.R.layout.simple_spinner_item);
-        stateList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        state.setAdapter(stateList);
     }
     private void setInitial(){
             name.setText(student.name);
@@ -104,7 +99,7 @@ public class Update extends ActionBarActivity {
         if (!state.isEmpty()){
             String[] list= getResources().getStringArray(R.array.state_codes);
             for (int i=1;i<list.length;i++)
-                if (list[i].equals(state.toCharArray()))
+                if (list[i].equals(state))
                     return i;
         }
         return 0;

@@ -39,7 +39,8 @@ public class Navigation extends ActionBarActivity
     private int mCurrentPosition;
     private CharSequence mTitle;
     private MySQLiteHelper db;
-    public Map<String,String> userParams;
+    public Map<String,String> userParams=new HashMap<String,String>();
+    public Map<String,Object> userInfo=new HashMap<String, Object>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +48,11 @@ public class Navigation extends ActionBarActivity
         setContentView(R.layout.activity_navigation);
         db=new MySQLiteHelper(this);
         entrant=db.getEntrant();
-        userParams=new HashMap<String,String>();
+        userInfo.put("name",entrant.name);
+        userInfo.put("img",entrant.profile_img);
+        userInfo.put("state",entrant.state);
+        userInfo.put("branchname",entrant.branchname);
+        userInfo.put("branchcode",entrant.branchcode);
         userParams.put("state", entrant.statecode);
         userParams.put("branch", entrant.branchcode);
         userParams.put("sess_id",entrant.sess_id);
@@ -55,7 +60,7 @@ public class Navigation extends ActionBarActivity
         fragmentCount=0;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mNavigationDrawerFragment.set(1);
+        mNavigationDrawerFragment.set(1,userInfo);
 
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
         if(!isConnected()){
@@ -155,7 +160,7 @@ public class Navigation extends ActionBarActivity
     }
     public void getPageTitle(){
 
-        String[] mTitleArray = getResources().getStringArray(R.array.tabs);
+        String[] mTitleArray = getResources().getStringArray(R.array.entrantstabs);
         mTitle=mTitleArray[mCurrentPosition];
     }
 
@@ -188,6 +193,5 @@ public class Navigation extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
-
 
 }

@@ -19,7 +19,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -54,8 +53,6 @@ public class Register extends AppCompatActivity {
     public CookieManager cookieManager;
     public Map<String,String > params;
     public String csrftoken;
-    public Spinner state;
-    public Spinner branch;
     public ImageView img;
     public int pos_state;
     public int pos_branch;
@@ -82,16 +79,6 @@ public class Register extends AppCompatActivity {
                 pickImage();
             }
         });
-
-        state= (Spinner) findViewById(R.id.new_state);
-        ArrayAdapter<CharSequence> stateList=ArrayAdapter.createFromResource(this,R.array.states,android.R.layout.simple_spinner_item);
-        stateList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        state.setAdapter(stateList);
-
-        branch= (Spinner) findViewById(R.id.new_branch);
-        ArrayAdapter<CharSequence> branchList=ArrayAdapter.createFromResource(this,R.array.branches,android.R.layout.simple_spinner_item);
-        branchList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        branch.setAdapter(branchList);
 
     }
     private void pickImage() {
@@ -152,8 +139,8 @@ public class Register extends AppCompatActivity {
 
     public void register(View view) throws IllegalAccessException {
         if (isConnected()){
-            pos_branch=branch.getSelectedItemPosition();
-            pos_state=state.getSelectedItemPosition();
+            pos_branch=((Spinner) findViewById(R.id.new_branch)).getSelectedItemPosition();
+            pos_state=((Spinner) findViewById(R.id.new_state)).getSelectedItemPosition();
             entrant.name= ((EditText) findViewById(R.id.new_name)).getText().toString().trim();
             entrant.username= ((EditText) findViewById(R.id.new_username)).getText().toString().trim();
             entrant.password= ((EditText) findViewById(R.id.new_password)).getText().toString().trim();
@@ -161,9 +148,9 @@ public class Register extends AppCompatActivity {
             entrant.email= ((EditText) findViewById(R.id.new_email)).getText().toString().trim();
             entrant.mobile= ((EditText) findViewById(R.id.new_mobile)).getText().toString().trim();
             entrant.fb_link= ((EditText) findViewById(R.id.new_fblink)).getText().toString().trim();
-            entrant.branchname=branch.getSelectedItem().toString().trim();
+            entrant.branchname=((Spinner) findViewById(R.id.new_branch)).getSelectedItem().toString().trim();
             entrant.branchcode=(getResources().getStringArray(R.array.branch_codes))[pos_branch];
-            entrant.state= state.getSelectedItem().toString().trim();
+            entrant.state= ((Spinner) findViewById(R.id.new_branch)).getSelectedItem().toString().trim();
             entrant.statecode=(getResources().getStringArray(R.array.state_codes))[pos_state];
             entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibilty)).isChecked();
             entrant.profile_privacy= ((CheckBox) findViewById(R.id.profile_visibilty)).isChecked();

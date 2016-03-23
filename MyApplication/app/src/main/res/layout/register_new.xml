@@ -123,7 +123,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/new_branch"
-                        android:layout_weight="1" />
+                        android:drawSelectorOnTop="true"
+                        android:entries="@array/branches"
+                        android:layout_weight="1"
+                        android:spinnerMode="dialog" />
                 </TableRow>
 
                 <TableRow
@@ -142,7 +145,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/new_state"
-                        android:layout_weight="1" />
+                        android:entries="@array/states"
+                        android:drawSelectorOnTop="true"
+                        android:layout_weight="1"
+                        android:spinnerMode="dialog" />
                 </TableRow>
 
                 <TableRow

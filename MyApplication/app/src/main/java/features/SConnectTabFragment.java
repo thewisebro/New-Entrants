@@ -22,7 +22,7 @@ public class SConnectTabFragment extends Fragment {
 
     private FragmentTabHost mTabHost;
 
-private Map<String,String> userParams;
+    private Map<String,String> userParams;
     public SConnectTabFragment(Map<String,String> params){
         this.userParams=params;
     }

@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -25,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookieStore;
 import java.net.HttpURLConnection;
@@ -40,7 +38,6 @@ import models.StudentModel;
 
 @SuppressLint("ValidFragment")
 public class ProfileFragment extends Fragment {
-
     private StudentModel student;
     private NewEntrantModel entrant;
     private String category;
@@ -56,7 +53,7 @@ public class ProfileFragment extends Fragment {
     public EditText fblink;
     public CheckBox cb_contact;
     public CheckBox cb_profile;
-    private Object user;
+    private Map<String,String> params;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
 
@@ -68,77 +65,43 @@ public class ProfileFragment extends Fragment {
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String, String> params = null;
-                getValues(params);
-                if (validate(params)){
-                    new UpdateTask(params).execute();
+                getValues();
+                if (validate()){
+                    new UpdateTask().execute();
                 }
             }
         });
         return view;
     }
     public ProfileFragment(Object user,String category){
-        this.user=user;
         if (category.equals("entrant"))
             entrant= (NewEntrantModel) user;
         else
             student= (StudentModel) user;
         this.category=category;
     }
-    private void getValues(Map params){
+    private void getValues(){
         params=new HashMap<String,String>();
         params.put("email",email.getText().toString().trim());
-        if (branch.getSelectedItem().toString().equals("Select")) {
-            if (user instanceof NewEntrantModel)
-            {
-                params.put("branchname",((NewEntrantModel) user).branchname);
-                params.put("branch",((NewEntrantModel) user).branchcode);
-            }
-            if (user instanceof StudentModel)
-            {
-                params.put("branchname",((StudentModel) user).branchname);
-                params.put("branch",((StudentModel) user).branchcode);
-            }
-        }
-        else {
-            params.put("branchname",branch.getSelectedItem().toString());
-            params.put("branch", (getResources().getStringArray(R.array.branch_codes))[branch.getSelectedItemPosition()]);
-        }
-        if (state.getSelectedItem().toString().equals("Select")) {
-            if (user instanceof NewEntrantModel)
-            {
-                params.put("statename",((NewEntrantModel) user).state);
-                params.put("state",((NewEntrantModel) user).statecode);
-            }
-            if (user instanceof StudentModel)
-            {
-                params.put("statename",((StudentModel) user).state);
-                params.put("state",((StudentModel) user).statecode);
-            }
-        }
-        else {
-            params.put("statename",state.getSelectedItem().toString());
-            params.put("state", (getResources().getStringArray(R.array.state_codes))[state.getSelectedItemPosition()]);
-        }
+        params.put("branchname",branch.getSelectedItem().toString());
+        params.put("branch", (getResources().getStringArray(R.array.branch_codes))[branch.getSelectedItemPosition()]);
+
+        params.put("statename",state.getSelectedItem().toString());
+        params.put("state", (getResources().getStringArray(R.array.state_codes))[state.getSelectedItemPosition()]);
+
         params.put("hometown",town.getText().toString().trim());
         params.put("fb_link",fblink.getText().toString().trim());
         params.put("phone_no",mobile.getText().toString().trim());
-        if (cb_profile.isChecked())
-            params.put("profile_privacy","True");
-        if (cb_contact.isChecked())
-            params.put("phone_privacy","True");
+        if (category.equals("entrants")){
+            if (cb_profile.isChecked())
+                params.put("profile_privacy","True");
+            if (cb_contact.isChecked())
+                params.put("phone_privacy","True");
+        }
     }
     private void setViews(View v){
-        state= (Spinner) v.findViewById(R.id.state);
-        ArrayAdapter<CharSequence> stateList=ArrayAdapter.createFromResource(getContext(),R.array.states,android.R.layout.simple_spinner_item);
-        stateList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        state.setAdapter(stateList);
-
-        branch= (Spinner) v.findViewById(R.id.branch);
-        ArrayAdapter<CharSequence> branchList=ArrayAdapter.createFromResource(getContext(),R.array.branches,android.R.layout.simple_spinner_item);
-        branchList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        branch.setAdapter(branchList);
-
+        state= (Spinner) v.findViewById(R.id.list_states);
+        branch= (Spinner) v.findViewById(R.id.list_branches);
         name= (EditText) v.findViewById(R.id.name);
         username= (EditText) v.findViewById(R.id.username);
         password= (EditText) v.findViewById(R.id.password);
@@ -151,12 +114,12 @@ public class ProfileFragment extends Fragment {
         cb_profile= (CheckBox) v.findViewById(R.id.ed_profile_visibilty);
     }
     private void setInitial(View v){
-        ((ViewGroup) password.getParent()).removeView(password);
-        ((ViewGroup) re_password.getParent()).removeView(re_password);
+        v.findViewById(R.id.password_row).setVisibility(View.GONE);
+        v.findViewById(R.id.re_row).setVisibility(View.GONE);
 
         if (category.equals("student")){
-            ((ViewGroup) cb_profile.getParent()).removeView(cb_profile);
-            ((ViewGroup) cb_contact.getParent()).removeView(cb_contact);
+            cb_contact.setVisibility(View.GONE);
+            cb_profile.setVisibility(View.GONE);
 
             name.setText(student.name);
             username.setText(student.username);
@@ -166,8 +129,8 @@ public class ProfileFragment extends Fragment {
             email.setText(student.email);
             fblink.setText(student.fb_link);
             town.setText(student.town);
-            state.setPrompt("Keep Select option to keep your original selection");
-            branch.setPrompt("Keep Select option to keep your original selection");
+            state.setSelection(getSpinnerPos(student.statecode, getResources().getStringArray(R.array.state_codes)));
+            branch.setSelection(getSpinnerPos(student.branchcode,getResources().getStringArray(R.array.branch_codes)));
         }
         else {
             name.setText(entrant.name);
@@ -178,33 +141,59 @@ public class ProfileFragment extends Fragment {
             email.setText(entrant.email);
             fblink.setText(entrant.fb_link);
             town.setText(entrant.town);
-            state.setPrompt("Keep Select option to keep your original selection");
-            branch.setPrompt("Keep Select option to keep your original selection");
             cb_contact.setChecked(entrant.phone_privacy);
             cb_profile.setChecked(entrant.profile_privacy);
+            state.setSelection(getSpinnerPos(entrant.statecode, getResources().getStringArray(R.array.state_codes)));
+            branch.setSelection(getSpinnerPos(entrant.branchcode, getResources().getStringArray(R.array.branch_codes)));
         }
     }
-    public boolean validate(Map params){
+    private int getSpinnerPos(String item,String[] list){
+        for (int i=1;i<list.length;i++)
+             if (list[i].equals(item))
+                 return i;
+
+        return 0;
+    }
+    public boolean validate(){
 
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         String mobilePattern="\\d+";
+        String idPattern="\\d+";
         String namePattern="[a-zA-Z ]+";
+        String townPattern="^$|^[a-zA-Z ]+$";
+        String fbPattern="^$|^[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+$";
         boolean flag=true;
-        if (!(params.get("email").toString()).matches(emailPattern)){
+        if (!((params.get("email")).matches(emailPattern))){
             Toast.makeText(getContext(), "Invalid valid email address", Toast.LENGTH_SHORT).show();
             flag=false;
         }
-        if(!(params.get("phone_no").toString()).matches(mobilePattern)){
+        if(!((params.get("phone_no")).matches(mobilePattern))){
             Toast.makeText(getContext(),"Invalid Mobile Number", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+  /*      if(!((entrant.password).equals(((EditText) findViewById(R.id.re_password)).getText().toString()))){
+            Toast.makeText(getApplicationContext(),"Passwords do not match", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }*/
+        if(!((params.get("town")).matches(townPattern))){
+            Toast.makeText(getContext(),"Enter a proper City name", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        if (!((params.get("fblink")).matches(fbPattern))){
+            Toast.makeText(getContext(), "Invalid valid Facebook link", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        if (state.getSelectedItemPosition()==0){
+            Toast.makeText(getContext(), "Select a State", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        if (branch.getSelectedItemPosition()==0){
+            Toast.makeText(getContext(), "Select a State", Toast.LENGTH_SHORT).show();
             flag=false;
         }
         return flag;
     }
     private class UpdateTask extends AsyncTask<String, Void, String>{
-        private Map<String,String> params;
-        public UpdateTask(Map params){
-            this.params=params;
-        }
 
         @Override
         protected String doInBackground(String... args) {
@@ -252,9 +241,12 @@ public class ProfileFragment extends Fragment {
         protected void onPostExecute(String result){
             if (result.equals("success")){
                 if (category.equals("entrant"))
-                    entrant.branchname=params.get("");
-                else
-                    ;
+                {
+
+                }
+                else{
+
+                }
             }
         }
     }

@@ -97,7 +97,7 @@ public class SConnectPendingFragment extends Fragment {
 
                 HttpURLConnection conn=(HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/pending/").openConnection();
                 conn.setRequestMethod("GET");
-                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+params.get("sess_id"));
+                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+params.get("sess_id").toString());
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
                 String line = "";

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -23,10 +24,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import models.DrawerItemModel;
 
@@ -40,6 +43,7 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
+    private RelativeLayout mDrawerProfileView;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
 
@@ -72,9 +76,10 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        LinearLayout mDrawerLayout=(LinearLayout) inflater.inflate(
-                R.layout.fragment_navigation_drawer, container, false);
-        mDrawerListView = (ListView) mDrawerLayout.findViewById(R.id.drawer_list);
+        LinearLayout DrawerLayout=(LinearLayout) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        mDrawerProfileView= (RelativeLayout) DrawerLayout.findViewById(R.id.profile_view);
+        mDrawerListView = (ListView) DrawerLayout.findViewById(R.id.drawer_list);
+        //mDrawerListView= (ListView) inflater.inflate(R.layout.navigation_drawer,container,false);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -83,9 +88,20 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        return mDrawerListView;
+        return DrawerLayout;
     }
-    public void set(int type){
+    public void set(int type, Map<String,Object> params){
+
+        //Profile
+        byte[] imgByte= (byte[]) params.get("img");
+        if (imgByte!=null)
+            ((ImageView) mDrawerProfileView.findViewById(R.id.profile_picture))
+                    .setImageBitmap(BitmapFactory.decodeByteArray(imgByte,0,imgByte.length));
+        ((TextView)mDrawerProfileView.findViewById(R.id.name)).setText(params.get("name").toString());
+        ((TextView)mDrawerProfileView.findViewById(R.id.info))
+                .setText(params.get("state").toString() + "\n" + params.get("branchname").toString()+","+params.get("branchcode").toString());
+
+        //List items
         DrawerItemAdapter adapter=new DrawerItemAdapter(getContext(),R.layout.drawer_item);
         ArrayList<DrawerItemModel> arrayList=new ArrayList<DrawerItemModel>();
         String[] tabs=null;
@@ -97,8 +113,9 @@ public class NavigationDrawerFragment extends Fragment {
         if(type==1){
             tabs=getResources().getStringArray(R.array.entrantstabs);
         }
-        DrawerItemModel model=new DrawerItemModel();
+
         for (int i=0;i<4;i++){
+            DrawerItemModel model=new DrawerItemModel();
             model.drawable=drawables[i];
             model.string=tabs[i];
             adapter.add(model);

@@ -34,7 +34,8 @@ public class NavigationStudent extends ActionBarActivity
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
     private CharSequence mTitle;
-    private Map<String,String> userParams;
+    private Map<String,String> userParams=new HashMap<String,String>();
+    private Map<String,Object> userInfo=new HashMap<String, Object>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +44,19 @@ public class NavigationStudent extends ActionBarActivity
         setContentView(R.layout.activity_navigation);
         db=new MySQLiteHelper(this);
         student=db.getStudent();
-        userParams=new HashMap<String,String>();
-        userParams.put("sess_id",student.sess_id);
+        userParams.put("sess_id", student.sess_id);
         userParams.put("category", "student");
+        userInfo.put("name",student.name);
+        userInfo.put("img",student.profile_img);
+        userInfo.put("state",student.state);
+        userInfo.put("branchname",student.branchname);
+        userInfo.put("branchcode",student.branchcode);
 
         mCurrentPosition=-1;
         fragmentCount=0;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mNavigationDrawerFragment.set(2);
+        mNavigationDrawerFragment.set(2,userInfo);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
 

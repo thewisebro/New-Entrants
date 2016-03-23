@@ -2,7 +2,7 @@ package features;
 
 
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +19,7 @@ public class SConnectRequestFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_sconnect_request, container, false);
         params= (Map<String, String>) getArguments().getSerializable("userParams");
+
 
         return view;
     }
