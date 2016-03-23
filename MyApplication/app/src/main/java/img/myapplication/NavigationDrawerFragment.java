@@ -1,6 +1,7 @@
 package img.myapplication;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -19,7 +20,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import models.DrawerItemModel;
 
 public class NavigationDrawerFragment extends Fragment {
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
@@ -63,8 +72,9 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
+        LinearLayout mDrawerLayout=(LinearLayout) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
+        mDrawerListView = (ListView) mDrawerLayout.findViewById(R.id.drawer_list);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -76,23 +86,85 @@ public class NavigationDrawerFragment extends Fragment {
         return mDrawerListView;
     }
     public void set(int type){
+        DrawerItemAdapter adapter=new DrawerItemAdapter(getContext(),R.layout.drawer_item);
+        ArrayList<DrawerItemModel> arrayList=new ArrayList<DrawerItemModel>();
         String[] tabs=null;
+        int[] drawables={android.R.drawable.sym_action_chat,android.R.drawable.ic_menu_share,
+                android.R.drawable.ic_menu_preferences,android.R.drawable.ic_lock_idle_lock};
         if(type==2) {
             tabs = getResources().getStringArray(R.array.studenttabs);
         }
         if(type==1){
             tabs=getResources().getStringArray(R.array.entrantstabs);
         }
-
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+        DrawerItemModel model=new DrawerItemModel();
+        for (int i=0;i<4;i++){
+            model.drawable=drawables[i];
+            model.string=tabs[i];
+            adapter.add(model);
+        }
+        /*mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 tabs
-        ));
+        ));*/
+        mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
     }
 
+    public class DrawerItemAdapter extends ArrayAdapter<DrawerItemModel> {
+
+        private List<DrawerItemModel> list = new ArrayList<DrawerItemModel>();
+
+        public DrawerItemAdapter(Context context, int textViewResourceId) {
+            super(context, textViewResourceId);
+        }
+
+        @Override
+        public void add(DrawerItemModel object) {
+            list.add(object);
+            super.add(object);
+        }
+
+        @Override
+        public int getCount() {
+            return this.list.size();
+        }
+
+        @Override
+        public DrawerItemModel getItem(int index) {
+            return this.list.get(index);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View row = convertView;
+            ViewHolder viewHolder;
+            if (row == null) {
+                LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                row = inflater.inflate(R.layout.drawer_item, parent, false);
+                viewHolder = new ViewHolder();
+                viewHolder.drawerIcon= (ImageView) row.findViewById(R.id.drawer_icon);
+                viewHolder.drawerItem= (TextView) row.findViewById(R.id.drawer_list_text);
+
+            } else {
+                viewHolder = (ViewHolder)row.getTag();
+            }
+            final DrawerItemModel model = getItem(position);
+            viewHolder.drawerIcon.setImageDrawable(getResources().getDrawable(model.drawable));
+            viewHolder.drawerItem.setText(model.string);
+
+            row.setTag(viewHolder);
+            return row;
+        }
+
+
+        private class ViewHolder {
+            public ImageView drawerIcon;
+            public TextView drawerItem;
+        }
+    }
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }

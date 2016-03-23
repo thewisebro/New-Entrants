@@ -265,7 +265,7 @@ public class BlogsFragment extends Fragment {
         }
 
 
-}
+    }
     public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
         private String url;
