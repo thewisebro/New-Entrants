@@ -104,16 +104,15 @@ public class Navigation extends ActionBarActivity
             switch(position) {
                 case -1: fragment = new OpeningFragment();
                     break;
-                case 1:fragment = new BlogsFragment();
+                case 0:fragment = new BlogsFragment();
                     break;
-                case 2:fragment = new PConnectFragment(entrant.sess_id);
+                case 1:fragment = new SConnectTabFragment(userParams);
                     break;
-                case 3:fragment = new SConnectTabFragment(userParams);
+                case 3: logout();
                     break;
-
-                case 4: logout();
+                case 2: fragment=new ProfileFragment(entrant,entrant.category);
                     break;
-                default: fragment=new ProfileFragment(entrant,entrant.category);
+                default:fragment = new PConnectFragment(entrant.sess_id);
                     break;
             }
 

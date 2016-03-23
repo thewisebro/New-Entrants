@@ -106,9 +106,9 @@ public class NavigationStudent extends ActionBarActivity
             switch(position) {
                 case -1: fragment = new OpeningFragment();
                     break;
-                case 1:fragment = new BlogsFragment();
+                case 0:fragment = new BlogsFragment();
                     break;
-                case 2: fragment=new JuniorConnect(userParams.get("sess_id"));
+                case 1: fragment=new JuniorConnect(userParams.get("sess_id"));
                     break;
                 case 3: logout();
                     break;
