@@ -1,5 +1,6 @@
 package models;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -10,5 +11,9 @@ public class JuniorCardViewHolder {
     public TextView state;
     public TextView town;
     public TextView branch;
-    public JuniorModel model;
+    public TextView contact;
+    public TextView email;
+    public TextView fblink;
+    public ImageView dp;
+    public String username;
 }

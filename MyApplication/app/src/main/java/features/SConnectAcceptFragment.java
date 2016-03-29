@@ -1,11 +1,15 @@
 package features;
 
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -116,6 +122,10 @@ public class SConnectAcceptFragment extends Fragment {
                     model.town=object.getString("hometown");
                     model.state=(new JSONObject(object.getString("state"))).getString("name");
                     model.branch=(new JSONObject(object.getString("branch"))).getString("name");
+                    model.fblink=object.getString("fb_link");
+                    model.contact=object.getString("contact");
+                    model.email=object.getString("email");
+                    model.dp_link=object.getString("dp_link");
                     //model.username=object.getString("username");
                     list.add(model);
 
@@ -179,7 +189,8 @@ public class SConnectAcceptFragment extends Fragment {
                 viewHolder.state= (TextView) row.findViewById(R.id.s_state);
                 viewHolder.contact= (TextView) row.findViewById(R.id.s_contact);
                 viewHolder.email= (TextView) row.findViewById(R.id.s_email);
-                viewHolder.fblink= (TextView) row.findViewById(R.id.fblink);
+                viewHolder.fblink= (TextView) row.findViewById(R.id.s_fblink);
+                viewHolder.dp= (ImageView) row.findViewById(R.id.s_dp);
             } else {
                 viewHolder = (SeniorCardViewHolder)row.getTag();
             }
@@ -193,6 +204,10 @@ public class SConnectAcceptFragment extends Fragment {
                 viewHolder.town.setText(card.town);
             viewHolder.email.setText(card.email);
             viewHolder.contact.setText(card.contact);
+            if (card.dp_link.isEmpty())
+                viewHolder.dp.setVisibility(View.GONE);
+            else
+                new ImageLoadTask(card.dp_link,viewHolder.dp).execute();
             if (card.fblink.isEmpty())
                 viewHolder.fblink.setVisibility(View.GONE);
             else
@@ -212,5 +227,40 @@ public class SConnectAcceptFragment extends Fragment {
             });
             return row;
         }
+    }
+    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
+
+        private String url;
+        private ImageView imageView;
+
+        public ImageLoadTask(String url, ImageView imageView) {
+            this.url = url;
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            try {
+                URL urlConnection = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) urlConnection
+                        .openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                return myBitmap;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            super.onPostExecute(result);
+            imageView.setImageBitmap(result);
+        }
+
     }
 }

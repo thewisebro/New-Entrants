@@ -1,6 +1,7 @@
 package features;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,9 +13,7 @@ import img.myapplication.R;
 import models.StudentModel;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+@SuppressLint("ValidFragment")
 public class StudentProfileFragment extends Fragment {
 
 

@@ -1,5 +1,6 @@
 package models;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -13,4 +14,5 @@ public class SeniorCardViewHolder {
     public TextView contact;
     public TextView email;
     public TextView fblink;
+    public ImageView dp;
 }

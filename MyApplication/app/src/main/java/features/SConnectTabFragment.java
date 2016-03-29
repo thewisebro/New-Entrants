@@ -41,7 +41,7 @@ public class SConnectTabFragment extends Fragment {
                 SConnectAcceptFragment.class, arg);
         mTabHost.addTab(mTabHost.newTabSpec("request").setIndicator("Connect"),
                 SConnectRequestFragment.class, arg);
-        mTabHost.addTab(mTabHost.newTabSpec("pending").setIndicator("Pending"),
+        mTabHost.addTab(mTabHost.newTabSpec("pending").setIndicator("Requests"),
                 SConnectPendingFragment.class, arg);
 
         return view;

@@ -102,7 +102,7 @@ public class JuniorConnectPending extends Fragment {
         JSONObject jObject= null;
         try {
             jObject = new JSONObject(result);
-            JSONArray jArray=jObject.getJSONArray("students");
+            JSONArray jArray=jObject.getJSONArray("requests");
             int len=jArray.length();
 
             for(int i=0; i<len;i++){
@@ -166,10 +166,10 @@ public class JuniorConnectPending extends Fragment {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 row = inflater.inflate(R.layout.list_junior_card, parent, false);
                 viewHolder = new JuniorCardViewHolder();
-                viewHolder.name = (TextView) row.findViewById(R.id.jname);
-                viewHolder.town = (TextView) row.findViewById(R.id.jtown);
-                viewHolder.state = (TextView) row.findViewById(R.id.jstate);
-                viewHolder.branch= (TextView) row.findViewById(R.id.jbranch);
+                viewHolder.name = (TextView) row.findViewById(R.id.j_name);
+                viewHolder.town = (TextView) row.findViewById(R.id.j_town);
+                viewHolder.state = (TextView) row.findViewById(R.id.j_state);
+                viewHolder.branch= (TextView) row.findViewById(R.id.j_branch);
             } else {
                 viewHolder = (JuniorCardViewHolder)row.getTag();
             }
@@ -178,13 +178,13 @@ public class JuniorConnectPending extends Fragment {
             viewHolder.town.setText(card.town);
             viewHolder.state.setText(card.state);
             viewHolder.branch.setText(card.branch);
-            viewHolder.model=card;
+            viewHolder.username=card.username;
 
             row.setTag(viewHolder);
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new AcceptRequestTask().execute(((JuniorCardViewHolder)v.getTag()).model.username);
+                    new AcceptRequestTask().execute(((JuniorCardViewHolder)v.getTag()).username);
                 }
             });
 
@@ -197,15 +197,6 @@ public class JuniorConnectPending extends Fragment {
         protected String doInBackground(String... args) {
 
             try {
-/*                CookieManager manager= new CookieManager(null, CookiePolicy.ACCEPT_ALL);
-                CookieHandler.setDefault(manager);
-                CookieStore store=manager.getCookieStore();
-                store.removeAll();
-                HttpURLConnection getconn = (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/accept/").openConnection();
-                getconn.setRequestMethod("GET");
-                getconn.setRequestProperty("Cookie", "CHANNELI_SESSID=" + sess_id);
-
-                Object obj=getconn.getContent();*/
 
                 HttpURLConnection conn = (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/accept/").openConnection();
                 conn.setRequestMethod("POST");

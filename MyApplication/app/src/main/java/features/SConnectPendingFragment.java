@@ -2,27 +2,29 @@ package features;
 
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,8 +32,8 @@ import java.util.List;
 import java.util.Map;
 
 import img.myapplication.R;
-import models.SeniorCardViewHolder;
-import models.SeniorModel;
+import models.RequestCardViewHolder;
+import models.RequestModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +42,9 @@ public class SConnectPendingFragment extends Fragment {
 
     private Map<String,String> params;
     private SeniorCardArrayAdapter cardArrayAdapter;
-    private List<SeniorModel> list=new ArrayList<SeniorModel>();
+    private List<RequestModel> list=new ArrayList<RequestModel>();
+    public String request_url="http://192.168.121.187:8080/new_entrants/pending/";
+    public String extend_url="http://192.168.121.187:8080/new_entrants/extend/";
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         params= (Map<String, String>) getArguments().getSerializable("userParams");
@@ -49,10 +53,10 @@ public class SConnectPendingFragment extends Fragment {
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
 
-        cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_senior_card);
+        cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_request_card);
 
         if (isConnected())
-            new getSeniorsTask().execute();
+            new getRequestsTask().execute();
 
         listView.setAdapter(cardArrayAdapter);
 
@@ -71,17 +75,18 @@ public class SConnectPendingFragment extends Fragment {
         JSONObject jObject= null;
         try {
             jObject = new JSONObject(result);
-            JSONArray jArray=jObject.getJSONArray("students");
+            JSONArray jArray=jObject.getJSONArray("requests");
             int len=jArray.length();
 
             for(int i=0; i<len;i++){
 
                 JSONObject object=jArray.getJSONObject(i);
-                SeniorModel model= new SeniorModel();
-                model.name=object.getString("name");
-                model.town=object.getString("hometown");
-                model.state=(new JSONObject(object.getString("state"))).getString("name");
-                model.branch=(new JSONObject(object.getString("branch"))).getString("name");
+                RequestModel model=new RequestModel();
+                model.value=object.getString("value");
+                model.accepted=object.getInt("accepted");
+                model.id=object.getInt("id");
+                model.param=object.getString("param");
+                model.more=object.getBoolean("more");
                 list.add(model);
 
             }
@@ -90,12 +95,11 @@ public class SConnectPendingFragment extends Fragment {
         }
 
     }
-    private class getSeniorsTask extends AsyncTask<String, Void, String> {
+    private class getRequestsTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... args) {
             try {
-
-                HttpURLConnection conn=(HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/pending/").openConnection();
+                HttpURLConnection conn=(HttpURLConnection) new URL(request_url).openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Cookie","CHANNELI_SESSID="+params.get("sess_id").toString());
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
@@ -121,12 +125,11 @@ public class SConnectPendingFragment extends Fragment {
     }
 
 
-    public class SeniorCardArrayAdapter  extends ArrayAdapter<SeniorModel> {
+    public class SeniorCardArrayAdapter  extends ArrayAdapter<RequestModel> {
 
-        private List<SeniorModel> cardList = new ArrayList<SeniorModel>();
+        private List<RequestModel> cardList = new ArrayList<RequestModel>();
 
         public void refresh(){
-            this.cardList.clear();
             this.cardList.addAll(list);
             list.clear();
             notifyDataSetChanged();
@@ -136,7 +139,7 @@ public class SConnectPendingFragment extends Fragment {
         }
 
         @Override
-        public void add(SeniorModel object) {
+        public void add(RequestModel object) {
             cardList.add(object);
             super.add(object);
         }
@@ -147,36 +150,80 @@ public class SConnectPendingFragment extends Fragment {
         }
 
         @Override
-        public SeniorModel getItem(int index) {
+        public RequestModel getItem(int index) {
             return this.cardList.get(index);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = convertView;
-            SeniorCardViewHolder viewHolder;
+            RequestCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.list_senior_card, parent, false);
-                viewHolder = new SeniorCardViewHolder();
-                viewHolder.name = (TextView) row.findViewById(R.id.s_name);
-                viewHolder.branch = (TextView) row.findViewById(R.id.s_branch);
-                viewHolder.town= (TextView) row.findViewById(R.id.s_town);
-                viewHolder.state= (TextView) row.findViewById(R.id.s_state);
+                row = inflater.inflate(R.layout.list_request_card, parent, false);
+                viewHolder = new RequestCardViewHolder();
+                viewHolder.param= (TextView) row.findViewById(R.id.param);
+                viewHolder.accepted= (TextView) row.findViewById(R.id.accepted);
+                viewHolder.value= (TextView) row.findViewById(R.id.value);
             } else {
-                viewHolder = (SeniorCardViewHolder)row.getTag();
+                viewHolder = (RequestCardViewHolder)row.getTag();
             }
-            SeniorModel card = getItem(position);
-            viewHolder.name.setText(card.name);
-            viewHolder.branch.setText(card.branch);
-            viewHolder.state.setText(card.state);
-            viewHolder.town.setText(card.town);
-
+            RequestModel card = getItem(position);
+            viewHolder.param.setText(card.param);
+            viewHolder.accepted.setText(String.valueOf(card.accepted));
+            viewHolder.value.setText(card.value);
+            if (card.more){
+                TextView more= (TextView) row.findViewById(R.id.more);
+                more.setVisibility(View.VISIBLE);
+                more.setTag(card.id);
+                more.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new SendMoreRequests().execute(getTag().toString());
+                    }
+                });
+            }
+            row.setTag(viewHolder);
             return row;
         }
 
-        public Bitmap decodeToBitmap(byte[] decodedByte) {
-            return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+    private class SendMoreRequests extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... args) {
+            try {
+                HttpURLConnection conn = (HttpURLConnection) new URL(extend_url).openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Cookie", "CHANNELI_SESSID=" + params.get("sess_id").toString());
+
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write("id=" + args[0]);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int responseCode = conn.getResponseCode();
+
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null)
+                    sb.append(line + '\n');
+                getCards(sb.toString());
+                return "success";
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String result){
+            if (result.equals("success")){
+                Toast.makeText(getContext(), "Request Sent Successfully!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
