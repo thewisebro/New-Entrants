@@ -99,7 +99,7 @@ public class NavigationDrawerFragment extends Fragment {
                     .setImageBitmap(BitmapFactory.decodeByteArray(imgByte,0,imgByte.length));
         ((TextView)mDrawerProfileView.findViewById(R.id.name)).setText(params.get("name").toString());
         ((TextView)mDrawerProfileView.findViewById(R.id.info))
-                .setText(params.get("state").toString() + "\n" + params.get("branchname").toString()+","+params.get("branchcode").toString());
+                .setText(params.get("state").toString() + "\n" + params.get("branchname").toString()+" "+params.get("branchcode").toString());
 
         //List items
         DrawerItemAdapter adapter=new DrawerItemAdapter(getContext(),R.layout.drawer_item);

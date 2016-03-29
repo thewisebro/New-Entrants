@@ -3,6 +3,8 @@ package img.myapplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -21,7 +23,9 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -31,6 +35,7 @@ import java.net.CookiePolicy;
 import java.net.CookieStore;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -43,7 +48,8 @@ public class Login extends ActionBarActivity {
     public Map<String,String> params;
     public CookieManager cookieManager;
     public Map<String,String> details;
-
+    private StudentModel student=new StudentModel();
+    private NewEntrantModel entrant=new NewEntrantModel();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,6 +201,7 @@ public class Login extends ActionBarActivity {
                     details.put("username",params.get("username"));
                     details.put("password", params.get("password"));
                     getDetails();
+                    getUser();
                     return "Logged In";
                 }
                 else
@@ -217,6 +224,7 @@ public class Login extends ActionBarActivity {
             //getSupportFragmentManager().beginTransaction().remove(fragment);
         }
     }
+
     public void getDetails(){
         CookieStore cookieStore=cookieManager.getCookieStore();
         try {
@@ -238,8 +246,7 @@ public class Login extends ActionBarActivity {
             e.printStackTrace();
         }
     }
-
-    public void start(){
+    public void getUser(){
         String branchname = null;
         String branchcode=null;
         String statename=null;
@@ -257,9 +264,8 @@ public class Login extends ActionBarActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         if (details.get("category").equals("senior")){
-            StudentModel student=new StudentModel();
+            student.profile_img=downloadImage("http://192.168.121.187:8080"+details.get("photo"));
             student.name=details.get("name");
             student.enr_no=details.get("enr_no");
             student.username=details.get("username");
@@ -274,6 +280,53 @@ public class Login extends ActionBarActivity {
             student.mobile=details.get("phone");
             student.fb_link=details.get("fb_link");
             student.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
+            //new DownloadImageTask().execute("http://192.168.121.187:8080"+details.get("photo"));
+
+
+        }
+        else if (details.get("category").equals("junior")){
+            entrant.id=details.get("id");
+            entrant.name=details.get("name");
+            entrant.username=details.get("username");
+            entrant.password=details.get("password");
+            entrant.town=details.get("hometown");
+            entrant.state=statename;
+            entrant.statecode=statecode;
+            entrant.branchname=branchname;
+            entrant.branchcode=branchcode;
+            entrant.mobile=details.get("phone");
+            entrant.email=details.get("email");
+            entrant.fb_link=details.get("fb_link");
+            entrant.profile_privacy=details.get("profile_privacy").equals("true");
+            entrant.phone_privacy=details.get("phone_privacy").equals("true");
+            entrant.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
+
+        }
+    }
+
+    public byte[] downloadImage(String url){
+        try {
+            URL urlConnection = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) urlConnection
+                    .openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            int rcode=connection.getResponseCode();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            ByteArrayOutputStream baos=new ByteArrayOutputStream();
+            myBitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
+            byte[] img=baos.toByteArray();
+            return img;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public void start(){
+
+        if (details.get("category").equals("senior")){
+
             if ("".equals(student.town) || "".equals(student.state) || "".equals(student.email) || "".equals(student.mobile)){
                 Intent intent=new Intent(this,Update.class);
                 intent.putExtra("student",student);
@@ -290,27 +343,39 @@ public class Login extends ActionBarActivity {
 
         }
         else if (details.get("category").equals("junior")){
-            NewEntrantModel entrant= new NewEntrantModel();
-            entrant.id=details.get("id");
-            entrant.name=details.get("name");
-            entrant.username=details.get("username");
-            entrant.password=details.get("password");
-            entrant.town=details.get("hometown");
-            entrant.state=statename;
-            entrant.statecode=statecode;
-            entrant.branchname=branchname;
-            entrant.branchcode=branchcode;
-            entrant.mobile=details.get("phone");
-            entrant.email=details.get("email");
-            entrant.fb_link=details.get("fb_link");
-            entrant.profile_privacy=details.get("profile_privacy").equals("true");
-            entrant.phone_privacy=details.get("phone_privacy").equals("true");
-            entrant.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
+
             MySQLiteHelper db=new MySQLiteHelper(this);
             db.addEntrant(entrant);
             db.close();
             startActivity(new Intent(this,Navigation.class));
             finish();
+        }
+    }
+    private class DownloadImageTask extends AsyncTask<String, Void, byte[]> {
+        @Override
+        protected byte[] doInBackground(String... urls) {
+            try {
+                URL urlConnection = new URL(urls[0]);
+                HttpURLConnection connection = (HttpURLConnection) urlConnection
+                        .openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                int rcode=connection.getResponseCode();
+                InputStream input = connection.getInputStream();
+                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                ByteBuffer buffer=ByteBuffer.allocate(myBitmap.getByteCount());
+                myBitmap.copyPixelsToBuffer(buffer);
+                byte[] img=buffer.array();
+                return img;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(byte[] result) {
+            if (result!=null)
+                student.profile_img=result;
         }
     }
 
