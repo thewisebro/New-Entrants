@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/card_background_selector"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/card_top"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/img_layout"
+            android:layout_height="140dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:id="@+id/blog_img" />
+            <View
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:alpha="0.5"
+                android:background="@drawable/gradient"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_alignBottom="@+id/img_layout"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Large Text"
+                android:id="@+id/topic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:layout_below="@+id/topic"
+                android:id="@+id/date" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/card_middle"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/description" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/card_bottom"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <img.myapplication.RoundImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/blog_dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/category"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/blog_dp"
+            android:layout_toEndOf="@+id/blog_dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:layout_below="@+id/category"
+            android:layout_toRightOf="@+id/blog_dp"
+            android:layout_toEndOf="@+id/blog_dp"
+            android:id="@+id/group" />
+    </RelativeLayout>
+</LinearLayout>

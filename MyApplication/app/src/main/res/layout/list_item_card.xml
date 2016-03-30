@@ -7,9 +7,7 @@
     android:id="@+id/blog_card"
     android:orientation="vertical"
     android:background="@drawable/card_background_selector"
-    android:descendantFocusability="beforeDescendants"
-    android:paddingTop="0dp"
-    android:paddingBottom="15dp">
+    android:descendantFocusability="beforeDescendants">
 
 
     <RelativeLayout
@@ -21,31 +19,40 @@
         android:id="@+id/cardTop"
         android:textAlignment="center">
 
-        <ImageView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="140dp"
-            android:id="@+id/card_img"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
+            android:id="@+id/imgview"
             android:layout_alignParentLeft="true"
-            android:scaleType="fitXY"
-            android:layout_centerHorizontal="true" />
-        <View android:layout_width="match_parent"
-            android:background="@drawable/gradient"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_centerHorizontal="true"
-            android:layout_height="140dp"
-            android:alpha="0.5" />
+            android:layout_alignParentStart="true">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/card_img"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:scaleType="fitXY"
+                android:layout_centerHorizontal="true" />
+
+            <View android:layout_width="match_parent"
+                android:background="@drawable/gradient"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
+                android:layout_height="fill_parent"
+                android:alpha="0.4" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:textAlignment="center">
+            android:textAlignment="center"
+            android:layout_alignBottom="@+id/imgview"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="true">
 
             <TextView
                 android:id="@+id/topic"
@@ -112,7 +119,7 @@
             android:onClick="fromCategory"
             android:layout_centerHorizontal="true"/>
 
-        <ImageView
+        <img.myapplication.RoundImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/blog_dp"

@@ -297,7 +297,6 @@ public class Login extends ActionBarActivity {
             entrant.mobile=details.get("phone");
             entrant.email=details.get("email");
             entrant.fb_link=details.get("fb_link");
-            entrant.profile_privacy=details.get("profile_privacy").equals("true");
             entrant.phone_privacy=details.get("phone_privacy").equals("true");
             entrant.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
 

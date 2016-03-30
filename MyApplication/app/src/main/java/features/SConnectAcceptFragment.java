@@ -61,16 +61,6 @@ public class SConnectAcceptFragment extends Fragment {
 
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_senior_card);
 
-      /*  SeniorModel model=new SeniorModel();
-        model.name="asd";
-        model.username="asd";
-        model.state="bhr";
-        model.email="asd";
-        model.branch="cse";
-        model.contact="123";
-        model.town="patna";
-        model.fblink="asfb";
-        cardArrayAdapter.add(model);*/
         if (isConnected())
         {
             new UpdateAcceptedSeniorsTask().execute();
@@ -126,7 +116,6 @@ public class SConnectAcceptFragment extends Fragment {
                     model.contact=object.getString("contact");
                     model.email=object.getString("email");
                     model.dp_link=object.getString("dp_link");
-                    //model.username=object.getString("username");
                     list.add(model);
 
                 }

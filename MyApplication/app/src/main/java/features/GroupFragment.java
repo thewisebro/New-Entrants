@@ -50,6 +50,7 @@ public class GroupFragment extends Fragment {
     private int blogsCount;
     private int lastId;
     private String groupUrl;
+    private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
 
     public GroupFragment(String url){
         groupUrl=url;
@@ -83,7 +84,7 @@ public class GroupFragment extends Fragment {
         });
 
         items=new ArrayList<BlogModel>();
-        cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_item_card);
+        cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
         blogsCount=0;
         lastId=0;
         if (isConnected())
@@ -212,31 +213,36 @@ public class GroupFragment extends Fragment {
             BlogCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.list_item_card, parent, false);
+                row = inflater.inflate(R.layout.list_blog_card, parent, false);
                 viewHolder = new BlogCardViewHolder();
+                viewHolder.img = (ImageView) row.findViewById(R.id.blog_img);
                 viewHolder.topic = (TextView) row.findViewById(R.id.topic);
-                viewHolder.shortInfo = (TextView) row.findViewById(R.id.shortInfo);
-                viewHolder.group= (TextView) row.findViewById(R.id.author);
                 viewHolder.date = (TextView) row.findViewById(R.id.date);
-                viewHolder.img = (ImageView) row.findViewById(R.id.card_img);
-                viewHolder.dp= (ImageView) row.findViewById(R.id.blog_dp);
+                viewHolder.description = (TextView) row.findViewById(R.id.description);
+                viewHolder.dp = (ImageView) row.findViewById(R.id.blog_dp);
+                viewHolder.category = (TextView) row.findViewById(R.id.category);
+                viewHolder.group = (TextView) row.findViewById(R.id.group);
 
             } else {
-                viewHolder = (BlogCardViewHolder)row.getTag();
+                viewHolder = (BlogCardViewHolder) row.getTag();
             }
             final BlogModel card = getItem(position);
             viewHolder.topic.setText(card.topic);
-            viewHolder.shortInfo.setText(card.desc);
+            viewHolder.description.setText(card.desc);
             viewHolder.group.setText(card.group);
             viewHolder.date.setText(card.date);
-            new ImageLoadTask(card.dpurl,viewHolder.dp).execute();
-            if (!(card.imageurl.isEmpty()))
-                new ImageLoadTask(card.imageurl,viewHolder.img).execute();
+            viewHolder.category.setText("From the Groups");
+            viewHolder.blogUrl = BlogUrl + card.group_username + "/" + card.slug;
+            new ImageLoadTask(card.dpurl, viewHolder.dp).execute();
+            if (card.imageurl != null) {
+                row.findViewById(R.id.card_middle).setVisibility(View.GONE);
+                new ImageLoadTask(card.imageurl, viewHolder.img).execute();
+            } else {
+                row.findViewById(R.id.img_layout).setVisibility(View.GONE);
+            }
             row.setTag(viewHolder);
             return row;
         }
-
-
     }
     public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 

@@ -8,11 +8,11 @@ import android.widget.TextView;
  */
 public class BlogCardViewHolder {
     public  TextView topic;
-    public TextView shortInfo;
+    public TextView description;
     public TextView group;
     public  TextView date;
     public ImageView img;
     public ImageView dp;
     public String blogUrl;
-    public BlogModel model;
+    public TextView category;
 }

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -25,7 +24,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -100,7 +98,7 @@ public class BlogsFragment extends Fragment {
         });
 
         items=new ArrayList<BlogModel>();
-        cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_item_card);
+        cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
         blogsCount=0;
         lastId=0;
         if (isConnected())
@@ -182,9 +180,10 @@ public class BlogsFragment extends Fragment {
                 model.id = Integer.parseInt(object.getString("id"));
                 model.group_username=object.getString("group_username");
                 model.slug=object.getString("slug");
-                //Boolean flag=object.has("thumbnail");
                 if (object.has("thumbnail"))
                     model.imageurl=object.getString("thumbnail");
+                else
+                    model.imageurl=null;
                 items.add(model);
                 lastId =model.id;
                 blogsCount+=1;
@@ -230,27 +229,34 @@ public class BlogsFragment extends Fragment {
             BlogCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.list_item_card, parent, false);
+                row = inflater.inflate(R.layout.list_blog_card, parent, false);
                 viewHolder = new BlogCardViewHolder();
-                viewHolder.topic = (TextView) row.findViewById(R.id.topic);
-                viewHolder.shortInfo = (TextView) row.findViewById(R.id.shortInfo);
-                viewHolder.group= (TextView) row.findViewById(R.id.author);
-                viewHolder.date = (TextView) row.findViewById(R.id.date);
-                viewHolder.img = (ImageView) row.findViewById(R.id.card_img);
+                viewHolder.img= (ImageView) row.findViewById(R.id.blog_img);
+                viewHolder.topic= (TextView) row.findViewById(R.id.topic);
+                viewHolder.date= (TextView) row.findViewById(R.id.date);
+                viewHolder.description= (TextView) row.findViewById(R.id.description);
                 viewHolder.dp= (ImageView) row.findViewById(R.id.blog_dp);
+                viewHolder.category= (TextView) row.findViewById(R.id.category);
+                viewHolder.group= (TextView) row.findViewById(R.id.group);
 
             } else {
                 viewHolder = (BlogCardViewHolder)row.getTag();
             }
             final BlogModel card = getItem(position);
             viewHolder.topic.setText(card.topic);
-            viewHolder.shortInfo.setText(card.desc);
+            viewHolder.description.setText(card.desc);
             viewHolder.group.setText(card.group);
             viewHolder.date.setText(card.date);
+            viewHolder.category.setText("From the Groups");
             viewHolder.blogUrl=BlogUrl+card.group_username+"/"+card.slug;
             new ImageLoadTask(card.dpurl,viewHolder.dp).execute();
-            if (card.imageurl!=null)
-                new ImageLoadTask(card.imageurl,viewHolder.img).execute();
+            if (card.imageurl!=null) {
+                row.findViewById(R.id.card_middle).setVisibility(View.GONE);
+                new ImageLoadTask(card.imageurl, viewHolder.img).execute();
+            }
+            else {
+                row.findViewById(R.id.img_layout).setVisibility(View.GONE);
+            }
             viewHolder.dp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -298,8 +304,8 @@ public class BlogsFragment extends Fragment {
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
             imageView.setImageBitmap(result);
-            GradientDrawable gd=new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP,new int[]{0xFF525252,0xFFA8A6A6,0xFFFFFF});
-            ((RelativeLayout)imageView.getParent()).setBackground(gd);
+            //GradientDrawable gd=new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP,new int[]{0xFF525252,0xFFA8A6A6,0xFFFFFF});
+            //((RelativeLayout)imageView.getParent()).setBackground(gd);
         }
 
     }
