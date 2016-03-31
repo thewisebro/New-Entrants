@@ -131,7 +131,7 @@ public class GroupFragment extends Fragment {
         if (blogsCount==0)
             blogUrl=groupUrl;
         else
-            blogUrl=groupUrl+lastId;
+            blogUrl=groupUrl+"?action=next&id="+lastId;
         try {
             URL url= new URL(blogUrl);
             HttpURLConnection conn=(HttpURLConnection) url.openConnection();
@@ -241,6 +241,13 @@ public class GroupFragment extends Fragment {
                 row.findViewById(R.id.img_layout).setVisibility(View.GONE);
             }
             row.setTag(viewHolder);
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BlogCardViewHolder holder = (BlogCardViewHolder) v.getTag();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new BlogPage(holder.blogUrl)).addToBackStack(null).commit();
+                }
+            });
             return row;
         }
     }

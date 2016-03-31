@@ -65,7 +65,7 @@
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/shortInfo"
+                android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Text line 2"

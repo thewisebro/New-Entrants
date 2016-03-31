@@ -257,7 +257,7 @@ public class BlogsFragment extends Fragment {
             else {
                 row.findViewById(R.id.img_layout).setVisibility(View.GONE);
             }
-            viewHolder.dp.setOnClickListener(new View.OnClickListener() {
+            row.findViewById(R.id.card_bottom).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (!refreshing) {
@@ -267,6 +267,13 @@ public class BlogsFragment extends Fragment {
                 }
             });
             row.setTag(viewHolder);
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BlogCardViewHolder holder= (BlogCardViewHolder) v.getTag();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new BlogPage(holder.blogUrl)).addToBackStack(null).commit();
+                }
+            });
             return row;
         }
 

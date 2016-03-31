@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,23 +27,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import img.myapplication.R;
+import models.BlogModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 @SuppressLint("ValidFragment")
 public class BlogPage extends Fragment {
-    //private BlogModel blog;
+    private BlogModel model=new BlogModel();
     private String url;
     public TextView topic;
     public TextView description;
     public TextView date;
     public TextView content;
     public TextView group;
+    public TextView category;
     public ImageView image;
+    public ImageView dp;
     public BlogPage(String blogUrl){
         this.url=blogUrl;
-        //this.blog=model;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,15 +53,22 @@ public class BlogPage extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_blog_page, container, false);
         topic= (TextView) view.findViewById(R.id.topic);
-        description= (TextView) view.findViewById(R.id.shortInfo);
+        description= (TextView) view.findViewById(R.id.description);
         date= (TextView) view.findViewById(R.id.date);
         content= (TextView) view.findViewById(R.id.blogText);
         group= (TextView) view.findViewById(R.id.group);
         image=(ImageView) view.findViewById(R.id.blog_img);
-
+        category= (TextView) view.findViewById(R.id.category);
+        dp= (ImageView) view.findViewById(R.id.group_dp);
 
         if (isConnected())
-            new BlogTask().execute();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    BlogTask task = new BlogTask();
+                    task.execute();
+                }
+            }, 5000);
         return view;
     }
     public boolean isConnected(){
@@ -77,8 +87,6 @@ public class BlogPage extends Fragment {
             try {
                 HttpURLConnection conn= (HttpURLConnection) new URL(url).openConnection();
                 conn.setRequestMethod("GET");
-                //conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                //conn.setRequestProperty("Accept", "application/json");
 
                 BufferedReader reader= new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuffer buffer=new StringBuffer();
@@ -86,7 +94,8 @@ public class BlogPage extends Fragment {
                 while ((inputLine = reader.readLine()) != null)
                     buffer.append(inputLine+"\n");
 
-                return buffer.toString();
+                getData( buffer.toString());
+                return "success";
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -95,57 +104,53 @@ public class BlogPage extends Fragment {
         }
         @Override
         protected void onPostExecute(String result){
-            displayBlog(result);
+            if (result.equals("success"))
+                displayBlog();
         }
     }
-    private void displayBlog(String result){
+    public void getData(String str){
         try {
-            JSONObject object= new JSONObject(result);
-
-            topic.setText(object.getString("title"));
-            date.setText(object.getString("date"));
-            description.setText(object.getString("description"));
-            content.setText(object.getString("content"));
-            group.setText(object.getString("group"));
-            new ImageLoadTask(object.getString("dp_link"),image).execute();
-
+            JSONObject object=new JSONObject(str);
+            model.dpurl=object.getString("dp_link");
+            model.content=object.getString("content");
+            model.date=object.getString("date");
+            model.topic=object.getString("title");
+            model.desc=object.getString("description");
+            model.group=object.getString("group");
+            model.id=object.getInt("id");
+            model.group_username=object.getString("group_username");
+            model.slug=object.getString("slug");
+            model.category="From the Groups";
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
+    private void displayBlog(){
 
-        private String url;
-        private ImageView imageView;
-
-        public ImageLoadTask(String url, ImageView imageView) {
-            this.url = url;
-            this.imageView = imageView;
+        topic.setText(model.topic);
+        date.setText(model.date);
+        description.setText(model.desc);
+        content.setText(model.content);
+        group.setText(model.group);
+        category.setText(model.category);
+        ImageLoad(model.dpurl, dp);
+        if (model.imageurl!=null) {
+            ImageLoad(model.imageurl,image);
         }
-
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-            try {
-                URL urlConnection = new URL(url);
-                HttpURLConnection connection = (HttpURLConnection) urlConnection
-                        .openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                return myBitmap;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
+    }
+    public void ImageLoad(String url, ImageView imageView){
+        try {
+            URL urlConnection = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) urlConnection
+                    .openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            imageView.setImageBitmap(myBitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            super.onPostExecute(result);
-            imageView.setImageBitmap(result);
-        }
-
     }
 
 }

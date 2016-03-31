@@ -9,6 +9,8 @@ public class BlogModel {
     public String imageurl;
     public String slug;
     public String dpurl;
+    public String content;
+    public String category;
     public int id;
 
 }

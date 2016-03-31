@@ -7,54 +7,91 @@
         tools:context="BlogPage">
 
          <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
             android:id="@+id/blog_img"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+             android:paddingBottom="15dp" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/topic"
             android:layout_below="@+id/blog_img"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/date"
-            android:layout_marginTop="52dp"
             android:layout_below="@+id/topic"
-            android:layout_centerHorizontal="true" />
+            android:paddingLeft="10dp"
+            android:textColor="@color/blue_grey_300"
+            android:textStyle="italic" />
          <TextView
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:textAppearance="?android:attr/textAppearanceLarge"
-         android:id="@+id/shortInfo"
-         android:layout_marginTop="52dp"
-         android:layout_below="@+id/topic"
-         android:layout_centerHorizontal="true" />
+         android:id="@+id/description"
+         android:layout_below="@+id/date"
+         android:layout_centerHorizontal="true"
+             android:textStyle="normal"
+             android:textColor="@color/blue_green"
+             android:padding="5dp" />
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/shortInfo"
+            android:layout_below="@+id/description"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/blogText"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/group"
-            android:layout_below="@+id/blogText"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="43dp" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp" />
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:id="@+id/group_card"
+         android:layout_alignParentBottom="true"
+         android:layout_height="wrap_content"
+         android:padding="5dp">
+
+         <img.myapplication.RoundImageView
+             android:layout_width="50dp"
+             android:layout_height="50dp"
+             android:id="@+id/group_dp"
+             android:padding="10dp" />
+
+         <TextView
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:textAppearance="?android:attr/textAppearanceMedium"
+             android:id="@+id/category"
+             android:layout_alignParentTop="true"
+             android:layout_toRightOf="@+id/blog_dp"
+             android:layout_toEndOf="@+id/blog_dp"
+             android:paddingLeft="5dp"
+             android:textStyle="bold|italic"
+             android:textColor="@color/yellow_700" />
+
+         <TextView
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:textAppearance="?android:attr/textAppearanceMedium"
+             android:layout_below="@+id/category"
+             android:layout_toRightOf="@+id/blog_dp"
+             android:layout_toEndOf="@+id/blog_dp"
+             android:id="@+id/group"
+             android:paddingLeft="5dp" />
+     </RelativeLayout>
 
  </RelativeLayout>
