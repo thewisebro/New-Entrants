@@ -21,7 +21,7 @@ import java.util.Map;
 import features.BlogPage;
 import features.BlogsFragment;
 import features.JuniorConnect;
-import features.ProfileFragment;
+import features.StudentUpdateFragment;
 import models.BlogCardViewHolder;
 import models.StudentModel;
 
@@ -36,6 +36,7 @@ public class NavigationStudent extends ActionBarActivity
     private CharSequence mTitle;
     private Map<String,String> userParams=new HashMap<String,String>();
     private Map<String,Object> userInfo=new HashMap<String, Object>();
+    private boolean lock=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class NavigationStudent extends ActionBarActivity
         setContentView(R.layout.activity_navigation);
         db=new MySQLiteHelper(this);
         student=db.getStudent();
+
         userParams.put("sess_id", student.sess_id);
         userParams.put("category", "student");
         userInfo.put("name",student.name);
@@ -52,6 +54,7 @@ public class NavigationStudent extends ActionBarActivity
         userInfo.put("branchname",student.branchname);
         userInfo.put("branchcode",student.branchcode);
 
+
         mCurrentPosition=-1;
         fragmentCount=0;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -59,9 +62,18 @@ public class NavigationStudent extends ActionBarActivity
         mNavigationDrawerFragment.set(2,userInfo);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
+        checkforUpdate();
 
         if(!isConnected()){
             Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void checkforUpdate() {
+        if ("".equals(student.town) || "".equals(student.state) || "".equals(student.email) || "".equals(student.mobile)){
+            StudentUpdateFragment fragment=new StudentUpdateFragment(student);
+            lock=true;
+            fragment.lock=true;
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
         }
     }
     public boolean isConnected(){
@@ -117,7 +129,8 @@ public class NavigationStudent extends ActionBarActivity
                     break;
                 case 3: logout();
                     break;
-                default:fragment=new ProfileFragment(student,student.category);
+                //default:fragment=new ProfileFragment(student,student.category);
+                default: fragment= new StudentUpdateFragment(student);
 
             }
         }
@@ -158,7 +171,6 @@ public class NavigationStudent extends ActionBarActivity
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
 
         return super.onOptionsItemSelected(item);
     }

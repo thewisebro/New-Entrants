@@ -1,20 +1,23 @@
-package img.myapplication;
+package features;
+
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -32,11 +35,18 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import img.myapplication.MySQLiteHelper;
+import img.myapplication.OpeningFragment;
+import img.myapplication.R;
 import models.StudentModel;
 
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class StudentUpdateFragment extends Fragment {
 
-public class Update extends ActionBarActivity {
-
+    public boolean lock=false;
+    private View view;
     private Spinner state;
     private EditText name;
     private EditText username;
@@ -45,33 +55,45 @@ public class Update extends ActionBarActivity {
     private EditText mobile;
     private EditText email;
     private EditText fblink;
-    private StudentModel student;
     private CookieManager cookieManager;
     private Map<String,String> params=new HashMap<String,String>();
     private String updateURL="http://192.168.121.187:8080/new_entrants/update/";
+    private StudentModel student;
+    private DrawerLayout drawer;
+
+    public StudentUpdateFragment(StudentModel model){
+        this.student=model;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setContentView(R.layout.activity_update);
-        student= (StudentModel) getIntent().getSerializableExtra("student");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        view= inflater.inflate(R.layout.update_student,container,false);
+        drawer= (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+        if (lock){
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+            ActionBar actionBar=((ActionBarActivity)getActivity()).getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
 
         setViews();
         setInitial();
-
-        Button bt= (Button) findViewById(R.id.button_submit);
+        Button bt= (Button) view.findViewById(R.id.button_submit);
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isConnected());
-                    new UpdateSubmitTask().execute();
+                if (isConnected()) {
+                    getParams();
+                    if (checkParams())
+                        new UpdateSubmitTask().execute();
+                }
             }
         });
-
+        return view;
     }
     public boolean isConnected(){
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected())
             return true;
@@ -79,28 +101,27 @@ public class Update extends ActionBarActivity {
             return false;
     }
     private void setViews(){
-        name= (EditText) findViewById(R.id.u_name);
-        username= (EditText) findViewById(R.id.u_username);
-        town= (EditText) findViewById(R.id.u_town);
-        branch= (EditText) findViewById(R.id.u_branch);
-        mobile= (EditText) findViewById(R.id.u_mobile);
-        email= (EditText) findViewById(R.id.u_email);
-        fblink= (EditText) findViewById(R.id.u_fblink);
-        state= (Spinner) findViewById(R.id.u_state);
+        name= (EditText) view.findViewById(R.id.u_name);
+        username= (EditText) view.findViewById(R.id.u_username);
+        town= (EditText) view.findViewById(R.id.u_town);
+        branch= (EditText) view.findViewById(R.id.u_branch);
+        mobile= (EditText) view.findViewById(R.id.u_mobile);
+        email= (EditText) view.findViewById(R.id.u_email);
+        fblink= (EditText) view.findViewById(R.id.u_fblink);
+        state= (Spinner) view.findViewById(R.id.u_state);
     }
     private void setInitial(){
-            name.setText(student.name);
-            username.setText(student.username);
-            branch.setText(student.branchname);
-            mobile.setText(student.mobile);
-            email.setText(student.email);
-            fblink.setText(student.fb_link);
-            town.setText(student.town);
-            state.setSelection(getSpinnerPos(student.statecode));
+        name.setText(student.name);
+        username.setText(student.username);
+        branch.setText(student.branchname);
+        mobile.setText(student.mobile);
+        email.setText(student.email);
+        fblink.setText(student.fb_link);
+        town.setText(student.town);
+        state.setSelection(getSpinnerPos(student.statecode,getResources().getStringArray(R.array.state_codes)));
     }
-    private int getSpinnerPos(String state){
+    public int getSpinnerPos(String state,String[] list){
         if (!state.isEmpty()){
-            String[] list= getResources().getStringArray(R.array.state_codes);
             for (int i=1;i<list.length;i++)
                 if (list[i].equals(state))
                     return i;
@@ -109,17 +130,18 @@ public class Update extends ActionBarActivity {
     }
     private class UpdateSubmitTask extends AsyncTask<String, Void, String> {
 
+
         @Override
         protected String doInBackground(String... urls) {
             cookieManager=new CookieManager(null, CookiePolicy.ACCEPT_ALL);
             CookieHandler.setDefault(cookieManager);
             CookieStore cookieStore=cookieManager.getCookieStore();
             try {
-                HttpURLConnection connGet= (HttpURLConnection) new URL(updateURL).openConnection();
+                /*HttpURLConnection connGet= (HttpURLConnection) new URL(updateURL).openConnection();
                 connGet.setRequestMethod("GET");
                 connGet.setRequestProperty("Cookie","CHANNELI_SESSID="+student.sess_id);
                 Object obj=connGet.getContent();
-                //String csrftoken=cookieStore.getCookies().get(0).getValue();
+                //String csrftoken=cookieStore.getCookies().get(0).getValue();*/
 
                 HttpURLConnection connPost= (HttpURLConnection) new URL(updateURL).openConnection();
                 connPost.setRequestMethod("POST");
@@ -127,7 +149,7 @@ public class Update extends ActionBarActivity {
                 connPost.setDoOutput(true);
                 connPost.setRequestProperty("Cookie", "CHANNELI_SESSID=" + student.sess_id);
                 //connPost.setRequestProperty("Cookie", "CHANNELI_SESSID=" + student.sess_id + ";csrftoken=" + csrftoken);
-                getParams();
+                //getParams();
                 //params.put("csrfmiddlewaretoken",csrftoken);
                 Uri.Builder builder = new Uri.Builder();
                 for (Map.Entry<String, String> entry : params.entrySet()){
@@ -151,7 +173,6 @@ public class Update extends ActionBarActivity {
                 String result=buffer.toString();
                 JSONObject object=new JSONObject(buffer.toString());
                 return object.getString("status");
-                //return  null;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -166,12 +187,18 @@ public class Update extends ActionBarActivity {
                 student.mobile=params.get("phone_no");
                 student.fb_link=params.get("fb_link");
 
-                MySQLiteHelper db=new MySQLiteHelper(getApplicationContext());
+                MySQLiteHelper db=new MySQLiteHelper(getContext());
                 db.deleteStudent();
                 db.addStudent(student);
                 db.close();
-                startActivity(new Intent(getApplicationContext(), NavigationStudent.class));
-                finish();
+                if (lock) {
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new OpeningFragment()).commit();
+                    lock=false;
+                }
+                Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
+                //startActivity(new Intent(getContext(), NavigationStudent.class));
+                //getActivity().finish();
             }
         }
     }
@@ -182,26 +209,34 @@ public class Update extends ActionBarActivity {
         params.put("phone_no",mobile.getText().toString().trim());
         params.put("hometown",town.getText().toString().trim());
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_update, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    public boolean checkParams(){
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        //String mobilePattern="\\d+";
+        String mobilePattern="^(\\+91|0|)[0-9]{10}$";
+        String townPattern="^[a-zA-Z ]+$";
+        String fbPattern="^$|^[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+$";
+        boolean flag=true;
+        if (!(params.get("email").toString()).matches(emailPattern)){
+            Toast.makeText(getContext(), "Invalid valid email address", Toast.LENGTH_SHORT).show();
+            flag=false;
         }
-
-        return super.onOptionsItemSelected(item);
+        if(!(params.get("phone_no").toString()).matches(mobilePattern)){
+            Toast.makeText(getContext(),"Invalid Mobile Number", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        if(!(params.get("hometown").toString()).matches(townPattern)){
+            Toast.makeText(getContext(),"Enter a proper City name", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        if (!(params.get("fb_link").toString()).matches(fbPattern)){
+            Toast.makeText(getContext(), "Invalid valid Facebook link", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        if (state.getSelectedItemPosition()==0){
+            Toast.makeText(getContext(), "Select a State", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        return flag;
     }
+
 }

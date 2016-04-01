@@ -87,7 +87,7 @@ public class NavigationDrawerFragment extends Fragment {
 
             }
         });
-
+        DrawerLayout.setFitsSystemWindows(true);
         return DrawerLayout;
     }
     public void set(int type, Map<String,Object> params){
@@ -120,12 +120,7 @@ public class NavigationDrawerFragment extends Fragment {
             model.string=tabs[i];
             adapter.add(model);
         }
-        /*mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                tabs
-        ));*/
+
         mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
     }
@@ -191,7 +186,6 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout = drawerLayout;
 
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
@@ -210,7 +204,7 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
-
+                //getActionBar().show();
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
@@ -228,7 +222,7 @@ public class NavigationDrawerFragment extends Fragment {
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
-
+                //getActionBar().hide();
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };

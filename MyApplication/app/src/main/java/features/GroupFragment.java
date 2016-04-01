@@ -50,7 +50,6 @@ public class GroupFragment extends Fragment {
     private int blogsCount;
     private int lastId;
     private String groupUrl;
-    private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
 
     public GroupFragment(String url){
         groupUrl=url;
@@ -158,7 +157,7 @@ public class GroupFragment extends Fragment {
                 JSONObject object=jArray.getJSONObject(i);
                 BlogModel model= new BlogModel();
                 model.topic=object.getString("title");
-                model.imageurl=object.getString("dp_link");
+                model.dpurl=object.getString("dp_link");
                 model.group=object.getString("group");
                 model.desc=object.getString("description");
                 model.date=object.getString("date");
@@ -232,7 +231,7 @@ public class GroupFragment extends Fragment {
             viewHolder.group.setText(card.group);
             viewHolder.date.setText(card.date);
             viewHolder.category.setText("From the Groups");
-            viewHolder.blogUrl = BlogUrl + card.group_username + "/" + card.slug;
+            viewHolder.blogUrl = groupUrl+"/" + card.slug;
             new ImageLoadTask(card.dpurl, viewHolder.dp).execute();
             if (card.imageurl != null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);

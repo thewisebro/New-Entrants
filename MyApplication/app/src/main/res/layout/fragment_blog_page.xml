@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/topic"
+            android:id="@+id/title"
             android:layout_below="@+id/blog_img"
             android:layout_centerHorizontal="true"
             android:padding="10dp"
@@ -77,8 +77,8 @@
              android:textAppearance="?android:attr/textAppearanceMedium"
              android:id="@+id/category"
              android:layout_alignParentTop="true"
-             android:layout_toRightOf="@+id/blog_dp"
-             android:layout_toEndOf="@+id/blog_dp"
+             android:layout_toRightOf="@+id/group_dp"
+             android:layout_toEndOf="@+id/group_dp"
              android:paddingLeft="5dp"
              android:textStyle="bold|italic"
              android:textColor="@color/yellow_700" />
@@ -88,8 +88,8 @@
              android:layout_height="wrap_content"
              android:textAppearance="?android:attr/textAppearanceMedium"
              android:layout_below="@+id/category"
-             android:layout_toRightOf="@+id/blog_dp"
-             android:layout_toEndOf="@+id/blog_dp"
+             android:layout_toRightOf="@+id/group_dp"
+             android:layout_toEndOf="@+id/group_dp"
              android:id="@+id/group"
              android:paddingLeft="5dp" />
      </RelativeLayout>

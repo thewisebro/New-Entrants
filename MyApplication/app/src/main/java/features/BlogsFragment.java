@@ -49,7 +49,6 @@ import models.BlogModel;
 public class BlogsFragment extends Fragment {
 
     public boolean refreshing=false;
-    private LoadBlogTask task;
     private BlogCardArrayAdapter cardArrayAdapter;
     private List<BlogModel> items;
     private ListView listView;
@@ -57,13 +56,9 @@ public class BlogsFragment extends Fragment {
     private int blogsCount;
     private int lastId;
     private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
+    private String url;
+    boolean flag=true;
 
-   @Override
-    public void onStop(){
-
-        super.onStop();
-
-    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         setHasOptionsMenu(true);
@@ -77,6 +72,8 @@ public class BlogsFragment extends Fragment {
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
+        url=BlogUrl;
+
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -87,8 +84,7 @@ public class BlogsFragment extends Fragment {
                         public void run() {
                             swipeLayout.setRefreshing(false);
                             refreshing=true;
-                            task = new LoadBlogTask();
-                            task.execute();
+                            new LoadBlogTask().execute();
                             Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
                         }
                     }, 5000);
@@ -133,8 +129,6 @@ public class BlogsFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             if (result.equals("success")){
-                //cardArrayAdapter.notifyDataSetChanged();
-
                 cardArrayAdapter.refresh();
                 items.clear();
                 refreshing=false;
@@ -142,11 +136,9 @@ public class BlogsFragment extends Fragment {
         }
     }
     public void loadBlogs(){
-        String blogUrl=null;
-        if (blogsCount==0)
-            blogUrl=BlogUrl;
-        else
-            blogUrl=BlogUrl+"?action=next&id="+lastId;
+        String blogUrl=url;
+        if (blogsCount!=0)
+            blogUrl+="?action=next&id="+lastId;
         try {
             URL url= new URL(blogUrl);
             HttpURLConnection conn=(HttpURLConnection) url.openConnection();
@@ -200,7 +192,12 @@ public class BlogsFragment extends Fragment {
             this.cardList.addAll(items);
             notifyDataSetChanged();
         }
-
+        @Override
+        public void clear(){
+            this.cardList.clear();
+            notifyDataSetChanged();
+            super.clear();
+        }
         private List<BlogModel> cardList = new ArrayList<BlogModel>();
 
         public BlogCardArrayAdapter(Context context, int textViewResourceId) {
@@ -320,18 +317,36 @@ public class BlogsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
+        flag=true;
         inflater.inflate(R.menu.menu_blogs,menu);
-        MenuItem item=menu.findItem(R.id.filter_spinner);
-        Spinner spinner= (Spinner) MenuItemCompat.getActionView(item);
+        final MenuItem item=menu.findItem(R.id.filter_spinner);
+        final Spinner spinner= (Spinner) MenuItemCompat.getActionView(item);
         ArrayAdapter<CharSequence> filters=ArrayAdapter.createFromResource(getContext(),R.array.filters,R.layout.spinner_item);
         filters.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(filters);
         spinner.setPopupBackgroundDrawable(getResources().getDrawable(R.drawable.spinner_background));
 
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (flag){
+                    flag=false;
+                }
+                else{
+                    cardArrayAdapter.clear();
+                    items.clear();
+                    switch (position){
+                        case 1: url=BlogUrl+"iitr/";
+                            blogsCount=0;
+                            new LoadBlogTask().execute();
+                            break;
+                        default: url=BlogUrl;
+                            blogsCount=0;
+                            new LoadBlogTask().execute();
+                            break;
+                    }
+                }
 
             }
 

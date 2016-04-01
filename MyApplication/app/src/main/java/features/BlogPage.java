@@ -1,14 +1,16 @@
 package features;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +54,7 @@ public class BlogPage extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_blog_page, container, false);
-        topic= (TextView) view.findViewById(R.id.topic);
+        topic= (TextView) view.findViewById(R.id.title);
         description= (TextView) view.findViewById(R.id.description);
         date= (TextView) view.findViewById(R.id.date);
         content= (TextView) view.findViewById(R.id.blogText);
@@ -62,13 +64,7 @@ public class BlogPage extends Fragment {
         dp= (ImageView) view.findViewById(R.id.group_dp);
 
         if (isConnected())
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    BlogTask task = new BlogTask();
-                    task.execute();
-                }
-            }, 5000);
+            new BlogTask().execute();
         return view;
     }
     public boolean isConnected(){
@@ -82,6 +78,14 @@ public class BlogPage extends Fragment {
 
     private class BlogTask extends AsyncTask<String,Void,String>{
 
+        private ProgressDialog dialog=new ProgressDialog(getContext());
+
+        @Override
+        protected void onPreExecute(){
+            this.dialog.setMessage("Loading...");
+            this.dialog.show();
+        }
+
         @Override
         protected String doInBackground(String... params) {
             try {
@@ -94,7 +98,7 @@ public class BlogPage extends Fragment {
                 while ((inputLine = reader.readLine()) != null)
                     buffer.append(inputLine+"\n");
 
-                getData( buffer.toString());
+                getData(buffer.toString());
                 return "success";
 
             } catch (IOException e) {
@@ -106,6 +110,8 @@ public class BlogPage extends Fragment {
         protected void onPostExecute(String result){
             if (result.equals("success"))
                 displayBlog();
+            if (dialog.isShowing())
+                dialog.dismiss();
         }
     }
     public void getData(String str){
@@ -120,22 +126,25 @@ public class BlogPage extends Fragment {
             model.id=object.getInt("id");
             model.group_username=object.getString("group_username");
             model.slug=object.getString("slug");
+            model.imageurl=object.getString("thumbnail");
             model.category="From the Groups";
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
     private void displayBlog(){
-
-        topic.setText(model.topic);
         date.setText(model.date);
+        topic.setText(model.topic);
+
         description.setText(model.desc);
         content.setText(model.content);
         group.setText(model.group);
         category.setText(model.category);
-        ImageLoad(model.dpurl, dp);
+        new ImageLoadTask(model.dpurl,dp).execute();
+        //ImageLoad(model.dpurl, dp);
         if (model.imageurl!=null) {
-            ImageLoad(model.imageurl,image);
+            new ImageLoadTask(model.imageurl,image).execute();
+            //ImageLoad(model.imageurl,image);
         }
     }
     public void ImageLoad(String url, ImageView imageView){
@@ -148,9 +157,49 @@ public class BlogPage extends Fragment {
             InputStream input = connection.getInputStream();
             Bitmap myBitmap = BitmapFactory.decodeStream(input);
             imageView.setImageBitmap(myBitmap);
+            /*InputStream is= (InputStream) new URL(url).getContent();
+            Drawable drawable= Drawable.createFromStream(is,"blog_img");
+            imageView.setImageDrawable(drawable);*/
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
+
+        private String url;
+        private ImageView imageView;
+
+        public ImageLoadTask(String url, ImageView imageView) {
+            this.url = url;
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            try {
+                URL urlConnection = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) urlConnection
+                        .openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                return myBitmap;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            super.onPostExecute(result);
+            imageView.setImageBitmap(result);
+            //GradientDrawable gd=new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP,new int[]{0xFF525252,0xFFA8A6A6,0xFFFFFF});
+            //((RelativeLayout)imageView.getParent()).setBackground(gd);
+        }
+
     }
 
 }
