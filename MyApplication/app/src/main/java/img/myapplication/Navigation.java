@@ -49,7 +49,6 @@ public class Navigation extends ActionBarActivity
         db=new MySQLiteHelper(this);
         entrant=db.getEntrant();
         userInfo.put("name",entrant.name);
-        userInfo.put("img",entrant.profile_img);
         userInfo.put("state",entrant.state);
         userInfo.put("branchname",entrant.branchname);
         userInfo.put("branchcode",entrant.branchcode);

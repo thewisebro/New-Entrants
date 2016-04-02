@@ -1,19 +1,13 @@
 package img.myapplication;
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -30,8 +24,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -70,18 +62,10 @@ public class Register extends AppCompatActivity {
         bar.setDisplayHomeAsUpEnabled(true);
         db=new MySQLiteHelper(this);
         entrant=new NewEntrantModel();
-        setContentView(R.layout.register_new);
-
-        img= (ImageView) findViewById(R.id.profile_img);
-        img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickImage();
-            }
-        });
+        setContentView(R.layout.activity_register);
 
     }
-    private void pickImage() {
+ /*   private void pickImage() {
         final CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -127,7 +111,7 @@ public class Register extends AppCompatActivity {
             ImageView imageView = (ImageView) findViewById(R.id.profile_img);
             imageView.setImageBitmap(bitmap);
         }
-    }
+    }*/
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -153,11 +137,6 @@ public class Register extends AppCompatActivity {
             entrant.state= ((Spinner) findViewById(R.id.new_branch)).getSelectedItem().toString().trim();
             entrant.statecode=(getResources().getStringArray(R.array.state_codes))[pos_state];
             entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibilty)).isChecked();
-            entrant.profile_privacy= ((CheckBox) findViewById(R.id.profile_visibilty)).isChecked();
-            Bitmap imgBitmap= ((BitmapDrawable)((ImageView) findViewById(R.id.profile_img)).getDrawable()).getBitmap();
-            ByteArrayOutputStream baos= new ByteArrayOutputStream();
-            imgBitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
-            entrant.profile_img=baos.toByteArray();
             if(validate())
                 new RegisterTask().execute();
         }
@@ -167,15 +146,23 @@ public class Register extends AppCompatActivity {
     }
     public boolean validate(){
 
-        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-        String mobilePattern="\\d+";
-        String idPattern="\\d+";
-        String namePattern="[a-zA-Z ]+";
+        //String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        String emailPattern="^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        //String mobilePattern="^(\\+91|0|)[0-9]{10}$";
+        String mobilePattern="^$|^(\\+[0-9]{2}|0|)[0-9][10]$";
+        //String namePattern="[a-zA-Z ]+";
+        String namePattern="^[a-zA-Z ]{1,100}$";
+        String usernamePattern="^[0-9a-zA-Z]{1,30}$";
         String townPattern="^$|^[a-zA-Z ]+$";
-        String fbPattern="^$|^[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+$";
+        String fbPattern="^$|^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        //String fbPattern="^$|^[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+$";
         boolean flag=true;
         if (!(entrant.email).matches(emailPattern)){
-            Toast.makeText(getApplicationContext(), "Invalid valid email address", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        if (!(entrant.username).matches(usernamePattern)){
+            Toast.makeText(getApplicationContext(), "Invalid username", Toast.LENGTH_SHORT).show();
             flag=false;
         }
         if(!(entrant.mobile).matches(mobilePattern)){
@@ -195,7 +182,7 @@ public class Register extends AppCompatActivity {
             flag=false;
         }
         if (!(entrant.fb_link).matches(fbPattern)){
-            Toast.makeText(getApplicationContext(), "Invalid valid Facebook link", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Invalid Facebook link", Toast.LENGTH_SHORT).show();
             flag=false;
         }
         if (pos_state==0){
@@ -220,8 +207,7 @@ public class Register extends AppCompatActivity {
         if (entrant.phone_privacy)
             params.put("phone_privacy","on");
 
-        if (entrant.profile_privacy)
-            params.put("profile_privacy","on");
+        params.put("droid","True");
 
     }
     private String registerNow(){

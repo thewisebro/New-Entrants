@@ -3,9 +3,10 @@
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    style="?android:attr/spinnerItemStyle"
     android:layout_height="wrap_content"
     android:textSize="20sp"
-    android:gravity="left"
+    android:singleLine="true"
     android:textColor="@color/off_white"
     android:padding="5dip"
     android:textStyle="bold" />

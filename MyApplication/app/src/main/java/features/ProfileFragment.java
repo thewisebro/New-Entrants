@@ -142,7 +142,6 @@ public class ProfileFragment extends Fragment {
             fblink.setText(entrant.fb_link);
             town.setText(entrant.town);
             cb_contact.setChecked(entrant.phone_privacy);
-            cb_profile.setChecked(entrant.profile_privacy);
             state.setSelection(getSpinnerPos(entrant.statecode, getResources().getStringArray(R.array.state_codes)));
             branch.setSelection(getSpinnerPos(entrant.branchcode, getResources().getStringArray(R.array.branch_codes)));
         }

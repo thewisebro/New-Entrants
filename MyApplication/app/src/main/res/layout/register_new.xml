@@ -19,6 +19,7 @@
                 android:layout_height="200dp"
                 android:scaleType="fitXY"
                 android:id="@+id/profile_img"
+                android:visibility="gone"
                 android:src="@drawable/android_contact"
                 android:layout_alignParentTop="true" />
 
@@ -251,27 +252,6 @@
                         android:layout_gravity="center_horizontal" />
                 </TableRow>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Profile Visibilty"
-                        android:textColor="#ffffff"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:id="@+id/textView5"
-                        android:layout_gravity="center" />
-
-                    <CheckBox
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:id="@+id/profile_visibilty"
-                        android:layout_gravity="center" />
-                </TableRow>
-
             </TableLayout>
             <Button
                 android:layout_width="wrap_content"
@@ -290,7 +270,8 @@
                 android:layout_alignBottom="@+id/profile_img"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:src="@android:drawable/ic_menu_camera" />
+                android:src="@android:drawable/ic_menu_camera"
+                android:visibility="gone" />
         </RelativeLayout>
     </ScrollView>
 </LinearLayout>

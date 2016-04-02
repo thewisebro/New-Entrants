@@ -175,7 +175,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("phone_privacy",entrant.phone_privacy);
         values.put("profile_privacy",entrant.profile_privacy);
         values.put("sess_id",entrant.sess_id);
-        values.put("img",entrant.profile_img);
         db.insert(TABLE_ENTRANTS, null, values);
         db.close();
     }
@@ -228,7 +227,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             entrant.phone_privacy=cursor.getInt(12) >0;
             entrant.profile_privacy=cursor.getInt(13) > 0;
             entrant.sess_id=cursor.getString(14);
-            entrant.profile_img=cursor.getBlob(15);
         }
         return entrant;
     }

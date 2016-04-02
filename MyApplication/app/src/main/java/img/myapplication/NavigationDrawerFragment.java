@@ -93,10 +93,14 @@ public class NavigationDrawerFragment extends Fragment {
     public void set(int type, Map<String,Object> params){
 
         //Profile
-        byte[] imgByte= (byte[]) params.get("img");
+        byte[] imgByte=null;
+        if (params.containsKey("img"))
+            imgByte= (byte[]) params.get("img");
         if (imgByte!=null)
             ((ImageView) mDrawerProfileView.findViewById(R.id.profile_picture))
                     .setImageBitmap(BitmapFactory.decodeByteArray(imgByte,0,imgByte.length));
+        else
+            ((ImageView) mDrawerProfileView.findViewById(R.id.profile_picture)).setVisibility(View.GONE);
         ((TextView)mDrawerProfileView.findViewById(R.id.name)).setText(params.get("name").toString());
         ((TextView)mDrawerProfileView.findViewById(R.id.info))
                 .setText(params.get("state").toString() + "\n" + params.get("branchname").toString()+" "+params.get("branchcode").toString());

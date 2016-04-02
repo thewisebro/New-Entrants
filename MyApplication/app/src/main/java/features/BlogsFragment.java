@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -57,7 +58,7 @@ public class BlogsFragment extends Fragment {
     private int lastId;
     private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
     private String url;
-    boolean flag=true;
+    boolean flag=false;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
@@ -317,35 +318,53 @@ public class BlogsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-        flag=true;
+        flag=false;
         inflater.inflate(R.menu.menu_blogs,menu);
         final MenuItem item=menu.findItem(R.id.filter_spinner);
         final Spinner spinner= (Spinner) MenuItemCompat.getActionView(item);
         ArrayAdapter<CharSequence> filters=ArrayAdapter.createFromResource(getContext(),R.array.filters,R.layout.spinner_item);
+        //ArrayAdapter<String> adapter=new ArrayAdapter<String>(getContext(),R.layout.spinner_view, R.array.filters);
         filters.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(filters);
-        spinner.setPopupBackgroundDrawable(getResources().getDrawable(R.drawable.spinner_background));
+        //spinner.setBackground(getResources().getDrawable(android.R.drawable.btn_dropdown));
+        //spinner.setBackgroundColor(getResources().getColor(R.color.blue_grey_800));
+        //spinner.setBackground(getResources().getDrawable(R.drawable.spinner_background));
+        spinner.setPopupBackgroundDrawable(getResources().getDrawable(R.drawable.spinner_dropdown_background));
+
+
+        spinner.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                flag=true;
+                return false;
+            }
+        });
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if (flag){
-                    flag=false;
-                }
-                else{
+                if (flag) {
+
                     cardArrayAdapter.clear();
-                    items.clear();
-                    switch (position){
-                        case 1: url=BlogUrl+"iitr/";
-                            blogsCount=0;
+                    switch (position) {
+                        case 1:
+                            url = BlogUrl + "iitr/";
+                            blogsCount = 0;
                             new LoadBlogTask().execute();
                             break;
-                        default: url=BlogUrl;
-                            blogsCount=0;
+                        case 2:
+                            url = BlogUrl + "groups/";
+                            blogsCount = 0;
+                            new LoadBlogTask().execute();
+                            break;
+                        default:
+                            url = BlogUrl;
+                            blogsCount = 0;
                             new LoadBlogTask().execute();
                             break;
                     }
+                    flag = false;
                 }
 
             }
