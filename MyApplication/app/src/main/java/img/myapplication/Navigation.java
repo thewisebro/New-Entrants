@@ -21,9 +21,9 @@ import java.util.Map;
 
 import features.BlogPage;
 import features.BlogsFragment;
+import features.EntrantUpdateFragment;
 import features.PConnectFragment;
 import features.PeerPage;
-import features.ProfileFragment;
 import features.RequestSenior;
 import features.SConnectTabFragment;
 import models.BlogCardViewHolder;
@@ -114,7 +114,7 @@ public class Navigation extends ActionBarActivity
                     break;
                 case 3: logout();
                     break;
-                case 2: fragment=new ProfileFragment(entrant,entrant.category);
+                case 2: fragment=new EntrantUpdateFragment(entrant);
                     break;
                 default:fragment = new PConnectFragment(entrant.sess_id);
                     break;

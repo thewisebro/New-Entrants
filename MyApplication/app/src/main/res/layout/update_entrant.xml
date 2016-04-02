@@ -31,7 +31,7 @@
                     android:hint="Name"
                     android:enabled="false"
                     android:ems="10"
-                    android:id="@+id/name"
+                    android:id="@+id/u_name"
                     android:layout_weight="1" />
             </TableRow>
 
@@ -50,48 +50,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:enabled="false"
-                    android:id="@+id/username"
-                    android:layout_weight="1" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/password_row">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Password" />
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:hint="Password"
-                    android:ems="10"
-                    android:id="@+id/password"
-                    android:layout_weight="1" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/re_row">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Re-enter Passowrd" />
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:ems="10"
-                    android:id="@+id/password_re"
+                    android:id="@+id/u_username"
                     android:layout_weight="1" />
             </TableRow>
 
@@ -109,7 +68,7 @@
                 <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/list_branches"
+                    android:id="@+id/u_branches"
                     android:entries="@array/branches"
                     android:layout_weight="1"
                     android:spinnerMode="dialog" />
@@ -129,7 +88,7 @@
                 <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/list_states"
+                    android:id="@+id/u_states"
                     android:entries="@array/states"
                     android:layout_weight="1"
                     android:spinnerMode="dialog" />
@@ -151,7 +110,7 @@
                     android:inputType="textPersonName"
                     android:hint="City"
                     android:ems="10"
-                    android:id="@+id/town"
+                    android:id="@+id/u_town"
                     android:layout_weight="1" />
             </TableRow>
 
@@ -170,7 +129,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="phone"
                     android:ems="10"
-                    android:id="@+id/mobile"
+                    android:id="@+id/u_mobile"
                     android:layout_weight="1" />
             </TableRow>
 
@@ -189,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:ems="10"
-                    android:id="@+id/email"
+                    android:id="@+id/u_email"
                     android:layout_weight="1" />
             </TableRow>
 
@@ -208,7 +167,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:ems="10"
-                    android:id="@+id/fblink"
+                    android:id="@+id/u_fblink"
                     android:layout_weight="1" />
             </TableRow>
 
@@ -225,24 +184,9 @@
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/ed_contact_visibilty" />
+                    android:id="@+id/u_contact_visibilty" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Profile Visibilty"
-                    android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-                <CheckBox
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/ed_profile_visibilty" />
-            </TableRow>
         </TableLayout>
 
         <Button

@@ -130,7 +130,6 @@ public class StudentUpdateFragment extends Fragment {
     }
     private class UpdateSubmitTask extends AsyncTask<String, Void, String> {
 
-
         @Override
         protected String doInBackground(String... urls) {
             cookieManager=new CookieManager(null, CookiePolicy.ACCEPT_ALL);
@@ -210,11 +209,15 @@ public class StudentUpdateFragment extends Fragment {
         params.put("hometown",town.getText().toString().trim());
     }
     public boolean checkParams(){
-        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-        //String mobilePattern="\\d+";
-        String mobilePattern="^(\\+91|0|)[0-9]{10}$";
-        String townPattern="^[a-zA-Z ]+$";
-        String fbPattern="^$|^[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+$";
+        String emailPattern="^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        //String mobilePattern="^(\\+91|0|)[0-9]{10}$";
+        String mobilePattern="^$|^(\\+[0-9]{2}|0|)[0-9][10]$";
+        //String namePattern="[a-zA-Z ]+";
+        String namePattern="^[a-zA-Z ]{1,100}$";
+        String usernamePattern="^[0-9a-zA-Z]{1,30}$";
+        String townPattern="^$|^[a-zA-Z ]+$";
+        String fbPattern="^$|^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+
         boolean flag=true;
         if (!(params.get("email").toString()).matches(emailPattern)){
             Toast.makeText(getContext(), "Invalid valid email address", Toast.LENGTH_SHORT).show();
