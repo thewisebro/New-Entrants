@@ -24,7 +24,7 @@ import features.BlogsFragment;
 import features.EntrantUpdateFragment;
 import features.PConnectFragment;
 import features.PeerPage;
-import features.RequestSenior;
+import features.SConnectRequestFragment;
 import features.SConnectTabFragment;
 import models.BlogCardViewHolder;
 import models.NewEntrantModel;
@@ -90,10 +90,7 @@ public class Navigation extends ActionBarActivity
         loadFragment(new PeerPage(viewHolder.model));
     }
     public void sendRequest(View view){
-
-    }
-    public void requestSenior(View view){
-        loadFragment(new RequestSenior());
+        loadFragment(new SConnectRequestFragment(userParams));
     }
     public void TryAgain(){
         if (isConnected()){

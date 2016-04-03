@@ -250,6 +250,8 @@ public class BlogsFragment extends Fragment {
             new ImageLoadTask(card.dpurl,viewHolder.dp).execute();
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
+                row.findViewById(R.id.topic_parent).bringToFront();
+                ((TextView)row.findViewById(R.id.topic)).setTextColor(R.color.white);
                 new ImageLoadTask(card.imageurl, viewHolder.img).execute();
             }
             else {
@@ -268,7 +270,7 @@ public class BlogsFragment extends Fragment {
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    BlogCardViewHolder holder= (BlogCardViewHolder) v.getTag();
+                    BlogCardViewHolder holder = (BlogCardViewHolder) v.getTag();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new BlogPage(holder.blogUrl)).addToBackStack(null).commit();
                 }
             });
@@ -322,13 +324,10 @@ public class BlogsFragment extends Fragment {
         inflater.inflate(R.menu.menu_blogs,menu);
         final MenuItem item=menu.findItem(R.id.filter_spinner);
         final Spinner spinner= (Spinner) MenuItemCompat.getActionView(item);
+        spinner.setDropDownWidth(50);
         ArrayAdapter<CharSequence> filters=ArrayAdapter.createFromResource(getContext(),R.array.filters,R.layout.spinner_item);
-        //ArrayAdapter<String> adapter=new ArrayAdapter<String>(getContext(),R.layout.spinner_view, R.array.filters);
         filters.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        spinner.setAdapter(filters);
-        //spinner.setBackground(getResources().getDrawable(android.R.drawable.btn_dropdown));
-        //spinner.setBackgroundColor(getResources().getColor(R.color.blue_grey_800));
-        //spinner.setBackground(getResources().getDrawable(R.drawable.spinner_background));
+        spinner.setAdapter(filters);;
         spinner.setPopupBackgroundDrawable(getResources().getDrawable(R.drawable.spinner_dropdown_background));
 
 

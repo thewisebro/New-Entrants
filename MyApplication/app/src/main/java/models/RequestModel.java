@@ -9,4 +9,8 @@ public class RequestModel {
     public int id;
     public int accepted;
     public boolean more;
+    public String query;
+    public String date;
+    public int allowed;
+    public int request_no;
 }

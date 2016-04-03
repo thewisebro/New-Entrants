@@ -1,6 +1,7 @@
 package features;
 
 
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,7 +9,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,31 +32,71 @@ import img.myapplication.R;
 
 public class SConnectRequestFragment extends Fragment {
     private Map<String,String> params;
-    public Spinner state;
-    public Spinner branch;
+    private Map<String,String> rq_params=new HashMap<>();
+    public Spinner list;
+    public EditText query;
+    public RadioGroup options;
     public String connect_url="http://192.168.121.187:8080/new_entrants/connect/";
 
+    public SConnectRequestFragment(Map<String,String> params){
+        this.params=params;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_sconnect_request, container, false);
-        params= (Map<String, String>) getArguments().getSerializable("userParams");
-        state= (Spinner) view.findViewById(R.id.list_states);
-        branch= (Spinner) view.findViewById(R.id.list_branches);
-        Button request_state= (Button) view.findViewById(R.id.rq_s);
-        Button request_branch= (Button) view.findViewById(R.id.rq_b);
-        request_state.setOnClickListener(new View.OnClickListener() {
+        View view= inflater.inflate(R.layout.send_request, container, false);
+
+        list= (Spinner) view.findViewById(R.id.list);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(getContext(), R.array.states, R.layout.request_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        list.setAdapter(adapter);
+
+        query= (EditText) view.findViewById(R.id.query);
+        options= (RadioGroup) view.findViewById(R.id.options);
+        options.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                new sendRequestTask("location",
-                        ((String[])(getResources().getStringArray(R.array.state_codes)))[state.getSelectedItemPosition()]).execute();
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int pos = group.indexOfChild(group.findViewById(checkedId));
+                ArrayAdapter<CharSequence> adapter = null;
+                switch (pos) {
+                    case 0:
+                        adapter = ArrayAdapter.createFromResource(getContext(), R.array.states, R.layout.request_spinner_item);
+                        break;
+                    default:
+                        adapter = ArrayAdapter.createFromResource(getContext(), R.array.branches, R.layout.request_spinner_item);
+                        break;
+                }
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                list.setAdapter(adapter);
             }
         });
-        request_branch.setOnClickListener(new View.OnClickListener() {
+
+        Button bt= (Button) view.findViewById(R.id.send);
+
+        bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new sendRequestTask("branch",
-                        ((String[])(getResources().getStringArray(R.array.branch_codes)))[state.getSelectedItemPosition()]).execute();
+                int pos=options.indexOfChild(options.findViewById(options.getCheckedRadioButtonId()));
+                int selected_pos=list.getSelectedItemPosition();
+                if (selected_pos==0){
+                    Toast.makeText(getContext(), "Select a Parameter", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String description=query.getText().toString().trim();
+                if (description.length()==0)
+                    description="In Need of Assistance";
+                switch(pos){
+                    case 0: rq_params.put("param", "location");
+                                        rq_params.put("value", ((String[]) (getResources().getStringArray(R.array.state_codes)))[list.getSelectedItemPosition()]);
+                                        rq_params.put("description", description);
+                                        new sendRequestTask().execute();
+                                        break;
+                    default: rq_params.put("param","branch");
+                                      rq_params.put("value", ((String[]) (getResources().getStringArray(R.array.branch_codes)))[list.getSelectedItemPosition()]);
+                                      rq_params.put("description",description);
+                                      new sendRequestTask().execute();
+                                      break;
+                }
             }
         });
 
@@ -60,12 +104,15 @@ public class SConnectRequestFragment extends Fragment {
     }
 
     private class sendRequestTask extends AsyncTask<String, Void, String> {
-        private Map<String,String> rq_params=new HashMap<String,String>();
-        public sendRequestTask(String param, String value){
-            this.rq_params.put("param",param);
-            this.rq_params.put("value",value);
 
+        ProgressDialog dialog;
+        @Override
+        protected void onPreExecute(){
+            dialog=new ProgressDialog(getContext());
+            dialog.setMessage("Sending Request");
+            dialog.show();
         }
+
         @Override
         protected String doInBackground(String... args) {
             try {
@@ -109,8 +156,10 @@ public class SConnectRequestFragment extends Fragment {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
+            dialog.dismiss();
             if (result.equals("success")) {
                 Toast.makeText(getContext(), "Request Sent Successfully!", Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new SConnectTabFragment(params)).commit();
             }
         }
     }

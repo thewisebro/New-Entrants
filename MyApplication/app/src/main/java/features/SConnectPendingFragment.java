@@ -53,7 +53,7 @@ public class SConnectPendingFragment extends Fragment {
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
 
-        cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_request_card);
+        cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.request_card);
 
         if (isConnected())
             new getRequestsTask().execute();
@@ -87,8 +87,11 @@ public class SConnectPendingFragment extends Fragment {
                 model.id=object.getInt("id");
                 model.param=object.getString("param");
                 model.more=object.getBoolean("more");
+                model.allowed=object.getInt("allowed");
+                model.query=object.getString("description");
+                model.date=object.getString("date");
+                model.request_no=i+1;
                 list.add(model);
-
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -160,11 +163,13 @@ public class SConnectPendingFragment extends Fragment {
             RequestCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.list_request_card, parent, false);
+                row = inflater.inflate(R.layout.request_card, parent, false);
                 viewHolder = new RequestCardViewHolder();
                 viewHolder.param= (TextView) row.findViewById(R.id.param);
                 viewHolder.accepted= (TextView) row.findViewById(R.id.accepted);
                 viewHolder.value= (TextView) row.findViewById(R.id.value);
+                viewHolder.date= (TextView) row.findViewById(R.id.date);
+                viewHolder.query= (TextView) row.findViewById(R.id.query);
             } else {
                 viewHolder = (RequestCardViewHolder)row.getTag();
             }
@@ -172,9 +177,11 @@ public class SConnectPendingFragment extends Fragment {
             viewHolder.param.setText(card.param);
             viewHolder.accepted.setText(String.valueOf(card.accepted));
             viewHolder.value.setText(card.value);
+            viewHolder.query.setText(card.query);
+            viewHolder.date.setText(card.date);
+            ((TextView)row.findViewById(R.id.request_no)).setText(String.valueOf(card.request_no));
             if (card.more){
                 TextView more= (TextView) row.findViewById(R.id.more);
-                more.setVisibility(View.VISIBLE);
                 more.setTag(card.id);
                 more.setOnClickListener(new View.OnClickListener() {
                     @Override

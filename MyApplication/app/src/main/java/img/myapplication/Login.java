@@ -68,7 +68,7 @@ public class Login extends ActionBarActivity {
         }
 
         params=new HashMap<String,String>();
-        setContentView(R.layout.activity_login2);
+        setContentView(R.layout.activity_login);
     }
     //public TextView blogText;
     public boolean isConnected(){

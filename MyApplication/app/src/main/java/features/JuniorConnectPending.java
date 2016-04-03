@@ -43,6 +43,7 @@ public class JuniorConnectPending extends Fragment {
     private ListView listView;
     private String sess_id;
     private List<JuniorModel> list=new ArrayList<JuniorModel>();
+    private String pendingURL="http://192.168.121.187:8080/new_entrants/pending/";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,7 +76,7 @@ public class JuniorConnectPending extends Fragment {
 
             try {
 
-                HttpURLConnection conn=(HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/pending/").openConnection();
+                HttpURLConnection conn=(HttpURLConnection) new URL(pendingURL).openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Cookie", "CHANNELI_SESSID="+params[0]);
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
@@ -114,6 +115,7 @@ public class JuniorConnectPending extends Fragment {
                 model.state=(new JSONObject(object.getString("state"))).getString("name");
                 model.branch=(new JSONObject(object.getString("branch"))).getString("name");
                 model.username=object.getString("username");
+                model.description=object.getString("description");
                 list.add(model);
 
             }

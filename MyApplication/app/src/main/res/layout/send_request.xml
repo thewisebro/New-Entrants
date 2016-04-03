@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffdedede">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="REQUEST"
+            android:id="@+id/textView15"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textColor="@color/blue_grey_300"
+            android:padding="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Request Query"
+            android:id="@+id/textView16"
+            android:padding="5dp"
+            android:textColor="@color/blue_grey_300"
+            android:fontFamily="sans-serif" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/query"
+            android:fontFamily="sans-serif"
+            android:backgroundTint="#ff22a9ff"
+            android:hint="Query"
+            android:textColor="@color/blue_grey_900" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Request by"
+            android:id="@+id/textView18"
+            android:paddingTop="15dp"
+            android:textColor="@color/blue_grey_300"
+            android:fontFamily="sans-serif" />
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/options">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:id="@+id/location"
+                android:textColor="@color/blue_grey_900"
+                android:checked="true"
+                android:focusableInTouchMode="false"
+                android:fontFamily="sans-serif"
+                android:layout_marginRight="30px" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Branch"
+                android:id="@+id/branch"
+                android:checked="false"
+                android:textColor="@color/blue_grey_900"
+                android:fontFamily="sans-serif" />
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request to Seniors from"
+            android:id="@+id/textView19"
+            android:textColor="@color/blue_grey_300"
+            android:fontFamily="sans-serif" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/list"
+            android:spinnerMode="dialog"
+            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:padding="3px" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SEND"
+            android:id="@+id/send"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/light_green"
+            android:layout_marginTop="15dp"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

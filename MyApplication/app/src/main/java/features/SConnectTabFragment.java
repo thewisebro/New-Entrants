@@ -37,12 +37,10 @@ public class SConnectTabFragment extends Fragment {
 
         Bundle arg = new Bundle();
         arg.putSerializable("userParams", (Serializable) userParams);
-        mTabHost.addTab(mTabHost.newTabSpec("accepted").setIndicator("Accepted"),
-                SConnectAcceptFragment.class, arg);
-        mTabHost.addTab(mTabHost.newTabSpec("request").setIndicator("Connect"),
-                SConnectRequestFragment.class, arg);
-        mTabHost.addTab(mTabHost.newTabSpec("pending").setIndicator("Requests"),
+        mTabHost.addTab(mTabHost.newTabSpec("pending").setIndicator("ALL REQUESTS"),
                 SConnectPendingFragment.class, arg);
+        mTabHost.addTab(mTabHost.newTabSpec("accepted").setIndicator("ACCEPTED"),
+                SConnectAcceptFragment.class, arg);
 
         return view;
     }

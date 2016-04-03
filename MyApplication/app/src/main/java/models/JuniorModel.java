@@ -13,4 +13,5 @@ public class JuniorModel {
     public String fblink;
     public String username;
     public String dp_link="";
+    public String description;
 }
