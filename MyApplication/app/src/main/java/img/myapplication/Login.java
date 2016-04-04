@@ -50,6 +50,10 @@ public class Login extends ActionBarActivity {
     public Map<String,String> details;
     private StudentModel student=new StudentModel();
     private NewEntrantModel entrant=new NewEntrantModel();
+    private String serverURL="http://192.168.121.187:8080";
+    private String loginURL="http://192.168.121.187:8080/login/";
+    private String userinfoURL="http://192.168.121.187:8080/new_entrants/userinfo/";
+    private String appURL="http://192.168.121.187:8080/new_entrants/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,19 +75,48 @@ public class Login extends ActionBarActivity {
         setContentView(R.layout.activity_login);
     }
     //public TextView blogText;
-    public boolean isConnected(){
+    /*public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected())
             return true;
         else
             return false;
+    }*/
+    public boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()){
+            try {
+                HttpURLConnection connection= (HttpURLConnection) new URL(appURL).openConnection();
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(5000);
+                int rcode=connection.getResponseCode();
+                if (rcode== HttpURLConnection.HTTP_OK || rcode==HttpURLConnection.HTTP_ACCEPTED)
+                    return true;
+                else {
+                    if (rcode==HttpURLConnection.HTTP_SERVER_ERROR){
+                        Toast.makeText(getApplicationContext(), "SERVER-SIDE NETWORK ERROR!", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "NETWORK ERROR", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "NETWORK ERROR", Toast.LENGTH_SHORT).show();
+                return false;
+
+            }
+        }
+        else
+            Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
+        return false;
     }
     public void login(View view){
-        if (!isConnected()){
-            Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        if (isConnected()){
             params.clear();
             EditText Username=(EditText) findViewById(R.id.et_username);
             EditText Password=(EditText) findViewById(R.id.et_Password);
@@ -113,7 +146,7 @@ public class Login extends ActionBarActivity {
         CookieStore cookieStore=cookieManager.getCookieStore();
         try {
 
-            HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/login/").openConnection();
+            HttpURLConnection conn= (HttpURLConnection) new URL(loginURL).openConnection();
             conn.setConnectTimeout(10000);
             conn.setReadTimeout(10000);
             conn.setRequestMethod("GET");
@@ -126,7 +159,7 @@ public class Login extends ActionBarActivity {
             params.put("csrfmiddlewaretoken",csrftoken);
             params.put("remember_me","on");
 
-            urlConnectionPost= (HttpURLConnection) new URL("http://192.168.121.187:8080/login/").openConnection();
+            urlConnectionPost= (HttpURLConnection) new URL(loginURL).openConnection();
             urlConnectionPost.setDoOutput(true);
             urlConnectionPost.setDoInput(true);
             urlConnectionPost.setRequestMethod("POST");
@@ -229,7 +262,7 @@ public class Login extends ActionBarActivity {
         CookieStore cookieStore=cookieManager.getCookieStore();
         try {
 
-            HttpURLConnection conn = (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/userinfo/").openConnection();
+            HttpURLConnection conn = (HttpURLConnection) new URL(userinfoURL).openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -265,7 +298,7 @@ public class Login extends ActionBarActivity {
             e.printStackTrace();
         }
         if (details.get("category").equals("senior")){
-            student.profile_img=downloadImage("http://192.168.121.187:8080"+details.get("photo"));
+            student.profile_img=downloadImage(serverURL+details.get("photo"));
             student.name=details.get("name");
             student.enr_no=details.get("enr_no");
             student.username=details.get("username");
@@ -280,7 +313,6 @@ public class Login extends ActionBarActivity {
             student.mobile=details.get("phone");
             student.fb_link=details.get("fb_link");
             student.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
-            //new DownloadImageTask().execute("http://192.168.121.187:8080"+details.get("photo"));
 
 
         }

@@ -13,8 +13,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import features.BlogPage;
 import features.BlogsFragment;
@@ -37,6 +39,7 @@ public class Navigation extends ActionBarActivity
     private CharSequence mTitle;
     private MySQLiteHelper db;
     private boolean updated=false;
+    private String appURL="http://192.168.121.187:8080/new_entrants/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,18 +54,47 @@ public class Navigation extends ActionBarActivity
         mNavigationDrawerFragment.set(1);
 
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-        if(!isConnected()){
-            Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
-        }
     }
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected())
-            return true;
+        if (networkInfo != null && networkInfo.isConnected()){
+            try {
+                HttpURLConnection connection= (HttpURLConnection) new URL(appURL).openConnection();
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(5000);
+                int rcode=connection.getResponseCode();
+                if (rcode== HttpURLConnection.HTTP_OK || rcode==HttpURLConnection.HTTP_ACCEPTED)
+                    return true;
+                else {
+                    if (rcode==HttpURLConnection.HTTP_SERVER_ERROR){
+                        Toast.makeText(getApplicationContext(), "SERVER-SIDE NETWORK ERROR!", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "NETWORK ERROR", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "NETWORK ERROR", Toast.LENGTH_SHORT).show();
+                return false;
+
+            }
+        }
         else
-            return false;
+            Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
+        return false;
     }
+/*public boolean isConnected(){
+    ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+    if (networkInfo != null && networkInfo.isConnected())
+        return true;
+    else
+        return false;
+}*/
     public boolean get_update_status(){ return this.updated;}
     public void set_updated(){ this.updated=true;}
     public void reset_updated(){this.updated=false;}
@@ -83,34 +115,38 @@ public class Navigation extends ActionBarActivity
     public void sendRequest(View view){
         loadFragment(new SConnectRequestFragment());
     }
-    public void TryAgain(){
-        if (isConnected()){
-            getSupportFragmentManager().beginTransaction().replace(R.id.container,new OpeningFragment()).commit();
-        }
-    }
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
         mCurrentPosition=position;
-        //if (isConnected()){
-            switch(position) {
-                case -1: fragment = new OpeningFragment();
+        if (isConnected()) {
+            switch (position) {
+                case -1:
+                    fragment = new OpeningFragment();
                     break;
-                case 0:fragment = new BlogsFragment();
+                case 0:
+                    fragment = new BlogsFragment();
                     break;
-                case 1:fragment = new SConnectTabFragment();
+                case 1:
+                    fragment = new SConnectTabFragment();
                     break;
-                case 3: logout();
+                case 3:
+                    logout();
                     break;
-                case 2: fragment=new EntrantUpdateFragment();
+                case 2:
+                    fragment = new EntrantUpdateFragment();
                     break;
-                default:fragment = new PConnectFragment(entrant.sess_id);
+                default:
+                    fragment = new PConnectFragment(entrant.sess_id);
                     break;
             }
-
-       /*else {
-            fragment= new NetworkErrorFragment();
-        }*/
+        }
+        else {
+            if (position==3)
+                logout();
+            else
+                fragment=new NetworkErrorFragment();
+        }
 
        loadFragment(fragment);
 
@@ -131,20 +167,7 @@ public class Navigation extends ActionBarActivity
             getSupportFragmentManager().popBackStack();
         }
     }
-    public void update(View view) {
-        EditText et_email = (EditText) findViewById(R.id.edit_email);
-        EditText et_number = (EditText) findViewById(R.id.edit_number);
 
-        entrant.email = et_email.getText().toString();
-        entrant.mobile = et_number.getText().toString();
-
-        if(db.updateEntrant(entrant)>0){
-            Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
-        }
-        else if(db.updateEntrant(entrant)==0){
-            Toast.makeText(getApplicationContext(),"No update", Toast.LENGTH_SHORT).show();
-        }
-    }
     public void getPageTitle(){
 
         String[] mTitleArray = getResources().getStringArray(R.array.entrantstabs);

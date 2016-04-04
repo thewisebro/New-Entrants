@@ -49,6 +49,7 @@ public class Register extends AppCompatActivity {
     public int pos_state;
     public int pos_branch;
     private String registerURL="http://192.168.121.187:8080/new_entrants/register/";
+    private String appURL="http://192.168.121.187:8080/new_entrants/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +64,45 @@ public class Register extends AppCompatActivity {
 
     }
 
-    public boolean isConnected(){
+    /*public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected())
             return true;
         else
             return false;
+    }*/
+    public boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()){
+            try {
+                HttpURLConnection connection= (HttpURLConnection) new URL(appURL).openConnection();
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(5000);
+                int rcode=connection.getResponseCode();
+                if (rcode== HttpURLConnection.HTTP_OK || rcode==HttpURLConnection.HTTP_ACCEPTED)
+                    return true;
+                else {
+                    if (rcode==HttpURLConnection.HTTP_SERVER_ERROR){
+                        Toast.makeText(getApplicationContext(), "SERVER-SIDE NETWORK ERROR!", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "NETWORK ERROR", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "NETWORK ERROR", Toast.LENGTH_SHORT).show();
+                return false;
+
+            }
+        }
+        else
+            Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
+        return false;
     }
 
     public void register(View view) throws IllegalAccessException {
@@ -92,8 +125,6 @@ public class Register extends AppCompatActivity {
                 new RegisterTask().execute();
         }
 
-        else {
-        }
     }
     public boolean validate(){
 
