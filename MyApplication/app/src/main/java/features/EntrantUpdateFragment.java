@@ -92,7 +92,7 @@ public class EntrantUpdateFragment extends Fragment {
         email= (EditText) view.findViewById(R.id.u_email);
         fblink= (EditText) view.findViewById(R.id.u_fblink);
         state= (Spinner) view.findViewById(R.id.u_states);
-        visibility= (CheckBox) view.findViewById(R.id.u_contact_visibilty);
+        visibility= (CheckBox) view.findViewById(R.id.u_contact_visibility);
     }
     private void setInitial(){
         name.setText(entrant.name);
@@ -186,7 +186,7 @@ public class EntrantUpdateFragment extends Fragment {
     public boolean checkParams(){
         String emailPattern="^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         //String mobilePattern="^(\\+91|0|)[0-9]{10}$";
-        String mobilePattern="^$|^(\\+[0-9]{2}|0|)[0-9][10]$";
+        String mobilePattern="^$|^(\\+\\d{1,3}[- ]?)?\\d{10}$";
         //String namePattern="[a-zA-Z ]+";
         String namePattern="^[a-zA-Z ]{1,100}$";
         String usernamePattern="^[0-9a-zA-Z]{1,30}$";

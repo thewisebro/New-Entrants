@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = -1;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
-
+    private Map<String,Object> params=new HashMap<String,Object>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,9 +91,9 @@ public class NavigationDrawerFragment extends Fragment {
         DrawerLayout.setFitsSystemWindows(true);
         return DrawerLayout;
     }
-    public void set(int type, Map<String,Object> params){
-
-        //Profile
+    public void setProfileView(Map<String,Object> params)    {
+        if (params.isEmpty())
+            return;
         byte[] imgByte=null;
         if (params.containsKey("img"))
             imgByte= (byte[]) params.get("img");
@@ -105,6 +106,11 @@ public class NavigationDrawerFragment extends Fragment {
         ((TextView)mDrawerProfileView.findViewById(R.id.info))
                 .setText(params.get("state").toString() + "\n" + params.get("branchname").toString()+" "+params.get("branchcode").toString());
 
+    }
+    public void set(int type, Map<String,Object> params){
+       this.params.putAll(params);
+        //Profile
+        setProfileView(params);
         //List items
         DrawerItemAdapter adapter=new DrawerItemAdapter(getContext(),R.layout.drawer_item);
         ArrayList<DrawerItemModel> arrayList=new ArrayList<DrawerItemModel>();
@@ -182,13 +188,19 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
     public boolean isDrawerOpen() {
+        setProfileView(params);
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
-
+        mDrawerLayout.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                setProfileView(params);
+            }
+        });
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -211,10 +223,19 @@ public class NavigationDrawerFragment extends Fragment {
                 //getActionBar().show();
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset){
+                super.onDrawerSlide(drawerView,slideOffset);
+            }
+            @Override
+            public void onDrawerStateChanged(int newState){
+                super.onDrawerStateChanged(newState);
+            }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+
                 if (!isAdded()) {
                     return;
                 }
@@ -283,6 +304,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        setProfileView(params);
         super.onConfigurationChanged(newConfig);
 
         mDrawerToggle.onConfigurationChanged(newConfig);

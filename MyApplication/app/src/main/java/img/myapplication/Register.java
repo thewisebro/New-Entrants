@@ -48,9 +48,6 @@ public class Register extends AppCompatActivity {
     public ImageView img;
     public int pos_state;
     public int pos_branch;
-    public int PICK_IMAGE_REQUEST=1;
-    public int REQUEST_CAMERA=1;
-    public int SELECT_FILE=2;
     private String registerURL="http://192.168.121.187:8080/new_entrants/register/";
 
     @Override
@@ -65,53 +62,7 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
     }
- /*   private void pickImage() {
-        final CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select Picture");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo")) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, REQUEST_CAMERA);
-                } else if (items[item].equals("Choose from Library")) {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setType("image/*");
-                    startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECT_FILE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
-            Uri uri = data.getData();
-
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                ImageView imageView = (ImageView) findViewById(R.id.profile_img);
-                imageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        else if (requestCode == REQUEST_CAMERA && resultCode == RESULT_OK && data != null) {
-
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            ImageView imageView = (ImageView) findViewById(R.id.profile_img);
-            imageView.setImageBitmap(bitmap);
-        }
-    }*/
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -136,7 +87,7 @@ public class Register extends AppCompatActivity {
             entrant.branchcode=(getResources().getStringArray(R.array.branch_codes))[pos_branch];
             entrant.state= ((Spinner) findViewById(R.id.new_branch)).getSelectedItem().toString().trim();
             entrant.statecode=(getResources().getStringArray(R.array.state_codes))[pos_state];
-            entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibilty)).isChecked();
+            entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibility)).isChecked();
             if(validate())
                 new RegisterTask().execute();
         }
@@ -149,7 +100,7 @@ public class Register extends AppCompatActivity {
         //String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         String emailPattern="^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         //String mobilePattern="^(\\+91|0|)[0-9]{10}$";
-        String mobilePattern="^$|^(\\+[0-9]{2}|0|)[0-9][10]$";
+        String mobilePattern="^$|^(\\+\\d{1,3}[- ]?)?\\d{10}$";
         //String namePattern="[a-zA-Z ]+";
         String namePattern="^[a-zA-Z ]{1,100}$";
         String usernamePattern="^[0-9a-zA-Z]{1,30}$";
@@ -157,6 +108,11 @@ public class Register extends AppCompatActivity {
         String fbPattern="^$|^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         //String fbPattern="^$|^[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+$";
         boolean flag=true;
+
+        if(!(entrant.password).equals(((EditText) findViewById(R.id.re_password)).getText().toString())){
+            Toast.makeText(getApplicationContext(),"Passwords do not match", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
         if (!(entrant.email).matches(emailPattern)){
             Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
             flag=false;
@@ -171,10 +127,6 @@ public class Register extends AppCompatActivity {
         }
         if(!(entrant.name).matches(namePattern)){
             Toast.makeText(getApplicationContext(),"Enter a proper Name", Toast.LENGTH_SHORT).show();
-            flag=false;
-        }
-        if(!(entrant.password).equals(((EditText) findViewById(R.id.re_password)).getText().toString())){
-            Toast.makeText(getApplicationContext(),"Passwords do not match", Toast.LENGTH_SHORT).show();
             flag=false;
         }
         if(!(entrant.town).matches(townPattern)){

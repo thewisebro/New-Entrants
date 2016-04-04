@@ -2,6 +2,7 @@ package features;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -108,7 +109,7 @@ public class StudentUpdateFragment extends Fragment {
         mobile= (EditText) view.findViewById(R.id.u_mobile);
         email= (EditText) view.findViewById(R.id.u_email);
         fblink= (EditText) view.findViewById(R.id.u_fblink);
-        state= (Spinner) view.findViewById(R.id.u_state);
+        state= (Spinner) view.findViewById(R.id.u_states);
     }
     private void setInitial(){
         name.setText(student.name);
@@ -129,6 +130,13 @@ public class StudentUpdateFragment extends Fragment {
         return 0;
     }
     private class UpdateSubmitTask extends AsyncTask<String, Void, String> {
+        private ProgressDialog dialog;
+        @Override
+        protected void onPreExecute(){
+            dialog=new ProgressDialog(getContext());
+            dialog.setMessage("Updating...");
+            dialog.show();
+        }
 
         @Override
         protected String doInBackground(String... urls) {
@@ -181,7 +189,8 @@ public class StudentUpdateFragment extends Fragment {
         protected void onPostExecute(String result) {
             if (result.equals("success")){
                 student.email=params.get("email");
-                student.state=params.get("state");
+                student.statecode=params.get("state");
+                student.state=state.getSelectedItem().toString();
                 student.town=params.get("hometown");
                 student.mobile=params.get("phone_no");
                 student.fb_link=params.get("fb_link");
@@ -196,6 +205,7 @@ public class StudentUpdateFragment extends Fragment {
                     lock=false;
                 }
                 Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
                 //startActivity(new Intent(getContext(), NavigationStudent.class));
                 //getActivity().finish();
             }
@@ -211,7 +221,7 @@ public class StudentUpdateFragment extends Fragment {
     public boolean checkParams(){
         String emailPattern="^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         //String mobilePattern="^(\\+91|0|)[0-9]{10}$";
-        String mobilePattern="^$|^(\\+[0-9]{2}|0|)[0-9][10]$";
+        String mobilePattern="^$|^(\\+\\d{1,3}[- ]?)?\\d{10}$";
         //String namePattern="[a-zA-Z ]+";
         String namePattern="^[a-zA-Z ]{1,100}$";
         String usernamePattern="^[0-9a-zA-Z]{1,30}$";

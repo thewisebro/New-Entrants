@@ -1,277 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ScrollView
-        android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:background="#ffcfe7e7"
         android:layout_height="match_parent"
-        android:id="@+id/scrollView" >
+        android:padding="20dp">
 
-        <RelativeLayout
-            android:orientation="vertical"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/blue_grey_800"
+            android:text="Name"/>
+
+        <EditText
             android:layout_width="match_parent"
-            android:background="#ff939393"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/blue_grey_800"
+            android:hint="Name"
+            android:enabled="false"
+            android:id="@+id/u_name" />
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="fitXY"
-                android:id="@+id/profile_img"
-                android:visibility="gone"
-                android:src="@drawable/android_contact"
-                android:layout_alignParentTop="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/blue_grey_800"
+            android:text="Username"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:inputType="textPersonName"
+            android:hint="Username"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/blue_grey_800"
+            android:id="@+id/u_username" />
 
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/profile_img"
-                android:id="@+id/register_table"
-                android:theme="@style/Base.V7.Theme.AppCompat.Light">
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/blue_grey_800"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Branch" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/blue_grey_800"
+            android:enabled="false"
+            android:id="@+id/u_branch" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/blue_grey_800"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="State" />
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/states"
+            android:spinnerMode="dialog"
+            android:id="@+id/u_states" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/blue_grey_800"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="City" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="City"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/blue_grey_800"
+            android:id="@+id/u_town"
+            android:inputType="textPersonName" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/blue_grey_800"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Contact Number" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Number"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/blue_grey_800"
+            android:inputType="phone"
+            android:id="@+id/u_mobile" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/blue_grey_800"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Email Address" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/blue_grey_800"
+            android:id="@+id/u_email"
+            android:inputType="textEmailAddress" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/blue_grey_800"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Facebook ID" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/blue_grey_800"
+            android:hint="Facebook ID"
+            android:id="@+id/u_fblink"
+            android:inputType="textEmailAddress" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_menu_my_calendar" />
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contact Visibility"
+            android:id="@+id/u_contact_visibility"
+            android:textColor="@color/blue_grey_800"
+            android:fontFamily="sans-serif-light"
+            android:padding="10dp" />
 
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
-                        android:hint="Name"
-                        android:textColorHint="#ffffff"
-                        android:ems="10"
-                        android:id="@+id/new_name"
-                        android:layout_weight="1" />
-                </TableRow>
+        <Button
+            android:layout_width="wrap_content"
+            android:text="UPDATE"
+            android:id="@+id/button_submit"
+            android:padding="10dp"
+            android:background="@color/light_green"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_menu_my_calendar" />
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:textColorHint="#ffffff"
-                        android:hint="Username"
-                        android:id="@+id/new_username"
-                        android:layout_weight="1" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/stat_notify_error" />
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:hint="Password"
-                        android:textColorHint="#ffffff"
-                        android:ems="10"
-                        android:id="@+id/new_password"
-                        android:layout_weight="1" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:src="@android:drawable/stat_notify_error"
-                        android:layout_height="wrap_content"/>
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:ems="10"
-                        android:textColorHint="#ffffff"
-                        android:hint="Password"
-                        android:id="@+id/re_password"
-                        android:layout_weight="1" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Branch"
-                        android:textColor="#ffffff"
-                        android:layout_gravity="center" />
-
-                    <Spinner
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/new_branch"
-                        android:drawSelectorOnTop="true"
-                        android:entries="@array/branches"
-                        android:layout_weight="1"
-                        android:spinnerMode="dialog" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="State:"
-                        android:textColor="#ffffff"
-                        android:layout_gravity="center" />
-
-                    <Spinner
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/new_state"
-                        android:entries="@array/states"
-                        android:drawSelectorOnTop="true"
-                        android:layout_weight="1"
-                        android:spinnerMode="dialog" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_dialog_map" />
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
-                        android:hint="City"
-                        android:textColorHint="#ffffff"
-                        android:ems="10"
-                        android:id="@+id/new_town"
-                        android:layout_weight="1" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_menu_call" />
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:textColorHint="#ffffff"
-                        android:ems="10"
-                        android:hint="Mobile Number"
-                        android:id="@+id/new_mobile"
-                        android:layout_weight="1" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/sym_action_email" />
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
-                        android:ems="10"
-                        android:textColorHint="#ffffff"
-                        android:hint="E-Mail"
-                        android:id="@+id/new_email"
-                        android:layout_weight="1" />
-                </TableRow>
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_dialog_email" />
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
-                        android:ems="10"
-                        android:textColorHint="#ffffff"
-                        android:hint="Facebook Profile"
-                        android:id="@+id/new_fblink"
-                        android:layout_weight="1" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Contact Visibility"
-                        android:textColor="#ffffff"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:id="@+id/textView4"
-                        android:layout_gravity="center" />
-
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:id="@+id/contact_visibilty"
-                        android:layout_gravity="center_horizontal" />
-                </TableRow>
-
-            </TableLayout>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Submit"
-                android:id="@+id/button_submit"
-                android:layout_below="@+id/register_table"
-                android:layout_gravity="center_horizontal"
-                android:onClick="register"
-                android:layout_margin="15dp" />
-
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/imageView"
-                android:layout_alignBottom="@+id/profile_img"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:src="@android:drawable/ic_menu_camera"
-                android:visibility="gone" />
-        </RelativeLayout>
-    </ScrollView>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>
