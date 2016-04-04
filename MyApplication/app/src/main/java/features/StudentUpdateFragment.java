@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import img.myapplication.MySQLiteHelper;
+import img.myapplication.NavigationStudent;
 import img.myapplication.OpeningFragment;
 import img.myapplication.R;
 import models.StudentModel;
@@ -61,10 +62,6 @@ public class StudentUpdateFragment extends Fragment {
     private String updateURL="http://192.168.121.187:8080/new_entrants/update/";
     private StudentModel student;
     private DrawerLayout drawer;
-
-    public StudentUpdateFragment(StudentModel model){
-        this.student=model;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,6 +99,9 @@ public class StudentUpdateFragment extends Fragment {
             return false;
     }
     private void setViews(){
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        student=db.getStudent();
+        db.close();
         name= (EditText) view.findViewById(R.id.u_name);
         username= (EditText) view.findViewById(R.id.u_username);
         town= (EditText) view.findViewById(R.id.u_town);
@@ -204,11 +204,16 @@ public class StudentUpdateFragment extends Fragment {
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new OpeningFragment()).commit();
                     lock=false;
                 }
+                ((NavigationStudent)getActivity()).set_updated();
                 Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+
                 //startActivity(new Intent(getContext(), NavigationStudent.class));
                 //getActivity().finish();
             }
+            else {
+                Toast.makeText(getContext(), "Update failed!", Toast.LENGTH_SHORT).show();
+            }
+            dialog.dismiss();
         }
     }
     public void getParams(){

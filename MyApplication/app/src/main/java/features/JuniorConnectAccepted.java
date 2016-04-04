@@ -3,6 +3,7 @@ package features;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -72,6 +73,14 @@ public class JuniorConnectAccepted extends Fragment {
             return false;
     }
     private class getAcceptedTask extends AsyncTask<String, Void, String> {
+        private ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute(){
+            this.dialog=new ProgressDialog(getContext());
+            this.dialog.setMessage("Loading...");
+            this.dialog.show();
+        }
         @Override
         protected String doInBackground(String... params) {
 
@@ -98,6 +107,7 @@ public class JuniorConnectAccepted extends Fragment {
             if (result.equals("success")){
                 cardArrayAdapter.refresh();
             }
+            dialog.dismiss();
         }
     }
     private void getCards(String result){

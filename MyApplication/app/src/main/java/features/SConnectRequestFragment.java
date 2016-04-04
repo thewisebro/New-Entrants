@@ -1,7 +1,10 @@
 package features;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,19 +31,16 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import img.myapplication.MySQLiteHelper;
 import img.myapplication.R;
 
 public class SConnectRequestFragment extends Fragment {
-    private Map<String,String> params;
     private Map<String,String> rq_params=new HashMap<>();
     public Spinner list;
     public EditText query;
     public RadioGroup options;
     public String connect_url="http://192.168.121.187:8080/new_entrants/connect/";
 
-    public SConnectRequestFragment(Map<String,String> params){
-        this.params=params;
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,31 +76,46 @@ public class SConnectRequestFragment extends Fragment {
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int pos=options.indexOfChild(options.findViewById(options.getCheckedRadioButtonId()));
-                int selected_pos=list.getSelectedItemPosition();
-                if (selected_pos==0){
-                    Toast.makeText(getContext(), "Select a Parameter", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String description=query.getText().toString().trim();
-                if (description.length()==0)
-                    description="In Need of Assistance";
-                switch(pos){
-                    case 0: rq_params.put("param", "location");
-                                        rq_params.put("value", ((String[]) (getResources().getStringArray(R.array.state_codes)))[list.getSelectedItemPosition()]);
-                                        rq_params.put("description", description);
-                                        new sendRequestTask().execute();
-                                        break;
-                    default: rq_params.put("param","branch");
-                                      rq_params.put("value", ((String[]) (getResources().getStringArray(R.array.branch_codes)))[list.getSelectedItemPosition()]);
-                                      rq_params.put("description",description);
-                                      new sendRequestTask().execute();
-                                      break;
+                if (isConnected()){
+                    int pos=options.indexOfChild(options.findViewById(options.getCheckedRadioButtonId()));
+                    int selected_pos=list.getSelectedItemPosition();
+                    if (selected_pos==0){
+                        Toast.makeText(getContext(), "Select a Parameter", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String description=query.getText().toString().trim();
+                    if (description.length()==0)
+                        description="In Need of Assistance";
+                    switch(pos){
+                        case 0: rq_params.put("param", "location");
+                            rq_params.put("value", ((String[]) (getResources().getStringArray(R.array.state_codes)))[list.getSelectedItemPosition()]);
+                            rq_params.put("description", description);
+                            new sendRequestTask().execute();
+                            break;
+                        default: rq_params.put("param","branch");
+                            rq_params.put("value", ((String[]) (getResources().getStringArray(R.array.branch_codes)))[list.getSelectedItemPosition()]);
+                            rq_params.put("description",description);
+                            new sendRequestTask().execute();
+                            break;
+                    }
                 }
             }
         });
 
         return view;
+    }
+
+    private String getEntrantSESSID(){
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        return db.getEntrant().sess_id;
+    }
+    public boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
     }
 
     private class sendRequestTask extends AsyncTask<String, Void, String> {
@@ -118,7 +133,7 @@ public class SConnectRequestFragment extends Fragment {
             try {
                 HttpURLConnection conn= (HttpURLConnection) new URL(connect_url).openConnection();
                 conn.setRequestMethod("POST");
-                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+params.get("sess_id"));
+                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+getEntrantSESSID());
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
 
@@ -159,7 +174,7 @@ public class SConnectRequestFragment extends Fragment {
             dialog.dismiss();
             if (result.equals("success")) {
                 Toast.makeText(getContext(), "Request Sent Successfully!", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new SConnectTabFragment(params)).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new SConnectTabFragment()).commit();
             }
         }
     }

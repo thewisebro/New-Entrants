@@ -2,6 +2,7 @@ package features;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -116,6 +117,14 @@ public class BlogsFragment extends Fragment {
             return false;
     }
     private class LoadBlogTask extends AsyncTask<String, Void, String> {
+        private ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute(){
+            this.dialog=new ProgressDialog(getContext());
+            this.dialog.setMessage("Loading...");
+            this.dialog.show();
+        }
         @Override
         protected String doInBackground(String... params) {
 
@@ -134,6 +143,7 @@ public class BlogsFragment extends Fragment {
                 items.clear();
                 refreshing=false;
             }
+            dialog.dismiss();
         }
     }
     public void loadBlogs(){

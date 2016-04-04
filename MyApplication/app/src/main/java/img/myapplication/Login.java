@@ -325,20 +325,7 @@ public class Login extends ActionBarActivity {
     public void start(){
 
         if (details.get("category").equals("senior")){
-            /*
-            if ("".equals(student.town) || "".equals(student.state) || "".equals(student.email) || "".equals(student.mobile)){
-                Intent intent=new Intent(this,Update.class);
-                intent.putExtra("student",student);
-                startActivity(intent);
-                finish();
-            }
-            else {
-                MySQLiteHelper db = new MySQLiteHelper(this);
-                db.addStudent(student);
-                db.close();
-                startActivity(new Intent(this, NavigationStudent.class));
-                finish();
-            }*/
+
             MySQLiteHelper db = new MySQLiteHelper(this);
             db.addStudent(student);
             db.close();

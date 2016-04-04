@@ -3,6 +3,7 @@ package features;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,7 +34,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import img.myapplication.MySQLiteHelper;
 import img.myapplication.R;
@@ -46,13 +46,11 @@ import models.SeniorModel;
 public class SConnectAcceptFragment extends Fragment {
 
     private SeniorCardArrayAdapter cardArrayAdapter;
-    private Map<String,String> params;
     private List<SeniorModel> list=new ArrayList<SeniorModel>();
     private ListView listView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        params= (Map<String, String>) getArguments().getSerializable("userParams");
         View view = inflater.inflate(R.layout.fragment_sconnect_accept, container, false);
 
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -86,15 +84,26 @@ public class SConnectAcceptFragment extends Fragment {
         else
             return false;
     }
-
+    private String getEntrantSESSID(){
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        return db.getEntrant().sess_id;
+    }
     private class UpdateAcceptedSeniorsTask extends AsyncTask<String, Void, String> {
+        private ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute(){
+            this.dialog=new ProgressDialog(getContext());
+            this.dialog.setMessage("Loading...");
+            this.dialog.show();
+        }
         @Override
         protected String doInBackground(String... args) {
 
             try {
                 HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/accepted/").openConnection();
                 conn.setRequestMethod("GET");
-                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+params.get("sess_id").toString());
+                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+getEntrantSESSID());
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
                 String line = "";
@@ -132,6 +141,7 @@ public class SConnectAcceptFragment extends Fragment {
             if (result.equals("success")) {
                 cardArrayAdapter.refresh();
             }
+            dialog.dismiss();
         }
     }
     public class SeniorCardArrayAdapter  extends ArrayAdapter<SeniorModel> {

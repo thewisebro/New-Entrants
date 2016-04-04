@@ -28,11 +28,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import models.DrawerItemModel;
+import models.NewEntrantModel;
+import models.StudentModel;
 
 public class NavigationDrawerFragment extends Fragment {
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
@@ -51,7 +51,7 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = -1;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
-    private Map<String,Object> params=new HashMap<String,Object>();
+    private int type;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,26 +91,41 @@ public class NavigationDrawerFragment extends Fragment {
         DrawerLayout.setFitsSystemWindows(true);
         return DrawerLayout;
     }
-    public void setProfileView(Map<String,Object> params)    {
-        if (params.isEmpty())
-            return;
-        byte[] imgByte=null;
-        if (params.containsKey("img"))
-            imgByte= (byte[]) params.get("img");
-        if (imgByte!=null)
-            ((ImageView) mDrawerProfileView.findViewById(R.id.profile_picture))
-                    .setImageBitmap(BitmapFactory.decodeByteArray(imgByte,0,imgByte.length));
-        else
+    public void setProfileView()    {
+        String name=null;
+        String state=null;
+        String branchcode=null;
+        String branchname=null;
+
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        if (type==1){
+            NewEntrantModel model=db.getEntrant();
+            name=model.name;
+            state=model.state;
+            branchcode=model.branchcode;
+            branchname=model.branchname;
             ((ImageView) mDrawerProfileView.findViewById(R.id.profile_picture)).setVisibility(View.GONE);
-        ((TextView)mDrawerProfileView.findViewById(R.id.name)).setText(params.get("name").toString());
-        ((TextView)mDrawerProfileView.findViewById(R.id.info))
-                .setText(params.get("state").toString() + "\n" + params.get("branchname").toString()+" "+params.get("branchcode").toString());
+        }
+        else {
+            StudentModel model=db.getStudent();
+            name=model.name;
+            state=model.state;
+            branchcode=model.branchcode;
+            branchname=model.branchname;
+            if (model.profile_img!=null){
+                ((ImageView) mDrawerProfileView.findViewById(R.id.profile_picture))
+                        .setImageBitmap(BitmapFactory.decodeByteArray(model.profile_img,0,model.profile_img.length));
+            }
+        }
+
+        ((TextView)mDrawerProfileView.findViewById(R.id.name)).setText(name);
+        ((TextView)mDrawerProfileView.findViewById(R.id.info)).setText(state + "\n" + branchcode + ", " + branchname);
 
     }
-    public void set(int type, Map<String,Object> params){
-       this.params.putAll(params);
+    public void set(int type){
+       this.type=type;
         //Profile
-        setProfileView(params);
+        setProfileView();
         //List items
         DrawerItemAdapter adapter=new DrawerItemAdapter(getContext(),R.layout.drawer_item);
         ArrayList<DrawerItemModel> arrayList=new ArrayList<DrawerItemModel>();
@@ -188,19 +203,13 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
     public boolean isDrawerOpen() {
-        setProfileView(params);
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
-        mDrawerLayout.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                setProfileView(params);
-            }
-        });
+
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -230,6 +239,20 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerStateChanged(int newState){
                 super.onDrawerStateChanged(newState);
+                if (type==1){
+                    Navigation activity= (Navigation) getActivity();
+                    if (activity.get_update_status()) {
+                        setProfileView();
+                        activity.reset_updated();
+                    }
+                }
+                else {
+                    NavigationStudent activity= (NavigationStudent) getActivity();
+                    if (activity.get_update_status()) {
+                        setProfileView();
+                        activity.reset_updated();
+                    }
+                }
             }
 
             @Override
@@ -304,7 +327,6 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        setProfileView(params);
         super.onConfigurationChanged(newConfig);
 
         mDrawerToggle.onConfigurationChanged(newConfig);

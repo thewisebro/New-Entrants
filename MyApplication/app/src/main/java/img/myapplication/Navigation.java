@@ -16,9 +16,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import features.BlogPage;
 import features.BlogsFragment;
 import features.EntrantUpdateFragment;
@@ -39,8 +36,7 @@ public class Navigation extends ActionBarActivity
     private int mCurrentPosition;
     private CharSequence mTitle;
     private MySQLiteHelper db;
-    public Map<String,String> userParams=new HashMap<String,String>();
-    public Map<String,Object> userInfo=new HashMap<String, Object>();
+    private boolean updated=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,18 +44,11 @@ public class Navigation extends ActionBarActivity
         setContentView(R.layout.activity_navigation);
         db=new MySQLiteHelper(this);
         entrant=db.getEntrant();
-        userInfo.put("name",entrant.name);
-        userInfo.put("state",entrant.state);
-        userInfo.put("branchname",entrant.branchname);
-        userInfo.put("branchcode",entrant.branchcode);
-        userParams.put("state", entrant.statecode);
-        userParams.put("branch", entrant.branchcode);
-        userParams.put("sess_id",entrant.sess_id);
         mCurrentPosition=-1;
         fragmentCount=0;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mNavigationDrawerFragment.set(1,userInfo);
+        mNavigationDrawerFragment.set(1);
 
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
         if(!isConnected()){
@@ -74,9 +63,11 @@ public class Navigation extends ActionBarActivity
         else
             return false;
     }
+    public boolean get_update_status(){ return this.updated;}
+    public void set_updated(){ this.updated=true;}
+    public void reset_updated(){this.updated=false;}
     public void logout(){
         db.deleteEntrant();
-        db.deleteSeniors();
         Intent intent=new Intent(this, Login.class);
         startActivity(intent);
         finish();
@@ -90,7 +81,7 @@ public class Navigation extends ActionBarActivity
         loadFragment(new PeerPage(viewHolder.model));
     }
     public void sendRequest(View view){
-        loadFragment(new SConnectRequestFragment(userParams));
+        loadFragment(new SConnectRequestFragment());
     }
     public void TryAgain(){
         if (isConnected()){
@@ -107,11 +98,11 @@ public class Navigation extends ActionBarActivity
                     break;
                 case 0:fragment = new BlogsFragment();
                     break;
-                case 1:fragment = new SConnectTabFragment(userParams);
+                case 1:fragment = new SConnectTabFragment();
                     break;
                 case 3: logout();
                     break;
-                case 2: fragment=new EntrantUpdateFragment(entrant);
+                case 2: fragment=new EntrantUpdateFragment();
                     break;
                 default:fragment = new PConnectFragment(entrant.sess_id);
                     break;

@@ -15,9 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import features.BlogPage;
 import features.BlogsFragment;
 import features.JuniorConnect;
@@ -34,10 +31,8 @@ public class NavigationStudent extends ActionBarActivity
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
     private CharSequence mTitle;
-    private Map<String,String> userParams=new HashMap<String,String>();
-    private Map<String,Object> userInfo=new HashMap<String, Object>();
     private boolean lock=false;
-
+    private boolean updated=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,20 +41,11 @@ public class NavigationStudent extends ActionBarActivity
         db=new MySQLiteHelper(this);
         student=db.getStudent();
 
-        userParams.put("sess_id", student.sess_id);
-        userParams.put("category", "student");
-        userInfo.put("name",student.name);
-        userInfo.put("img",student.profile_img);
-        userInfo.put("state",student.state);
-        userInfo.put("branchname",student.branchname);
-        userInfo.put("branchcode",student.branchcode);
-
-
         mCurrentPosition=-1;
         fragmentCount=0;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mNavigationDrawerFragment.set(2,userInfo);
+        mNavigationDrawerFragment.set(2);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
         checkforUpdate();
@@ -68,9 +54,12 @@ public class NavigationStudent extends ActionBarActivity
             Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
         }
     }
+    public boolean get_update_status(){ return this.updated;}
+    public void set_updated(){ this.updated=true;}
+    public void reset_updated(){this.updated=false;}
     public void checkforUpdate() {
         if ("".equals(student.town) || "".equals(student.state) || "".equals(student.email) || "".equals(student.mobile)){
-            StudentUpdateFragment fragment=new StudentUpdateFragment(student);
+            StudentUpdateFragment fragment=new StudentUpdateFragment();
             lock=true;
             fragment.lock=true;
             getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
@@ -125,12 +114,11 @@ public class NavigationStudent extends ActionBarActivity
                     break;
                 case 0:fragment = new BlogsFragment();
                     break;
-                case 1: fragment=new JuniorConnect(userParams.get("sess_id"));
+                case 1: fragment=new JuniorConnect(student.sess_id);
                     break;
                 case 3: logout();
                     break;
-                //default:fragment=new ProfileFragment(student,student.category);
-                default: fragment= new StudentUpdateFragment(student);
+                default: fragment= new StudentUpdateFragment();
 
             }
         }

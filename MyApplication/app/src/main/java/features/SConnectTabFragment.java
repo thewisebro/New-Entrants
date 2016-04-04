@@ -9,9 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.Serializable;
-import java.util.Map;
-
 import img.myapplication.R;
 
 /**
@@ -20,12 +17,6 @@ import img.myapplication.R;
 @SuppressLint("ValidFragment")
 public class SConnectTabFragment extends Fragment {
 
-    private FragmentTabHost mTabHost;
-
-    private Map<String,String> userParams;
-    public SConnectTabFragment(Map<String,String> params){
-        this.userParams=params;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,12 +26,10 @@ public class SConnectTabFragment extends Fragment {
         FragmentTabHost mTabHost = (FragmentTabHost)view.findViewById(R.id.my_tabhost);
         mTabHost.setup(getActivity(), getChildFragmentManager(), R.layout.fragment_sconnect_tab);
 
-        Bundle arg = new Bundle();
-        arg.putSerializable("userParams", (Serializable) userParams);
         mTabHost.addTab(mTabHost.newTabSpec("pending").setIndicator("ALL REQUESTS"),
-                SConnectPendingFragment.class, arg);
+                SConnectPendingFragment.class, null);
         mTabHost.addTab(mTabHost.newTabSpec("accepted").setIndicator("ACCEPTED"),
-                SConnectAcceptFragment.class, arg);
+                SConnectAcceptFragment.class, null);
 
         return view;
     }

@@ -2,6 +2,7 @@ package features;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -29,8 +30,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import img.myapplication.MySQLiteHelper;
 import img.myapplication.R;
 import models.RequestCardViewHolder;
 import models.RequestModel;
@@ -40,14 +41,12 @@ import models.RequestModel;
  */
 public class SConnectPendingFragment extends Fragment {
 
-    private Map<String,String> params;
     private SeniorCardArrayAdapter cardArrayAdapter;
     private List<RequestModel> list=new ArrayList<RequestModel>();
     public String request_url="http://192.168.121.187:8080/new_entrants/pending/";
     public String extend_url="http://192.168.121.187:8080/new_entrants/extend/";
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
-        params= (Map<String, String>) getArguments().getSerializable("userParams");
         View view=inflater.inflate(R.layout.fragment_sconnect_pending, container, false);
         ListView listView = (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
@@ -69,6 +68,11 @@ public class SConnectPendingFragment extends Fragment {
             return true;
         else
             return false;
+    }
+
+    private String getEntrantSESSID(){
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        return db.getEntrant().sess_id;
     }
 
     private void getCards(String result){
@@ -99,12 +103,20 @@ public class SConnectPendingFragment extends Fragment {
 
     }
     private class getRequestsTask extends AsyncTask<String, Void, String> {
+        private ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute(){
+            this.dialog=new ProgressDialog(getContext());
+            this.dialog.setMessage("Loading...");
+            this.dialog.show();
+        }
         @Override
         protected String doInBackground(String... args) {
             try {
                 HttpURLConnection conn=(HttpURLConnection) new URL(request_url).openConnection();
                 conn.setRequestMethod("GET");
-                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+params.get("sess_id").toString());
+                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+getEntrantSESSID());
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
                 String line = "";
@@ -124,6 +136,7 @@ public class SConnectPendingFragment extends Fragment {
             if (result.equals("success")){
                 cardArrayAdapter.refresh();
             }
+            dialog.dismiss();
         }
     }
 
@@ -196,12 +209,20 @@ public class SConnectPendingFragment extends Fragment {
 
     }
     private class SendMoreRequests extends AsyncTask<String, Void, String> {
+        private ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute(){
+            this.dialog=new ProgressDialog(getContext());
+            this.dialog.setMessage("Loading...");
+            this.dialog.show();
+        }
         @Override
         protected String doInBackground(String... args) {
             try {
                 HttpURLConnection conn = (HttpURLConnection) new URL(extend_url).openConnection();
                 conn.setRequestMethod("POST");
-                conn.setRequestProperty("Cookie", "CHANNELI_SESSID=" + params.get("sess_id").toString());
+                conn.setRequestProperty("Cookie", "CHANNELI_SESSID=" + getEntrantSESSID());
 
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
@@ -231,6 +252,7 @@ public class SConnectPendingFragment extends Fragment {
             if (result.equals("success")){
                 Toast.makeText(getContext(), "Request Sent Successfully!", Toast.LENGTH_SHORT).show();
             }
+            dialog.dismiss();
         }
     }
 

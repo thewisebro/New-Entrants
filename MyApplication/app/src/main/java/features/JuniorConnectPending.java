@@ -2,6 +2,7 @@ package features;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -71,6 +72,14 @@ public class JuniorConnectPending extends Fragment {
             return false;
     }
     private class getPendingTask extends AsyncTask<String, Void, String> {
+        private ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute(){
+            this.dialog=new ProgressDialog(getContext());
+            this.dialog.setMessage("Loading...");
+            this.dialog.show();
+        }
         @Override
         protected String doInBackground(String... params) {
 
@@ -97,6 +106,7 @@ public class JuniorConnectPending extends Fragment {
             if (result.equals("success")){
                 cardArrayAdapter.refresh();
             }
+            dialog.dismiss();
         }
     }
     private void getCards(String result){

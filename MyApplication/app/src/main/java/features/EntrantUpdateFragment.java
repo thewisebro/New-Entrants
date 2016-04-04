@@ -2,6 +2,7 @@ package features;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import img.myapplication.MySQLiteHelper;
+import img.myapplication.Navigation;
 import img.myapplication.R;
 import models.NewEntrantModel;
 
@@ -52,9 +54,6 @@ public class EntrantUpdateFragment extends Fragment {
     private CheckBox visibility;
     private String updateURL="http://192.168.121.187:8080/new_entrants/j_update/";
 
-    public EntrantUpdateFragment(NewEntrantModel model){
-        this.entrant=model;
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -95,6 +94,9 @@ public class EntrantUpdateFragment extends Fragment {
         visibility= (CheckBox) view.findViewById(R.id.u_contact_visibility);
     }
     private void setInitial(){
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        entrant=db.getEntrant();
+        db.close();
         name.setText(entrant.name);
         username.setText(entrant.username);
         branch.setSelection(getSpinnerPos(entrant.branchcode, getResources().getStringArray(R.array.branch_codes)));
@@ -115,6 +117,14 @@ public class EntrantUpdateFragment extends Fragment {
     }
 
     private class UpdateSubmitTask extends AsyncTask<String, Void, String> {
+
+        private ProgressDialog dialog;
+        @Override
+        protected void onPreExecute(){
+            dialog=new ProgressDialog(getContext());
+            dialog.setMessage("Updating...");
+            dialog.show();
+        }
 
         @Override
         protected String doInBackground(String... urls) {
@@ -168,8 +178,13 @@ public class EntrantUpdateFragment extends Fragment {
                 db.deleteEntrant();
                 db.addEntrant(entrant);
                 db.close();
+                ((Navigation)getActivity()).set_updated();
                 Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
             }
+            else{
+                Toast.makeText(getContext(), "Update failed!", Toast.LENGTH_SHORT).show();
+            }
+            dialog.dismiss();
         }
     }
     public void getParams(){
