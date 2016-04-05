@@ -64,15 +64,15 @@ public class Register extends AppCompatActivity {
 
     }
 
-    /*public boolean isConnected(){
+    public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected())
             return true;
         else
             return false;
-    }*/
-    public boolean isConnected(){
+    }
+ /*   public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()){
@@ -103,7 +103,7 @@ public class Register extends AppCompatActivity {
         else
             Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
         return false;
-    }
+    }*/
 
     public void register(View view) throws IllegalAccessException {
         if (isConnected()){

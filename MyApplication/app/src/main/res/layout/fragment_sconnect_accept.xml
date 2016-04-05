@@ -5,8 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:background="#e2e4fe">
+    android:background="@color/blue_grey_50">
 
     <ListView
         android:id="@+id/card_listView"
@@ -14,7 +13,6 @@
         android:layout_height="match_parent"
         android:listSelector="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
-        android:animateLayoutChanges="true"
         android:divider="@null"
         android:dividerHeight="10dp" />
     <img.myapplication.RoundImageView

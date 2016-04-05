@@ -13,10 +13,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import features.BlogPage;
 import features.BlogsFragment;
@@ -65,15 +61,15 @@ public class NavigationStudent extends ActionBarActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
         }
     }
-/*    public boolean isConnected(){
+    public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected())
             return true;
         else
             return false;
-    }*/
-    public boolean isConnected(){
+    }
+ /*   public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()){
@@ -104,7 +100,7 @@ public class NavigationStudent extends ActionBarActivity
         else
             Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
         return false;
-    }
+    }*/
     public void logout(){
         db.deleteStudent();
         Intent intent=new Intent(this, Login.class);

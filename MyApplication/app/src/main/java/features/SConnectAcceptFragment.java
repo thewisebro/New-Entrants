@@ -1,6 +1,7 @@
 package features;
 
 
+import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -19,8 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -213,15 +214,21 @@ public class SConnectAcceptFragment extends Fragment {
                 viewHolder.fblink.setText(card.fblink);
             ToggleButton bt= (ToggleButton) row.findViewById(R.id.toggle_senior);
             bt.setVisibility(View.VISIBLE);
-            bt.setTag(row.findViewById(R.id.down_view));
+            bt.setTag(row.findViewById(R.id.card_layout));
             bt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    RelativeLayout layout = (RelativeLayout) buttonView.getTag();
-                    if (isChecked)
-                        layout.setVisibility(View.VISIBLE);
-                    else
-                        layout.setVisibility(View.GONE);
+                    LinearLayout layout = (LinearLayout) buttonView.getTag();
+                    if (isChecked) {
+                        ((LinearLayout)layout.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
+                        layout.setLayoutTransition(null);
+
+                        //listView.setLayoutTransition(new LayoutTransition());
+                    } else {
+                        ((LinearLayout)layout.findViewById(R.id.down_view)).setVisibility(View.GONE);
+                        layout.setLayoutTransition(new LayoutTransition());
+                        //listView.setLayoutTransition(null);
+                    }
                 }
             });
             return row;

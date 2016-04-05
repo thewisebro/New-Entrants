@@ -10,10 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 
 /**
@@ -24,7 +20,7 @@ public class NetworkErrorFragment extends Fragment {
     private String appURL="http://192.168.121.187:8080/new_entrants/";
 
 
-    public boolean isConnected(){
+ /*   public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()){
@@ -55,7 +51,15 @@ public class NetworkErrorFragment extends Fragment {
         else
             Toast.makeText(getContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
         return false;
-    }
+    }*/
+ public boolean isConnected(){
+     ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
+     NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+     if (networkInfo != null && networkInfo.isConnected())
+         return true;
+     else
+         return false;
+ }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

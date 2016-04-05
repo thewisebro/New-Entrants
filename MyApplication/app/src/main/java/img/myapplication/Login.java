@@ -75,46 +75,15 @@ public class Login extends ActionBarActivity {
         setContentView(R.layout.activity_login);
     }
     //public TextView blogText;
-    /*public boolean isConnected(){
+    public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected())
             return true;
         else
             return false;
-    }*/
-    public boolean isConnected(){
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()){
-            try {
-                HttpURLConnection connection= (HttpURLConnection) new URL(appURL).openConnection();
-                connection.setConnectTimeout(5000);
-                connection.setReadTimeout(5000);
-                int rcode=connection.getResponseCode();
-                if (rcode== HttpURLConnection.HTTP_OK || rcode==HttpURLConnection.HTTP_ACCEPTED)
-                    return true;
-                else {
-                    if (rcode==HttpURLConnection.HTTP_SERVER_ERROR){
-                        Toast.makeText(getApplicationContext(), "SERVER-SIDE NETWORK ERROR!", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), "NETWORK ERROR", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "NETWORK ERROR", Toast.LENGTH_SHORT).show();
-                return false;
-
-            }
-        }
-        else
-            Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
-        return false;
     }
+
     public void login(View view){
         if (isConnected()){
             params.clear();

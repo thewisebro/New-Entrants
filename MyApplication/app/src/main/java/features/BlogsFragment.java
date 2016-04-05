@@ -334,7 +334,6 @@ public class BlogsFragment extends Fragment {
         inflater.inflate(R.menu.menu_blogs,menu);
         final MenuItem item=menu.findItem(R.id.filter_spinner);
         final Spinner spinner= (Spinner) MenuItemCompat.getActionView(item);
-        spinner.setDropDownWidth(50);
         ArrayAdapter<CharSequence> filters=ArrayAdapter.createFromResource(getContext(),R.array.filters,R.layout.spinner_item);
         filters.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(filters);;

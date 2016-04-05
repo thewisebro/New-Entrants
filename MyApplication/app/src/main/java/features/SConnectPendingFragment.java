@@ -203,6 +203,10 @@ public class SConnectPendingFragment extends Fragment {
                     }
                 });
             }
+            else{
+                TextView more= (TextView) row.findViewById(R.id.more);
+                more.setAlpha(0.4F);
+            }
             row.setTag(viewHolder);
             return row;
         }

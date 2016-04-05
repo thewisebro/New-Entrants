@@ -13,10 +13,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import features.BlogPage;
 import features.BlogsFragment;
@@ -55,16 +51,48 @@ public class Navigation extends ActionBarActivity
 
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
-    public boolean isConnected(){
+ /*   private class CheckConnection extends AsyncTask<String, Void, Boolean> {
+        private ProgressDialog dialog=new ProgressDialog(getApplicationContext());
+        public Boolean result=false;
+        @Override
+        protected void onPreExecute(){
+            dialog.setMessage("Checking Connection...");
+            dialog.show();
+        }
+        @Override
+        protected Boolean doInBackground(String... urls) {
+
+            String url=urls[0];
+
+            return  isConnected(urls[0]);
+        }
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result)
+                this.result=true;
+            else
+                this.result=false;
+            dialog.dismiss();
+        }
+    }*/
+ public boolean isConnected(){
+     ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+     NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+     if (networkInfo != null && networkInfo.isConnected())
+         return true;
+     else
+         return false;
+ }
+   /* public boolean isConnected(String url){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()){
             try {
-                HttpURLConnection connection= (HttpURLConnection) new URL(appURL).openConnection();
-                connection.setConnectTimeout(5000);
-                connection.setReadTimeout(5000);
+                HttpURLConnection connection= (HttpURLConnection) new URL(url).openConnection();
+                connection.setReadTimeout(3000);
                 int rcode=connection.getResponseCode();
-                if (rcode== HttpURLConnection.HTTP_OK || rcode==HttpURLConnection.HTTP_ACCEPTED)
+                if (rcode== HttpURLConnection.HTTP_OK || rcode==HttpURLConnection.HTTP_ACCEPTED )
                     return true;
                 else {
                     if (rcode==HttpURLConnection.HTTP_SERVER_ERROR){
@@ -86,15 +114,7 @@ public class Navigation extends ActionBarActivity
         else
             Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
         return false;
-    }
-/*public boolean isConnected(){
-    ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
-    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-    if (networkInfo != null && networkInfo.isConnected())
-        return true;
-    else
-        return false;
-}*/
+    }*/
     public boolean get_update_status(){ return this.updated;}
     public void set_updated(){ this.updated=true;}
     public void reset_updated(){this.updated=false;}
@@ -119,7 +139,7 @@ public class Navigation extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
         mCurrentPosition=position;
-        if (isConnected()) {
+        if (isConnected()){
             switch (position) {
                 case -1:
                     fragment = new OpeningFragment();

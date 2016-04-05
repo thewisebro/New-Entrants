@@ -12,6 +12,5 @@ public class JuniorModel {
     public String mobile;
     public String fblink;
     public String username;
-    public String dp_link="";
     public String description;
 }

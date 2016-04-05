@@ -54,7 +54,7 @@ public class JuniorConnectPending extends Fragment {
         listView= (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
-        cardArrayAdapter = new JuniorCardArrayAdapter(getContext(), R.layout.list_junior_card);
+        cardArrayAdapter = new JuniorCardArrayAdapter(getContext(), R.layout.junior_card);
 
         if (isConnected()){
             new getPendingTask().execute(sess_id);
@@ -176,7 +176,7 @@ public class JuniorConnectPending extends Fragment {
             JuniorCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.list_junior_card, parent, false);
+                row = inflater.inflate(R.layout.junior_card, parent, false);
                 viewHolder = new JuniorCardViewHolder();
                 viewHolder.name = (TextView) row.findViewById(R.id.j_name);
                 viewHolder.town = (TextView) row.findViewById(R.id.j_town);

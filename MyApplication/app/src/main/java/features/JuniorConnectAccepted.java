@@ -1,16 +1,13 @@
 package features;
 
 
-import android.annotation.TargetApi;
+import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,9 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -29,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -55,7 +50,7 @@ public class JuniorConnectAccepted extends Fragment {
         listView= (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
-        cardArrayAdapter = new JuniorCardArrayAdapter(getContext(), R.layout.list_junior_card);
+        cardArrayAdapter = new JuniorCardArrayAdapter(getContext(), R.layout.junior_card);
 
         if (isConnected()){
             new getAcceptedTask().execute(sess_id);
@@ -178,7 +173,7 @@ public class JuniorConnectAccepted extends Fragment {
             JuniorCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.list_junior_card, parent, false);
+                row = inflater.inflate(R.layout.junior_card, parent, false);
                 viewHolder = new JuniorCardViewHolder();
                 viewHolder.name = (TextView) row.findViewById(R.id.j_name);
                 viewHolder.town = (TextView) row.findViewById(R.id.j_town);
@@ -187,7 +182,6 @@ public class JuniorConnectAccepted extends Fragment {
                 viewHolder.contact= (TextView) row.findViewById(R.id.j_contact);
                 viewHolder.email= (TextView) row.findViewById(R.id.j_email);
                 viewHolder.fblink= (TextView) row.findViewById(R.id.j_fblink);
-                viewHolder.dp= (ImageView) row.findViewById(R.id.j_dp);
 
             } else {
                 viewHolder = (JuniorCardViewHolder)row.getTag();
@@ -199,65 +193,31 @@ public class JuniorConnectAccepted extends Fragment {
             viewHolder.branch.setText(card.branch);
             viewHolder.contact.setText(card.mobile);
             viewHolder.email.setText(card.email);
-            if (card.dp_link.isEmpty())
-                viewHolder.dp.setVisibility(View.GONE);
-            else
-                new ImageLoadTask(card.dp_link,viewHolder.dp).execute();
-            if (card.fblink.isEmpty())
-                viewHolder.fblink.setVisibility(View.GONE);
-            else
-                viewHolder.fblink.setText(card.fblink);
+            viewHolder.fblink.setText(card.fblink);
             ToggleButton bt= (ToggleButton) row.findViewById(R.id.toggle_junior);
             bt.setVisibility(View.VISIBLE);
-            bt.setTag(row.findViewById(R.id.down_view));
+            bt.setTag(row.findViewById(R.id.card_layout));
             bt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    RelativeLayout layout = (RelativeLayout) buttonView.getTag();
-                    if (isChecked)
-                        layout.setVisibility(View.VISIBLE);
-                    else
-                        layout.setVisibility(View.GONE);
+                    LinearLayout layout = (LinearLayout) buttonView.getTag();
+                    if (isChecked) {
+                        ((LinearLayout)layout.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
+                        layout.setLayoutTransition(null);
+
+                        //listView.setLayoutTransition(new LayoutTransition());
+                    } else {
+                        ((LinearLayout)layout.findViewById(R.id.down_view)).setVisibility(View.GONE);
+                        layout.setLayoutTransition(new LayoutTransition());
+                        //listView.setLayoutTransition(null);
+                    }
                 }
             });
+            row.setTag(viewHolder);
             return row;
         }
 
     }
-    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
-        private String url;
-        private ImageView imageView;
-
-        public ImageLoadTask(String url, ImageView imageView) {
-            this.url = url;
-            this.imageView = imageView;
-        }
-
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-            try {
-                URL urlConnection = new URL(url);
-                HttpURLConnection connection = (HttpURLConnection) urlConnection
-                        .openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                return myBitmap;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            super.onPostExecute(result);
-            imageView.setImageBitmap(result);
-        }
-
-    }
 
 }
