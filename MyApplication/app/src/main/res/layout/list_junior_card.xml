@@ -1,122 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
-    android:orientation="vertical"
-    android:background="@drawable/card_background_selector"
-    android:descendantFocusability="beforeDescendants"
-    android:animateLayoutChanges="true"
     android:longClickable="true">
 
-    <RelativeLayout
-        android:orientation="vertical"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:descendantFocusability="afterDescendants"
-        android:outlineProvider="paddedBounds"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp">
+        android:orientation="vertical"
+        android:background="@drawable/card_background_selector"
+        android:animateLayoutChanges="true"
+        android:longClickable="true">
 
-        <TextView
-            android:id="@+id/j_name"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/yellow_700"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/j_name"
-            android:id="@+id/j_loc"
-            android:layout_centerHorizontal="true"
-            android:orientation="horizontal">
+            android:descendantFocusability="afterDescendants"
+            android:outlineProvider="paddedBounds"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
+
             <TextView
-                android:id="@+id/j_town"
+                android:id="@+id/j_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/blue_grey_300"
-                android:layout_below="@+id/j_name"/>
+                android:textColor="@color/yellow_700"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/j_name"
+                android:id="@+id/j_loc"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/j_town"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue_grey_300"
+                    android:layout_below="@+id/j_name"/>
+
+                <TextView
+                    android:id="@+id/j_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue_grey_300"
+                    android:layout_centerHorizontal="true"
+                    android:layout_toLeftOf="@+id/j_town"
+                    android:layout_below="@+id/j_name"/>
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/j_state"
+                android:id="@+id/j_branch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue_grey_300"
                 android:layout_centerHorizontal="true"
-                android:layout_toLeftOf="@+id/j_town"
-                android:layout_below="@+id/j_name"/>
+                android:layout_below="@+id/j_loc"/>
+
+            <ToggleButton
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:id="@+id/toggle_junior"
+                android:background="@drawable/check"
+                android:textOn=""
+                android:textOff=""
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="15dp"
+            android:id="@+id/down_view"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height=".5dp"
+                android:layout_margin="5dp"
+                android:background="@color/blue_grey_300"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/j_query"
+                android:textColor="@color/blue_grey_300"
+                android:layout_centerHorizontal="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height=".5dp"
+                android:layout_margin="5dp"
+                android:background="@color/blue_grey_300"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="CONNECT"
+                android:id="@+id/connect"
+                android:layout_gravity="right"
+                android:textColor="@color/yellow_700"
+                android:textStyle="bold" />
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/j_branch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/blue_grey_300"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/j_loc"/>
-
-        <ToggleButton
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:id="@+id/toggle_junior"
-            android:background="@drawable/check"
-            android:textOn=""
-            android:textOff=""
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:visibility="gone" />
-
-        <img.myapplication.RoundImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/j_dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:outlineProvider="paddedBounds"
-        android:padding="15dp"
-        android:id="@+id/down_view"
-        android:animateLayoutChanges="true"
-        android:textAlignment="center"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/j_contact"
-            android:layout_alignParentTop="true"
-            android:textColor="@color/blue_grey_300"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/j_email"
-            android:textColor="@color/blue_grey_300"
-            android:layout_below="@+id/j_contact"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/j_fblink"
-            android:textColor="@color/blue_grey_300"
-            android:layout_below="@+id/j_email"
-            android:layout_centerHorizontal="true" />
-
-    </RelativeLayout>
-
-</LinearLayout>
+    </LinearLayout>
+</FrameLayout>

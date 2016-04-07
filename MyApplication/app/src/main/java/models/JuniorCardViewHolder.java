@@ -13,5 +13,5 @@ public class JuniorCardViewHolder {
     public TextView contact;
     public TextView email;
     public TextView fblink;
-    public String username;
+    public TextView query;
 }

@@ -14,16 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import features.BlogPage;
-import features.BlogsFragment;
+import features.Blogs_new;
 import features.EntrantUpdateFragment;
 import features.PConnectFragment;
-import features.PeerPage;
 import features.SConnectRequestFragment;
 import features.SConnectTabFragment;
-import models.BlogCardViewHolder;
 import models.NewEntrantModel;
-import models.PeerCardViewHolder;
 
 
 public class Navigation extends ActionBarActivity
@@ -124,14 +120,14 @@ public class Navigation extends ActionBarActivity
         startActivity(intent);
         finish();
     }
-    public void displayBlog(View view){
+/*    public void displayBlog(View view){
        BlogCardViewHolder viewHolder=(BlogCardViewHolder) view.getTag();
         loadFragment(new BlogPage(viewHolder.blogUrl));
     }
     public void displayPeer(View view){
         PeerCardViewHolder viewHolder=(PeerCardViewHolder) view.getTag();
         loadFragment(new PeerPage(viewHolder.model));
-    }
+    }*/
     public void sendRequest(View view){
         loadFragment(new SConnectRequestFragment());
     }
@@ -145,7 +141,8 @@ public class Navigation extends ActionBarActivity
                     fragment = new OpeningFragment();
                     break;
                 case 0:
-                    fragment = new BlogsFragment();
+                    //fragment = new BlogsFragment();
+                    fragment=new Blogs_new();
                     break;
                 case 1:
                     fragment = new SConnectTabFragment();

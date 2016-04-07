@@ -12,13 +12,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import features.BlogPage;
 import features.BlogsFragment;
 import features.JuniorConnect;
 import features.StudentUpdateFragment;
-import models.BlogCardViewHolder;
 import models.StudentModel;
 
 
@@ -107,10 +104,10 @@ public class NavigationStudent extends ActionBarActivity
         startActivity(intent);
         finish();
     }
-    public void displayBlog(View view){
+ /*   public void displayBlog(View view){
         BlogCardViewHolder viewHolder=(BlogCardViewHolder) view.getTag();
         loadFragment(new BlogPage(viewHolder.blogUrl));
-    }
+    }*/
     public void loadFragment(Fragment fragment){
         if (fragment == null)
             return;

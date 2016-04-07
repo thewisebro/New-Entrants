@@ -1,6 +1,7 @@
 package features;
 
 
+import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,9 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +58,7 @@ public class JuniorConnectPending extends Fragment {
         listView= (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
-        cardArrayAdapter = new JuniorCardArrayAdapter(getContext(), R.layout.junior_card);
+        cardArrayAdapter = new JuniorCardArrayAdapter(getContext(), R.layout.pending_card);
 
         if (isConnected()){
             new getPendingTask().execute(sess_id);
@@ -176,12 +180,13 @@ public class JuniorConnectPending extends Fragment {
             JuniorCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.junior_card, parent, false);
+                row = inflater.inflate(R.layout.pending_card, parent, false);
                 viewHolder = new JuniorCardViewHolder();
                 viewHolder.name = (TextView) row.findViewById(R.id.j_name);
                 viewHolder.town = (TextView) row.findViewById(R.id.j_town);
                 viewHolder.state = (TextView) row.findViewById(R.id.j_state);
                 viewHolder.branch= (TextView) row.findViewById(R.id.j_branch);
+                viewHolder.query= (TextView) row.findViewById(R.id.j_query);
             } else {
                 viewHolder = (JuniorCardViewHolder)row.getTag();
             }
@@ -190,16 +195,32 @@ public class JuniorConnectPending extends Fragment {
             viewHolder.town.setText(card.town);
             viewHolder.state.setText(card.state);
             viewHolder.branch.setText(card.branch);
-            viewHolder.username=card.username;
-
-            row.setTag(viewHolder);
-            row.setOnClickListener(new View.OnClickListener() {
+            viewHolder.query.setText(card.description);
+            ToggleButton bt= (ToggleButton) row.findViewById(R.id.toggle_junior);
+            bt.setVisibility(View.VISIBLE);
+            bt.setTag(row.findViewById(R.id.card_layout));
+            bt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    new AcceptRequestTask().execute(((JuniorCardViewHolder)v.getTag()).username);
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    LinearLayout layout = (LinearLayout) buttonView.getTag();
+                    if (isChecked) {
+                        ((LinearLayout) layout.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
+                        layout.setLayoutTransition(null);
+                    } else {
+                        ((LinearLayout) layout.findViewById(R.id.down_view)).setVisibility(View.GONE);
+                        layout.setLayoutTransition(new LayoutTransition());
+                    }
                 }
             });
-
+            TextView connect = (TextView) row.findViewById(R.id.connect);
+            connect.setTag(card.username);
+            connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AcceptRequestTask().execute(v.getTag().toString());
+                }
+            });
+            row.setTag(viewHolder);
             return row;
         }
 

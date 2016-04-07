@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -234,6 +235,13 @@ public class NavigationDrawerFragment extends Fragment {
             }
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset){
+                Handler delay= new Handler();
+                delay.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                },5000);
                 super.onDrawerSlide(drawerView,slideOffset);
             }
             @Override

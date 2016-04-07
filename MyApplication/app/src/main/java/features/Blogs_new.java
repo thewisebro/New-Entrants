@@ -44,11 +44,10 @@ import java.util.List;
 
 import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
-import models.BlogCardViewHolder;
 import models.BlogModel;
 
 
-public class BlogsFragment extends Fragment {
+public class Blogs_new extends Fragment {
 
     public boolean refreshing=false;
     private BlogCardArrayAdapter cardArrayAdapter;
@@ -202,6 +201,7 @@ public class BlogsFragment extends Fragment {
     }
 
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
+        Context context;
 
         public void refresh(){
             //this.cardList.clear();
@@ -218,6 +218,7 @@ public class BlogsFragment extends Fragment {
 
         public BlogCardArrayAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
+            this.context=context;
         }
 
         @Override
@@ -238,34 +239,21 @@ public class BlogsFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View row = convertView;
-            BlogCardViewHolder viewHolder;
-            if (row == null) {
-                LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.list_blog_card, parent, false);
-                viewHolder = new BlogCardViewHolder();
-                viewHolder.img= (ImageView) row.findViewById(R.id.blog_img);
-                viewHolder.topic= (TextView) row.findViewById(R.id.topic);
-                viewHolder.date= (TextView) row.findViewById(R.id.date);
-                viewHolder.description= (TextView) row.findViewById(R.id.description);
-                viewHolder.dp= (ImageView) row.findViewById(R.id.blog_dp);
-                viewHolder.category= (TextView) row.findViewById(R.id.category);
-                viewHolder.group= (TextView) row.findViewById(R.id.group);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View row = inflater.inflate(R.layout.list_blog_card, parent, false);
 
-            } else {
-                viewHolder = (BlogCardViewHolder)row.getTag();
-            }
             final BlogModel card = getItem(position);
-            viewHolder.topic.setText(card.topic);
-            viewHolder.description.setText(card.desc);
-            viewHolder.group.setText(card.group);
-            viewHolder.date.setText(card.date);
-            viewHolder.category.setText(card.category);
-            viewHolder.blogUrl=BlogUrl+card.group_username+"/"+card.slug;
-            new ImageLoadTask(card.dpurl,viewHolder.dp).execute();
+
+            ((TextView) row.findViewById(R.id.topic)).setText(card.topic);
+            ((TextView) row.findViewById(R.id.date)).setText(card.date);
+            ((TextView) row.findViewById(R.id.description)).setText(card.desc);
+            ((TextView) row.findViewById(R.id.category)).setText(card.category);
+            ((TextView) row.findViewById(R.id.group)).setText(card.group);
+            String blogUrl=BlogUrl+card.group_username+"/"+card.slug;
+            new ImageLoadTask(card.dpurl, (ImageView) row.findViewById(R.id.blog_dp)).execute();
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
-                new ImageLoadTask(server+card.imageurl, viewHolder.img).execute();
+                new ImageLoadTask(server+card.imageurl, (ImageView) row.findViewById(R.id.blog_img)).execute();
             }
             else {
                 row.findViewById(R.id.img_layout).setVisibility(View.GONE);
@@ -279,15 +267,15 @@ public class BlogsFragment extends Fragment {
                     }
                 }
             });
+
+            row.setTag(blogUrl);
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    BlogCardViewHolder holder = (BlogCardViewHolder) v.getTag();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new Blog(holder.blogUrl)).addToBackStack(null).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new Blog(v.getTag().toString())).addToBackStack(null).commit();
                 }
             });
 
-            row.setTag(viewHolder);
             return row;
         }
 
