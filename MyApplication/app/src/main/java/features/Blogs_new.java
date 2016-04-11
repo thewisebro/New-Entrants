@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -123,17 +124,49 @@ public class Blogs_new extends Fragment {
         protected void onPreExecute(){
             this.dialog=new ProgressDialog(getContext());
             this.dialog.setMessage("Loading...");
+            this.dialog.setIndeterminate(false);
+            this.dialog.setCancelable(false);
+            this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancel(true);
+                }
+            });
             this.dialog.show();
         }
         @Override
-        protected String doInBackground(String... params) {
+        protected void onCancelled(String result){
 
+            Toast.makeText(getContext(),"Cancelled!",Toast.LENGTH_SHORT).show();
+            cardArrayAdapter.refresh();
+            items.clear();
+            refreshing=false;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            String blogUrl=url;
+            if (blogsCount!=0)
+                blogUrl+="?action=next&id="+lastId;
             try {
-                loadBlogs();
+                URL url= new URL(blogUrl);
+                HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(10000);
+                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb=new StringBuilder();
+                String line = "";
+                while((line = bufferedReader.readLine()) != null)
+                    sb.append(line + '\n');
+                String result=sb.toString();
+                getBlogs(result);
                 return "success";
+
             } catch (Exception e) {
-                return "Unable to retrieve web page. URL may be invalid.";
+                e.printStackTrace();
+                return "Can't connect to network";
             }
+
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override

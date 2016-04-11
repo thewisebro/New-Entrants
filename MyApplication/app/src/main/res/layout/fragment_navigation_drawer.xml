@@ -11,35 +11,42 @@
         android:id="@+id/profile_view"
         android:background="@drawable/iitr">
 
-        <img.myapplication.RoundImageView
-            android:id="@+id/profile_picture"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_height="80dp">
+            <img.myapplication.RoundImageView
+                android:id="@+id/profile_picture"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"/>
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/profile_picture"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:singleLine="true"
+                android:textColor="#FFFFFF"/>
 
-        <TextView
-            android:id="@+id/info"
-            android:layout_toRightOf="@id/profile_picture"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="0dp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"/>
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/info"
-            android:layout_toRightOf="@id/profile_picture"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"/>
-
+            <TextView
+                android:id="@+id/info"
+                android:layout_toRightOf="@id/profile_picture"
+                android:layout_width="fill_parent"
+                android:layout_below="@+id/name"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="sans-serif"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#FFFFFF"/>
+        </RelativeLayout>
     </RelativeLayout>
 
     <ListView

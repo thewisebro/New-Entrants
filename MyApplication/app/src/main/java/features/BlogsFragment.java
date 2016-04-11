@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -124,17 +125,42 @@ public class BlogsFragment extends Fragment {
         protected void onPreExecute(){
             this.dialog=new ProgressDialog(getContext());
             this.dialog.setMessage("Loading...");
+            this.dialog.setIndeterminate(false);
+            this.dialog.setCancelable(false);
+            this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
             this.dialog.show();
         }
         @Override
         protected String doInBackground(String... params) {
 
-            try {
-                loadBlogs();
-                return "success";
-            } catch (Exception e) {
-                return "Unable to retrieve web page. URL may be invalid.";
-            }
+            String blogUrl=url;
+                if (blogsCount!=0)
+                    blogUrl+="?action=next&id="+lastId;
+                try {
+                    URL url= new URL(blogUrl);
+                    HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setConnectTimeout(5000);
+                    conn.setReadTimeout(10000);
+                    BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+                    StringBuilder sb=new StringBuilder();
+                    String line = "";
+                    while((line = bufferedReader.readLine()) != null)
+                        sb.append(line + '\n');
+                    String result=sb.toString();
+                    getBlogs(result);
+                    return "success";
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return "Can't connect to network";
+                }
+
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
@@ -155,6 +181,8 @@ public class BlogsFragment extends Fragment {
             URL url= new URL(blogUrl);
             HttpURLConnection conn=(HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(10000);
             BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
             StringBuilder sb=new StringBuilder();
             String line = "";
@@ -265,10 +293,13 @@ public class BlogsFragment extends Fragment {
             new ImageLoadTask(card.dpurl,viewHolder.dp).execute();
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
+                row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
                 new ImageLoadTask(server+card.imageurl, viewHolder.img).execute();
             }
             else {
                 row.findViewById(R.id.img_layout).setVisibility(View.GONE);
+                row.findViewById(R.id.card_middle).setVisibility(View.VISIBLE);
+
             }
             row.findViewById(R.id.card_bottom).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -312,7 +343,12 @@ public class BlogsFragment extends Fragment {
                 connection.setDoInput(true);
                 connection.connect();
                 InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                BitmapFactory.Options options=new BitmapFactory.Options();
+                options.inSampleSize=2;
+                options.inJustDecodeBounds=false;
+                Bitmap myBitmap = BitmapFactory.decodeStream(input,null,options);
+
+
                 return myBitmap;
             } catch (Exception e) {
                 e.printStackTrace();

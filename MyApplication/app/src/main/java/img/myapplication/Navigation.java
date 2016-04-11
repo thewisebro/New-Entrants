@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import features.Blogs_new;
+import features.BlogsFragment;
 import features.EntrantUpdateFragment;
 import features.PConnectFragment;
 import features.SConnectRequestFragment;
@@ -142,7 +142,7 @@ public class Navigation extends ActionBarActivity
                     break;
                 case 0:
                     //fragment = new BlogsFragment();
-                    fragment=new Blogs_new();
+                    fragment=new BlogsFragment();
                     break;
                 case 1:
                     fragment = new SConnectTabFragment();

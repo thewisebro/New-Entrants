@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -45,11 +44,19 @@ public class Register extends AppCompatActivity {
     public CookieManager cookieManager;
     public Map<String,String > params;
     public String csrftoken;
-    public ImageView img;
-    public int pos_state;
-    public int pos_branch;
     private String registerURL="http://192.168.121.187:8080/new_entrants/register/";
     private String appURL="http://192.168.121.187:8080/new_entrants/";
+    private EditText name;
+    private EditText username;
+    private EditText password;
+    private EditText re_password;
+    private EditText town;
+    private EditText email;
+    private EditText mobile;
+    private EditText fblink;
+    private CheckBox phone_privacy;
+    private Spinner state;
+    private Spinner branch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +68,7 @@ public class Register extends AppCompatActivity {
         db=new MySQLiteHelper(this);
         entrant=new NewEntrantModel();
         setContentView(R.layout.activity_register);
-
+        setViews();
     }
 
     public boolean isConnected(){
@@ -72,55 +79,34 @@ public class Register extends AppCompatActivity {
         else
             return false;
     }
- /*   public boolean isConnected(){
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()){
-            try {
-                HttpURLConnection connection= (HttpURLConnection) new URL(appURL).openConnection();
-                connection.setConnectTimeout(5000);
-                connection.setReadTimeout(5000);
-                int rcode=connection.getResponseCode();
-                if (rcode== HttpURLConnection.HTTP_OK || rcode==HttpURLConnection.HTTP_ACCEPTED)
-                    return true;
-                else {
-                    if (rcode==HttpURLConnection.HTTP_SERVER_ERROR){
-                        Toast.makeText(getApplicationContext(), "SERVER-SIDE NETWORK ERROR!", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), "NETWORK ERROR", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "NETWORK ERROR", Toast.LENGTH_SHORT).show();
-                return false;
-
-            }
-        }
-        else
-            Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
-        return false;
-    }*/
+    private void setViews(){
+        name=(EditText) findViewById(R.id.new_name);
+        username= (EditText) findViewById(R.id.new_username);
+        password= (EditText) findViewById(R.id.new_password);
+        re_password=(EditText) findViewById(R.id.re_password);
+        town=(EditText) findViewById(R.id.new_town);
+        email=(EditText) findViewById(R.id.new_email);
+        mobile=(EditText) findViewById(R.id.new_mobile);
+        fblink=(EditText) findViewById(R.id.new_fblink);
+        phone_privacy= (CheckBox) findViewById(R.id.contact_visibility);
+        state= (Spinner) findViewById(R.id.new_state);
+        branch= (Spinner) findViewById(R.id.new_branch);
+    }
 
     public void register(View view) throws IllegalAccessException {
         if (isConnected()){
-            pos_branch=((Spinner) findViewById(R.id.new_branch)).getSelectedItemPosition();
-            pos_state=((Spinner) findViewById(R.id.new_state)).getSelectedItemPosition();
-            entrant.name= ((EditText) findViewById(R.id.new_name)).getText().toString().trim();
-            entrant.username= ((EditText) findViewById(R.id.new_username)).getText().toString().trim();
-            entrant.password= ((EditText) findViewById(R.id.new_password)).getText().toString().trim();
-            entrant.town= ((EditText) findViewById(R.id.new_town)).getText().toString().trim();
-            entrant.email= ((EditText) findViewById(R.id.new_email)).getText().toString().trim();
-            entrant.mobile= ((EditText) findViewById(R.id.new_mobile)).getText().toString().trim();
-            entrant.fb_link= ((EditText) findViewById(R.id.new_fblink)).getText().toString().trim();
-            entrant.branchname=((Spinner) findViewById(R.id.new_branch)).getSelectedItem().toString().trim();
-            entrant.branchcode=(getResources().getStringArray(R.array.branch_codes))[pos_branch];
-            entrant.state= ((Spinner) findViewById(R.id.new_branch)).getSelectedItem().toString().trim();
-            entrant.statecode=(getResources().getStringArray(R.array.state_codes))[pos_state];
-            entrant.phone_privacy= ((CheckBox) findViewById(R.id.contact_visibility)).isChecked();
+            entrant.name= name.getText().toString().trim();
+            entrant.username= username.getText().toString().trim();
+            entrant.password= password.getText().toString().trim();
+            entrant.town= town.getText().toString().trim();
+            entrant.email= email.getText().toString().trim();
+            entrant.mobile= mobile.getText().toString().trim();
+            entrant.fb_link= fblink.getText().toString().trim();
+            entrant.branchname=branch.getSelectedItem().toString().trim();
+            entrant.branchcode=(getResources().getStringArray(R.array.branch_codes))[branch.getSelectedItemPosition()];
+            entrant.state= state.getSelectedItem().toString().trim();
+            entrant.statecode=(getResources().getStringArray(R.array.state_codes))[state.getSelectedItemPosition()];
+            entrant.phone_privacy= phone_privacy.isChecked();
             if(validate())
                 new RegisterTask().execute();
         }
@@ -140,38 +126,62 @@ public class Register extends AppCompatActivity {
         //String fbPattern="^$|^[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+$";
         boolean flag=true;
 
-        if(!(entrant.password).equals(((EditText) findViewById(R.id.re_password)).getText().toString())){
+        if(!(entrant.password).equals(re_password.getText().toString())){
+            re_password.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getApplicationContext(),"Passwords do not match", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            re_password.setBackgroundDrawable(null);
         if (!(entrant.email).matches(emailPattern)){
+            email.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            email.setBackgroundDrawable(null);
         if (!(entrant.username).matches(usernamePattern)){
+            username.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getApplicationContext(), "Invalid username", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            username.setBackgroundDrawable(null);
         if(!(entrant.mobile).matches(mobilePattern)){
+            mobile.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getApplicationContext(),"Invalid Mobile Number", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            mobile.setBackgroundDrawable(null);
         if(!(entrant.name).matches(namePattern)){
+            name.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getApplicationContext(),"Enter a proper Name", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            name.setBackgroundDrawable(null);
         if(!(entrant.town).matches(townPattern)){
+            town.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getApplicationContext(),"Enter a proper City name", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            town.setBackgroundDrawable(null);
         if (!(entrant.fb_link).matches(fbPattern)){
+            fblink.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getApplicationContext(), "Invalid Facebook link", Toast.LENGTH_SHORT).show();
             flag=false;
         }
-        if (pos_state==0){
+        else
+            fblink.setBackgroundDrawable(null);
+        if (state.getSelectedItemPosition()==0){
+            state.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getApplicationContext(), "Select a State", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            state.setBackgroundDrawable(null);
         return flag;
     }
     private void setParams() throws IllegalAccessException {
@@ -253,10 +263,14 @@ public class Register extends AppCompatActivity {
         try {
             JSONObject rObj=new JSONObject(result);
             status=rObj.get("status").toString();
+            if (status.equals("fails"))
+                status=rObj.getString("error");
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
         return status;
     }
     private class RegisterTask extends AsyncTask<String, Void, String> {
@@ -277,7 +291,10 @@ public class Register extends AppCompatActivity {
                 finish();
             }
             else {
-                Toast.makeText(getApplicationContext(),"Registration Failed!", Toast.LENGTH_SHORT).show();
+                if (result==null)
+                    Toast.makeText(getApplicationContext(),"Registration Failed!", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getApplicationContext(),result, Toast.LENGTH_SHORT).show();
             }
         }
     }
