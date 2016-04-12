@@ -290,11 +290,11 @@ public class BlogsFragment extends Fragment {
             viewHolder.date.setText(card.date);
             viewHolder.category.setText(card.category);
             viewHolder.blogUrl=BlogUrl+card.group_username+"/"+card.slug;
-            new ImageLoadTask(card.dpurl,viewHolder.dp).execute();
+            new ImageLoadTask(card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length)).execute();
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
                 row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
-                new ImageLoadTask(server+card.imageurl, viewHolder.img).execute();
+                new ImageLoadTask(server+card.imageurl, viewHolder.img,(int) getResources().getDimension(R.dimen.blogcardimg_heigth),getActivity().getWindowManager().getDefaultDisplay().getWidth()).execute();
             }
             else {
                 row.findViewById(R.id.img_layout).setVisibility(View.GONE);
@@ -328,14 +328,51 @@ public class BlogsFragment extends Fragment {
 
         private String url;
         private ImageView imageView;
+        private int ht;
+        private int wt;
 
-        public ImageLoadTask(String url, ImageView imageView) {
+        public ImageLoadTask(String url, ImageView imageView, int h,int w) {
             this.url = url;
             this.imageView = imageView;
+            this.ht=h;
+            this.wt=w;
+        }
+        public int getSampleSize(){
+
+            try {
+                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeStream(input, null, options);
+
+                final int height = options.outHeight;
+                final int width = options.outWidth;
+                int inSampleSize = 1;
+
+                if (height > ht || width > wt) {
+
+                    final int halfHeight = height / 2;
+                    final int halfWidth = width / 2;
+
+                    while ((halfHeight / inSampleSize) > ht
+                            && (halfWidth / inSampleSize) > wt) {
+                        inSampleSize *= 2;
+                    }
+                }
+
+                return inSampleSize;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 1;
         }
 
         @Override
         protected Bitmap doInBackground(Void... params) {
+            int insamplesize=getSampleSize();
             try {
                 URL urlConnection = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) urlConnection
@@ -343,12 +380,12 @@ public class BlogsFragment extends Fragment {
                 connection.setDoInput(true);
                 connection.connect();
                 InputStream input = connection.getInputStream();
-                BitmapFactory.Options options=new BitmapFactory.Options();
-                options.inSampleSize=2;
-                options.inJustDecodeBounds=false;
-                Bitmap myBitmap = BitmapFactory.decodeStream(input,null,options);
 
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize=insamplesize;
+                options.inJustDecodeBounds = false;
 
+                Bitmap myBitmap= BitmapFactory.decodeStream(input,null,options);
                 return myBitmap;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -361,8 +398,6 @@ public class BlogsFragment extends Fragment {
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
             imageView.setImageBitmap(result);
-            //GradientDrawable gd=new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP,new int[]{0xFF525252,0xFFA8A6A6,0xFFFFFF});
-            //((RelativeLayout)imageView.getParent()).setBackground(gd);
         }
 
     }

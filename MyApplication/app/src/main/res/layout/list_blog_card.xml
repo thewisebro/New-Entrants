@@ -23,7 +23,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:id="@+id/img_layout"
-                android:layout_height="150sp">
+                android:layout_height="@dimen/blogcardimg_heigth">
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -106,8 +106,8 @@
 
 
             <img.myapplication.RoundImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/roundimage_length"
+                android:layout_height="@dimen/roundimage_length"
                 android:id="@+id/blog_dp"
                 android:padding="10dp" />
 

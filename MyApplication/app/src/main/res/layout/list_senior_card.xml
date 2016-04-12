@@ -86,8 +86,8 @@
                 android:visibility="gone" />
 
             <img.myapplication.RoundImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/roundimage_length"
+                android:layout_height="@dimen/roundimage_length"
                 android:id="@+id/s_dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
