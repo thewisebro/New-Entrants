@@ -102,24 +102,24 @@ public class NavigationDrawerFragment extends Fragment {
             NewEntrantModel model=db.getEntrant();
             name=model.name;
             state=model.state;
-            branchcode=model.branchcode;
-            branchname=model.branchname;
             ((ImageView) mDrawerProfileView.findViewById(R.id.profile_picture)).setVisibility(View.GONE);
+            ((TextView)mDrawerProfileView.findViewById(R.id.name)).setText(name);
+            ((TextView)mDrawerProfileView.findViewById(R.id.info)).setText(state);
         }
         else {
             StudentModel model=db.getStudent();
             name=model.name;
-            state=model.state;
             branchcode=model.branchcode;
             branchname=model.branchname;
             if (model.profile_img!=null){
                 ((ImageView) mDrawerProfileView.findViewById(R.id.profile_picture))
                         .setImageBitmap(BitmapFactory.decodeByteArray(model.profile_img,0,model.profile_img.length));
             }
+            ((TextView)mDrawerProfileView.findViewById(R.id.name)).setText(name);
+            ((TextView)mDrawerProfileView.findViewById(R.id.info)).setText(branchcode + ", " + branchname);
         }
 
-        ((TextView)mDrawerProfileView.findViewById(R.id.name)).setText(name);
-        ((TextView)mDrawerProfileView.findViewById(R.id.info)).setText(branchcode + ", " + branchname);
+
 
     }
     public void set(int type){
@@ -130,16 +130,20 @@ public class NavigationDrawerFragment extends Fragment {
         DrawerItemAdapter adapter=new DrawerItemAdapter(getContext(),R.layout.drawer_item);
         ArrayList<DrawerItemModel> arrayList=new ArrayList<DrawerItemModel>();
         String[] tabs=null;
-        int[] drawables={android.R.drawable.sym_action_chat,android.R.drawable.ic_menu_share,
-                android.R.drawable.ic_menu_preferences,android.R.drawable.ic_lock_idle_lock};
+        int[] drawables=null;
         if(type==2) {
+            drawables=new int[]{android.R.drawable.sym_action_chat,android.R.drawable.ic_menu_share,
+                    android.R.drawable.ic_menu_preferences,android.R.drawable.ic_lock_idle_lock};
             tabs = getResources().getStringArray(R.array.studenttabs);
         }
         if(type==1){
+            drawables=new int[]{android.R.drawable.sym_action_chat,android.R.drawable.ic_menu_share,
+                    android.R.drawable.ic_menu_add,android.R.drawable.ic_menu_preferences,
+                    android.R.drawable.ic_lock_idle_lock};
             tabs=getResources().getStringArray(R.array.entrantstabs);
         }
 
-        for (int i=0;i<4;i++){
+        for (int i=0;i<drawables.length;i++){
             DrawerItemModel model=new DrawerItemModel();
             model.drawable=drawables[i];
             model.string=tabs[i];

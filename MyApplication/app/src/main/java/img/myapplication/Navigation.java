@@ -147,10 +147,13 @@ public class Navigation extends ActionBarActivity
                 case 1:
                     fragment = new SConnectTabFragment();
                     break;
-                case 3:
+                case 2:
+                    fragment=new SConnectRequestFragment();
+                    break;
+                case 4:
                     logout();
                     break;
-                case 2:
+                case 3:
                     fragment = new EntrantUpdateFragment();
                     break;
                 default:
@@ -159,7 +162,7 @@ public class Navigation extends ActionBarActivity
             }
         }
         else {
-            if (position==3)
+            if (position==4)
                 logout();
             else
                 fragment=new NetworkErrorFragment();

@@ -62,6 +62,7 @@ public class BlogsFragment extends Fragment {
     private String server="http://192.168.121.187:8080";
     private String url;
     boolean flag=false;
+    private int spinner_pos;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
@@ -87,7 +88,7 @@ public class BlogsFragment extends Fragment {
                         @Override
                         public void run() {
                             swipeLayout.setRefreshing(false);
-                            refreshing=true;
+                            refreshing = true;
                             new LoadBlogTask().execute();
                             Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
                         }
@@ -294,7 +295,7 @@ public class BlogsFragment extends Fragment {
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
                 row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
-                new ImageLoadTask(server+card.imageurl, viewHolder.img,(int) getResources().getDimension(R.dimen.blogcardimg_heigth),getActivity().getWindowManager().getDefaultDisplay().getWidth()).execute();
+                new ImageLoadTask(server+card.imageurl, viewHolder.img,(int) getResources().getDimension(R.dimen.blogcardimg_height),getActivity().getWindowManager().getDefaultDisplay().getWidth()).execute();
             }
             else {
                 row.findViewById(R.id.img_layout).setVisibility(View.GONE);
@@ -408,13 +409,11 @@ public class BlogsFragment extends Fragment {
         flag=false;
         inflater.inflate(R.menu.menu_blogs,menu);
         final MenuItem item=menu.findItem(R.id.filter_spinner);
-        final Spinner spinner= (Spinner) MenuItemCompat.getActionView(item);
+        Spinner spinner= (Spinner) MenuItemCompat.getActionView(item);
         ArrayAdapter<CharSequence> filters=ArrayAdapter.createFromResource(getContext(),R.array.filters,R.layout.spinner_item);
         filters.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        spinner.setAdapter(filters);;
+        spinner.setAdapter(filters);
         spinner.setPopupBackgroundDrawable(getResources().getDrawable(R.drawable.spinner_dropdown_background));
-
-
         spinner.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -426,28 +425,30 @@ public class BlogsFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                spinner_pos=position;
                 if (flag) {
-
-                    cardArrayAdapter.clear();
-                    switch (position) {
-                        case 1:
-                            url = BlogUrl + "iitr/";
-                            blogsCount = 0;
-                            new LoadBlogTask().execute();
-                            break;
-                        case 2:
-                            url = BlogUrl + "groups/";
-                            blogsCount = 0;
-                            new LoadBlogTask().execute();
-                            break;
-                        default:
-                            url = BlogUrl;
-                            blogsCount = 0;
-                            new LoadBlogTask().execute();
-                            break;
+                    if (isConnected()){
+                        cardArrayAdapter.clear();
+                        switch (position) {
+                            case 1:
+                                url = BlogUrl + "iitr/";
+                                blogsCount = 0;
+                                new LoadBlogTask().execute();
+                                break;
+                            case 2:
+                                url = BlogUrl + "groups/";
+                                blogsCount = 0;
+                                new LoadBlogTask().execute();
+                                break;
+                            default:
+                                url = BlogUrl;
+                                blogsCount = 0;
+                                new LoadBlogTask().execute();
+                                break;
+                        }
+                        flag = false;
                     }
-                    flag = false;
+
                 }
 
             }

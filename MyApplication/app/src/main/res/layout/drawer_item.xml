@@ -4,7 +4,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:background="@drawable/card_background_selector">
+    android:background="@drawable/item_background_selector">
 
     <ImageView
         android:id="@+id/drawer_icon"
@@ -21,7 +21,7 @@
         android:layout_centerVertical="true"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:textColor="#757575"
+        android:textColor="@color/drawer_textColor"
         android:layout_marginLeft="15dp">
     </TextView>
 

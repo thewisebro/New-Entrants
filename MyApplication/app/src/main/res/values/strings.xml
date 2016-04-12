@@ -2,15 +2,10 @@
     <string name="app_name">New Entrants</string>
     <string name="title_activity_navigation">Navigation</string>
 
-    <string name="tab1">Profile</string>
-    <string name="tab2">Blogs</string>
-    <string name="tab3">Peer Connect</string>
-    <string name="tab4">Senior Connect</string>
-    <string name="tab5">Edit Info</string>
-    <string name="tab6">Logout</string>
     <string-array name="entrantstabs">
         <item>Blogs</item>
         <item>Senior Connect</item>
+        <item>Request a Senior</item>
         <item>Profile</item>
         <item>Logout</item>
     </string-array>
@@ -20,14 +15,7 @@
         <item>Profile</item>
         <item>Logout</item>
     </string-array>
-    <string-array name="tabs">
-        <item>Profile</item>
-        <item>Blogs</item>
-        <item>Peer Connect</item>
-        <item>Senior Connect</item>
-        <item>Edit Info</item>
-        <item>Logout</item>
-    </string-array>
+
     <string-array name="tabs_logged_in">
         <item>Signup</item>
         <item>Login</item>

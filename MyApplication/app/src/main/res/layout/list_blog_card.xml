@@ -23,7 +23,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:id="@+id/img_layout"
-                android:layout_height="@dimen/blogcardimg_heigth">
+                android:layout_height="@dimen/blogcardimg_height">
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                     android:layout_centerHorizontal="true"
                     android:fontFamily="sans-serif"
                     android:textStyle="bold"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                     android:textStyle="italic"
                     android:fontFamily="sans-serif-light"
                     android:paddingLeft="10dp"
-                    android:textColor="@color/blue_grey_300" />
+                    android:textColor="@color/blue_grey_50" />
             </RelativeLayout>
 
         </RelativeLayout>

@@ -1,6 +1,7 @@
 package features;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -51,6 +53,7 @@ public class GroupFragment extends Fragment {
     private int blogsCount;
     private int lastId;
     private String groupUrl;
+    private String server="http://192.168.121.187:8080";
 
     public GroupFragment(String url){
         groupUrl=url;
@@ -242,12 +245,16 @@ public class GroupFragment extends Fragment {
             viewHolder.date.setText(card.date);
             viewHolder.category.setText("From the Groups");
             viewHolder.blogUrl = groupUrl+"/" + card.slug;
-            new ImageLoadTask(card.dpurl, viewHolder.dp).execute();
-            if (card.imageurl != null) {
+            new ImageLoadTask(card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length)).execute();
+            if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
-                new ImageLoadTask(card.imageurl, viewHolder.img).execute();
-            } else {
+                row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
+                new ImageLoadTask(server+card.imageurl, viewHolder.img,(int) getResources().getDimension(R.dimen.blogcardimg_height),getActivity().getWindowManager().getDefaultDisplay().getWidth()).execute();
+            }
+            else {
                 row.findViewById(R.id.img_layout).setVisibility(View.GONE);
+                row.findViewById(R.id.card_middle).setVisibility(View.VISIBLE);
+
             }
             row.setTag(viewHolder);
             row.setOnClickListener(new View.OnClickListener() {
@@ -264,14 +271,51 @@ public class GroupFragment extends Fragment {
 
         private String url;
         private ImageView imageView;
+        private int ht;
+        private int wt;
 
-        public ImageLoadTask(String url, ImageView imageView) {
+        public ImageLoadTask(String url, ImageView imageView, int h,int w) {
             this.url = url;
             this.imageView = imageView;
+            this.ht=h;
+            this.wt=w;
+        }
+        public int getSampleSize(){
+
+            try {
+                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeStream(input, null, options);
+
+                final int height = options.outHeight;
+                final int width = options.outWidth;
+                int inSampleSize = 1;
+
+                if (height > ht || width > wt) {
+
+                    final int halfHeight = height / 2;
+                    final int halfWidth = width / 2;
+
+                    while ((halfHeight / inSampleSize) > ht
+                            && (halfWidth / inSampleSize) > wt) {
+                        inSampleSize *= 2;
+                    }
+                }
+
+                return inSampleSize;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 1;
         }
 
         @Override
         protected Bitmap doInBackground(Void... params) {
+            int insamplesize=getSampleSize();
             try {
                 URL urlConnection = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) urlConnection
@@ -279,7 +323,12 @@ public class GroupFragment extends Fragment {
                 connection.setDoInput(true);
                 connection.connect();
                 InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize=insamplesize;
+                options.inJustDecodeBounds = false;
+
+                Bitmap myBitmap= BitmapFactory.decodeStream(input,null,options);
                 return myBitmap;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -287,6 +336,7 @@ public class GroupFragment extends Fragment {
             return null;
         }
 
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @Override
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
