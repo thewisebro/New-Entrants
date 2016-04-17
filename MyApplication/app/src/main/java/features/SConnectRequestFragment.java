@@ -147,6 +147,8 @@ public class SConnectRequestFragment extends Fragment {
             try {
                 HttpURLConnection conn= (HttpURLConnection) new URL(connect_url).openConnection();
                 conn.setRequestMethod("POST");
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(10000);
                 conn.setRequestProperty("Cookie","CHANNELI_SESSID="+getEntrantSESSID());
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
@@ -165,7 +167,6 @@ public class SConnectRequestFragment extends Fragment {
                 writer.close();
                 os.close();
 
-                int responseCode=conn.getResponseCode();
                 BufferedReader reader= new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuffer buffer=new StringBuffer();
                 String inputLine;
@@ -177,6 +178,7 @@ public class SConnectRequestFragment extends Fragment {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                Toast.makeText(getContext(),"Unable to send request!",Toast.LENGTH_LONG).show();
             }
 
             return null;

@@ -104,6 +104,8 @@ public class JuniorConnectPending extends Fragment {
 
                 HttpURLConnection conn=(HttpURLConnection) new URL(pendingURL).openConnection();
                 conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(10000);
                 conn.setRequestProperty("Cookie", "CHANNELI_SESSID="+params[0]);
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
@@ -114,6 +116,7 @@ public class JuniorConnectPending extends Fragment {
                 return "success";
             } catch (Exception e) {
                 e.printStackTrace();
+                Toast.makeText(getContext(),"Unable to load!",Toast.LENGTH_LONG).show();
             }
             return null;
         }
@@ -243,12 +246,11 @@ public class JuniorConnectPending extends Fragment {
         protected String doInBackground(String... args) {
 
             try {
-
                 HttpURLConnection conn = (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/accept/").openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Cookie", "CHANNELI_SESSID=" + sess_id);
-
-
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(10000);
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));

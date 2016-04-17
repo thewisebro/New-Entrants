@@ -28,10 +28,7 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.CookieHandler;
 import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.CookieStore;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -154,24 +151,12 @@ public class StudentUpdateFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... urls) {
-            cookieManager=new CookieManager(null, CookiePolicy.ACCEPT_ALL);
-            CookieHandler.setDefault(cookieManager);
-            CookieStore cookieStore=cookieManager.getCookieStore();
             try {
-                /*HttpURLConnection connGet= (HttpURLConnection) new URL(updateURL).openConnection();
-                connGet.setRequestMethod("GET");
-                connGet.setRequestProperty("Cookie","CHANNELI_SESSID="+student.sess_id);
-                Object obj=connGet.getContent();
-                //String csrftoken=cookieStore.getCookies().get(0).getValue();*/
-
                 HttpURLConnection connPost= (HttpURLConnection) new URL(updateURL).openConnection();
                 connPost.setRequestMethod("POST");
                 connPost.setDoInput(true);
                 connPost.setDoOutput(true);
                 connPost.setRequestProperty("Cookie", "CHANNELI_SESSID=" + student.sess_id);
-                //connPost.setRequestProperty("Cookie", "CHANNELI_SESSID=" + student.sess_id + ";csrftoken=" + csrftoken);
-                //getParams();
-                //params.put("csrfmiddlewaretoken",csrftoken);
                 Uri.Builder builder = new Uri.Builder();
                 for (Map.Entry<String, String> entry : params.entrySet()){
                     builder.appendQueryParameter(entry.getKey(),entry.getValue());
@@ -185,7 +170,6 @@ public class StudentUpdateFragment extends Fragment {
                 writer.flush();
                 writer.close();
                 os.close();
-                int rcode=connPost.getResponseCode();
                 BufferedReader reader= new BufferedReader(new InputStreamReader(connPost.getInputStream()));
                 StringBuffer buffer=new StringBuffer();
                 String inputLine;
@@ -220,9 +204,6 @@ public class StudentUpdateFragment extends Fragment {
                 }
                 ((NavigationStudent)getActivity()).set_updated();
                 Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
-
-                //startActivity(new Intent(getContext(), NavigationStudent.class));
-                //getActivity().finish();
             }
             else {
                 Toast.makeText(getContext(), "Update failed!", Toast.LENGTH_SHORT).show();
@@ -239,35 +220,46 @@ public class StudentUpdateFragment extends Fragment {
     }
     public boolean checkParams(){
         String emailPattern="^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        //String mobilePattern="^(\\+91|0|)[0-9]{10}$";
         String mobilePattern="^$|^(\\+\\d{1,3}[- ]?)?\\d{10}$";
-        //String namePattern="[a-zA-Z ]+";
-        String namePattern="^[a-zA-Z ]{1,100}$";
-        String usernamePattern="^[0-9a-zA-Z]{1,30}$";
         String townPattern="^$|^[a-zA-Z ]+$";
         String fbPattern="^$|^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
 
         boolean flag=true;
         if (!(params.get("email").toString()).matches(emailPattern)){
-            Toast.makeText(getContext(), "Invalid valid email address", Toast.LENGTH_SHORT).show();
+            email.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            email.setBackgroundDrawable(null);
         if(!(params.get("phone_no").toString()).matches(mobilePattern)){
+            mobile.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getContext(),"Invalid Mobile Number", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            mobile.setBackgroundDrawable(null);
         if(!(params.get("hometown").toString()).matches(townPattern)){
+            town.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getContext(),"Enter a proper City name", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            town.setBackgroundDrawable(null);
         if (!(params.get("fb_link").toString()).matches(fbPattern)){
-            Toast.makeText(getContext(), "Invalid valid Facebook link", Toast.LENGTH_SHORT).show();
+            fblink.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getContext(), "Invalid Facebook link", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            fblink.setBackgroundDrawable(null);
         if (state.getSelectedItemPosition()==0){
+            state.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getContext(), "Select a State", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            state.setBackgroundDrawable(null);
         return flag;
     }
 

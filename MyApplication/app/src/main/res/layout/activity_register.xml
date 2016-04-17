@@ -83,8 +83,7 @@
             android:layout_height="wrap_content"
             android:spinnerMode="dialog"
             android:entries="@array/branches"
-            android:id="@+id/new_branch"
-            android:background="@color/white" />
+            android:id="@+id/new_branch" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

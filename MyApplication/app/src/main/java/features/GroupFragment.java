@@ -143,8 +143,6 @@ public class GroupFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             if (result.equals("success")){
-                //cardArrayAdapter.notifyDataSetChanged();
-
                 cardArrayAdapter.refresh();
                 items.clear();
             }
@@ -161,6 +159,8 @@ public class GroupFragment extends Fragment {
             URL url= new URL(blogUrl);
             HttpURLConnection conn=(HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(10000);
             BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
             StringBuilder sb=new StringBuilder();
             String line = "";
@@ -171,6 +171,7 @@ public class GroupFragment extends Fragment {
 
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(getContext(),"Unable to load blogs",Toast.LENGTH_LONG).show();
         }
     }
     public void getBlogs(String result){

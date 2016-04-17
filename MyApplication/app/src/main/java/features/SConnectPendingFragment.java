@@ -130,6 +130,8 @@ public class SConnectPendingFragment extends Fragment {
             try {
                 HttpURLConnection conn=(HttpURLConnection) new URL(request_url).openConnection();
                 conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(10000);
                 conn.setRequestProperty("Cookie","CHANNELI_SESSID="+getEntrantSESSID());
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
@@ -139,6 +141,7 @@ public class SConnectPendingFragment extends Fragment {
                 getCards(sb.toString());
                 return "success";
             } catch (Exception e) {
+                Toast.makeText(getContext(),"Unable to load!",Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 

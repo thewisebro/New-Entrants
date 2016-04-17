@@ -164,6 +164,7 @@ public class BlogsFragment extends Fragment {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Toast.makeText(getContext(),"Can't connect to network",Toast.LENGTH_LONG).show();
                     return "Can't connect to network";
                 }
         }
@@ -175,7 +176,7 @@ public class BlogsFragment extends Fragment {
                 items.clear();
                 refreshing=false;
             }
-            if (isCancelled())
+
             dialog.dismiss();
         }
     }

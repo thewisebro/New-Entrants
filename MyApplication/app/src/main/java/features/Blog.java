@@ -91,7 +91,7 @@ public class Blog extends Fragment {
         protected String doInBackground(String... params) {
             try {
                 HttpURLConnection conn= (HttpURLConnection) new URL(url).openConnection();
-                conn.setConnectTimeout(3000);
+                conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);
                 conn.setRequestMethod("GET");
 

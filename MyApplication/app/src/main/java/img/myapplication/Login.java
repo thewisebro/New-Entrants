@@ -35,7 +35,6 @@ import java.net.CookiePolicy;
 import java.net.CookieStore;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -74,7 +73,6 @@ public class Login extends ActionBarActivity {
         params=new HashMap<String,String>();
         setContentView(R.layout.activity_login);
     }
-    //public TextView blogText;
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -380,33 +378,6 @@ public class Login extends ActionBarActivity {
             finish();
         }
     }
-    private class DownloadImageTask extends AsyncTask<String, Void, byte[]> {
-        @Override
-        protected byte[] doInBackground(String... urls) {
-            try {
-                URL urlConnection = new URL(urls[0]);
-                HttpURLConnection connection = (HttpURLConnection) urlConnection
-                        .openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                int rcode=connection.getResponseCode();
-                InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                ByteBuffer buffer=ByteBuffer.allocate(myBitmap.getByteCount());
-                myBitmap.copyPixelsToBuffer(buffer);
-                byte[] img=buffer.array();
-                return img;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-        @Override
-        protected void onPostExecute(byte[] result) {
-            if (result!=null)
-                student.profile_img=result;
-        }
-    }
 
     public void register(View view){
         Intent intent = new Intent(this, Register.class);
@@ -414,20 +385,12 @@ public class Login extends ActionBarActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-
-
         return super.onOptionsItemSelected(item);
     }
 }

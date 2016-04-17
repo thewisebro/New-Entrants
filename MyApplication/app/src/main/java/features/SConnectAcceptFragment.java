@@ -110,6 +110,8 @@ public class SConnectAcceptFragment extends Fragment {
             try {
                 HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/accepted/").openConnection();
                 conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(10000);
                 conn.setRequestProperty("Cookie","CHANNELI_SESSID="+getEntrantSESSID());
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
@@ -137,6 +139,7 @@ public class SConnectAcceptFragment extends Fragment {
                 }
                 return "success";
             } catch (Exception e) {
+                Toast.makeText(getContext(),"Unable to load!",Toast.LENGTH_LONG).show();
                 return "Unable to retrieve web page. URL may be invalid.";
             }
 

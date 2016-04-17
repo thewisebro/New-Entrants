@@ -214,35 +214,46 @@ public class EntrantUpdateFragment extends Fragment {
     }
     public boolean checkParams(){
         String emailPattern="^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        //String mobilePattern="^(\\+91|0|)[0-9]{10}$";
         String mobilePattern="^$|^(\\+\\d{1,3}[- ]?)?\\d{10}$";
-        //String namePattern="[a-zA-Z ]+";
-        String namePattern="^[a-zA-Z ]{1,100}$";
-        String usernamePattern="^[0-9a-zA-Z]{1,30}$";
         String townPattern="^$|^[a-zA-Z ]+$";
         String fbPattern="^$|^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
 
         boolean flag=true;
         if (!(params.get("email").toString()).matches(emailPattern)){
-            Toast.makeText(getContext(), "Invalid valid email address", Toast.LENGTH_SHORT).show();
+            email.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            email.setBackgroundDrawable(null);
         if(!(params.get("phone_no").toString()).matches(mobilePattern)){
+            mobile.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getContext(),"Invalid Mobile Number", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            mobile.setBackgroundDrawable(null);
         if(!(params.get("hometown").toString()).matches(townPattern)){
+            town.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getContext(),"Enter a proper City name", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            town.setBackgroundDrawable(null);
         if (!(params.get("fb_link").toString()).matches(fbPattern)){
-            Toast.makeText(getContext(), "Invalid valid Facebook link", Toast.LENGTH_SHORT).show();
+            fblink.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getContext(), "Invalid Facebook link", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            fblink.setBackgroundDrawable(null);
         if (state.getSelectedItemPosition()==0){
+            state.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getContext(), "Select a State", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            state.setBackgroundDrawable(null);
         return flag;
     }
 }

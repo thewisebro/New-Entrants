@@ -207,7 +207,6 @@ public class Register extends AppCompatActivity {
     }
     private String registerNow(){
         String result=null;
-        HttpURLConnection urlConnectionPost=null;
         cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
         CookieStore cookieStore=cookieManager.getCookieStore();
@@ -215,14 +214,15 @@ public class Register extends AppCompatActivity {
             cookieStore.removeAll();
             HttpURLConnection conn= (HttpURLConnection) new URL(registerURL).openConnection();
             conn.setRequestMethod("GET");
-            conn.setReadTimeout(5000);
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(10000);
             if (conn.getResponseCode()== HttpURLConnection.HTTP_OK) {
                 Object obj = conn.getContent();
             }
 
             csrftoken=cookieStore.getCookies().get(0).getValue().toString();
 
-            urlConnectionPost= (HttpURLConnection) new URL(registerURL).openConnection();
+            HttpURLConnection urlConnectionPost= (HttpURLConnection) new URL(registerURL).openConnection();
             urlConnectionPost.setDoOutput(true);
             urlConnectionPost.setDoInput(true);
             urlConnectionPost.setRequestMethod("POST");
@@ -305,7 +305,6 @@ public class Register extends AppCompatActivity {
                 return "Unable to retrieve web page. URL may be invalid.";
             }
         }
-        // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
             if (result.equals("success")){
