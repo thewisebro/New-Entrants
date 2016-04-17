@@ -20,4 +20,12 @@
         android:layout_gravity="center"
         android:gravity="center_vertical|center_horizontal" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/appLink"
+        android:id="@+id/link"
+        android:layout_gravity="center_horizontal|bottom" />
+
 </FrameLayout>

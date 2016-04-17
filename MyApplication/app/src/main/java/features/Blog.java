@@ -3,6 +3,7 @@ package features;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -64,12 +65,26 @@ public class Blog extends Fragment {
 
     private class BlogTask extends AsyncTask<String,Void,String>{
 
-        private ProgressDialog dialog=new ProgressDialog(getContext());
+        private ProgressDialog dialog;
 
         @Override
         protected void onPreExecute(){
+            this.dialog=new ProgressDialog(getContext());
             this.dialog.setMessage("Loading...");
+            this.dialog.setIndeterminate(false);
+            this.dialog.setCancelable(false);
+            this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancel(true);
+                }
+            });
             this.dialog.show();
+        }
+        @Override
+        protected void onCancelled(String result){
+            Toast.makeText(getContext(),"Loading aborted!",Toast.LENGTH_LONG).show();
+            onPostExecute(result);
         }
 
         @Override
@@ -103,8 +118,7 @@ public class Blog extends Fragment {
             else {
                 Toast.makeText(getContext(),"Unable to load this blog",Toast.LENGTH_LONG).show();
             }
-            if (dialog.isShowing())
-                dialog.dismiss();
+            dialog.dismiss();
         }
     }
     public class ImageGetter implements Html.ImageGetter {

@@ -11,6 +11,8 @@ public class BlogModel {
     public String dpurl;
     public String content;
     public String category;
+    public byte[] img;
+    public byte[] dp;
     public int id;
 
 }

@@ -2,7 +2,9 @@ package features;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -137,6 +139,26 @@ public class SConnectFragment extends Fragment {
 
     }
     private class getSeniorsTask extends AsyncTask<String, Void, String> {
+        private ProgressDialog dialog;
+        @Override
+        protected void onPreExecute(){
+            this.dialog=new ProgressDialog(getContext());
+            this.dialog.setMessage("Loading...");
+            this.dialog.setIndeterminate(false);
+            this.dialog.setCancelable(false);
+            this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancel(true);
+                }
+            });
+            this.dialog.show();
+        }
+        @Override
+        protected void onCancelled(String result){
+            Toast.makeText(getContext(),"Loading aborted!",Toast.LENGTH_LONG).show();
+            onPostExecute(result);
+        }
         @Override
         protected String doInBackground(String... params) {
 
@@ -148,6 +170,7 @@ public class SConnectFragment extends Fragment {
             if (result.equals("success")){
                 cardArrayAdapter.refresh();
             }
+            dialog.dismiss();
         }
     }
 

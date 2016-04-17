@@ -1,6 +1,8 @@
 package img.myapplication;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -274,6 +276,26 @@ public class Register extends AppCompatActivity {
         return status;
     }
     private class RegisterTask extends AsyncTask<String, Void, String> {
+        private ProgressDialog dialog;
+        @Override
+        protected void onPreExecute(){
+            this.dialog=new ProgressDialog(getApplicationContext());
+            this.dialog.setMessage("Registering...");
+            this.dialog.setIndeterminate(false);
+            this.dialog.setCancelable(false);
+            this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancel(true);
+                }
+            });
+            this.dialog.show();
+        }
+        @Override
+        protected void onCancelled(String result){
+            Toast.makeText(getApplicationContext(),"Aborted!",Toast.LENGTH_SHORT).show();
+            onPostExecute(result);
+        }
         @Override
         protected String doInBackground(String... urls) {
 
@@ -296,6 +318,7 @@ public class Register extends AppCompatActivity {
                 else
                     Toast.makeText(getApplicationContext(),result, Toast.LENGTH_SHORT).show();
             }
+            dialog.dismiss();
         }
     }
 

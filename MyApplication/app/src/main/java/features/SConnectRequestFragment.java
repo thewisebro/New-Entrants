@@ -3,6 +3,7 @@ package features;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -123,9 +124,22 @@ public class SConnectRequestFragment extends Fragment {
         ProgressDialog dialog;
         @Override
         protected void onPreExecute(){
-            dialog=new ProgressDialog(getContext());
-            dialog.setMessage("Sending Request");
-            dialog.show();
+            this.dialog=new ProgressDialog(getContext());
+            this.dialog.setMessage("Sending Request...");
+            this.dialog.setIndeterminate(false);
+            this.dialog.setCancelable(false);
+            this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancel(true);
+                }
+            });
+            this.dialog.show();
+        }
+        @Override
+        protected void onCancelled(String result){
+            Toast.makeText(getContext(),"Aborted!",Toast.LENGTH_LONG).show();
+            onPostExecute(result);
         }
 
         @Override

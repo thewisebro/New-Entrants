@@ -62,10 +62,11 @@ public class BlogsFragment extends Fragment {
     private String server="http://192.168.121.187:8080";
     private String url;
     boolean flag=false;
-    private int spinner_pos;
+    boolean resume;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
+        resume=true;
         setHasOptionsMenu(true);
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -102,9 +103,9 @@ public class BlogsFragment extends Fragment {
         cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
         blogsCount=0;
         lastId=0;
-        if (isConnected())
-            new LoadBlogTask().execute();
-        else
+        //if (isConnected())
+        //    new LoadBlogTask().execute();
+        if (!isConnected())
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
 
         listView.setAdapter(cardArrayAdapter);
@@ -121,7 +122,6 @@ public class BlogsFragment extends Fragment {
     }
     private class LoadBlogTask extends AsyncTask<String, Void, String> {
         private ProgressDialog dialog;
-
         @Override
         protected void onPreExecute(){
             this.dialog=new ProgressDialog(getContext());
@@ -131,10 +131,15 @@ public class BlogsFragment extends Fragment {
             this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
+                    cancel(true);
                 }
             });
             this.dialog.show();
+        }
+        @Override
+        protected void onCancelled(String result){
+            Toast.makeText(getContext(),"Loading aborted!",Toast.LENGTH_LONG).show();
+            onPostExecute(result);
         }
         @Override
         protected String doInBackground(String... params) {
@@ -161,7 +166,6 @@ public class BlogsFragment extends Fragment {
                     e.printStackTrace();
                     return "Can't connect to network";
                 }
-
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
@@ -171,29 +175,8 @@ public class BlogsFragment extends Fragment {
                 items.clear();
                 refreshing=false;
             }
+            if (isCancelled())
             dialog.dismiss();
-        }
-    }
-    public void loadBlogs(){
-        String blogUrl=url;
-        if (blogsCount!=0)
-            blogUrl+="?action=next&id="+lastId;
-        try {
-            URL url= new URL(blogUrl);
-            HttpURLConnection conn=(HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(10000);
-            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-            StringBuilder sb=new StringBuilder();
-            String line = "";
-            while((line = bufferedReader.readLine()) != null)
-                sb.append(line + '\n');
-            String result=sb.toString();
-            getBlogs(result);
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
     public void getBlogs(String result){
@@ -295,6 +278,7 @@ public class BlogsFragment extends Fragment {
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
                 row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
+                viewHolder.img.setImageDrawable(getResources().getDrawable(android.R.drawable.sym_def_app_icon));
                 new ImageLoadTask(server+card.imageurl, viewHolder.img,(int) getResources().getDimension(R.dimen.blogcardimg_height),getActivity().getWindowManager().getDefaultDisplay().getWidth()).execute();
             }
             else {
@@ -383,7 +367,7 @@ public class BlogsFragment extends Fragment {
                 InputStream input = connection.getInputStream();
 
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize=insamplesize;
+                options.inSampleSize=insamplesize/2;
                 options.inJustDecodeBounds = false;
 
                 Bitmap myBitmap= BitmapFactory.decodeStream(input,null,options);
@@ -425,8 +409,8 @@ public class BlogsFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                spinner_pos=position;
-                if (flag) {
+
+                if (flag || resume) {
                     if (isConnected()){
                         cardArrayAdapter.clear();
                         switch (position) {
@@ -447,6 +431,7 @@ public class BlogsFragment extends Fragment {
                                 break;
                         }
                         flag = false;
+                        resume=false;
                     }
 
                 }

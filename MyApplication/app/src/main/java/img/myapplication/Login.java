@@ -116,7 +116,7 @@ public class Login extends ActionBarActivity {
         try {
 
             HttpURLConnection conn= (HttpURLConnection) new URL(loginURL).openConnection();
-            conn.setConnectTimeout(10000);
+            conn.setConnectTimeout(3000);
             conn.setReadTimeout(10000);
             conn.setRequestMethod("GET");
             int rcode=conn.getResponseCode();
@@ -223,7 +223,6 @@ public class Login extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
                 start();
             }
-            //getSupportFragmentManager().beginTransaction().remove(fragment);
         }
     }
 
@@ -267,7 +266,9 @@ public class Login extends ActionBarActivity {
             e.printStackTrace();
         }
         if (details.get("category").equals("senior")){
-            student.profile_img=downloadImage(serverURL+details.get("photo"));
+            student.profile_img=downloadImage(serverURL+details.get("photo")
+                    ,(int) getResources().getDimension(R.dimen.roundimage_length)
+                    ,(int) getResources().getDimension(R.dimen.roundimage_length));
             student.name=details.get("name");
             student.enr_no=details.get("enr_no");
             student.username=details.get("username");
@@ -304,16 +305,19 @@ public class Login extends ActionBarActivity {
         }
     }
 
-    public byte[] downloadImage(String url){
+    public byte[] downloadImage(String url,int ht,int wt){
+        int inSampleSize=getSampleSize(url,ht,wt);
         try {
             URL urlConnection = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) urlConnection
                     .openConnection();
             connection.setDoInput(true);
             connection.connect();
-            int rcode=connection.getResponseCode();
             InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            BitmapFactory.Options options=new BitmapFactory.Options();
+            options.inSampleSize=inSampleSize;
+            options.inJustDecodeBounds=false;
+            Bitmap myBitmap = BitmapFactory.decodeStream(input,null,options);
             ByteArrayOutputStream baos=new ByteArrayOutputStream();
             myBitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
             byte[] img=baos.toByteArray();
@@ -323,6 +327,39 @@ public class Login extends ActionBarActivity {
         }
         return null;
     }
+    public int getSampleSize(String url,int ht,int wt){
+
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(input, null, options);
+
+            final int height = options.outHeight;
+            final int width = options.outWidth;
+            int inSampleSize = 1;
+
+            if (height > ht || width > wt) {
+
+                final int halfHeight = height / 2;
+                final int halfWidth = width / 2;
+
+                while ((halfHeight / inSampleSize) > ht
+                        && (halfWidth / inSampleSize) > wt) {
+                    inSampleSize *= 2;
+                }
+            }
+
+            return inSampleSize;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 1;
+    }
+
     public void start(){
 
         if (details.get("category").equals("senior")){
