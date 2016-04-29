@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.LruCache;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -49,7 +50,7 @@ import models.BlogCardViewHolder;
 import models.BlogModel;
 
 
-public class BlogsFragment extends Fragment {
+public class BlogsList extends Fragment {
 
     public boolean refreshing=false;
     private BlogCardArrayAdapter cardArrayAdapter;
@@ -64,11 +65,13 @@ public class BlogsFragment extends Fragment {
     boolean flag=false;
     boolean resume;
 
+    private LruCache<String,Bitmap> bitmapCache;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         resume=true;
         setHasOptionsMenu(true);
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
+        setCache();
         listView = (ListView) view.findViewById(R.id.card_listView);
 
         listView.addHeaderView(new View(getContext()));
@@ -112,6 +115,17 @@ public class BlogsFragment extends Fragment {
 
         return view;
     }
+    private void setCache(){
+        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        int cacheSize=maxMemory/8;
+        bitmapCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount() / 1024;
+            }
+        };
+
+    }
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -147,28 +161,28 @@ public class BlogsFragment extends Fragment {
         protected String doInBackground(String... params) {
 
             String blogUrl=url;
-                if (blogsCount!=0)
-                    blogUrl+="?action=next&id="+lastId;
-                try {
-                    URL url= new URL(blogUrl);
-                    HttpURLConnection conn=(HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setConnectTimeout(5000);
-                    conn.setReadTimeout(10000);
-                    BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-                    StringBuilder sb=new StringBuilder();
-                    String line = "";
-                    while((line = bufferedReader.readLine()) != null)
-                        sb.append(line + '\n');
-                    String result=sb.toString();
-                    getBlogs(result);
-                    return "success";
+            if (blogsCount!=0)
+                blogUrl+="?action=next&id="+lastId;
+            try {
+                URL url= new URL(blogUrl);
+                HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(10000);
+                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb=new StringBuilder();
+                String line = "";
+                while((line = bufferedReader.readLine()) != null)
+                    sb.append(line + '\n');
+                String result=sb.toString();
+                getBlogs(result);
+                return "success";
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(),"Can't connect to network",Toast.LENGTH_LONG).show();
-                    return "Can't connect to network";
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(),"Can't connect to network",Toast.LENGTH_LONG).show();
+                return "Can't connect to network";
+            }
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
@@ -277,12 +291,14 @@ public class BlogsFragment extends Fragment {
             viewHolder.date.setText(card.date);
             viewHolder.category.setText(card.category);
             viewHolder.blogUrl=BlogUrl+card.group_username+"/"+card.slug;
-            new ImageLoadTask(card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length)).execute();
+            new ImageLoadTask(card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length))
+                    .execute(card.group_username);
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
                 row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
                 viewHolder.img.setImageResource(R.drawable.android_loading);
-                new ImageLoadTask(server+card.imageurl, viewHolder.img,(int) getResources().getDimension(R.dimen.blogcardimg_height),getActivity().getWindowManager().getDefaultDisplay().getWidth()).execute();
+                new ImageLoadTask(server+card.imageurl, viewHolder.img,(int) getResources().getDimension(R.dimen.blogcardimg_height),getActivity().getWindowManager().getDefaultDisplay().getWidth())
+                        .execute(card.slug);
             }
             else {
                 row.findViewById(R.id.img_layout).setVisibility(View.GONE);
@@ -294,7 +310,8 @@ public class BlogsFragment extends Fragment {
                 public void onClick(View view) {
                     if (!refreshing) {
                         String url = BlogUrl + card.group_username;
-                        getFragmentManager().beginTransaction().replace(R.id.container, new GroupFragment(url)).addToBackStack(null).commit();
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container, new GroupBlogList(url)).addToBackStack(null).commit();
                     }
                 }
             });
@@ -302,7 +319,8 @@ public class BlogsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     BlogCardViewHolder holder = (BlogCardViewHolder) v.getTag();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new BlogPage(holder.blogUrl)).addToBackStack(null).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, new BlogPage(holder.blogUrl)).addToBackStack(null).commit();
                 }
             });
 
@@ -312,7 +330,7 @@ public class BlogsFragment extends Fragment {
 
 
     }
-    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
+    public class ImageLoadTask extends AsyncTask<String, Void, Bitmap> {
 
         private String url;
         private ImageView imageView;
@@ -357,15 +375,16 @@ public class BlogsFragment extends Fragment {
             }
             return 1;
         }
-
-        @Override
-        protected Bitmap doInBackground(Void... params) {
+        private Bitmap loadImage(){
             int insamplesize=getSampleSize();
             try {
                 URL urlConnection = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) urlConnection
                         .openConnection();
+                connection.setConnectTimeout(3000);
+                connection.setReadTimeout(5000);
                 connection.setDoInput(true);
+                connection.setUseCaches(true);
                 connection.connect();
                 InputStream input = connection.getInputStream();
 
@@ -373,12 +392,24 @@ public class BlogsFragment extends Fragment {
                 options.inSampleSize=insamplesize/2;
                 options.inJustDecodeBounds = false;
 
-                Bitmap myBitmap= BitmapFactory.decodeStream(input,null,options);
-                return myBitmap;
+                return BitmapFactory.decodeStream(input,null,options);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
+        }
+        private Bitmap image(String key){
+                Bitmap bitmap=bitmapCache.get(key);
+                if (bitmap==null){
+                    bitmap=loadImage();
+                    bitmapCache.put(key,bitmap);
+                }
+                return bitmap;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            return image(params[0]);
         }
 
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

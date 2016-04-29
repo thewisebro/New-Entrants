@@ -36,17 +36,17 @@ import img.myapplication.R;
 import models.BlogModel;
 
 @SuppressLint("ValidFragment")
-public class Blog extends Fragment {
+public class BlogView extends Fragment {
     private BlogModel model=new BlogModel();
     private String url;
     public TextView blog;
-    public Blog(String blogUrl){
+    public BlogView(String blogUrl){
         this.url=blogUrl;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.blog_page, container, false);
+        View view= inflater.inflate(R.layout.blog, container, false);
         blog= (TextView) view.findViewById(R.id.blogHTML);
 
         if (isConnected())
@@ -101,7 +101,7 @@ public class Blog extends Fragment {
                     buffer.append(inputLine+"\n");
                 JSONObject object=new JSONObject(buffer.toString());
 
-               return object.getString("content");
+                return object.getString("content");
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -111,8 +111,7 @@ public class Blog extends Fragment {
         @Override
         protected void onPostExecute(String result){
             if (result!=null){
-                //blog.setText(Html.fromHtml(result,new URLImageParser(blog,getContext()),null));
-                blog.setText(Html.fromHtml(result,new ImageGetter(),null));
+
             }
             else {
                 Toast.makeText(getContext(),"Unable to load this blog",Toast.LENGTH_LONG).show();

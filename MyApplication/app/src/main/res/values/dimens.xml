@@ -8,6 +8,7 @@
     <dimen name="navigation_drawer_width">240dp</dimen>
     <dimen name="roundimage_length">50dp</dimen>
     <dimen name="drawer_img">150dp</dimen>
-    <dimen name="blogcardimg_height">150sp</dimen>
+    <dimen name="blogcardimg_height">150dp</dimen>
+    <dimen name="blogimg_ht">150dp</dimen>
 
 </resources>

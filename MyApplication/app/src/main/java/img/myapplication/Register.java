@@ -294,7 +294,7 @@ public class Register extends AppCompatActivity {
         @Override
         protected void onCancelled(String result){
             Toast.makeText(getApplicationContext(),"Aborted!",Toast.LENGTH_SHORT).show();
-            onPostExecute(result);
+            dialog.dismiss();
         }
         @Override
         protected String doInBackground(String... urls) {
@@ -302,7 +302,7 @@ public class Register extends AppCompatActivity {
             try {
                 return registerNow();
             } catch (Exception e) {
-                return "Unable to retrieve web page. URL may be invalid.";
+                return null;
             }
         }
         @Override
@@ -312,10 +312,7 @@ public class Register extends AppCompatActivity {
                 finish();
             }
             else {
-                if (result==null)
-                    Toast.makeText(getApplicationContext(),"Registration Failed!", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getApplicationContext(),result, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Registration Failed!", Toast.LENGTH_SHORT).show();
             }
             dialog.dismiss();
         }

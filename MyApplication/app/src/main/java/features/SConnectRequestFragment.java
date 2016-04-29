@@ -139,7 +139,7 @@ public class SConnectRequestFragment extends Fragment {
         @Override
         protected void onCancelled(String result){
             Toast.makeText(getContext(),"Aborted!",Toast.LENGTH_LONG).show();
-            onPostExecute(result);
+            dialog.dismiss();
         }
 
         @Override

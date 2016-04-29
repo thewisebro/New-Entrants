@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,11 +52,12 @@ public class SConnectAcceptFragment extends Fragment {
     private SeniorCardArrayAdapter cardArrayAdapter;
     private List<SeniorModel> list=new ArrayList<SeniorModel>();
     private ListView listView;
+    private LruCache<String,Bitmap> bitmapCache;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sconnect_accept, container, false);
-
+        setCache();
         listView = (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
@@ -70,7 +72,17 @@ public class SConnectAcceptFragment extends Fragment {
         listView.setAdapter(cardArrayAdapter);
         return view;
     }
+    private void setCache(){
+        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        int cacheSize=maxMemory/8;
+        bitmapCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount() / 1024;
+            }
+        };
 
+    }
     public boolean isConnected() {
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -102,7 +114,8 @@ public class SConnectAcceptFragment extends Fragment {
         @Override
         protected void onCancelled(String result){
             Toast.makeText(getContext(), "Loading aborted!", Toast.LENGTH_LONG).show();
-            onPostExecute(result);
+            cardArrayAdapter.refresh();
+            dialog.dismiss();
         }
         @Override
         protected String doInBackground(String... args) {
@@ -216,7 +229,8 @@ public class SConnectAcceptFragment extends Fragment {
             if (card.dp_link.isEmpty())
                 viewHolder.dp.setVisibility(View.GONE);
             else
-                new ImageLoadTask(card.dp_link,viewHolder.dp).execute();
+                new ImageLoadTask(card.dp_link,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length))
+                        .execute();
             if (card.fblink.isEmpty())
                 viewHolder.fblink.setVisibility(View.GONE);
             else
@@ -243,7 +257,7 @@ public class SConnectAcceptFragment extends Fragment {
             return row;
         }
     }
-    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
+/*    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
         private String url;
         private ImageView imageView;
@@ -278,4 +292,95 @@ public class SConnectAcceptFragment extends Fragment {
         }
 
     }
+    */
+public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
+
+    private String url;
+    private ImageView imageView;
+    private int ht;
+    private int wt;
+
+    public ImageLoadTask(String url, ImageView imageView, int h,int w) {
+        this.url = url;
+        this.imageView = imageView;
+        this.ht=h;
+        this.wt=w;
+    }
+    public int getSampleSize(){
+
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(input, null, options);
+
+            final int height = options.outHeight;
+            final int width = options.outWidth;
+            int inSampleSize = 1;
+
+            if (height > ht || width > wt) {
+
+                final int halfHeight = height / 2;
+                final int halfWidth = width / 2;
+
+                while ((halfHeight / inSampleSize) > ht
+                        && (halfWidth / inSampleSize) > wt) {
+                    inSampleSize *= 2;
+                }
+            }
+
+            return inSampleSize;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 1;
+    }
+    private Bitmap loadImage(){
+        int insamplesize=getSampleSize();
+        try {
+            URL urlConnection = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) urlConnection
+                    .openConnection();
+            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(5000);
+            connection.setDoInput(true);
+            connection.setUseCaches(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize=insamplesize/2;
+            options.inJustDecodeBounds = false;
+
+            return BitmapFactory.decodeStream(input,null,options);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    private Bitmap image(){
+        Bitmap bitmap=bitmapCache.get(url);
+        if (bitmap==null){
+            bitmap=loadImage();
+            bitmapCache.put(url,bitmap);
+        }
+        return bitmap;
+    }
+
+    @Override
+    protected Bitmap doInBackground(Void... params) {
+        return image();
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    protected void onPostExecute(Bitmap result) {
+        super.onPostExecute(result);
+        imageView.setImageBitmap(result);
+    }
+
+}
 }

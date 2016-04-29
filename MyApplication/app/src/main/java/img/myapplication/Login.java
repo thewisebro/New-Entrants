@@ -24,7 +24,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -102,10 +101,11 @@ public class Login extends ActionBarActivity {
                new LoginTask().execute();
             }
         }
+        else
+            Toast.makeText(getApplicationContext(),"Check network connection!",Toast.LENGTH_LONG).show();
     }
 
-    private boolean peopleLogin() throws IOException{
-        Boolean result=false;
+    private boolean peopleLogin() {
         HttpURLConnection urlConnectionPost=null;
         String csrftoken=null;
         cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
@@ -115,7 +115,7 @@ public class Login extends ActionBarActivity {
 
             HttpURLConnection conn= (HttpURLConnection) new URL(loginURL).openConnection();
             conn.setConnectTimeout(3000);
-            conn.setReadTimeout(10000);
+            conn.setReadTimeout(5000);
             conn.setRequestMethod("GET");
             int rcode=conn.getResponseCode();
             if (rcode!= HttpURLConnection.HTTP_OK && rcode!=HttpURLConnection.HTTP_ACCEPTED)
@@ -195,20 +195,16 @@ public class Login extends ActionBarActivity {
         }
         @Override
         protected String doInBackground(String... urls) {
-            try {
-                if (peopleLogin()) {
-                    details=new HashMap<String,String>();
-                    details.put("username",params.get("username"));
-                    details.put("password", params.get("password"));
-                    getDetails();
-                    getUser();
-                    return "Logged In";
-                }
-                else
-                    return "";
-            } catch (IOException e) {
-                return "Unable to retrieve web page. URL may be invalid.";
+            if (peopleLogin()) {
+                details=new HashMap<String,String>();
+                details.put("username",params.get("username"));
+                details.put("password", params.get("password"));
+                getDetails();
+                getUser();
+                return "Logged In";
             }
+            else
+                return "";
         }
         @Override
         protected void onPostExecute(String result) {
@@ -230,6 +226,8 @@ public class Login extends ActionBarActivity {
 
             HttpURLConnection conn = (HttpURLConnection) new URL(userinfoURL).openConnection();
             conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(10000);
             conn.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestProperty("Accept", "application/xml");

@@ -127,16 +127,38 @@ public class GroupFragment extends Fragment {
         @Override
         protected void onCancelled(String result){
             Toast.makeText(getContext(),"Loading aborted!",Toast.LENGTH_LONG).show();
-            onPostExecute(result);
+
+            cardArrayAdapter.refresh();
+            items.clear();
+            dialog.dismiss();
         }
         @Override
         protected String doInBackground(String... params) {
 
+            String blogUrl=null;
+            if (blogsCount==0)
+                blogUrl=groupUrl;
+            else
+                blogUrl=groupUrl+"?action=next&id="+lastId;
             try {
-                loadBlogs();
+                URL url= new URL(blogUrl);
+                HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(10000);
+                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb=new StringBuilder();
+                String line = "";
+                while((line = bufferedReader.readLine()) != null)
+                    sb.append(line + '\n');
+                String result=sb.toString();
+                getBlogs(result);
                 return "success";
+
             } catch (Exception e) {
-                return "Unable to retrieve web page. URL may be invalid.";
+                e.printStackTrace();
+                Toast.makeText(getContext(),"Unable to load blogs",Toast.LENGTH_LONG).show();
+                return "Unable to load blogs";
             }
         }
         // onPostExecute displays the results of the AsyncTask.
@@ -149,31 +171,7 @@ public class GroupFragment extends Fragment {
             dialog.dismiss();
         }
     }
-    public void loadBlogs(){
-        String blogUrl=null;
-        if (blogsCount==0)
-            blogUrl=groupUrl;
-        else
-            blogUrl=groupUrl+"?action=next&id="+lastId;
-        try {
-            URL url= new URL(blogUrl);
-            HttpURLConnection conn=(HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(10000);
-            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-            StringBuilder sb=new StringBuilder();
-            String line = "";
-            while((line = bufferedReader.readLine()) != null)
-                sb.append(line + '\n');
-            String result=sb.toString();
-            getBlogs(result);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getContext(),"Unable to load blogs",Toast.LENGTH_LONG).show();
-        }
-    }
     public void getBlogs(String result){
         try {
             JSONObject jObject = new JSONObject(result);

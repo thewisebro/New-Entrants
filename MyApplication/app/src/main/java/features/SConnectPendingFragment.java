@@ -123,7 +123,8 @@ public class SConnectPendingFragment extends Fragment {
         @Override
         protected void onCancelled(String result){
             Toast.makeText(getContext(),"Loading aborted!",Toast.LENGTH_LONG).show();
-            onPostExecute(result);
+            cardArrayAdapter.refresh();
+            dialog.dismiss();
         }
         @Override
         protected String doInBackground(String... args) {
