@@ -19,4 +19,5 @@
     <color name="blue_grey_50">#eceff1</color>
     <color name="drawer_textColor">#757575</color>
     <color name="tint_white">#FFDADADA</color>
+    <color name="light_blue">#ffdedede</color>
 </resources>

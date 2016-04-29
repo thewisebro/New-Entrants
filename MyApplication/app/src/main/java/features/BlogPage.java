@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -16,7 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +49,8 @@ public class BlogPage extends Fragment {
     public TextView category;
     public ImageView image;
     public ImageView dp;
+    public RelativeLayout group_card;
+    private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
     public BlogPage(String blogUrl){
         this.url=blogUrl;
     }
@@ -62,6 +67,7 @@ public class BlogPage extends Fragment {
         image=(ImageView) view.findViewById(R.id.blog_img);
         category= (TextView) view.findViewById(R.id.category);
         dp= (ImageView) view.findViewById(R.id.group_dp);
+        group_card= (RelativeLayout) view.findViewById(R.id.group_card);
 
         if (isConnected())
             new BlogTask().execute();
@@ -78,12 +84,26 @@ public class BlogPage extends Fragment {
 
     private class BlogTask extends AsyncTask<String,Void,String>{
 
-        private ProgressDialog dialog=new ProgressDialog(getContext());
-
+        private ProgressDialog dialog;
         @Override
         protected void onPreExecute(){
+            this.dialog=new ProgressDialog(getContext());
             this.dialog.setMessage("Loading...");
+            this.dialog.setIndeterminate(false);
+            this.dialog.setCancelable(false);
+            this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancel(true);
+                }
+            });
             this.dialog.show();
+        }
+        @Override
+        protected void onCancelled(String result){
+            Toast.makeText(getContext(), "Loading aborted!", Toast.LENGTH_LONG).show();
+            dialog.dismiss();
+            topic.setText("Unable to displa");
         }
 
         @Override
@@ -127,7 +147,7 @@ public class BlogPage extends Fragment {
             model.group_username=object.getString("group_username");
             model.slug=object.getString("slug");
             model.imageurl=object.getString("thumbnail");
-            model.category="From the Groups";
+            model.setCategory();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -135,35 +155,25 @@ public class BlogPage extends Fragment {
     private void displayBlog(){
         date.setText(model.date);
         topic.setText(model.topic);
-
         description.setText(model.desc);
         content.setText(model.content);
         group.setText(model.group);
         category.setText(model.category);
         new ImageLoadTask(model.dpurl,dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length)).execute();
-        //ImageLoad(model.dpurl, dp);
         if (model.imageurl!=null) {
-            new ImageLoadTask(model.imageurl,image, (int) getResources().getDimension(R.dimen.blogimg_ht),getActivity().getWindowManager().getDefaultDisplay().getWidth()).execute();
-            //ImageLoad(model.imageurl,image);
+            new ImageLoadTask(model.imageurl,image, (int) getResources().getDimension(R.dimen.blogimg_ht),getActivity().getWindowManager().getDefaultDisplay().getWidth())
+                    .execute();
         }
+        group_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url=BlogUrl+model.group_username;
+                getFragmentManager().beginTransaction().replace(R.id.container, new GroupFragment(url))
+                        .addToBackStack(null).commit();
+            }
+        });
     }
-    public void ImageLoad(String url, ImageView imageView){
-        try {
-            URL urlConnection = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) urlConnection
-                    .openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            imageView.setImageBitmap(myBitmap);
-            /*InputStream is= (InputStream) new URL(url).getContent();
-            Drawable drawable= Drawable.createFromStream(is,"blog_img");
-            imageView.setImageDrawable(drawable);*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
     public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
         private String url;
@@ -217,6 +227,8 @@ public class BlogPage extends Fragment {
                 URL urlConnection = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) urlConnection
                         .openConnection();
+                connection.setReadTimeout(10000);
+                connection.setConnectTimeout(5000);
                 connection.setDoInput(true);
                 connection.connect();
                 InputStream input = connection.getInputStream();

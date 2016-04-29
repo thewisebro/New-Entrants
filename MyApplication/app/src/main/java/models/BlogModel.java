@@ -15,4 +15,11 @@ public class BlogModel {
     public byte[] dp;
     public int id;
 
+    public void setCategory(){
+        if (group_username.equals("iitr"))
+            category="From the Institute";
+        else
+            category="From the Groups";
+    }
+
 }
