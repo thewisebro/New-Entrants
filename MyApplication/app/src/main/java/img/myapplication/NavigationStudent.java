@@ -13,7 +13,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import features.BlogsFragment;
+import features.BlogsList;
 import features.JuniorConnect;
 import features.StudentUpdateFragment;
 import models.StudentModel;
@@ -134,7 +134,7 @@ public class NavigationStudent extends ActionBarActivity
             switch(position) {
                 case -1: fragment = new OpeningFragment();
                     break;
-                case 0:fragment = new BlogsFragment();
+                case 0:fragment = new BlogsList();
                     break;
                 case 1: fragment=new JuniorConnect(student.sess_id);
                     break;
@@ -157,6 +157,9 @@ public class NavigationStudent extends ActionBarActivity
 
         String[] mTitleArray = getResources().getStringArray(R.array.studenttabs);
         mTitle=mTitleArray[mCurrentPosition];
+    }
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 
     public void restoreActionBar() {

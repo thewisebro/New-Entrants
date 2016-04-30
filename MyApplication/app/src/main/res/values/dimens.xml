@@ -11,5 +11,6 @@
     <dimen name="blogcardimg_height">150dp</dimen>
     <dimen name="blogimg_ht">200dp</dimen>
     <dimen name="blogimg_wt">300dp</dimen>
+    <dimen name="actionbarname_padding">10dp</dimen>
 
 </resources>

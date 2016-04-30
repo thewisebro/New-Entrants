@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import features.BlogsFragment;
+import features.BlogsList;
 import features.EntrantUpdateFragment;
 import features.PConnectFragment;
 import features.SConnectRequestFragment;
@@ -141,8 +141,7 @@ public class Navigation extends ActionBarActivity
                     fragment = new OpeningFragment();
                     break;
                 case 0:
-                    //fragment = new BlogsFragment();
-                    fragment=new BlogsFragment();
+                    fragment=new BlogsList();
                     break;
                 case 1:
                     fragment = new SConnectTabFragment();
@@ -187,7 +186,9 @@ public class Navigation extends ActionBarActivity
             getSupportFragmentManager().popBackStack();
         }
     }
-
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
+    }
     public void getPageTitle(){
 
         String[] mTitleArray = getResources().getStringArray(R.array.entrantstabs);

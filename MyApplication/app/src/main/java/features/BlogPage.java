@@ -50,8 +50,11 @@ public class BlogPage extends Fragment {
     public ImageView image;
     public ImageView dp;
     public RelativeLayout group_card;
+
+    private String server="http://192.168.121.187:8080";
     private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
     public BlogPage(String blogUrl){
+
         this.url=blogUrl;
     }
     @Override
@@ -103,7 +106,7 @@ public class BlogPage extends Fragment {
         protected void onCancelled(String result){
             Toast.makeText(getContext(), "Loading aborted!", Toast.LENGTH_LONG).show();
             dialog.dismiss();
-            topic.setText("Unable to displa");
+            topic.setText("Unable to display");
         }
 
         @Override
@@ -161,14 +164,14 @@ public class BlogPage extends Fragment {
         category.setText(model.category);
         new ImageLoadTask(model.dpurl,dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length)).execute();
         if (model.imageurl!=null) {
-            new ImageLoadTask(model.imageurl,image, (int) getResources().getDimension(R.dimen.blogimg_ht),getActivity().getWindowManager().getDefaultDisplay().getWidth())
+            new ImageLoadTask(server+model.imageurl,image, (int) getResources().getDimension(R.dimen.blogimg_ht),getActivity().getWindowManager().getDefaultDisplay().getWidth())
                     .execute();
         }
         group_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String url=BlogUrl+model.group_username;
-                getFragmentManager().beginTransaction().replace(R.id.container, new GroupFragment(url))
+                getFragmentManager().beginTransaction().replace(R.id.container, new GroupBlogList(url,model.group))
                         .addToBackStack(null).commit();
             }
         });

@@ -13,11 +13,14 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.LruCache;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -42,6 +45,7 @@ import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.BlogCardViewHolder;
 import models.BlogModel;
+import models.GroupBlogCardViewHolder;
 
 
 @SuppressLint("ValidFragment")
@@ -55,13 +59,17 @@ public class GroupBlogList extends Fragment {
     private int blogsCount;
     private int lastId;
     private String groupUrl;
+    private String groupName;
     private String server="http://192.168.121.187:8080";
     private LruCache<String,Bitmap> bitmapCache;
 
-    public GroupBlogList(String url){
+    public GroupBlogList(String url,String group){
         groupUrl=url;
+        groupName=group;
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
+
+        setHasOptionsMenu(true);
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         setCache();
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -77,14 +85,8 @@ public class GroupBlogList extends Fragment {
             @Override
             public void onRefresh() {
                 if (isConnected()) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            new LoadBlogTask().execute();
-                            Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
-                            swipeLayout.setRefreshing(false);
-                        }
-                    }, 5000);
+                    new LoadBlogTask().execute();
+                    swipeLayout.setRefreshing(false);
                 }
             }
 
@@ -181,6 +183,7 @@ public class GroupBlogList extends Fragment {
             if (result.equals("success")){
                 cardArrayAdapter.refresh();
                 items.clear();
+                Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
             }
             dialog.dismiss();
         }
@@ -205,7 +208,7 @@ public class GroupBlogList extends Fragment {
                 model.slug=object.getString("slug");
                 if (object.has("thumbnail"))
                     model.imageurl=object.getString("thumbnail");
-                items.add(model);
+                items.add(0,model);
                 //cardArrayAdapter.notifyDataSetChanged();
                 lastId =model.id;
                 blogsCount+=1;
@@ -219,7 +222,7 @@ public class GroupBlogList extends Fragment {
 
         public void refresh(){
             //this.cardList.clear();
-            this.cardList.addAll(items);
+            this.cardList.addAll(0,items);
             notifyDataSetChanged();
         }
 
@@ -248,11 +251,11 @@ public class GroupBlogList extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = convertView;
-            BlogCardViewHolder viewHolder;
+            GroupBlogCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 row = inflater.inflate(R.layout.list_blog_card, parent, false);
-                viewHolder = new BlogCardViewHolder();
+                viewHolder = new GroupBlogCardViewHolder();
                 viewHolder.img = (ImageView) row.findViewById(R.id.blog_img);
                 viewHolder.topic = (TextView) row.findViewById(R.id.topic);
                 viewHolder.date = (TextView) row.findViewById(R.id.date);
@@ -262,22 +265,28 @@ public class GroupBlogList extends Fragment {
                 viewHolder.group = (TextView) row.findViewById(R.id.group);
 
             } else {
-                viewHolder = (BlogCardViewHolder) row.getTag();
+                viewHolder = (GroupBlogCardViewHolder) row.getTag();
             }
             final BlogModel card = getItem(position);
+            if (viewHolder.id!=card.id && viewHolder.id!=0){
+                viewHolder.loaddp.cancel(true);
+                viewHolder.loadimg.cancel(true);
+            }
+            viewHolder.id=card.id;
             viewHolder.topic.setText(card.topic);
             viewHolder.description.setText(card.desc);
             viewHolder.group.setText(card.group);
             viewHolder.date.setText(card.date);
             viewHolder.category.setText("From the Groups");
             viewHolder.blogUrl = groupUrl+"/" + card.slug;
-            new ImageLoadTask(card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length))
-                    .execute(card.group_username);
+            ImageLoadTask loaddp=new ImageLoadTask(card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
+            loaddp.execute();
+            ImageLoadTask loadimg=new ImageLoadTask(server+card.imageurl, viewHolder.img,(int) getResources().getDimension(R.dimen.blogcardimg_height),getActivity().getWindowManager().getDefaultDisplay().getWidth());
+
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
                 row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
-                new ImageLoadTask(server+card.imageurl, viewHolder.img,(int) getResources().getDimension(R.dimen.blogcardimg_height),getActivity().getWindowManager().getDefaultDisplay().getWidth())
-                        .execute(card.slug);
+                loadimg.execute();
             }
             else {
                 row.findViewById(R.id.img_layout).setVisibility(View.GONE);
@@ -289,13 +298,17 @@ public class GroupBlogList extends Fragment {
                 @Override
                 public void onClick(View v) {
                     BlogCardViewHolder holder = (BlogCardViewHolder) v.getTag();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new BlogPage(holder.blogUrl)).addToBackStack(null).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, new BlogPage(holder.blogUrl)).addToBackStack(null).commit();
                 }
             });
+            viewHolder.loaddp=loaddp;
+            viewHolder.loadimg=loadimg;
+            row.setTag(viewHolder);
             return row;
         }
     }
-    public class ImageLoadTask extends AsyncTask<String, Void, Bitmap> {
+    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
         private String url;
         private ImageView imageView;
@@ -311,14 +324,18 @@ public class GroupBlogList extends Fragment {
         public int getSampleSize(){
 
             try {
+                if (isCancelled())
+                    return 0;
                 HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                 connection.setDoInput(true);
+                connection.setUseCaches(true);
                 connection.connect();
                 InputStream input = connection.getInputStream();
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
                 BitmapFactory.decodeStream(input, null, options);
-
+                if (isCancelled())
+                    return 0;
                 final int height = options.outHeight;
                 final int width = options.outWidth;
                 int inSampleSize = 1;
@@ -341,8 +358,12 @@ public class GroupBlogList extends Fragment {
             return 1;
         }
         private Bitmap loadImage(){
+            if (isCancelled())
+                return null;
             int insamplesize=getSampleSize();
             try {
+                if (isCancelled())
+                    return null;
                 URL urlConnection = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) urlConnection
                         .openConnection();
@@ -351,38 +372,63 @@ public class GroupBlogList extends Fragment {
                 connection.setDoInput(true);
                 connection.setUseCaches(true);
                 connection.connect();
+                if (isCancelled())
+                    return null;
                 InputStream input = connection.getInputStream();
-
+                if (isCancelled())
+                    return null;
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize=insamplesize/2;
                 options.inJustDecodeBounds = false;
-
-                return BitmapFactory.decodeStream(input,null,options);
+                if (isCancelled())
+                    return null;
+                Bitmap bitmap=BitmapFactory.decodeStream(input,null,options);
+                if (isCancelled())
+                    return null;
+                return bitmap;
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
         }
-        private Bitmap image(String key){
-            Bitmap bitmap=bitmapCache.get(key);
+        private Bitmap image(){
+            if (isCancelled())
+                return null;
+            Bitmap bitmap=bitmapCache.get(url);
             if (bitmap==null){
+                if (isCancelled())
+                    return null;
                 bitmap=loadImage();
-                bitmapCache.put(key,bitmap);
+                if (bitmap!=null)
+                    bitmapCache.put(url,bitmap);
             }
             return bitmap;
         }
 
         @Override
-        protected Bitmap doInBackground(String... params) {
-            return image(params[0]);
+        protected Bitmap doInBackground(Void... params) {
+            if (isCancelled())
+                return null;
+            return image();
         }
 
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @Override
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
-            imageView.setImageBitmap(result);
+            if (result!=null)
+                imageView.setImageBitmap(result);
         }
 
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        inflater.inflate(R.menu.menu_groups,menu);
+        final MenuItem item=menu.findItem(R.id.group_name);
+        TextView group= (TextView) MenuItemCompat.getActionView(item);
+        group.setText(groupName);
+        int padding= (int) getResources().getDimension(R.dimen.actionbarname_padding);
+        group.setPadding(0,0,padding,0);
     }
 }

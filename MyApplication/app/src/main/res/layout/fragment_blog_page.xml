@@ -23,7 +23,7 @@
                 android:scaleType="fitXY" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/title"
@@ -31,15 +31,16 @@
                 android:textAlignment="center"
                 android:textStyle="bold"
                 android:textColor="@color/blue_grey_900"
-                android:fontFamily="sans-serif" />
+                android:fontFamily="sans-serif"
+                android:layout_gravity="center_horizontal" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:id="@+id/date"
                 android:textColor="@color/blue_grey_300"
-                android:textStyle="bold|italic"
+                android:textStyle="italic"
                 android:paddingLeft="10dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
@@ -47,14 +48,15 @@
                 android:layout_gravity="right"
                 android:paddingRight="10dp" />
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:id="@+id/description"
                 android:textStyle="italic"
                 android:textColor="@color/blue_grey_300"
                 android:padding="5dp"
-                android:fontFamily="sans-serif" />
+                android:fontFamily="sans-serif"
+                android:layout_gravity="center_horizontal" />
 
 
             <TextView
@@ -106,7 +108,7 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:id="@+id/group"
                 android:paddingLeft="5dp"
                 android:fontFamily="sans-serif"
