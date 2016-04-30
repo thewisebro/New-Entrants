@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 public class BlogModel {
     public String topic;
     public String desc;
@@ -11,8 +13,7 @@ public class BlogModel {
     public String dpurl;
     public String content;
     public String category;
-    public byte[] img;
-    public byte[] dp;
+    public List<String> urls;
     public int id;
 
     public void setCategory(){
