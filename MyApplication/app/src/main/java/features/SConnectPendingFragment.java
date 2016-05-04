@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import img.myapplication.MySQLiteHelper;
+import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.RequestCardViewHolder;
 import models.RequestModel;
@@ -57,6 +58,8 @@ public class SConnectPendingFragment extends Fragment {
 
         if (isConnected())
             new getRequestsTask().execute();
+        else
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
 
         listView.setAdapter(cardArrayAdapter);
 
@@ -151,10 +154,13 @@ public class SConnectPendingFragment extends Fragment {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
+            dialog.dismiss();
             if (result.equals("success")){
                 cardArrayAdapter.refresh();
             }
-            dialog.dismiss();
+            else
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
         }
     }
 

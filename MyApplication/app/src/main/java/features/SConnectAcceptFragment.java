@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import img.myapplication.MySQLiteHelper;
+import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.SeniorCardViewHolder;
 import models.SeniorModel;
@@ -68,6 +69,8 @@ public class SConnectAcceptFragment extends Fragment {
         {
             new UpdateAcceptedSeniorsTask().execute();
         }
+        else
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
 
         listView.setAdapter(cardArrayAdapter);
         return view;
@@ -161,10 +164,13 @@ public class SConnectAcceptFragment extends Fragment {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
+            dialog.dismiss();
             if (result.equals("success")) {
                 cardArrayAdapter.refresh();
             }
-            dialog.dismiss();
+            else
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
         }
     }
     public class SeniorCardArrayAdapter  extends ArrayAdapter<SeniorModel> {
@@ -257,42 +263,7 @@ public class SConnectAcceptFragment extends Fragment {
             return row;
         }
     }
-/*    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
-        private String url;
-        private ImageView imageView;
-
-        public ImageLoadTask(String url, ImageView imageView) {
-            this.url = url;
-            this.imageView = imageView;
-        }
-
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-            try {
-                URL urlConnection = new URL(url);
-                HttpURLConnection connection = (HttpURLConnection) urlConnection
-                        .openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                return myBitmap;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            super.onPostExecute(result);
-            imageView.setImageBitmap(result);
-        }
-
-    }
-    */
 public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
     private String url;

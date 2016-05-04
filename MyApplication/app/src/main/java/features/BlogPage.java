@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.BlogModel;
 
@@ -74,6 +75,9 @@ public class BlogPage extends Fragment {
 
         if (isConnected())
             new BlogTask().execute();
+        else
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
         return view;
     }
     public boolean isConnected(){
@@ -135,6 +139,9 @@ public class BlogPage extends Fragment {
                 displayBlog();
             if (dialog.isShowing())
                 dialog.dismiss();
+            if (result==null){
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+            }
         }
     }
     public void getData(String str){

@@ -36,6 +36,7 @@ import java.util.Map;
 
 import img.myapplication.MySQLiteHelper;
 import img.myapplication.NavigationStudent;
+import img.myapplication.NetworkErrorFragment;
 import img.myapplication.OpeningFragment;
 import img.myapplication.R;
 import models.StudentModel;
@@ -84,6 +85,8 @@ public class StudentUpdateFragment extends Fragment {
                     if (checkParams())
                         new UpdateSubmitTask().execute();
                 }
+                else
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
             }
         });
         return view;
@@ -185,6 +188,7 @@ public class StudentUpdateFragment extends Fragment {
         }
         @Override
         protected void onPostExecute(String result) {
+            dialog.dismiss();
             if (result.equals("success")){
                 student.email=params.get("email");
                 student.statecode=params.get("state");
@@ -207,8 +211,8 @@ public class StudentUpdateFragment extends Fragment {
             }
             else {
                 Toast.makeText(getContext(), "Update failed!", Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
             }
-            dialog.dismiss();
         }
     }
     public void getParams(){

@@ -12,7 +12,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -84,17 +83,12 @@ public class BlogsFragment extends Fragment {
             @Override
             public void onRefresh() {
                 if (isConnected()) {
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeLayout.setRefreshing(false);
-                            refreshing = true;
-                            new LoadBlogTask().execute();
-                            Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
-                        }
-                    }, 5000);
+                    swipeLayout.setRefreshing(false);
+                    refreshing = true;
+                    new LoadBlogTask().execute();
                 }
+                else
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
             }
 
         });
@@ -103,10 +97,8 @@ public class BlogsFragment extends Fragment {
         cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
         blogsCount=0;
         lastId=0;
-        //if (isConnected())
-        //    new LoadBlogTask().execute();
         if (!isConnected())
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
 
         listView.setAdapter(cardArrayAdapter);
 
@@ -177,7 +169,10 @@ public class BlogsFragment extends Fragment {
                 cardArrayAdapter.refresh();
                 items.clear();
                 refreshing=false;
+                Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
             }
+            else
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
 
             dialog.dismiss();
         }

@@ -36,6 +36,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.JuniorCardViewHolder;
 import models.JuniorModel;
@@ -64,6 +65,9 @@ public class JuniorConnectPending extends Fragment {
         if (isConnected()){
             new getPendingTask().execute(sess_id);
         }
+        else
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
         listView.setAdapter(cardArrayAdapter);
         return view;
     }
@@ -124,10 +128,13 @@ public class JuniorConnectPending extends Fragment {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
+            dialog.dismiss();
             if (result.equals("success")){
                 cardArrayAdapter.refresh();
             }
-            dialog.dismiss();
+            else
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
         }
     }
     private void getCards(String result){
@@ -281,6 +288,9 @@ public class JuniorConnectPending extends Fragment {
                 Toast.makeText(getActivity(), "Accepted Request", Toast.LENGTH_SHORT).show();
                 refreshFragment();
             }
+            else
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
         }
     }
     public void refreshFragment(){

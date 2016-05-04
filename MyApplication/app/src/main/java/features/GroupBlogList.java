@@ -88,6 +88,8 @@ public class GroupBlogList extends Fragment {
                     new LoadBlogTask().execute();
                     swipeLayout.setRefreshing(false);
                 }
+                else
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
             }
 
         });
@@ -99,7 +101,7 @@ public class GroupBlogList extends Fragment {
         if (isConnected())
             new LoadBlogTask().execute();
         else
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
 
         listView.setAdapter(cardArrayAdapter);
 
@@ -185,6 +187,9 @@ public class GroupBlogList extends Fragment {
                 items.clear();
                 Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
             }
+            else
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
             dialog.dismiss();
         }
     }
@@ -209,7 +214,6 @@ public class GroupBlogList extends Fragment {
                 if (object.has("thumbnail"))
                     model.imageurl=object.getString("thumbnail");
                 items.add(0,model);
-                //cardArrayAdapter.notifyDataSetChanged();
                 lastId =model.id;
                 blogsCount+=1;
             }

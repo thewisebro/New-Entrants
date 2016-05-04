@@ -101,11 +101,13 @@ public class Login extends ActionBarActivity {
                new LoginTask().execute();
             }
         }
-        else
-            Toast.makeText(getApplicationContext(),"Check network connection!",Toast.LENGTH_LONG).show();
+        else {
+            Toast.makeText(getApplicationContext(), "Check network connection!", Toast.LENGTH_LONG).show();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+        }
     }
 
-    private boolean peopleLogin() {
+    private String peopleLogin() {
         HttpURLConnection urlConnectionPost=null;
         String csrftoken=null;
         cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
@@ -119,7 +121,7 @@ public class Login extends ActionBarActivity {
             conn.setRequestMethod("GET");
             int rcode=conn.getResponseCode();
             if (rcode!= HttpURLConnection.HTTP_OK && rcode!=HttpURLConnection.HTTP_ACCEPTED)
-                return false;
+                return "false";
             Object obj = conn.getContent();
 
             csrftoken=cookieStore.getCookies().get(0).getValue().toString();
@@ -158,7 +160,7 @@ public class Login extends ActionBarActivity {
             if (responseCode== HttpURLConnection.HTTP_OK){
                 obj=urlConnectionPost.getContent();
                 if (cookieStore.getCookies().size()>1){
-                    return true;
+                    return "true";
                 }
             }
 
@@ -166,8 +168,9 @@ public class Login extends ActionBarActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return "error";
         }
-        return false;
+        return "false";
     }
 
     private void parseUserData(String userDetails){
@@ -195,7 +198,8 @@ public class Login extends ActionBarActivity {
         }
         @Override
         protected String doInBackground(String... urls) {
-            if (peopleLogin()) {
+            String login_result=peopleLogin();
+            if (login_result.equals("true")) {
                 details=new HashMap<String,String>();
                 details.put("username",params.get("username"));
                 details.put("password", params.get("password"));
@@ -204,19 +208,22 @@ public class Login extends ActionBarActivity {
                 return "Logged In";
             }
             else
-                return "";
+                return login_result;
         }
         @Override
         protected void onPostExecute(String result) {
 
-            if ("".equals(result)){
+            if ("false".equals(result)){
                 getSupportFragmentManager().popBackStack();
                 Toast.makeText(getApplicationContext(),"Enter correct username and password", Toast.LENGTH_SHORT).show();
             }
-            else {
-                Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
-                start();
-            }
+            else if ("error".equals(result))
+                getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
+                else {
+                    Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
+                    start();
+                }
         }
     }
 

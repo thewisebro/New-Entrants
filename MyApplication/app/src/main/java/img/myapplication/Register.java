@@ -112,6 +112,9 @@ public class Register extends AppCompatActivity {
             if(validate())
                 new RegisterTask().execute();
         }
+        else
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
 
     }
     public boolean validate(){
@@ -257,6 +260,7 @@ public class Register extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
+            result="error";
         }
         return result;
     }
@@ -311,8 +315,9 @@ public class Register extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Registration Successful!", Toast.LENGTH_SHORT).show();
                 finish();
             }
-            else {
+            else if(result.equals("error")) {
                 Toast.makeText(getApplicationContext(),"Registration Failed!", Toast.LENGTH_SHORT).show();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
             }
             dialog.dismiss();
         }

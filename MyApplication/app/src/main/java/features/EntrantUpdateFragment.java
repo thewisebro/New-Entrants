@@ -33,6 +33,7 @@ import java.util.Map;
 
 import img.myapplication.MySQLiteHelper;
 import img.myapplication.Navigation;
+import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.NewEntrantModel;
 
@@ -71,6 +72,9 @@ public class EntrantUpdateFragment extends Fragment {
                     if (checkParams())
                         new UpdateSubmitTask().execute();
                 }
+                else
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
             }
         });
         return view;
@@ -197,6 +201,7 @@ public class EntrantUpdateFragment extends Fragment {
             }
             else{
                 Toast.makeText(getContext(), "Update failed!", Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
             }
             dialog.dismiss();
         }

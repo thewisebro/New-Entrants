@@ -47,31 +47,7 @@ public class Navigation extends ActionBarActivity
 
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
- /*   private class CheckConnection extends AsyncTask<String, Void, Boolean> {
-        private ProgressDialog dialog=new ProgressDialog(getApplicationContext());
-        public Boolean result=false;
-        @Override
-        protected void onPreExecute(){
-            dialog.setMessage("Checking Connection...");
-            dialog.show();
-        }
-        @Override
-        protected Boolean doInBackground(String... urls) {
 
-            String url=urls[0];
-
-            return  isConnected(urls[0]);
-        }
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if (result)
-                this.result=true;
-            else
-                this.result=false;
-            dialog.dismiss();
-        }
-    }*/
  public boolean isConnected(){
      ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
      NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -80,37 +56,7 @@ public class Navigation extends ActionBarActivity
      else
          return false;
  }
-   /* public boolean isConnected(String url){
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()){
-            try {
-                HttpURLConnection connection= (HttpURLConnection) new URL(url).openConnection();
-                connection.setReadTimeout(3000);
-                int rcode=connection.getResponseCode();
-                if (rcode== HttpURLConnection.HTTP_OK || rcode==HttpURLConnection.HTTP_ACCEPTED )
-                    return true;
-                else {
-                    if (rcode==HttpURLConnection.HTTP_SERVER_ERROR){
-                        Toast.makeText(getApplicationContext(), "SERVER-SIDE NETWORK ERROR!", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), "NETWORK ERROR", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "NETWORK ERROR", Toast.LENGTH_SHORT).show();
-                return false;
 
-            }
-        }
-        else
-            Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
-        return false;
-    }*/
     public boolean get_update_status(){ return this.updated;}
     public void set_updated(){ this.updated=true;}
     public void reset_updated(){this.updated=false;}
@@ -120,14 +66,7 @@ public class Navigation extends ActionBarActivity
         startActivity(intent);
         finish();
     }
-/*    public void displayBlog(View view){
-       BlogCardViewHolder viewHolder=(BlogCardViewHolder) view.getTag();
-        loadFragment(new BlogPage(viewHolder.blogUrl));
-    }
-    public void displayPeer(View view){
-        PeerCardViewHolder viewHolder=(PeerCardViewHolder) view.getTag();
-        loadFragment(new PeerPage(viewHolder.model));
-    }*/
+
     public void sendRequest(View view){
         loadFragment(new SConnectRequestFragment());
     }

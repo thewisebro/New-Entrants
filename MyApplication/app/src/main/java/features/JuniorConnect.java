@@ -34,10 +34,10 @@ public class JuniorConnect extends Fragment {
 
         Bundle arg = new Bundle();
         arg.putString("sess_id", sess_id);
-        mTabHost.addTab(mTabHost.newTabSpec("accepted").setIndicator("Accepted"),
-                JuniorConnectAccepted.class, arg);
         mTabHost.addTab(mTabHost.newTabSpec("pending").setIndicator("Pending"),
                 JuniorConnectPending.class, arg);
+        mTabHost.addTab(mTabHost.newTabSpec("accepted").setIndicator("Accepted"),
+                JuniorConnectAccepted.class, arg);
         return view;
     }
 

@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import img.myapplication.MySQLiteHelper;
+import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 
 public class SConnectRequestFragment extends Fragment {
@@ -100,6 +101,8 @@ public class SConnectRequestFragment extends Fragment {
                             break;
                     }
                 }
+                else
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
             }
         });
 
@@ -192,6 +195,9 @@ public class SConnectRequestFragment extends Fragment {
                 Toast.makeText(getContext(), "Request Sent Successfully!", Toast.LENGTH_SHORT).show();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new SConnectTabFragment()).commit();
             }
+            else
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
         }
     }
 }

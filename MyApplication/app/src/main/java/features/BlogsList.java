@@ -91,6 +91,8 @@ public class BlogsList extends Fragment {
                     refreshing = true;
                     new LoadBlogTask().execute();
                 }
+                else
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
             }
 
         });
@@ -100,7 +102,7 @@ public class BlogsList extends Fragment {
         blogsCount=0;
         lastId=0;
         if (!isConnected())
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
 
         listView.setAdapter(cardArrayAdapter);
 
@@ -160,6 +162,7 @@ public class BlogsList extends Fragment {
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);
+                conn.setUseCaches(true);
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
                 String line = "";
@@ -178,15 +181,17 @@ public class BlogsList extends Fragment {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
+
+            dialog.dismiss();
             if (result.equals("success")){
                 cardArrayAdapter.refresh();
                 items.clear();
                 refreshing=false;
-
                 Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
             }
+            else
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
 
-            dialog.dismiss();
         }
     }
     public void getBlogs(String result){
@@ -227,7 +232,6 @@ public class BlogsList extends Fragment {
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
         public void refresh(){
-            //this.cardList.clear();
             this.cardList.addAll(0, items);
             //this.cardList.addAll(items);
             notifyDataSetChanged();
