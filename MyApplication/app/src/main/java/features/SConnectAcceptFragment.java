@@ -54,6 +54,7 @@ public class SConnectAcceptFragment extends Fragment {
     private List<SeniorModel> list=new ArrayList<SeniorModel>();
     private ListView listView;
     private LruCache<String,Bitmap> bitmapCache;
+    private TextView zerocount;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class SConnectAcceptFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
-
+        zerocount= (TextView) view.findViewById(R.id.zerocount);
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_senior_card);
 
         if (isConnected())
@@ -182,6 +183,10 @@ public class SConnectAcceptFragment extends Fragment {
             this.cardList.addAll(list);
             list.clear();
             notifyDataSetChanged();
+            if (getCount()==0)
+                zerocount.setVisibility(View.VISIBLE);
+            else
+                zerocount.setVisibility(View.GONE);
         }
         public SeniorCardArrayAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
@@ -336,7 +341,8 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
         Bitmap bitmap=bitmapCache.get(url);
         if (bitmap==null){
             bitmap=loadImage();
-            bitmapCache.put(url,bitmap);
+            if (bitmap!=null)
+                bitmapCache.put(url,bitmap);
         }
         return bitmap;
     }
@@ -350,7 +356,8 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
     @Override
     protected void onPostExecute(Bitmap result) {
         super.onPostExecute(result);
-        imageView.setImageBitmap(result);
+        if (result!=null)
+            imageView.setImageBitmap(result);
     }
 
 }

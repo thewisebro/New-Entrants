@@ -15,7 +15,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.LruCache;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +30,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,7 +58,7 @@ public class BlogsList extends Fragment {
     private BlogCardArrayAdapter cardArrayAdapter;
     private List<BlogModel> items;
     private ListView listView;
-    private SwipeRefreshLayout swipeLayout;
+    private SwipyRefreshLayout swipeLayout;
     private int blogsCount;
     private int lastId;
     private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
@@ -74,17 +77,19 @@ public class BlogsList extends Fragment {
         listView = (ListView) view.findViewById(R.id.card_listView);
 
         listView.addHeaderView(new View(getContext()));
-        listView.addFooterView(new View(getContext()));
+        TextView tv=new TextView(getContext());
+        tv.setText("Pull Up to Load More");
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        listView.addFooterView(tv);
 
-        swipeLayout= (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        swipeLayout= (SwipyRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
         url=BlogUrl;
 
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void onRefresh(SwipyRefreshLayoutDirection swipyRefreshLayoutDirection) {
                 if (isConnected()) {
 
                     swipeLayout.setRefreshing(false);
@@ -93,9 +98,11 @@ public class BlogsList extends Fragment {
                 }
                 else
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
             }
 
         });
+
 
         items=new ArrayList<BlogModel>();
         cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
@@ -178,7 +185,6 @@ public class BlogsList extends Fragment {
                 return "Can't connect to network";
             }
         }
-        // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
 
@@ -220,7 +226,7 @@ public class BlogsList extends Fragment {
                 else
                     model.imageurl=null;
 
-                items.add(0,model);
+                items.add(model);
                 lastId =model.id;
                 blogsCount+=1;
             }
@@ -232,8 +238,7 @@ public class BlogsList extends Fragment {
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
         public void refresh(){
-            this.cardList.addAll(0, items);
-            //this.cardList.addAll(items);
+            this.cardList.addAll(items);
             notifyDataSetChanged();
         }
         @Override
@@ -324,7 +329,7 @@ public class BlogsList extends Fragment {
                 public void onClick(View v) {
                     BlogCardViewHolder holder = (BlogCardViewHolder) v.getTag();
                     getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, new BlogPage(holder.blogUrl)).addToBackStack(null).commit();
+                            .replace(R.id.container, new Blog(holder.blogUrl)).addToBackStack(null).commit();
                 }
             });
 
@@ -460,6 +465,7 @@ public class BlogsList extends Fragment {
         ArrayAdapter<CharSequence> filters=ArrayAdapter.createFromResource(getContext(),R.array.filters,R.layout.spinner_item);
         filters.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(filters);
+        spinner.setBackground(getResources().getDrawable(R.drawable.spinner_background));
         spinner.setPopupBackgroundDrawable(getResources().getDrawable(R.drawable.spinner_dropdown_background));
         spinner.setOnTouchListener(new View.OnTouchListener() {
             @Override

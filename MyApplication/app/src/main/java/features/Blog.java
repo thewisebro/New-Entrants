@@ -1,6 +1,7 @@
 package features;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -12,15 +13,19 @@ import android.graphics.drawable.LevelListDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -32,6 +37,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.BlogModel;
 
@@ -39,18 +45,36 @@ import models.BlogModel;
 public class Blog extends Fragment {
     private BlogModel model=new BlogModel();
     private String url;
-    public TextView blog;
+    public TextView topic;
+    public TextView description;
+    public TextView date;
+    public TextView content;
+    public TextView group;
+    public ImageView dp;
+    public RelativeLayout group_card;
+    private String server="http://192.168.121.187:8080";
+    private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
+
     public Blog(String blogUrl){
         this.url=blogUrl;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.blog_page, container, false);
-        blog= (TextView) view.findViewById(R.id.blogHTML);
+        View view= inflater.inflate(R.layout.blog, container, false);
+        topic= (TextView) view.findViewById(R.id.title);
+        description= (TextView) view.findViewById(R.id.description);
+        date= (TextView) view.findViewById(R.id.date);
+        content= (TextView) view.findViewById(R.id.blogHTML);
+        group= (TextView) view.findViewById(R.id.group);
+        dp= (ImageView) view.findViewById(R.id.group_dp);
+        group_card= (RelativeLayout) view.findViewById(R.id.group_card);
 
         if (isConnected())
             new BlogTask().execute();
+        else
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
         return view;
     }
     public boolean isConnected(){
@@ -83,7 +107,8 @@ public class Blog extends Fragment {
         @Override
         protected void onCancelled(String result){
             Toast.makeText(getContext(),"Loading aborted!",Toast.LENGTH_LONG).show();
-            onPostExecute(result);
+            dialog.dismiss();
+            topic.setText("Unable to display");
         }
 
         @Override
@@ -101,7 +126,8 @@ public class Blog extends Fragment {
                     buffer.append(inputLine+"\n");
                 JSONObject object=new JSONObject(buffer.toString());
 
-               return object.getString("content");
+                getData(buffer.toString());
+                return "success";
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -110,14 +136,46 @@ public class Blog extends Fragment {
         }
         @Override
         protected void onPostExecute(String result){
-            if (result!=null){
-                //blog.setText(Html.fromHtml(result,new URLImageParser(blog,getContext()),null));
-                blog.setText(Html.fromHtml(result,new ImageGetter(),null));
-            }
-            else {
-                Toast.makeText(getContext(),"Unable to load this blog",Toast.LENGTH_LONG).show();
-            }
+
             dialog.dismiss();
+            if (result.equals("success"))
+                displayBlog();
+            if (result==null){
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+            }
+        }
+    }
+    private void displayBlog(){
+        date.setText(model.date);
+        topic.setText(model.topic);
+        description.setText(model.desc);
+        content.setText(Html.fromHtml(model.content,new ImageGetter(),null));
+        group.setText(model.group);
+        new ImageLoadTask(model.dpurl,dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length)).execute();
+
+        group_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url=BlogUrl+model.group_username;
+                getFragmentManager().beginTransaction().replace(R.id.container, new GroupBlogList(url,model.group))
+                        .addToBackStack(null).commit();
+            }
+        });
+    }
+    public void getData(String str){
+        try {
+            JSONObject object=new JSONObject(str);
+            model.dpurl=object.getString("dp_link");
+            model.content=object.getString("content");
+            model.date=object.getString("date");
+            model.topic=object.getString("title");
+            model.desc=object.getString("description");
+            model.group=object.getString("group");
+            model.id=object.getInt("id");
+            model.group_username=object.getString("group_username");
+            model.slug=object.getString("slug");
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
     public class ImageGetter implements Html.ImageGetter {
@@ -161,14 +219,91 @@ public class Blog extends Fragment {
                     mDrawable.addLevel(1, 1, d);
                     mDrawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
                     mDrawable.setLevel(1);
-                    // i don't know yet a better way to refresh TextView
-                    // mTv.invalidate() doesn't work as expected
-                    CharSequence t = blog.getText();
-                    blog.setText(t);
+                    CharSequence t = content.getText();
+                    content.setText(t);
                 }
             }
         }
     }
 
+    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
+
+        private String url;
+        private ImageView imageView;
+        private int ht;
+        private int wt;
+
+        public ImageLoadTask(String url, ImageView imageView, int h,int w) {
+            this.url = url;
+            this.imageView = imageView;
+            this.ht=h;
+            this.wt=w;
+        }
+        public int getSampleSize(){
+
+            try {
+                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeStream(input, null, options);
+
+                final int height = options.outHeight;
+                final int width = options.outWidth;
+                int inSampleSize = 1;
+
+                if (height > ht || width > wt) {
+
+                    final int halfHeight = height / 2;
+                    final int halfWidth = width / 2;
+
+                    while ((halfHeight / inSampleSize) > ht
+                            && (halfWidth / inSampleSize) > wt) {
+                        inSampleSize *= 2;
+                    }
+                }
+
+                return inSampleSize;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 1;
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            int insamplesize=getSampleSize();
+            try {
+                URL urlConnection = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) urlConnection
+                        .openConnection();
+                connection.setReadTimeout(10000);
+                connection.setConnectTimeout(5000);
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize=insamplesize/2;
+                options.inJustDecodeBounds = false;
+
+                Bitmap myBitmap= BitmapFactory.decodeStream(input,null,options);
+                return myBitmap;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            super.onPostExecute(result);
+            imageView.setImageBitmap(result);
+        }
+
+    }
 
 }

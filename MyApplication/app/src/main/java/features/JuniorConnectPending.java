@@ -51,6 +51,7 @@ public class JuniorConnectPending extends Fragment {
     private String sess_id;
     private List<JuniorModel> list=new ArrayList<JuniorModel>();
     private String pendingURL="http://192.168.121.187:8080/new_entrants/pending/";
+    private TextView zerocount;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class JuniorConnectPending extends Fragment {
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
         cardArrayAdapter = new JuniorCardArrayAdapter(getContext(), R.layout.pending_card);
-
+        zerocount= (TextView) view.findViewById(R.id.zerocount);
         if (isConnected()){
             new getPendingTask().execute(sess_id);
         }
@@ -169,6 +170,10 @@ public class JuniorConnectPending extends Fragment {
             this.cardList.addAll(list);
             list.clear();
             notifyDataSetChanged();
+            if (getCount()==0)
+                zerocount.setVisibility(View.VISIBLE);
+            else
+                zerocount.setVisibility(View.GONE);
         }
 
         private List<JuniorModel> cardList = new ArrayList<JuniorModel>();

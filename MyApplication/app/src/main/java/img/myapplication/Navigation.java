@@ -74,7 +74,7 @@ public class Navigation extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
         mCurrentPosition=position;
-        if (isConnected()){
+
             switch (position) {
                 case -1:
                     fragment = new OpeningFragment();
@@ -98,16 +98,8 @@ public class Navigation extends ActionBarActivity
                     fragment = new PConnectFragment(entrant.sess_id);
                     break;
             }
-        }
-        else {
-            if (position==4)
-                logout();
-            else
-                fragment=new NetworkErrorFragment();
-        }
 
        loadFragment(fragment);
-
 
     }
     public void loadFragment(Fragment fragment){

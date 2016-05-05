@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CheckedTextView
-    android:id="@android:id/text1"
     style="?android:attr/spinnerDropDownItemStyle"
     android:singleLine="true"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:textColor="#000000"
+    android:textColor="@color/drawer_textColor"
+    android:fontFamily="sans-serif"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:background="@drawable/spinner_dropdown_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:textStyle="bold" />

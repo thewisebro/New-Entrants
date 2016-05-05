@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">New Entrants</string>
+    <string name="BlogUrl">http://192.168.121.187:8080/new_entrants/blogs/</string>
+    <string name="server">http://192.168.121.187:8080</string>
     <string name="title_activity_navigation">Navigation</string>
     <string name="appLink"><a href="http://192.168.121.187:8080/new_entrants/">New Entrants Web</a></string>
     <string-array name="entrantstabs">

@@ -44,6 +44,7 @@ public class JuniorConnectAccepted extends Fragment {
     private JuniorCardArrayAdapter cardArrayAdapter;
     private ListView listView;
     private List<JuniorModel> list=new ArrayList<JuniorModel>();
+    private TextView zerocount;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class JuniorConnectAccepted extends Fragment {
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
         cardArrayAdapter = new JuniorCardArrayAdapter(getContext(), R.layout.junior_card);
-
+        zerocount= (TextView) view.findViewById(R.id.zerocount );
         if (isConnected()){
             new getAcceptedTask().execute(sess_id);
         }
@@ -163,6 +164,10 @@ public class JuniorConnectAccepted extends Fragment {
             this.cardList.addAll(list);
             list.clear();
             notifyDataSetChanged();
+            if (getCount()==0)
+                zerocount.setVisibility(View.VISIBLE);
+            else
+                zerocount.setVisibility(View.GONE);
         }
 
         private List<JuniorModel> cardList = new ArrayList<JuniorModel>();

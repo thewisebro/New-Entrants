@@ -18,5 +18,17 @@
         android:divider="@null"
         android:dividerHeight="10dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="No Accepted Requests"
+        android:id="@+id/zerocount"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/blue_grey_800"
+        android:textStyle="bold|italic"
+        android:padding="10dp" />
+
 
 </RelativeLayout>

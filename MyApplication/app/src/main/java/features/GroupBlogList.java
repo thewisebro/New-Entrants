@@ -16,7 +16,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.LruCache;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +28,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +46,6 @@ import java.util.List;
 
 import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
-import models.BlogCardViewHolder;
 import models.BlogModel;
 import models.GroupBlogCardViewHolder;
 
@@ -55,7 +57,7 @@ public class GroupBlogList extends Fragment {
     private BlogCardArrayAdapter cardArrayAdapter;
     private List<BlogModel> items;
     private ListView listView;
-    private SwipeRefreshLayout swipeLayout;
+    private SwipyRefreshLayout swipeLayout;
     private int blogsCount;
     private int lastId;
     private String groupUrl;
@@ -74,22 +76,25 @@ public class GroupBlogList extends Fragment {
         setCache();
         listView = (ListView) view.findViewById(R.id.card_listView);
 
-        listView.addHeaderView(new View(getContext()));
-        listView.addFooterView(new View(getContext()));
+        listView.addHeaderView(new View(getContext()));TextView tv=new TextView(getContext());
+        tv.setText("Pull Up to Load More");
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        listView.addFooterView(tv);
 
-        swipeLayout= (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        swipeLayout= (SwipyRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void onRefresh(SwipyRefreshLayoutDirection swipyRefreshLayoutDirection) {
                 if (isConnected()) {
                     new LoadBlogTask().execute();
                     swipeLayout.setRefreshing(false);
                 }
                 else
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+
             }
 
         });
@@ -179,7 +184,6 @@ public class GroupBlogList extends Fragment {
                 return "Unable to load blogs";
             }
         }
-        // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
             if (result.equals("success")){
@@ -213,7 +217,7 @@ public class GroupBlogList extends Fragment {
                 model.slug=object.getString("slug");
                 if (object.has("thumbnail"))
                     model.imageurl=object.getString("thumbnail");
-                items.add(0,model);
+                items.add(model);
                 lastId =model.id;
                 blogsCount+=1;
             }
@@ -225,8 +229,7 @@ public class GroupBlogList extends Fragment {
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
         public void refresh(){
-            //this.cardList.clear();
-            this.cardList.addAll(0,items);
+            this.cardList.addAll(items);
             notifyDataSetChanged();
         }
 
@@ -290,6 +293,7 @@ public class GroupBlogList extends Fragment {
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
                 row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
+                viewHolder.img.setImageResource(R.drawable.android_loading);
                 loadimg.execute();
             }
             else {
@@ -297,13 +301,12 @@ public class GroupBlogList extends Fragment {
                 row.findViewById(R.id.card_middle).setVisibility(View.VISIBLE);
 
             }
-            row.setTag(viewHolder);
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    BlogCardViewHolder holder = (BlogCardViewHolder) v.getTag();
+                    GroupBlogCardViewHolder holder = (GroupBlogCardViewHolder) v.getTag();
                     getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, new BlogPage(holder.blogUrl)).addToBackStack(null).commit();
+                            .replace(R.id.container, new Blog(holder.blogUrl)).addToBackStack(null).commit();
                 }
             });
             viewHolder.loaddp=loaddp;

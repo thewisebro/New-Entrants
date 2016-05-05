@@ -47,13 +47,13 @@ public class SConnectPendingFragment extends Fragment {
     private List<RequestModel> list=new ArrayList<RequestModel>();
     public String request_url="http://192.168.121.187:8080/new_entrants/pending/";
     public String extend_url="http://192.168.121.187:8080/new_entrants/extend/";
-
+    private TextView zerocount;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         View view=inflater.inflate(R.layout.fragment_sconnect_pending, container, false);
         ListView listView = (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
-
+        zerocount= (TextView) view.findViewById(R.id.zerocount);
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.request_card);
 
         if (isConnected())
@@ -173,6 +173,10 @@ public class SConnectPendingFragment extends Fragment {
             this.cardList.addAll(list);
             list.clear();
             notifyDataSetChanged();
+            if (getCount()==0)
+                zerocount.setVisibility(View.VISIBLE);
+            else
+                zerocount.setVisibility(View.GONE);
         }
         public SeniorCardArrayAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
