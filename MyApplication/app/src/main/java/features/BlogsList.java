@@ -58,6 +58,7 @@ public class BlogsList extends Fragment {
     private BlogCardArrayAdapter cardArrayAdapter;
     private List<BlogModel> items;
     private ListView listView;
+    private TextView tv;        //Footer View
     private SwipyRefreshLayout swipeLayout;
     private int blogsCount;
     private int lastId;
@@ -77,7 +78,7 @@ public class BlogsList extends Fragment {
         listView = (ListView) view.findViewById(R.id.card_listView);
 
         listView.addHeaderView(new View(getContext()));
-        TextView tv=new TextView(getContext());
+        tv=new TextView(getContext());
         tv.setText("Pull Up to Load More");
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
         listView.addFooterView(tv);
@@ -193,7 +194,6 @@ public class BlogsList extends Fragment {
                 cardArrayAdapter.refresh();
                 items.clear();
                 refreshing=false;
-                Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
             }
             else
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
@@ -239,11 +239,19 @@ public class BlogsList extends Fragment {
 
         public void refresh(){
             this.cardList.addAll(items);
+            if (items.size()==0 && listView.getFooterViewsCount()!=0) {
+                Toast.makeText(getContext(), "No More Blogs", Toast.LENGTH_LONG).show();
+                listView.removeFooterView(tv);
+            }
+            else
+                Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
             notifyDataSetChanged();
         }
         @Override
         public void clear(){
             this.cardList.clear();
+            if (listView.getFooterViewsCount()==0)
+                listView.addFooterView(tv);
             notifyDataSetChanged();
             super.clear();
         }
