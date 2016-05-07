@@ -181,7 +181,6 @@ public class SConnectRequestFragment extends Fragment {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(getContext(),"Unable to send request!",Toast.LENGTH_LONG).show();
             }
 
             return null;
@@ -191,13 +190,16 @@ public class SConnectRequestFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             dialog.dismiss();
-            if (result.equals("success")) {
+            if (result==null) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+                Toast.makeText(getContext(), "Unable to send request!", Toast.LENGTH_SHORT).show();
+            }
+            else if (result.equals("success")) {
                 Toast.makeText(getContext(), "Request Sent Successfully!", Toast.LENGTH_SHORT).show();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new SConnectTabFragment()).commit();
             }
             else
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
+                Toast.makeText(getContext(),"Request failed!",Toast.LENGTH_LONG).show();
         }
     }
 }

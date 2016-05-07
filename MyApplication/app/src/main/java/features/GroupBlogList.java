@@ -182,7 +182,6 @@ public class GroupBlogList extends Fragment {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(getContext(),"Unable to load blogs",Toast.LENGTH_LONG).show();
                 return "Unable to load blogs";
             }
         }
@@ -192,9 +191,10 @@ public class GroupBlogList extends Fragment {
                 cardArrayAdapter.refresh();
                 items.clear();
             }
-            else
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
+            else {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+                Toast.makeText(getContext(), "Unable to load blogs", Toast.LENGTH_SHORT).show();
+            }
             dialog.dismiss();
         }
     }

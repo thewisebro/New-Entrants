@@ -149,6 +149,8 @@ public class EntrantUpdateFragment extends Fragment {
             try {
                 HttpURLConnection connPost= (HttpURLConnection) new URL(updateURL).openConnection();
                 connPost.setRequestMethod("POST");
+                connPost.setConnectTimeout(7000);
+                connPost.setReadTimeout(7000);
                 connPost.setDoInput(true);
                 connPost.setDoOutput(true);
                 connPost.setRequestProperty("Cookie", "CHANNELI_SESSID=" + entrant.sess_id);
@@ -181,7 +183,13 @@ public class EntrantUpdateFragment extends Fragment {
         }
         @Override
         protected void onPostExecute(String result) {
-            if (result.equals("success")){
+
+            dialog.dismiss();
+            if (result==null){
+                Toast.makeText(getContext(), "Update failed!", Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+            }
+            else if (result.equals("success")){
                 entrant.email=params.get("email");
                 entrant.state=state.getSelectedItem().toString();
                 entrant.statecode=params.get("state");
@@ -199,11 +207,8 @@ public class EntrantUpdateFragment extends Fragment {
                 ((Navigation)getActivity()).set_updated();
                 Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
             }
-            else{
+            else
                 Toast.makeText(getContext(), "Update failed!", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-            }
-            dialog.dismiss();
         }
     }
     public void getParams(){

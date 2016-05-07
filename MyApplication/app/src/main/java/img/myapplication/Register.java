@@ -113,52 +113,20 @@ public class Register extends AppCompatActivity {
                 new RegisterTask().execute();
         }
         else
-            getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
+            Toast.makeText(getApplicationContext(),"Unable to connect to network!",Toast.LENGTH_LONG).show();
 
     }
     public boolean validate(){
 
-        //String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         String emailPattern="^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        //String mobilePattern="^(\\+91|0|)[0-9]{10}$";
         String mobilePattern="^$|^(\\+\\d{1,3}[- ]?)?\\d{10}$";
-        //String namePattern="[a-zA-Z ]+";
         String namePattern="^[a-zA-Z ]{1,100}$";
         String usernamePattern="^[0-9a-zA-Z]{1,30}$";
         String townPattern="^$|^[a-zA-Z ]+$";
+        String passwordPattern="^[0-9a-zA-Z]{6,20}$";
         String fbPattern="^$|^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        //String fbPattern="^$|^[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+$";
         boolean flag=true;
 
-        if(!(entrant.password).equals(re_password.getText().toString())){
-            re_password.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
-            Toast.makeText(getApplicationContext(),"Passwords do not match", Toast.LENGTH_SHORT).show();
-            flag=false;
-        }
-        else
-            re_password.setBackgroundDrawable(null);
-        if (!(entrant.email).matches(emailPattern)){
-            email.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
-            Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
-            flag=false;
-        }
-        else
-            email.setBackgroundDrawable(null);
-        if (!(entrant.username).matches(usernamePattern)){
-            username.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
-            Toast.makeText(getApplicationContext(), "Invalid username", Toast.LENGTH_SHORT).show();
-            flag=false;
-        }
-        else
-            username.setBackgroundDrawable(null);
-        if(!(entrant.mobile).matches(mobilePattern)){
-            mobile.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
-            Toast.makeText(getApplicationContext(),"Invalid Mobile Number", Toast.LENGTH_SHORT).show();
-            flag=false;
-        }
-        else
-            mobile.setBackgroundDrawable(null);
         if(!(entrant.name).matches(namePattern)){
             name.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getApplicationContext(),"Enter a proper Name", Toast.LENGTH_SHORT).show();
@@ -166,20 +134,27 @@ public class Register extends AppCompatActivity {
         }
         else
             name.setBackgroundDrawable(null);
-        if(!(entrant.town).matches(townPattern)){
-            town.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
-            Toast.makeText(getApplicationContext(),"Enter a proper City name", Toast.LENGTH_SHORT).show();
+        if (!(entrant.username).matches(usernamePattern)){
+            username.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getApplicationContext(), "Invalid username!\nUsername can have only characters", Toast.LENGTH_SHORT).show();
             flag=false;
         }
         else
-            town.setBackgroundDrawable(null);
-        if (!(entrant.fb_link).matches(fbPattern)){
-            fblink.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
-            Toast.makeText(getApplicationContext(), "Invalid Facebook link", Toast.LENGTH_SHORT).show();
+            username.setBackgroundDrawable(null);
+        if (!(entrant.password).matches(passwordPattern)){
+            password.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getApplicationContext(), "Password can have only 6-20 characters", Toast.LENGTH_LONG).show();
             flag=false;
         }
         else
-            fblink.setBackgroundDrawable(null);
+            password.setBackgroundDrawable(null);
+        if(!(entrant.password).equals(re_password.getText().toString())){
+            re_password.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getApplicationContext(),"Passwords do not match", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        else
+            re_password.setBackgroundDrawable(null);
         if (state.getSelectedItemPosition()==0){
             state.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getApplicationContext(), "Select a State", Toast.LENGTH_SHORT).show();
@@ -187,6 +162,35 @@ public class Register extends AppCompatActivity {
         }
         else
             state.setBackgroundDrawable(null);
+        if(!(entrant.town).matches(townPattern)){
+            town.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getApplicationContext(),"Enter a proper City name", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        else
+            town.setBackgroundDrawable(null);
+        if(!(entrant.mobile).matches(mobilePattern)){
+            mobile.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getApplicationContext(),"Invalid Mobile Number", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        else
+            mobile.setBackgroundDrawable(null);
+        if (!(entrant.email).matches(emailPattern)){
+            email.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        else
+            email.setBackgroundDrawable(null);
+        if (!(entrant.fb_link).matches(fbPattern)){
+            fblink.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getApplicationContext(), "Invalid Facebook link", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        else
+            fblink.setBackgroundDrawable(null);
+
         return flag;
     }
     private void setParams() throws IllegalAccessException {
@@ -283,7 +287,7 @@ public class Register extends AppCompatActivity {
         private ProgressDialog dialog;
         @Override
         protected void onPreExecute(){
-            this.dialog=new ProgressDialog(getApplicationContext());
+            this.dialog=new ProgressDialog(Register.this);
             this.dialog.setMessage("Registering...");
             this.dialog.setIndeterminate(false);
             this.dialog.setCancelable(false);
@@ -302,24 +306,23 @@ public class Register extends AppCompatActivity {
         }
         @Override
         protected String doInBackground(String... urls) {
-
-            try {
-                return registerNow();
-            } catch (Exception e) {
-                return null;
-            }
+            return registerNow();
         }
         @Override
         protected void onPostExecute(String result) {
-            if (result.equals("success")){
+            dialog.dismiss();
+            if (result==null)
+                Toast.makeText(getApplicationContext(),"Registration Failed!", Toast.LENGTH_SHORT).show();
+            else if (result.equals("success")){
                 Toast.makeText(getApplicationContext(),"Registration Successful!", Toast.LENGTH_SHORT).show();
                 finish();
             }
             else if(result.equals("error")) {
-                Toast.makeText(getApplicationContext(),"Registration Failed!", Toast.LENGTH_SHORT).show();
-                getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-            }
-            dialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Registration Failed!\nCheck Network Connection", Toast.LENGTH_SHORT).show();
+             }
+            else
+                Toast.makeText(getApplicationContext(),result, Toast.LENGTH_SHORT).show();
+
         }
     }
 

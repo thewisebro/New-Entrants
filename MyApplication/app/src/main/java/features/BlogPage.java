@@ -141,6 +141,7 @@ public class BlogPage extends Fragment {
                 dialog.dismiss();
             if (result==null){
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+                Toast.makeText(getContext(), "Unable to load blog", Toast.LENGTH_LONG).show();
             }
         }
     }

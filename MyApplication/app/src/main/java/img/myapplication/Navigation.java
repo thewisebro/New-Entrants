@@ -16,7 +16,6 @@ import android.view.View;
 
 import features.BlogsList;
 import features.EntrantUpdateFragment;
-import features.PConnectFragment;
 import features.SConnectRequestFragment;
 import features.SConnectTabFragment;
 import models.NewEntrantModel;
@@ -79,9 +78,6 @@ public class Navigation extends ActionBarActivity
                 case -1:
                     fragment = new OpeningFragment();
                     break;
-                case 0:
-                    fragment=new BlogsList();
-                    break;
                 case 1:
                     fragment = new SConnectTabFragment();
                     break;
@@ -95,7 +91,7 @@ public class Navigation extends ActionBarActivity
                     fragment = new EntrantUpdateFragment();
                     break;
                 default:
-                    fragment = new PConnectFragment(entrant.sess_id);
+                    fragment = new BlogsList();
                     break;
             }
 

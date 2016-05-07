@@ -115,20 +115,20 @@ public class JuniorConnectAccepted extends Fragment {
                 return "success";
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(getContext(), "Unable to load!", Toast.LENGTH_LONG).show();
+                return null;
             }
-            return null;
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
             dialog.dismiss();
-            if (result.equals("success")){
+            if (result==null){
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+                Toast.makeText(getContext(), "Unable to load!", Toast.LENGTH_SHORT).show();
+            }
+            else if (result.equals("success")){
                 cardArrayAdapter.refresh();
             }
-            else
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
         }
     }
     private void getCards(String result){

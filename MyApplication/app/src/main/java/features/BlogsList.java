@@ -182,7 +182,6 @@ public class BlogsList extends Fragment {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(getContext(),"Can't connect to network",Toast.LENGTH_LONG).show();
                 return "Can't connect to network";
             }
         }
@@ -195,9 +194,10 @@ public class BlogsList extends Fragment {
                 items.clear();
                 refreshing=false;
             }
-            else
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
+            else {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+                Toast.makeText(getContext(), "Can't connect to network", Toast.LENGTH_SHORT).show();
+            }
         }
     }
     public void getBlogs(String result){

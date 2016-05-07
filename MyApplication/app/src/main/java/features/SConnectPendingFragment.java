@@ -145,7 +145,6 @@ public class SConnectPendingFragment extends Fragment {
                 getCards(sb.toString());
                 return "success";
             } catch (Exception e) {
-                Toast.makeText(getContext(),"Unable to load!",Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -155,12 +154,13 @@ public class SConnectPendingFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             dialog.dismiss();
-            if (result.equals("success")){
+            if (result==null){
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+                Toast.makeText(getContext(), "Unable to load!", Toast.LENGTH_SHORT).show();
+            }
+            else if (result.equals("success")){
                 cardArrayAdapter.refresh();
             }
-            else
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
         }
     }
 

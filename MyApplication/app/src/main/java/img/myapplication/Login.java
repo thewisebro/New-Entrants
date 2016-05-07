@@ -215,11 +215,12 @@ public class Login extends ActionBarActivity {
 
             if ("false".equals(result)){
                 getSupportFragmentManager().popBackStack();
-                Toast.makeText(getApplicationContext(),"Enter correct username and password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Enter correct username and password", Toast.LENGTH_LONG).show();
             }
-            else if ("error".equals(result))
-                getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
+            else if ("error".equals(result)) {
+                getSupportFragmentManager().popBackStack();
+                Toast.makeText(getApplicationContext(), "Unable to connect to network", Toast.LENGTH_LONG).show();
+            }
                 else {
                     Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
                     start();

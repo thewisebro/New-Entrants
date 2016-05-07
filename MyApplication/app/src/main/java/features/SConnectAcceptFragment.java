@@ -156,7 +156,6 @@ public class SConnectAcceptFragment extends Fragment {
                 }
                 return "success";
             } catch (Exception e) {
-                Toast.makeText(getContext(),"Unable to load!",Toast.LENGTH_LONG).show();
                 return "Unable to retrieve web page. URL may be invalid.";
             }
 
@@ -169,9 +168,10 @@ public class SConnectAcceptFragment extends Fragment {
             if (result.equals("success")) {
                 cardArrayAdapter.refresh();
             }
-            else
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
+            else {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+                Toast.makeText(getContext(), "Unable to load!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
     public class SeniorCardArrayAdapter  extends ArrayAdapter<SeniorModel> {

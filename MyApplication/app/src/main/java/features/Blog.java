@@ -138,11 +138,12 @@ public class Blog extends Fragment {
         protected void onPostExecute(String result){
 
             dialog.dismiss();
-            if (result.equals("success"))
-                displayBlog();
             if (result==null){
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+                Toast.makeText(getContext(), "Unable to load blog", Toast.LENGTH_SHORT).show();
             }
+            else if (result.equals("success"))
+                displayBlog();
         }
     }
     private void displayBlog(){
