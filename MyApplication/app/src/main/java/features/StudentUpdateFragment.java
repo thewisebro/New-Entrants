@@ -208,7 +208,9 @@ public class StudentUpdateFragment extends Fragment {
                 db.addStudent(student);
                 db.close();
                 if (lock) {
-                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    ActionBar actionBar=((ActionBarActivity)getActivity()).getSupportActionBar();
+                    actionBar.setDisplayHomeAsUpEnabled(true);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new OpeningFragment()).commit();
                     lock=false;
                 }
@@ -229,8 +231,8 @@ public class StudentUpdateFragment extends Fragment {
     }
     public boolean checkParams(){
         String emailPattern="^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        String mobilePattern="^$|^(\\+\\d{1,3}[- ]?)?\\d{10}$";
-        String townPattern="^$|^[a-zA-Z ]+$";
+        String mobilePattern="^(\\+\\d{1,3}[- ]?)?\\d{10}$";
+        String townPattern="^[a-zA-Z ]+$";
         String fbPattern="^$|^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
 
         boolean flag=true;

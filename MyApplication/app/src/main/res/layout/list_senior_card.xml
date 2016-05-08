@@ -47,13 +47,6 @@
                     android:textColor="@color/blue_grey_300"
                     android:layout_below="@+id/s_name"/>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/blue_grey_300"
-                    android:text=", "
-                    android:layout_below="@+id/s_name"/>
-
-                <TextView
                     android:id="@+id/s_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -101,7 +94,6 @@
             android:outlineProvider="paddedBounds"
             android:orientation="vertical"
             android:id="@+id/down_view"
-            android:textAlignment="center"
             android:visibility="gone">
 
             <LinearLayout
@@ -112,6 +104,7 @@
 
             <LinearLayout
                 android:orientation="horizontal"
+                android:id="@+id/contactline"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -125,13 +118,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/s_contact"
-                    android:layout_alignParentTop="true"
-                    android:textColor="@color/blue_grey_300"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/blue_grey_300" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
+                android:id="@+id/emailline"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -145,14 +138,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/s_email"
-                    android:textColor="@color/blue_grey_300"
-                    android:layout_below="@+id/s_contact"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/blue_grey_300"/>
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
+                android:id="@+id/fbline"
                 android:layout_height="match_parent">
 
                 <ImageView
@@ -165,9 +158,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/s_fblink"
-                    android:textColor="@color/blue_grey_300"
-                    android:layout_below="@+id/s_email"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/blue_grey_300"/>
             </LinearLayout>
 
         </LinearLayout>

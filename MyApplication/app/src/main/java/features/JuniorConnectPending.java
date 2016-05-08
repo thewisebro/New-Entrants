@@ -222,10 +222,19 @@ public class JuniorConnectPending extends Fragment {
             }
             JuniorModel card = getItem(position);
             viewHolder.name.setText(card.name);
-            viewHolder.town.setText(card.town);
+            if (!("".equals(card.town)))
+                viewHolder.town.setText(card.town+", ");
             viewHolder.state.setText(card.state);
-            viewHolder.branch.setText(card.branch);
-            viewHolder.query.setText(card.description);
+            if ("".equals(card.branch))
+                viewHolder.branch.setVisibility(View.GONE);
+            else {
+                viewHolder.branch.setVisibility(View.VISIBLE);
+                viewHolder.branch.setText(card.branch);
+            }
+            if ("".equals(card.description))
+                viewHolder.query.setText("Please guide me");
+            else
+                viewHolder.query.setText(card.description);
             ToggleButton bt= (ToggleButton) row.findViewById(R.id.toggle_junior);
             bt.setVisibility(View.VISIBLE);
             bt.setTag(row.findViewById(R.id.card_layout));

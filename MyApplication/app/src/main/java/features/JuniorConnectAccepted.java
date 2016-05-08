@@ -218,12 +218,33 @@ public class JuniorConnectAccepted extends Fragment {
             }
             JuniorModel card = getItem(position);
             viewHolder.name.setText(card.name);
-            viewHolder.town.setText(card.town);
+            if (!("".equals(card.town)))
+                viewHolder.town.setText(card.town+", ");
             viewHolder.state.setText(card.state);
-            viewHolder.branch.setText(card.branch);
-            viewHolder.contact.setText(card.mobile);
-            viewHolder.email.setText(card.email);
-            viewHolder.fblink.setText(card.fblink);
+            if ("".equals(card.branch))
+                viewHolder.branch.setVisibility(View.GONE);
+            else {
+                viewHolder.branch.setVisibility(View.VISIBLE);
+                viewHolder.branch.setText(card.branch);
+            }
+            if ("".equals(card.mobile))
+                row.findViewById(R.id.contactline).setVisibility(View.GONE);
+            else {
+                row.findViewById(R.id.contactline).setVisibility(View.VISIBLE);
+                viewHolder.contact.setText(card.mobile);
+            }
+            if ("".equals(card.email))
+                row.findViewById(R.id.emailline).setVisibility(View.GONE);
+            else {
+                row.findViewById(R.id.emailline).setVisibility(View.VISIBLE);
+                viewHolder.email.setText(card.email);
+            }
+            if ("".equals(card.fblink))
+                row.findViewById(R.id.fbline).setVisibility(View.GONE);
+            else {
+                row.findViewById(R.id.fbline).setVisibility(View.VISIBLE);
+                viewHolder.fblink.setText(card.fblink);
+            }
             ToggleButton bt= (ToggleButton) row.findViewById(R.id.toggle_junior);
             bt.setVisibility(View.VISIBLE);
             bt.setTag(row.findViewById(R.id.card_layout));
@@ -235,11 +256,9 @@ public class JuniorConnectAccepted extends Fragment {
                         ((LinearLayout)layout.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
                         layout.setLayoutTransition(null);
 
-                        //listView.setLayoutTransition(new LayoutTransition());
                     } else {
                         ((LinearLayout)layout.findViewById(R.id.down_view)).setVisibility(View.GONE);
                         layout.setLayoutTransition(new LayoutTransition());
-                        //listView.setLayoutTransition(null);
                     }
                 }
             });

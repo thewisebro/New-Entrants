@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -83,7 +84,7 @@ public class NavigationDrawerFragment extends Fragment {
         //mDrawerListView= (ListView) inflater.inflate(R.layout.navigation_drawer,container,false);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 selectItem(position);
 
             }
@@ -301,7 +302,13 @@ public class NavigationDrawerFragment extends Fragment {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(position);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mCallbacks.onNavigationDrawerItemSelected(mCurrentSelectedPosition);
+                }
+            }, 200);
+            //mCallbacks.onNavigationDrawerItemSelected(position);
         }
     }
 

@@ -124,7 +124,7 @@ public class Register extends AppCompatActivity {
         String usernamePattern="^[0-9a-zA-Z]{1,30}$";
         String townPattern="^$|^[a-zA-Z ]+$";
         String passwordPattern="^[0-9a-zA-Z]{6,20}$";
-        String fbPattern="^$|^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        String fbPattern="^$|^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$";
         boolean flag=true;
 
         if(!(entrant.name).matches(namePattern)){
@@ -213,7 +213,6 @@ public class Register extends AppCompatActivity {
 
     }
     private String registerNow(){
-        String result=null;
         cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
         CookieStore cookieStore=cookieManager.getCookieStore();
@@ -260,27 +259,25 @@ public class Register extends AppCompatActivity {
             String inputLine;
             while ((inputLine = reader.readLine()) != null)
                 buffer.append(inputLine+"\n");
-            result=getResult(buffer.toString());
+            return getResult(buffer.toString());
 
         } catch (Exception e) {
             e.printStackTrace();
-            result="error";
+            return "error";
         }
-        return result;
     }
     public String getResult(String result){
         String status=null;
         try {
             JSONObject rObj=new JSONObject(result);
             status=rObj.get("status").toString();
-            if (status.equals("fails"))
+            if (status.equals("fail"))
                 status=rObj.getString("error");
 
         } catch (JSONException e) {
             e.printStackTrace();
+            status="JSON error";
         }
-
-
         return status;
     }
     private class RegisterTask extends AsyncTask<String, Void, String> {
@@ -311,9 +308,7 @@ public class Register extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             dialog.dismiss();
-            if (result==null)
-                Toast.makeText(getApplicationContext(),"Registration Failed!", Toast.LENGTH_SHORT).show();
-            else if (result.equals("success")){
+            if (result.equals("success")){
                 Toast.makeText(getApplicationContext(),"Registration Successful!", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -322,7 +317,6 @@ public class Register extends AppCompatActivity {
              }
             else
                 Toast.makeText(getApplicationContext(),result, Toast.LENGTH_SHORT).show();
-
         }
     }
 

@@ -233,19 +233,35 @@ public class SConnectAcceptFragment extends Fragment {
             viewHolder.state.setText(card.state);
             if (card.town.isEmpty())
                 viewHolder.town.setVisibility(View.GONE);
-            else
-                viewHolder.town.setText(card.town);
-            viewHolder.email.setText(card.email);
-            viewHolder.contact.setText(card.contact);
+            else {
+                viewHolder.town.setVisibility(View.VISIBLE);
+                viewHolder.town.setText(card.town+", ");
+            }
+            if ("".equals(card.email))
+                row.findViewById(R.id.emailline).setVisibility(View.GONE);
+            else {
+                row.findViewById(R.id.emailline).setVisibility(View.VISIBLE);
+                viewHolder.email.setText(card.email);
+            }
+            if (card.contact.isEmpty())
+                row.findViewById(R.id.contactline).setVisibility(View.GONE);
+            else {
+                row.findViewById(R.id.contactline).setVisibility(View.VISIBLE);
+                viewHolder.contact.setText(card.contact);
+            }
             if (card.dp_link.isEmpty())
                 viewHolder.dp.setVisibility(View.GONE);
-            else
-                new ImageLoadTask(card.dp_link,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length))
+            else {
+                viewHolder.dp.setVisibility(View.VISIBLE);
+                new ImageLoadTask(card.dp_link, viewHolder.dp, (int) getResources().getDimension(R.dimen.roundimage_length), (int) getResources().getDimension(R.dimen.roundimage_length))
                         .execute();
-            if (card.fblink.isEmpty())
-                viewHolder.fblink.setVisibility(View.GONE);
-            else
+            }
+            if ("".equals(card.fblink))
+                row.findViewById(R.id.fbline).setVisibility(View.GONE);
+            else {
+                row.findViewById(R.id.fbline).setVisibility(View.VISIBLE);
                 viewHolder.fblink.setText(card.fblink);
+            }
             ToggleButton bt= (ToggleButton) row.findViewById(R.id.toggle_senior);
             bt.setVisibility(View.VISIBLE);
             bt.setTag(row.findViewById(R.id.card_layout));
@@ -257,11 +273,9 @@ public class SConnectAcceptFragment extends Fragment {
                         ((LinearLayout)layout.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
                         layout.setLayoutTransition(null);
 
-                        //listView.setLayoutTransition(new LayoutTransition());
                     } else {
                         ((LinearLayout)layout.findViewById(R.id.down_view)).setVisibility(View.GONE);
                         layout.setLayoutTransition(new LayoutTransition());
-                        //listView.setLayoutTransition(null);
                     }
                 }
             });
