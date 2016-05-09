@@ -310,7 +310,8 @@ public class BlogsList extends Fragment {
             viewHolder.blogUrl=BlogUrl+card.group_username+"/"+card.slug;
             ImageLoadTask loaddp=new ImageLoadTask(card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
             loaddp.execute();
-            ImageLoadTask loadimg=new ImageLoadTask(server+card.imageurl, viewHolder.img,(int) getResources().getDimension(R.dimen.blogcardimg_height),getActivity().getWindowManager().getDefaultDisplay().getWidth());
+            int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
+            ImageLoadTask loadimg=new ImageLoadTask(server+card.imageurl, viewHolder.img,screen_width,screen_width);
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
                 row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
@@ -470,11 +471,12 @@ public class BlogsList extends Fragment {
         inflater.inflate(R.menu.menu_blogs,menu);
         final MenuItem item=menu.findItem(R.id.filter_spinner);
         Spinner spinner= (Spinner) MenuItemCompat.getActionView(item);
-        ArrayAdapter<CharSequence> filters=ArrayAdapter.createFromResource(getContext(),R.array.filters,R.layout.spinner_item);
+        ArrayAdapter<CharSequence> filters=ArrayAdapter.createFromResource(getContext(),R.array.filters, R.layout.spinner_item);
         filters.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(filters);
-        spinner.setBackground(getResources().getDrawable(R.drawable.spinner_background));
+        spinner.setBackground(getResources().getDrawable(R.drawable.spinner_bg));
         spinner.setPopupBackgroundDrawable(getResources().getDrawable(R.drawable.spinner_dropdown_background));
+        spinner.setPadding(0,0,(int) getResources().getDimension(R.dimen.spinner_padding),0);
         spinner.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

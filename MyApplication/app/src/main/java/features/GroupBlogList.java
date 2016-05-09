@@ -295,7 +295,8 @@ public class GroupBlogList extends Fragment {
             viewHolder.blogUrl = groupUrl+"/" + card.slug;
             ImageLoadTask loaddp=new ImageLoadTask(card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
             loaddp.execute();
-            ImageLoadTask loadimg=new ImageLoadTask(server+card.imageurl, viewHolder.img,(int) getResources().getDimension(R.dimen.blogcardimg_height),getActivity().getWindowManager().getDefaultDisplay().getWidth());
+            int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
+            ImageLoadTask loadimg=new ImageLoadTask(server+card.imageurl, viewHolder.img,screen_width,screen_width);
 
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);

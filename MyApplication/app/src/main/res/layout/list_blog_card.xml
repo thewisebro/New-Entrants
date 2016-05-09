@@ -3,8 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
     android:longClickable="true">
 
     <LinearLayout
@@ -23,18 +21,21 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:id="@+id/img_layout"
-                android:layout_height="@dimen/blogcardimg_height">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
                     android:id="@+id/blog_img" />
                 <View
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:alpha="0.4"
-                    android:background="@drawable/gradient"/>
+                    android:background="@drawable/gradient"
+                    android:layout_alignTop="@+id/blog_img"
+                    android:layout_alignBottom="@+id/blog_img"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -109,7 +110,7 @@
                 android:layout_width="@dimen/roundimage_length"
                 android:layout_height="@dimen/roundimage_length"
                 android:id="@+id/blog_dp"
-                android:padding="10dp" />
+                android:layout_margin="8dp" />
 
             <TextView
                 android:layout_width="fill_parent"

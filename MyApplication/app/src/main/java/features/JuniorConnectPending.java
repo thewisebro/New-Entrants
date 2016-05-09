@@ -232,7 +232,7 @@ public class JuniorConnectPending extends Fragment {
                 viewHolder.branch.setText(card.branch);
             }
             if ("".equals(card.description))
-                viewHolder.query.setText("Please guide me");
+                viewHolder.query.setText("In need of Assistance");
             else
                 viewHolder.query.setText(card.description);
             ToggleButton bt= (ToggleButton) row.findViewById(R.id.toggle_junior);

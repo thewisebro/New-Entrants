@@ -5,7 +5,7 @@
     style="?android:attr/spinnerItemStyle"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:singleLine="true"
-    android:textColor="@color/drawer_textColor"
+    android:textColor="@color/white"
     android:fontFamily="sans-serif"
     android:textAppearance="?android:attr/textAppearanceSmall"
     android:textStyle="bold"

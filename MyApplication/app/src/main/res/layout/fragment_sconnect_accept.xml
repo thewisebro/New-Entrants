@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_grey_50">
+    android:background="@color/list_bg">
 
     <ListView
         android:id="@+id/card_listView"
@@ -27,14 +27,16 @@
         android:textStyle="bold|italic"
         android:padding="10dp" />
     <img.myapplication.RoundImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/roundimage_length"
+        android:layout_height="@dimen/roundimage_length"
         android:onClick="sendRequest"
+        android:scaleType="fitXY"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:src="@mipmap/ic_launcher"
-        android:padding="10dp"
-        android:nestedScrollingEnabled="false" />
+        android:src="@drawable/ic_sconnect"
+        android:nestedScrollingEnabled="false"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="25dp" />
 
 </RelativeLayout>

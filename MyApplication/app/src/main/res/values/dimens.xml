@@ -9,8 +9,8 @@
     <dimen name="roundimage_length">50dp</dimen>
     <dimen name="drawer_img">150dp</dimen>
     <dimen name="blogcardimg_height">150dp</dimen>
-    <dimen name="blogimg_ht">200dp</dimen>
+    <dimen name="blogimg_ht">300dp</dimen>
     <dimen name="blogimg_wt">300dp</dimen>
     <dimen name="actionbarname_padding">10dp</dimen>
-
+    <dimen name="spinner_padding">30dp</dimen>
 </resources>

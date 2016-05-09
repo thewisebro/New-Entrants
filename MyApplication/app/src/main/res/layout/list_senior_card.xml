@@ -24,7 +24,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/top_view"
             android:outlineProvider="paddedBounds"
-            android:layout_margin="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
 
             <TextView
                 android:id="@+id/s_name"
@@ -38,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/s_name"
                 android:id="@+id/s_loc"
+                android:gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
                 android:orientation="horizontal">
                 <TextView
@@ -62,7 +64,9 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue_grey_300"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/s_loc"/>
+                android:gravity="center_horizontal"
+                android:layout_below="@+id/s_loc"
+                android:textAlignment="center" />
 
             <ToggleButton
                 android:layout_width="50dp"
@@ -76,7 +80,8 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:alpha=".3" />
 
             <img.myapplication.RoundImageView
                 android:layout_width="@dimen/roundimage_length"
@@ -106,60 +111,69 @@
                 android:orientation="horizontal"
                 android:id="@+id/contactline"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView"
-                    android:src="@android:drawable/ic_menu_call" />
+                    android:src="@drawable/ic_contact_phone_black_24dp"
+                    android:alpha=".3"
+                    android:layout_margin="5dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/s_contact"
                     android:layout_gravity="center_vertical"
-                    android:textColor="@color/blue_grey_300" />
+                    android:textColor="@color/blue_grey_300"
+                    android:layout_margin="5dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:id="@+id/emailline"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView3"
-                    android:src="@android:drawable/sym_action_email" />
+                    android:src="@drawable/ic_email_black_24dp"
+                    android:alpha=".3"
+                    android:layout_margin="5dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/s_email"
                     android:layout_gravity="center_vertical"
-                    android:textColor="@color/blue_grey_300"/>
+                    android:textColor="@color/blue_grey_300"
+                    android:layout_margin="5dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:id="@+id/fbline"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView4"
-                    android:src="@android:drawable/ic_dialog_email" />
+                    android:src="@drawable/ic_fb"
+                    android:alpha=".3"
+                    android:layout_margin="5dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/s_fblink"
                     android:layout_gravity="center_vertical"
-                    android:textColor="@color/blue_grey_300"/>
+                    android:textColor="@color/blue_grey_300"
+                    android:layout_margin="5dp" />
             </LinearLayout>
 
         </LinearLayout>

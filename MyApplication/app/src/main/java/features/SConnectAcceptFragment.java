@@ -270,13 +270,23 @@ public class SConnectAcceptFragment extends Fragment {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     LinearLayout layout = (LinearLayout) buttonView.getTag();
                     if (isChecked) {
-                        ((LinearLayout)layout.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
+                        ((LinearLayout) layout.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
                         layout.setLayoutTransition(null);
 
                     } else {
-                        ((LinearLayout)layout.findViewById(R.id.down_view)).setVisibility(View.GONE);
+                        ((LinearLayout) layout.findViewById(R.id.down_view)).setVisibility(View.GONE);
                         layout.setLayoutTransition(new LayoutTransition());
                     }
+                }
+            });
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToggleButton bt= (ToggleButton) v.findViewById(R.id.toggle_senior);
+                    if (bt.isChecked())
+                        bt.setChecked(false);
+                    else
+                        bt.setChecked(true);
                 }
             });
             return row;

@@ -11,7 +11,8 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="15dp"/>
+        android:layout_marginLeft="15dp"
+        android:alpha=".3" />
 
     <TextView
         android:id="@+id/drawer_list_text"
