@@ -134,12 +134,12 @@ public class NavigationDrawerFragment extends Fragment {
         int[] drawables=null;
         if(type==2) {
             drawables=new int[]{R.drawable.ic_chrome_reader_mode_black_24dp,R.drawable.ic_person_black_24dp ,
-                    R.drawable.ic_settings_black_24dp,R.drawable.ic_power_settings_new_black_24dp};
+                    R.drawable.ic_info_black_24dp,R.drawable.ic_power_settings_new_black_24dp};
             tabs = getResources().getStringArray(R.array.studenttabs);
         }
         if(type==1){
             drawables=new int[]{R.drawable.ic_chrome_reader_mode_black_24dp,R.drawable.ic_group_black_24dp,
-                    R.drawable.ic_group_add_black_24dp,R.drawable.ic_settings_black_24dp,
+                    R.drawable.ic_group_add_black_24dp,R.drawable.ic_info_black_24dp,
                     R.drawable.ic_power_settings_new_black_24dp};
             tabs=getResources().getStringArray(R.array.entrantstabs);
         }

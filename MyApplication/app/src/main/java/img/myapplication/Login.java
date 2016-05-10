@@ -52,6 +52,12 @@ public class Login extends ActionBarActivity {
     private String loginURL="http://192.168.121.187:8080/login/";
     private String userinfoURL="http://192.168.121.187:8080/new_entrants/userinfo/";
     private String appURL="http://192.168.121.187:8080/new_entrants/";
+    private void getURLs(){
+        String hostURL=getString(R.string.host);
+        this.loginURL=hostURL+"/login/";
+        this.userinfoURL=hostURL+"/new_entrants/userinfo/";
+        this.appURL=hostURL+"/new_entrants/";
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
