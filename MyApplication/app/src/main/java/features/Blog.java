@@ -55,10 +55,9 @@ public class Blog extends Fragment {
     public ImageView dp;
     public RelativeLayout group_card;
     private String BlogUrl;
-
+    private String hostURL;
     public Blog(String blogUrl){
         this.url=blogUrl;
-        this.BlogUrl=getString(R.string.host)+"/new_entrants/blogs/";
     }
     private boolean cancelled=false;
     @Override
@@ -66,14 +65,21 @@ public class Blog extends Fragment {
         cancelled=true;
         super.onDestroyView();
     }
+    private void getURLs(){
+        this.hostURL=getString(R.string.host);
+        this.BlogUrl=hostURL+"/new_entrants/blogs/";
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getURLs();
         if (getActivity() instanceof Navigation)
             ((Navigation) getActivity()).setActionBarTitle("Blogs");
         else if (getActivity() instanceof NavigationStudent)
             ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
+
         View view= inflater.inflate(R.layout.blog, container, false);
+        cancelled=false;
         topic= (TextView) view.findViewById(R.id.title);
         description= (TextView) view.findViewById(R.id.description);
         date= (TextView) view.findViewById(R.id.date);

@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import img.myapplication.MySQLiteHelper;
+import img.myapplication.Navigation;
 import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 
@@ -57,8 +58,9 @@ public class SConnectRequestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getURLs();
+        ((Navigation)getActivity()).setActionBarTitle("Senior Connect");
         View view= inflater.inflate(R.layout.send_request, container, false);
-
+        cancelled=false;
         list= (Spinner) view.findViewById(R.id.list);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(getContext(), R.array.states, R.layout.request_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

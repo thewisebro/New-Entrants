@@ -163,21 +163,20 @@ public class Login extends ActionBarActivity {
 
             int responseCode=urlConnectionPost.getResponseCode();
 
-
             if (responseCode== HttpURLConnection.HTTP_OK){
                 obj=urlConnectionPost.getContent();
                 if (cookieStore.getCookies().size()>1){
                     return "true";
                 }
+                else
+                    return "false";
             }
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
         }
-        return "false";
+        return "error";
     }
 
     private void parseUserData(String userDetails){

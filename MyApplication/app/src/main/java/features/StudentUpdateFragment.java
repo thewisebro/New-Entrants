@@ -76,6 +76,7 @@ public class StudentUpdateFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getURLs();
+        cancelled=false;
         ((NavigationStudent)getActivity()).setActionBarTitle("Profile");
         view= inflater.inflate(R.layout.update_student,container,false);
         drawer= (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);

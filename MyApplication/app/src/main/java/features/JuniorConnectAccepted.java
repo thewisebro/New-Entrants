@@ -61,6 +61,7 @@ public class JuniorConnectAccepted extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getURLs();
+        cancelled=false;
         //((NavigationStudent)getActivity()).setActionBarTitle("Junior Connect");
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_junior_connect_accepted, container, false);

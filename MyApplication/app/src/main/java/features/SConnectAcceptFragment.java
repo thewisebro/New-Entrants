@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import img.myapplication.MySQLiteHelper;
-import img.myapplication.Navigation;
 import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.SeniorCardViewHolder;
@@ -62,7 +61,7 @@ public class SConnectAcceptFragment extends Fragment {
         hostURL = getString(R.string.host);
         acceptedURL = hostURL + "/new_entrants/accepted/";
     }
-    private boolean cancelled=false;
+    private boolean cancelled;
     @Override
     public void onDestroyView(){
         cancelled=true;
@@ -72,7 +71,7 @@ public class SConnectAcceptFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getURLs();
-
+        cancelled=false;
         View view = inflater.inflate(R.layout.fragment_sconnect_accept, container, false);
         setCache();
         listView = (ListView) view.findViewById(R.id.card_listView);

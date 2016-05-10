@@ -14,5 +14,5 @@
     android:listSelector="@android:color/transparent"
     android:cacheColorHint="@android:color/transparent"
     android:divider="@null"
-    android:dividerHeight="10dp" />
+    android:dividerHeight="5dp" />
 </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
