@@ -62,17 +62,23 @@ public class BlogsList extends Fragment {
     private SwipyRefreshLayout swipeLayout;
     private int blogsCount;
     private int lastId;
-    private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
-    private String server="http://192.168.121.187:8080";
+    private String BlogUrl;
     private String url;
     boolean flag=false;
     boolean resume;
-
     private LruCache<String,Bitmap> bitmapCache;
-
+    private String hostURL;
+    private void getURLs(){
+        this.hostURL=getString(R.string.host);
+        this.BlogUrl=hostURL+"/new_entrants/blogs/";
+    }
+    public BlogsList(){
+        getURLs();
+    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         resume=true;
         setHasOptionsMenu(true);
+        //getURLs();
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         setCache();
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -311,7 +317,7 @@ public class BlogsList extends Fragment {
             ImageLoadTask loaddp=new ImageLoadTask(card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
             loaddp.execute();
             int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
-            ImageLoadTask loadimg=new ImageLoadTask(server+card.imageurl, viewHolder.img,screen_width,screen_width);
+            ImageLoadTask loadimg=new ImageLoadTask(hostURL+card.imageurl, viewHolder.img,screen_width,screen_width);
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
                 row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);

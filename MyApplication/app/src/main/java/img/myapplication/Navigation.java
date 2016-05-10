@@ -30,7 +30,6 @@ public class Navigation extends ActionBarActivity
     private CharSequence mTitle;
     private MySQLiteHelper db;
     private boolean updated=false;
-    private String appURL="http://192.168.121.187:8080/new_entrants/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

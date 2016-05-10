@@ -45,9 +45,16 @@ public class JuniorConnectAccepted extends Fragment {
     private ListView listView;
     private List<JuniorModel> list=new ArrayList<JuniorModel>();
     private TextView zerocount;
+    private String acceptedURL;
+    private String hostURL;
+    private void getURLs() {
+        hostURL = getString(R.string.host);
+        acceptedURL = hostURL + "/new_entrants/accepted/";
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getURLs();
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_junior_connect_accepted, container, false);
         String sess_id=getArguments().getString("sess_id");
@@ -101,7 +108,7 @@ public class JuniorConnectAccepted extends Fragment {
         protected String doInBackground(String... params) {
 
             try {
-                HttpURLConnection conn=(HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/accepted/").openConnection();
+                HttpURLConnection conn=(HttpURLConnection) new URL(acceptedURL).openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);

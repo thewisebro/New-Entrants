@@ -45,10 +45,17 @@ public class SConnectPendingFragment extends Fragment {
 
     private SeniorCardArrayAdapter cardArrayAdapter;
     private List<RequestModel> list=new ArrayList<RequestModel>();
-    public String request_url="http://192.168.121.187:8080/new_entrants/pending/";
-    public String extend_url="http://192.168.121.187:8080/new_entrants/extend/";
+    public String request_url;
+    public String extend_url;
     private TextView zerocount;
+    private String hostURL;
+    private void getURLs() {
+        hostURL = getString(R.string.host);
+        request_url = hostURL + "/new_entrants/pending/";
+        extend_url = hostURL + "/new_entrants/extend/";
+    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
+        getURLs();
         View view=inflater.inflate(R.layout.fragment_sconnect_pending, container, false);
         ListView listView = (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));

@@ -52,11 +52,11 @@ public class Blog extends Fragment {
     public TextView group;
     public ImageView dp;
     public RelativeLayout group_card;
-    private String server="http://192.168.121.187:8080";
-    private String BlogUrl="http://192.168.121.187:8080/new_entrants/blogs/";
+    private String BlogUrl;
 
     public Blog(String blogUrl){
         this.url=blogUrl;
+        this.BlogUrl=getString(R.string.host)+"/new_entrants/blogs/";
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

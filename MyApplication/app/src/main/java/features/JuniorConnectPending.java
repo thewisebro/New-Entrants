@@ -50,11 +50,19 @@ public class JuniorConnectPending extends Fragment {
     private ListView listView;
     private String sess_id;
     private List<JuniorModel> list=new ArrayList<JuniorModel>();
-    private String pendingURL="http://192.168.121.187:8080/new_entrants/pending/";
+    private String pendingURL;
     private TextView zerocount;
+    private String hostURL;
+    private String acceptURL;
+    private void getURLs() {
+        hostURL = getString(R.string.host);
+        pendingURL = hostURL + "/new_entrants/pending/";
+        acceptURL=hostURL + "/new_entrants/accept/";
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getURLs();
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_junior_connect_pending, container, false);
         sess_id=getArguments().getString("sess_id");
@@ -269,7 +277,7 @@ public class JuniorConnectPending extends Fragment {
         protected String doInBackground(String... args) {
 
             try {
-                HttpURLConnection conn = (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/accept/").openConnection();
+                HttpURLConnection conn = (HttpURLConnection) new URL(acceptURL).openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Cookie", "CHANNELI_SESSID=" + sess_id);
                 conn.setConnectTimeout(5000);

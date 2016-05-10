@@ -48,12 +48,12 @@ public class Login extends ActionBarActivity {
     public Map<String,String> details;
     private StudentModel student=new StudentModel();
     private NewEntrantModel entrant=new NewEntrantModel();
-    private String serverURL="http://192.168.121.187:8080";
-    private String loginURL="http://192.168.121.187:8080/login/";
-    private String userinfoURL="http://192.168.121.187:8080/new_entrants/userinfo/";
-    private String appURL="http://192.168.121.187:8080/new_entrants/";
+    private String loginURL;
+    private String userinfoURL;
+    private String appURL;
+    private String hostURL;
     private void getURLs(){
-        String hostURL=getString(R.string.host);
+        this.hostURL=getString(R.string.host);
         this.loginURL=hostURL+"/login/";
         this.userinfoURL=hostURL+"/new_entrants/userinfo/";
         this.appURL=hostURL+"/new_entrants/";
@@ -62,6 +62,7 @@ public class Login extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getURLs();
         MySQLiteHelper db=new MySQLiteHelper(this);
 
         if (db.loggedEntrant()){
@@ -276,7 +277,7 @@ public class Login extends ActionBarActivity {
             e.printStackTrace();
         }
         if (details.get("category").equals("senior")){
-            student.profile_img=downloadImage(serverURL+details.get("photo")
+            student.profile_img=downloadImage(hostURL+details.get("photo")
                     ,(int) getResources().getDimension(R.dimen.roundimage_length)
                     ,(int) getResources().getDimension(R.dimen.roundimage_length));
             student.name=details.get("name");

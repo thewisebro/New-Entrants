@@ -46,8 +46,7 @@ public class Register extends AppCompatActivity {
     public CookieManager cookieManager;
     public Map<String,String > params;
     public String csrftoken;
-    private String registerURL="http://192.168.121.187:8080/new_entrants/register/";
-    private String appURL="http://192.168.121.187:8080/new_entrants/";
+    private String registerURL;
     private EditText name;
     private EditText username;
     private EditText password;
@@ -60,10 +59,19 @@ public class Register extends AppCompatActivity {
     private Spinner state;
     private Spinner branch;
 
+    private String appURL;
+    private String hostURL;
+    private void getURLs(){
+        this.hostURL=getString(R.string.host);
+        this.appURL=this.hostURL+"/new_entrants/";
+        this.registerURL=this.hostURL+"/new_entrants/register/";
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getURLs();
         ActionBar bar=getSupportActionBar();
         bar.setHomeButtonEnabled(true);
         bar.setDisplayHomeAsUpEnabled(true);

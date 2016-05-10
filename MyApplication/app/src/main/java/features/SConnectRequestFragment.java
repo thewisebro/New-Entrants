@@ -41,11 +41,16 @@ public class SConnectRequestFragment extends Fragment {
     public Spinner list;
     public EditText query;
     public RadioGroup options;
-    public String connect_url="http://192.168.121.187:8080/new_entrants/connect/";
-
+    public String connect_url;
+    private String hostURL;
+    private void getURLs() {
+        hostURL = getString(R.string.host);
+        connect_url = hostURL + "/new_entrants/connect/";
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getURLs();
         View view= inflater.inflate(R.layout.send_request, container, false);
 
         list= (Spinner) view.findViewById(R.id.list);

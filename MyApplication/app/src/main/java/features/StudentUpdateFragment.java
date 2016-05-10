@@ -58,13 +58,18 @@ public class StudentUpdateFragment extends Fragment {
     private EditText fblink;
     private CookieManager cookieManager;
     private Map<String,String> params=new HashMap<String,String>();
-    private String updateURL="http://192.168.121.187:8080/new_entrants/update/";
+    private String updateURL;
     private StudentModel student;
     private DrawerLayout drawer;
-
+    private String hostURL;
+    private void getURLs() {
+        hostURL = getString(R.string.host);
+        updateURL = hostURL + "/new_entrants/update/";
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getURLs();
         view= inflater.inflate(R.layout.update_student,container,false);
         drawer= (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
         if (lock){

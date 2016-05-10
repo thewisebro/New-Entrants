@@ -54,11 +54,17 @@ public class EntrantUpdateFragment extends Fragment {
     private EditText fblink;
     private Spinner state;
     private CheckBox visibility;
-    private String updateURL="http://192.168.121.187:8080/new_entrants/j_update/";
+    private String updateURL;
+    private String hostURL;
+    private void getURLs(){
+        this.hostURL=getString(R.string.host);
+        this.updateURL=this.hostURL+"/new_entrants/j_update/";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getURLs();
         view= inflater.inflate(R.layout.update_entrant,container,false);
 
         setViews();

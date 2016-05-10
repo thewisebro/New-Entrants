@@ -55,9 +55,16 @@ public class SConnectAcceptFragment extends Fragment {
     private ListView listView;
     private LruCache<String,Bitmap> bitmapCache;
     private TextView zerocount;
+    private String acceptedURL;
+    private String hostURL;
+    private void getURLs() {
+        hostURL = getString(R.string.host);
+        acceptedURL = hostURL + "/new_entrants/accepted/";
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getURLs();
         View view = inflater.inflate(R.layout.fragment_sconnect_accept, container, false);
         setCache();
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -125,7 +132,7 @@ public class SConnectAcceptFragment extends Fragment {
         protected String doInBackground(String... args) {
 
             try {
-                HttpURLConnection conn= (HttpURLConnection) new URL("http://192.168.121.187:8080/new_entrants/accepted/").openConnection();
+                HttpURLConnection conn= (HttpURLConnection) new URL(acceptedURL).openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);

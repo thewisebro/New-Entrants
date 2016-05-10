@@ -63,12 +63,13 @@ public class GroupBlogList extends Fragment {
     private int lastId;
     private String groupUrl;
     private String groupName;
-    private String server="http://192.168.121.187:8080";
+    private String host;
     private LruCache<String,Bitmap> bitmapCache;
 
     public GroupBlogList(String url,String group){
         groupUrl=url;
         groupName=group;
+        host=getString(R.string.host);
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
 
@@ -296,7 +297,7 @@ public class GroupBlogList extends Fragment {
             ImageLoadTask loaddp=new ImageLoadTask(card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
             loaddp.execute();
             int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
-            ImageLoadTask loadimg=new ImageLoadTask(server+card.imageurl, viewHolder.img,screen_width,screen_width);
+            ImageLoadTask loadimg=new ImageLoadTask(host+card.imageurl, viewHolder.img,screen_width,screen_width);
 
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
