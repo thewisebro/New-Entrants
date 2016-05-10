@@ -75,7 +75,7 @@ public class Navigation extends ActionBarActivity
 
             switch (position) {
                 case -1:
-                    fragment = new OpeningFragment(1);
+                    fragment = new OpeningFragment();
                     break;
                 case 1:
                     fragment = new SConnectTabFragment();
@@ -128,7 +128,7 @@ public class Navigation extends ActionBarActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        //actionBar.setTitle(mTitle);
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import img.myapplication.NavigationStudent;
 import img.myapplication.R;
 
 /**
@@ -27,6 +28,7 @@ public class JuniorConnect extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((NavigationStudent)getActivity()).setActionBarTitle("Junior Connect");
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_junior_connect, container, false);
         FragmentTabHost mTabHost = (FragmentTabHost)view.findViewById(R.id.my_jtabhost);

@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import img.myapplication.MySQLiteHelper;
+import img.myapplication.Navigation;
 import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.SeniorCardViewHolder;
@@ -61,10 +62,17 @@ public class SConnectAcceptFragment extends Fragment {
         hostURL = getString(R.string.host);
         acceptedURL = hostURL + "/new_entrants/accepted/";
     }
+    private boolean cancelled=false;
+    @Override
+    public void onDestroyView(){
+        cancelled=true;
+        super.onDestroyView();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getURLs();
+
         View view = inflater.inflate(R.layout.fragment_sconnect_accept, container, false);
         setCache();
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -124,9 +132,11 @@ public class SConnectAcceptFragment extends Fragment {
         }
         @Override
         protected void onCancelled(String result){
-            Toast.makeText(getContext(), "Loading aborted!", Toast.LENGTH_LONG).show();
-            cardArrayAdapter.refresh();
-            dialog.dismiss();
+            if (!cancelled){
+                Toast.makeText(getContext(), "Loading aborted!", Toast.LENGTH_LONG).show();
+                cardArrayAdapter.refresh();
+                dialog.dismiss();
+            }
         }
         @Override
         protected String doInBackground(String... args) {

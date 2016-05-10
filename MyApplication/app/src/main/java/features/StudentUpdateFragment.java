@@ -66,10 +66,17 @@ public class StudentUpdateFragment extends Fragment {
         hostURL = getString(R.string.host);
         updateURL = hostURL + "/new_entrants/update/";
     }
+    private boolean cancelled=false;
+    @Override
+    public void onDestroyView(){
+        cancelled=true;
+        super.onDestroyView();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getURLs();
+        ((NavigationStudent)getActivity()).setActionBarTitle("Profile");
         view= inflater.inflate(R.layout.update_student,container,false);
         drawer= (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
         if (lock){
@@ -153,8 +160,10 @@ public class StudentUpdateFragment extends Fragment {
         }
         @Override
         protected void onCancelled(String result){
-            Toast.makeText(getContext(),"Aborted!",Toast.LENGTH_SHORT).show();
-            onPostExecute(result);
+            if (!cancelled) {
+                Toast.makeText(getContext(), "Aborted!", Toast.LENGTH_SHORT).show();
+                onPostExecute(result);
+            }
         }
 
         @Override
@@ -216,7 +225,7 @@ public class StudentUpdateFragment extends Fragment {
                     drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     ActionBar actionBar=((ActionBarActivity)getActivity()).getSupportActionBar();
                     actionBar.setDisplayHomeAsUpEnabled(true);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new OpeningFragment(2)).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new OpeningFragment()).commit();
                     lock=false;
                 }
                 ((NavigationStudent)getActivity()).set_updated();

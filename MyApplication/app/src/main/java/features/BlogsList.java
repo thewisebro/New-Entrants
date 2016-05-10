@@ -46,6 +46,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import img.myapplication.Navigation;
+import img.myapplication.NavigationStudent;
 import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.BlogCardViewHolder;
@@ -72,6 +74,12 @@ public class BlogsList extends Fragment {
         this.hostURL=getString(R.string.host);
         this.BlogUrl=hostURL+"/new_entrants/blogs/";
     }
+    private boolean cancelled=false;
+    @Override
+    public void onDestroyView(){
+        cancelled=true;
+        super.onDestroyView();
+    }
     @Override
     public void onCreate(Bundle savedInstanceState){
         getURLs();
@@ -79,6 +87,11 @@ public class BlogsList extends Fragment {
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         resume=true;
+        if (getActivity() instanceof Navigation)
+            ((Navigation) getActivity()).setActionBarTitle("Blogs");
+        else if (getActivity() instanceof NavigationStudent)
+            ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
+
         setHasOptionsMenu(true);
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         setCache();
@@ -160,10 +173,12 @@ public class BlogsList extends Fragment {
         }
         @Override
         protected void onCancelled(String result){
-            Toast.makeText(getContext(),"Loading aborted!",Toast.LENGTH_SHORT).show();
-            //cardArrayAdapter.refresh();
-            items.clear();
-            dialog.dismiss();
+            if (!cancelled) {
+                Toast.makeText(getContext(), "Loading aborted!", Toast.LENGTH_SHORT).show();
+                //cardArrayAdapter.refresh();
+                //items.clear();
+                dialog.dismiss();
+            }
         }
         @Override
         protected String doInBackground(String... params) {

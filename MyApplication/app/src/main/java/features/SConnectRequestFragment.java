@@ -47,6 +47,12 @@ public class SConnectRequestFragment extends Fragment {
         hostURL = getString(R.string.host);
         connect_url = hostURL + "/new_entrants/connect/";
     }
+    private boolean cancelled=false;
+    @Override
+    public void onDestroyView(){
+        cancelled=true;
+        super.onDestroyView();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -146,8 +152,10 @@ public class SConnectRequestFragment extends Fragment {
         }
         @Override
         protected void onCancelled(String result){
-            Toast.makeText(getContext(),"Aborted!",Toast.LENGTH_LONG).show();
-            dialog.dismiss();
+            if (!cancelled) {
+                Toast.makeText(getContext(), "Aborted!", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
         }
 
         @Override

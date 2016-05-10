@@ -60,13 +60,18 @@ public class EntrantUpdateFragment extends Fragment {
         this.hostURL=getString(R.string.host);
         this.updateURL=this.hostURL+"/new_entrants/j_update/";
     }
-
+    private boolean cancelled=false;
+    @Override
+    public void onDestroyView(){
+        cancelled=true;
+        super.onDestroyView();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getURLs();
+        ((Navigation)getActivity()).setActionBarTitle("Profile");
         view= inflater.inflate(R.layout.update_entrant,container,false);
-
         setViews();
         setInitial();
         Button bt= (Button) view.findViewById(R.id.bt_update);
@@ -146,8 +151,10 @@ public class EntrantUpdateFragment extends Fragment {
         }
         @Override
         protected void onCancelled(String result){
-            Toast.makeText(getContext(),"Aborted!",Toast.LENGTH_SHORT).show();
-            onPostExecute(result);
+            if (!cancelled) {
+                Toast.makeText(getContext(), "Aborted!", Toast.LENGTH_SHORT).show();
+                onPostExecute(result);
+            }
         }
 
         @Override

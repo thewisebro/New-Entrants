@@ -54,15 +54,23 @@ public class JuniorConnectPending extends Fragment {
     private TextView zerocount;
     private String hostURL;
     private String acceptURL;
+
     private void getURLs() {
         hostURL = getString(R.string.host);
         pendingURL = hostURL + "/new_entrants/pending/";
         acceptURL=hostURL + "/new_entrants/accept/";
     }
+    private boolean cancelled=false;
+    @Override
+    public void onDestroyView(){
+        cancelled=true;
+        super.onDestroyView();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getURLs();
+        //((NavigationStudent)getActivity()).setActionBarTitle("Junior Connect");
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_junior_connect_pending, container, false);
         sess_id=getArguments().getString("sess_id");
@@ -107,9 +115,11 @@ public class JuniorConnectPending extends Fragment {
         }
         @Override
         protected void onCancelled(String result){
-            Toast.makeText(getContext(),"Loading aborted!",Toast.LENGTH_LONG).show();
-            cardArrayAdapter.refresh();
-            dialog.dismiss();
+            if (!cancelled) {
+                Toast.makeText(getContext(), "Loading aborted!", Toast.LENGTH_SHORT).show();
+                cardArrayAdapter.refresh();
+                dialog.dismiss();
+            }
         }
         @Override
         protected String doInBackground(String... params) {

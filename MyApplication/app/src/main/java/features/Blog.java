@@ -37,6 +37,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import img.myapplication.Navigation;
+import img.myapplication.NavigationStudent;
 import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.BlogModel;
@@ -58,9 +60,19 @@ public class Blog extends Fragment {
         this.url=blogUrl;
         this.BlogUrl=getString(R.string.host)+"/new_entrants/blogs/";
     }
+    private boolean cancelled=false;
+    @Override
+    public void onDestroyView(){
+        cancelled=true;
+        super.onDestroyView();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (getActivity() instanceof Navigation)
+            ((Navigation) getActivity()).setActionBarTitle("Blogs");
+        else if (getActivity() instanceof NavigationStudent)
+            ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
         View view= inflater.inflate(R.layout.blog, container, false);
         topic= (TextView) view.findViewById(R.id.title);
         description= (TextView) view.findViewById(R.id.description);

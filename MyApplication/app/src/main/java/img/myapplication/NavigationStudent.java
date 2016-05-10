@@ -97,7 +97,7 @@ public class NavigationStudent extends ActionBarActivity
 
 
             switch(position) {
-                case -1: fragment = new OpeningFragment(2);
+                case -1: fragment = new OpeningFragment();
                     break;
                 case 1: fragment=new JuniorConnect(student.sess_id);
                     break;
@@ -129,7 +129,7 @@ public class NavigationStudent extends ActionBarActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        //actionBar.setTitle(mTitle);
     }
 
     @Override

@@ -14,23 +14,30 @@ import android.widget.TextView;
 public class OpeningFragment extends Fragment {
 
     private int type;
-    public OpeningFragment(int type){
-        this.type=type;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (getActivity() instanceof Navigation) {
+            ((Navigation) getActivity()).setActionBarTitle("Welcome");
+            type=1;
+        }
+        else if (getActivity() instanceof NavigationStudent) {
+            ((NavigationStudent) getActivity()).setActionBarTitle("Welcome");
+            type=2;
+        }
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_opening, container, false);
         TextView link= (TextView) view.findViewById(R.id.link);
         link.setMovementMethod(LinkMovementMethod.getInstance());
         TextView desc= (TextView) view.findViewById(R.id.app_desc);
         desc.setMovementMethod(new ScrollingMovementMethod());
-        if (type==1)
+        if (type==1) {
             desc.setText(getString(R.string.desc_junior));
-        else
+        }
+        else {
             desc.setText(getString(R.string.desc_senior));
+        }
         return view;
     }
 
