@@ -302,7 +302,7 @@ public class GroupBlogList extends Fragment {
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
                 row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
-                viewHolder.img.setImageResource(R.drawable.android_loading);
+                viewHolder.img.setImageResource(R.drawable.loading);
                 loadimg.execute();
             }
             else {

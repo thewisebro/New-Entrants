@@ -75,7 +75,7 @@ public class Navigation extends ActionBarActivity
 
             switch (position) {
                 case -1:
-                    fragment = new OpeningFragment();
+                    fragment = new OpeningFragment(1);
                     break;
                 case 1:
                     fragment = new SConnectTabFragment();

@@ -216,7 +216,7 @@ public class StudentUpdateFragment extends Fragment {
                     drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     ActionBar actionBar=((ActionBarActivity)getActivity()).getSupportActionBar();
                     actionBar.setDisplayHomeAsUpEnabled(true);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new OpeningFragment()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new OpeningFragment(2)).commit();
                     lock=false;
                 }
                 ((NavigationStudent)getActivity()).set_updated();
