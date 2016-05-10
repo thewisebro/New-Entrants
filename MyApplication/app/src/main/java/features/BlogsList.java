@@ -72,13 +72,14 @@ public class BlogsList extends Fragment {
         this.hostURL=getString(R.string.host);
         this.BlogUrl=hostURL+"/new_entrants/blogs/";
     }
-    public BlogsList(){
+    @Override
+    public void onCreate(Bundle savedInstanceState){
         getURLs();
+        super.onCreate(savedInstanceState);
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         resume=true;
         setHasOptionsMenu(true);
-        //getURLs();
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         setCache();
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -159,8 +160,8 @@ public class BlogsList extends Fragment {
         }
         @Override
         protected void onCancelled(String result){
-            Toast.makeText(getContext(),"Loading aborted!",Toast.LENGTH_LONG).show();
-            cardArrayAdapter.refresh();
+            Toast.makeText(getContext(),"Loading aborted!",Toast.LENGTH_SHORT).show();
+            //cardArrayAdapter.refresh();
             items.clear();
             dialog.dismiss();
         }
