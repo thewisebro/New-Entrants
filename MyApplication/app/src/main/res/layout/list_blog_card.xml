@@ -30,7 +30,7 @@
                     android:adjustViewBounds="true"
                     android:id="@+id/blog_img" />
                 <View
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:alpha="0.4"
                     android:background="@drawable/gradient"
@@ -112,30 +112,33 @@
                 android:id="@+id/blog_dp"
                 android:layout_margin="8dp" />
 
-            <TextView
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/category"
-                android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/blog_dp"
                 android:layout_toEndOf="@+id/blog_dp"
                 android:paddingLeft="5dp"
-                android:textStyle="bold|italic"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/yellow_700" />
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true">
 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_below="@+id/category"
-                android:layout_toRightOf="@+id/blog_dp"
-                android:layout_toEndOf="@+id/blog_dp"
-                android:id="@+id/group"
-                android:paddingLeft="5dp"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/blue_grey_300" />
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/category"
+                    android:textStyle="bold|italic"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/yellow_700" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/group"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/blue_grey_300" />
+            </LinearLayout>
+
         </RelativeLayout>
     </LinearLayout>
 </FrameLayout>

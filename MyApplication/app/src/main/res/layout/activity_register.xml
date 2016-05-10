@@ -161,7 +161,7 @@
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Contact Visibility"
+            android:text="Show my contact while connecting to seniors"
             android:id="@+id/contact_visibility"
             android:checked="true"
             android:textColor="@color/blue_grey_800"

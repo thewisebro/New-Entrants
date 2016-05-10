@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -74,8 +75,8 @@ public class Navigation extends ActionBarActivity
         mCurrentPosition=position;
 
             switch (position) {
-                case -1:
-                    fragment = new OpeningFragment();
+                case 0:
+                    fragment = new BlogsList();
                     break;
                 case 1:
                     fragment = new SConnectTabFragment();
@@ -83,25 +84,31 @@ public class Navigation extends ActionBarActivity
                 case 2:
                     fragment=new SConnectRequestFragment();
                     break;
-                case 4:
+                case 5:
                     logout();
                     break;
                 case 3:
                     fragment = new EntrantUpdateFragment();
                     break;
                 default:
-                    fragment = new BlogsList();
+                    fragment = new OpeningFragment();
                     break;
             }
 
        loadFragment(fragment);
 
     }
-    public void loadFragment(Fragment fragment){
+    public void loadFragment(final Fragment fragment){
         if (fragment == null)
             return;
-        if (fragmentCount!=0)
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+        if (fragmentCount!=0) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                }
+            }, 250);
+        }
         else
             getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
         fragmentCount++;

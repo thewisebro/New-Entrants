@@ -82,7 +82,6 @@ public class StudentUpdateFragment extends Fragment {
         drawer= (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
         if (lock){
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
             ActionBar actionBar=((ActionBarActivity)getActivity()).getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
@@ -233,8 +232,7 @@ public class StudentUpdateFragment extends Fragment {
                 Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
             }
             else
-
-                Toast.makeText(getContext(), "Update failed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Update failed! Internal Error!", Toast.LENGTH_SHORT).show();
         }
     }
     public void getParams(){

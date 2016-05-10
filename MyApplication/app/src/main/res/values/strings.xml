@@ -10,12 +10,14 @@
         <item>Senior Connect</item>
         <item>Request a Senior</item>
         <item>Profile</item>
+        <item>About</item>
         <item>Logout</item>
     </string-array>
     <string-array name="studenttabs">
         <item>Blogs</item>
         <item>Junior Connect</item>
         <item>Profile</item>
+        <item>About</item>
         <item>Logout</item>
     </string-array>
 

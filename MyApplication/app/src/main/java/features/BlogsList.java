@@ -261,14 +261,15 @@ public class BlogsList extends Fragment {
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
         public void refresh(){
-            this.cardList.addAll(items);
             if (items.size()==0 && listView.getFooterViewsCount()!=0) {
                 Toast.makeText(getContext(), "No More Blogs", Toast.LENGTH_LONG).show();
                 listView.removeFooterView(tv);
             }
-            else
+            else {
+                this.cardList.addAll(items);
                 Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
-            notifyDataSetChanged();
+                notifyDataSetChanged();
+            }
         }
         @Override
         public void clear(){
@@ -352,7 +353,7 @@ public class BlogsList extends Fragment {
                     if (!refreshing) {
                         String url = BlogUrl + card.group_username;
                         getFragmentManager().beginTransaction()
-                                .replace(R.id.container, new GroupBlogList(url,card.group)).addToBackStack(null).commit();
+                                .replace(R.id.container, new GroupBlogList(url, card.group)).addToBackStack(null).commit();
                     }
                 }
             });
@@ -443,13 +444,11 @@ public class BlogsList extends Fragment {
                 if (isCancelled())
                     return null;
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize=insamplesize/2;
+                options.inSampleSize=insamplesize;
                 options.inJustDecodeBounds = false;
                 if (isCancelled())
                     return null;
                 Bitmap bitmap=BitmapFactory.decodeStream(input,null,options);
-                if (isCancelled())
-                    return null;
                 return bitmap;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -457,8 +456,6 @@ public class BlogsList extends Fragment {
             return null;
         }
         private Bitmap image(){
-                if (isCancelled())
-                    return null;
                 Bitmap bitmap=bitmapCache.get(url);
                 if (bitmap==null){
                     if (isCancelled())
@@ -472,8 +469,6 @@ public class BlogsList extends Fragment {
 
         @Override
         protected Bitmap doInBackground(Void... params) {
-            if (isCancelled())
-                return null;
             return image();
         }
 
@@ -486,7 +481,7 @@ public class BlogsList extends Fragment {
         }
 
     }
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
@@ -497,6 +492,7 @@ public class BlogsList extends Fragment {
         ArrayAdapter<CharSequence> filters=ArrayAdapter.createFromResource(getContext(),R.array.filters, R.layout.spinner_item);
         filters.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(filters);
+        spinner.setGravity(Gravity.RIGHT);
         spinner.setBackground(getResources().getDrawable(R.drawable.spinner_bg));
         spinner.setPopupBackgroundDrawable(getResources().getDrawable(R.drawable.spinner_dropdown_background));
         spinner.setPadding(0,0,(int) getResources().getDimension(R.dimen.spinner_padding),0);

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -134,12 +133,13 @@ public class NavigationDrawerFragment extends Fragment {
         int[] drawables=null;
         if(type==2) {
             drawables=new int[]{R.drawable.ic_chrome_reader_mode_black_24dp,R.drawable.ic_person_black_24dp ,
-                    R.drawable.ic_info_black_24dp,R.drawable.ic_power_settings_new_black_24dp};
+                    R.drawable.ic_settings_black_24dp, R.drawable.ic_info_black_24dp,
+                    R.drawable.ic_power_settings_new_black_24dp};
             tabs = getResources().getStringArray(R.array.studenttabs);
         }
         if(type==1){
             drawables=new int[]{R.drawable.ic_chrome_reader_mode_black_24dp,R.drawable.ic_group_black_24dp,
-                    R.drawable.ic_group_add_black_24dp,R.drawable.ic_info_black_24dp,
+                    R.drawable.ic_group_add_black_24dp,R.drawable.ic_settings_black_24dp,R.drawable.ic_info_black_24dp,
                     R.drawable.ic_power_settings_new_black_24dp};
             tabs=getResources().getStringArray(R.array.entrantstabs);
         }
@@ -302,13 +302,7 @@ public class NavigationDrawerFragment extends Fragment {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mCallbacks.onNavigationDrawerItemSelected(mCurrentSelectedPosition);
-                }
-            }, 250);
-            //mCallbacks.onNavigationDrawerItemSelected(position);
+            mCallbacks.onNavigationDrawerItemSelected(position);
         }
     }
 

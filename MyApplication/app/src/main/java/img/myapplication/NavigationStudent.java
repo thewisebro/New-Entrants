@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -73,11 +74,17 @@ public class NavigationStudent extends ActionBarActivity
         finish();
     }
 
-    public void loadFragment(Fragment fragment){
+    public void loadFragment(final Fragment fragment){
         if (fragment == null)
             return;
-        if (fragmentCount!=0)
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+        if (fragmentCount!=0) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                }
+            }, 250);
+        }
         else
             getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
         fragmentCount++;
@@ -95,17 +102,16 @@ public class NavigationStudent extends ActionBarActivity
         Fragment fragment = null;
         mCurrentPosition=position;
 
-
             switch(position) {
-                case -1: fragment = new OpeningFragment();
+                case 0: fragment = new BlogsList();
                     break;
                 case 1: fragment=new JuniorConnect(student.sess_id);
                     break;
                 case 2:fragment= new StudentUpdateFragment();
                     break;
-                case 3: logout();
+                case 4: logout();
                     break;
-                default: fragment = new BlogsList();
+                default: fragment=new OpeningFragment();
                     break;
 
             }

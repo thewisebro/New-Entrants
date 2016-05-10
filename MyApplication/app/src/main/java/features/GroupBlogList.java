@@ -71,7 +71,6 @@ public class GroupBlogList extends Fragment {
     public GroupBlogList(String url,String group){
         groupUrl=url;
         groupName=group;
-        host=getString(R.string.host);
     }
     private boolean cancelled=false;
     @Override
@@ -79,8 +78,11 @@ public class GroupBlogList extends Fragment {
         cancelled=true;
         super.onDestroyView();
     }
+    private void getURL(){
+        host=getString(R.string.host);
+    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
-
+        getURL();
         if (getActivity() instanceof Navigation)
             ((Navigation) getActivity()).setActionBarTitle("Blogs");
         else if (getActivity() instanceof NavigationStudent)
@@ -245,14 +247,15 @@ public class GroupBlogList extends Fragment {
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
         public void refresh(){
-            this.cardList.addAll(items);
             if (items.size()==0) {
                 Toast.makeText(getContext(), "No More Blogs", Toast.LENGTH_LONG).show();
                 listView.removeFooterView(tv);
             }
-            else
+            else {
                 Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
-            notifyDataSetChanged();
+                this.cardList.addAll(items);
+                notifyDataSetChanged();
+            }
         }
 
         private List<BlogModel> cardList = new ArrayList<BlogModel>();
@@ -408,7 +411,7 @@ public class GroupBlogList extends Fragment {
                 if (isCancelled())
                     return null;
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize=insamplesize/2;
+                options.inSampleSize=insamplesize;
                 options.inJustDecodeBounds = false;
                 if (isCancelled())
                     return null;
