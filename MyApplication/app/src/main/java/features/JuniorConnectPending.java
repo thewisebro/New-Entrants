@@ -1,6 +1,5 @@
 package features;
 
-
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -36,7 +35,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import img.myapplication.NetworkErrorFragment;
+import img.myapplication.MySQLiteHelper;
 import img.myapplication.R;
 import models.JuniorCardViewHolder;
 import models.JuniorModel;
@@ -49,11 +48,11 @@ public class JuniorConnectPending extends Fragment {
     private JuniorCardArrayAdapter cardArrayAdapter;
     private ListView listView;
     private String sess_id;
-    private List<JuniorModel> list=new ArrayList<JuniorModel>();
     private String pendingURL;
     private TextView zerocount;
     private String hostURL;
     private String acceptURL;
+    private MySQLiteHelper db;
 
     private void getURLs() {
         hostURL = getString(R.string.host);
@@ -71,8 +70,7 @@ public class JuniorConnectPending extends Fragment {
                              Bundle savedInstanceState) {
         getURLs();
         cancelled=false;
-        //((NavigationStudent)getActivity()).setActionBarTitle("Junior Connect");
-        // Inflate the layout for this fragment
+        db=new MySQLiteHelper(getContext());
         View view= inflater.inflate(R.layout.fragment_junior_connect_pending, container, false);
         sess_id=getArguments().getString("sess_id");
         listView= (ListView) view.findViewById(R.id.card_listView);
@@ -80,12 +78,12 @@ public class JuniorConnectPending extends Fragment {
         listView.addFooterView(new View(getContext()));
         cardArrayAdapter = new JuniorCardArrayAdapter(getContext(), R.layout.pending_card);
         zerocount= (TextView) view.findViewById(R.id.zerocount);
-        if (isConnected()){
-            new getPendingTask().execute(sess_id);
-        }
-        else
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
+        //if (isConnected()){
+        //    new getPendingTask().execute(sess_id);
+        //}
+        //else
+        //    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+        new getPendingTask().execute(sess_id);
         listView.setAdapter(cardArrayAdapter);
         return view;
     }
@@ -103,7 +101,7 @@ public class JuniorConnectPending extends Fragment {
         @Override
         protected void onPreExecute(){
             this.dialog=new ProgressDialog(getContext());
-            this.dialog.setMessage("Loading...");
+            this.dialog.setMessage("Updating List...");
             this.dialog.setIndeterminate(false);
             this.dialog.setCancelable(false);
             this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
@@ -117,7 +115,7 @@ public class JuniorConnectPending extends Fragment {
         @Override
         protected void onCancelled(String result){
             if (!cancelled) {
-                Toast.makeText(getContext(), "Loading aborted!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Update aborted!", Toast.LENGTH_SHORT).show();
                 cardArrayAdapter.refresh();
                 dialog.dismiss();
             }
@@ -126,7 +124,6 @@ public class JuniorConnectPending extends Fragment {
         protected String doInBackground(String... params) {
 
             try {
-
                 HttpURLConnection conn=(HttpURLConnection) new URL(pendingURL).openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
@@ -141,21 +138,26 @@ public class JuniorConnectPending extends Fragment {
                 return "success";
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;
+                return "error";
             }
         }
-        // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
             dialog.dismiss();
-            if (result==null){
+            /*if (result==null){
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
                 Toast.makeText(getContext(), "Unable to load!", Toast.LENGTH_SHORT).show();
             }
             else if (result.equals("success")){
                 cardArrayAdapter.refresh();
+            }*/
+            if (result.equals("success")){
+                Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
             }
-
+            else if (result.equals("error")){
+                Toast.makeText(getContext(), "Unable to update! Check network connection", Toast.LENGTH_SHORT).show();
+            }
+            cardArrayAdapter.refresh();
         }
     }
     private void getCards(String result){
@@ -164,7 +166,7 @@ public class JuniorConnectPending extends Fragment {
             jObject = new JSONObject(result);
             JSONArray jArray=jObject.getJSONArray("requests");
             int len=jArray.length();
-
+            db.deletePendingJuniors();
             for(int i=0; i<len;i++){
 
                 JSONObject object=jArray.getJSONObject(i);
@@ -175,20 +177,18 @@ public class JuniorConnectPending extends Fragment {
                 model.branch=(new JSONObject(object.getString("branch"))).getString("name");
                 model.username=object.getString("username");
                 model.description=object.getString("description");
-                list.add(model);
-
+                model.status="pending";
+                db.addJunior(model);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
     public class JuniorCardArrayAdapter  extends ArrayAdapter<JuniorModel> {
 
         public void refresh(){
             this.cardList.clear();
-            this.cardList.addAll(list);
-            list.clear();
+            this.cardList.addAll(db.getPendingJuniors());
             notifyDataSetChanged();
             if (getCount()==0)
                 zerocount.setVisibility(View.VISIBLE);
@@ -270,12 +270,22 @@ public class JuniorConnectPending extends Fragment {
                     }
                 }
             });
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToggleButton bt = (ToggleButton) v.findViewById(R.id.toggle_junior);
+                    if (bt.isChecked())
+                        bt.setChecked(false);
+                    else
+                        bt.setChecked(true);
+                }
+            });
             TextView connect = (TextView) row.findViewById(R.id.connect);
             connect.setTag(card.username);
             connect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new AcceptRequestTask().execute(v.getTag().toString());
+                    new AcceptRequestTask(v.getTag().toString()).execute();
                 }
             });
             row.setTag(viewHolder);
@@ -283,9 +293,36 @@ public class JuniorConnectPending extends Fragment {
         }
 
     }
-    private class AcceptRequestTask extends AsyncTask<String, Void, String> {
+    private class AcceptRequestTask extends AsyncTask<Void, Void, String> {
+        private String username;
+        public AcceptRequestTask(String arg){
+            this.username=arg;
+        }
+        private ProgressDialog dialog;
         @Override
-        protected String doInBackground(String... args) {
+        protected void onPreExecute(){
+            this.dialog=new ProgressDialog(getContext());
+            this.dialog.setMessage("Accepting...");
+            this.dialog.setIndeterminate(false);
+            this.dialog.setCancelable(false);
+            this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancel(true);
+                }
+            });
+            this.dialog.show();
+        }
+        @Override
+        protected void onCancelled(String result){
+            if (!cancelled) {
+                Toast.makeText(getContext(), "Aborted!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                refreshFragment();
+            }
+        }
+        @Override
+        protected String doInBackground(Void... args) {
 
             try {
                 HttpURLConnection conn = (HttpURLConnection) new URL(acceptURL).openConnection();
@@ -296,12 +333,11 @@ public class JuniorConnectPending extends Fragment {
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
-                writer.write("from=" + args[0]);
+                writer.write("from=" + username);
                 writer.flush();
                 writer.close();
                 os.close();
 
-                int code = conn.getResponseCode();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line = "";
@@ -312,19 +348,26 @@ public class JuniorConnectPending extends Fragment {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                return "error";
             }
-            return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
+            dialog.dismiss();
             if (result.equals("success")) {
                 Toast.makeText(getActivity(), "Accepted Request", Toast.LENGTH_SHORT).show();
+                db.acceptJunior(username);
                 refreshFragment();
             }
-            else
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
+            //else
+                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+            else if (result.equals("error"))
+                Toast.makeText(getActivity(), "Failed! Check network connection", Toast.LENGTH_SHORT).show();
+            else {
+                Toast.makeText(getActivity(), "Failed!", Toast.LENGTH_SHORT).show();
+                refreshFragment();
+            }
         }
     }
     public void refreshFragment(){
