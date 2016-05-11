@@ -1,6 +1,5 @@
 package features;
 
-
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -38,7 +37,6 @@ import img.myapplication.R;
 import models.JuniorCardViewHolder;
 import models.JuniorModel;
 
-
 public class JuniorConnectAccepted extends Fragment {
 
     private JuniorCardArrayAdapter cardArrayAdapter;
@@ -62,8 +60,6 @@ public class JuniorConnectAccepted extends Fragment {
                              Bundle savedInstanceState) {
         getURLs();
         cancelled=false;
-        //((NavigationStudent)getActivity()).setActionBarTitle("Junior Connect");
-        // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_junior_connect_accepted, container, false);
         String sess_id=getArguments().getString("sess_id");
         listView= (ListView) view.findViewById(R.id.card_listView);

@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import models.JuniorModel;
 import models.NewEntrantModel;
 import models.StudentModel;
 
@@ -19,19 +23,31 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String TABLE_SENIORS="seniors";
     private static final String TABLE_USERS = "users";
     private static final String TABLE_BLOGS= "blogs";
+    private static final String TABLE_JUNIORS="juniors";
     private static final String TABLE_STUDENTS="students";
     private static final String TABLE_ENTRANTS="entrants";
 
     private static String CREATE_SENIORS_TABLE=
             "create table if not exists seniors ( "+
                     "name varchar," +
-                    "branchname varchar,"+
-                    "branchcode varchar,"+
+                    "branch varchar,"+
                     "state varchar,"+
-                    "hometown varchar,"+
-                    "mobile varchar,"+
+                    "town varchar,"+
+                    "contact varchar,"+
                     "email varchar,"+
-                    "fb_link varchar);";
+                    "fblink varchar,"+
+                    "dp_link varchar);";
+    private static String CREATE_JUNIORS_TABLE=
+            "create table if not exists juniors ( "+
+                    "name varchar,"+
+                    "username varchar,"+
+                    "branch varchar,"+
+                    "state varchar,"+
+                    "town varchar,"+
+                    "email varchar,"+
+                    "mobile varchar,"+
+                    "fblink varchar,"+
+                    "description varchar);";
 
     private static String CREATE_STUDENTS_TABLE=
             "create table if not exists students ( "+
@@ -81,7 +97,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_STUDENTS_TABLE);
         db.execSQL(CREATE_ENTRANTS_TABLE);
         //db.execSQL(TEMP_ENTRANT);
-        db.execSQL(CREATE_SENIORS_TABLE);
+        //db.execSQL(CREATE_SENIORS_TABLE);
+        db.execSQL(CREATE_JUNIORS_TABLE);
     }
 
     @Override
@@ -90,7 +107,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS seniors");
+        db.execSQL("DROP TABLE IF EXISTS juniors");
         db.execSQL("DROP TABLE IF EXISTS students");
         db.execSQL("DROP TABLE IF EXISTS entrants");
         this.onCreate(db);
@@ -134,8 +151,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
     public void addStudent(StudentModel student){
         SQLiteDatabase db=this.getWritableDatabase();
-        //deleteStudent();
-        //db.execSQL(CREATE_STUDENTS_TABLE);
         ContentValues values=new ContentValues();
         values.put("name",student.name);
         values.put("enr_no",student.enr_no);
@@ -157,8 +172,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
     public void addEntrant(NewEntrantModel entrant){
         SQLiteDatabase db=this.getWritableDatabase();
-        //db.execSQL(CREATE_ENTRANTS_TABLE);
-        //deleteEntrant();
         ContentValues values=new ContentValues();
         values.put("id", entrant.id);
         values.put("name", entrant.name);
@@ -178,9 +191,23 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.insert(TABLE_ENTRANTS, null, values);
         db.close();
     }
+    public void addJunior(JuniorModel junior){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put("name",junior.name);
+        values.put("username",junior.username);
+        values.put("branch",junior.branch);
+        values.put("state",junior.state);
+        values.put("town",junior.town);
+        values.put("email",junior.email);
+        values.put("mobile",junior.mobile);
+        values.put("fblink",junior.fblink);
+        values.put("description",junior.description);
+        db.insert(TABLE_JUNIORS, null, values);
+        db.close();
+    }
 /*    public void addSenior(SeniorModel senior){
             SQLiteDatabase db=this.getWritableDatabase();
-            //db.execSQL(CREATE_SENIORS_TABLE);
             ContentValues values=new ContentValues();
             values.put("name",senior.name);
             values.put("branchname",senior.branch);
@@ -211,7 +238,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         if (cursor.getCount()!=0) {
             cursor.moveToFirst();
 
-
             entrant.id = cursor.getString(0);
             entrant.name = cursor.getString(1);
             entrant.username = cursor.getString(2);
@@ -230,58 +256,29 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         }
         return entrant;
     }
- /*   public List<SeniorModel> getSeniors(int opt, String param){
-        SQLiteDatabase db=this.getReadableDatabase();
-        List<SeniorModel> seniors=new ArrayList<SeniorModel>();
-        String query=null;
-        switch (opt){
-            case 1: query="select * from seniors where state='"+param+"';";
-                break;
-            case 2: query="select * from seniors where branchcode='"+param+"';";
-                break;
-            default: query="select * from seniors;";
-        }
-        Cursor cursor=db.rawQuery(query,null);
-        int len=cursor.getCount();
-        if (len!=0) {
-            cursor.moveToFirst();
-            for (int i=0;i<len;i++){
-                SeniorModel senior=new SeniorModel();
-                senior.name=cursor.getString(0);
-                senior.branchname=cursor.getString(1);
-                senior.branchcode=cursor.getString(2);
-                senior.state=cursor.getString(3);
-                senior.hometown=cursor.getString(4);
-                senior.mobile=cursor.getString(5);
-                senior.email=cursor.getString(6);
-                senior.fb_link=cursor.getString(7);
-                seniors.add(senior);
-                cursor.moveToNext();
+    public List<JuniorModel> getJuniors(){
+        SQLiteDatabase db= this.getReadableDatabase();
+        List<JuniorModel> juniorsList=new ArrayList<JuniorModel>();
+        Cursor cursor=db.rawQuery("select * from juniors;", null);
+        if (cursor.moveToFirst()){
+            do {
+                JuniorModel junior=new JuniorModel();
+                junior.name=cursor.getString(0);
+                junior.username=cursor.getString(1);
+                junior.branch=cursor.getString(2);
+                junior.state=cursor.getString(3);
+                junior.town=cursor.getString(4);
+                junior.email=cursor.getString(5);
+                junior.mobile=cursor.getString(6);
+                junior.fblink=cursor.getString(7);
+                junior.description=cursor.getString(8);
+                juniorsList.add(junior);
             }
+            while (cursor.moveToNext());
         }
-        return seniors;
-    }*/
-    public int updateEntrant(NewEntrantModel entrant){
-        SQLiteDatabase db=this.getWritableDatabase();
-
-        ContentValues values= new ContentValues();
-
-        values.put("id", entrant.id);
-        values.put("name", entrant.name);
-        //values.put("username", entrant.username);
-        //values.put("password", entrant.password);
-        values.put("email", entrant.email);
-        //values.put("branch", entrant.branch);
-        values.put("town", entrant.town);
-        //values.put("state", entrant.state);
-        //values.put("about", entrant.about);
-        values.put("mobile", entrant.mobile);
-
-        int i=db.update(TABLE_ENTRANTS, values, " id = ? ", new String[]{entrant.id});
-
-        return i;
-
+        return juniorsList;
     }
+
     public void deleteEntrant(){
         SQLiteDatabase db=this.getWritableDatabase();
         db.execSQL("DELETE FROM entrants");
@@ -292,9 +289,5 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM students");
         db.close();
     }
-    public void deleteSeniors(){
-        SQLiteDatabase db=this.getWritableDatabase();
-        db.execSQL("DELETE FROM seniors");
-        db.close();
-    }
+
 }
