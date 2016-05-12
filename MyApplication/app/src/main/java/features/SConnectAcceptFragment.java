@@ -240,6 +240,7 @@ public class SConnectAcceptFragment extends Fragment {
                 viewHolder.email= (TextView) row.findViewById(R.id.s_email);
                 viewHolder.fblink= (TextView) row.findViewById(R.id.s_fblink);
                 viewHolder.dp= (ImageView) row.findViewById(R.id.s_dp);
+                viewHolder.year= (TextView) row.findViewById(R.id.s_year);
             } else {
                 viewHolder = (SeniorCardViewHolder)row.getTag();
             }
@@ -247,11 +248,12 @@ public class SConnectAcceptFragment extends Fragment {
             viewHolder.name.setText(card.name);
             viewHolder.branch.setText(card.branch);
             viewHolder.state.setText(card.state);
+            viewHolder.year.setText(String.valueOf(card.year));
             if (card.town.isEmpty())
                 viewHolder.town.setVisibility(View.GONE);
             else {
                 viewHolder.town.setVisibility(View.VISIBLE);
-                viewHolder.town.setText(card.town+", ");
+                viewHolder.town.setText(card.town + ", ");
             }
             if ("".equals(card.email))
                 row.findViewById(R.id.emailline).setVisibility(View.GONE);

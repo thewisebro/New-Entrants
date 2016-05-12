@@ -15,4 +15,5 @@ public class SeniorCardViewHolder {
     public TextView email;
     public TextView fblink;
     public ImageView dp;
+    public TextView year;
 }
