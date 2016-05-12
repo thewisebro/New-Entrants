@@ -100,6 +100,7 @@ public class JuniorConnectPending extends Fragment {
         private ProgressDialog dialog;
         @Override
         protected void onPreExecute(){
+            cardArrayAdapter.refresh();
             this.dialog=new ProgressDialog(getContext());
             this.dialog.setMessage("Updating List...");
             this.dialog.setIndeterminate(false);

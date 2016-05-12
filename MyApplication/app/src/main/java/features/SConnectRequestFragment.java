@@ -34,7 +34,6 @@ import java.util.Map;
 
 import img.myapplication.MySQLiteHelper;
 import img.myapplication.Navigation;
-import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 
 public class SConnectRequestFragment extends Fragment {
@@ -102,12 +101,12 @@ public class SConnectRequestFragment extends Fragment {
                     if (description.length()==0)
                         description="In Need of Assistance";
                     switch(pos){
-                        case 0: rq_params.put("param", "location");
+                        case 0: rq_params.put("param", "Location");
                             rq_params.put("value", ((String[]) (getResources().getStringArray(R.array.state_codes)))[list.getSelectedItemPosition()]);
                             rq_params.put("description", description);
                             new sendRequestTask().execute();
                             break;
-                        default: rq_params.put("param","branch");
+                        default: rq_params.put("param","Branch");
                             rq_params.put("value", ((String[]) (getResources().getStringArray(R.array.branch_codes)))[list.getSelectedItemPosition()]);
                             rq_params.put("description",description);
                             new sendRequestTask().execute();
@@ -115,7 +114,8 @@ public class SConnectRequestFragment extends Fragment {
                     }
                 }
                 else
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+                    Toast.makeText(getContext(),"Check network connection!",Toast.LENGTH_SHORT).show();
+                    //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
             }
         });
 
@@ -155,7 +155,7 @@ public class SConnectRequestFragment extends Fragment {
         @Override
         protected void onCancelled(String result){
             if (!cancelled) {
-                Toast.makeText(getContext(), "Aborted!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Aborted!", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         }
@@ -196,25 +196,25 @@ public class SConnectRequestFragment extends Fragment {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                return "error";
             }
-
-            return null;
         }
 
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
             dialog.dismiss();
-            if (result==null) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
-                Toast.makeText(getContext(), "Unable to send request!", Toast.LENGTH_SHORT).show();
-            }
-            else if (result.equals("success")) {
+
+            if (result.equals("success")) {
                 Toast.makeText(getContext(), "Request Sent Successfully!", Toast.LENGTH_SHORT).show();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new SConnectTabFragment()).commit();
             }
+            else if (result.equals("error")) {
+                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+                Toast.makeText(getContext(), "Unable to send request!\nCheck network connection", Toast.LENGTH_SHORT).show();
+            }
             else
-                Toast.makeText(getContext(),"Request failed!",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"Request failed!",Toast.LENGTH_SHORT).show();
         }
     }
 }

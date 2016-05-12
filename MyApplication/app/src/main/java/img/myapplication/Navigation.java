@@ -60,10 +60,15 @@ public class Navigation extends ActionBarActivity
     public void set_updated(){ this.updated=true;}
     public void reset_updated(){this.updated=false;}
     public void logout(){
-        db.deleteEntrant();
-        Intent intent=new Intent(this, Login.class);
-        startActivity(intent);
-        finish();
+        final Intent intent = new Intent(this, Login.class);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                db.logoutEntrant();
+                startActivity(intent);
+                finish();
+            }
+        }, 250);
     }
 
     public void sendRequest(View view){

@@ -11,6 +11,6 @@ public class SeniorModel {
     public String email;
     public String fblink;
     public String branch;
-    public String username;
     public String dp_link;
+    public int year;
 }

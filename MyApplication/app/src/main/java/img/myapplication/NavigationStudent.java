@@ -68,10 +68,15 @@ public class NavigationStudent extends ActionBarActivity
     }
 
     public void logout(){
-        db.deleteStudent();
-        Intent intent=new Intent(this, Login.class);
-        startActivity(intent);
-        finish();
+        final Intent intent=new Intent(this, Login.class);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                db.logoutStudent();
+                startActivity(intent);
+                finish();
+            }
+        }, 250);
     }
 
     public void loadFragment(final Fragment fragment){

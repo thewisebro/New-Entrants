@@ -11,6 +11,8 @@ import java.util.List;
 
 import models.JuniorModel;
 import models.NewEntrantModel;
+import models.RequestModel;
+import models.SeniorModel;
 import models.StudentModel;
 
 
@@ -21,7 +23,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Entrants_Data";
 
     private static final String TABLE_SENIORS="seniors";
-    private static final String TABLE_USERS = "users";
+    private static final String TABLE_REQUESTS = "requests";
     private static final String TABLE_BLOGS= "blogs";
     private static final String TABLE_JUNIORS="juniors";
     private static final String TABLE_STUDENTS="students";
@@ -36,7 +38,25 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "contact varchar,"+
                     "email varchar,"+
                     "fblink varchar,"+
-                    "dp_link varchar);";
+                    "dp_link varchar,"+
+                    "year int(1),"+
+                    "unique(name,email) on conflict replace );";
+    private static String TEMP_SENIOR=
+            "insert into seniors values('asd','ee','uk','rk','1234567899','a@a.com','fb/asd','',2);";
+    private static String CREATE_REQUESTS_TABLE=
+            "create table if not exists requests ( "+
+                    "param varchar,"+
+                    "value varchar,"+
+                    "id int,"+
+                    "accepted int,"+
+                    "more int(1),"+
+                    "query varchar,"+
+                    "date varchar,"+
+                    "allowed int,"+
+                    "request_no int," +
+                    "unique(id) on conflict replace );";
+    private static String TEMP_REQUEST=
+            "insert into requests values('Location','GUJ',12,3,1,'HELP','12-3-16',5,56);";
     private static String CREATE_JUNIORS_TABLE=
             "create table if not exists juniors ( "+
                     "name varchar,"+
@@ -77,16 +97,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "mobile varchar,"+
                     "fb_link varchar,"+
                     "phone_privacy int(1),"+
-                    "profile_privacy int(1),"+"sess_id varchar,"+"img blob );";
+                    "profile_privacy int(1),"+"sess_id varchar );";
 
     public static String TEMP_ENTRANT=
-            "insert into entrants values ('1','singh','asd','asd','ee','EE','roorkee','uk','UK','a@a.a','123','singh@fb.com',1,1,'asdasd',NULL);";
+            "insert into entrants values ('1','singh','asd','asd','ee','EE','roorkee','uk','UK','a@a.a','123','fb.com/spunk',0,1,'');";
     public static String TEMP_STUDENT=
             "insert into students values ('ankush','14115019','14115019','asd','ee','2','roorkee','uk','a@a.a','123','spunk@facebook.com');";
     public static String TEMP_BLOG=
             "insert into blogs values ('topic','short info','group','2016-02-04','content');";
-    public static String TEMP_SENIOR=
-            "insert into seniors values ('name','branch','2','state');";
     public static String TEMP_JUNIOR=
             "insert into juniors values ('asd','asd','ee','delhi','gurgaon','asd@asd.com','1231231231','fb.com/spunk','smart','pending');";
     public MySQLiteHelper(Context context) {
@@ -97,11 +115,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         //db.execSQL("DROP TABLE IF EXISTS students");
         //db.execSQL("DROP TABLE IF EXISTS entrants");
         //db.execSQL("drop table if exists juniors");
+        //db.execSQL("drop table if exists requests");
         db.execSQL(CREATE_STUDENTS_TABLE);
         db.execSQL(CREATE_ENTRANTS_TABLE);
         //db.execSQL(TEMP_ENTRANT);
-        //db.execSQL(CREATE_SENIORS_TABLE);
+        db.execSQL(CREATE_SENIORS_TABLE);
+        db.execSQL(CREATE_REQUESTS_TABLE);
         db.execSQL(CREATE_JUNIORS_TABLE);
+        //db.execSQL(TEMP_REQUEST);
+        // db.execSQL(TEMP_SENIOR);
         //db.execSQL(TEMP_JUNIOR);
     }
 
@@ -114,6 +136,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS juniors");
         db.execSQL("DROP TABLE IF EXISTS students");
         db.execSQL("DROP TABLE IF EXISTS entrants");
+        db.execSQL("DROP TABLE IF EXISTS seniors");
+        db.execSQL("DROP TABLE IF EXISTS requests");
         this.onCreate(db);
     }
 
@@ -211,20 +235,36 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.insert(TABLE_JUNIORS, null, values);
         db.close();
     }
-/*    public void addSenior(SeniorModel senior){
+    public void addSenior(SeniorModel senior){
             SQLiteDatabase db=this.getWritableDatabase();
             ContentValues values=new ContentValues();
             values.put("name",senior.name);
-            values.put("branchname",senior.branch);
-            values.put("branchcode",senior.branchcode);
+            values.put("branch",senior.branch);
             values.put("state", senior.state);
-            values.put("hometown",senior.hometown);
-            values.put("mobile",senior.mobile);
+            values.put("town",senior.town);
+            values.put("contact",senior.contact);
             values.put("email",senior.email);
-            values.put("fb_link",senior.fb_link);
+            values.put("fblink",senior.fblink);
+            values.put("dp_link",senior.dp_link);
+            values.put("year",senior.year);
             db.insert(TABLE_SENIORS, null, values);
             db.close();
-    }*/
+    }
+    public void addRequest(RequestModel request){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put("param",request.param);
+        values.put("value",request.value);
+        values.put("id",request.id);
+        values.put("accepted",request.accepted);
+        values.put("more",request.more);
+        values.put("query",request.query);
+        values.put("date",request.date);
+        values.put("allowed",request.allowed);
+        values.put("request_no",request.request_no);
+        db.insert(TABLE_REQUESTS, null, values);
+        db.close();
+    }
     public boolean loggedEntrant(){
         SQLiteDatabase db= this.getWritableDatabase();
         db.execSQL(CREATE_ENTRANTS_TABLE);
@@ -260,6 +300,50 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             entrant.sess_id=cursor.getString(14);
         }
         return entrant;
+    }
+    public List<SeniorModel> getAcceptedSeniors(){
+        SQLiteDatabase db= this.getReadableDatabase();
+        List<SeniorModel> seniorsList=new ArrayList<SeniorModel>();
+        Cursor cursor=db.rawQuery("select * from seniors", null);
+        if (cursor.moveToFirst()){
+            do {
+                SeniorModel senior=new SeniorModel();
+                senior.name=cursor.getString(0);
+                senior.branch=cursor.getString(1);
+                senior.state=cursor.getString(2);
+                senior.town=cursor.getString(3);
+                senior.contact=cursor.getString(4);
+                senior.email=cursor.getString(5);
+                senior.fblink=cursor.getString(6);
+                senior.dp_link=cursor.getString(7);
+                senior.year=cursor.getInt(8);
+                seniorsList.add(senior);
+            }
+            while (cursor.moveToNext());
+        }
+        return seniorsList;
+    }
+    public List<RequestModel> getRequests(){
+        SQLiteDatabase db= this.getReadableDatabase();
+        List<RequestModel> requestsList=new ArrayList<RequestModel>();
+        Cursor cursor=db.rawQuery("select * from requests;", null);
+        if (cursor.moveToFirst()){
+            do {
+                RequestModel request=new RequestModel();
+                request.param=cursor.getString(0);
+                request.value=cursor.getString(1);
+                request.id=cursor.getInt(2);
+                request.accepted=cursor.getInt(3);
+                request.more=cursor.getInt(4)>0;
+                request.query=cursor.getString(5);
+                request.date=cursor.getString(6);
+                request.allowed=cursor.getInt(7);
+                request.request_no=cursor.getInt(8);
+                requestsList.add(request);
+            }
+            while (cursor.moveToNext());
+        }
+        return requestsList;
     }
     public List<JuniorModel> getAcceptedJuniors(){
         SQLiteDatabase db= this.getReadableDatabase();
@@ -320,7 +404,21 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM juniors where status='pending'");
         db.close();
     }
-
+    public void deleteJuniors(){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL("DELETE FROM juniors");
+        db.close();
+    }
+    public void deleteSeniors(){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL("DELETE FROM seniors");
+        db.close();
+    }
+    public void deleteRequests(){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL("DELETE FROM requests");
+        db.close();
+    }
     public void deleteEntrant(){
         SQLiteDatabase db=this.getWritableDatabase();
         db.execSQL("DELETE FROM entrants");
@@ -331,5 +429,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM students");
         db.close();
     }
-
+    public void logoutStudent(){
+        deleteStudent();
+        deleteJuniors();
+    }
+    public void logoutEntrant(){
+        deleteEntrant();
+        deleteSeniors();
+        deleteRequests();
+    }
 }

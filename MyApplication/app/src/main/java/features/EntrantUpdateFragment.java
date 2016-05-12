@@ -33,7 +33,6 @@ import java.util.Map;
 
 import img.myapplication.MySQLiteHelper;
 import img.myapplication.Navigation;
-import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.NewEntrantModel;
 
@@ -85,7 +84,8 @@ public class EntrantUpdateFragment extends Fragment {
                         new UpdateSubmitTask().execute();
                 }
                 else
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+                    Toast.makeText(getContext(),"Check network connection",Toast.LENGTH_SHORT).show();
+                    //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
 
             }
         });
@@ -200,8 +200,8 @@ public class EntrantUpdateFragment extends Fragment {
 
             dialog.dismiss();
             if (result==null){
-                Toast.makeText(getContext(), "Update failed!", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+                Toast.makeText(getContext(), "Update failed!Check network connection", Toast.LENGTH_SHORT).show();
+                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
             }
             else if (result.equals("success")){
                 entrant.email=params.get("email");

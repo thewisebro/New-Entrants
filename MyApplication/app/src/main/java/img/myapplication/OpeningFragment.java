@@ -19,11 +19,11 @@ public class OpeningFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (getActivity() instanceof Navigation) {
-            ((Navigation) getActivity()).setActionBarTitle("Welcome");
+            ((Navigation) getActivity()).setActionBarTitle("About");
             type=1;
         }
         else if (getActivity() instanceof NavigationStudent) {
-            ((NavigationStudent) getActivity()).setActionBarTitle("Welcome");
+            ((NavigationStudent) getActivity()).setActionBarTitle("About");
             type=2;
         }
         // Inflate the layout for this fragment

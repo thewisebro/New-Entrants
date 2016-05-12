@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import img.myapplication.MySQLiteHelper;
-import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.RequestCardViewHolder;
 import models.RequestModel;
@@ -44,7 +43,7 @@ import models.RequestModel;
 public class SConnectPendingFragment extends Fragment {
 
     private SeniorCardArrayAdapter cardArrayAdapter;
-    private List<RequestModel> list=new ArrayList<RequestModel>();
+    private MySQLiteHelper db;
     public String request_url;
     public String extend_url;
     private TextView zerocount;
@@ -63,6 +62,7 @@ public class SConnectPendingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         getURLs();
         cancelled=false;
+        db= new MySQLiteHelper(getContext());
         View view=inflater.inflate(R.layout.fragment_sconnect_pending, container, false);
         ListView listView = (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
@@ -70,11 +70,12 @@ public class SConnectPendingFragment extends Fragment {
         zerocount= (TextView) view.findViewById(R.id.zerocount);
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.request_card);
 
-        if (isConnected())
+/*        if (isConnected())
             new getRequestsTask().execute();
         else
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
+*/
+        new getRequestsTask().execute();
         listView.setAdapter(cardArrayAdapter);
 
         return view;
@@ -113,7 +114,7 @@ public class SConnectPendingFragment extends Fragment {
                 model.query=object.getString("description");
                 model.date=object.getString("date");
                 model.request_no=i+1;
-                list.add(model);
+                db.addRequest(model);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -125,8 +126,9 @@ public class SConnectPendingFragment extends Fragment {
 
         @Override
         protected void onPreExecute(){
+            cardArrayAdapter.refresh();
             this.dialog=new ProgressDialog(getContext());
-            this.dialog.setMessage("Loading...");
+            this.dialog.setMessage("Updating List...");
             this.dialog.setIndeterminate(false);
             this.dialog.setCancelable(false);
             this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
@@ -140,7 +142,7 @@ public class SConnectPendingFragment extends Fragment {
         @Override
         protected void onCancelled(String result){
             if (!cancelled) {
-                Toast.makeText(getContext(), "Loading aborted!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Update aborted!", Toast.LENGTH_LONG).show();
                 cardArrayAdapter.refresh();
                 dialog.dismiss();
             }
@@ -162,21 +164,28 @@ public class SConnectPendingFragment extends Fragment {
                 return "success";
             } catch (Exception e) {
                 e.printStackTrace();
+                return "error";
             }
-
-        return null;
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
             dialog.dismiss();
-            if (result==null){
+/*            if (result==null){
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
                 Toast.makeText(getContext(), "Unable to load!", Toast.LENGTH_SHORT).show();
             }
             else if (result.equals("success")){
                 cardArrayAdapter.refresh();
             }
+*/
+            if (result.equals("success")){
+                Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(getContext(), "Unable to update! Check network connection", Toast.LENGTH_SHORT).show();
+            }
+            cardArrayAdapter.refresh();
         }
     }
 
@@ -186,8 +195,8 @@ public class SConnectPendingFragment extends Fragment {
         private List<RequestModel> cardList = new ArrayList<RequestModel>();
 
         public void refresh(){
-            this.cardList.addAll(list);
-            list.clear();
+            this.cardList.clear();
+            this.cardList.addAll(db.getRequests());
             notifyDataSetChanged();
             if (getCount()==0)
                 zerocount.setVisibility(View.VISIBLE);
@@ -285,6 +294,8 @@ public class SConnectPendingFragment extends Fragment {
             try {
                 HttpURLConnection conn = (HttpURLConnection) new URL(extend_url).openConnection();
                 conn.setRequestMethod("POST");
+                conn.setConnectTimeout(7000);
+                conn.setReadTimeout(5000);
                 conn.setRequestProperty("Cookie", "CHANNELI_SESSID=" + getEntrantSESSID());
 
                 OutputStream os = conn.getOutputStream();
@@ -295,8 +306,6 @@ public class SConnectPendingFragment extends Fragment {
                 writer.close();
                 os.close();
 
-                int responseCode = conn.getResponseCode();
-
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line = "";
@@ -306,22 +315,18 @@ public class SConnectPendingFragment extends Fragment {
                 return "success";
             } catch (Exception e) {
                 e.printStackTrace();
+                return "error";
             }
-
-            return null;
         }
         @Override
         protected void onPostExecute(String result){
             if (result.equals("success")){
                 Toast.makeText(getContext(), "Request Sent Successfully!", Toast.LENGTH_SHORT).show();
             }
+            else if (result.equals("error")){
+                Toast.makeText(getContext(), "Unable to send request!\nCheck network connection", Toast.LENGTH_SHORT).show();
+            }
             dialog.dismiss();
         }
     }
-
-
 }
-
-
-
-

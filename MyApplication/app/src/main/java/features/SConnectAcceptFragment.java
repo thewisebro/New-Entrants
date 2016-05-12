@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import img.myapplication.MySQLiteHelper;
-import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
 import models.SeniorCardViewHolder;
 import models.SeniorModel;
@@ -51,7 +50,7 @@ import models.SeniorModel;
 public class SConnectAcceptFragment extends Fragment {
 
     private SeniorCardArrayAdapter cardArrayAdapter;
-    private List<SeniorModel> list=new ArrayList<SeniorModel>();
+    private MySQLiteHelper db;
     private ListView listView;
     private LruCache<String,Bitmap> bitmapCache;
     private TextView zerocount;
@@ -72,6 +71,7 @@ public class SConnectAcceptFragment extends Fragment {
                              Bundle savedInstanceState) {
         getURLs();
         cancelled=false;
+        db=new MySQLiteHelper(getContext());
         View view = inflater.inflate(R.layout.fragment_sconnect_accept, container, false);
         setCache();
         listView = (ListView) view.findViewById(R.id.card_listView);
@@ -80,13 +80,14 @@ public class SConnectAcceptFragment extends Fragment {
         zerocount= (TextView) view.findViewById(R.id.zerocount);
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_senior_card);
 
-        if (isConnected())
+/*        if (isConnected())
         {
             new UpdateAcceptedSeniorsTask().execute();
         }
         else
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
+*/
+        new UpdateAcceptedSeniorsTask().execute();
         listView.setAdapter(cardArrayAdapter);
         return view;
     }
@@ -117,8 +118,9 @@ public class SConnectAcceptFragment extends Fragment {
         private ProgressDialog dialog;
         @Override
         protected void onPreExecute(){
+            cardArrayAdapter.refresh();
             this.dialog=new ProgressDialog(getContext());
-            this.dialog.setMessage("Loading...");
+            this.dialog.setMessage("Updating List...");
             this.dialog.setIndeterminate(false);
             this.dialog.setCancelable(false);
             this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
@@ -132,7 +134,7 @@ public class SConnectAcceptFragment extends Fragment {
         @Override
         protected void onCancelled(String result){
             if (!cancelled){
-                Toast.makeText(getContext(), "Loading aborted!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Update aborted!", Toast.LENGTH_SHORT).show();
                 cardArrayAdapter.refresh();
                 dialog.dismiss();
             }
@@ -156,7 +158,6 @@ public class SConnectAcceptFragment extends Fragment {
                 int len=jArray.length();
 
                 for(int i=0; i<len;i++){
-
                     JSONObject object=jArray.getJSONObject(i);
                     SeniorModel model= new SeniorModel();
                     model.name=object.getString("name");
@@ -167,14 +168,13 @@ public class SConnectAcceptFragment extends Fragment {
                     model.contact=object.getString("contact");
                     model.email=object.getString("email");
                     model.dp_link=object.getString("dp_link");
-                    list.add(model);
-
+                    model.year=object.getInt("year");
+                    db.addSenior(model);
                 }
                 return "success";
             } catch (Exception e) {
-                return "Unable to retrieve web page. URL may be invalid.";
+                return "error";
             }
-
         }
 
         // onPostExecute displays the results of the AsyncTask.
@@ -182,12 +182,13 @@ public class SConnectAcceptFragment extends Fragment {
         protected void onPostExecute(String result) {
             dialog.dismiss();
             if (result.equals("success")) {
-                cardArrayAdapter.refresh();
+                Toast.makeText(getContext(), "List Updated!", Toast.LENGTH_SHORT).show();
             }
-            else {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
-                Toast.makeText(getContext(), "Unable to load!", Toast.LENGTH_SHORT).show();
+            else if (result.equals("error")){
+                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+                Toast.makeText(getContext(), "Unable to update! Check network connection", Toast.LENGTH_SHORT).show();
             }
+            cardArrayAdapter.refresh();
         }
     }
     public class SeniorCardArrayAdapter  extends ArrayAdapter<SeniorModel> {
@@ -196,8 +197,7 @@ public class SConnectAcceptFragment extends Fragment {
 
         public void refresh(){
             this.cardList.clear();
-            this.cardList.addAll(list);
-            list.clear();
+            this.cardList.addAll(db.getAcceptedSeniors());
             notifyDataSetChanged();
             if (getCount()==0)
                 zerocount.setVisibility(View.VISIBLE);
@@ -265,7 +265,7 @@ public class SConnectAcceptFragment extends Fragment {
                 row.findViewById(R.id.contactline).setVisibility(View.VISIBLE);
                 viewHolder.contact.setText(card.contact);
             }
-            if (card.dp_link.isEmpty())
+            if (card.dp_link==null || "".equals(card.dp_link))
                 viewHolder.dp.setVisibility(View.GONE);
             else {
                 viewHolder.dp.setVisibility(View.VISIBLE);
@@ -305,6 +305,7 @@ public class SConnectAcceptFragment extends Fragment {
                         bt.setChecked(true);
                 }
             });
+            row.setTag(viewHolder);
             return row;
         }
     }
