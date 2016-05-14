@@ -116,6 +116,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/j_contact"
+                    android:autoLink="phone"
+                    android:linksClickable="true"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/blue_grey_300"
                     android:layout_margin="5dp" />
@@ -139,6 +141,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/j_email"
+                    android:autoLink="email"
+                    android:linksClickable="true"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/blue_grey_300"
                     android:layout_margin="5dp" />

@@ -60,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Requested by"
+            android:text="Request Seniors with"
             android:id="@+id/textView12"
             android:textColor="@color/blue_grey_300" />
 

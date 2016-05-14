@@ -29,6 +29,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -154,24 +155,31 @@ public class SConnectAcceptFragment extends Fragment {
                 while((line = bufferedReader.readLine()) != null)
                     sb.append(line + '\n');
 
-                JSONArray jArray=(new JSONObject(sb.toString())).getJSONArray("students");
-                int len=jArray.length();
+                JSONObject jObject=new JSONObject(sb.toString());
+                if ("success".equals(jObject.getString("status"))){
+                    JSONArray jArray=jObject.getJSONArray("students");
+                    int len=jArray.length();
 
-                for(int i=0; i<len;i++){
-                    JSONObject object=jArray.getJSONObject(i);
-                    SeniorModel model= new SeniorModel();
-                    model.name=object.getString("name");
-                    model.town=object.getString("hometown");
-                    model.state=(new JSONObject(object.getString("state"))).getString("name");
-                    model.branch=(new JSONObject(object.getString("branch"))).getString("name");
-                    model.fblink=object.getString("fb_link");
-                    model.contact=object.getString("contact");
-                    model.email=object.getString("email");
-                    model.dp_link=object.getString("dp_link");
-                    model.year=object.getInt("year");
-                    db.addSenior(model);
+                    for(int i=0; i<len;i++){
+                        JSONObject object=jArray.getJSONObject(i);
+                        SeniorModel model= new SeniorModel();
+                        model.name=object.getString("name");
+                        model.town=object.getString("hometown");
+                        model.state=(new JSONObject(object.getString("state"))).getString("name");
+                        model.branch=(new JSONObject(object.getString("branch"))).getString("name");
+                        model.fblink=object.getString("fb_link");
+                        model.contact=object.getString("contact");
+                        model.email=object.getString("email");
+                        model.dp_link=object.getString("dp_link");
+                        model.year=object.getInt("year");
+                        db.addSenior(model);
+                    }
+                    return "success";
                 }
-                return "success";
+                else
+                    return "fail";
+            } catch (JSONException e){
+                return "fail";
             } catch (Exception e) {
                 return "error";
             }
@@ -188,6 +196,8 @@ public class SConnectAcceptFragment extends Fragment {
                 //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
                 Toast.makeText(getContext(), "Unable to update! Check network connection", Toast.LENGTH_SHORT).show();
             }
+            else
+                Toast.makeText(getContext(), "Sorry! Unable to update", Toast.LENGTH_SHORT).show();
             cardArrayAdapter.refresh();
         }
     }
@@ -248,7 +258,7 @@ public class SConnectAcceptFragment extends Fragment {
             viewHolder.name.setText(card.name);
             viewHolder.branch.setText(card.branch);
             viewHolder.state.setText(card.state);
-            viewHolder.year.setText(String.valueOf(card.year));
+            viewHolder.year.setText("Year "+String.valueOf(card.year));
             if (card.town.isEmpty())
                 viewHolder.town.setVisibility(View.GONE);
             else {

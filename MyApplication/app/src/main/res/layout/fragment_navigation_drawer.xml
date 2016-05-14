@@ -3,7 +3,7 @@
     android:id="@+id/drawer_linear_layout"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="@color/off_white"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -54,6 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:choiceMode="singleChoice"
+        android:divider="@null"
         android:id="@+id/drawer_list" />
 
 </LinearLayout>

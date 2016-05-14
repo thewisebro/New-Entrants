@@ -110,7 +110,7 @@ public class Login extends ActionBarActivity {
         }
         else {
             Toast.makeText(getApplicationContext(), "Check network connection!", Toast.LENGTH_LONG).show();
-            getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+            //getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
         }
     }
 
@@ -221,11 +221,11 @@ public class Login extends ActionBarActivity {
 
             if ("false".equals(result)){
                 getSupportFragmentManager().popBackStack();
-                Toast.makeText(getApplicationContext(),"Enter correct username and password", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Enter correct username and password", Toast.LENGTH_SHORT).show();
             }
             else if ("error".equals(result)) {
                 getSupportFragmentManager().popBackStack();
-                Toast.makeText(getApplicationContext(), "Unable to connect to network", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Unable to connect to network", Toast.LENGTH_SHORT).show();
             }
                 else {
                     Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();

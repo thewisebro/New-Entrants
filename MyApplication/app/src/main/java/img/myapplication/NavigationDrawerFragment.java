@@ -115,6 +115,8 @@ public class NavigationDrawerFragment extends Fragment {
                 ((ImageView) mDrawerProfileView.findViewById(R.id.profile_picture))
                         .setImageBitmap(BitmapFactory.decodeByteArray(model.profile_img,0,model.profile_img.length));
             }
+            else
+                mDrawerProfileView.findViewById(R.id.profile_picture).setVisibility(View.GONE);
             ((TextView)mDrawerProfileView.findViewById(R.id.name)).setText(name);
             ((TextView)mDrawerProfileView.findViewById(R.id.info)).setText(branchcode + ", " + branchname);
         }

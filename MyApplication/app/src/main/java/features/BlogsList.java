@@ -200,12 +200,11 @@ public class BlogsList extends Fragment {
                 while((line = bufferedReader.readLine()) != null)
                     sb.append(line + '\n');
                 String result=sb.toString();
-                getBlogs(result);
-                return "success";
+                return getBlogs(result);
 
             } catch (Exception e) {
                 e.printStackTrace();
-                return "Can't connect to network";
+                return "error";
             }
         }
         @Override
@@ -217,44 +216,53 @@ public class BlogsList extends Fragment {
                 items.clear();
                 refreshing=false;
             }
-            else {
+            else if (result.equals("error")){
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
                 Toast.makeText(getContext(), "Can't connect to network", Toast.LENGTH_SHORT).show();
             }
+            else
+                Toast.makeText(getContext(), "Sorry! Unable to load blogs", Toast.LENGTH_SHORT).show();
         }
     }
-    public void getBlogs(String result){
+    public String getBlogs(String result){
         try {
             JSONObject jObject = new JSONObject(result);
-            JSONArray jArray=jObject.getJSONArray("blogs");
-            int len=jArray.length();
+            if ("success".equals(jObject.getString("status"))){
+                JSONArray jArray=jObject.getJSONArray("blogs");
+                int len=jArray.length();
 
-            for(int i=0; i<len;i++){
-                JSONObject object=jArray.getJSONObject(i);
-                BlogModel model= new BlogModel();
-                model.topic=object.getString("title");
-                model.dpurl=object.getString("dp_link");
-                model.group=object.getString("group");
-                model.desc=object.getString("description");
-                model.date=object.getString("date");
-                model.id = Integer.parseInt(object.getString("id"));
-                model.group_username=object.getString("group_username");
-                model.slug=object.getString("slug");
-                if (model.group_username.equals("iitr"))
-                    model.category="From the Institute";
-                else
-                    model.category="From the Groups";
-                if (object.has("thumbnail"))
-                    model.imageurl=object.getString("thumbnail");
-                else
-                    model.imageurl=null;
+                for(int i=0; i<len;i++){
+                    JSONObject object=jArray.getJSONObject(i);
+                    BlogModel model= new BlogModel();
+                    model.topic=object.getString("title");
+                    model.dpurl=object.getString("dp_link");
+                    model.group=object.getString("group");
+                    model.desc=object.getString("description");
+                    model.date=object.getString("date");
+                    model.id = Integer.parseInt(object.getString("id"));
+                    model.group_username=object.getString("group_username");
+                    model.slug=object.getString("slug");
+                    if (model.group_username.equals("iitr"))
+                        model.category="From the Institute";
+                    else
+                        model.category="From the Groups";
+                    if (object.has("thumbnail"))
+                        model.imageurl=object.getString("thumbnail");
+                    else
+                        model.imageurl=null;
 
-                items.add(model);
-                lastId =model.id;
-                blogsCount+=1;
+                    items.add(model);
+                    lastId =model.id;
+                    blogsCount+=1;
+                }
+                return "success";
             }
+            else
+                return "fail";
+
         } catch (JSONException e) {
             e.printStackTrace();
+            return "fail";
         }
     }
 

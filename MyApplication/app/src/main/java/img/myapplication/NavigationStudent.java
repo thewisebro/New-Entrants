@@ -1,6 +1,8 @@
 package img.myapplication;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
@@ -22,7 +24,7 @@ import models.StudentModel;
 
 public class NavigationStudent extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-    private int fragmentCount;
+    private int fragmentCount=0;
     private MySQLiteHelper db;
     public StudentModel student;
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -39,7 +41,6 @@ public class NavigationStudent extends ActionBarActivity
         student=db.getStudent();
 
         mCurrentPosition=-1;
-        fragmentCount=0;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.set(2);
@@ -68,13 +69,29 @@ public class NavigationStudent extends ActionBarActivity
     }
 
     public void logout(){
-        final Intent intent=new Intent(this, Login.class);
-        new Handler().postDelayed(new Runnable() {
+        final Intent intent = new Intent(this, Login.class);
+        final AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setTitle("Logout");
+        dialog.setMessage("Are you sure you want to Logout?");
+        dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
-            public void run() {
+            public void onClick(DialogInterface dialog, int which) {
                 db.logoutStudent();
                 startActivity(intent);
                 finish();
+            }
+        });
+        dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.show();
             }
         }, 250);
     }
@@ -100,7 +117,7 @@ public class NavigationStudent extends ActionBarActivity
             getSupportFragmentManager().popBackStack();
         }
         else
-            return;
+            logout();
     }
     @Override
     public void onNavigationDrawerItemSelected(int position) {

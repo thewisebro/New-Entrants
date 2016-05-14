@@ -192,8 +192,8 @@ public class EntrantUpdateFragment extends Fragment {
                 return object.getString("status");
             } catch (Exception e) {
                 e.printStackTrace();
+                return null;
             }
-            return null;
         }
         @Override
         protected void onPostExecute(String result) {

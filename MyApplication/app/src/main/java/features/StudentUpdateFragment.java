@@ -232,7 +232,7 @@ public class StudentUpdateFragment extends Fragment {
                 Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
             }
             else
-                Toast.makeText(getContext(), "Update failed! Internal Error!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Sorry! Unable to update", Toast.LENGTH_SHORT).show();
         }
     }
     public void getParams(){

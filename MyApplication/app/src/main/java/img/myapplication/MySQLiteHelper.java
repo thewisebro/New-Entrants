@@ -60,7 +60,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static String CREATE_JUNIORS_TABLE=
             "create table if not exists juniors ( "+
                     "name varchar,"+
-                    "username varchar unique,"+
+                    "username varchar,"+
                     "branch varchar,"+
                     "state varchar,"+
                     "town varchar,"+
@@ -68,12 +68,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "mobile varchar,"+
                     "fblink varchar,"+
                     "description varchar,"+
-                    "status varchar);";
+                    "status varchar,"+
+                    "unique(username) on conflict replace);";
 
     private static String CREATE_STUDENTS_TABLE=
             "create table if not exists students ( "+
                 "name varchar,"+
-                "enr_no char(8) primary key,"+
+                "enr_no char(8),"+
                 "username varchar,"+
                 "password varchar,"+
                 "branchname varchar,"+"branchcode varchar,"+
@@ -82,11 +83,17 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "state varchar,"+"statecode varchar,"+
                 "email varchar,"+
                 "mobile varchar,"+
-                "fb_link varchar,"+"sess_id varchar,"+"img blob );";
+                "fb_link varchar,"+
+                "sess_id varchar,"+
+                "img blob,"+
+                "primary key(enr_no) on conflict replace );";
+
+    public static String TEMP_STUDENT=
+            "insert into students values ('ankush','','14115019','asd','ee','EE','2','roorkee','uk','UK','a@a.a','8006572222','fb.com/spunk','','');";
 
     private static String CREATE_ENTRANTS_TABLE=
             "create table if not exists entrants ( "+
-                    "id text primary key,"+
+                    "id text,"+
                     "name varchar,"+
                     "username varchar,"+
                     "password varchar,"+
@@ -97,16 +104,18 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "mobile varchar,"+
                     "fb_link varchar,"+
                     "phone_privacy int(1),"+
-                    "profile_privacy int(1),"+"sess_id varchar );";
+                    "profile_privacy int(1),"+
+                    "sess_id varchar,"+
+                    "primary key(id) on conflict replace );";
 
     public static String TEMP_ENTRANT=
-            "insert into entrants values ('1','singh','asd','asd','ee','EE','roorkee','uk','UK','a@a.a','123','fb.com/spunk',0,1,'');";
-    public static String TEMP_STUDENT=
-            "insert into students values ('ankush','14115019','14115019','asd','ee','2','roorkee','uk','a@a.a','123','spunk@facebook.com');";
+            "insert into entrants values ('1','singh','asd','asd','ee','EE','roorkee','uk','UK','a@a.a','123','fb.com/spunk',0,1,NULL);";
     public static String TEMP_BLOG=
             "insert into blogs values ('topic','short info','group','2016-02-04','content');";
+    public static String TEMP_PENDING_JUNIOR=
+            "insert into juniors values ('asd','ass','ee','delhi','gurgaon','asd@asd.com','1231231231','fb.com/spunk','smart','pending');";
     public static String TEMP_JUNIOR=
-            "insert into juniors values ('asd','asd','ee','delhi','gurgaon','asd@asd.com','1231231231','fb.com/spunk','smart','pending');";
+            "insert into juniors values ('asd','asd','ee','delhi','gurgaon','asd@asd.com','1231231231','fb.com/spunk','smart','accepted');";
     public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
@@ -119,12 +128,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_STUDENTS_TABLE);
         db.execSQL(CREATE_ENTRANTS_TABLE);
         //db.execSQL(TEMP_ENTRANT);
+        //db.execSQL(TEMP_STUDENT);
         db.execSQL(CREATE_SENIORS_TABLE);
         db.execSQL(CREATE_REQUESTS_TABLE);
         db.execSQL(CREATE_JUNIORS_TABLE);
         //db.execSQL(TEMP_REQUEST);
-        // db.execSQL(TEMP_SENIOR);
+        //db.execSQL(TEMP_SENIOR);
         //db.execSQL(TEMP_JUNIOR);
+        //db.execSQL(TEMP_PENDING_JUNIOR);
     }
 
     @Override

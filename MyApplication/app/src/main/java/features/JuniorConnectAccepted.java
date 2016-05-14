@@ -125,8 +125,7 @@ public class JuniorConnectAccepted extends Fragment {
                 String line = "";
                 while((line = bufferedReader.readLine()) != null)
                     sb.append(line + '\n');
-                getCards(sb.toString());
-                return "success";
+                return getCards(sb.toString());
             } catch (Exception e) {
                 e.printStackTrace();
                 return "error";
@@ -148,32 +147,40 @@ public class JuniorConnectAccepted extends Fragment {
             else if (result.equals("error")){
                 Toast.makeText(getContext(), "Unable to Update! Check network connection", Toast.LENGTH_SHORT).show();
             }
+            else
+                Toast.makeText(getContext(), "Sorry! Unable to update!", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
             cardArrayAdapter.refresh();
         }
     }
-    private void getCards(String result){
-        JSONObject jObject= null;
+    private String getCards(String result){
+
         try {
-            jObject = new JSONObject(result);
-            JSONArray jArray=jObject.getJSONArray("students");
-            int len=jArray.length();
-            db.deleteAcceptedJuniors();
-            for(int i=0; i<len;i++){
-                JSONObject object=jArray.getJSONObject(i);
-                JuniorModel model= new JuniorModel();
-                model.name=object.getString("name");
-                model.town=object.getString("hometown");
-                model.state=(new JSONObject(object.getString("state"))).getString("name");
-                model.branch=(new JSONObject(object.getString("branch"))).getString("name");
-                model.fblink=object.getString("fb_link");
-                model.mobile=object.getString("contact");
-                model.email=object.getString("email");
-                model.status="accepted";
-                db.addJunior(model);
+            JSONObject jObject = new JSONObject(result);
+            if ("success".equals(jObject.getString("status"))){
+                JSONArray jArray=jObject.getJSONArray("students");
+                int len=jArray.length();
+                db.deleteAcceptedJuniors();
+                for(int i=0; i<len;i++){
+                    JSONObject object=jArray.getJSONObject(i);
+                    JuniorModel model= new JuniorModel();
+                    model.name=object.getString("name");
+                    model.town=object.getString("hometown");
+                    model.state=(new JSONObject(object.getString("state"))).getString("name");
+                    model.branch=(new JSONObject(object.getString("branch"))).getString("name");
+                    model.fblink=object.getString("fb_link");
+                    model.mobile=object.getString("contact");
+                    model.email=object.getString("email");
+                    model.status="accepted";
+                    db.addJunior(model);
+                }
+                return "success";
             }
+            else
+                return "fail";
         } catch (JSONException e) {
             e.printStackTrace();
+            return "fail";
         }
     }
     public class JuniorCardArrayAdapter  extends ArrayAdapter<JuniorModel> {

@@ -208,39 +208,47 @@ public class GroupBlogList extends Fragment {
                 cardArrayAdapter.refresh();
                 items.clear();
             }
-            else {
+            else if (result.equals("error")){
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
                 Toast.makeText(getContext(), "Unable to load blogs", Toast.LENGTH_SHORT).show();
             }
+            else
+                Toast.makeText(getContext(), "Sorry! Unable to load blogs", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         }
     }
 
-    public void getBlogs(String result){
+    public String getBlogs(String result){
         try {
             JSONObject jObject = new JSONObject(result);
-            JSONArray jArray=jObject.getJSONArray("blogs");
-            int len=jArray.length();
+            if ("success".equals(jObject.getString("status"))){
+                JSONArray jArray=jObject.getJSONArray("blogs");
+                int len=jArray.length();
 
-            for(int i=0; i<len;i++){
-                JSONObject object=jArray.getJSONObject(i);
-                BlogModel model= new BlogModel();
-                model.topic=object.getString("title");
-                model.dpurl=object.getString("dp_link");
-                model.group=object.getString("group");
-                model.desc=object.getString("description");
-                model.date=object.getString("date");
-                model.id = Integer.parseInt(object.getString("id"));
-                model.group_username=object.getString("group_username");
-                model.slug=object.getString("slug");
-                if (object.has("thumbnail"))
-                    model.imageurl=object.getString("thumbnail");
-                items.add(model);
-                lastId =model.id;
-                blogsCount+=1;
+                for(int i=0; i<len;i++){
+                    JSONObject object=jArray.getJSONObject(i);
+                    BlogModel model= new BlogModel();
+                    model.topic=object.getString("title");
+                    model.dpurl=object.getString("dp_link");
+                    model.group=object.getString("group");
+                    model.desc=object.getString("description");
+                    model.date=object.getString("date");
+                    model.id = Integer.parseInt(object.getString("id"));
+                    model.group_username=object.getString("group_username");
+                    model.slug=object.getString("slug");
+                    if (object.has("thumbnail"))
+                        model.imageurl=object.getString("thumbnail");
+                    items.add(model);
+                    lastId =model.id;
+                    blogsCount+=1;
+                }
+                return "success";
             }
+            else
+                return "fail";
         } catch (JSONException e) {
             e.printStackTrace();
+            return "fail";
         }
     }
 

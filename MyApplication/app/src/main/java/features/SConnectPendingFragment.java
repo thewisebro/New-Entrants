@@ -70,11 +70,6 @@ public class SConnectPendingFragment extends Fragment {
         zerocount= (TextView) view.findViewById(R.id.zerocount);
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.request_card);
 
-/*        if (isConnected())
-            new getRequestsTask().execute();
-        else
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-*/
         new getRequestsTask().execute();
         listView.setAdapter(cardArrayAdapter);
 
@@ -94,7 +89,7 @@ public class SConnectPendingFragment extends Fragment {
         return db.getEntrant().sess_id;
     }
 
-    private void getCards(String result){
+    private String getCards(String result){
         JSONObject jObject= null;
         try {
             jObject = new JSONObject(result);
@@ -116,8 +111,10 @@ public class SConnectPendingFragment extends Fragment {
                 model.request_no=i+1;
                 db.addRequest(model);
             }
+            return "success";
         } catch (JSONException e) {
             e.printStackTrace();
+            return "fail";
         }
 
     }
@@ -160,8 +157,7 @@ public class SConnectPendingFragment extends Fragment {
                 String line = "";
                 while((line = bufferedReader.readLine()) != null)
                     sb.append(line + '\n');
-                getCards(sb.toString());
-                return "success";
+                return getCards(sb.toString());
             } catch (Exception e) {
                 e.printStackTrace();
                 return "error";
@@ -171,20 +167,15 @@ public class SConnectPendingFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             dialog.dismiss();
-/*            if (result==null){
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
-                Toast.makeText(getContext(), "Unable to load!", Toast.LENGTH_SHORT).show();
-            }
-            else if (result.equals("success")){
-                cardArrayAdapter.refresh();
-            }
-*/
+
             if (result.equals("success")){
                 Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
             }
-            else {
+            else if (result.equals("error")){
                 Toast.makeText(getContext(), "Unable to update! Check network connection", Toast.LENGTH_SHORT).show();
             }
+            else
+                Toast.makeText(getContext(), "Update Failed!", Toast.LENGTH_SHORT).show();
             cardArrayAdapter.refresh();
         }
     }
@@ -311,8 +302,8 @@ public class SConnectPendingFragment extends Fragment {
                 String line = "";
                 while ((line = bufferedReader.readLine()) != null)
                     sb.append(line + '\n');
-                getCards(sb.toString());
-                return "success";
+                JSONObject result=new JSONObject(sb.toString());
+                return result.getString("status");
             } catch (Exception e) {
                 e.printStackTrace();
                 return "error";
@@ -326,6 +317,8 @@ public class SConnectPendingFragment extends Fragment {
             else if (result.equals("error")){
                 Toast.makeText(getContext(), "Unable to send request!\nCheck network connection", Toast.LENGTH_SHORT).show();
             }
+            else
+                Toast.makeText(getContext(), "Request failed!", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         }
     }

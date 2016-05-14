@@ -18,6 +18,10 @@ public class NetworkErrorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (getActivity() instanceof Navigation)
+            ((Navigation) getActivity()).setActionBarTitle("Blogs");
+        else if (getActivity() instanceof NavigationStudent)
+            ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
         View view= inflater.inflate(R.layout.fragment_network_error, container, false);
         Button bt= (Button) view.findViewById(R.id.bt_try);
         Toast.makeText(getContext(),"Check Network Connection",Toast.LENGTH_SHORT).show();

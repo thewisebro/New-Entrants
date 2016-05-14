@@ -3,7 +3,7 @@
     android:id="@+id/drawer_list_item"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="wrap_content"
     android:background="@drawable/item_background_selector">
 
     <ImageView
@@ -11,7 +11,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="15dp"
+        android:layout_margin="15dp"
         android:alpha=".3" />
 
     <TextView
@@ -20,16 +20,9 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/drawer_icon"
         android:layout_centerVertical="true"
-        android:textSize="14sp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textStyle="bold"
-        android:textColor="@color/drawer_textColor"
-        android:layout_marginLeft="15dp">
+        android:textColor="@color/drawer_textColor">
     </TextView>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_below="@id/drawer_icon"
-        android:id="@+id/extra_space"/>
 
 </RelativeLayout>

@@ -118,14 +118,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Year : "
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:layout_gravity="center_vertical"
+                    android:id="@+id/imageView2"
+                    android:src="@drawable/ic_school_black_24dp"
                     android:layout_margin="3dp"
-                    android:textColor="@color/blue_grey_300" />
+                    android:alpha=".3" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -155,6 +154,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/s_contact"
+                    android:autoLink="phone"
+                    android:linksClickable="true"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="3dp"
@@ -179,6 +180,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/s_email"
+                    android:autoLink="email"
+                    android:linksClickable="true"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/blue_grey_300"

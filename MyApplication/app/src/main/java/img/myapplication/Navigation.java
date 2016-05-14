@@ -1,6 +1,8 @@
 package img.myapplication;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
@@ -24,7 +26,7 @@ import models.NewEntrantModel;
 
 public class Navigation extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-    private int fragmentCount;
+    private int fragmentCount=0;
     public NewEntrantModel entrant;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition;
@@ -39,11 +41,9 @@ public class Navigation extends ActionBarActivity
         db=new MySQLiteHelper(this);
         entrant=db.getEntrant();
         mCurrentPosition=-1;
-        fragmentCount=0;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.set(1);
-
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
@@ -61,12 +61,28 @@ public class Navigation extends ActionBarActivity
     public void reset_updated(){this.updated=false;}
     public void logout(){
         final Intent intent = new Intent(this, Login.class);
-        new Handler().postDelayed(new Runnable() {
+        final AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setTitle("Logout");
+        dialog.setMessage("Are you sure you want to Logout?");
+        dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
-            public void run() {
+            public void onClick(DialogInterface dialog, int which) {
                 db.logoutEntrant();
                 startActivity(intent);
                 finish();
+            }
+        });
+        dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.show();
             }
         }, 250);
     }
@@ -123,6 +139,8 @@ public class Navigation extends ActionBarActivity
         if (getSupportFragmentManager().getBackStackEntryCount()!=0){
             getSupportFragmentManager().popBackStack();
         }
+        else
+            logout();
     }
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
