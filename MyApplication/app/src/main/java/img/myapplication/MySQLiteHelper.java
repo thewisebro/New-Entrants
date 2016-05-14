@@ -42,7 +42,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "year int(1),"+
                     "unique(name,email) on conflict replace );";
     private static String TEMP_SENIOR=
-            "insert into seniors values('asd','ee','uk','rk','1234567899','a@a.com','fb/asd','',2);";
+            "insert into seniors values('asd','ee','uk','rk','1234567899','a@a.com','fb/asd','https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/2000px-User_icon_2.svg.png',2);";
     private static String CREATE_REQUESTS_TABLE=
             "create table if not exists requests ( "+
                     "param varchar,"+

@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import img.myapplication.MySQLiteHelper;
+import img.myapplication.Navigation;
 import img.myapplication.R;
 import models.SeniorCardViewHolder;
 import models.SeniorModel;
@@ -74,7 +75,8 @@ public class SConnectAcceptFragment extends Fragment {
         cancelled=false;
         db=new MySQLiteHelper(getContext());
         View view = inflater.inflate(R.layout.fragment_sconnect_accept, container, false);
-        setCache();
+        //setCache();
+        bitmapCache=((Navigation)getActivity()).bitmapCache;
         listView = (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
@@ -92,17 +94,7 @@ public class SConnectAcceptFragment extends Fragment {
         listView.setAdapter(cardArrayAdapter);
         return view;
     }
-    private void setCache(){
-        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        int cacheSize=maxMemory/8;
-        bitmapCache = new LruCache<String, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap) {
-                return bitmap.getByteCount() / 1024;
-            }
-        };
 
-    }
     public boolean isConnected() {
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();

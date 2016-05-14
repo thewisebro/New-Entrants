@@ -83,14 +83,18 @@ public class GroupBlogList extends Fragment {
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         getURL();
-        if (getActivity() instanceof Navigation)
+        if (getActivity() instanceof Navigation) {
             ((Navigation) getActivity()).setActionBarTitle("Blogs");
-        else if (getActivity() instanceof NavigationStudent)
-            ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
+            bitmapCache=((Navigation) getActivity()).bitmapCache;
+        }
+        else if (getActivity() instanceof NavigationStudent) {
+            ((NavigationStudent) getActivity()).setActionBarTitle("Blogs");
+            bitmapCache=((NavigationStudent) getActivity()).bitmapCache;
+        }
         cancelled=false;
         setHasOptionsMenu(true);
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
-        setCache();
+        //setCache();
         listView = (ListView) view.findViewById(R.id.card_listView);
 
         listView.addHeaderView(new View(getContext()));
@@ -129,17 +133,6 @@ public class GroupBlogList extends Fragment {
         listView.setAdapter(cardArrayAdapter);
 
         return view;
-    }
-    private void setCache(){
-        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        int cacheSize=maxMemory/8;
-        bitmapCache = new LruCache<String, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap) {
-                return bitmap.getByteCount() / 1024;
-            }
-        };
-
     }
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);

@@ -144,13 +144,12 @@ public class Blog extends Fragment {
                     buffer.append(inputLine+"\n");
                 JSONObject object=new JSONObject(buffer.toString());
 
-                getData(buffer.toString());
-                return "success";
+                return getData(buffer.toString());
 
             } catch (Exception e) {
                 e.printStackTrace();
+                return null;
             }
-            return null;
         }
         @Override
         protected void onPostExecute(String result){
@@ -162,6 +161,8 @@ public class Blog extends Fragment {
             }
             else if (result.equals("success"))
                 displayBlog();
+            else
+                Toast.makeText(getContext(), "Sorry! Unable to load blog!", Toast.LENGTH_SHORT).show();
         }
     }
     private void displayBlog(){
@@ -181,20 +182,27 @@ public class Blog extends Fragment {
             }
         });
     }
-    public void getData(String str){
+    public String getData(String str){
         try {
             JSONObject object=new JSONObject(str);
-            model.dpurl=object.getString("dp_link");
-            model.content=object.getString("content");
-            model.date=object.getString("date");
-            model.topic=object.getString("title");
-            model.desc=object.getString("description");
-            model.group=object.getString("group");
-            model.id=object.getInt("id");
-            model.group_username=object.getString("group_username");
-            model.slug=object.getString("slug");
+            if ("success".equals(object.getString("status"))){
+
+                model.dpurl=object.getString("dp_link");
+                model.content=object.getString("content");
+                model.date=object.getString("date");
+                model.topic=object.getString("title");
+                model.desc=object.getString("description");
+                model.group=object.getString("group");
+                model.id=object.getInt("id");
+                model.group_username=object.getString("group_username");
+                model.slug=object.getString("slug");
+                return "success";
+            }
+            else
+                return "fail";
         } catch (JSONException e) {
             e.printStackTrace();
+            return "fail";
         }
     }
     public class ImageGetter implements Html.ImageGetter {

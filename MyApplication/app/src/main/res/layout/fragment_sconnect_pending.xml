@@ -28,8 +28,8 @@
         android:padding="10dp" />
 
     <img.myapplication.RoundImageView
-        android:layout_width="@dimen/roundimage_length"
-        android:layout_height="@dimen/roundimage_length"
+        android:layout_width="@dimen/fav_bt"
+        android:layout_height="@dimen/fav_bt"
         android:onClick="sendRequest"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
