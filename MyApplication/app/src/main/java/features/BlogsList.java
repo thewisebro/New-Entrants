@@ -267,7 +267,7 @@ public class BlogsList extends Fragment {
             }
             else {
                 this.cardList.addAll(items);
-                Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
                 notifyDataSetChanged();
             }
         }
@@ -332,7 +332,7 @@ public class BlogsList extends Fragment {
             viewHolder.date.setText(card.date);
             viewHolder.category.setText(card.category);
             viewHolder.blogUrl=BlogUrl+card.group_username+"/"+card.slug;
-            ImageLoadTask loaddp=new ImageLoadTask(card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
+            ImageLoadTask loaddp=new ImageLoadTask(hostURL+card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
             loaddp.execute();
             int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
             ImageLoadTask loadimg=new ImageLoadTask(hostURL+card.imageurl, viewHolder.img,screen_width,screen_width);

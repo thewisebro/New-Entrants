@@ -106,7 +106,7 @@ public class SConnectRequestFragment extends Fragment {
                             rq_params.put("description", description);
                             new sendRequestTask().execute();
                             break;
-                        default: rq_params.put("param","Branch");
+                        default: rq_params.put("param","branch");
                             rq_params.put("value", ((String[]) (getResources().getStringArray(R.array.branch_codes)))[list.getSelectedItemPosition()]);
                             rq_params.put("description",description);
                             new sendRequestTask().execute();
@@ -192,7 +192,10 @@ public class SConnectRequestFragment extends Fragment {
                     buffer.append(inputLine+"\n");
                 String result=buffer.toString();
                 JSONObject object=new JSONObject(buffer.toString());
-                return object.getString("status");
+                if ("success".equals(object.getString("status")))
+                    return "success";
+                else
+                    return object.getString("error");
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -214,7 +217,7 @@ public class SConnectRequestFragment extends Fragment {
                 Toast.makeText(getContext(), "Unable to send request!\nCheck network connection", Toast.LENGTH_SHORT).show();
             }
             else
-                Toast.makeText(getContext(),"Request failed!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Request failed!\n"+result,Toast.LENGTH_SHORT).show();
         }
     }
 }

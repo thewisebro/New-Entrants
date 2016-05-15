@@ -83,14 +83,9 @@ public class SConnectAcceptFragment extends Fragment {
         zerocount= (TextView) view.findViewById(R.id.zerocount);
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_senior_card);
 
-/*        if (isConnected())
-        {
+        cardArrayAdapter.refresh();
+        if (isConnected())
             new UpdateAcceptedSeniorsTask().execute();
-        }
-        else
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-*/
-        new UpdateAcceptedSeniorsTask().execute();
         listView.setAdapter(cardArrayAdapter);
         return view;
     }
@@ -111,9 +106,8 @@ public class SConnectAcceptFragment extends Fragment {
         private ProgressDialog dialog;
         @Override
         protected void onPreExecute(){
-            cardArrayAdapter.refresh();
             this.dialog=new ProgressDialog(getContext());
-            this.dialog.setMessage("Updating List...");
+            this.dialog.setMessage("Updating List. Please Wait...");
             this.dialog.setIndeterminate(false);
             this.dialog.setCancelable(false);
             this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
@@ -182,11 +176,11 @@ public class SConnectAcceptFragment extends Fragment {
         protected void onPostExecute(String result) {
             dialog.dismiss();
             if (result.equals("success")) {
-                Toast.makeText(getContext(), "List Updated!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "List Updated!", Toast.LENGTH_SHORT).show();
             }
             else if (result.equals("error")){
                 //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
-                Toast.makeText(getContext(), "Unable to update! Check network connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Unable to update!\nCheck network connection", Toast.LENGTH_SHORT).show();
             }
             else
                 Toast.makeText(getContext(), "Sorry! Unable to update", Toast.LENGTH_SHORT).show();

@@ -119,6 +119,7 @@
                 android:text="REQUEST MORE SENIORS"
                 android:id="@+id/more"
                 android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
                 android:textColor="@color/yellow_700"
                 android:textStyle="bold" />
 
@@ -127,6 +128,8 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/black"
                 android:id="@+id/accepted" />
 
 
@@ -134,10 +137,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Seniors Accepted : "
+                android:text="Seniors Accepted:"
                 android:layout_toLeftOf="@id/accepted"
+                android:layout_toRightOf="@+id/more"
+                android:layout_gravity="right"
+                android:textColor="@color/blue_grey_300"
+                android:gravity="center_horizontal"
+                android:layout_centerVertical="true"
                 android:id="@+id/textView17"
-                android:singleLine="true" />
+                android:singleLine="false" />
         </RelativeLayout>
 
     </LinearLayout>

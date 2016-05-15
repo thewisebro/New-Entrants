@@ -171,7 +171,7 @@ public class Blog extends Fragment {
         description.setText(model.desc);
         content.setText(Html.fromHtml(model.content,new ImageGetter(),null));
         group.setText(model.group);
-        new ImageLoadTask(model.dpurl,dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length)).execute();
+        new ImageLoadTask(hostURL+model.dpurl,dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length)).execute();
 
         group_card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,9 +242,13 @@ public class Blog extends Fragment {
             @Override
             protected void onPostExecute(Bitmap bitmap) {
                 if (bitmap != null) {
-                    BitmapDrawable d = new BitmapDrawable(bitmap);
+                    int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
+                    float aspectRatio = bitmap.getWidth() / (float) bitmap.getHeight();
+                    int height=Math.round(screen_width / aspectRatio);
+                    Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, screen_width,height, true);
+                    BitmapDrawable d = new BitmapDrawable(resizedBitmap);
                     mDrawable.addLevel(1, 1, d);
-                    mDrawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
+                    mDrawable.setBounds(0, 0, resizedBitmap.getWidth(), resizedBitmap.getHeight());
                     mDrawable.setLevel(1);
                     CharSequence t = content.getText();
                     content.setText(t);

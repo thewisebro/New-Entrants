@@ -78,12 +78,10 @@ public class JuniorConnectPending extends Fragment {
         listView.addFooterView(new View(getContext()));
         cardArrayAdapter = new JuniorCardArrayAdapter(getContext(), R.layout.pending_card);
         zerocount= (TextView) view.findViewById(R.id.zerocount);
-        //if (isConnected()){
-        //    new getPendingTask().execute(sess_id);
-        //}
-        //else
-        //    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-        new getPendingTask().execute(sess_id);
+
+        cardArrayAdapter.refresh();
+        if (isConnected())
+            new getPendingTask().execute(sess_id);
         listView.setAdapter(cardArrayAdapter);
         return view;
     }
@@ -100,9 +98,8 @@ public class JuniorConnectPending extends Fragment {
         private ProgressDialog dialog;
         @Override
         protected void onPreExecute(){
-            cardArrayAdapter.refresh();
             this.dialog=new ProgressDialog(getContext());
-            this.dialog.setMessage("Updating List...");
+            this.dialog.setMessage("Updating List. Please Wait...");
             this.dialog.setIndeterminate(false);
             this.dialog.setCancelable(false);
             this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
@@ -144,18 +141,12 @@ public class JuniorConnectPending extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             dialog.dismiss();
-            /*if (result==null){
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
-                Toast.makeText(getContext(), "Unable to load!", Toast.LENGTH_SHORT).show();
-            }
-            else if (result.equals("success")){
-                cardArrayAdapter.refresh();
-            }*/
+
             if (result.equals("success")){
-                Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
             }
             else if (result.equals("error")){
-                Toast.makeText(getContext(), "Unable to update! Check network connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Unable to update!\nCheck network connection", Toast.LENGTH_SHORT).show();
             }
             else
                 Toast.makeText(getContext(), "Sorry! Unable to update!", Toast.LENGTH_SHORT).show();

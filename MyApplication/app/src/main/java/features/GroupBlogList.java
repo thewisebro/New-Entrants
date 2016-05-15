@@ -253,7 +253,7 @@ public class GroupBlogList extends Fragment {
                 listView.removeFooterView(tv);
             }
             else {
-                Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
                 this.cardList.addAll(items);
                 notifyDataSetChanged();
             }
@@ -312,7 +312,7 @@ public class GroupBlogList extends Fragment {
             viewHolder.date.setText(card.date);
             viewHolder.category.setText("From the Groups");
             viewHolder.blogUrl = groupUrl+"/" + card.slug;
-            ImageLoadTask loaddp=new ImageLoadTask(card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
+            ImageLoadTask loaddp=new ImageLoadTask(host+card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
             loaddp.execute();
             int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
             ImageLoadTask loadimg=new ImageLoadTask(host+card.imageurl, viewHolder.img,screen_width,screen_width);

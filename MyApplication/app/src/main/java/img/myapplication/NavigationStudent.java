@@ -40,6 +40,7 @@ public class NavigationStudent extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_navigation);
+        setCache();
         db=new MySQLiteHelper(this);
         student=db.getStudent();
 
