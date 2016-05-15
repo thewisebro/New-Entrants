@@ -2,6 +2,7 @@ package img.myapplication;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -15,8 +16,12 @@ import android.support.v4.util.LruCache;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import features.BlogsList;
 import features.JuniorConnect;
@@ -40,6 +45,8 @@ public class NavigationStudent extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_navigation);
+        setDrawerOnTop();
+
         setCache();
         db=new MySQLiteHelper(this);
         student=db.getStudent();
@@ -62,6 +69,30 @@ public class NavigationStudent extends ActionBarActivity
             fragment.lock=true;
             getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
         }
+    }
+    public void  setDrawerOnTop(){
+        // Inflate the "decor.xml"
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        DrawerLayout drawer = (DrawerLayout) inflater.inflate(R.layout.drawer, null); // "null" is important.
+
+        // HACK: "steal" the first child of decor view
+        ViewGroup decor = (ViewGroup) getWindow().getDecorView();
+        View child = decor.getChildAt(0);
+        decor.removeView(child);
+        FrameLayout container = (FrameLayout) drawer.findViewById(R.id.container_drawer); // This is the container we defined just now.
+        container.addView(child);
+        //drawer.setPadding(0,getStatusBarHeight(),0,0);
+        (drawer.findViewById(R.id.navigation_drawer)).setPadding(0,getStatusBarHeight(),0,0);
+        // Make the drawer replace the first child
+        decor.addView(drawer);
+    }
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
     private void setCache(){
         int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
