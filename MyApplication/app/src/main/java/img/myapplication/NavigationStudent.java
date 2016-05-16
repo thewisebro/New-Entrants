@@ -36,7 +36,7 @@ public class NavigationStudent extends ActionBarActivity
     public LruCache<String,Bitmap> bitmapCache;
     public StudentModel student;
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    private int mCurrentPosition;
+    private int mCurrentPosition=-1;
     private CharSequence mTitle;
     private boolean lock=false;
     private boolean updated=false;
@@ -51,7 +51,6 @@ public class NavigationStudent extends ActionBarActivity
         db=new MySQLiteHelper(this);
         student=db.getStudent();
 
-        mCurrentPosition=-1;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.set(2);

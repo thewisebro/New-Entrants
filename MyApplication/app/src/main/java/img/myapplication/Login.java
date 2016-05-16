@@ -67,11 +67,13 @@ public class Login extends ActionBarActivity {
 
         if (db.loggedEntrant()){
             Intent intent=new Intent(this, Navigation.class);
+            intent.putExtra("first_time",false);
             startActivity(intent);
             finish();
         }
         else if (db.loggedStudent()){
             Intent intent=new Intent(this,NavigationStudent.class);
+            intent.putExtra("first_time",false);
             startActivity(intent);
             finish();
         }
@@ -280,7 +282,7 @@ public class Login extends ActionBarActivity {
                     ,(int) getResources().getDimension(R.dimen.roundimage_length)
                     ,(int) getResources().getDimension(R.dimen.roundimage_length));
             student.name=details.get("name");
-            student.enr_no=details.get("enr_no");
+            student.enr_no=details.get("enrollment_no");
             student.username=details.get("username");
             student.password=details.get("password");
             student.branchname=branchname;
@@ -377,7 +379,9 @@ public class Login extends ActionBarActivity {
             MySQLiteHelper db = new MySQLiteHelper(this);
             db.addStudent(student);
             db.close();
-            startActivity(new Intent(this, NavigationStudent.class));
+            Intent intent=new Intent(this, NavigationStudent.class);
+            intent.putExtra("first_time", true);
+            startActivity(intent);
             finish();
 
         }
@@ -386,7 +390,9 @@ public class Login extends ActionBarActivity {
             MySQLiteHelper db=new MySQLiteHelper(this);
             db.addEntrant(entrant);
             db.close();
-            startActivity(new Intent(this,Navigation.class));
+            Intent intent=new Intent(this,Navigation.class);
+            intent.putExtra("first_time", true);
+            startActivity(intent);
             finish();
         }
     }

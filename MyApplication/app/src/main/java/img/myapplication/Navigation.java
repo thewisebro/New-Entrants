@@ -36,20 +36,21 @@ public class Navigation extends ActionBarActivity
     public NewEntrantModel entrant;
     public LruCache<String,Bitmap> bitmapCache;
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    private int mCurrentPosition;
+    private int mCurrentPosition=-1;
     private CharSequence mTitle;
     private MySQLiteHelper db;
     private boolean updated=false;
+    private boolean first_time;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_navigation);
         setDrawerOnTop();
+        first_time=getIntent().getBooleanExtra("first_time",false);
         setCache();
         db=new MySQLiteHelper(this);
         entrant=db.getEntrant();
-        mCurrentPosition=-1;
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.set(1);

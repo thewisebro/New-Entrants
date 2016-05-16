@@ -29,6 +29,7 @@
                 <item>All</item>
                 <item>From the Institute</item>
                 <item>From the Groups</item>
+                <item>From the Students</item>
     </string-array>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

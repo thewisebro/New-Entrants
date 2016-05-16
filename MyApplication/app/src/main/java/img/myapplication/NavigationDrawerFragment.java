@@ -121,8 +121,6 @@ public class NavigationDrawerFragment extends Fragment {
             ((TextView)mDrawerProfileView.findViewById(R.id.info)).setText(branchcode + ", " + branchname);
         }
 
-
-
     }
     public void set(int type){
        this.type=type;

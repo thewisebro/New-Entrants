@@ -13,11 +13,14 @@ public class BlogModel {
     public String dpurl;
     public String content;
     public String category;
+    public boolean student;
     public List<String> urls;
     public int id;
 
     public void setCategory(){
-        if (group_username.equals("iitr"))
+        if (student)
+            category="From the Students";
+        else if (group_username.equals("iitr"))
             category="From the Institute";
         else
             category="From the Groups";

@@ -234,10 +234,10 @@ public class BlogsList extends Fragment {
                     model.id = Integer.parseInt(object.getString("id"));
                     model.group_username=object.getString("group_username");
                     model.slug=object.getString("slug");
-                    if (model.group_username.equals("iitr"))
-                        model.category="From the Institute";
-                    else
-                        model.category="From the Groups";
+                    model.student=object.getBoolean("student");
+                    if (model.student)
+                        model.group_username="students";
+                    model.setCategory();
                     if (object.has("thumbnail"))
                         model.imageurl=object.getString("thumbnail");
                     else
@@ -351,9 +351,11 @@ public class BlogsList extends Fragment {
                 @Override
                 public void onClick(View view) {
                     if (!refreshing) {
-                        String url = BlogUrl + card.group_username;
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.container, new GroupBlogList(url, card.group)).addToBackStack(null).commit();
+                        if (!(card.student)) {
+                            String url = BlogUrl + card.group_username;
+                            getFragmentManager().beginTransaction()
+                                    .replace(R.id.container, new GroupBlogList(url, card.group)).addToBackStack(null).commit();
+                        }
                     }
                 }
             });
@@ -520,6 +522,11 @@ public class BlogsList extends Fragment {
                             case 2:
                                 url = BlogUrl + "groups/";
                                 blogsCount = 0;
+                                new LoadBlogTask().execute();
+                                break;
+                            case 3:
+                                url= BlogUrl + "students/";
+                                blogsCount =0;
                                 new LoadBlogTask().execute();
                                 break;
                             default:

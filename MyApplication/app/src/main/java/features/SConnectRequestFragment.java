@@ -106,7 +106,7 @@ public class SConnectRequestFragment extends Fragment {
                             rq_params.put("description", description);
                             new sendRequestTask().execute();
                             break;
-                        default: rq_params.put("param","branch");
+                        default: rq_params.put("param","Branch");
                             rq_params.put("value", ((String[]) (getResources().getStringArray(R.array.branch_codes)))[list.getSelectedItemPosition()]);
                             rq_params.put("description",description);
                             new sendRequestTask().execute();
