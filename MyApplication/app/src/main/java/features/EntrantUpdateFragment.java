@@ -200,7 +200,7 @@ public class EntrantUpdateFragment extends Fragment {
 
             dialog.dismiss();
             if (result==null){
-                Toast.makeText(getContext(), "Update failed!Check network connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Update failed! Check network connection", Toast.LENGTH_SHORT).show();
                 //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
             }
             else if (result.equals("success")){

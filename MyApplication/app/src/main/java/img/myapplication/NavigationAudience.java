@@ -24,12 +24,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import features.BlogsList;
-import features.JuniorConnect;
-import features.StudentUpdateFragment;
 import models.StudentModel;
 
 
-public class NavigationStudent extends ActionBarActivity
+public class NavigationAudience extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     private int fragmentCount=0;
     private MySQLiteHelper db;
@@ -38,8 +36,6 @@ public class NavigationStudent extends ActionBarActivity
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition=-1;
     private CharSequence mTitle;
-    private boolean lock=false;
-    private boolean updated=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,22 +49,11 @@ public class NavigationStudent extends ActionBarActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mNavigationDrawerFragment.set(2,getIntent().getBooleanExtra("first_time",true));
+        mNavigationDrawerFragment.set(3,getIntent().getBooleanExtra("first_time",true));
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        checkforUpdate();
     }
-    public boolean get_update_status(){ return this.updated;}
-    public void set_updated(){ this.updated=true;}
-    public void reset_updated(){this.updated=false;}
-    public void checkforUpdate() {
-        if ("".equals(student.town) || "".equals(student.state) || "".equals(student.email) || "".equals(student.mobile)){
-            StudentUpdateFragment fragment=new StudentUpdateFragment();
-            lock=true;
-            fragment.lock=true;
-            getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
-        }
-    }
+
     public void  setDrawerOnTop(){
         // Inflate the "decor.xml"
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -121,7 +106,7 @@ public class NavigationStudent extends ActionBarActivity
         dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                db.logoutStudent();
+                db.logoutAudience();
                 startActivity(intent);
                 finish();
             }
@@ -169,19 +154,15 @@ public class NavigationStudent extends ActionBarActivity
         Fragment fragment = null;
         mCurrentPosition=position;
 
-            switch(position) {
-                case 0: fragment = new BlogsList();
-                    break;
-                case 1: fragment=new JuniorConnect(student.sess_id);
-                    break;
-                case 2:fragment= new StudentUpdateFragment();
-                    break;
-                case 4: logout();
-                    break;
-                default: fragment=new OpeningFragment();
-                    break;
+        switch(position) {
+            case 0: fragment = new BlogsList();
+                break;
+            case 2: logout();
+                break;
+            default: fragment=new OpeningFragment();
+                break;
 
-            }
+        }
 
         loadFragment(fragment);
     }

@@ -20,7 +20,11 @@
         <item>About</item>
         <item>Logout</item>
     </string-array>
-
+    <string-array name="audiencetabs">
+        <item>Blogs</item>
+        <item>About</item>
+        <item>Logout</item>
+    </string-array>
     <string-array name="tabs_logged_in">
         <item>Signup</item>
         <item>Login</item>
@@ -179,6 +183,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_update">Update</string>
+    <string name="title_activity_navigation_audience">NavigationAudience</string>
 
 
 

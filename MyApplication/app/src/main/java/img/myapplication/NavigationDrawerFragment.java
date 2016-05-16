@@ -52,7 +52,6 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private int type;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +64,7 @@ public class NavigationDrawerFragment extends Fragment {
             mFromSavedInstanceState = true;
         }
 
-        selectItem(mCurrentSelectedPosition);
+        //selectItem(mCurrentSelectedPosition);
     }
 
     @Override
@@ -122,10 +121,18 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
     }
-    public void set(int type){
-       this.type=type;
+    private void setFirstFragment(boolean flag){
+        if (flag)
+            mCurrentSelectedPosition=-1;
+        else
+            mCurrentSelectedPosition=0;
+    }
+    public void set(int type,boolean flag){
+        this.type=type;
         //Profile
         setProfileView();
+        //Decide First Fragment
+        setFirstFragment(flag);
         //List items
         DrawerItemAdapter adapter=new DrawerItemAdapter(getContext(),R.layout.drawer_item);
         ArrayList<DrawerItemModel> arrayList=new ArrayList<DrawerItemModel>();
@@ -137,11 +144,17 @@ public class NavigationDrawerFragment extends Fragment {
                     R.drawable.ic_power_settings_new_black_24dp};
             tabs = getResources().getStringArray(R.array.studenttabs);
         }
-        if(type==1){
+        else if(type==1){
             drawables=new int[]{R.drawable.ic_chrome_reader_mode_black_24dp,R.drawable.ic_group_black_24dp,
                     R.drawable.ic_group_add_black_24dp,R.drawable.ic_settings_black_24dp,R.drawable.ic_info_black_24dp,
                     R.drawable.ic_power_settings_new_black_24dp};
             tabs=getResources().getStringArray(R.array.entrantstabs);
+        }
+        else if (type==3){
+            drawables=new int[]{R.drawable.ic_chrome_reader_mode_black_24dp,
+                    R.drawable.ic_info_black_24dp,
+                    R.drawable.ic_power_settings_new_black_24dp};
+            tabs=getResources().getStringArray(R.array.audiencetabs);
         }
 
         for (int i=0;i<drawables.length;i++){
@@ -153,6 +166,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        selectItem(mCurrentSelectedPosition);
     }
 
     public class DrawerItemAdapter extends ArrayAdapter<DrawerItemModel> {
@@ -249,12 +263,15 @@ public class NavigationDrawerFragment extends Fragment {
                         activity.reset_updated();
                     }
                 }
-                else {
+                else if (type==2){
                     NavigationStudent activity= (NavigationStudent) getActivity();
                     if (activity.get_update_status()) {
                         setProfileView();
                         activity.reset_updated();
                     }
+                }
+                else if (type==3){
+                    setProfileView();
                 }
             }
 

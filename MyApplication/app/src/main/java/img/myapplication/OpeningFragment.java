@@ -27,6 +27,10 @@ public class OpeningFragment extends Fragment {
             ((NavigationStudent) getActivity()).setActionBarTitle("About");
             type=2;
         }
+        else if (getActivity() instanceof NavigationAudience) {
+            ((NavigationAudience) getActivity()).setActionBarTitle("About");
+            type=3;
+        }
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_opening, container, false);
         TextView link= (TextView) view.findViewById(R.id.link);

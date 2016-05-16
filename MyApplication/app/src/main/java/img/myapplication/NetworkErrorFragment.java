@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 
 /**
@@ -24,7 +23,6 @@ public class NetworkErrorFragment extends Fragment {
             ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
         View view= inflater.inflate(R.layout.fragment_network_error, container, false);
         Button bt= (Button) view.findViewById(R.id.bt_try);
-        Toast.makeText(getContext(),"Check Network Connection",Toast.LENGTH_SHORT).show();
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import img.myapplication.Navigation;
+import img.myapplication.NavigationAudience;
 import img.myapplication.NavigationStudent;
 import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
@@ -94,6 +95,10 @@ public class BlogsList extends Fragment {
         else if (getActivity() instanceof NavigationStudent){
             ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
             bitmapCache=((NavigationStudent) getActivity()).bitmapCache;
+        }
+        else if (getActivity() instanceof NavigationAudience){
+            ((NavigationAudience)getActivity()).setActionBarTitle("Blogs");
+            bitmapCache=((NavigationAudience) getActivity()).bitmapCache;
         }
 
         cancelled=false;
@@ -210,7 +215,7 @@ public class BlogsList extends Fragment {
             }
             else if (result.equals("error")){
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
-                Toast.makeText(getContext(), "Can't connect to network", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Please Check your Network Connection", Toast.LENGTH_SHORT).show();
             }
             else
                 Toast.makeText(getContext(), "Sorry! Unable to load blogs", Toast.LENGTH_SHORT).show();
@@ -347,18 +352,20 @@ public class BlogsList extends Fragment {
                 row.findViewById(R.id.card_middle).setVisibility(View.VISIBLE);
 
             }
-            row.findViewById(R.id.card_bottom).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!refreshing) {
-                        if (!(card.student)) {
+            if (!(card.student)){
+                row.findViewById(R.id.card_bottom).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!refreshing) {
                             String url = BlogUrl + card.group_username;
                             getFragmentManager().beginTransaction()
                                     .replace(R.id.container, new GroupBlogList(url, card.group)).addToBackStack(null).commit();
+
                         }
                     }
-                }
-            });
+                });
+            }
+
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

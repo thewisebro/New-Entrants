@@ -86,10 +86,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "fb_link varchar,"+
                 "sess_id varchar,"+
                 "img blob,"+
+                "category varchar,"+
                 "primary key(enr_no) on conflict replace );";
 
     public static String TEMP_STUDENT=
-            "insert into students values ('ankush','','14115019','asd','ee','EE','2','roorkee','uk','UK','a@a.a','8006572222','fb.com/spunk','','');";
+            "insert into students values ('ankush','','14115019','asd','ee','EE','2','roorkee','uk','UK','a@a.a','8006572222','fb.com/spunk','','','senior');";
+    public static String TEMP_AUDIENCE=
+            "insert into students values ('ankush','','14115019','asd','ee','EE','2','roorkee','uk','UK','a@a.a','8006572222','fb.com/spunk','','','audience');";
 
     private static String CREATE_ENTRANTS_TABLE=
             "create table if not exists entrants ( "+
@@ -129,6 +132,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_ENTRANTS_TABLE);
         //db.execSQL(TEMP_ENTRANT);
         //db.execSQL(TEMP_STUDENT);
+        //db.execSQL(TEMP_AUDIENCE);
         db.execSQL(CREATE_SENIORS_TABLE);
         db.execSQL(CREATE_REQUESTS_TABLE);
         db.execSQL(CREATE_JUNIORS_TABLE);
@@ -175,15 +179,26 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             student.fb_link=cursor.getString(12);
             student.sess_id=cursor.getString(13);
             student.profile_img=cursor.getBlob(14);
+            student.category=cursor.getString(15);
         }
         return student;
     }
-    public boolean loggedStudent(){
+    public boolean loggedSenior(){
         SQLiteDatabase db= this.getWritableDatabase();
         db.execSQL(CREATE_STUDENTS_TABLE);
         db.close();
         db=this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("select * from students ;", null);
+        Cursor cursor=db.rawQuery("select * from students where category='senior' ;", null);
+
+        if(cursor.getCount()==0) return false;
+        else return true;
+    }
+    public boolean loggedAudience(){
+        SQLiteDatabase db= this.getWritableDatabase();
+        db.execSQL(CREATE_STUDENTS_TABLE);
+        db.close();
+        db=this.getReadableDatabase();
+        Cursor cursor=db.rawQuery("select * from students where category='audience' ;", null);
 
         if(cursor.getCount()==0) return false;
         else return true;
@@ -206,6 +221,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("fb_link", student.fb_link);
         values.put("sess_id",student.sess_id);
         values.put("img",student.profile_img);
+        values.put("category",student.category);
         db.insert(TABLE_STUDENTS,null,values);
         db.close();
     }
@@ -448,5 +464,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         deleteEntrant();
         deleteSeniors();
         deleteRequests();
+    }
+    public void logoutAudience(){
+        deleteStudent();
     }
 }

@@ -40,20 +40,18 @@ public class Navigation extends ActionBarActivity
     private CharSequence mTitle;
     private MySQLiteHelper db;
     private boolean updated=false;
-    private boolean first_time;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_navigation);
         setDrawerOnTop();
-        first_time=getIntent().getBooleanExtra("first_time",false);
         setCache();
         db=new MySQLiteHelper(this);
         entrant=db.getEntrant();
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mNavigationDrawerFragment.set(1);
+        mNavigationDrawerFragment.set(1,getIntent().getBooleanExtra("first_time",true));
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
     public void  setDrawerOnTop(){

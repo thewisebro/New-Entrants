@@ -71,8 +71,14 @@ public class Login extends ActionBarActivity {
             startActivity(intent);
             finish();
         }
-        else if (db.loggedStudent()){
+        else if (db.loggedSenior()){
             Intent intent=new Intent(this,NavigationStudent.class);
+            intent.putExtra("first_time",false);
+            startActivity(intent);
+            finish();
+        }
+        else if (db.loggedAudience()){
+            Intent intent=new Intent(this,NavigationAudience.class);
             intent.putExtra("first_time",false);
             startActivity(intent);
             finish();
@@ -140,6 +146,8 @@ public class Login extends ActionBarActivity {
             urlConnectionPost= (HttpURLConnection) new URL(loginURL).openConnection();
             urlConnectionPost.setDoOutput(true);
             urlConnectionPost.setDoInput(true);
+            urlConnectionPost.setConnectTimeout(5000);
+            urlConnectionPost.setReadTimeout(5000);
             urlConnectionPost.setRequestMethod("POST");
             urlConnectionPost.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
             cookieStore.removeAll();
@@ -211,9 +219,14 @@ public class Login extends ActionBarActivity {
                 details=new HashMap<String,String>();
                 details.put("username",params.get("username"));
                 details.put("password", params.get("password"));
-                getDetails();
-                getUser();
-                return "Logged In";
+                //getDetails();
+                String get_details=getDetails();
+                if ("success".equals(get_details)) {
+                    getUser();
+                    return "success";
+                }
+                else
+                    return get_details;
             }
             else
                 return login_result;
@@ -229,14 +242,20 @@ public class Login extends ActionBarActivity {
                 getSupportFragmentManager().popBackStack();
                 Toast.makeText(getApplicationContext(), "Unable to connect to network", Toast.LENGTH_SHORT).show();
             }
-                else {
+                else if ("success".equals(result)){
                     Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
                     start();
                 }
+                    else if ("fail".equals(result)){
+                    getSupportFragmentManager().popBackStack();
+                    Toast.makeText(getApplicationContext(), "Unable to fetch user data!", Toast.LENGTH_SHORT).show();
+                }
+                    else
+                        getSupportFragmentManager().popBackStack();
         }
     }
 
-    public void getDetails(){
+    public String getDetails(){
         CookieStore cookieStore=cookieManager.getCookieStore();
         try {
 
@@ -254,9 +273,10 @@ public class Login extends ActionBarActivity {
             while ((inputLine = reader.readLine()) != null)
                 buffer.append(inputLine+"\n");
             parseUserData(buffer.toString());
-            int responseCode=conn.getResponseCode();
+            return details.get("status");
         } catch (Exception e) {
             e.printStackTrace();
+            return "error";
         }
     }
     public void getUser(){
@@ -277,7 +297,26 @@ public class Login extends ActionBarActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if (details.get("category").equals("senior")){
+
+        if (details.get("category").equals("junior")){
+            entrant.id=details.get("id");
+            entrant.name=details.get("name");
+            entrant.username=details.get("username");
+            entrant.password=details.get("password");
+            entrant.town=details.get("hometown");
+            entrant.state=statename;
+            entrant.statecode=statecode;
+            entrant.branchname=branchname;
+            entrant.branchcode=branchcode;
+            entrant.mobile=details.get("phone");
+            entrant.email=details.get("email");
+            entrant.fb_link=details.get("fb_link");
+            entrant.phone_privacy=details.get("phone_privacy").equals("true");
+            entrant.category="junior";
+            entrant.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
+
+        }
+        else {
             student.profile_img=downloadImage(hostURL+details.get("photo")
                     ,(int) getResources().getDimension(R.dimen.roundimage_length)
                     ,(int) getResources().getDimension(R.dimen.roundimage_length));
@@ -294,26 +333,8 @@ public class Login extends ActionBarActivity {
             student.email=details.get("email");
             student.mobile=details.get("phone");
             student.fb_link=details.get("fb_link");
+            student.category=details.get("category");
             student.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
-
-
-        }
-        else if (details.get("category").equals("junior")){
-            entrant.id=details.get("id");
-            entrant.name=details.get("name");
-            entrant.username=details.get("username");
-            entrant.password=details.get("password");
-            entrant.town=details.get("hometown");
-            entrant.state=statename;
-            entrant.statecode=statecode;
-            entrant.branchname=branchname;
-            entrant.branchcode=branchcode;
-            entrant.mobile=details.get("phone");
-            entrant.email=details.get("email");
-            entrant.fb_link=details.get("fb_link");
-            entrant.phone_privacy=details.get("phone_privacy").equals("true");
-            entrant.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
-
         }
     }
 
@@ -383,7 +404,6 @@ public class Login extends ActionBarActivity {
             intent.putExtra("first_time", true);
             startActivity(intent);
             finish();
-
         }
         else if (details.get("category").equals("junior")){
 
@@ -391,6 +411,15 @@ public class Login extends ActionBarActivity {
             db.addEntrant(entrant);
             db.close();
             Intent intent=new Intent(this,Navigation.class);
+            intent.putExtra("first_time", true);
+            startActivity(intent);
+            finish();
+        }
+        else if (details.get("category").equals("audience")){
+            MySQLiteHelper db=new MySQLiteHelper(this);
+            db.addStudent(student);
+            db.close();
+            Intent intent=new Intent(this,NavigationAudience.class);
             intent.putExtra("first_time", true);
             startActivity(intent);
             finish();

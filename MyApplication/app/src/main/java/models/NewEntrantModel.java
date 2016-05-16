@@ -21,6 +21,6 @@ public class NewEntrantModel implements Serializable {
     public Boolean phone_privacy;
     public Boolean profile_privacy;
     public String sess_id;
-    public final String category="entrant";
+    public String category;
     public boolean valid;
 }

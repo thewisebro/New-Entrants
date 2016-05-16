@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import img.myapplication.Navigation;
+import img.myapplication.NavigationAudience;
 import img.myapplication.NavigationStudent;
 import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
@@ -90,6 +91,10 @@ public class GroupBlogList extends Fragment {
         else if (getActivity() instanceof NavigationStudent) {
             ((NavigationStudent) getActivity()).setActionBarTitle("Blogs");
             bitmapCache=((NavigationStudent) getActivity()).bitmapCache;
+        }
+        else if (getActivity() instanceof NavigationAudience){
+            ((NavigationAudience)getActivity()).setActionBarTitle("Blogs");
+            bitmapCache=((NavigationAudience) getActivity()).bitmapCache;
         }
         cancelled=false;
         setHasOptionsMenu(true);

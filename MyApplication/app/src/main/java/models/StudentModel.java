@@ -21,7 +21,7 @@ public class StudentModel implements Serializable {
     public String fb_link;
     public String sess_id;
     public byte[] profile_img;
-    public String category="student";
+    public String category;
     public boolean valid;
 
 }
