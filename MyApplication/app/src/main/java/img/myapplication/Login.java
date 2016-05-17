@@ -55,7 +55,7 @@ public class Login extends ActionBarActivity {
     private void getURLs(){
         this.hostURL=getString(R.string.host);
         this.loginURL=hostURL+"/login/";
-        this.userinfoURL=hostURL+"/new_entrants/userinfo/";
+        this.userinfoURL=hostURL+"/new_entrants/userinfo?device=mobile";
         this.appURL=hostURL+"/new_entrants/";
     }
     @Override
