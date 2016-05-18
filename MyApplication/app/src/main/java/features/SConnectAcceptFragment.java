@@ -3,14 +3,9 @@ package features;
 
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,16 +18,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -80,112 +68,11 @@ public class SConnectAcceptFragment extends Fragment {
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.list_senior_card);
 
         cardArrayAdapter.refresh();
-        if (isConnected())
-            new UpdateAcceptedSeniorsTask().execute();
         listView.setAdapter(cardArrayAdapter);
         return view;
     }
 
-    public boolean isConnected() {
-        ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected())
-            return true;
-        else
-            return false;
-    }
-    private String getEntrantSESSID(){
-        MySQLiteHelper db=new MySQLiteHelper(getContext());
-        return db.getEntrant().sess_id;
-    }
-    private class UpdateAcceptedSeniorsTask extends AsyncTask<String, Void, String> {
-        private ProgressDialog dialog;
-        @Override
-        protected void onPreExecute(){
-            this.dialog=new ProgressDialog(getContext());
-            this.dialog.setMessage("Updating List. Please Wait...");
-            this.dialog.setIndeterminate(false);
-            this.dialog.setCancelable(false);
-            this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    cancel(true);
-                }
-            });
-            this.dialog.show();
-        }
-        @Override
-        protected void onCancelled(String result){
-            if (!cancelled){
-                Toast.makeText(getContext(), "Update aborted!", Toast.LENGTH_SHORT).show();
-                cardArrayAdapter.refresh();
-                dialog.dismiss();
-            }
-        }
-        @Override
-        protected String doInBackground(String... args) {
 
-            try {
-                HttpURLConnection conn= (HttpURLConnection) new URL(acceptedURL).openConnection();
-                conn.setRequestMethod("GET");
-                conn.setConnectTimeout(5000);
-                conn.setReadTimeout(10000);
-                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+getEntrantSESSID());
-                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-                StringBuilder sb=new StringBuilder();
-                String line = "";
-                while((line = bufferedReader.readLine()) != null)
-                    sb.append(line + '\n');
-
-                JSONObject jObject=new JSONObject(sb.toString());
-                if ("success".equals(jObject.getString("status"))){
-                    JSONArray jArray=jObject.getJSONArray("students");
-                    int len=jArray.length();
-
-                    for(int i=0; i<len;i++){
-                        JSONObject object=jArray.getJSONObject(i);
-                        SeniorModel model= new SeniorModel();
-                        model.name=object.getString("name");
-                        model.town=object.getString("hometown");
-                        model.state=(new JSONObject(object.getString("state"))).getString("name");
-                        model.branch=(new JSONObject(object.getString("branch"))).getString("name");
-                        model.fblink=object.getString("fb_link");
-                        model.contact=object.getString("contact");
-                        model.email=object.getString("email");
-                        model.dp_link=object.getString("dp_link");
-                        model.year=object.getInt("year");
-                        db.addSenior(model);
-                    }
-                    return "success";
-                }
-                else
-                    return "fail";
-            } catch (JSONException e){
-                return "fail";
-            } catch (Exception e) {
-                return "error";
-            }
-        }
-
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-            if (getActivity()==null)
-                return;
-
-            dialog.dismiss();
-            if (result.equals("success")) {
-                //Toast.makeText(getContext(), "List Updated!", Toast.LENGTH_SHORT).show();
-            }
-            else if (result.equals("error")){
-                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
-                Toast.makeText(getContext(), "Unable to update!\nCheck network connection", Toast.LENGTH_SHORT).show();
-            }
-            else
-                Toast.makeText(getContext(), "Sorry! Unable to update", Toast.LENGTH_SHORT).show();
-            cardArrayAdapter.refresh();
-        }
-    }
     public class SeniorCardArrayAdapter  extends ArrayAdapter<SeniorModel> {
 
         private List<SeniorModel> cardList = new ArrayList<SeniorModel>();

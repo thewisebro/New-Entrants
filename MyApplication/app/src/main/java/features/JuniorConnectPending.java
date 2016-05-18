@@ -14,15 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -47,8 +44,6 @@ public class JuniorConnectPending extends Fragment {
 
     private JuniorCardArrayAdapter cardArrayAdapter;
     private ListView listView;
-    private String sess_id;
-    private String pendingURL;
     private TextView zerocount;
     private String hostURL;
     private String acceptURL;
@@ -56,7 +51,6 @@ public class JuniorConnectPending extends Fragment {
 
     private void getURLs() {
         hostURL = getString(R.string.host);
-        pendingURL = hostURL + "/new_entrants/pending/";
         acceptURL=hostURL + "/new_entrants/accept/";
     }
     private boolean cancelled=false;
@@ -72,7 +66,6 @@ public class JuniorConnectPending extends Fragment {
         cancelled=false;
         db=new MySQLiteHelper(getContext());
         View view= inflater.inflate(R.layout.fragment_junior_connect_pending, container, false);
-        sess_id=getArguments().getString("sess_id");
         listView= (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
@@ -80,12 +73,14 @@ public class JuniorConnectPending extends Fragment {
         zerocount= (TextView) view.findViewById(R.id.zerocount);
 
         cardArrayAdapter.refresh();
-        if (isConnected())
-            new getPendingTask().execute(sess_id);
+
         listView.setAdapter(cardArrayAdapter);
         return view;
     }
-
+    private String getStudentSESSID(){
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        return db.getStudent().sess_id;
+    }
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -94,99 +89,7 @@ public class JuniorConnectPending extends Fragment {
         else
             return false;
     }
-    private class getPendingTask extends AsyncTask<String, Void, String> {
-        private ProgressDialog dialog;
-        @Override
-        protected void onPreExecute(){
-            this.dialog=new ProgressDialog(getContext());
-            this.dialog.setMessage("Updating List. Please Wait...");
-            this.dialog.setIndeterminate(false);
-            this.dialog.setCancelable(false);
-            this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    cancel(true);
-                }
-            });
-            this.dialog.show();
-        }
-        @Override
-        protected void onCancelled(String result){
-            if (!cancelled) {
-                Toast.makeText(getContext(), "Update aborted!", Toast.LENGTH_SHORT).show();
-                cardArrayAdapter.refresh();
-                dialog.dismiss();
-            }
-        }
-        @Override
-        protected String doInBackground(String... params) {
 
-            try {
-                HttpURLConnection conn=(HttpURLConnection) new URL(pendingURL).openConnection();
-                conn.setRequestMethod("GET");
-                conn.setConnectTimeout(5000);
-                conn.setReadTimeout(10000);
-                conn.setRequestProperty("Cookie", "CHANNELI_SESSID="+params[0]);
-                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-                StringBuilder sb=new StringBuilder();
-                String line = "";
-                while((line = bufferedReader.readLine()) != null)
-                    sb.append(line + '\n');
-                return getCards(sb.toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "error";
-            }
-        }
-        @Override
-        protected void onPostExecute(String result) {
-
-            if (getActivity()==null)
-                return;
-
-            dialog.dismiss();
-
-            if (result.equals("success")){
-                //Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
-            }
-            else if (result.equals("error")){
-                Toast.makeText(getContext(), "Unable to update!\nCheck network connection", Toast.LENGTH_SHORT).show();
-            }
-            else
-                Toast.makeText(getContext(), "Sorry! Unable to update!", Toast.LENGTH_SHORT).show();
-            cardArrayAdapter.refresh();
-        }
-    }
-    private String getCards(String result){
-
-        try {
-            JSONObject jObject = new JSONObject(result);
-            if ("success".equals(jObject.getString("status"))){
-                JSONArray jArray=jObject.getJSONArray("requests");
-                int len=jArray.length();
-                db.deletePendingJuniors();
-                for(int i=0; i<len;i++){
-
-                    JSONObject object=jArray.getJSONObject(i);
-                    JuniorModel model= new JuniorModel();
-                    model.name=object.getString("name");
-                    model.town=object.getString("hometown");
-                    model.state=(new JSONObject(object.getString("state"))).getString("name");
-                    model.branch=(new JSONObject(object.getString("branch"))).getString("name");
-                    model.username=object.getString("username");
-                    model.description=object.getString("description");
-                    model.status="pending";
-                    db.addJunior(model);
-                }
-                return "success";
-            }
-            else
-                return "fail";
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return "fail";
-        }
-    }
     public class JuniorCardArrayAdapter  extends ArrayAdapter<JuniorModel> {
 
         public void refresh(){
@@ -266,14 +169,13 @@ public class JuniorConnectPending extends Fragment {
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (card.toggle){
-                        card.toggle=false;
+                    if (card.toggle) {
+                        card.toggle = false;
                         ((LinearLayout) v.findViewById(R.id.card_layout)).setLayoutTransition(null);
                         ((LinearLayout) v.findViewById(R.id.down_view)).setVisibility(View.GONE);
                         ((ToggleButton) v.findViewById(R.id.toggle_junior)).setChecked(false);
-                    }
-                    else {
-                        card.toggle=true;
+                    } else {
+                        card.toggle = true;
                         ((LinearLayout) v.findViewById(R.id.card_layout)).setLayoutTransition(new LayoutTransition());
                         ((LinearLayout) v.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
                         ((ToggleButton) v.findViewById(R.id.toggle_junior)).setChecked(true);
@@ -322,12 +224,12 @@ public class JuniorConnectPending extends Fragment {
             }
         }
         @Override
-        protected String doInBackground(Void... args) {
+      protected String doInBackground(Void... args) {
 
             try {
                 HttpURLConnection conn = (HttpURLConnection) new URL(acceptURL).openConnection();
                 conn.setRequestMethod("POST");
-                conn.setRequestProperty("Cookie", "CHANNELI_SESSID=" + sess_id);
+                conn.setRequestProperty("Cookie", "CHANNELI_SESSID=" + getStudentSESSID());
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);
                 OutputStream os = conn.getOutputStream();
@@ -360,8 +262,6 @@ public class JuniorConnectPending extends Fragment {
                 db.acceptJunior(username);
                 refreshFragment();
             }
-            //else
-                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
             else if (result.equals("error"))
                 Toast.makeText(getActivity(), "Failed! Check network connection", Toast.LENGTH_SHORT).show();
             else {

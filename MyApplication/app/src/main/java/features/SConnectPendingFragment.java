@@ -18,8 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -44,13 +42,11 @@ public class SConnectPendingFragment extends Fragment {
 
     private SeniorCardArrayAdapter cardArrayAdapter;
     private MySQLiteHelper db;
-    public String request_url;
     public String extend_url;
     private TextView zerocount;
     private String hostURL;
     private void getURLs() {
         hostURL = getString(R.string.host);
-        request_url = hostURL + "/new_entrants/pending/";
         extend_url = hostURL + "/new_entrants/extend/";
     }
     private boolean cancelled;
@@ -71,8 +67,6 @@ public class SConnectPendingFragment extends Fragment {
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.request_card);
 
         cardArrayAdapter.refresh();
-        if (isConnected())
-            new getRequestsTask().execute();
         listView.setAdapter(cardArrayAdapter);
 
         return view;
@@ -89,99 +83,6 @@ public class SConnectPendingFragment extends Fragment {
     private String getEntrantSESSID(){
         MySQLiteHelper db=new MySQLiteHelper(getContext());
         return db.getEntrant().sess_id;
-    }
-
-    private String getCards(String result){
-        JSONObject jObject= null;
-        try {
-            jObject = new JSONObject(result);
-            JSONArray jArray=jObject.getJSONArray("requests");
-            int len=jArray.length();
-
-            for(int i=0; i<len;i++){
-
-                JSONObject object=jArray.getJSONObject(i);
-                RequestModel model=new RequestModel();
-                model.value=object.getString("value");
-                model.accepted=object.getInt("accepted");
-                model.id=object.getInt("id");
-                model.param=object.getString("param");
-                model.more=object.getBoolean("more");
-                model.allowed=object.getInt("allowed");
-                model.query=object.getString("description");
-                model.date=object.getString("date");
-                model.request_no=i+1;
-                db.addRequest(model);
-            }
-            return "success";
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return "fail";
-        }
-
-    }
-    private class getRequestsTask extends AsyncTask<String, Void, String> {
-        private ProgressDialog dialog;
-
-        @Override
-        protected void onPreExecute(){
-            this.dialog=new ProgressDialog(getContext());
-            this.dialog.setMessage("Updating List. Please Wait...");
-            this.dialog.setIndeterminate(false);
-            this.dialog.setCancelable(false);
-            this.dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    cancel(true);
-                }
-            });
-            this.dialog.show();
-        }
-        @Override
-        protected void onCancelled(String result){
-            if (!cancelled) {
-                Toast.makeText(getContext(), "Update aborted!", Toast.LENGTH_LONG).show();
-                cardArrayAdapter.refresh();
-                dialog.dismiss();
-            }
-        }
-        @Override
-        protected String doInBackground(String... args) {
-            try {
-                HttpURLConnection conn=(HttpURLConnection) new URL(request_url).openConnection();
-                conn.setRequestMethod("GET");
-                conn.setConnectTimeout(5000);
-                conn.setReadTimeout(10000);
-                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+getEntrantSESSID());
-                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-                StringBuilder sb=new StringBuilder();
-                String line = "";
-                while((line = bufferedReader.readLine()) != null)
-                    sb.append(line + '\n');
-                return getCards(sb.toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "error";
-            }
-        }
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-            if (getActivity()==null)
-                return;
-
-            dialog.dismiss();
-
-            if (result.equals("success")){
-                //Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
-            }
-            else if (result.equals("error")){
-                Toast.makeText(getContext(), "Unable to update!\nCheck network connection", Toast.LENGTH_SHORT).show();
-            }
-            else
-                Toast.makeText(getContext(), "Update Failed!", Toast.LENGTH_SHORT).show();
-            cardArrayAdapter.refresh();
-        }
     }
 
 

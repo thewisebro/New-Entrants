@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,6 +26,7 @@ public class SConnectTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ((Navigation)getActivity()).setActionBarTitle("Senior Connect");
+        setHasOptionsMenu(true);
         View view= inflater.inflate(R.layout.fragment_sconnect_tab, container, false);
 
         FragmentTabHost mTabHost = (FragmentTabHost)view.findViewById(R.id.my_tabhost);
@@ -36,5 +40,17 @@ public class SConnectTabFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
+        inflater.inflate(R.menu.menu_connect, menu);
+        final MenuItem item = menu.findItem(R.id.update);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new SeniorConnectLoading()).commit();
+                return false;
+            }
+        });
+    }
 }

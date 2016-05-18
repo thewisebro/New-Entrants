@@ -6,13 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.LruCache;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -24,7 +22,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import features.BlogsList;
-import features.JuniorConnect;
+import features.JuniorConnectLoading;
 import features.StudentUpdateFragment;
 import models.StudentModel;
 
@@ -161,7 +159,7 @@ public class NavigationStudent extends ActionBarActivity
             switch(position) {
                 case 0: fragment = new BlogsList();
                     break;
-                case 1: fragment=new JuniorConnect(student.sess_id);
+                case 1: fragment=new JuniorConnectLoading();
                     break;
                 case 2:fragment= new StudentUpdateFragment();
                     break;

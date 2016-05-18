@@ -25,6 +25,7 @@ import features.BlogsList;
 import features.EntrantUpdateFragment;
 import features.SConnectRequestFragment;
 import features.SConnectTabFragment;
+import features.SeniorConnectLoading;
 import models.NewEntrantModel;
 
 
@@ -129,7 +130,7 @@ public class Navigation extends ActionBarActivity
                     fragment = new BlogsList();
                     break;
                 case 1:
-                    fragment = new SConnectTabFragment();
+                    fragment = new SeniorConnectLoading();
                     break;
                 case 2:
                     fragment=new SConnectRequestFragment();
