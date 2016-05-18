@@ -14,4 +14,5 @@ public class JuniorModel {
     public String username;
     public String description;
     public String status;
+    public boolean toggle=false;
 }

@@ -202,6 +202,10 @@ public class GroupBlogList extends Fragment {
         }
         @Override
         protected void onPostExecute(String result) {
+
+            if (getActivity()==null)
+                return;
+
             if (result.equals("success")){
                 cardArrayAdapter.refresh();
                 items.clear();
@@ -304,12 +308,14 @@ public class GroupBlogList extends Fragment {
 
             } else {
                 viewHolder = (GroupBlogCardViewHolder) row.getTag();
-            }
-            final BlogModel card = getItem(position);
-            if (viewHolder.id!=card.id && viewHolder.id!=0){
                 viewHolder.loaddp.cancel(true);
                 viewHolder.loadimg.cancel(true);
             }
+            final BlogModel card = getItem(position);
+            /*if (viewHolder.id!=card.id && viewHolder.id!=0){
+                viewHolder.loaddp.cancel(true);
+                viewHolder.loadimg.cancel(true);
+            }*/
             viewHolder.id=card.id;
             viewHolder.topic.setText(card.topic);
             viewHolder.description.setText(card.desc);
@@ -368,6 +374,8 @@ public class GroupBlogList extends Fragment {
                 HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                 connection.setDoInput(true);
                 connection.setUseCaches(true);
+                connection.setConnectTimeout(3000);
+                connection.setReadTimeout(5000);
                 connection.connect();
                 InputStream input = connection.getInputStream();
                 BitmapFactory.Options options = new BitmapFactory.Options();

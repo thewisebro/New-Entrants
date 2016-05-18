@@ -207,6 +207,9 @@ public class BlogsList extends Fragment {
         @Override
         protected void onPostExecute(String result) {
 
+            if (getActivity()==null)
+                return;
+
             dialog.dismiss();
             if (result.equals("success")){
                 cardArrayAdapter.refresh();
@@ -309,7 +312,7 @@ public class BlogsList extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = convertView;
-            BlogCardViewHolder viewHolder;
+            final BlogCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 row = inflater.inflate(R.layout.list_blog_card, parent, false);
@@ -321,15 +324,16 @@ public class BlogsList extends Fragment {
                 viewHolder.dp= (ImageView) row.findViewById(R.id.blog_dp);
                 viewHolder.category= (TextView) row.findViewById(R.id.category);
                 viewHolder.group= (TextView) row.findViewById(R.id.group);
-
             } else {
                 viewHolder = (BlogCardViewHolder)row.getTag();
+                viewHolder.loaddp.cancel(true);
+                viewHolder.loadimg.cancel(true);
             }
             final BlogModel card = getItem(position);
-            if (viewHolder.id!=card.id && viewHolder.id!=0){
+            /*if (viewHolder.id!=card.id && viewHolder.id!=0){
                 viewHolder.loadimg.cancel(true);
                 viewHolder.loaddp.cancel(true);
-            }
+            }*/
             viewHolder.id=card.id;
             viewHolder.topic.setText(card.topic);
             viewHolder.description.setText(card.desc);
@@ -352,7 +356,20 @@ public class BlogsList extends Fragment {
                 row.findViewById(R.id.card_middle).setVisibility(View.VISIBLE);
 
             }
-            if (!(card.student)){
+            View.OnClickListener rowClickListener=new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, new Blog(viewHolder.blogUrl)).addToBackStack(null).commit();
+
+                }
+            };
+            row.setOnClickListener(rowClickListener);
+
+            if (card.student)
+                row.findViewById(R.id.card_bottom).setOnClickListener(rowClickListener);
+
+            else {
                 row.findViewById(R.id.card_bottom).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -366,14 +383,6 @@ public class BlogsList extends Fragment {
                 });
             }
 
-            row.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    BlogCardViewHolder holder = (BlogCardViewHolder) v.getTag();
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, new Blog(holder.blogUrl)).addToBackStack(null).commit();
-                }
-            });
 
             viewHolder.loadimg=loadimg;
             viewHolder.loaddp=loaddp;
@@ -404,6 +413,8 @@ public class BlogsList extends Fragment {
                 HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                 connection.setDoInput(true);
                 connection.setUseCaches(true);
+                connection.setConnectTimeout(3000);
+                connection.setReadTimeout(5000);
                 connection.connect();
                 InputStream input = connection.getInputStream();
                 BitmapFactory.Options options = new BitmapFactory.Options();

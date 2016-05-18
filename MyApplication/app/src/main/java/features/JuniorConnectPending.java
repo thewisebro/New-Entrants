@@ -140,6 +140,10 @@ public class JuniorConnectPending extends Fragment {
         }
         @Override
         protected void onPostExecute(String result) {
+
+            if (getActivity()==null)
+                return;
+
             dialog.dismiss();
 
             if (result.equals("success")){

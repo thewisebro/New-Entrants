@@ -206,6 +206,9 @@ public class SConnectRequestFragment extends Fragment {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
+            if (getActivity()==null)
+                return;
+
             dialog.dismiss();
 
             if (result.equals("success")) {
