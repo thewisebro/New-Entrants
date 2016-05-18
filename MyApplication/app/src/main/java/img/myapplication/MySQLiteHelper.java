@@ -86,7 +86,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "fb_link varchar,"+
                 "sess_id varchar,"+
                 "img blob,"+
-                "category varchar,"+
+                "category char(10),"+
                 "primary key(enr_no) on conflict replace );";
 
     public static String TEMP_STUDENT=

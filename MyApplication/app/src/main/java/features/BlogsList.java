@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.LruCache;
 import android.support.v4.view.MenuItemCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,6 +45,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import img.myapplication.BitmapCacheUtil;
 import img.myapplication.Navigation;
 import img.myapplication.NavigationAudience;
 import img.myapplication.NavigationStudent;
@@ -69,7 +69,6 @@ public class BlogsList extends Fragment {
     private String url;
     boolean flag=false;
     boolean resume;
-    private LruCache<String,Bitmap> bitmapCache;
     private String hostURL;
     private void getURLs(){
         this.hostURL=getString(R.string.host);
@@ -90,15 +89,12 @@ public class BlogsList extends Fragment {
         resume=true;
         if (getActivity() instanceof Navigation) {
             ((Navigation) getActivity()).setActionBarTitle("Blogs");
-            bitmapCache=((Navigation) getActivity()).bitmapCache;
         }
         else if (getActivity() instanceof NavigationStudent){
             ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
-            bitmapCache=((NavigationStudent) getActivity()).bitmapCache;
         }
         else if (getActivity() instanceof NavigationAudience){
             ((NavigationAudience)getActivity()).setActionBarTitle("Blogs");
-            bitmapCache=((NavigationAudience) getActivity()).bitmapCache;
         }
 
         cancelled=false;
@@ -476,14 +472,13 @@ public class BlogsList extends Fragment {
             return null;
         }
         private Bitmap image(){
-                Bitmap bitmap=bitmapCache.get(url);
+                Bitmap bitmap= BitmapCacheUtil.getBitmap(url);
                 if (bitmap==null){
-                    if (isCancelled())
-                        return null;
                     bitmap=loadImage();
                     if (bitmap!=null)
-                        bitmapCache.put(url,bitmap);
+                        BitmapCacheUtil.putBitmap(url,bitmap);
                 }
+
                 return bitmap;
         }
 

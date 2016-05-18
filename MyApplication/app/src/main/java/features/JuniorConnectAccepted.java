@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -267,56 +268,29 @@ public class JuniorConnectAccepted extends Fragment {
                 row.findViewById(R.id.fbline).setVisibility(View.VISIBLE);
                 viewHolder.fblink.setText(card.fblink);
             }
-            /*ToggleButton bt= (ToggleButton) row.findViewById(R.id.toggle_junior);
-            bt.setVisibility(View.VISIBLE);
-            bt.setTag(row.findViewById(R.id.card_layout));
-            bt.setChecked(card.toggle);
-            bt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    LinearLayout layout = (LinearLayout) buttonView.getTag();
-                    if (isChecked) {
-                        ((LinearLayout) layout.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
-                        layout.setLayoutTransition(null);
-                        card.toggle=true;
-                    } else {
-                        ((LinearLayout) layout.findViewById(R.id.down_view)).setVisibility(View.GONE);
-                        layout.setLayoutTransition(new LayoutTransition());
-                        card.toggle=false;
-                    }
-                }
-            });
-            row.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ToggleButton bt= (ToggleButton) v.findViewById(R.id.toggle_junior);
-                    if (bt.isChecked())
-                        bt.setChecked(false);
-                    else
-                        bt.setChecked(true);
-                }
-            });*/
 
             if (card.toggle)
                 ((LinearLayout) row.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
             else
                 ((LinearLayout) row.findViewById(R.id.down_view)).setVisibility(View.GONE);
-            View.OnClickListener rowClick= new View.OnClickListener() {
+            ((ToggleButton) row.findViewById(R.id.toggle_junior)).setChecked(card.toggle);
+            row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (card.toggle){
                         card.toggle=false;
                         ((LinearLayout) v.findViewById(R.id.card_layout)).setLayoutTransition(null);
                         ((LinearLayout) v.findViewById(R.id.down_view)).setVisibility(View.GONE);
+                        ((ToggleButton) v.findViewById(R.id.toggle_junior)).setChecked(false);
                     }
                     else {
                         card.toggle=true;
                         ((LinearLayout) v.findViewById(R.id.card_layout)).setLayoutTransition(new LayoutTransition());
                         ((LinearLayout) v.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
+                        ((ToggleButton) v.findViewById(R.id.toggle_junior)).setChecked(true);
                     }
                 }
-            };
-            row.setOnClickListener(rowClick);
+            });
             row.setTag(viewHolder);
             return row;
         }

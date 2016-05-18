@@ -242,7 +242,7 @@ public class JuniorConnectPending extends Fragment {
             } else {
                 viewHolder = (JuniorCardViewHolder)row.getTag();
             }
-            JuniorModel card = getItem(position);
+            final JuniorModel card = getItem(position);
             viewHolder.name.setText(card.name);
             if (!("".equals(card.town)))
                 viewHolder.town.setText(card.town+", ");
@@ -257,38 +257,35 @@ public class JuniorConnectPending extends Fragment {
                 viewHolder.query.setText("In need of Assistance");
             else
                 viewHolder.query.setText(card.description);
-            ToggleButton bt= (ToggleButton) row.findViewById(R.id.toggle_junior);
-            bt.setVisibility(View.VISIBLE);
-            bt.setTag(row.findViewById(R.id.card_layout));
-            bt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    LinearLayout layout = (LinearLayout) buttonView.getTag();
-                    if (isChecked) {
-                        ((LinearLayout) layout.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
-                        layout.setLayoutTransition(null);
-                    } else {
-                        ((LinearLayout) layout.findViewById(R.id.down_view)).setVisibility(View.GONE);
-                        layout.setLayoutTransition(new LayoutTransition());
-                    }
-                }
-            });
+
+            if (card.toggle)
+                ((LinearLayout) row.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
+            else
+                ((LinearLayout) row.findViewById(R.id.down_view)).setVisibility(View.GONE);
+            ((ToggleButton) row.findViewById(R.id.toggle_junior)).setChecked(card.toggle);
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ToggleButton bt = (ToggleButton) v.findViewById(R.id.toggle_junior);
-                    if (bt.isChecked())
-                        bt.setChecked(false);
-                    else
-                        bt.setChecked(true);
+                    if (card.toggle){
+                        card.toggle=false;
+                        ((LinearLayout) v.findViewById(R.id.card_layout)).setLayoutTransition(null);
+                        ((LinearLayout) v.findViewById(R.id.down_view)).setVisibility(View.GONE);
+                        ((ToggleButton) v.findViewById(R.id.toggle_junior)).setChecked(false);
+                    }
+                    else {
+                        card.toggle=true;
+                        ((LinearLayout) v.findViewById(R.id.card_layout)).setLayoutTransition(new LayoutTransition());
+                        ((LinearLayout) v.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
+                        ((ToggleButton) v.findViewById(R.id.toggle_junior)).setChecked(true);
+                    }
                 }
             });
+
             TextView connect = (TextView) row.findViewById(R.id.connect);
-            connect.setTag(card.username);
             connect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new AcceptRequestTask(v.getTag().toString()).execute();
+                    new AcceptRequestTask(card.username).execute();
                 }
             });
             row.setTag(viewHolder);

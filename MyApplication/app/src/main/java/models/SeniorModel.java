@@ -13,4 +13,5 @@ public class SeniorModel {
     public String branch;
     public String dp_link;
     public int year;
+    public boolean toggle;
 }

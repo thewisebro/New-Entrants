@@ -33,7 +33,6 @@ public class NavigationStudent extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     private int fragmentCount=0;
     private MySQLiteHelper db;
-    public LruCache<String,Bitmap> bitmapCache;
     public StudentModel student;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition=-1;
@@ -46,8 +45,8 @@ public class NavigationStudent extends ActionBarActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_navigation);
         setDrawerOnTop();
+        BitmapCacheUtil.setCache();
 
-        setCache();
         db=new MySQLiteHelper(this);
         student=db.getStudent();
 
@@ -93,17 +92,7 @@ public class NavigationStudent extends ActionBarActivity
         }
         return result;
     }
-    private void setCache(){
-        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        int cacheSize=maxMemory/4;
-        bitmapCache = new LruCache<String, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap) {
-                return bitmap.getByteCount() / 1024;
-            }
-        };
 
-    }
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();

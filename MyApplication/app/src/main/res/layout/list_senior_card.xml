@@ -80,6 +80,8 @@
                 android:background="@drawable/check"
                 android:textOn=""
                 android:textOff=""
+                android:clickable="false"
+                android:enabled="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:layout_centerVertical="true"

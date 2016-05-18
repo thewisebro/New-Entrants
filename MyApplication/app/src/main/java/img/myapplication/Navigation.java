@@ -6,13 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.LruCache;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -34,7 +32,7 @@ public class Navigation extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     private int fragmentCount=0;
     public NewEntrantModel entrant;
-    public LruCache<String,Bitmap> bitmapCache;
+
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition=-1;
     private CharSequence mTitle;
@@ -46,7 +44,7 @@ public class Navigation extends ActionBarActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_navigation);
         setDrawerOnTop();
-        setCache();
+        BitmapCacheUtil.setCache();
         db=new MySQLiteHelper(this);
         entrant=db.getEntrant();
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -66,7 +64,7 @@ public class Navigation extends ActionBarActivity
         FrameLayout container = (FrameLayout) drawer.findViewById(R.id.container_drawer); // This is the container we defined just now.
         container.addView(child);
         //drawer.setPadding(0,getStatusBarHeight(),0,0);
-        (drawer.findViewById(R.id.navigation_drawer)).setPadding(0,getStatusBarHeight(),0,0);
+        (drawer.findViewById(R.id.navigation_drawer)).setPadding(0, getStatusBarHeight(), 0, 0);
         // Make the drawer replace the first child
         decor.addView(drawer);
     }
@@ -86,17 +84,7 @@ public class Navigation extends ActionBarActivity
      else
          return false;
  }
-    private void setCache(){
-        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        int cacheSize=maxMemory/4;
-        bitmapCache = new LruCache<String, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap) {
-                return bitmap.getByteCount() / 1024;
-            }
-        };
 
-    }
     public boolean get_update_status(){ return this.updated;}
     public void set_updated(){ this.updated=true;}
     public void reset_updated(){this.updated=false;}

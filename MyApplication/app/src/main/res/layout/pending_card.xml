@@ -74,12 +74,13 @@
                 android:background="@drawable/check"
                 android:textOn=""
                 android:textOff=""
+                android:clickable="false"
+                android:enabled="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:visibility="gone"
                 android:alpha=".3" />
 
         </RelativeLayout>

@@ -15,12 +15,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -40,8 +38,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import img.myapplication.BitmapCacheUtil;
 import img.myapplication.MySQLiteHelper;
-import img.myapplication.Navigation;
 import img.myapplication.R;
 import models.SeniorCardViewHolder;
 import models.SeniorModel;
@@ -54,7 +52,6 @@ public class SConnectAcceptFragment extends Fragment {
     private SeniorCardArrayAdapter cardArrayAdapter;
     private MySQLiteHelper db;
     private ListView listView;
-    private LruCache<String,Bitmap> bitmapCache;
     private TextView zerocount;
     private String acceptedURL;
     private String hostURL;
@@ -75,8 +72,7 @@ public class SConnectAcceptFragment extends Fragment {
         cancelled=false;
         db=new MySQLiteHelper(getContext());
         View view = inflater.inflate(R.layout.fragment_sconnect_accept, container, false);
-        //setCache();
-        bitmapCache=((Navigation)getActivity()).bitmapCache;
+
         listView = (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
@@ -243,7 +239,7 @@ public class SConnectAcceptFragment extends Fragment {
             } else {
                 viewHolder = (SeniorCardViewHolder)row.getTag();
             }
-            SeniorModel card = getItem(position);
+            final SeniorModel card = getItem(position);
             viewHolder.name.setText(card.name);
             viewHolder.branch.setText(card.branch);
             viewHolder.state.setText(card.state);
@@ -279,33 +275,32 @@ public class SConnectAcceptFragment extends Fragment {
                 row.findViewById(R.id.fbline).setVisibility(View.VISIBLE);
                 viewHolder.fblink.setText(card.fblink);
             }
-            ToggleButton bt= (ToggleButton) row.findViewById(R.id.toggle_senior);
-            bt.setVisibility(View.VISIBLE);
-            bt.setTag(row.findViewById(R.id.card_layout));
-            bt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    LinearLayout layout = (LinearLayout) buttonView.getTag();
-                    if (isChecked) {
-                        ((LinearLayout) layout.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
-                        layout.setLayoutTransition(null);
 
-                    } else {
-                        ((LinearLayout) layout.findViewById(R.id.down_view)).setVisibility(View.GONE);
-                        layout.setLayoutTransition(new LayoutTransition());
-                    }
-                }
-            });
+            row.findViewById(R.id.toggle_senior).setVisibility(View.VISIBLE);
+            ((ToggleButton) row.findViewById(R.id.toggle_senior)).setChecked(card.toggle);
+            if (card.toggle)
+                ((LinearLayout) row.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
+            else
+                ((LinearLayout) row.findViewById(R.id.down_view)).setVisibility(View.GONE);
+
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ToggleButton bt= (ToggleButton) v.findViewById(R.id.toggle_senior);
-                    if (bt.isChecked())
-                        bt.setChecked(false);
-                    else
-                        bt.setChecked(true);
+                    if (card.toggle){
+                        card.toggle=false;
+                        ((LinearLayout) v.findViewById(R.id.card_layout)).setLayoutTransition(null);
+                        ((LinearLayout) v.findViewById(R.id.down_view)).setVisibility(View.GONE);
+                        ((ToggleButton) v.findViewById(R.id.toggle_senior)).setChecked(false);
+                    }
+                    else {
+                        card.toggle=true;
+                        ((LinearLayout) v.findViewById(R.id.card_layout)).setLayoutTransition(new LayoutTransition());
+                        ((LinearLayout) v.findViewById(R.id.down_view)).setVisibility(View.VISIBLE);
+                        ((ToggleButton) v.findViewById(R.id.toggle_senior)).setChecked(true);
+                    }
                 }
             });
+
             row.setTag(viewHolder);
             return row;
         }
@@ -380,11 +375,11 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
         return null;
     }
     private Bitmap image(){
-        Bitmap bitmap=bitmapCache.get(url);
+        Bitmap bitmap= BitmapCacheUtil.getBitmap(url);
         if (bitmap==null){
             bitmap=loadImage();
             if (bitmap!=null)
-                bitmapCache.put(url,bitmap);
+                BitmapCacheUtil.putBitmap(url,bitmap);
         }
         return bitmap;
     }
