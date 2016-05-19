@@ -14,6 +14,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -72,9 +74,16 @@ public class StudentUpdateFragment extends Fragment {
         super.onDestroyView();
     }
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_connect, menu);
+    }
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getURLs();
+        setHasOptionsMenu(true);
+
         cancelled=false;
         ((NavigationStudent)getActivity()).setActionBarTitle("Profile");
         view= inflater.inflate(R.layout.update_student,container,false);

@@ -153,6 +153,7 @@ public class SConnectAcceptFragment extends Fragment {
                 viewHolder.dp.setVisibility(View.GONE);
             else {
                 viewHolder.dp.setVisibility(View.VISIBLE);
+                viewHolder.dp.setImageResource(R.drawable.ic_person_black_24dp);
                 new ImageLoadTask(card.dp_link, viewHolder.dp, (int) getResources().getDimension(R.dimen.roundimage_length), (int) getResources().getDimension(R.dimen.roundimage_length))
                         .execute();
             }

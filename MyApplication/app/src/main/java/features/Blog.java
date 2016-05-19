@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -70,9 +72,15 @@ public class Blog extends Fragment {
         this.BlogUrl=hostURL+"/new_entrants/blogs/";
     }
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_connect, menu);
+    }
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getURLs();
+        setHasOptionsMenu(true);
         if (getActivity() instanceof Navigation)
             ((Navigation) getActivity()).setActionBarTitle("Blogs");
         else if (getActivity() instanceof NavigationStudent)
@@ -172,16 +180,21 @@ public class Blog extends Fragment {
         description.setText(model.desc);
         content.setText(Html.fromHtml(model.content,new ImageGetter(),null));
         group.setText(model.group);
+        if (model.student){
+            dp.setImageResource(R.drawable.ic_person_black_24dp);
+        }
+        else {
+            dp.setImageResource(R.drawable.ic_group_black_24dp);
+            group_card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = BlogUrl + model.group_username;
+                    getFragmentManager().beginTransaction().replace(R.id.container, new GroupBlogList(url, model.group))
+                            .addToBackStack(null).commit();
+                }
+            });
+        }
         new ImageLoadTask(hostURL+model.dpurl,dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length)).execute();
-
-        group_card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url=BlogUrl+model.group_username;
-                getFragmentManager().beginTransaction().replace(R.id.container, new GroupBlogList(url,model.group))
-                        .addToBackStack(null).commit();
-            }
-        });
     }
     public String getData(String str){
         try {
@@ -197,6 +210,7 @@ public class Blog extends Fragment {
                 model.id=object.getInt("id");
                 model.group_username=object.getString("group_username");
                 model.slug=object.getString("slug");
+                model.student=object.getBoolean("student");
                 return "success";
             }
             else
@@ -333,7 +347,8 @@ public class Blog extends Fragment {
         @Override
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
-            imageView.setImageBitmap(result);
+            if (result!=null)
+                imageView.setImageBitmap(result);
         }
 
     }

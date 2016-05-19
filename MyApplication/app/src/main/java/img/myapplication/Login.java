@@ -1,14 +1,17 @@
 package img.myapplication;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
@@ -338,33 +341,38 @@ public class Login extends ActionBarActivity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public byte[] downloadImage(String url,int ht,int wt){
         int inSampleSize=getSampleSize(url,ht,wt);
+        Bitmap bitmap=null;
         try {
             URL urlConnection = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) urlConnection
                     .openConnection();
             connection.setDoInput(true);
+            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(5000);
             connection.connect();
             InputStream input = connection.getInputStream();
             BitmapFactory.Options options=new BitmapFactory.Options();
             options.inSampleSize=inSampleSize;
             options.inJustDecodeBounds=false;
-            Bitmap myBitmap = BitmapFactory.decodeStream(input,null,options);
-            ByteArrayOutputStream baos=new ByteArrayOutputStream();
-            myBitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
-            byte[] img=baos.toByteArray();
-            return img;
+            bitmap = BitmapFactory.decodeStream(input,null,options);
         } catch (Exception e) {
             e.printStackTrace();
+            bitmap= ((BitmapDrawable) getDrawable(R.drawable.ic_person_black_24dp)).getBitmap();
         }
-        return null;
+        ByteArrayOutputStream baos=new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+        return baos.toByteArray();
     }
     public int getSampleSize(String url,int ht,int wt){
 
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setDoInput(true);
+            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(5000);
             connection.connect();
             InputStream input = connection.getInputStream();
             BitmapFactory.Options options = new BitmapFactory.Options();

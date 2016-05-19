@@ -11,6 +11,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -59,12 +61,16 @@ public class JuniorConnectLoading extends Fragment {
         cancelled=false;
         getURLs();
     }
-
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_connect, menu);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ((NavigationStudent)getActivity()).setActionBarTitle("Junior Connect");
-
+        setHasOptionsMenu(true);
         View view= inflater.inflate(R.layout.blank, container, false);
 
         if (isConnected())

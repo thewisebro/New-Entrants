@@ -311,6 +311,8 @@ public class GroupBlogList extends Fragment {
             viewHolder.date.setText(card.date);
             viewHolder.category.setText("From the Groups");
             viewHolder.blogUrl = groupUrl+"/" + card.slug;
+
+            viewHolder.dp.setImageResource(R.drawable.ic_group_black_24dp);
             ImageLoadTask loaddp=new ImageLoadTask(host+card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
             loaddp.execute();
             int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
@@ -454,7 +456,7 @@ public class GroupBlogList extends Fragment {
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
+    {   menu.clear();
         inflater.inflate(R.menu.menu_groups,menu);
         final MenuItem item=menu.findItem(R.id.group_name);
         TextView group= (TextView) MenuItemCompat.getActionView(item);

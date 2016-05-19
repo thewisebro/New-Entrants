@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -146,7 +147,10 @@ public class NavigationStudent extends ActionBarActivity
     @Override
     public void onBackPressed(){
         if (getSupportFragmentManager().getBackStackEntryCount()!=0){
-            getSupportFragmentManager().popBackStack();
+            //getSupportFragmentManager().popBackStack();
+            FragmentManager.BackStackEntry a = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1);
+            getSupportFragmentManager().popBackStack(a.getId(), getSupportFragmentManager().POP_BACK_STACK_INCLUSIVE);
+
         }
         else
             logout();

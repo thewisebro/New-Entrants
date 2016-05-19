@@ -1,6 +1,8 @@
 <android.support.v4.app.FragmentTabHost
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/my_tabhost"
+    android:clickable="false"
+    android:background="@color/list_bg"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -12,7 +14,7 @@
         <FrameLayout
             android:id="@+id/realtabcontent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"/>
 
     </LinearLayout>

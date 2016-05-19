@@ -331,6 +331,11 @@ public class BlogsList extends Fragment {
             viewHolder.date.setText(card.date);
             viewHolder.category.setText(card.category);
             viewHolder.blogUrl=BlogUrl+card.group_username+"/"+card.slug;
+
+            if (card.student)
+                viewHolder.dp.setImageResource(R.drawable.ic_person_black_24dp);
+            else
+                viewHolder.dp.setImageResource(R.drawable.ic_group_black_24dp);
             ImageLoadTask loaddp=new ImageLoadTask(hostURL+card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
             loaddp.execute();
             int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
@@ -495,6 +500,7 @@ public class BlogsList extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         flag=false;
+        menu.clear();
         inflater.inflate(R.menu.menu_blogs,menu);
         final MenuItem item=menu.findItem(R.id.filter_spinner);
         Spinner spinner= (Spinner) MenuItemCompat.getActionView(item);

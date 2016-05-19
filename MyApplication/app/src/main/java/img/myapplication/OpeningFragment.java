@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,7 +16,10 @@ import android.widget.TextView;
 public class OpeningFragment extends Fragment {
 
     private int type;
-
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -31,7 +36,8 @@ public class OpeningFragment extends Fragment {
             ((NavigationAudience) getActivity()).setActionBarTitle("About");
             type=3;
         }
-        // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
+
         View view= inflater.inflate(R.layout.fragment_opening, container, false);
         TextView link= (TextView) view.findViewById(R.id.link);
         link.setMovementMethod(LinkMovementMethod.getInstance());

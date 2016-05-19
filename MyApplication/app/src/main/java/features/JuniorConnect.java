@@ -41,9 +41,8 @@ public class JuniorConnect extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
         inflater.inflate(R.menu.menu_connect, menu);
-
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -10,6 +10,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -50,12 +52,17 @@ public class SeniorConnectLoading extends Fragment {
         cancelled=true;
         super.onDestroyView();
     }
-
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        //inflater.inflate(R.menu.menu_connect, menu);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ((Navigation)getActivity()).setActionBarTitle("Senior Connect");
+        setHasOptionsMenu(true);
         getURLs();
         cancelled=false;
         db=new MySQLiteHelper(getContext());
@@ -200,8 +207,6 @@ public class SeniorConnectLoading extends Fragment {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            if (getActivity()==null)
-                return;
 
             dialog.dismiss();
             if (result.equals("success")) {

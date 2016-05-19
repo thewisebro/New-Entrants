@@ -11,6 +11,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -54,9 +56,14 @@ public class SConnectRequestFragment extends Fragment {
         super.onDestroyView();
     }
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+    }
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getURLs();
+        setHasOptionsMenu(true);
         ((Navigation)getActivity()).setActionBarTitle("Senior Connect");
         View view= inflater.inflate(R.layout.send_request, container, false);
         cancelled=false;
