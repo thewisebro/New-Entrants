@@ -140,6 +140,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         //db.execSQL(TEMP_SENIOR);
         //db.execSQL(TEMP_JUNIOR);
         //db.execSQL(TEMP_PENDING_JUNIOR);
+        db.close();
     }
 
     @Override
@@ -181,6 +182,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             student.profile_img=cursor.getBlob(14);
             student.category=cursor.getString(15);
         }
+        db.close();
         return student;
     }
     public boolean loggedSenior(){
@@ -190,8 +192,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("select * from students where category='senior' ;", null);
 
-        if(cursor.getCount()==0) return false;
-        else return true;
+        int count=cursor.getCount();
+        db.close();
+        if(count==0)
+            return false;
+        else
+            return true;
     }
     public boolean loggedAudience(){
         SQLiteDatabase db= this.getWritableDatabase();
@@ -200,8 +206,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("select * from students where category='audience' ;", null);
 
-        if(cursor.getCount()==0) return false;
-        else return true;
+        int count=cursor.getCount();
+        db.close();
+        if(count==0)
+            return false;
+        else
+            return true;
     }
     public void addStudent(StudentModel student){
         SQLiteDatabase db=this.getWritableDatabase();
@@ -299,8 +309,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("select * from entrants ;", null);
 
-        if(cursor.getCount()==0) return false;
-        else return true;
+        int count=cursor.getCount();
+        db.close();
+        if(count==0)
+            return false;
+        else
+            return true;
     }
     public NewEntrantModel getEntrant(){
         SQLiteDatabase db= this.getReadableDatabase();
@@ -326,6 +340,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             entrant.profile_privacy=cursor.getInt(13) > 0;
             entrant.sess_id=cursor.getString(14);
         }
+        db.close();
         return entrant;
     }
     public List<SeniorModel> getAcceptedSeniors(){
@@ -348,6 +363,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
             while (cursor.moveToNext());
         }
+        db.close();
         return seniorsList;
     }
     public List<RequestModel> getRequests(){
@@ -370,6 +386,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
             while (cursor.moveToNext());
         }
+        db.close();
         return requestsList;
     }
     public List<JuniorModel> getAcceptedJuniors(){
@@ -392,6 +409,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
             while (cursor.moveToNext());
         }
+        db.close();
         return juniorsList;
     }
     public List<JuniorModel> getPendingJuniors(){
@@ -414,6 +432,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
             while (cursor.moveToNext());
         }
+        db.close();
         return juniorsList;
     }
     public void acceptJunior(String username){

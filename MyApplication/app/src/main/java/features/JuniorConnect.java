@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TabHost;
 
 import img.myapplication.NavigationStudent;
 import img.myapplication.R;
@@ -21,7 +22,7 @@ import img.myapplication.R;
 @SuppressLint("ValidFragment")
 public class JuniorConnect extends Fragment {
 
-
+    FragmentTabHost mTabHost;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -29,16 +30,29 @@ public class JuniorConnect extends Fragment {
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_junior_connect, container, false);
-        FragmentTabHost mTabHost = (FragmentTabHost)view.findViewById(R.id.my_jtabhost);
+        mTabHost = (FragmentTabHost)view.findViewById(R.id.my_jtabhost);
         mTabHost.setup(getActivity(), getChildFragmentManager(), R.layout.fragment_junior_connect);
 
         mTabHost.addTab(mTabHost.newTabSpec("pending").setIndicator("Pending"),
                 JuniorConnectPending.class, null);
         mTabHost.addTab(mTabHost.newTabSpec("accepted").setIndicator("Accepted"),
                 JuniorConnectAccepted.class, null);
+        setTabColor();
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                setTabColor();
+            }
+        });
         return view;
     }
+    private void setTabColor(){
+        for (int i = 0; i < mTabHost.getTabWidget().getChildCount(); i++) {
+            mTabHost.getTabWidget().getChildAt(i).setBackgroundColor(getResources().getColor(R.color.tab_unselected)); //unselected
+        }
+        mTabHost.getTabWidget().getChildAt(mTabHost.getCurrentTab()).setBackgroundColor(getResources().getColor(R.color.tab_selected)); // selected
 
+    }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();

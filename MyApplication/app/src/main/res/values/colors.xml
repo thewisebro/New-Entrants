@@ -22,4 +22,6 @@
     <color name="tint_white">#FFDADADA</color>
     <color name="light_blue">#ffdedede</color>
     <color name="list_bg">#CFD8DC</color>
+    <color name="tab_selected">#0000FF</color>
+    <color name="tab_unselected">#FF0000</color>
 </resources>
