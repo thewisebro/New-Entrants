@@ -102,18 +102,12 @@ public class JuniorConnectLoading extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     cancel(true);
+                    loadTabs();
                 }
             });
             this.dialog.show();
         }
-        @Override
-        protected void onCancelled(String result){
-            if (!cancelled) {
-                Toast.makeText(getContext(), "Update aborted!", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-                loadTabs();
-            }
-        }
+
         private String acceptedJuniors(String sess_id){
             try {
                 HttpURLConnection conn=(HttpURLConnection) new URL(acceptedURL).openConnection();

@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/update"
-        app:showAsAction="never"
-        app:title="Update"/>
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/list_update"
+                app:showAsAction="always"
+                android:title="Update List" />
+        </menu>
+    </item>
 </menu>

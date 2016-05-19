@@ -66,12 +66,19 @@ public class Register extends AppCompatActivity {
         this.appURL=this.hostURL+"/new_entrants/";
         this.registerURL=this.hostURL+"/new_entrants/register/";
     }
+    private boolean cancelled=false;
+    @Override
+    protected void onDestroy(){
+        cancelled=true;
+        super.onDestroy();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getURLs();
+        cancelled=false;
         ActionBar bar=getSupportActionBar();
         bar.setHomeButtonEnabled(true);
         bar.setDisplayHomeAsUpEnabled(true);
@@ -300,14 +307,17 @@ public class Register extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     cancel(true);
+                    dialog.dismiss();
                 }
             });
             this.dialog.show();
         }
         @Override
         protected void onCancelled(String result){
-            Toast.makeText(getApplicationContext(),"Aborted!",Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
+            if (result.equals("success")){
+                Toast.makeText(getApplicationContext(),"Registration Successful!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
         @Override
         protected String doInBackground(String... urls) {

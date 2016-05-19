@@ -154,6 +154,7 @@ public class StudentUpdateFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     cancel(true);
+                    dialog.dismiss();
                 }
             });
             this.dialog.show();
@@ -161,7 +162,6 @@ public class StudentUpdateFragment extends Fragment {
         @Override
         protected void onCancelled(String result){
             if (!cancelled) {
-                Toast.makeText(getContext(), "Aborted!", Toast.LENGTH_SHORT).show();
                 onPostExecute(result);
             }
         }
@@ -236,7 +236,7 @@ public class StudentUpdateFragment extends Fragment {
                 Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
             }
             else
-                Toast.makeText(getContext(), "Sorry! Unable to update", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Sorry! Update failed!", Toast.LENGTH_SHORT).show();
         }
     }
     public void getParams(){

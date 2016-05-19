@@ -118,15 +118,13 @@ public class Blog extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     cancel(true);
+                    Toast.makeText(getContext(),"Loading aborted!",Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
+                    topic.setText("Unable to display");
+
                 }
             });
             this.dialog.show();
-        }
-        @Override
-        protected void onCancelled(String result){
-            Toast.makeText(getContext(),"Loading aborted!",Toast.LENGTH_LONG).show();
-            dialog.dismiss();
-            topic.setText("Unable to display");
         }
 
         @Override

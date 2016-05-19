@@ -211,6 +211,8 @@ public class JuniorConnectPending extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     cancel(true);
+                    dialog.dismiss();
+                    Toast.makeText(getContext(), "Aborted!", Toast.LENGTH_SHORT).show();
                 }
             });
             this.dialog.show();
@@ -218,8 +220,6 @@ public class JuniorConnectPending extends Fragment {
         @Override
         protected void onCancelled(String result){
             if (!cancelled) {
-                Toast.makeText(getContext(), "Aborted!", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
                 refreshFragment();
             }
         }

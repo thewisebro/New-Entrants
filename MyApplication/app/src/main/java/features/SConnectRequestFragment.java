@@ -148,6 +148,7 @@ public class SConnectRequestFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     cancel(true);
+                    dialog.dismiss();
                 }
             });
             this.dialog.show();
@@ -155,8 +156,7 @@ public class SConnectRequestFragment extends Fragment {
         @Override
         protected void onCancelled(String result){
             if (!cancelled) {
-                Toast.makeText(getContext(), "Aborted!", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+                onPostExecute(result);
             }
         }
 

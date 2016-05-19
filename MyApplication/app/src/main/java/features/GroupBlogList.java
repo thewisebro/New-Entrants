@@ -155,18 +155,10 @@ public class GroupBlogList extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     cancel(true);
+                    Toast.makeText(getContext(), "Loading aborted!", Toast.LENGTH_SHORT).show();
                 }
             });
             this.dialog.show();
-        }
-        @Override
-        protected void onCancelled(String result){
-            if (!cancelled) {
-                Toast.makeText(getContext(), "Loading aborted!", Toast.LENGTH_LONG).show();
-                //cardArrayAdapter.refresh();
-                //items.clear();
-                dialog.dismiss();
-            }
         }
         @Override
         protected String doInBackground(String... params) {
