@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import img.myapplication.NavigationStudent;
 import img.myapplication.R;
@@ -28,14 +29,13 @@ public class JuniorConnect extends Fragment {
                              Bundle savedInstanceState) {
         ((NavigationStudent)getActivity()).setActionBarTitle("Junior Connect");
         setHasOptionsMenu(true);
-        // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_junior_connect, container, false);
         mTabHost = (FragmentTabHost)view.findViewById(R.id.my_jtabhost);
         mTabHost.setup(getActivity(), getChildFragmentManager(), R.layout.fragment_junior_connect);
 
-        mTabHost.addTab(mTabHost.newTabSpec("pending").setIndicator("Pending"),
+        mTabHost.addTab(mTabHost.newTabSpec("pending").setIndicator(getTabView("Pending")),
                 JuniorConnectPending.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec("accepted").setIndicator("Accepted"),
+        mTabHost.addTab(mTabHost.newTabSpec("accepted").setIndicator(getTabView("Accepted")),
                 JuniorConnectAccepted.class, null);
         setTabColor();
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
@@ -46,12 +46,18 @@ public class JuniorConnect extends Fragment {
         });
         return view;
     }
+    private TextView getTabView(String title){
+        TextView view= (TextView) LayoutInflater.from(getContext()).inflate(R.layout.tabview,null);
+        view.setText(title);
+        return view;
+    }
     private void setTabColor(){
-        for (int i = 0; i < mTabHost.getTabWidget().getChildCount(); i++) {
-            mTabHost.getTabWidget().getChildAt(i).setBackgroundColor(getResources().getColor(R.color.tab_unselected)); //unselected
+        for(int i=0;i<mTabHost.getTabWidget().getChildCount();i++) {
+            TextView tab= (TextView) mTabHost.getTabWidget().getChildTabViewAt(i);
+            tab.setTextColor(getResources().getColor(R.color.blue_grey_300));
         }
-        mTabHost.getTabWidget().getChildAt(mTabHost.getCurrentTab()).setBackgroundColor(getResources().getColor(R.color.tab_selected)); // selected
-
+        TextView currentTab= (TextView) mTabHost.getTabWidget().getChildTabViewAt(mTabHost.getCurrentTab());
+        currentTab.setTextColor(getResources().getColor(R.color.yellow_700));
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

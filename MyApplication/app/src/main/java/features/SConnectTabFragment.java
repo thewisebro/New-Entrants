@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import img.myapplication.Navigation;
 import img.myapplication.R;
@@ -33,9 +34,9 @@ public class SConnectTabFragment extends Fragment {
         mTabHost = (FragmentTabHost)view.findViewById(R.id.my_tabhost);
         mTabHost.setup(getActivity(), getChildFragmentManager(), R.layout.fragment_sconnect_tab);
 
-        mTabHost.addTab(mTabHost.newTabSpec("pending").setIndicator("ALL REQUESTS"),
+        mTabHost.addTab(mTabHost.newTabSpec("pending").setIndicator(getTabView("ALL REQUESTS")),
                 SConnectPendingFragment.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec("accepted").setIndicator("ACCEPTED"),
+        mTabHost.addTab(mTabHost.newTabSpec("accepted").setIndicator(getTabView("ACCEPTED")),
                 SConnectAcceptFragment.class, null);
 
         setTabColor();
@@ -48,12 +49,18 @@ public class SConnectTabFragment extends Fragment {
 
         return view;
     }
+    private TextView getTabView(String title){
+        TextView view= (TextView) LayoutInflater.from(getContext()).inflate(R.layout.tabview,null);
+        view.setText(title);
+        return view;
+    }
     private void setTabColor(){
         for(int i=0;i<mTabHost.getTabWidget().getChildCount();i++) {
-            mTabHost.getTabWidget().getChildAt(i).setBackgroundColor(getResources().getColor(R.color.tab_unselected)); //unselected
+            TextView tab= (TextView) mTabHost.getTabWidget().getChildTabViewAt(i);
+            tab.setTextColor(getResources().getColor(R.color.blue_grey_300));
         }
-        mTabHost.getTabWidget().getChildAt(mTabHost.getCurrentTab()).setBackgroundColor(getResources().getColor(R.color.tab_selected)); // selected
-
+        TextView currentTab= (TextView) mTabHost.getTabWidget().getChildTabViewAt(mTabHost.getCurrentTab());
+        currentTab.setTextColor(getResources().getColor(R.color.yellow_700));
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

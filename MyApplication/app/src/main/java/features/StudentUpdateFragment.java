@@ -76,7 +76,6 @@ public class StudentUpdateFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_connect, menu);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
