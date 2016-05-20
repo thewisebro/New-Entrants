@@ -123,7 +123,7 @@ public class SeniorConnectLoading extends Fragment {
                 if ("success".equals(jObject.getString("status"))){
                     JSONArray jArray=jObject.getJSONArray("students");
                     int len=jArray.length();
-
+                    db.deleteSeniors();
                     for(int i=0; i<len;i++){
                         JSONObject object=jArray.getJSONObject(i);
                         SeniorModel model= new SeniorModel();
@@ -164,7 +164,7 @@ public class SeniorConnectLoading extends Fragment {
                 if ("success".equals(jObject.getString("status"))){
                     JSONArray jArray=jObject.getJSONArray("requests");
                     int len=jArray.length();
-
+                    db.deleteRequests();
                     for(int i=0; i<len;i++){
 
                         JSONObject object=jArray.getJSONObject(i);

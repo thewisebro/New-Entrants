@@ -343,6 +343,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.close();
         return entrant;
     }
+    public int getAcceptedSeniorsCount(){
+        SQLiteDatabase db= this.getReadableDatabase();
+        Cursor cursor=db.rawQuery("select * from seniors", null);
+        int count=cursor.getCount();
+        db.close();
+        return count;
+    }
     public List<SeniorModel> getAcceptedSeniors(){
         SQLiteDatabase db= this.getReadableDatabase();
         List<SeniorModel> seniorsList=new ArrayList<SeniorModel>();
@@ -411,6 +418,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         }
         db.close();
         return juniorsList;
+    }
+    public int getPendingJuniorsCount(){
+        SQLiteDatabase db= this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from juniors where status='pending';", null);
+        int count=cursor.getCount();
+        db.close();
+        return count;
     }
     public List<JuniorModel> getPendingJuniors(){
         SQLiteDatabase db= this.getReadableDatabase();

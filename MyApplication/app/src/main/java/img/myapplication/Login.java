@@ -2,6 +2,8 @@ package img.myapplication;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -65,6 +67,7 @@ public class Login extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getURLs();
+        cancelAlarm();   //cancel notification alarm
         MySQLiteHelper db=new MySQLiteHelper(this);
 
         if (db.loggedEntrant()){
@@ -446,5 +449,10 @@ public class Login extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+    private void cancelAlarm(){
+        PendingIntent pIntent=PendingIntent.getService(this,0,new Intent(this,NotificationService.class),0);
+        AlarmManager am=(AlarmManager) getSystemService(ALARM_SERVICE);
+        am.cancel(pIntent);
     }
 }

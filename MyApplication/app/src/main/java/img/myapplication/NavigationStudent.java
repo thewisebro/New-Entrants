@@ -1,7 +1,9 @@
 package img.myapplication;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -43,7 +46,6 @@ public class NavigationStudent extends ActionBarActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_navigation);
         setDrawerOnTop();
-        BitmapCacheUtil.setCache();
 
         db=new MySQLiteHelper(this);
         student=db.getStudent();
@@ -205,12 +207,32 @@ public class NavigationStudent extends ActionBarActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
+    private void  setAlarm(){
+        PendingIntent pIntent=PendingIntent.getService(this,0,new Intent(this,NotificationService.class),0);
+        AlarmManager am=(AlarmManager) getSystemService(ALARM_SERVICE);
+        am.cancel(pIntent);
+        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(),
+                AlarmManager.INTERVAL_HALF_DAY, pIntent);
+    }
+    private void cancelAlarm(){
+        PendingIntent pIntent=PendingIntent.getService(this,0,new Intent(this,NotificationService.class),0);
+        AlarmManager am=(AlarmManager) getSystemService(ALARM_SERVICE);
+        am.cancel(pIntent);
+    }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        cancelAlarm();
 
+    }
+    @Override
+    public void onPause(){
+        super.onPause();
+        setAlarm();
+    }
 
 }

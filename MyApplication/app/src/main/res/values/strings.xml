@@ -37,7 +37,10 @@
     </string-array>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
+    <string name="senior_notify_title">Pending Requests</string>
+    <string name="senior_notify_msg">You have pending requests from juniors</string>
+    <string name="junior_notify_title">Requested Accepted</string>
+    <string name="junior_notify_msg">Your request has been accepted by seniors</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_senior_connect">SConnect</string>
     <string name="request_button">Request a Senior</string>

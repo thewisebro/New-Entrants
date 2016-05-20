@@ -471,13 +471,12 @@ public class BlogsList extends Fragment {
             return null;
         }
         private Bitmap image(){
-                Bitmap bitmap= BitmapCacheUtil.getBitmap(url);
+                Bitmap bitmap=BitmapCacheUtil.getCache().get(url);
                 if (bitmap==null){
                     bitmap=loadImage();
                     if (bitmap!=null)
-                        BitmapCacheUtil.putBitmap(url,bitmap);
+                        BitmapCacheUtil.getCache().put(url,bitmap);
                 }
-
                 return bitmap;
         }
 

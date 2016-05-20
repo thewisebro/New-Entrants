@@ -39,7 +39,6 @@ public class NavigationAudience extends ActionBarActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_navigation);
         setDrawerOnTop();
-        BitmapCacheUtil.setCache();
         db=new MySQLiteHelper(this);
         student=db.getStudent();
 

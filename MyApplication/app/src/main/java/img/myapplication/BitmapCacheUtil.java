@@ -10,21 +10,23 @@ public final class BitmapCacheUtil {
     private static LruCache<String,Bitmap> bitmapCache;
     private BitmapCacheUtil(){}
 
-    public static void setCache(){
-        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        int cacheSize=maxMemory/4;
-        bitmapCache = new LruCache<String, Bitmap>(cacheSize) {
+    public static LruCache<String,Bitmap> getCache(){
+        if (bitmapCache==null)
+            setCache();
+        return bitmapCache;
+    }
+    private static int getCacheSize(){
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize=maxMemory/4;
+        return cacheSize;
+    }
+
+    private static void setCache(){
+        bitmapCache = new LruCache<String, Bitmap>(getCacheSize()) {
             @Override
             protected int sizeOf(String key, Bitmap bitmap) {
                 return bitmap.getByteCount() / 1024;
             }
         };
-
-    }
-    public static Bitmap getBitmap(String key){
-        return bitmapCache.get(key);
-    }
-    public static void putBitmap(String key, Bitmap value){
-        bitmapCache.put(key, value);
     }
 }
