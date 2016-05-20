@@ -101,7 +101,7 @@ public class NavigationDrawerFragment extends Fragment {
             NewEntrantModel model=db.getEntrant();
             name=model.name;
             state=model.state;
-            ((ImageView) mDrawerProfileView.findViewById(R.id.profile_picture)).setVisibility(View.GONE);
+            mDrawerProfileView.findViewById(R.id.profile_picture).setVisibility(View.GONE);
             ((TextView)mDrawerProfileView.findViewById(R.id.name)).setText(name);
             ((TextView)mDrawerProfileView.findViewById(R.id.info)).setText(state);
         }
@@ -110,7 +110,7 @@ public class NavigationDrawerFragment extends Fragment {
             name=model.name;
             branchcode=model.branchcode;
             branchname=model.branchname;
-            if (model.profile_img!=null){
+            if (model.profile_img.length>1){
                 ((ImageView) mDrawerProfileView.findViewById(R.id.profile_picture))
                         .setImageBitmap(BitmapFactory.decodeByteArray(model.profile_img,0,model.profile_img.length));
             }

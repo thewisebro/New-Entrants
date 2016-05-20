@@ -220,7 +220,7 @@ public class SConnectRequestFragment extends Fragment {
 
             if (result.equals("success")) {
                 Toast.makeText(getContext(), "Request Sent Successfully!", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new SConnectTabFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new SeniorConnectLoading()).commit();
             }
             else if (result.equals("error")) {
                 //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();

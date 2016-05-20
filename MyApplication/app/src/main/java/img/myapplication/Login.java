@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -344,7 +343,6 @@ public class Login extends ActionBarActivity {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public byte[] downloadImage(String url,int ht,int wt){
         int inSampleSize=getSampleSize(url,ht,wt);
-        Bitmap bitmap=null;
         try {
             URL urlConnection = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) urlConnection
@@ -357,14 +355,15 @@ public class Login extends ActionBarActivity {
             BitmapFactory.Options options=new BitmapFactory.Options();
             options.inSampleSize=inSampleSize;
             options.inJustDecodeBounds=false;
-            bitmap = BitmapFactory.decodeStream(input,null,options);
+            Bitmap bitmap = BitmapFactory.decodeStream(input,null,options);
+            ByteArrayOutputStream baos=new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+            return baos.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
-            bitmap= ((BitmapDrawable) getDrawable(R.drawable.ic_person_black_24dp)).getBitmap();
+            return null;
         }
-        ByteArrayOutputStream baos=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
-        return baos.toByteArray();
+
     }
     public int getSampleSize(String url,int ht,int wt){
 
