@@ -31,7 +31,7 @@ public class Singleton  {
     private RequestQueue requestQueue;
     private ImageLoader imageLoader;
     public final static String TAG= Singleton.class.getSimpleName();
-    private ImageLoader.ImageCache bitmapCache;
+    private imageCache bitmapCache;
 
     private Singleton(Context cntxt){        //no external instances can be created
         context=cntxt;
@@ -47,7 +47,7 @@ public class Singleton  {
     }
     private RequestQueue getRequestQueue(){
         if (requestQueue==null)
-            requestQueue= Volley.newRequestQueue(context.getApplicationContext());
+            requestQueue= Volley.newRequestQueue(context);
         return requestQueue;
     }
     public <T> void addToRequestQueue(Request<T> req) {
@@ -78,12 +78,10 @@ public class Singleton  {
     public void requestBitmap(String url, ImageView view){
         imageLoader.get(url,ImageLoader.getImageListener(view,R.drawable.img_error,R.drawable.img_error));
     }
-    public JSONObject jsonObjectRequest(String url){
-        ProgressDialog dialog=new ProgressDialog(context.getApplicationContext());
+    public void jsonObjectRequest(String url){
+        final ProgressDialog dialog=new ProgressDialog(context);
         dialog.setMessage("Requesting...");
         dialog.show();
-
-        final JSONObject[] output = new JSONObject[1];
 
         JsonObjectRequest request= new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -91,26 +89,22 @@ public class Singleton  {
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, response.toString());
                         dialog.dismiss();
-                        output[0] =response;
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         dialog.dismiss();
-                        //Toast.makeText(context.getApplicationContext(),"Error: "+error.getMessage(),Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context,"Error: "+error.getMessage(),Toast.LENGTH_SHORT).show();
                         VolleyLog.d(TAG, "Error: " + error.getMessage());
                     }
                 });
         addToRequestQueue(request, "JSONObject Request");
-        return output[0];
     }
-    public JSONArray jsonArrayRequest(String url){
-        ProgressDialog dialog=new ProgressDialog(context.getApplicationContext());
+    public void jsonArrayRequest(String url){
+        final ProgressDialog dialog=new ProgressDialog(context);
         dialog.setMessage("Requesting...");
         dialog.show();
-
-        final JSONArray[] output = new JSONArray[1];
 
         JsonArrayRequest request= new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
@@ -118,22 +112,20 @@ public class Singleton  {
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, response.toString());
                         dialog.dismiss();
-                        output[0] =response;
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         dialog.dismiss();
-                        //Toast.makeText(context.getApplicationContext(),"Error: "+error.getMessage(),Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context,"Error: "+error.getMessage(),Toast.LENGTH_SHORT).show();
                         VolleyLog.d(TAG, "Error: " + error.getMessage());
                     }
                 });
         addToRequestQueue(request, "JSONArray Request");
-        return output[0];
     }
-    public void postRequest(String url, Map<String,String> params){
-        ProgressDialog dialog=new ProgressDialog(context.getApplicationContext());
+    public void postRequest(String url, final Map<String,String> params){
+        final ProgressDialog dialog=new ProgressDialog(context);
         dialog.setMessage("Requesting...");
         dialog.show();
 
@@ -149,7 +141,6 @@ public class Singleton  {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         dialog.dismiss();
-                        //Toast.makeText(context.getApplicationContext(),"Error: "+error.getMessage(),Toast.LENGTH_SHORT).show();
                         VolleyLog.d(TAG, "Error: " + error.getMessage());
                     }
                 }){
