@@ -47,7 +47,8 @@ public class SConnectPendingFragment extends Fragment {
     private String hostURL;
     private void getURLs() {
         hostURL = getString(R.string.host);
-        extend_url = hostURL + "/new_entrants/extend/";
+        String appURL=getString(R.string.app);
+        extend_url = appURL + "/extend/";
     }
     private boolean cancelled;
     @Override

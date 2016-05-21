@@ -43,8 +43,9 @@ public class SeniorConnectLoading extends Fragment {
 
     private void getURLs() {
         hostURL = getString(R.string.host);
-        acceptedURL = hostURL + "/new_entrants/accepted/";
-        request_url = hostURL + "/new_entrants/pending/";
+        String appURL=getString(R.string.app);
+        acceptedURL = appURL + "/accepted/";
+        request_url = appURL + "/pending/";
     }
     private boolean cancelled;
     @Override

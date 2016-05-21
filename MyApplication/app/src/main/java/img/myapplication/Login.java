@@ -36,6 +36,7 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.CookieStore;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -58,9 +59,9 @@ public class Login extends ActionBarActivity {
     private String hostURL;
     private void getURLs(){
         this.hostURL=getString(R.string.host);
+        this.appURL=getString(R.string.app);
         this.loginURL=hostURL+"/login/";
-        this.userinfoURL=hostURL+"/new_entrants/userinfo?device=mobile";
-        this.appURL=hostURL+"/new_entrants/";
+        this.userinfoURL=appURL+"/userinfo?device=mobile";
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,11 +181,15 @@ public class Login extends ActionBarActivity {
 
             if (responseCode== HttpURLConnection.HTTP_OK){
                 obj=urlConnectionPost.getContent();
-                if (cookieStore.getCookies().size()>1){
+                /*if (cookieStore.getCookies().size()>1){
                     return "true";
                 }
                 else
-                    return "false";
+                    return "false";*/
+                for (HttpCookie cookie: cookieStore.getCookies())
+                    if ("CHANNELI_SESSID".equals(cookie.getName()))
+                        return "true";
+                return "false";
             }
 
         } catch (Exception e) {
@@ -227,8 +232,7 @@ public class Login extends ActionBarActivity {
                 //getDetails();
                 String get_details=getDetails();
                 if ("success".equals(get_details)) {
-                    getUser();
-                    return "success";
+                    return getUser();
                 }
                 else
                     return get_details;
@@ -284,7 +288,7 @@ public class Login extends ActionBarActivity {
             return "error";
         }
     }
-    public void getUser(){
+    public String getUser(){
         String branchname = null;
         String branchcode=null;
         String statename=null;
@@ -318,7 +322,7 @@ public class Login extends ActionBarActivity {
             entrant.fb_link=details.get("fb_link");
             entrant.phone_privacy=details.get("phone_privacy").equals("true");
             entrant.category="junior";
-            entrant.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
+            entrant.sess_id=getSESSID();
 
         }
         else {
@@ -339,8 +343,18 @@ public class Login extends ActionBarActivity {
             student.mobile=details.get("phone");
             student.fb_link=details.get("fb_link");
             student.category=details.get("category");
-            student.sess_id=cookieManager.getCookieStore().getCookies().get(1).getValue().toString();
+            student.sess_id=getSESSID();
         }
+        if ("".equals(entrant.sess_id) && "".equals(student.sess_id))
+            return "error";
+        else
+            return "success";
+    }
+    private String getSESSID(){
+        for (HttpCookie cookie: cookieManager.getCookieStore().getCookies())
+            if ("CHANNELI_SESSID".equals(cookie.getName()))
+                return cookie.getValue();
+        return "";
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

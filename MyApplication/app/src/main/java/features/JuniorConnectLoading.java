@@ -45,8 +45,9 @@ public class JuniorConnectLoading extends Fragment {
 
     private void getURLs() {
         hostURL = getString(R.string.host);
-        pendingURL = hostURL + "/new_entrants/pending/";
-        acceptedURL = hostURL + "/new_entrants/accepted/";
+        String appURL=getString(R.string.app);
+        pendingURL = appURL + "/pending/";
+        acceptedURL = appURL + "/accepted/";
     }
 
     @Override

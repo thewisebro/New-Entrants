@@ -65,7 +65,8 @@ public class StudentUpdateFragment extends Fragment {
     private String hostURL;
     private void getURLs() {
         hostURL = getString(R.string.host);
-        updateURL = hostURL + "/new_entrants/update/";
+        String appURL=getString(R.string.app);
+        updateURL = appURL + "/update/";
     }
     private boolean cancelled=false;
     @Override

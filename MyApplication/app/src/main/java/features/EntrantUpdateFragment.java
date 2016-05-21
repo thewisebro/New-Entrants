@@ -59,7 +59,8 @@ public class EntrantUpdateFragment extends Fragment {
     private String hostURL;
     private void getURLs(){
         this.hostURL=getString(R.string.host);
-        this.updateURL=this.hostURL+"/new_entrants/j_update/";
+        String appURL=getString(R.string.app);
+        this.updateURL=appURL+"/j_update/";
     }
     private boolean cancelled=false;
     @Override

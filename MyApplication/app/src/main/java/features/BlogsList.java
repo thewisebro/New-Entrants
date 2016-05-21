@@ -69,10 +69,12 @@ public class BlogsList extends Fragment {
     private String url;
     boolean flag=false;
     boolean resume;
+    private int spinnerPos;
     private String hostURL;
     private void getURLs(){
         this.hostURL=getString(R.string.host);
-        this.BlogUrl=hostURL+"/new_entrants/blogs/";
+        String appURL=getString(R.string.app);
+        this.BlogUrl=appURL+"/blogs/";
     }
     private boolean cancelled=false;
     @Override
@@ -83,6 +85,7 @@ public class BlogsList extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         getURLs();
+        spinnerPos=0;
         super.onCreate(savedInstanceState);
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
@@ -100,14 +103,14 @@ public class BlogsList extends Fragment {
         cancelled=false;
         setHasOptionsMenu(true);
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
-        //setCache();
+
         listView = (ListView) view.findViewById(R.id.card_listView);
 
         listView.addHeaderView(new View(getContext()));
         tv=new TextView(getContext());
         tv.setText("Pull Up to Load More");
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
-        listView.addFooterView(tv);
+        //listView.addFooterView(tv);
 
         swipeLayout= (SwipyRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light,
@@ -265,6 +268,8 @@ public class BlogsList extends Fragment {
             }
             else {
                 this.cardList.addAll(items);
+                if (listView.getFooterViewsCount()==0)
+                    listView.addFooterView(tv);
                 //Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
                 notifyDataSetChanged();
             }
@@ -320,10 +325,7 @@ public class BlogsList extends Fragment {
                 viewHolder.loadimg.cancel(true);
             }
             final BlogModel card = getItem(position);
-            /*if (viewHolder.id!=card.id && viewHolder.id!=0){
-                viewHolder.loadimg.cancel(true);
-                viewHolder.loaddp.cancel(true);
-            }*/
+
             viewHolder.id=card.id;
             viewHolder.topic.setText(card.topic);
             viewHolder.description.setText(card.desc);
@@ -378,13 +380,11 @@ public class BlogsList extends Fragment {
                 });
             }
 
-
             viewHolder.loadimg=loadimg;
             viewHolder.loaddp=loaddp;
             row.setTag(viewHolder);
             return row;
         }
-
 
     }
     public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
@@ -510,6 +510,7 @@ public class BlogsList extends Fragment {
         spinner.setBackground(getResources().getDrawable(R.drawable.spinner_bg));
         spinner.setPopupBackgroundDrawable(getResources().getDrawable(R.drawable.spinner_dropdown_background));
         spinner.setPadding(0,0,(int) getResources().getDimension(R.dimen.spinner_padding),0);
+        spinner.setSelection(spinnerPos);
         spinner.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -521,7 +522,7 @@ public class BlogsList extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                spinnerPos=position;
                 if (flag || resume) {
                     if (isConnected()){
                         cardArrayAdapter.clear();

@@ -47,7 +47,8 @@ public class SConnectRequestFragment extends Fragment {
     private String hostURL;
     private void getURLs() {
         hostURL = getString(R.string.host);
-        connect_url = hostURL + "/new_entrants/connect/";
+        String appURL=getString(R.string.app);
+        connect_url = appURL + "/connect/";
     }
     private boolean cancelled=false;
     @Override

@@ -51,7 +51,8 @@ public class JuniorConnectPending extends Fragment {
 
     private void getURLs() {
         hostURL = getString(R.string.host);
-        acceptURL=hostURL + "/new_entrants/accept/";
+        String appURL=getString(R.string.app);
+        acceptURL=appURL + "/accept/";
     }
     private boolean cancelled=false;
     @Override

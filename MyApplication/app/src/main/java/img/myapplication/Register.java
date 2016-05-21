@@ -63,8 +63,8 @@ public class Register extends AppCompatActivity {
     private String hostURL;
     private void getURLs(){
         this.hostURL=getString(R.string.host);
-        this.appURL=this.hostURL+"/new_entrants/";
-        this.registerURL=this.hostURL+"/new_entrants/register/";
+        this.appURL=getString(R.string.app);
+        this.registerURL=this.appURL+"/register/";
     }
     private boolean cancelled=false;
     @Override

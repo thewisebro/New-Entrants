@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">New Entrants</string>
-    <string name="host">http://192.168.121.187:8080</string>
+    <string name="app_name">IITR Fresherlogue</string>
+    <string name="app">http://people.iitr.ernet.in/iitr_fresherlogue</string>
+    <string name="host">http://people.iitr.ernet.in</string>
     <string name="title_activity_navigation">Navigation</string>
-    <string name="appLink"><a href="http://192.168.121.187:8080/new_entrants/">New Entrants Web</a></string>
+    <string name="appLink"><a href="http://people.iitr.ernet.in/iitr_fresherlogue/">IITR Fresherlogue Web</a></string>
     <string name="desc_junior">---description for juniors---</string>
     <string name="desc_senior">---description for seniors---</string>
     <string-array name="entrantstabs">

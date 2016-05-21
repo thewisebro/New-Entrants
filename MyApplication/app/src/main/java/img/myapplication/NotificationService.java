@@ -78,8 +78,8 @@ public class NotificationService extends Service {
         @Override
         protected void onPreExecute(){
             student=db.getStudent();
-            String hostURL = getString(R.string.host);
-            pendingURL = hostURL + "/new_entrants/pending/";
+            String appURL = getString(R.string.app);
+            pendingURL = appURL + "/pending/";
         }
         @Override
         protected String doInBackground(Void... params) {
@@ -220,6 +220,7 @@ public class NotificationService extends Service {
                 .setContentTitle(title)  // the label of the entry
                 .setContentText(msg)  // the contents of the entry
                 .setContentIntent(actionIntent)  // The intent to send when the entry is clicked
+                .setAutoCancel(true)
                 .build();
 
         // Send the notification.

@@ -69,7 +69,8 @@ public class Blog extends Fragment {
     }
     private void getURLs(){
         this.hostURL=getString(R.string.host);
-        this.BlogUrl=hostURL+"/new_entrants/blogs/";
+        String appURL=getString(R.string.app);
+        this.BlogUrl=appURL+"/blogs/";
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

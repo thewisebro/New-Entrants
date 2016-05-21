@@ -45,7 +45,8 @@ public class SConnectAcceptFragment extends Fragment {
     private String hostURL;
     private void getURLs() {
         hostURL = getString(R.string.host);
-        acceptedURL = hostURL + "/new_entrants/accepted/";
+        String appURL=getString(R.string.app);
+        acceptedURL = appURL + "/accepted/";
     }
     private boolean cancelled;
     @Override
