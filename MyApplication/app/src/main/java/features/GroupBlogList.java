@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import img.myapplication.BitmapCacheUtil;
+import img.myapplication.MySQLiteHelper;
 import img.myapplication.Navigation;
 import img.myapplication.NavigationAudience;
 import img.myapplication.NavigationStudent;
@@ -64,6 +65,7 @@ public class GroupBlogList extends Fragment {
     private SwipyRefreshLayout swipeLayout;
     private int blogsCount;
     private int lastId;
+    private String sessid;
     private String groupUrl;
     private String groupName;
     private String host;
@@ -85,12 +87,15 @@ public class GroupBlogList extends Fragment {
         getURL();
         if (getActivity() instanceof Navigation) {
             ((Navigation) getActivity()).setActionBarTitle("Blogs");
+            sessid=getEntrantSESSID();
         }
-        else if (getActivity() instanceof NavigationStudent) {
-            ((NavigationStudent) getActivity()).setActionBarTitle("Blogs");
+        else if (getActivity() instanceof NavigationStudent){
+            ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
+            sessid=getStudentSESSID();
         }
         else if (getActivity() instanceof NavigationAudience){
             ((NavigationAudience)getActivity()).setActionBarTitle("Blogs");
+            sessid=getStudentSESSID();
         }
         cancelled=false;
         setHasOptionsMenu(true);
@@ -135,6 +140,14 @@ public class GroupBlogList extends Fragment {
 
         return view;
     }
+    private String getStudentSESSID(){
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        return db.getStudent().sess_id;
+    }
+    private String getEntrantSESSID(){
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        return db.getEntrant().sess_id;
+    }
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -174,6 +187,8 @@ public class GroupBlogList extends Fragment {
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);
+                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+sessid);
+                conn.setUseCaches(true);
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
                 String line = "";
@@ -334,7 +349,7 @@ public class GroupBlogList extends Fragment {
                 public void onClick(View v) {
                     GroupBlogCardViewHolder holder = (GroupBlogCardViewHolder) v.getTag();
                     getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, new Blog(holder.blogUrl)).addToBackStack(null).commit();
+                            .replace(R.id.container, new BlogWebView(holder.blogUrl)).addToBackStack(null).commit();
                 }
             });
             viewHolder.loaddp=loaddp;

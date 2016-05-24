@@ -110,6 +110,7 @@
                 android:layout_width="@dimen/roundimage_length"
                 android:layout_height="@dimen/roundimage_length"
                 android:id="@+id/blog_dp"
+                android:scaleType="fitXY"
                 android:layout_margin="8dp" />
 
             <LinearLayout

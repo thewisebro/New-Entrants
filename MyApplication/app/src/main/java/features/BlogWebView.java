@@ -7,21 +7,19 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LevelListDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,12 +29,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import img.myapplication.MySQLiteHelper;
@@ -48,13 +43,13 @@ import img.myapplication.R;
 import models.BlogModel;
 
 @SuppressLint("ValidFragment")
-public class Blog extends Fragment {
+public class BlogWebView extends Fragment {
     private BlogModel model=new BlogModel();
     private String url;
     public TextView topic;
     public TextView description;
     public TextView date;
-    public TextView content;
+    public WebView content;
     public TextView group;
     public ImageView dp;
     public RelativeLayout group_card;
@@ -62,7 +57,7 @@ public class Blog extends Fragment {
     private String hostURL;
     private String sessid;
     private int screen_width;
-    public Blog(String blogUrl){
+    public BlogWebView(String blogUrl){
         this.url=blogUrl;
     }
     private boolean cancelled=false;
@@ -98,12 +93,12 @@ public class Blog extends Fragment {
             sessid=getStudentSESSID();
         }
 
-        View view= inflater.inflate(R.layout.blog, container, false);
+        View view= inflater.inflate(R.layout.blogwebview, container, false);
         cancelled=false;
         topic= (TextView) view.findViewById(R.id.title);
         description= (TextView) view.findViewById(R.id.description);
         date= (TextView) view.findViewById(R.id.date);
-        content= (TextView) view.findViewById(R.id.blogHTML);
+        content= (WebView) view.findViewById(R.id.blogHTML);
         group= (TextView) view.findViewById(R.id.group);
         dp= (ImageView) view.findViewById(R.id.group_dp);
         group_card= (RelativeLayout) view.findViewById(R.id.group_card);
@@ -198,7 +193,31 @@ public class Blog extends Fragment {
         date.setText(model.date);
         topic.setText(model.topic);
         description.setText(model.desc);
-        content.setText(Html.fromHtml(model.content, new ImageGetter(), null));
+
+        StringBuilder sb=new StringBuilder();
+        sb.append("<HTML><HEAD>" +
+                "<style>" +
+                "a.ckeditor_img > img {" +
+                "width: 100% !important;" +
+                "height: auto !important;" +
+                "}" +
+                "</style>" +
+                "</HEAD><body>");
+        sb.append(model.content);
+        sb.append("</body></HTML>");
+        content.loadData(sb.toString(), "text/html", "UTF-8");
+        WebSettings settings= content.getSettings();
+        settings.setTextSize(WebSettings.TextSize.SMALLER);
+        //settings.setDefaultFontSize((int) getResources().getDimension(R.dimen.webview_textsize));
+        settings.setBuiltInZoomControls(true);
+        settings.setSupportZoom(true);
+        //settings.setDisplayZoomControls(false);
+        //settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        //settings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
+        //settings.setUseWideViewPort(true);
+        //settings.setLoadWithOverviewMode(false);
+        content.setBackgroundColor(getResources().getColor(R.color.light_blue));
+
         group.setText(model.group);
         if (model.student){
             dp.setImageResource(R.drawable.ic_person_black_24dp);
@@ -240,111 +259,7 @@ public class Blog extends Fragment {
             return "fail";
         }
     }
-    public class ImageGetter implements Html.ImageGetter {
 
-        @Override
-        public Drawable getDrawable(String source) {
-            LevelListDrawable d = new LevelListDrawable();
-
-            new LoadImage().execute(source, d);
-
-            return d;
-        }
-        class LoadImage extends AsyncTask<Object, Void, Bitmap> {
-
-            private LevelListDrawable mDrawable;
-
-            public int getSampleSize(String source){
-
-                try {
-                    HttpURLConnection connection = (HttpURLConnection) new URL(source).openConnection();
-                    connection.setDoInput(true);
-                    connection.setUseCaches(true);
-                    connection.setConnectTimeout(3000);
-                    connection.setReadTimeout(5000);
-                    connection.connect();
-                    InputStream input = connection.getInputStream();
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
-                    BitmapFactory.decodeStream(input, null, options);
-
-                    final int height = options.outHeight;
-                    final int width = options.outWidth;
-                    int inSampleSize = 1;
-
-                    if (width > screen_width) {
-
-                        final int halfHeight = height / 2;
-                        final int halfWidth = width / 2;
-
-                        while ((halfWidth / inSampleSize) > screen_width) {
-                            inSampleSize *= 2;
-                        }
-                    }
-
-                    return inSampleSize;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return 1;
-            }
-
-            @Override
-            protected Bitmap doInBackground(Object... params) {
-                String source = (String) params[0];
-                mDrawable = (LevelListDrawable) params[1];
-                int insamplesize=getSampleSize(source);
-                try {
-                    //InputStream is = new URL(source).openStream();
-                    HttpURLConnection connection= (HttpURLConnection) new URL(source).openConnection();
-                    connection.setConnectTimeout(3000);
-                    connection.setReadTimeout(7000);
-                    connection.setDoInput(true);
-                    connection.setUseCaches(true);
-                    connection.connect();
-                    InputStream is=connection.getInputStream();
-
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inSampleSize=insamplesize;
-                    options.inJustDecodeBounds = false;
-
-                    Bitmap bitmap=BitmapFactory.decodeStream(is, null, options);
-                    return bitmap;
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap bitmap) {
-                if (getActivity()==null)
-                    return;
-                if (bitmap != null) {
-
-                    int width=bitmap.getWidth();
-                    int height=bitmap.getHeight();
-                    if (width>screen_width){
-                        float aspectRatio = width / (float) height;
-                        width=screen_width;
-                        height=Math.round(screen_width / aspectRatio);
-                    }
-
-                    Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, width,height, true);
-                    BitmapDrawable d = new BitmapDrawable(resizedBitmap);
-                    mDrawable.addLevel(1, 1, d);
-                    mDrawable.setBounds(0, 0, resizedBitmap.getWidth(), resizedBitmap.getHeight());
-                    mDrawable.setLevel(1);
-
-                    content.setText(content.getText());
-                }
-            }
-        }
-    }
 
     public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 

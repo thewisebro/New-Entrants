@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 public class OpeningFragment extends Fragment {
 
-    private int type;
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
@@ -24,18 +23,6 @@ public class OpeningFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if (getActivity() instanceof Navigation) {
-            ((Navigation) getActivity()).setActionBarTitle("About");
-            type=1;
-        }
-        else if (getActivity() instanceof NavigationStudent) {
-            ((NavigationStudent) getActivity()).setActionBarTitle("About");
-            type=2;
-        }
-        else if (getActivity() instanceof NavigationAudience) {
-            ((NavigationAudience) getActivity()).setActionBarTitle("About");
-            type=3;
-        }
         setHasOptionsMenu(true);
 
         View view= inflater.inflate(R.layout.fragment_opening, container, false);
@@ -43,10 +30,17 @@ public class OpeningFragment extends Fragment {
         link.setMovementMethod(LinkMovementMethod.getInstance());
         TextView desc= (TextView) view.findViewById(R.id.app_desc);
         desc.setMovementMethod(new ScrollingMovementMethod());
-        if (type==1) {
+
+        if (getActivity() instanceof Navigation) {
+            ((Navigation) getActivity()).setActionBarTitle("About");
             desc.setText(getString(R.string.desc_junior));
         }
-        else {
+        else if (getActivity() instanceof NavigationStudent) {
+            ((NavigationStudent) getActivity()).setActionBarTitle("About");
+            desc.setText(getString(R.string.desc_senior));
+        }
+        else if (getActivity() instanceof NavigationAudience) {
+            ((NavigationAudience) getActivity()).setActionBarTitle("About");
             desc.setText(getString(R.string.desc_senior));
         }
         return view;

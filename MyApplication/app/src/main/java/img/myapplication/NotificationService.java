@@ -215,15 +215,14 @@ public class NotificationService extends Service {
         PendingIntent actionIntent= PendingIntent.getActivity(getApplicationContext(),0
                 ,new Intent(getApplicationContext(),Login.class),0);
         Notification notification = new Notification.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)  // the status icon
-                .setWhen(System.currentTimeMillis())  // the time stamp
-                .setContentTitle(title)  // the label of the entry
-                .setContentText(msg)  // the contents of the entry
-                .setContentIntent(actionIntent)  // The intent to send when the entry is clicked
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(title)
                 .setAutoCancel(true)
+                .setContentText(msg)
+                .setContentIntent(actionIntent)
                 .build();
 
-        // Send the notification.
         mNM.notify(tag, notification);
     }
 }

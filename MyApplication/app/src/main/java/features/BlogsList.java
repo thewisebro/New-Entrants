@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import img.myapplication.BitmapCacheUtil;
+import img.myapplication.MySQLiteHelper;
 import img.myapplication.Navigation;
 import img.myapplication.NavigationAudience;
 import img.myapplication.NavigationStudent;
@@ -69,6 +70,7 @@ public class BlogsList extends Fragment {
     private String url;
     boolean flag=false;
     boolean resume;
+    private String sessid;
     private int spinnerPos;
     private String hostURL;
     private void getURLs(){
@@ -92,12 +94,15 @@ public class BlogsList extends Fragment {
         resume=true;
         if (getActivity() instanceof Navigation) {
             ((Navigation) getActivity()).setActionBarTitle("Blogs");
+            sessid=getEntrantSESSID();
         }
         else if (getActivity() instanceof NavigationStudent){
             ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
+            sessid=getStudentSESSID();
         }
         else if (getActivity() instanceof NavigationAudience){
             ((NavigationAudience)getActivity()).setActionBarTitle("Blogs");
+            sessid=getStudentSESSID();
         }
 
         cancelled=false;
@@ -144,6 +149,14 @@ public class BlogsList extends Fragment {
 
         return view;
     }
+    private String getStudentSESSID(){
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        return db.getStudent().sess_id;
+    }
+    private String getEntrantSESSID(){
+        MySQLiteHelper db=new MySQLiteHelper(getContext());
+        return db.getEntrant().sess_id;
+    }
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -183,6 +196,7 @@ public class BlogsList extends Fragment {
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);
+                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+sessid);
                 conn.setUseCaches(true);
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
@@ -357,7 +371,7 @@ public class BlogsList extends Fragment {
                 @Override
                 public void onClick(View v) {
                     getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, new Blog(viewHolder.blogUrl)).addToBackStack(null).commit();
+                            .replace(R.id.container, new BlogWebView(viewHolder.blogUrl)).addToBackStack(null).commit();
 
                 }
             };
@@ -403,8 +417,6 @@ public class BlogsList extends Fragment {
         public int getSampleSize(){
 
             try {
-                if (isCancelled())
-                    return 0;
                 HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                 connection.setDoInput(true);
                 connection.setUseCaches(true);
@@ -415,8 +427,7 @@ public class BlogsList extends Fragment {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
                 BitmapFactory.decodeStream(input, null, options);
-                if (isCancelled())
-                    return 0;
+
                 final int height = options.outHeight;
                 final int width = options.outWidth;
                 int inSampleSize = 1;
@@ -456,13 +467,11 @@ public class BlogsList extends Fragment {
                 if (isCancelled())
                     return null;
                 InputStream input = connection.getInputStream();
-                if (isCancelled())
-                    return null;
+
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize=insamplesize;
                 options.inJustDecodeBounds = false;
-                if (isCancelled())
-                    return null;
+
                 Bitmap bitmap=BitmapFactory.decodeStream(input,null,options);
                 return bitmap;
             } catch (Exception e) {
