@@ -50,8 +50,8 @@ import img.myapplication.NavigationAudience;
 import img.myapplication.NavigationStudent;
 import img.myapplication.NetworkErrorFragment;
 import img.myapplication.R;
+import models.BlogCardViewHolder;
 import models.BlogModel;
-import models.GroupBlogCardViewHolder;
 
 
 @SuppressLint("ValidFragment")
@@ -69,7 +69,7 @@ public class GroupBlogList extends Fragment {
     private String groupUrl;
     private String groupName;
     private String host;
-
+    private boolean resume;
     public GroupBlogList(String url,String group){
         groupUrl=url;
         groupName=group;
@@ -79,6 +79,14 @@ public class GroupBlogList extends Fragment {
     public void onDestroyView(){
         cancelled=true;
         super.onDestroyView();
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
+        blogsCount=0;
+        lastId=0;
+        resume=true;
+        super.onCreate(savedInstanceState);
     }
     private void getURL(){
         host=getString(R.string.host);
@@ -100,7 +108,6 @@ public class GroupBlogList extends Fragment {
         cancelled=false;
         setHasOptionsMenu(true);
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
-        //setCache();
         listView = (ListView) view.findViewById(R.id.card_listView);
 
         listView.addHeaderView(new View(getContext()));
@@ -128,13 +135,12 @@ public class GroupBlogList extends Fragment {
         });
 
         items=new ArrayList<BlogModel>();
-        cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
-        blogsCount=0;
-        lastId=0;
-        if (isConnected())
-            new LoadBlogTask().execute();
-        else
+        //cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
+
+        if (!isConnected())
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+        else if (resume)
+                new LoadBlogTask().execute();
 
         listView.setAdapter(cardArrayAdapter);
 
@@ -212,6 +218,7 @@ public class GroupBlogList extends Fragment {
             if (result.equals("success")){
                 cardArrayAdapter.refresh();
                 items.clear();
+                resume=false;
             }
             else if (result.equals("error")){
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
@@ -296,11 +303,11 @@ public class GroupBlogList extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = convertView;
-            GroupBlogCardViewHolder viewHolder;
+            BlogCardViewHolder viewHolder;
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 row = inflater.inflate(R.layout.list_blog_card, parent, false);
-                viewHolder = new GroupBlogCardViewHolder();
+                viewHolder = new BlogCardViewHolder();
                 viewHolder.img = (ImageView) row.findViewById(R.id.blog_img);
                 viewHolder.topic = (TextView) row.findViewById(R.id.topic);
                 viewHolder.date = (TextView) row.findViewById(R.id.date);
@@ -310,15 +317,9 @@ public class GroupBlogList extends Fragment {
                 viewHolder.group = (TextView) row.findViewById(R.id.group);
 
             } else {
-                viewHolder = (GroupBlogCardViewHolder) row.getTag();
-                viewHolder.loaddp.cancel(true);
-                viewHolder.loadimg.cancel(true);
+                viewHolder = (BlogCardViewHolder) row.getTag();
             }
             final BlogModel card = getItem(position);
-            /*if (viewHolder.id!=card.id && viewHolder.id!=0){
-                viewHolder.loaddp.cancel(true);
-                viewHolder.loadimg.cancel(true);
-            }*/
             viewHolder.id=card.id;
             viewHolder.topic.setText(card.topic);
             viewHolder.description.setText(card.desc);
@@ -328,16 +329,16 @@ public class GroupBlogList extends Fragment {
             viewHolder.blogUrl = groupUrl+"/" + card.slug;
 
             viewHolder.dp.setImageResource(R.drawable.ic_group_black_24dp);
-            ImageLoadTask loaddp=new ImageLoadTask(host+card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
-            loaddp.execute();
+            new ImageLoadTask(host+card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length))
+                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
-            ImageLoadTask loadimg=new ImageLoadTask(host+card.imageurl, viewHolder.img,screen_width,screen_width);
 
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
                 row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
                 viewHolder.img.setImageResource(R.drawable.loading);
-                loadimg.execute();
+                new ImageLoadTask(host + card.imageurl, viewHolder.img,screen_width,screen_width)
+                        .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
             else {
                 row.findViewById(R.id.img_layout).setVisibility(View.GONE);
@@ -347,13 +348,11 @@ public class GroupBlogList extends Fragment {
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    GroupBlogCardViewHolder holder = (GroupBlogCardViewHolder) v.getTag();
+                    BlogCardViewHolder holder = (BlogCardViewHolder) v.getTag();
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.container, new BlogWebView(holder.blogUrl)).addToBackStack(null).commit();
                 }
             });
-            viewHolder.loaddp=loaddp;
-            viewHolder.loadimg=loadimg;
             row.setTag(viewHolder);
             return row;
         }

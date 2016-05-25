@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/list_bg">
 
     <ListView
@@ -30,6 +31,7 @@
     <img.myapplication.RoundImageView
         android:layout_width="@dimen/fav_bt"
         android:layout_height="@dimen/fav_bt"
+        android:id="@+id/fav_button"
         android:onClick="sendRequest"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

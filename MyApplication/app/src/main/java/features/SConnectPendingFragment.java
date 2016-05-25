@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ import java.util.List;
 
 import img.myapplication.MySQLiteHelper;
 import img.myapplication.R;
+import img.myapplication.RoundImageView;
 import models.RequestCardViewHolder;
 import models.RequestModel;
 
@@ -44,6 +46,7 @@ public class SConnectPendingFragment extends Fragment {
     private MySQLiteHelper db;
     public String extend_url;
     private TextView zerocount;
+    private RoundImageView fav_button;
     private String hostURL;
     private void getURLs() {
         hostURL = getString(R.string.host);
@@ -64,6 +67,24 @@ public class SConnectPendingFragment extends Fragment {
         ListView listView = (ListView) view.findViewById(R.id.card_listView);
         listView.addHeaderView(new View(getContext()));
         listView.addFooterView(new View(getContext()));
+        fav_button= (RoundImageView) view.findViewById(R.id.fav_button);
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                switch (scrollState) {
+                    case SCROLL_STATE_IDLE:
+                        fav_button.setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        fav_button.setVisibility(View.GONE);
+                }
+            }
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem+visibleItemCount==totalItemCount)
+                    fav_button.setVisibility(View.VISIBLE);
+            }
+        });
         zerocount= (TextView) view.findViewById(R.id.zerocount);
         cardArrayAdapter = new SeniorCardArrayAdapter(getContext(), R.layout.request_card);
 

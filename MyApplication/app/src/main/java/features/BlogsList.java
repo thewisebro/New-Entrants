@@ -88,10 +88,13 @@ public class BlogsList extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         getURLs();
         spinnerPos=0;
+        cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
+        resume=true;
+        blogsCount=0;
+        lastId=0;
         super.onCreate(savedInstanceState);
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
-        resume=true;
         if (getActivity() instanceof Navigation) {
             ((Navigation) getActivity()).setActionBarTitle("Blogs");
             sessid=getEntrantSESSID();
@@ -115,7 +118,7 @@ public class BlogsList extends Fragment {
         tv=new TextView(getContext());
         tv.setText("Pull Up to Load More");
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
-        //listView.addFooterView(tv);
+        listView.addFooterView(tv);
 
         swipeLayout= (SwipyRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light,
@@ -139,11 +142,8 @@ public class BlogsList extends Fragment {
         });
 
         items=new ArrayList<BlogModel>();
-        cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
-        blogsCount=0;
-        lastId=0;
-        if (!isConnected())
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+        //if (!isConnected())
+        //    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
 
         listView.setAdapter(cardArrayAdapter);
 
@@ -335,8 +335,6 @@ public class BlogsList extends Fragment {
                 viewHolder.group= (TextView) row.findViewById(R.id.group);
             } else {
                 viewHolder = (BlogCardViewHolder)row.getTag();
-                viewHolder.loaddp.cancel(true);
-                viewHolder.loadimg.cancel(true);
             }
             final BlogModel card = getItem(position);
 
@@ -352,15 +350,16 @@ public class BlogsList extends Fragment {
                 viewHolder.dp.setImageResource(R.drawable.ic_person_black_24dp);
             else
                 viewHolder.dp.setImageResource(R.drawable.ic_group_black_24dp);
-            ImageLoadTask loaddp=new ImageLoadTask(hostURL+card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length));
-            loaddp.execute();
+            new ImageLoadTask(hostURL+card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length))
+                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
-            ImageLoadTask loadimg=new ImageLoadTask(hostURL+card.imageurl, viewHolder.img,screen_width,screen_width);
+
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
                 row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
                 viewHolder.img.setImageResource(R.drawable.loading);
-                loadimg.execute();
+                new ImageLoadTask(hostURL + card.imageurl, viewHolder.img,screen_width,screen_width)
+                        .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
             else {
                 row.findViewById(R.id.img_layout).setVisibility(View.GONE);
@@ -394,8 +393,6 @@ public class BlogsList extends Fragment {
                 });
             }
 
-            viewHolder.loadimg=loadimg;
-            viewHolder.loaddp=loaddp;
             row.setTag(viewHolder);
             return row;
         }
@@ -560,6 +557,8 @@ public class BlogsList extends Fragment {
                         flag = false;
                         resume=false;
                     }
+                    else
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
 
                 }
 

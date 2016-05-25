@@ -28,6 +28,8 @@ public class NetworkErrorFragment extends Fragment {
             ((Navigation) getActivity()).setActionBarTitle("Blogs");
         else if (getActivity() instanceof NavigationStudent)
             ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
+        else if (getActivity() instanceof NavigationAudience)
+            ((NavigationAudience)getActivity()).setActionBarTitle("Blogs");
 
         setHasOptionsMenu(true);
         View view= inflater.inflate(R.layout.fragment_network_error, container, false);

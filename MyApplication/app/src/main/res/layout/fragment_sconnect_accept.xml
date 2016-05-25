@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/list_bg">
 
     <ListView
@@ -31,6 +32,7 @@
         android:layout_height="@dimen/fav_bt"
         android:onClick="sendRequest"
         android:scaleType="fitXY"
+        android:id="@+id/fav_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
