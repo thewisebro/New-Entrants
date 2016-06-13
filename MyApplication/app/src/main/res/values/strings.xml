@@ -3,11 +3,16 @@
     <string name="app">http://people.iitr.ernet.in/iitr_fresherlogue</string>
     <string name="host">http://people.iitr.ernet.in</string>
     <string name="title_activity_navigation">Navigation</string>
+    <string name="title_blogs">Articles</string>
+    <string name="title_sconnect">Senior Connect</string>
+    <string name="title_jconnect">Junior Connect</string>
+    <string name="title_about">About</string>
+    <string name="title_profile">Profile</string>
     <string name="appLink"><a href="http://people.iitr.ernet.in/iitr_fresherlogue/">IITR Fresherlogue Web</a></string>
     <string name="desc_junior">---description for juniors---</string>
     <string name="desc_senior">---description for seniors---</string>
     <string-array name="entrantstabs">
-        <item>Blogs</item>
+        <item>Articles</item>
         <item>Senior Connect</item>
         <item>Request a Senior</item>
         <item>Profile</item>
@@ -15,14 +20,14 @@
         <item>Logout</item>
     </string-array>
     <string-array name="studenttabs">
-        <item>Blogs</item>
+        <item>Articles</item>
         <item>Junior Connect</item>
         <item>Profile</item>
         <item>About</item>
         <item>Logout</item>
     </string-array>
     <string-array name="audiencetabs">
-        <item>Blogs</item>
+        <item>Articles</item>
         <item>About</item>
         <item>Logout</item>
     </string-array>

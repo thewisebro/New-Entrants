@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -62,17 +64,20 @@ public class GroupBlogList extends Fragment {
     private List<BlogModel> items;
     private ListView listView;
     private TextView tv;   //Footer View
+    private LinearLayout groupDesc;
     private SwipyRefreshLayout swipeLayout;
     private int blogsCount;
     private int lastId;
     private String sessid;
     private String groupUrl;
     private String groupName;
+    private String groupInfoUrl;
+    private String groupUsername;
     private String host;
     private boolean resume;
-    public GroupBlogList(String url,String group){
-        groupUrl=url;
+    public GroupBlogList(String username,String group){
         groupName=group;
+        groupUsername=username;
     }
     private boolean cancelled=false;
     @Override
@@ -83,6 +88,7 @@ public class GroupBlogList extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
+        groupDesc= (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.groupdescription,null);
         blogsCount=0;
         lastId=0;
         resume=true;
@@ -90,19 +96,22 @@ public class GroupBlogList extends Fragment {
     }
     private void getURL(){
         host=getString(R.string.host);
+        String appURL=getString(R.string.app);
+        groupUrl=appURL+"/blogs/"+groupUsername;
+        groupInfoUrl=appURL+"/groupinfo/"+groupUsername;
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         getURL();
         if (getActivity() instanceof Navigation) {
-            ((Navigation) getActivity()).setActionBarTitle("Blogs");
+            ((Navigation) getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getEntrantSESSID();
         }
         else if (getActivity() instanceof NavigationStudent){
-            ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
+            ((NavigationStudent)getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getStudentSESSID();
         }
         else if (getActivity() instanceof NavigationAudience){
-            ((NavigationAudience)getActivity()).setActionBarTitle("Blogs");
+            ((NavigationAudience)getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getStudentSESSID();
         }
         cancelled=false;
@@ -115,6 +124,8 @@ public class GroupBlogList extends Fragment {
         tv.setText("Pull Up to Load More");
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
         listView.addFooterView(tv);
+
+        listView.addHeaderView(groupDesc);
 
         swipeLayout= (SwipyRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light,
@@ -135,12 +146,13 @@ public class GroupBlogList extends Fragment {
         });
 
         items=new ArrayList<BlogModel>();
-        //cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
 
         if (!isConnected())
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-        else if (resume)
-                new LoadBlogTask().execute();
+        else if (resume) {
+            new GroupInfoTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            new LoadBlogTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
 
         listView.setAdapter(cardArrayAdapter);
 
@@ -162,7 +174,38 @@ public class GroupBlogList extends Fragment {
         else
             return false;
     }
-    private class LoadBlogTask extends AsyncTask<String, Void, String> {
+    private class GroupInfoTask extends AsyncTask<Void,Void,String>{
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return getGroupInfo();
+        }
+        @Override
+        protected void onPostExecute(String result){
+            if (!("error".equals(result))){
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    if ("success".equals(jsonObject.getString("status"))){
+                        JSONObject groupObject=jsonObject.getJSONObject("group");
+                        TextView name= (TextView) groupDesc.findViewById(R.id.name);
+                        TextView mission= (TextView) groupDesc.findViewById(R.id.mission);
+                        TextView description= (TextView) groupDesc.findViewById(R.id.description);
+                        name.setText(groupObject.getString("name"));
+                        mission.setText(groupObject.getString("mission"));
+                        description.setText(groupObject.getString("description"));
+                    }
+                    else
+                        groupDesc.setVisibility(View.GONE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    groupDesc.setVisibility(View.GONE);
+                }
+            }
+            else
+                groupDesc.setVisibility(View.GONE);
+        }
+    }
+    private class LoadBlogTask extends AsyncTask<Void, Void, String> {
         private ProgressDialog dialog;
         @Override
         protected void onPreExecute(){
@@ -180,35 +223,10 @@ public class GroupBlogList extends Fragment {
             this.dialog.show();
         }
         @Override
-        protected String doInBackground(String... params) {
-
-            String blogUrl=null;
-            if (blogsCount==0)
-                blogUrl=groupUrl;
-            else
-                blogUrl=groupUrl+"?action=next&id="+lastId;
-            try {
-                URL url= new URL(blogUrl);
-                HttpURLConnection conn=(HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setConnectTimeout(5000);
-                conn.setReadTimeout(10000);
-                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+sessid);
-                conn.setUseCaches(true);
-                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-                StringBuilder sb=new StringBuilder();
-                String line = "";
-                while((line = bufferedReader.readLine()) != null)
-                    sb.append(line + '\n');
-                String result=sb.toString();
-                getBlogs(result);
-                return "success";
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "Unable to load blogs";
-            }
+        protected String doInBackground(Void... params) {
+            return retrieveBlogs();
         }
+
         @Override
         protected void onPostExecute(String result) {
 
@@ -222,14 +240,41 @@ public class GroupBlogList extends Fragment {
             }
             else if (result.equals("error")){
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
-                Toast.makeText(getContext(), "Unable to load blogs", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Please Check your Network Connection", Toast.LENGTH_SHORT).show();
             }
             else
-                Toast.makeText(getContext(), "Sorry! Unable to load blogs", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Sorry! Unable to load articles", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         }
     }
 
+    public String retrieveBlogs(){
+        String blogUrl=null;
+        if (blogsCount==0)
+            blogUrl=groupUrl;
+        else
+            blogUrl=groupUrl+"?action=next&id="+lastId;
+        try {
+            URL url= new URL(blogUrl);
+            HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(10000);
+            conn.setRequestProperty("Cookie","CHANNELI_SESSID="+sessid);
+            conn.setUseCaches(true);
+            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+            StringBuilder sb=new StringBuilder();
+            String line = "";
+            while((line = bufferedReader.readLine()) != null)
+                sb.append(line + '\n');
+            String result=sb.toString();
+            return getBlogs(result);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
     public String getBlogs(String result){
         try {
             JSONObject jObject = new JSONObject(result);
@@ -263,6 +308,25 @@ public class GroupBlogList extends Fragment {
             return "fail";
         }
     }
+    public String getGroupInfo(){
+        try {
+            HttpURLConnection urlConnection= (HttpURLConnection) new URL(groupInfoUrl).openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setConnectTimeout(3000);
+            urlConnection.setReadTimeout(5000);
+            urlConnection.setRequestProperty("Cookie", "CHANNELI_SESSID=" + sessid);
+            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(urlConnection.getInputStream()));
+            StringBuilder sb=new StringBuilder();
+            String line = "";
+            while((line = bufferedReader.readLine()) != null)
+                sb.append(line + '\n');
+
+            return sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
 
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
@@ -272,7 +336,6 @@ public class GroupBlogList extends Fragment {
                 listView.removeFooterView(tv);
             }
             else {
-                //Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
                 this.cardList.addAll(items);
                 notifyDataSetChanged();
             }
@@ -381,7 +444,7 @@ public class GroupBlogList extends Fragment {
                 connection.setConnectTimeout(3000);
                 connection.setReadTimeout(5000);
                 connection.connect();
-                InputStream input = connection.getInputStream();
+                InputStream input = new BufferedInputStream(connection.getInputStream());
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
                 BitmapFactory.decodeStream(input, null, options);
@@ -425,17 +488,11 @@ public class GroupBlogList extends Fragment {
                 connection.connect();
                 if (isCancelled())
                     return null;
-                InputStream input = connection.getInputStream();
-                if (isCancelled())
-                    return null;
+                InputStream input = new BufferedInputStream(connection.getInputStream());
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize=insamplesize;
                 options.inJustDecodeBounds = false;
-                if (isCancelled())
-                    return null;
                 Bitmap bitmap=BitmapFactory.decodeStream(input,null,options);
-                if (isCancelled())
-                    return null;
                 return bitmap;
             } catch (Exception e) {
                 e.printStackTrace();

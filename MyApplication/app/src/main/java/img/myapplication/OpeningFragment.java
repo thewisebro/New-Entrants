@@ -32,15 +32,15 @@ public class OpeningFragment extends Fragment {
         desc.setMovementMethod(new ScrollingMovementMethod());
 
         if (getActivity() instanceof Navigation) {
-            ((Navigation) getActivity()).setActionBarTitle("About");
+            ((Navigation) getActivity()).setActionBarTitle(getString(R.string.title_about));
             desc.setText(getString(R.string.desc_junior));
         }
         else if (getActivity() instanceof NavigationStudent) {
-            ((NavigationStudent) getActivity()).setActionBarTitle("About");
+            ((NavigationStudent) getActivity()).setActionBarTitle(getString(R.string.title_about));
             desc.setText(getString(R.string.desc_senior));
         }
         else if (getActivity() instanceof NavigationAudience) {
-            ((NavigationAudience) getActivity()).setActionBarTitle("About");
+            ((NavigationAudience) getActivity()).setActionBarTitle(getString(R.string.title_about));
             desc.setText(getString(R.string.desc_senior));
         }
         return view;

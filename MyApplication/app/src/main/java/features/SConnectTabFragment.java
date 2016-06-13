@@ -27,7 +27,7 @@ public class SConnectTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ((Navigation)getActivity()).setActionBarTitle("Senior Connect");
+        ((Navigation)getActivity()).setActionBarTitle(getString(R.string.title_sconnect));
         setHasOptionsMenu(true);
         View view= inflater.inflate(R.layout.fragment_sconnect_tab, container, false);
 

@@ -37,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -96,15 +97,15 @@ public class BlogsList extends Fragment {
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         if (getActivity() instanceof Navigation) {
-            ((Navigation) getActivity()).setActionBarTitle("Blogs");
+            ((Navigation) getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getEntrantSESSID();
         }
         else if (getActivity() instanceof NavigationStudent){
-            ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
+            ((NavigationStudent)getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getStudentSESSID();
         }
         else if (getActivity() instanceof NavigationAudience){
-            ((NavigationAudience)getActivity()).setActionBarTitle("Blogs");
+            ((NavigationAudience)getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getStudentSESSID();
         }
 
@@ -228,7 +229,7 @@ public class BlogsList extends Fragment {
                 Toast.makeText(getContext(), "Please Check your Network Connection", Toast.LENGTH_SHORT).show();
             }
             else
-                Toast.makeText(getContext(), "Sorry! Unable to load blogs", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Sorry! Unable to load articles", Toast.LENGTH_SHORT).show();
         }
     }
     public String getBlogs(String result){
@@ -384,9 +385,8 @@ public class BlogsList extends Fragment {
                     @Override
                     public void onClick(View view) {
                         if (!refreshing) {
-                            String url = BlogUrl + card.group_username;
                             getFragmentManager().beginTransaction()
-                                    .replace(R.id.container, new GroupBlogList(url, card.group)).addToBackStack(null).commit();
+                                    .replace(R.id.container, new GroupBlogList(card.group_username, card.group)).addToBackStack(null).commit();
 
                         }
                     }
@@ -420,7 +420,8 @@ public class BlogsList extends Fragment {
                 connection.setConnectTimeout(3000);
                 connection.setReadTimeout(5000);
                 connection.connect();
-                InputStream input = connection.getInputStream();
+                //InputStream input = connection.getInputStream();
+                InputStream input=new BufferedInputStream(connection.getInputStream());
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
                 BitmapFactory.decodeStream(input, null, options);
@@ -446,10 +447,29 @@ public class BlogsList extends Fragment {
             }
             return 1;
         }
+        private int getInSampleSize(InputStream input){
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(input, null, options);
+
+            final int height = options.outHeight;
+            final int width = options.outWidth;
+            int inSampleSize = 1;
+
+            if (height > ht || width > wt) {
+
+                final int halfHeight = height / 2;
+                final int halfWidth = width / 2;
+
+                while ((halfHeight / inSampleSize) > ht
+                        && (halfWidth / inSampleSize) > wt) {
+                    inSampleSize *= 2;
+                }
+            }
+
+            return inSampleSize;
+        }
         private Bitmap loadImage(){
-            if (isCancelled())
-                return null;
-            int insamplesize=getSampleSize();
             try {
                 if (isCancelled())
                     return null;
@@ -463,10 +483,10 @@ public class BlogsList extends Fragment {
                 connection.connect();
                 if (isCancelled())
                     return null;
-                InputStream input = connection.getInputStream();
-
+                //InputStream input = connection.getInputStream();
+                InputStream input= new BufferedInputStream(connection.getInputStream());
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize=insamplesize;
+                options.inSampleSize=getInSampleSize(input);
                 options.inJustDecodeBounds = false;
 
                 Bitmap bitmap=BitmapFactory.decodeStream(input,null,options);

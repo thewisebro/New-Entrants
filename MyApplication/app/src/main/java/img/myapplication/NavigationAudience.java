@@ -144,8 +144,7 @@ public class NavigationAudience extends ActionBarActivity
                 break;
             case 2: logout();
                 break;
-            default: fragment=new OpeningFragment();
-                break;
+            default: fragment=new AboutFragment();
 
         }
 

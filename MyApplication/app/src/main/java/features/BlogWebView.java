@@ -81,15 +81,15 @@ public class BlogWebView extends Fragment {
         getURLs();
         setHasOptionsMenu(true);
         if (getActivity() instanceof Navigation) {
-            ((Navigation) getActivity()).setActionBarTitle("Blogs");
+            ((Navigation) getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getEntrantSESSID();
         }
         else if (getActivity() instanceof NavigationStudent){
-            ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
+            ((NavigationStudent)getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getStudentSESSID();
         }
         else if (getActivity() instanceof NavigationAudience){
-            ((NavigationAudience)getActivity()).setActionBarTitle("Blogs");
+            ((NavigationAudience)getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getStudentSESSID();
         }
 
@@ -205,7 +205,7 @@ public class BlogWebView extends Fragment {
                 "</HEAD><body>");
         sb.append(model.content);
         sb.append("</body></HTML>");
-        content.loadData(sb.toString(), "text/html", "UTF-8");
+        content.loadData(sb.toString(), "text/html; charset=utf-8", "UTF-8");
         WebSettings settings= content.getSettings();
         settings.setTextSize(WebSettings.TextSize.SMALLER);
         //settings.setDefaultFontSize((int) getResources().getDimension(R.dimen.webview_textsize));
@@ -227,8 +227,7 @@ public class BlogWebView extends Fragment {
             group_card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String url = BlogUrl + model.group_username;
-                    getFragmentManager().beginTransaction().replace(R.id.container, new GroupBlogList(url, model.group))
+                    getFragmentManager().beginTransaction().replace(R.id.container, new GroupBlogList(model.group_username, model.group))
                             .addToBackStack(null).commit();
                 }
             });

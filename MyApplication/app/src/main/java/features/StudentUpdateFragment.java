@@ -85,7 +85,7 @@ public class StudentUpdateFragment extends Fragment {
         setHasOptionsMenu(true);
 
         cancelled=false;
-        ((NavigationStudent)getActivity()).setActionBarTitle("Profile");
+        ((NavigationStudent)getActivity()).setActionBarTitle(getString(R.string.title_profile));
         view= inflater.inflate(R.layout.update_student,container,false);
         drawer= (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
         if (lock){

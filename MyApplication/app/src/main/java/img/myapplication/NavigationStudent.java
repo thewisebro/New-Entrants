@@ -168,8 +168,6 @@ public class NavigationStudent extends ActionBarActivity
                 case 4: logout();
                     break;
                 default: fragment=new OpeningFragment();
-                    break;
-
             }
 
         loadFragment(fragment);
