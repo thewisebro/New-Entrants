@@ -39,11 +39,15 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import img.myapplication.BitmapCacheUtil;
@@ -247,6 +251,14 @@ public class BlogsList extends Fragment {
                     model.group=object.getString("group");
                     model.desc=object.getString("description");
                     model.date=object.getString("date");
+                    SimpleDateFormat inputDate=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    SimpleDateFormat outputDate=new SimpleDateFormat("d MMM, yyyy");
+                    try {
+                        Date input=inputDate.parse(model.date);
+                        model.date=outputDate.format(input);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     model.id = Integer.parseInt(object.getString("id"));
                     model.group_username=object.getString("group_username");
                     model.slug=object.getString("slug");
@@ -277,7 +289,7 @@ public class BlogsList extends Fragment {
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
         public void refresh(){
-            if (items.size()==0 && listView.getFooterViewsCount()!=0) {
+            if (items.size()==0 ) {
                 Toast.makeText(getContext(), "No More Blogs", Toast.LENGTH_LONG).show();
                 listView.removeFooterView(tv);
             }
@@ -323,9 +335,11 @@ public class BlogsList extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = convertView;
             final BlogCardViewHolder viewHolder;
+            int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
             if (row == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 row = inflater.inflate(R.layout.list_blog_card, parent, false);
+                row.getLayoutParams().height=screen_width;
                 viewHolder = new BlogCardViewHolder();
                 viewHolder.img= (ImageView) row.findViewById(R.id.blog_img);
                 viewHolder.topic= (TextView) row.findViewById(R.id.topic);
@@ -353,7 +367,6 @@ public class BlogsList extends Fragment {
                 viewHolder.dp.setImageResource(R.drawable.ic_group_black_24dp);
             new ImageLoadTask(hostURL+card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length))
                     .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            int screen_width=getActivity().getWindowManager().getDefaultDisplay().getWidth();
 
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
@@ -411,46 +424,8 @@ public class BlogsList extends Fragment {
             this.ht=h;
             this.wt=w;
         }
-        public int getSampleSize(){
 
-            try {
-                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-                connection.setDoInput(true);
-                connection.setUseCaches(true);
-                connection.setConnectTimeout(3000);
-                connection.setReadTimeout(5000);
-                connection.connect();
-                //InputStream input = connection.getInputStream();
-                InputStream input=new BufferedInputStream(connection.getInputStream());
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
-                BitmapFactory.decodeStream(input, null, options);
-
-                final int height = options.outHeight;
-                final int width = options.outWidth;
-                int inSampleSize = 1;
-
-                if (height > ht || width > wt) {
-
-                    final int halfHeight = height / 2;
-                    final int halfWidth = width / 2;
-
-                    while ((halfHeight / inSampleSize) > ht
-                            && (halfWidth / inSampleSize) > wt) {
-                        inSampleSize *= 2;
-                    }
-                }
-
-                return inSampleSize;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return 1;
-        }
-        private int getInSampleSize(InputStream input){
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(input, null, options);
+        private int getInSampleSize(BitmapFactory.Options options){
 
             final int height = options.outHeight;
             final int width = options.outWidth;
@@ -469,32 +444,48 @@ public class BlogsList extends Fragment {
 
             return inSampleSize;
         }
-        private Bitmap loadImage(){
+        private HttpURLConnection getConnection(){
+            HttpURLConnection connection = null;
             try {
-                if (isCancelled())
-                    return null;
-                URL urlConnection = new URL(url);
-                HttpURLConnection connection = (HttpURLConnection) urlConnection
+                connection = (HttpURLConnection) new URL(url)
                         .openConnection();
                 connection.setConnectTimeout(3000);
                 connection.setReadTimeout(5000);
                 connection.setDoInput(true);
                 connection.setUseCaches(true);
-                connection.connect();
-                if (isCancelled())
-                    return null;
-                //InputStream input = connection.getInputStream();
-                InputStream input= new BufferedInputStream(connection.getInputStream());
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize=getInSampleSize(input);
-                options.inJustDecodeBounds = false;
-
-                Bitmap bitmap=BitmapFactory.decodeStream(input,null,options);
-                return bitmap;
-            } catch (Exception e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            return null;
+            return connection;
+        }
+        private Bitmap loadImage(){
+            InputStream input=null;
+            Bitmap bitmap=null;
+            BitmapFactory.Options options=new BitmapFactory.Options();
+            try {
+                input= new BufferedInputStream(getConnection().getInputStream());
+                input.mark(input.available());
+                options.inJustDecodeBounds=true;
+                BitmapFactory.decodeStream(input, null, options);
+                options.inSampleSize=getInSampleSize(options);
+                options.inJustDecodeBounds = false;
+                input.reset();
+                bitmap=BitmapFactory.decodeStream(input,null,options);
+            } catch (IOException e) {
+                e.printStackTrace();
+                if (input!=null){
+                    options.inJustDecodeBounds=false;
+                    options.inPreferredConfig= Bitmap.Config.RGB_565;
+                    options.inSampleSize=8;
+                    try {
+                        input=new BufferedInputStream(getConnection().getInputStream());
+                        bitmap=BitmapFactory.decodeStream(input,null,options);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+            return bitmap;
         }
         private Bitmap image(){
                 Bitmap bitmap=BitmapCacheUtil.getCache().get(url);
@@ -517,6 +508,8 @@ public class BlogsList extends Fragment {
             super.onPostExecute(result);
             if (result!=null)
                 imageView.setImageBitmap(result);
+            else
+                imageView.setImageResource(R.drawable.img_error);
         }
 
     }

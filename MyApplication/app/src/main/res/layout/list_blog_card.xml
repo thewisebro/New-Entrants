@@ -1,145 +1,139 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:orientation="vertical"
+    android:id="@+id/blogcard"
+    android:longClickable="true"
+    android:background="@drawable/card_background_selector"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:longClickable="true">
+    android:layout_margin="5dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/blogcard"
-        android:background="@drawable/card_background_selector"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:id="@+id/card_top"
+        android:layout_weight="1"
+        android:layout_height="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:id="@+id/card_top"
-            android:layout_height="wrap_content">
+            android:id="@+id/img_layout"
+            android:layout_height="match_parent">
 
-            <RelativeLayout
+            <ImageView
                 android:layout_width="match_parent"
-                android:id="@+id/img_layout"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scaleType="fitXY"
-                    android:adjustViewBounds="true"
-                    android:id="@+id/blog_img" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.4"
-                    android:background="@drawable/gradient"
-                    android:layout_alignTop="@+id/blog_img"
-                    android:layout_alignBottom="@+id/blog_img"/>
-            </RelativeLayout>
-
-            <RelativeLayout
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                android:id="@+id/blog_img" />
+            <View
                 android:layout_width="match_parent"
-                android:layout_alignBottom="@+id/img_layout"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:id="@+id/topic_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/topic"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textAlignment="center"
-                    android:layout_centerHorizontal="true"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="bold"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:layout_below="@+id/topic"
-                    android:id="@+id/date"
-                    android:textStyle="italic"
-                    android:fontFamily="sans-serif-light"
-                    android:paddingLeft="10dp"
-                    android:textColor="@color/blue_grey_50" />
-            </RelativeLayout>
-
+                android:alpha="0.4"
+                android:background="@drawable/gradient"
+                android:layout_alignTop="@+id/blog_img"
+                android:layout_alignBottom="@+id/blog_img"/>
         </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_alignBottom="@+id/img_layout"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:id="@+id/topic_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/topic"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAlignment="center"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_below="@+id/topic"
+                android:id="@+id/date"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="10dp"
+                android:textColor="@color/blue_grey_100" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/card_middle"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:id="@+id/card_middle"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:layout_height=".5dp"
+            android:layout_margin="5dp"
+            android:background="@color/blue_grey_300"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height=".5dp"
-                android:layout_margin="5dp"
-                android:background="@color/blue_grey_300"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/description"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height=".5dp"
+            android:layout_margin="5dp"
+            android:background="@color/blue_grey_300"/>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/card_bottom"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+
+        <img.myapplication.RoundImageView
+            android:layout_width="@dimen/roundimage_length"
+            android:layout_height="@dimen/roundimage_length"
+            android:id="@+id/blog_dp"
+            android:scaleType="fitXY"
+            android:layout_margin="8dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_toRightOf="@+id/blog_dp"
+            android:layout_toEndOf="@+id/blog_dp"
+            android:paddingLeft="5dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/description"
+                android:id="@+id/category"
+                android:textStyle="bold|italic"
                 android:fontFamily="sans-serif"
-                android:textColor="@color/black" />
+                android:textColor="@color/yellow_700" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height=".5dp"
-                android:layout_margin="5dp"
-                android:background="@color/blue_grey_300"/>
-
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/group"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/blue_grey_300" />
         </LinearLayout>
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:id="@+id/card_bottom"
-            android:layout_height="wrap_content"
-            android:padding="5dp">
-
-
-            <img.myapplication.RoundImageView
-                android:layout_width="@dimen/roundimage_length"
-                android:layout_height="@dimen/roundimage_length"
-                android:id="@+id/blog_dp"
-                android:scaleType="fitXY"
-                android:layout_margin="8dp" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_toRightOf="@+id/blog_dp"
-                android:layout_toEndOf="@+id/blog_dp"
-                android:paddingLeft="5dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true">
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/category"
-                    android:textStyle="bold|italic"
-                    android:fontFamily="sans-serif"
-                    android:textColor="@color/yellow_700" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/group"
-                    android:fontFamily="sans-serif"
-                    android:textColor="@color/blue_grey_300" />
-            </LinearLayout>
-
-        </RelativeLayout>
-    </LinearLayout>
-</FrameLayout>
+    </RelativeLayout>
+</LinearLayout>

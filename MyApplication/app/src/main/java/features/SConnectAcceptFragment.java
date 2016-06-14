@@ -21,6 +21,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -229,60 +231,67 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
         this.ht=h;
         this.wt=w;
     }
-    public int getSampleSize(){
+    private int getInSampleSize(BitmapFactory.Options options){
 
-        try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(input, null, options);
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
 
-            final int height = options.outHeight;
-            final int width = options.outWidth;
-            int inSampleSize = 1;
+        if (height > ht || width > wt) {
 
-            if (height > ht || width > wt) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
 
-                final int halfHeight = height / 2;
-                final int halfWidth = width / 2;
-
-                while ((halfHeight / inSampleSize) > ht
-                        && (halfWidth / inSampleSize) > wt) {
-                    inSampleSize *= 2;
-                }
+            while ((halfHeight / inSampleSize) > ht
+                    && (halfWidth / inSampleSize) > wt) {
+                inSampleSize *= 2;
             }
-
-            return inSampleSize;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return 1;
+
+        return inSampleSize;
     }
-    private Bitmap loadImage(){
-        int insamplesize=getSampleSize();
+    private HttpURLConnection getConnection(){
+        HttpURLConnection connection = null;
         try {
-            URL urlConnection = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) urlConnection
+            connection = (HttpURLConnection) new URL(url)
                     .openConnection();
             connection.setConnectTimeout(3000);
             connection.setReadTimeout(5000);
             connection.setDoInput(true);
             connection.setUseCaches(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize=insamplesize/2;
-            options.inJustDecodeBounds = false;
-
-            return BitmapFactory.decodeStream(input,null,options);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return connection;
+    }
+    private Bitmap loadImage(){
+        InputStream input=null;
+        Bitmap bitmap=null;
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        try {
+            input= new BufferedInputStream(getConnection().getInputStream());
+            input.mark(input.available());
+            options.inJustDecodeBounds=true;
+            BitmapFactory.decodeStream(input, null, options);
+            options.inSampleSize=getInSampleSize(options);
+            options.inJustDecodeBounds = false;
+            input.reset();
+            bitmap=BitmapFactory.decodeStream(input,null,options);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if (input!=null){
+                options.inJustDecodeBounds=false;
+                options.inPreferredConfig= Bitmap.Config.RGB_565;
+                options.inSampleSize=8;
+                try {
+                    input=new BufferedInputStream(getConnection().getInputStream());
+                    bitmap=BitmapFactory.decodeStream(input,null,options);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        return bitmap;
     }
     private Bitmap image(){
         Bitmap bitmap=BitmapCacheUtil.getCache().get(url);

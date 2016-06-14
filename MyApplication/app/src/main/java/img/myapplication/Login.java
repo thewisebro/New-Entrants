@@ -25,9 +25,11 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -359,20 +361,8 @@ public class Login extends ActionBarActivity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public byte[] downloadImage(String url,int ht,int wt){
-        int inSampleSize=getSampleSize(url,ht,wt);
         try {
-            URL urlConnection = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) urlConnection
-                    .openConnection();
-            connection.setDoInput(true);
-            connection.setConnectTimeout(3000);
-            connection.setReadTimeout(5000);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            BitmapFactory.Options options=new BitmapFactory.Options();
-            options.inSampleSize=inSampleSize;
-            options.inJustDecodeBounds=false;
-            Bitmap bitmap = BitmapFactory.decodeStream(input,null,options);
+            Bitmap bitmap = loadImage(url,ht,wt);
             ByteArrayOutputStream baos=new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
             return baos.toByteArray();
@@ -382,39 +372,67 @@ public class Login extends ActionBarActivity {
         }
 
     }
-    public int getSampleSize(String url,int ht,int wt){
+    private int getInSampleSize(BitmapFactory.Options options,int ht,int wt){
 
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > ht || width > wt) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            while ((halfHeight / inSampleSize) > ht
+                    && (halfWidth / inSampleSize) > wt) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+    private HttpURLConnection getConnection(String url){
+        HttpURLConnection connection = null;
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.setDoInput(true);
+            connection = (HttpURLConnection) new URL(url)
+                    .openConnection();
             connection.setConnectTimeout(3000);
             connection.setReadTimeout(5000);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(input, null, options);
-
-            final int height = options.outHeight;
-            final int width = options.outWidth;
-            int inSampleSize = 1;
-
-            if (height > ht || width > wt) {
-
-                final int halfHeight = height / 2;
-                final int halfWidth = width / 2;
-
-                while ((halfHeight / inSampleSize) > ht
-                        && (halfWidth / inSampleSize) > wt) {
-                    inSampleSize *= 2;
-                }
-            }
-
-            return inSampleSize;
-        } catch (Exception e) {
+            connection.setDoInput(true);
+            connection.setUseCaches(true);
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return 1;
+        return connection;
+    }
+    private Bitmap loadImage(String url, int ht,int wt){
+        InputStream input=null;
+        Bitmap bitmap=null;
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        try {
+            input= new BufferedInputStream(getConnection(url).getInputStream());
+            input.mark(input.available());
+            options.inJustDecodeBounds=true;
+            BitmapFactory.decodeStream(input, null, options);
+            options.inSampleSize=getInSampleSize(options,ht,wt);
+            options.inJustDecodeBounds = false;
+            input.reset();
+            bitmap=BitmapFactory.decodeStream(input,null,options);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if (input!=null){
+                options.inJustDecodeBounds=false;
+                options.inPreferredConfig= Bitmap.Config.RGB_565;
+                options.inSampleSize=8;
+                try {
+                    input=new BufferedInputStream(getConnection(url).getInputStream());
+                    bitmap=BitmapFactory.decodeStream(input,null,options);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        return bitmap;
     }
 
     public void start(){

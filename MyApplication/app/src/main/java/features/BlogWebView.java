@@ -28,11 +28,16 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import img.myapplication.MySQLiteHelper;
 import img.myapplication.Navigation;
@@ -242,6 +247,14 @@ public class BlogWebView extends Fragment {
                 model.dpurl=object.getString("dp_link");
                 model.content=object.getString("content");
                 model.date=object.getString("date");
+                SimpleDateFormat inputDate=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat outputDate=new SimpleDateFormat("d MMM, yyyy");
+                try {
+                    Date input=inputDate.parse(model.date);
+                    model.date=outputDate.format(input);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 model.topic=object.getString("title");
                 model.desc=object.getString("description");
                 model.group=object.getString("group");
@@ -273,62 +286,71 @@ public class BlogWebView extends Fragment {
             this.ht=h;
             this.wt=w;
         }
-        public int getSampleSize(){
+        private int getInSampleSize(BitmapFactory.Options options){
 
+            final int height = options.outHeight;
+            final int width = options.outWidth;
+            int inSampleSize = 1;
+
+            if (height > ht || width > wt) {
+
+                final int halfHeight = height / 2;
+                final int halfWidth = width / 2;
+
+                while ((halfHeight / inSampleSize) > ht
+                        && (halfWidth / inSampleSize) > wt) {
+                    inSampleSize *= 2;
+                }
+            }
+
+            return inSampleSize;
+        }
+        private HttpURLConnection getConnection(){
+            HttpURLConnection connection = null;
             try {
-                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                connection = (HttpURLConnection) new URL(url)
+                        .openConnection();
+                connection.setConnectTimeout(3000);
+                connection.setReadTimeout(5000);
                 connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
+                connection.setUseCaches(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return connection;
+        }
+        private Bitmap loadImage(){
+            InputStream input=null;
+            Bitmap bitmap=null;
+            BitmapFactory.Options options=new BitmapFactory.Options();
+            try {
+                input= new BufferedInputStream(getConnection().getInputStream());
+                input.mark(input.available());
+                options.inJustDecodeBounds=true;
                 BitmapFactory.decodeStream(input, null, options);
-
-                final int height = options.outHeight;
-                final int width = options.outWidth;
-                int inSampleSize = 1;
-
-                if (height > ht || width > wt) {
-
-                    final int halfHeight = height / 2;
-                    final int halfWidth = width / 2;
-
-                    while ((halfHeight / inSampleSize) > ht
-                            && (halfWidth / inSampleSize) > wt) {
-                        inSampleSize *= 2;
+                options.inSampleSize=getInSampleSize(options);
+                options.inJustDecodeBounds = false;
+                input.reset();
+                bitmap=BitmapFactory.decodeStream(input,null,options);
+            } catch (IOException e) {
+                e.printStackTrace();
+                if (input!=null){
+                    options.inJustDecodeBounds=false;
+                    options.inPreferredConfig= Bitmap.Config.RGB_565;
+                    options.inSampleSize=8;
+                    try {
+                        input=new BufferedInputStream(getConnection().getInputStream());
+                        bitmap=BitmapFactory.decodeStream(input,null,options);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
                     }
                 }
-
-                return inSampleSize;
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-            return 1;
+            return bitmap;
         }
-
         @Override
         protected Bitmap doInBackground(Void... params) {
-            int insamplesize=getSampleSize();
-            try {
-                URL urlConnection = new URL(url);
-                HttpURLConnection connection = (HttpURLConnection) urlConnection
-                        .openConnection();
-                connection.setReadTimeout(10000);
-                connection.setConnectTimeout(5000);
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize=insamplesize/2;
-                options.inJustDecodeBounds = false;
-
-                Bitmap myBitmap= BitmapFactory.decodeStream(input,null,options);
-                return myBitmap;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
+            return loadImage();
         }
 
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

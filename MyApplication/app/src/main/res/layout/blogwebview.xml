@@ -15,41 +15,39 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/title"
                 android:padding="10dp"
-                android:textAlignment="center"
+                android:gravity="center_horizontal"
                 android:textStyle="bold"
                 android:textColor="@color/blue_grey_900"
-                android:fontFamily="sans-serif"
-                android:layout_gravity="center_horizontal" />
+                android:fontFamily="sans-serif"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:id="@+id/date"
-                android:textColor="@color/blue_grey_300"
-                android:textStyle="italic"
+                android:textColor="@color/blue_grey_500"
+                android:textStyle="bold"
                 android:paddingLeft="10dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:fontFamily="sans-serif-light"
-                android:layout_gravity="right"
+                android:gravity="end"
+                android:fontFamily="sans-serif"
                 android:paddingRight="10dp" />
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:id="@+id/description"
                 android:textStyle="italic"
-                android:textColor="@color/blue_grey_300"
+                android:textColor="@color/blue_grey_500"
                 android:padding="5dp"
                 android:fontFamily="sans-serif"
-                android:layout_gravity="center_horizontal" />
-
+                android:gravity="center_horizontal" />
 
             <WebView
                 android:layout_width="match_parent"
