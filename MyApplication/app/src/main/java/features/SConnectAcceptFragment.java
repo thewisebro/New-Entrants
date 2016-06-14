@@ -2,12 +2,7 @@ package features;
 
 
 import android.animation.LayoutTransition;
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,15 +16,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import img.myapplication.BitmapCacheUtil;
+import img.myapplication.ImageDownloader;
 import img.myapplication.MySQLiteHelper;
 import img.myapplication.R;
 import img.myapplication.RoundImageView;
@@ -47,6 +37,7 @@ public class SConnectAcceptFragment extends Fragment {
     private TextView zerocount;
     private String acceptedURL;
     private String hostURL;
+    private ImageDownloader imageDownloader;
     private void getURLs() {
         hostURL = getString(R.string.host);
         String appURL=getString(R.string.app);
@@ -63,6 +54,7 @@ public class SConnectAcceptFragment extends Fragment {
                              Bundle savedInstanceState) {
         getURLs();
         cancelled=false;
+        imageDownloader=new ImageDownloader(getContext());
         db=new MySQLiteHelper(getContext());
         View view = inflater.inflate(R.layout.fragment_sconnect_accept, container, false);
 
@@ -177,9 +169,10 @@ public class SConnectAcceptFragment extends Fragment {
                 viewHolder.dp.setVisibility(View.GONE);
             else {
                 viewHolder.dp.setVisibility(View.VISIBLE);
-                viewHolder.dp.setImageResource(R.drawable.ic_person_black_24dp);
-                new ImageLoadTask(card.dp_link, viewHolder.dp, (int) getResources().getDimension(R.dimen.roundimage_length), (int) getResources().getDimension(R.dimen.roundimage_length))
-                        .execute();
+                imageDownloader.getImage(card.dp_link, viewHolder.dp
+                        , (int) getResources().getDimension(R.dimen.roundimage_length)
+                        , (int) getResources().getDimension(R.dimen.roundimage_length)
+                        ,R.drawable.ic_person_black_24dp);
             }
             if ("".equals(card.fblink))
                 row.findViewById(R.id.fbline).setVisibility(View.GONE);
@@ -218,103 +211,4 @@ public class SConnectAcceptFragment extends Fragment {
         }
     }
 
-public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
-
-    private String url;
-    private ImageView imageView;
-    private int ht;
-    private int wt;
-
-    public ImageLoadTask(String url, ImageView imageView, int h,int w) {
-        this.url = url;
-        this.imageView = imageView;
-        this.ht=h;
-        this.wt=w;
-    }
-    private int getInSampleSize(BitmapFactory.Options options){
-
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > ht || width > wt) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            while ((halfHeight / inSampleSize) > ht
-                    && (halfWidth / inSampleSize) > wt) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-    private HttpURLConnection getConnection(){
-        HttpURLConnection connection = null;
-        try {
-            connection = (HttpURLConnection) new URL(url)
-                    .openConnection();
-            connection.setConnectTimeout(3000);
-            connection.setReadTimeout(5000);
-            connection.setDoInput(true);
-            connection.setUseCaches(true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return connection;
-    }
-    private Bitmap loadImage(){
-        InputStream input=null;
-        Bitmap bitmap=null;
-        BitmapFactory.Options options=new BitmapFactory.Options();
-        try {
-            input= new BufferedInputStream(getConnection().getInputStream());
-            input.mark(input.available());
-            options.inJustDecodeBounds=true;
-            BitmapFactory.decodeStream(input, null, options);
-            options.inSampleSize=getInSampleSize(options);
-            options.inJustDecodeBounds = false;
-            input.reset();
-            bitmap=BitmapFactory.decodeStream(input,null,options);
-        } catch (IOException e) {
-            e.printStackTrace();
-            if (input!=null){
-                options.inJustDecodeBounds=false;
-                options.inPreferredConfig= Bitmap.Config.RGB_565;
-                options.inSampleSize=8;
-                try {
-                    input=new BufferedInputStream(getConnection().getInputStream());
-                    bitmap=BitmapFactory.decodeStream(input,null,options);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-        return bitmap;
-    }
-    private Bitmap image(){
-        Bitmap bitmap=BitmapCacheUtil.getCache().get(url);
-        if (bitmap==null){
-            bitmap=loadImage();
-            if (bitmap!=null)
-                BitmapCacheUtil.getCache().put(url, bitmap);
-        }
-        return bitmap;
-    }
-
-    @Override
-    protected Bitmap doInBackground(Void... params) {
-        return image();
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    @Override
-    protected void onPostExecute(Bitmap result) {
-        super.onPostExecute(result);
-        if (result!=null)
-            imageView.setImageBitmap(result);
-    }
-
-}
 }

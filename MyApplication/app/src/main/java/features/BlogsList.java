@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -37,10 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -50,7 +45,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import img.myapplication.BitmapCacheUtil;
+import img.myapplication.ImageDownloader;
 import img.myapplication.MySQLiteHelper;
 import img.myapplication.Navigation;
 import img.myapplication.NavigationAudience;
@@ -78,6 +73,7 @@ public class BlogsList extends Fragment {
     private String sessid;
     private int spinnerPos;
     private String hostURL;
+    private ImageDownloader imageDownloader;
     private void getURLs(){
         this.hostURL=getString(R.string.host);
         String appURL=getString(R.string.app);
@@ -97,6 +93,7 @@ public class BlogsList extends Fragment {
         resume=true;
         blogsCount=0;
         lastId=0;
+        imageDownloader=new ImageDownloader(getContext());
         super.onCreate(savedInstanceState);
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
@@ -361,19 +358,20 @@ public class BlogsList extends Fragment {
             viewHolder.category.setText(card.category);
             viewHolder.blogUrl=BlogUrl+card.group_username+"/"+card.slug;
 
+            int dpHolder;
             if (card.student)
-                viewHolder.dp.setImageResource(R.drawable.ic_person_black_24dp);
+                dpHolder=R.drawable.ic_person_black_24dp;
             else
-                viewHolder.dp.setImageResource(R.drawable.ic_group_black_24dp);
-            new ImageLoadTask(hostURL+card.dpurl,viewHolder.dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length))
-                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                dpHolder=R.drawable.ic_group_black_24dp;
+
+            imageDownloader.getImage(hostURL+card.dpurl,viewHolder.dp
+                    ,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length),dpHolder);
 
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);
                 row.findViewById(R.id.img_layout).setVisibility(View.VISIBLE);
-                viewHolder.img.setImageResource(R.drawable.loading);
-                new ImageLoadTask(hostURL + card.imageurl, viewHolder.img,screen_width,screen_width)
-                        .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                imageDownloader.getImage(hostURL + card.imageurl
+                        , viewHolder.img,screen_width,screen_width,R.drawable.loading);
             }
             else {
                 row.findViewById(R.id.img_layout).setVisibility(View.GONE);
@@ -411,108 +409,7 @@ public class BlogsList extends Fragment {
         }
 
     }
-    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
-        private String url;
-        private ImageView imageView;
-        private int ht;
-        private int wt;
-
-        public ImageLoadTask(String url, ImageView imageView, int h,int w) {
-            this.url = url;
-            this.imageView = imageView;
-            this.ht=h;
-            this.wt=w;
-        }
-
-        private int getInSampleSize(BitmapFactory.Options options){
-
-            final int height = options.outHeight;
-            final int width = options.outWidth;
-            int inSampleSize = 1;
-
-            if (height > ht || width > wt) {
-
-                final int halfHeight = height / 2;
-                final int halfWidth = width / 2;
-
-                while ((halfHeight / inSampleSize) > ht
-                        && (halfWidth / inSampleSize) > wt) {
-                    inSampleSize *= 2;
-                }
-            }
-
-            return inSampleSize;
-        }
-        private HttpURLConnection getConnection(){
-            HttpURLConnection connection = null;
-            try {
-                connection = (HttpURLConnection) new URL(url)
-                        .openConnection();
-                connection.setConnectTimeout(3000);
-                connection.setReadTimeout(5000);
-                connection.setDoInput(true);
-                connection.setUseCaches(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return connection;
-        }
-        private Bitmap loadImage(){
-            InputStream input=null;
-            Bitmap bitmap=null;
-            BitmapFactory.Options options=new BitmapFactory.Options();
-            try {
-                input= new BufferedInputStream(getConnection().getInputStream());
-                input.mark(input.available());
-                options.inJustDecodeBounds=true;
-                BitmapFactory.decodeStream(input, null, options);
-                options.inSampleSize=getInSampleSize(options);
-                options.inJustDecodeBounds = false;
-                input.reset();
-                bitmap=BitmapFactory.decodeStream(input,null,options);
-            } catch (IOException e) {
-                e.printStackTrace();
-                if (input!=null){
-                    options.inJustDecodeBounds=false;
-                    options.inPreferredConfig= Bitmap.Config.RGB_565;
-                    options.inSampleSize=8;
-                    try {
-                        input=new BufferedInputStream(getConnection().getInputStream());
-                        bitmap=BitmapFactory.decodeStream(input,null,options);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            }
-            return bitmap;
-        }
-        private Bitmap image(){
-                Bitmap bitmap=BitmapCacheUtil.getCache().get(url);
-                if (bitmap==null){
-                    bitmap=loadImage();
-                    if (bitmap!=null)
-                        BitmapCacheUtil.getCache().put(url,bitmap);
-                }
-                return bitmap;
-        }
-
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-            return image();
-        }
-
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            super.onPostExecute(result);
-            if (result!=null)
-                imageView.setImageBitmap(result);
-            else
-                imageView.setImageResource(R.drawable.img_error);
-        }
-
-    }
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
