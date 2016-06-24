@@ -27,16 +27,16 @@ public class AboutFragment extends Fragment {
         View view= inflater.inflate(R.layout.fragment_about, container, false);
         SwipeImageAdapter pagerAdapter=null;
         if (getActivity() instanceof Navigation) {
-            int[] imageId={R.drawable.img_error};
+            int[] imageId={R.drawable.p01_welcome,R.drawable.p02_articles,R.drawable.p03_senior_connect};
             pagerAdapter=new SwipeImageAdapter(imageId);
         }
         else if (getActivity() instanceof NavigationStudent) {
-            int[] imageId={R.drawable.img_error};
+            int[] imageId={R.drawable.p01_welcome,R.drawable.p02_articles,R.drawable.p04_junior_connect};
             pagerAdapter=new SwipeImageAdapter(imageId);
         }
         else if (getActivity() instanceof NavigationAudience) {
             ((NavigationAudience) getActivity()).setActionBarTitle(getString(R.string.title_about));
-            int[] imageId={R.drawable.img_error};
+            int[] imageId={R.drawable.p01_welcome,R.drawable.p02_articles};
             pagerAdapter=new SwipeImageAdapter(imageId);
         }
         ViewPager pager= (ViewPager) view.findViewById(R.id.pager);

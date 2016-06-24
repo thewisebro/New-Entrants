@@ -29,25 +29,31 @@ public class ImageDownloader {
 
     public void getImage(String url, ImageView imageView, int ht, int wt,int placeHolder){
         if (cancelPotentialDownload(url, imageView)) {
-            final ImageLoadTask task=new ImageLoadTask(url,imageView,ht,wt);
+            final ImageLoadTask task=new ImageLoadTask(url,imageView,ht,wt,true);
             final AsyncDrawable asyncDrawable = new AsyncDrawable(task,placeHolder);
             imageView.setImageDrawable(asyncDrawable);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
+    public void loadImage(String url, ImageView imageView, int ht, int wt){
+        new ImageLoadTask(url,imageView,ht,wt,false)
+                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
     private class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
+        private boolean flag;
         private String url;
         private final WeakReference<ImageView> imageViewReference;
         private int ht;
         private int wt;
 
-        public ImageLoadTask(String url, ImageView imageView, int h,int w) {
+        public ImageLoadTask(String url, ImageView imageView, int h,int w, boolean b) {
             this.url = url;
             imageViewReference = new WeakReference<ImageView>(imageView);
             ht=h;
             wt=w;
+            flag=b;
         }
 
         private int getInSampleSize(BitmapFactory.Options options){
@@ -74,7 +80,7 @@ public class ImageDownloader {
                 connection = (HttpURLConnection) new URL(url)
                         .openConnection();
                 connection.setConnectTimeout(3000);
-                connection.setReadTimeout(5000);
+                connection.setReadTimeout(7000);
                 connection.setDoInput(true);
                 connection.setUseCaches(true);
             } catch (IOException e) {
@@ -134,9 +140,14 @@ public class ImageDownloader {
             }
             if (imageViewReference != null) {
                 ImageView imageView = imageViewReference.get();
-                ImageLoadTask task= getImageLoaderTask(imageView);
-                if (this == task) {
-                    if (result!=null)
+                if (result!=null){
+                    if (flag){
+                        ImageLoadTask task= getImageLoaderTask(imageView);
+                        if (this == task) {
+                            imageView.setImageBitmap(result);
+                        }
+                    }
+                    else
                         imageView.setImageBitmap(result);
                 }
             }

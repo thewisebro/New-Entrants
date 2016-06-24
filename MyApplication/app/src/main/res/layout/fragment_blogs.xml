@@ -7,13 +7,13 @@
     android:background="@color/light_blue"
     app:srl_direction="bottom">
 
-<ListView
-    android:id="@+id/card_listView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:listSelector="@android:color/transparent"
-    android:cacheColorHint="@android:color/transparent"
-    android:scrollbars="none"
-    android:divider="@null"
-    android:dividerHeight="8dp" />
+    <ListView
+        android:id="@+id/card_listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:scrollbars="none"
+        android:divider="@null"
+        android:dividerHeight="8dp" />
 </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>

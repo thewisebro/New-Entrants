@@ -1,16 +1,12 @@
 package features;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,10 +24,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -39,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import img.myapplication.ImageDownloader;
 import img.myapplication.MySQLiteHelper;
 import img.myapplication.Navigation;
 import img.myapplication.NavigationAudience;
@@ -237,7 +231,9 @@ public class BlogWebView extends Fragment {
                 }
             });
         }
-        new ImageLoadTask(hostURL+model.dpurl,dp,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length)).execute();
+        new ImageDownloader(getContext()).loadImage(hostURL+model.dpurl,dp
+                ,(int) getResources().getDimension(R.dimen.roundimage_length)
+                ,(int) getResources().getDimension(R.dimen.roundimage_length));
     }
     public String getData(String str){
         try {
@@ -270,97 +266,6 @@ public class BlogWebView extends Fragment {
             e.printStackTrace();
             return "fail";
         }
-    }
-
-
-    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
-
-        private String url;
-        private ImageView imageView;
-        private int ht;
-        private int wt;
-
-        public ImageLoadTask(String url, ImageView imageView, int h,int w) {
-            this.url = url;
-            this.imageView = imageView;
-            this.ht=h;
-            this.wt=w;
-        }
-        private int getInSampleSize(BitmapFactory.Options options){
-
-            final int height = options.outHeight;
-            final int width = options.outWidth;
-            int inSampleSize = 1;
-
-            if (height > ht || width > wt) {
-
-                final int halfHeight = height / 2;
-                final int halfWidth = width / 2;
-
-                while ((halfHeight / inSampleSize) > ht
-                        && (halfWidth / inSampleSize) > wt) {
-                    inSampleSize *= 2;
-                }
-            }
-
-            return inSampleSize;
-        }
-        private HttpURLConnection getConnection(){
-            HttpURLConnection connection = null;
-            try {
-                connection = (HttpURLConnection) new URL(url)
-                        .openConnection();
-                connection.setConnectTimeout(3000);
-                connection.setReadTimeout(5000);
-                connection.setDoInput(true);
-                connection.setUseCaches(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return connection;
-        }
-        private Bitmap loadImage(){
-            InputStream input=null;
-            Bitmap bitmap=null;
-            BitmapFactory.Options options=new BitmapFactory.Options();
-            try {
-                input= new BufferedInputStream(getConnection().getInputStream());
-                input.mark(input.available());
-                options.inJustDecodeBounds=true;
-                BitmapFactory.decodeStream(input, null, options);
-                options.inSampleSize=getInSampleSize(options);
-                options.inJustDecodeBounds = false;
-                input.reset();
-                bitmap=BitmapFactory.decodeStream(input,null,options);
-            } catch (IOException e) {
-                e.printStackTrace();
-                if (input!=null){
-                    options.inJustDecodeBounds=false;
-                    options.inPreferredConfig= Bitmap.Config.RGB_565;
-                    options.inSampleSize=8;
-                    try {
-                        input=new BufferedInputStream(getConnection().getInputStream());
-                        bitmap=BitmapFactory.decodeStream(input,null,options);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            }
-            return bitmap;
-        }
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-            return loadImage();
-        }
-
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            super.onPostExecute(result);
-            if (result!=null)
-                imageView.setImageBitmap(result);
-        }
-
     }
 
 }

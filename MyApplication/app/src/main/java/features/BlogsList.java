@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -63,6 +64,7 @@ public class BlogsList extends Fragment {
     private List<BlogModel> items;
     private ListView listView;
     private TextView tv;        //Footer View
+    private TextView noblog;
     private SwipyRefreshLayout swipeLayout;
     private int blogsCount;
     private int lastId;
@@ -121,6 +123,11 @@ public class BlogsList extends Fragment {
         tv.setText("Pull Up to Load More");
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
         listView.addFooterView(tv);
+
+        noblog=new TextView(getContext());
+        noblog.setText(getString(R.string.no_blog));
+        noblog.setGravity(Gravity.CENTER_HORIZONTAL);
+        noblog.setTypeface(null, Typeface.BOLD);
 
         swipeLayout= (SwipyRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light,
@@ -287,16 +294,20 @@ public class BlogsList extends Fragment {
 
         public void refresh(){
             if (items.size()==0 ) {
-                Toast.makeText(getContext(), "No More Blogs", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "No More Blogs", Toast.LENGTH_SHORT).show();
                 listView.removeFooterView(tv);
+                if (cardList.size()==0){
+                    listView.addHeaderView(noblog);
+                }
             }
             else {
+                listView.removeHeaderView(noblog);
                 this.cardList.addAll(items);
                 if (listView.getFooterViewsCount()==0)
                     listView.addFooterView(tv);
-                //Toast.makeText(getContext(), "List Updated", Toast.LENGTH_SHORT).show();
                 notifyDataSetChanged();
             }
+
         }
         @Override
         public void clear(){
@@ -360,11 +371,11 @@ public class BlogsList extends Fragment {
 
             int dpHolder;
             if (card.student)
-                dpHolder=R.drawable.ic_person_black_24dp;
+                dpHolder = R.drawable.ic_person_black_24dp;
             else
-                dpHolder=R.drawable.ic_group_black_24dp;
+                dpHolder = R.drawable.ic_group_black_24dp;
 
-            imageDownloader.getImage(hostURL+card.dpurl,viewHolder.dp
+            imageDownloader.getImage(hostURL + card.dpurl,viewHolder.dp
                     ,(int) getResources().getDimension(R.dimen.roundimage_length),(int) getResources().getDimension(R.dimen.roundimage_length),dpHolder);
 
             if (card.imageurl!=null) {

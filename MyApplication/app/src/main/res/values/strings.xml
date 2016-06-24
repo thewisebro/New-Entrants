@@ -11,6 +11,7 @@
     <string name="appLink"><a href="http://people.iitr.ernet.in/iitr_fresherlogue/">IITR Fresherlogue Web</a></string>
     <string name="desc_junior">---description for juniors---</string>
     <string name="desc_senior">---description for seniors---</string>
+    <string name="no_blog">No Article to Show</string>
     <string-array name="entrantstabs">
         <item>Articles</item>
         <item>Senior Connect</item>

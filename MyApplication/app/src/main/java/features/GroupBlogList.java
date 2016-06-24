@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -61,6 +62,7 @@ public class GroupBlogList extends Fragment {
     private List<BlogModel> items;
     private ListView listView;
     private TextView tv;   //Footer View
+    private TextView noblog;
     private LinearLayout groupDesc;
     private SwipyRefreshLayout swipeLayout;
     private int blogsCount;
@@ -118,11 +120,14 @@ public class GroupBlogList extends Fragment {
         View view=inflater.inflate(R.layout.fragment_blogs, container, false);
         listView = (ListView) view.findViewById(R.id.card_listView);
 
-        listView.addHeaderView(new View(getContext()));
         tv=new TextView(getContext());
         tv.setText("Pull Up to Load More");
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
-        //listView.addFooterView(tv);
+
+        noblog=new TextView(getContext());
+        noblog.setText(getString(R.string.no_blog));
+        noblog.setGravity(Gravity.CENTER_HORIZONTAL);
+        noblog.setTypeface(null, Typeface.BOLD);
 
         listView.addHeaderView(groupDesc);
 
@@ -338,15 +343,19 @@ public class GroupBlogList extends Fragment {
     public class BlogCardArrayAdapter  extends ArrayAdapter<BlogModel> {
 
         public void refresh(){
-            if (items.size()==0) {
-                Toast.makeText(getContext(), "No More Blogs", Toast.LENGTH_LONG).show();
+            if (items.size()==0 ) {
+                Toast.makeText(getContext(), "No More Blogs", Toast.LENGTH_SHORT).show();
                 listView.removeFooterView(tv);
+                if (cardList.size()==0){
+                    listView.addHeaderView(noblog);
+                }
             }
             else {
+                listView.removeHeaderView(noblog);
                 this.cardList.addAll(items);
-                notifyDataSetChanged();
                 if (listView.getFooterViewsCount()==0)
                     listView.addFooterView(tv);
+                notifyDataSetChanged();
             }
         }
 
@@ -402,10 +411,10 @@ public class GroupBlogList extends Fragment {
             viewHolder.category.setText("From the Groups");
             viewHolder.blogUrl = groupUrl+"/" + card.slug;
 
-            imageDownloader.getImage(host+card.dpurl,viewHolder.dp
-                    ,(int) getResources().getDimension(R.dimen.roundimage_length)
-                    ,(int) getResources().getDimension(R.dimen.roundimage_length)
-                    ,R.drawable.ic_group_black_24dp);
+            imageDownloader.getImage(host + card.dpurl, viewHolder.dp
+                    , (int) getResources().getDimension(R.dimen.roundimage_length)
+                    , (int) getResources().getDimension(R.dimen.roundimage_length)
+                    , R.drawable.ic_group_black_24dp);
 
             if (card.imageurl!=null) {
                 row.findViewById(R.id.card_middle).setVisibility(View.GONE);

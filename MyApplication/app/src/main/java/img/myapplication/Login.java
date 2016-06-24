@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -69,6 +70,8 @@ public class Login extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setContentView(R.layout.activity_login);
+        splashscreendelay();
         getURLs();
         cancelAlarm();   //cancel notification alarm
         MySQLiteHelper db=new MySQLiteHelper(this);
@@ -85,15 +88,21 @@ public class Login extends ActionBarActivity {
             startActivity(intent);
             finish();
         }
-        else if (db.loggedAudience()){
-            Intent intent=new Intent(this,NavigationAudience.class);
-            intent.putExtra("first_time",false);
-            startActivity(intent);
-            finish();
-        }
-
+            else if (db.loggedAudience()){
+                Intent intent=new Intent(this,NavigationAudience.class);
+                intent.putExtra("first_time",false);
+                startActivity(intent);
+                finish();
+            }
         params=new HashMap<String,String>();
-        setContentView(R.layout.activity_login);
+    }
+    public void splashscreendelay(){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+            }
+        }, 5000);
     }
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
@@ -126,7 +135,6 @@ public class Login extends ActionBarActivity {
         }
         else {
             Toast.makeText(getApplicationContext(), "Check network connection!", Toast.LENGTH_LONG).show();
-            //getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
         }
     }
 
@@ -183,11 +191,6 @@ public class Login extends ActionBarActivity {
 
             if (responseCode== HttpURLConnection.HTTP_OK){
                 obj=urlConnectionPost.getContent();
-                /*if (cookieStore.getCookies().size()>1){
-                    return "true";
-                }
-                else
-                    return "false";*/
                 for (HttpCookie cookie: cookieStore.getCookies())
                     if ("CHANNELI_SESSID".equals(cookie.getName()))
                         return "true";
@@ -231,7 +234,6 @@ public class Login extends ActionBarActivity {
                 details=new HashMap<String,String>();
                 details.put("username",params.get("username"));
                 details.put("password", params.get("password"));
-                //getDetails();
                 String get_details=getDetails();
                 if ("success".equals(get_details)) {
                     return getUser();
@@ -244,7 +246,6 @@ public class Login extends ActionBarActivity {
         }
         @Override
         protected void onPostExecute(String result) {
-
             if ("false".equals(result)){
                 getSupportFragmentManager().popBackStack();
                 Toast.makeText(getApplicationContext(),"Enter correct username and password", Toast.LENGTH_SHORT).show();
