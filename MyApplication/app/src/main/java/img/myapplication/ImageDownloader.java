@@ -79,8 +79,6 @@ public class ImageDownloader {
             try {
                 connection = (HttpURLConnection) new URL(url)
                         .openConnection();
-                connection.setConnectTimeout(3000);
-                connection.setReadTimeout(7000);
                 connection.setDoInput(true);
                 connection.setUseCaches(true);
             } catch (IOException e) {

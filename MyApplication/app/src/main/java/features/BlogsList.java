@@ -192,7 +192,11 @@ public class BlogsList extends Fragment {
             });
             this.dialog.show();
         }
-
+        @Override
+        protected void onCancelled(String result){
+            cardArrayAdapter.refresh();
+            items.clear();
+        }
         @Override
         protected String doInBackground(String... params) {
 

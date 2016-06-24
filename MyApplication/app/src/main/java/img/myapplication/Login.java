@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -51,7 +50,7 @@ import models.StudentModel;
 
 
 public class Login extends ActionBarActivity {
-    public Map<String,String> params;
+    public Map<String,String> params=new HashMap<String,String>();
     public CookieManager cookieManager;
     public Map<String,String> details;
     private StudentModel student=new StudentModel();
@@ -70,8 +69,6 @@ public class Login extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setContentView(R.layout.activity_login);
-        splashscreendelay();
         getURLs();
         cancelAlarm();   //cancel notification alarm
         MySQLiteHelper db=new MySQLiteHelper(this);
@@ -94,15 +91,8 @@ public class Login extends ActionBarActivity {
                 startActivity(intent);
                 finish();
             }
-        params=new HashMap<String,String>();
-    }
-    public void splashscreendelay(){
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-            }
-        }, 5000);
+
+        setContentView(R.layout.activity_login);
     }
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);

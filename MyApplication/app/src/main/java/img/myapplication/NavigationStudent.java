@@ -133,6 +133,7 @@ public class NavigationStudent extends ActionBarActivity
     public void loadFragment(final Fragment fragment){
         if (fragment == null)
             return;
+        decideActionBar(fragment);
         if (fragmentCount!=0) {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -172,7 +173,12 @@ public class NavigationStudent extends ActionBarActivity
 
         loadFragment(fragment);
     }
-
+    public void decideActionBar(Fragment fragment){
+        if (fragment instanceof AboutFragment)
+            getSupportActionBar().hide();
+        else
+            getSupportActionBar().show();
+    }
     public void getPageTitle(){
 
         String[] mTitleArray = getResources().getStringArray(R.array.studenttabs);

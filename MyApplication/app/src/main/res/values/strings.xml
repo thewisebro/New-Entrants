@@ -194,6 +194,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_update">Update</string>
     <string name="title_activity_navigation_audience">NavigationAudience</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
 
 
 

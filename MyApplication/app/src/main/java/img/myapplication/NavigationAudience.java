@@ -61,7 +61,7 @@ public class NavigationAudience extends ActionBarActivity
         FrameLayout container = (FrameLayout) drawer.findViewById(R.id.container_drawer); // This is the container we defined just now.
         container.addView(child);
         //drawer.setPadding(0,getStatusBarHeight(),0,0);
-        (drawer.findViewById(R.id.navigation_drawer)).setPadding(0,getStatusBarHeight(),0,0);
+        (drawer.findViewById(R.id.navigation_drawer)).setPadding(0, getStatusBarHeight(), 0, 0);
         // Make the drawer replace the first child
         decor.addView(drawer);
     }
@@ -114,6 +114,7 @@ public class NavigationAudience extends ActionBarActivity
     public void loadFragment(final Fragment fragment){
         if (fragment == null)
             return;
+        decideActionBar(fragment);
         if (fragmentCount!=0) {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -149,6 +150,12 @@ public class NavigationAudience extends ActionBarActivity
         }
 
         loadFragment(fragment);
+    }
+    public void decideActionBar(Fragment fragment){
+        if (fragment instanceof AboutFragment)
+            getSupportActionBar().hide();
+        else
+            getSupportActionBar().show();
     }
 
     public void getPageTitle(){
