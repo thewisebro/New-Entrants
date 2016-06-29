@@ -21,12 +21,14 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
+            android:paddingTop="12px"
+            android:paddingBottom="12px"
             android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/font_size_large"
                 android:text="Request  "
                 android:id="@+id/textView5"
                 android:textColor="@color/blue_grey_300"
@@ -35,7 +37,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/font_size_med_large"
                 android:id="@+id/request_no"
                 android:textColor="@color/blue_grey_300"
                 android:textStyle="bold" />
@@ -44,7 +46,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="@dimen/font_size_smaller"
             android:text="Query"
             android:id="@+id/textView11"
             android:textColor="@color/blue_grey_300" />
@@ -59,7 +61,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="@dimen/font_size_smaller"
             android:text="Request Seniors with"
             android:id="@+id/textView12"
             android:textColor="@color/blue_grey_300" />
@@ -95,7 +97,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="@dimen/font_size_smaller"
             android:text="Posted on"
             android:id="@+id/textView14"
             android:textColor="@color/blue_grey_300" />
@@ -107,46 +109,32 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/date" />
 
-        <RelativeLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_size_smaller"
+            android:text="Seniors Accepted"
+            android:textColor="@color/blue_grey_300" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="REQUEST MORE SENIORS"
-                android:id="@+id/more"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:textColor="@color/yellow_700"
-                android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue_grey_900"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/accepted" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:textColor="@color/black"
-                android:id="@+id/accepted" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_size_small"
+            android:text="REQUEST MORE SENIORS"
+            android:id="@+id/more"
+            android:textColor="@color/yellow_700"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12px"
+            android:layout_marginBottom="12px" />
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Seniors Accepted:"
-                android:layout_toLeftOf="@id/accepted"
-                android:layout_toRightOf="@+id/more"
-                android:layout_gravity="right"
-                android:textColor="@color/blue_grey_300"
-                android:gravity="center_horizontal"
-                android:layout_centerVertical="true"
-                android:id="@+id/textView17"
-                android:singleLine="false" />
-        </RelativeLayout>
 
     </LinearLayout>
 </FrameLayout>

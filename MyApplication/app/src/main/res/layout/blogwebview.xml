@@ -28,6 +28,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/description"
+                android:textStyle="italic"
+                android:textColor="@color/blue_grey_500"
+                android:padding="5dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:id="@+id/date"
                 android:textColor="@color/blue_grey_500"
@@ -38,16 +49,6 @@
                 android:gravity="end"
                 android:fontFamily="sans-serif"
                 android:paddingRight="10dp" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/description"
-                android:textStyle="italic"
-                android:textColor="@color/blue_grey_500"
-                android:padding="5dp"
-                android:fontFamily="sans-serif"
-                android:gravity="center_horizontal" />
 
             <WebView
                 android:layout_width="match_parent"
@@ -76,7 +77,7 @@
             android:layout_width="@dimen/roundimage_length"
             android:layout_height="@dimen/roundimage_length"
             android:id="@+id/group_dp"
-            android:padding="10dp" />
+            android:padding="5dp" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -87,7 +88,7 @@
             android:fontFamily="sans-serif"
             android:layout_toRightOf="@+id/group_dp"
             android:textColor="@color/yellow_700"
-            android:textStyle="normal"
+            android:textStyle="bold"
             android:layout_centerVertical="true" />
     </RelativeLayout>
 

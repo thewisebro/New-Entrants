@@ -13,13 +13,10 @@
         android:id="@+id/card_layout"
         android:orientation="vertical"
         android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:paddingRight="15dp"
         android:animateLayoutChanges="true"
         android:background="@drawable/card_background_selector"
-        android:descendantFocusability="afterDescendants">
+        android:descendantFocusability="afterDescendants"
+        android:padding="12px">
 
         <RelativeLayout
             android:orientation="vertical"
@@ -27,33 +24,37 @@
             android:layout_height="wrap_content"
             android:id="@+id/top_view"
             android:outlineProvider="paddedBounds"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginTop="12px"
+            android:layout_marginBottom="12px">
 
             <TextView
                 android:id="@+id/j_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/yellow_700"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentLeft="true" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/j_name"
-                android:gravity="center_horizontal"
                 android:id="@+id/j_loc"
-                android:layout_centerHorizontal="true"
+                android:layout_alignParentLeft="true"
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/j_town"
                     android:layout_width="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blue_grey_300"/>
 
                 <TextView
                     android:id="@+id/j_state"
                     android:layout_width="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blue_grey_300"/>
             </LinearLayout>
@@ -62,11 +63,9 @@
                 android:id="@+id/j_branch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:textColor="@color/blue_grey_300"
-                android:layout_centerHorizontal="true"
                 android:layout_below="@+id/j_loc"
-                android:textAlignment="center" />
+                android:layout_alignParentLeft="true"/>
 
             <ToggleButton
                 android:layout_width="wrap_content"
@@ -82,7 +81,8 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:alpha=".3" />
+                android:alpha=".3"
+                android:layout_margin="12px" />
 
         </RelativeLayout>
 

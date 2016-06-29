@@ -13,13 +13,10 @@
         android:id="@+id/card_layout"
         android:orientation="vertical"
         android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:paddingRight="15dp"
         android:animateLayoutChanges="true"
         android:background="@drawable/card_background_selector"
-        android:descendantFocusability="afterDescendants">
+        android:descendantFocusability="afterDescendants"
+        android:padding="12px">
 
         <RelativeLayout
             android:orientation="vertical"
@@ -27,22 +24,25 @@
             android:layout_height="wrap_content"
             android:id="@+id/top_view"
             android:outlineProvider="paddedBounds"
-            android:layout_margin="10dp">
+            android:layout_margin="12px">
 
             <TextView
                 android:id="@+id/j_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/yellow_700"
+                android:textSize="@dimen/font_size_small"
+                android:textStyle="bold"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"/>
+                android:layout_alignParentLeft="true" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/j_name"
                 android:id="@+id/j_loc"
                 android:layout_centerHorizontal="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_alignParentLeft="true">
                 <TextView
                     android:id="@+id/j_town"
                     android:layout_width="wrap_content"
@@ -65,7 +65,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue_grey_300"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/j_loc"/>
+                android:layout_below="@+id/j_loc"
+                android:layout_alignParentLeft="true" />
 
             <ToggleButton
                 android:layout_width="50dp"
@@ -81,7 +82,8 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:alpha=".3" />
+                android:alpha=".3"
+                android:layout_margin="12px" />
 
         </RelativeLayout>
 
@@ -129,7 +131,8 @@
                 android:id="@+id/connect"
                 android:layout_gravity="right"
                 android:textColor="@color/yellow_700"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_margin="12px" />
 
         </LinearLayout>
 

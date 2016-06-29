@@ -24,54 +24,63 @@
             android:layout_height="wrap_content"
             android:id="@+id/top_view"
             android:outlineProvider="paddedBounds"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginTop="12px"
+            android:layout_marginBottom="12px">
 
-            <TextView
-                android:id="@+id/s_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textStyle="bold"
-                android:textColor="@color/yellow_700"
+            <img.myapplication.RoundImageView
+                android:layout_width="@dimen/roundimage_length"
+                android:layout_height="@dimen/roundimage_length"
+                android:id="@+id/s_dp"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/s_name"
-                android:id="@+id/s_loc"
-                android:gravity="center_horizontal"
-                android:layout_centerHorizontal="true"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/s_town"
-                    android:layout_width="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/blue_grey_300"
-                    android:layout_below="@+id/s_name"/>
-                <TextView
-                    android:id="@+id/s_state"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/blue_grey_300"
-                    android:layout_centerHorizontal="true"
-                    android:layout_toLeftOf="@+id/s_town"
-                    android:layout_below="@+id/s_name"/>
-            </LinearLayout>
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_margin="12px" />
 
-            <TextView
-                android:id="@+id/s_branch"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/blue_grey_300"
-                android:layout_centerHorizontal="true"
-                android:gravity="center_horizontal"
-                android:layout_below="@+id/s_loc"
-                android:textAlignment="center" />
+                android:layout_toRightOf="@+id/s_dp"
+                android:id="@+id/s_detail"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/s_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textStyle="bold"
+                    android:textColor="@color/yellow_700"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/s_name"
+                    android:id="@+id/s_loc"
+                    android:layout_alignParentLeft="true"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/s_town"
+                        android:layout_width="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/blue_grey_300"/>
+                    <TextView
+                        android:id="@+id/s_state"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/blue_grey_300"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/s_branch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/blue_grey_300"
+                    android:layout_below="@+id/s_loc"
+                    android:layout_alignParentLeft="true"/>
+
+            </RelativeLayout>
 
             <ToggleButton
                 android:layout_width="50dp"
@@ -87,16 +96,10 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
+                android:layout_toRightOf="@+id/s_detail"
                 android:visibility="gone"
-                android:alpha=".3" />
-
-            <img.myapplication.RoundImageView
-                android:layout_width="@dimen/roundimage_length"
-                android:layout_height="@dimen/roundimage_length"
-                android:id="@+id/s_dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:alpha=".3"
+                android:layout_margin="12px" />
 
         </RelativeLayout>
 

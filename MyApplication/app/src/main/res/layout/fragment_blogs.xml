@@ -15,5 +15,6 @@
         android:cacheColorHint="@android:color/transparent"
         android:scrollbars="none"
         android:divider="@null"
+        android:padding="8dp"
         android:dividerHeight="8dp" />
 </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>

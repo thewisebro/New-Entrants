@@ -1,4 +1,5 @@
 package img.myapplication;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -8,30 +9,35 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import features.BlogsList;
+
 public class AboutFragment extends Fragment {
     private ViewPager pager;
     private ImageButton prevImage;
     private ImageButton nextImage;
+    private ImageButton gotIt;
+    private Activity activity;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_about, container, false);
         prevImage= (ImageButton) view.findViewById(R.id.prevIMG);
         nextImage= (ImageButton) view.findViewById(R.id.nextIMG);
+        gotIt= (ImageButton) view.findViewById(R.id.gotit);
         SwipeImageAdapter pagerAdapter=null;
         PageChangeListener pageChangeListener=null;
-        if (getActivity() instanceof Navigation) {
+        activity=getActivity();
+        if (activity instanceof Navigation) {
             int[] imageId={R.drawable.p01_welcome,R.drawable.p02_articles,R.drawable.p03_senior_connect};
             pagerAdapter=new SwipeImageAdapter(imageId);
             pageChangeListener=new PageChangeListener(imageId.length);
         }
-        else if (getActivity() instanceof NavigationStudent) {
+        else if (activity instanceof NavigationStudent) {
             int[] imageId={R.drawable.p01_welcome,R.drawable.p02_articles,R.drawable.p04_junior_connect};
             pagerAdapter=new SwipeImageAdapter(imageId);
             pageChangeListener=new PageChangeListener(imageId.length);
         }
-        else if (getActivity() instanceof NavigationAudience) {
-            ((NavigationAudience) getActivity()).setActionBarTitle(getString(R.string.title_about));
+        else if (activity instanceof NavigationAudience) {
             int[] imageId={R.drawable.p01_welcome,R.drawable.p02_articles};
             pagerAdapter=new SwipeImageAdapter(imageId);
             pageChangeListener=new PageChangeListener(imageId.length);
@@ -47,6 +53,17 @@ public class AboutFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 pager.setCurrentItem(pager.getCurrentItem() + 1);
+            }
+        });
+        gotIt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (activity instanceof Navigation)
+                    ((Navigation) activity).loadFragment(new BlogsList());
+                else if (activity instanceof NavigationStudent)
+                    ((NavigationStudent) activity).loadFragment(new BlogsList());
+                else if (activity instanceof NavigationAudience)
+                    ((NavigationAudience) activity).loadFragment(new BlogsList());
             }
         });
         pager.setOnPageChangeListener(pageChangeListener);
@@ -67,11 +84,13 @@ public class AboutFragment extends Fragment {
         public void onPageSelected(int position) {
             prevImage.setVisibility(View.VISIBLE);
             nextImage.setVisibility(View.VISIBLE);
+            gotIt.setVisibility(View.GONE);
             if (position==0) {
                 prevImage.setVisibility(View.GONE);
             }
             else if (position==length-1){
                 nextImage.setVisibility(View.GONE);
+                gotIt.setVisibility(View.VISIBLE);
             }
         }
 

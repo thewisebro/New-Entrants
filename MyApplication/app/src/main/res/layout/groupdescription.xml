@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/font_size_larger"
         android:id="@+id/name"
         android:padding="10dp"
         android:gravity="center_horizontal"
@@ -20,9 +20,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="@dimen/font_size_small"
         android:id="@+id/mission"
-        android:textStyle="italic|bold"
         android:gravity="center_horizontal"
         android:textColor="@color/blue_grey_500"
         android:padding="5dp"
@@ -30,7 +29,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="@dimen/font_size_smaller"
         android:id="@+id/description"
         android:gravity="center_horizontal"
         android:textColor="@color/blue_grey_800"

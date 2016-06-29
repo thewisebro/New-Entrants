@@ -15,4 +15,11 @@
     <dimen name="actionbarname_padding">10dp</dimen>
     <dimen name="spinner_padding">30dp</dimen>
     <dimen name="webview_textsize">10dp</dimen>
+    <dimen name="font_size_smaller">12sp</dimen>
+    <dimen name="font_size_small">14sp</dimen>
+    <dimen name="font_size_med_small">16sp</dimen>
+    <dimen name="font_size_medium">18sp</dimen>
+    <dimen name="font_size_med_large">20sp</dimen>
+    <dimen name="font_size_large">22sp</dimen>
+    <dimen name="font_size_larger">24sp</dimen>
 </resources>

@@ -5,7 +5,6 @@
     android:background="@drawable/card_background_selector"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
@@ -55,7 +54,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="@dimen/font_size_med_small"
                 android:layout_below="@+id/topic"
                 android:id="@+id/date"
                 android:fontFamily="sans-serif"
@@ -121,8 +120,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/category"
-                android:textStyle="bold|italic"
+                android:id="@+id/group"
+                android:textStyle="bold"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/yellow_700" />
 
@@ -130,7 +129,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/group"
+                android:id="@+id/category"
+                android:textStyle="italic"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/blue_grey_300" />
         </LinearLayout>

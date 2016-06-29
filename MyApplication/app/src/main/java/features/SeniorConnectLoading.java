@@ -24,6 +24,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import img.myapplication.MySQLiteHelper;
 import img.myapplication.Navigation;
@@ -178,6 +181,14 @@ public class SeniorConnectLoading extends Fragment {
                         model.allowed=object.getInt("allowed");
                         model.query=object.getString("description");
                         model.date=object.getString("date");
+                        SimpleDateFormat inputDate=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        SimpleDateFormat outputDate=new SimpleDateFormat("d MMM, yyyy");
+                        try {
+                            Date input=inputDate.parse(model.date);
+                            model.date=outputDate.format(input);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                         model.request_no=i+1;
                         db.addRequest(model);
                     }
