@@ -5,6 +5,8 @@
     android:background="@drawable/card_background_selector"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingLeft="12px"
+    android:paddingRight="12px"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout

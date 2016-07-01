@@ -5,5 +5,6 @@
     android:background="@drawable/tab_indicator"
     android:id="@+id/tabTitle"
     android:gravity="center"
+    android:fontFamily="sans-serif-medium"
     android:layout_gravity="center"
     xmlns:android="http://schemas.android.com/apk/res/android" />

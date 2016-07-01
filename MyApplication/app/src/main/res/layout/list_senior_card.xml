@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
+    android:paddingLeft="12px"
+    android:paddingRight="12px"
     android:descendantFocusability="beforeDescendants"
     android:longClickable="true">
 
@@ -13,7 +13,6 @@
         android:id="@+id/card_layout"
         android:orientation="vertical"
         android:layout_height="wrap_content"
-        android:padding="15dp"
         android:animateLayoutChanges="true"
         android:background="@drawable/card_background_selector"
         android:descendantFocusability="afterDescendants">
@@ -25,7 +24,8 @@
             android:id="@+id/top_view"
             android:outlineProvider="paddedBounds"
             android:layout_marginTop="12px"
-            android:layout_marginBottom="12px">
+            android:layout_marginBottom="12px"
+            android:padding="12px">
 
             <img.myapplication.RoundImageView
                 android:layout_width="@dimen/roundimage_length"
@@ -40,7 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_toRightOf="@+id/s_dp"
                 android:id="@+id/s_detail"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="12px">
                 <TextView
                     android:id="@+id/s_name"
                     android:layout_width="wrap_content"
@@ -109,7 +110,8 @@
             android:outlineProvider="paddedBounds"
             android:orientation="vertical"
             android:id="@+id/down_view"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:padding="12px">
 
             <LinearLayout
                 android:layout_width="match_parent"

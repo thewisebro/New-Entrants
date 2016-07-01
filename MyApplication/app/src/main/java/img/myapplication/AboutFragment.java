@@ -28,17 +28,19 @@ public class AboutFragment extends Fragment {
         PageChangeListener pageChangeListener=null;
         activity=getActivity();
         if (activity instanceof Navigation) {
-            int[] imageId={R.drawable.p01_welcome,R.drawable.p02_articles,R.drawable.p03_senior_connect};
+            int[] imageId={R.drawable.p01_welcome,R.drawable.t01_articles,R.drawable.t02_senior_connect
+                    ,R.drawable.t04_senior_connect_3,R.drawable.t03_senior_connect_2};
             pagerAdapter=new SwipeImageAdapter(imageId);
             pageChangeListener=new PageChangeListener(imageId.length);
         }
         else if (activity instanceof NavigationStudent) {
-            int[] imageId={R.drawable.p01_welcome,R.drawable.p02_articles,R.drawable.p04_junior_connect};
+            int[] imageId={R.drawable.p01_welcome,R.drawable.t01_articles
+                    ,R.drawable.t05_junior_connect,R.drawable.t06_junior_connect_2};
             pagerAdapter=new SwipeImageAdapter(imageId);
             pageChangeListener=new PageChangeListener(imageId.length);
         }
         else if (activity instanceof NavigationAudience) {
-            int[] imageId={R.drawable.p01_welcome,R.drawable.p02_articles};
+            int[] imageId={R.drawable.p01_welcome,R.drawable.t01_articles};
             pagerAdapter=new SwipeImageAdapter(imageId);
             pageChangeListener=new PageChangeListener(imageId.length);
         }

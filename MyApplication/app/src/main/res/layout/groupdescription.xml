@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/font_size_small"
+        android:textSize="@dimen/font_size_med_small"
         android:id="@+id/mission"
         android:gravity="center_horizontal"
         android:textColor="@color/blue_grey_500"
@@ -29,7 +29,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/font_size_smaller"
+        android:textSize="@dimen/font_size_small"
         android:id="@+id/description"
         android:gravity="center_horizontal"
         android:textColor="@color/blue_grey_800"

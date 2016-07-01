@@ -168,7 +168,7 @@ public class NavigationStudent extends ActionBarActivity
                     break;
                 case 4: logout();
                     break;
-                default: fragment=new OpeningFragment();
+                default: fragment=new AboutFragment();
             }
 
         loadFragment(fragment);

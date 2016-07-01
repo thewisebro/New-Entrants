@@ -15,7 +15,7 @@
         android:listSelector="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
-        android:dividerHeight="10dp" />
+        android:dividerHeight="12px" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

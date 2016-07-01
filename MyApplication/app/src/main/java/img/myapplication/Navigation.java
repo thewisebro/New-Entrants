@@ -139,7 +139,7 @@ public class Navigation extends ActionBarActivity
                     fragment = new EntrantUpdateFragment();
                     break;
                 default:
-                    fragment = new OpeningFragment();
+                    fragment = new AboutFragment();
                     break;
             }
 

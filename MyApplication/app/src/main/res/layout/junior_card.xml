@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
+    android:paddingLeft="12px"
+    android:paddingRight="12px"
     android:descendantFocusability="beforeDescendants"
     android:longClickable="true">
 
@@ -24,8 +24,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/top_view"
             android:outlineProvider="paddedBounds"
-            android:layout_marginTop="12px"
-            android:layout_marginBottom="12px">
+            android:layout_margin="12px">
 
             <TextView
                 android:id="@+id/j_name"

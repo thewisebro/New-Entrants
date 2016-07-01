@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
+    android:paddingLeft="12px"
+    android:paddingRight="12px"
     android:descendantFocusability="beforeDescendants"
     android:longClickable="true">
 
@@ -12,18 +12,14 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:paddingRight="15dp"
         android:background="@drawable/card_background_selector"
-        android:descendantFocusability="afterDescendants">
+        android:descendantFocusability="afterDescendants"
+        android:padding="12px">
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:paddingTop="12px"
-            android:paddingBottom="12px"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="12px">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -43,97 +39,126 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/font_size_smaller"
-            android:text="Query"
-            android:id="@+id/textView11"
-            android:textColor="@color/blue_grey_300" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="12px">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/query"
-            android:textColor="@color/blue_grey_900" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_small"
+                android:text="Query"
+                android:id="@+id/textView11"
+                android:textColor="@color/blue_grey_300" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/font_size_smaller"
-            android:text="Request Seniors with"
-            android:id="@+id/textView12"
-            android:textColor="@color/blue_grey_300" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_med_small"
+                android:id="@+id/query"
+                android:textColor="@color/blue_grey_900" />
+        </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="12px">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/param"
-                android:textColor="@color/blue_grey_900" />
+                android:textSize="@dimen/font_size_small"
+                android:text="Request Seniors with"
+                android:id="@+id/textView12"
+                android:textColor="@color/blue_grey_300" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_size_med_small"
+                    android:id="@+id/param"
+                    android:textColor="@color/blue_grey_900" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_size_med_small"
+                    android:text=" : "
+                    android:id="@+id/textView13"
+                    android:textColor="@color/blue_grey_900" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_size_med_small"
+                    android:id="@+id/value"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="12px">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text=" : "
-                android:id="@+id/textView13"
-                android:textColor="@color/blue_grey_900" />
+                android:textSize="@dimen/font_size_small"
+                android:text="Posted on"
+                android:id="@+id/textView14"
+                android:textColor="@color/blue_grey_300" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/value"
-                android:textColor="@color/black" />
+                android:textColor="@color/blue_grey_900"
+                android:textSize="@dimen/font_size_med_small"
+                android:id="@+id/date" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="12px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_small"
+                android:text="Seniors Accepted"
+                android:textColor="@color/blue_grey_300" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/blue_grey_900"
+                android:textSize="@dimen/font_size_med_small"
+                android:id="@+id/accepted" />
         </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_size_smaller"
-            android:text="Posted on"
-            android:id="@+id/textView14"
-            android:textColor="@color/blue_grey_300" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/blue_grey_900"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/date" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/font_size_smaller"
-            android:text="Seniors Accepted"
-            android:textColor="@color/blue_grey_300" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/blue_grey_900"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/accepted" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/font_size_small"
+            android:textSize="@dimen/font_size_med_small"
             android:text="REQUEST MORE SENIORS"
             android:id="@+id/more"
             android:textColor="@color/yellow_700"
             android:textStyle="bold"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12px"
-            android:layout_marginBottom="12px" />
+            android:gravity="center_horizontal"
+            android:padding="12px"
+            android:clickable="true"
+            android:longClickable="true" />
 
 
     </LinearLayout>

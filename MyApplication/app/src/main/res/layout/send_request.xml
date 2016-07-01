@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="REQUEST"
+            android:text="POST A REQUEST"
             android:id="@+id/textView15"
             android:fontFamily="sans-serif"
             android:textStyle="bold"
@@ -97,12 +97,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SEND"
+            android:text="POST"
             android:id="@+id/send"
             android:layout_gravity="center_horizontal"
             android:background="@color/light_green"
             android:layout_marginTop="15dp"
-            android:fontFamily="sans-serif"
+            android:fontFamily="sans-serif-medium"
             android:textColor="@color/white"
             android:textStyle="bold" />
     </LinearLayout>

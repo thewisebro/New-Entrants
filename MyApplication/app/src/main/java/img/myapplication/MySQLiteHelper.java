@@ -130,12 +130,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         //db.execSQL("drop table if exists requests");
         db.execSQL(CREATE_STUDENTS_TABLE);
         db.execSQL(CREATE_ENTRANTS_TABLE);
-        //db.execSQL(TEMP_ENTRANT);
-        //db.execSQL(TEMP_STUDENT);
-        //db.execSQL(TEMP_AUDIENCE);
         db.execSQL(CREATE_SENIORS_TABLE);
         db.execSQL(CREATE_REQUESTS_TABLE);
         db.execSQL(CREATE_JUNIORS_TABLE);
+        //db.execSQL(TEMP_ENTRANT);
+        //db.execSQL(TEMP_STUDENT);
+        //db.execSQL(TEMP_AUDIENCE);
         //db.execSQL(TEMP_REQUEST);
         //db.execSQL(TEMP_SENIOR);
         //db.execSQL(TEMP_JUNIOR);
