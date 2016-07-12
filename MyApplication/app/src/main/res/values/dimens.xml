@@ -7,6 +7,7 @@
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">240dp</dimen>
     <dimen name="roundimage_length">50dp</dimen>
+    <dimen name="arrow_width">25dp</dimen>
     <dimen name="fav_bt">60dp</dimen>
     <dimen name="drawer_img">180dp</dimen>
     <dimen name="blogcardimg_height">150dp</dimen>
