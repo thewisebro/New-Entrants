@@ -38,7 +38,6 @@ public class Navigation extends ActionBarActivity
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int mCurrentPosition=-1;
-    private CharSequence mTitle;
     private MySQLiteHelper db;
     private boolean updated=false;
     @Override
@@ -179,16 +178,8 @@ public class Navigation extends ActionBarActivity
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
-    public void getPageTitle(){
-
-        String[] mTitleArray = getResources().getStringArray(R.array.entrantstabs);
-        mTitle=mTitleArray[mCurrentPosition];
-    }
 
     public void restoreActionBar() {
-        if(mCurrentPosition != -1)
-            getPageTitle();
-        else mTitle="Welcome";
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);

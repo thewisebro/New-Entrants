@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            keyAlias 'AndroidKey'
+            keyAlias 'Android_Key'
             keyPassword 'ax50ankush'
             storeFile file('C:/Users/Ankush/AndroidStudioProjects/keystores/android.jks')
             storePassword 'ax50ankush'

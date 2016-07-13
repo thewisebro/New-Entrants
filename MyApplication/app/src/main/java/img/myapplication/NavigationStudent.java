@@ -189,13 +189,9 @@ public class NavigationStudent extends ActionBarActivity
     }
 
     public void restoreActionBar() {
-        if(mCurrentPosition != -1)
-            getPageTitle();
-        else mTitle="Welcome";
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        //actionBar.setTitle(mTitle);
     }
 
     @Override
