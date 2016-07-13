@@ -64,6 +64,7 @@ public class SeniorConnectLoading extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((Navigation) getActivity()).getSupportActionBar().show();
         ((Navigation)getActivity()).setActionBarTitle(getString(R.string.title_sconnect));
         setHasOptionsMenu(true);
         getURLs();

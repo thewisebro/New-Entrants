@@ -65,6 +65,7 @@ public class BlogsList extends Fragment {
     private ListView listView;
     private TextView tv;        //Footer View
     private TextView noblog;
+    private TextView failed;
     private SwipyRefreshLayout swipeLayout;
     private int blogsCount;
     private int lastId;
@@ -100,14 +101,17 @@ public class BlogsList extends Fragment {
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         if (getActivity() instanceof Navigation) {
+            ((Navigation) getActivity()).getSupportActionBar().show();
             ((Navigation) getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getEntrantSESSID();
         }
         else if (getActivity() instanceof NavigationStudent){
+            ((NavigationStudent) getActivity()).getSupportActionBar().show();
             ((NavigationStudent)getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getStudentSESSID();
         }
         else if (getActivity() instanceof NavigationAudience){
+            ((NavigationAudience) getActivity()).getSupportActionBar().show();
             ((NavigationAudience)getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getStudentSESSID();
         }
@@ -120,7 +124,7 @@ public class BlogsList extends Fragment {
 
         listView.addHeaderView(new View(getContext()));
         tv=new TextView(getContext());
-        tv.setText("Pull Up to Load More");
+        tv.setText("\nPull Up to Load More\n");
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
         listView.addFooterView(tv);
 
@@ -128,6 +132,11 @@ public class BlogsList extends Fragment {
         noblog.setText(getString(R.string.no_blog));
         noblog.setGravity(Gravity.CENTER_HORIZONTAL);
         noblog.setTypeface(null, Typeface.BOLD);
+
+        failed=new TextView(getContext());
+        failed.setText("\nNetwork Error\n");
+        failed.setGravity(Gravity.CENTER_HORIZONTAL);
+        failed.setTypeface(null, Typeface.BOLD);
 
         swipeLayout= (SwipyRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light,
@@ -151,9 +160,6 @@ public class BlogsList extends Fragment {
         });
 
         items=new ArrayList<BlogModel>();
-        //if (!isConnected())
-        //    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
-
         listView.setAdapter(cardArrayAdapter);
 
         return view;
@@ -237,7 +243,9 @@ public class BlogsList extends Fragment {
                 refreshing=false;
             }
             else if (result.equals("error")){
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+                resume=true;
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
                 Toast.makeText(getContext(), "Please Check your Network Connection", Toast.LENGTH_SHORT).show();
             }
             else
@@ -298,11 +306,11 @@ public class BlogsList extends Fragment {
 
         public void refresh(){
             if (items.size()==0 ) {
-                Toast.makeText(getContext(), "No More Blogs", Toast.LENGTH_SHORT).show();
                 listView.removeFooterView(tv);
                 if (cardList.size()==0){
                     listView.addHeaderView(noblog);
                 }
+                Toast.makeText(getContext(), "No More Blogs", Toast.LENGTH_SHORT).show();
             }
             else {
                 listView.removeHeaderView(noblog);

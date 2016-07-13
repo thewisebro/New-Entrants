@@ -77,6 +77,7 @@ public class EntrantUpdateFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         getURLs();
+        ((Navigation) getActivity()).getSupportActionBar().show();
         ((Navigation)getActivity()).setActionBarTitle(getString(R.string.title_profile));
         cancelled=false;
         view= inflater.inflate(R.layout.update_entrant,container,false);

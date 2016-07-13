@@ -36,9 +36,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import img.myapplication.AboutFragment;
 import img.myapplication.MySQLiteHelper;
 import img.myapplication.NavigationStudent;
-import img.myapplication.OpeningFragment;
 import img.myapplication.R;
 import models.StudentModel;
 
@@ -85,6 +85,7 @@ public class StudentUpdateFragment extends Fragment {
         setHasOptionsMenu(true);
 
         cancelled=false;
+        ((NavigationStudent) getActivity()).getSupportActionBar().show();
         ((NavigationStudent)getActivity()).setActionBarTitle(getString(R.string.title_profile));
         view= inflater.inflate(R.layout.update_student,container,false);
         drawer= (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
@@ -238,7 +239,7 @@ public class StudentUpdateFragment extends Fragment {
                     drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     ActionBar actionBar=((ActionBarActivity)getActivity()).getSupportActionBar();
                     actionBar.setDisplayHomeAsUpEnabled(true);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new OpeningFragment()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new AboutFragment()).commit();
                     lock=false;
                 }
                 ((NavigationStudent)getActivity()).set_updated();

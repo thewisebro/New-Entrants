@@ -69,6 +69,7 @@ public class JuniorConnectLoading extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((NavigationStudent) getActivity()).getSupportActionBar().show();
         ((NavigationStudent)getActivity()).setActionBarTitle(getString(R.string.title_jconnect));
         setHasOptionsMenu(true);
         View view= inflater.inflate(R.layout.blank, container, false);

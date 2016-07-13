@@ -148,7 +148,6 @@ public class Navigation extends ActionBarActivity
     public void loadFragment(final Fragment fragment){
         if (fragment == null)
             return;
-        decideActionBar(fragment);
         if (fragmentCount!=0) {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -169,12 +168,6 @@ public class Navigation extends ActionBarActivity
         else
             logout();
     }
-    public void decideActionBar(Fragment fragment){
-        if (fragment instanceof AboutFragment)
-            getSupportActionBar().hide();
-        else
-            getSupportActionBar().show();
-    }
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
@@ -183,13 +176,14 @@ public class Navigation extends ActionBarActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setShowHideAnimationEnabled(true);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
 
-            getMenuInflater().inflate(R.menu.navigation, menu);
+            getMenuInflater().inflate(R.menu.global, menu);
             restoreActionBar();
             return true;
         }

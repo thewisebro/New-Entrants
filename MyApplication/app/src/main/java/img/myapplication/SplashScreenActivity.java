@@ -26,7 +26,7 @@ public class SplashScreenActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_splash_screen, menu);
+        getMenuInflater().inflate(R.menu.global, menu);
         return true;
     }
 

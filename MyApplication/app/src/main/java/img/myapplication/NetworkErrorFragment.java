@@ -24,12 +24,18 @@ public class NetworkErrorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (getActivity() instanceof Navigation)
+        if (getActivity() instanceof Navigation) {
+            ((Navigation) getActivity()).getSupportActionBar().show();
             ((Navigation) getActivity()).setActionBarTitle("Blogs");
-        else if (getActivity() instanceof NavigationStudent)
-            ((NavigationStudent)getActivity()).setActionBarTitle("Blogs");
-        else if (getActivity() instanceof NavigationAudience)
-            ((NavigationAudience)getActivity()).setActionBarTitle("Blogs");
+        }
+        else if (getActivity() instanceof NavigationStudent) {
+            ((NavigationStudent) getActivity()).getSupportActionBar().show();
+            ((NavigationStudent) getActivity()).setActionBarTitle("Blogs");
+        }
+        else if (getActivity() instanceof NavigationAudience) {
+            ((NavigationAudience) getActivity()).getSupportActionBar().show();
+            ((NavigationAudience) getActivity()).setActionBarTitle("Blogs");
+        }
 
         setHasOptionsMenu(true);
         View view= inflater.inflate(R.layout.fragment_network_error, container, false);

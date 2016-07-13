@@ -104,14 +104,17 @@ public class GroupBlogList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
         getURL();
         if (getActivity() instanceof Navigation) {
+            ((Navigation) getActivity()).getSupportActionBar().show();
             ((Navigation) getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getEntrantSESSID();
         }
         else if (getActivity() instanceof NavigationStudent){
+            ((NavigationStudent) getActivity()).getSupportActionBar().show();
             ((NavigationStudent)getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getStudentSESSID();
         }
         else if (getActivity() instanceof NavigationAudience){
+            ((NavigationAudience) getActivity()).getSupportActionBar().show();
             ((NavigationAudience)getActivity()).setActionBarTitle(getString(R.string.title_blogs));
             sessid=getStudentSESSID();
         }

@@ -65,6 +65,7 @@ public class SConnectRequestFragment extends Fragment {
                              Bundle savedInstanceState) {
         getURLs();
         setHasOptionsMenu(true);
+        ((Navigation) getActivity()).getSupportActionBar().show();
         ((Navigation)getActivity()).setActionBarTitle("Senior Connect");
         View view= inflater.inflate(R.layout.send_request, container, false);
         cancelled=false;
