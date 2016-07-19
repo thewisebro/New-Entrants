@@ -117,7 +117,9 @@ public class SeniorConnectLoading extends Fragment {
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);
-                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+getEntrantSESSID());
+                String cookieHeader="CHANNELI_SESSID="+getEntrantSESSID();
+                cookieHeader+=";CHANNELI_DEVICE="+"android";
+                conn.setRequestProperty("Cookie",cookieHeader);
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
                 String line = "";
@@ -159,7 +161,9 @@ public class SeniorConnectLoading extends Fragment {
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);
-                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+getEntrantSESSID());
+                String cookieHeader="CHANNELI_SESSID="+getEntrantSESSID();
+                cookieHeader+=";CHANNELI_DEVICE="+"android";
+                conn.setRequestProperty("Cookie",cookieHeader);
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
                 String line = "";

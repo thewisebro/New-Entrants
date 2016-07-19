@@ -267,7 +267,9 @@ public class GroupBlogList extends Fragment {
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(10000);
-            conn.setRequestProperty("Cookie","CHANNELI_SESSID="+sessid);
+            String cookieHeader="CHANNELI_SESSID="+sessid;
+            cookieHeader+=";CHANNELI_DEVICE="+"android";
+            conn.setRequestProperty("Cookie",cookieHeader);
             conn.setUseCaches(true);
             BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
             StringBuilder sb=new StringBuilder();
@@ -329,7 +331,9 @@ public class GroupBlogList extends Fragment {
             urlConnection.setRequestMethod("GET");
             urlConnection.setConnectTimeout(3000);
             urlConnection.setReadTimeout(5000);
-            urlConnection.setRequestProperty("Cookie", "CHANNELI_SESSID=" + sessid);
+            String cookieHeader="CHANNELI_SESSID="+sessid;
+            cookieHeader+=";CHANNELI_DEVICE="+"android";
+            urlConnection.setRequestProperty("Cookie", cookieHeader);
             BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(urlConnection.getInputStream()));
             StringBuilder sb=new StringBuilder();
             String line = "";

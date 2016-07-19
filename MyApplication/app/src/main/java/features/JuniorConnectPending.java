@@ -230,7 +230,9 @@ public class JuniorConnectPending extends Fragment {
             try {
                 HttpURLConnection conn = (HttpURLConnection) new URL(acceptURL).openConnection();
                 conn.setRequestMethod("POST");
-                conn.setRequestProperty("Cookie", "CHANNELI_SESSID=" + getStudentSESSID());
+                String cookieHeader="CHANNELI_SESSID="+getStudentSESSID();
+                cookieHeader+=";CHANNELI_DEVICE="+"android";
+                conn.setRequestProperty("Cookie", cookieHeader);
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);
                 OutputStream os = conn.getOutputStream();

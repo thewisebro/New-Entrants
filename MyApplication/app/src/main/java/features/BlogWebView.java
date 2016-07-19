@@ -158,7 +158,9 @@ public class BlogWebView extends Fragment {
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);
                 conn.setRequestMethod("GET");
-                conn.setRequestProperty("Cookie", "CHANNELI_SESSID=" + sessid);
+                String cookieHeader="CHANNELI_SESSID="+sessid;
+                cookieHeader+=";CHANNELI_DEVICE="+"android";
+                conn.setRequestProperty("Cookie", cookieHeader);
                 conn.setUseCaches(true);
                 BufferedReader reader= new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuffer buffer=new StringBuffer();

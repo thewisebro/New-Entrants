@@ -35,6 +35,7 @@ import java.net.CookieStore;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import models.NewEntrantModel;
@@ -177,6 +178,11 @@ public class Register extends AppCompatActivity {
         }
         else
             state.setBackgroundDrawable(null);
+        if (branch.getSelectedItemPosition()==0){
+            branch.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getApplicationContext(),"Select a Branch", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
         if(!(entrant.town).matches(townPattern)){
             town.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getApplicationContext(),"Enter a proper City name", Toast.LENGTH_SHORT).show();
@@ -247,7 +253,9 @@ public class Register extends AppCompatActivity {
             urlConnectionPost.setDoOutput(true);
             urlConnectionPost.setDoInput(true);
             urlConnectionPost.setRequestMethod("POST");
-            urlConnectionPost.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
+            String cookieHeader= TextUtils.join(";", cookieStore.getCookies());
+            cookieHeader+=";CHANNELI_DEVICE="+"android";
+            urlConnectionPost.setRequestProperty("Cookie",cookieHeader );
             cookieStore.removeAll();
 
             urlConnectionPost.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -286,8 +294,16 @@ public class Register extends AppCompatActivity {
         try {
             JSONObject rObj=new JSONObject(result);
             status=rObj.get("status").toString();
-            if (status.equals("fail"))
-                status=rObj.getString("error");
+            if (status.equals("fail")) {
+                JSONObject err= new JSONObject(rObj.getString("error"));
+                Iterator<String> iter=err.keys();
+                status="";
+                while(iter.hasNext()){
+                    String key=iter.next();
+                    String value=err.getString(key);
+                    status+=value;
+                }
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

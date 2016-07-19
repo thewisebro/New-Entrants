@@ -121,7 +121,9 @@ public class JuniorConnectLoading extends Fragment {
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);
-                conn.setRequestProperty("Cookie", "CHANNELI_SESSID="+sess_id);
+                String cookieHeader="CHANNELI_SESSID="+sess_id;
+                cookieHeader+=";CHANNELI_DEVICE="+"android";
+                conn.setRequestProperty("Cookie", cookieHeader);
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
                 String line = "";
@@ -139,7 +141,9 @@ public class JuniorConnectLoading extends Fragment {
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);
-                conn.setRequestProperty("Cookie", "CHANNELI_SESSID="+sess_id);
+                String cookieHeader="CHANNELI_SESSID="+sess_id;
+                cookieHeader+=";CHANNELI_DEVICE="+"android";
+                conn.setRequestProperty("Cookie", cookieHeader);
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();
                 String line = "";

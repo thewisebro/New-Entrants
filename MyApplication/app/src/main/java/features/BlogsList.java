@@ -215,7 +215,9 @@ public class BlogsList extends Fragment {
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
                 conn.setReadTimeout(10000);
-                conn.setRequestProperty("Cookie","CHANNELI_SESSID="+sessid);
+                String cookieHeader="CHANNELI_SESSID="+sessid;
+                cookieHeader+=";CHANNELI_DEVICE="+"android";
+                conn.setRequestProperty("Cookie",cookieHeader);
                 conn.setUseCaches(true);
                 BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb=new StringBuilder();

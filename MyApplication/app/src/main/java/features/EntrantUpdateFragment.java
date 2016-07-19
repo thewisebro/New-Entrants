@@ -176,7 +176,9 @@ public class EntrantUpdateFragment extends Fragment {
                 connPost.setReadTimeout(7000);
                 connPost.setDoInput(true);
                 connPost.setDoOutput(true);
-                connPost.setRequestProperty("Cookie", "CHANNELI_SESSID=" + entrant.sess_id);
+                String cookieHeader="CHANNELI_SESSID="+entrant.sess_id;
+                cookieHeader+=";CHANNELI_DEVICE="+"android";
+                connPost.setRequestProperty("Cookie", cookieHeader);
                 Uri.Builder builder = new Uri.Builder();
                 for (Map.Entry<String, String> entry : params.entrySet()){
                     builder.appendQueryParameter(entry.getKey(),entry.getValue());

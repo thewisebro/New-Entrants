@@ -39,7 +39,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "email varchar,"+
                     "fblink varchar,"+
                     "dp_link varchar,"+
-                    "year int(1));";
+                    "year int(1),"+
+                    "unique(name,branch,state,year) on conflict replace );";
     private static String TEMP_SENIOR=
             "insert into seniors values('FirstName Lastname','Branch','State','City','9876543210','example@exam.ple','facebook.com/User','https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/2000px-User_icon_2.svg.png',2);";
     private static String CREATE_REQUESTS_TABLE=
@@ -55,7 +56,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     "request_no int," +
                     "unique(id) on conflict replace );";
     private static String TEMP_REQUEST=
-            "insert into requests values('Branch','EE',1,5,1,'In need of assistance','YYYY-MM-DD',5,2);";
+            "insert into requests values('Branch','EE',1,5,0,'In need of assistance','YYYY-MM-DD',5,2);";
     private static String CREATE_JUNIORS_TABLE=
             "create table if not exists juniors ( "+
                     "name varchar,"+

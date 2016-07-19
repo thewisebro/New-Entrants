@@ -155,7 +155,9 @@ public class Login extends ActionBarActivity {
             urlConnectionPost.setConnectTimeout(5000);
             urlConnectionPost.setReadTimeout(5000);
             urlConnectionPost.setRequestMethod("POST");
-            urlConnectionPost.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
+            String cookieHeader=TextUtils.join(";", cookieStore.getCookies());
+            cookieHeader+=";CHANNELI_DEVICE="+"android";
+            urlConnectionPost.setRequestProperty("Cookie", cookieHeader);
             cookieStore.removeAll();
 
             urlConnectionPost.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -214,7 +216,8 @@ public class Login extends ActionBarActivity {
 
         @Override
         protected void onPreExecute(){
-            getSupportFragmentManager().beginTransaction().replace(R.id.login_container,new LoginLoad()).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.login_container,new LoginLoad()).addToBackStack(null).commit();
             super.onPreExecute();
         }
         @Override
@@ -265,7 +268,9 @@ public class Login extends ActionBarActivity {
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(10000);
-            conn.setRequestProperty("Cookie", TextUtils.join(";", cookieStore.getCookies()));
+            String cookieHeader=TextUtils.join(";", cookieStore.getCookies());
+            cookieHeader+=";CHANNELI_DEVICE="+"android";
+            conn.setRequestProperty("Cookie", cookieHeader);
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestProperty("Accept", "application/xml");
 

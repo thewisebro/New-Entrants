@@ -157,26 +157,31 @@ public class SConnectPendingFragment extends Fragment {
             } else {
                 viewHolder = (RequestCardViewHolder)row.getTag();
             }
-            RequestModel card = getItem(position);
+            final RequestModel card = getItem(position);
             viewHolder.param.setText(card.param);
             viewHolder.accepted.setText(String.valueOf(card.accepted));
             viewHolder.value.setText(card.value);
             viewHolder.query.setText(card.query);
             viewHolder.date.setText(card.date);
             ((TextView)row.findViewById(R.id.request_no)).setText(String.valueOf(card.request_no));
+            TextView more= (TextView) row.findViewById(R.id.more);
             if (card.more){
-                TextView more= (TextView) row.findViewById(R.id.more);
-                more.setTag(card.id);
                 more.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new SendMoreRequests().execute(getTag().toString());
+                        new SendMoreRequests().execute(String.valueOf(card.id));
                     }
                 });
             }
             else{
-                TextView more= (TextView) row.findViewById(R.id.more);
                 more.setAlpha(0.4F);
+                more.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getContext(),"Available after "+String.valueOf(card.allowed)
+                                +" seniors have accepted",Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
             row.setTag(viewHolder);
             return row;
@@ -214,7 +219,9 @@ public class SConnectPendingFragment extends Fragment {
                 conn.setRequestMethod("POST");
                 conn.setConnectTimeout(7000);
                 conn.setReadTimeout(5000);
-                conn.setRequestProperty("Cookie", "CHANNELI_SESSID=" + getEntrantSESSID());
+                String cookieHeader="CHANNELI_SESSID="+getEntrantSESSID();
+                cookieHeader+=";CHANNELI_DEVICE="+"android";
+                conn.setRequestProperty("Cookie",cookieHeader);
 
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
