@@ -91,10 +91,9 @@ public class EntrantUpdateFragment extends Fragment {
                     getParams();
                     if (checkParams())
                         new UpdateSubmitTask().execute();
-                }
-                else
-                    Toast.makeText(getContext(),"Check network connection",Toast.LENGTH_SHORT).show();
-                    //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+                } else
+                    Toast.makeText(getContext(), "Check network connection", Toast.LENGTH_SHORT).show();
+                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
 
             }
         });
@@ -134,11 +133,13 @@ public class EntrantUpdateFragment extends Fragment {
         visibility.setChecked(entrant.phone_privacy);
     }
     public int getSpinnerPos(String state,String[] list){
-        if (!state.isEmpty()){
-            for (int i=1;i<list.length;i++)
-                if (list[i].equals(state))
-                    return i;
-        }
+
+        if (state!=null)
+            if (!state.isEmpty())
+                for (int i=1;i<list.length;i++)
+                    if (list[i].equals(state))
+                        return i;
+
         return 0;
     }
 

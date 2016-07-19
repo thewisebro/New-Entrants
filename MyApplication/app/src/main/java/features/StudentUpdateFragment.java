@@ -139,17 +139,26 @@ public class StudentUpdateFragment extends Fragment {
         username.setText(student.username);
         branch.setText(student.branchname);
         mobile.setText(student.mobile);
+        if (student.mobile==null || "".equals(student.mobile))
+            mobile.setBackgroundDrawable(getResources().getDrawable(R.drawable.required));
         email.setText(student.email);
+        if (student.email==null || "".equals(student.email))
+            email.setBackgroundDrawable(getResources().getDrawable(R.drawable.required));
         fblink.setText(student.fb_link);
         town.setText(student.town);
-        state.setSelection(getSpinnerPos(student.statecode,getResources().getStringArray(R.array.state_codes)));
+        if (student.town==null || "".equals(student.town))
+            town.setBackgroundDrawable(getResources().getDrawable(R.drawable.required));
+        state.setSelection(getSpinnerPos(student.statecode, getResources().getStringArray(R.array.state_codes)));
+        if (student.state==null || "".equals(student.state))
+            state.setBackgroundDrawable(getResources().getDrawable(R.drawable.required));
     }
     public int getSpinnerPos(String state,String[] list){
-        if (!state.isEmpty()){
-            for (int i=1;i<list.length;i++)
-                if (list[i].equals(state))
-                    return i;
-        }
+        if (state!=null)
+            if (!state.isEmpty())
+                for (int i=1;i<list.length;i++)
+                    if (list[i].equals(state))
+                        return i;
+
         return 0;
     }
     private class UpdateSubmitTask extends AsyncTask<String, Void, String> {

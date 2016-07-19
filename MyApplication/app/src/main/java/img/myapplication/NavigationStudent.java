@@ -61,7 +61,10 @@ public class NavigationStudent extends ActionBarActivity
     public void set_updated(){ this.updated=true;}
     public void reset_updated(){this.updated=false;}
     public void checkforUpdate() {
-        if ("".equals(student.town) || "".equals(student.state) || "".equals(student.email) || "".equals(student.mobile)){
+        if (student.town==null || "".equals(student.town)
+               || student.state==null || "".equals(student.state)
+                || student.email==null || "".equals(student.email)
+                || student.mobile==null || "".equals(student.mobile)){
             StudentUpdateFragment fragment=new StudentUpdateFragment();
             lock=true;
             fragment.lock=true;

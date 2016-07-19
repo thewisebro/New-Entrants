@@ -419,7 +419,7 @@ public class Login extends ActionBarActivity {
             if (input!=null){
                 options.inJustDecodeBounds=false;
                 options.inPreferredConfig= Bitmap.Config.RGB_565;
-                options.inSampleSize=8;
+                options.inSampleSize=2;
                 try {
                     input=new BufferedInputStream(getConnection(url).getInputStream());
                     bitmap=BitmapFactory.decodeStream(input,null,options);
