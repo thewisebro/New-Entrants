@@ -65,7 +65,7 @@ public class Register extends AppCompatActivity {
     private void getURLs(){
         this.hostURL=getString(R.string.host);
         this.appURL=getString(R.string.app);
-        this.registerURL=this.appURL+"/register/";
+        this.registerURL=this.appURL+"/register_mobile/";
     }
     private boolean cancelled=false;
     @Override
@@ -327,13 +327,6 @@ public class Register extends AppCompatActivity {
                 }
             });
             this.dialog.show();
-        }
-        @Override
-        protected void onCancelled(String result){
-            if (result.equals("success")){
-                Toast.makeText(getApplicationContext(),"Registration Successful!", Toast.LENGTH_SHORT).show();
-                finish();
-            }
         }
         @Override
         protected String doInBackground(String... urls) {

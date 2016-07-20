@@ -274,6 +274,8 @@ public class JuniorConnectPending extends Fragment {
         }
     }
     public void refreshFragment(){
-        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        //getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new JuniorConnectLoading()).commit();
+
     }
 }

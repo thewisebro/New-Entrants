@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">IITR Fresherlogue</string>
-    <string name="app">http://192.168.121.187:8080/iitr_fresherlogue</string>
-    <string name="host">http://192.168.121.187:8080</string>
+    <string name="app">http://people.iitr.ernet.in/iitr_fresherlogue</string>
+    <string name="host">http://people.iitr.ernet.in</string>
     <string name="title_activity_navigation">Navigation</string>
     <string name="title_blogs">Articles</string>
     <string name="title_sconnect">Senior Connect</string>
