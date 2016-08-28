@@ -59,6 +59,7 @@ public class BlogWebView extends Fragment {
     public BlogWebView(String blogUrl){
         this.url=blogUrl;
     }
+    private boolean visible;
     private boolean cancelled=false;
     @Override
     public void onDestroyView(){
@@ -97,6 +98,7 @@ public class BlogWebView extends Fragment {
 
         View view= inflater.inflate(R.layout.blogwebview, container, false);
         cancelled=false;
+        visible=true;
         topic= (TextView) view.findViewById(R.id.title);
         description= (TextView) view.findViewById(R.id.description);
         date= (TextView) view.findViewById(R.id.date);
@@ -184,7 +186,9 @@ public class BlogWebView extends Fragment {
 
             dialog.dismiss();
             if (result==null){
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
+                if(visible==true)
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container,new NetworkErrorFragment()).addToBackStack(null).commit();
                 Toast.makeText(getContext(), "Unable to load blog", Toast.LENGTH_SHORT).show();
             }
             else if (result.equals("success"))
@@ -273,4 +277,14 @@ public class BlogWebView extends Fragment {
         }
     }
 
+    @Override
+    public void onResume(){
+        visible=true;
+        super.onResume();
+    }
+    @Override
+    public void onPause(){
+        visible=false;
+        super.onPause();
+    }
 }

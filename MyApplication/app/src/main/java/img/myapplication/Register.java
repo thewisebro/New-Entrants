@@ -183,6 +183,8 @@ public class Register extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Select a Branch", Toast.LENGTH_SHORT).show();
             flag=false;
         }
+        else
+            branch.setBackgroundDrawable(null);
         if(!(entrant.town).matches(townPattern)){
             town.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
             Toast.makeText(getApplicationContext(),"Enter a proper City name", Toast.LENGTH_SHORT).show();

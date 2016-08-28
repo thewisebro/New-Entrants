@@ -79,6 +79,7 @@ public class GroupBlogList extends Fragment {
         groupName=group;
         groupUsername=username;
     }
+    private boolean visible;
     private boolean cancelled=false;
     @Override
     public void onDestroyView(){
@@ -91,6 +92,7 @@ public class GroupBlogList extends Fragment {
         groupDesc= (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.groupdescription,null);
         blogsCount=0;
         lastId=0;
+        visible=true;
         resume=true;
         imageDownloader=new ImageDownloader(getContext());
         super.onCreate(savedInstanceState);
@@ -235,6 +237,11 @@ public class GroupBlogList extends Fragment {
         }
 
         @Override
+        protected void onCancelled(String result){
+            cardArrayAdapter.refresh();
+            items.clear();
+        }
+        @Override
         protected void onPostExecute(String result) {
 
             if (getActivity()==null)
@@ -246,7 +253,9 @@ public class GroupBlogList extends Fragment {
                 resume=false;
             }
             else if (result.equals("error")){
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
+                if (visible)
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
                 Toast.makeText(getContext(), "Please Check your Network Connection", Toast.LENGTH_SHORT).show();
             }
             else
@@ -366,6 +375,14 @@ public class GroupBlogList extends Fragment {
             }
         }
 
+        @Override
+        public void clear(){
+            this.cardList.clear();
+            if (listView.getFooterViewsCount()==0)
+                listView.addFooterView(tv);
+            notifyDataSetChanged();
+            super.clear();
+        }
         private List<BlogModel> cardList = new ArrayList<BlogModel>();
 
         public BlogCardArrayAdapter(Context context, int textViewResourceId) {
@@ -455,5 +472,16 @@ public class GroupBlogList extends Fragment {
         group.setText(groupName);
         int padding= (int) getResources().getDimension(R.dimen.actionbarname_padding);
         group.setPadding(0,0,padding,0);
+    }
+
+    @Override
+    public void onResume(){
+        visible=true;
+        super.onResume();
+    }
+    @Override
+    public void onPause(){
+        visible=false;
+        super.onPause();
     }
 }

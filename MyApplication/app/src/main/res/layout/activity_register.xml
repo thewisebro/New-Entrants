@@ -175,6 +175,7 @@
             android:fontFamily="sans-serif-light"
             android:padding="10dp" />
 
+
         <Button
             android:layout_width="wrap_content"
             android:text="REGISTER"

@@ -82,6 +82,7 @@ public class BlogsList extends Fragment {
         String appURL=getString(R.string.app);
         this.BlogUrl=appURL+"/blogs/";
     }
+    private boolean visible;
     private boolean cancelled=false;
     @Override
     public void onDestroyView(){
@@ -94,6 +95,7 @@ public class BlogsList extends Fragment {
         spinnerPos=0;
         cardArrayAdapter = new BlogCardArrayAdapter(getContext(), R.layout.list_blog_card);
         resume=true;
+        visible=true;
         blogsCount=0;
         lastId=0;
         imageDownloader=new ImageDownloader(getContext());
@@ -246,7 +248,8 @@ public class BlogsList extends Fragment {
             }
             else if (result.equals("error")){
                 resume=true;
-                getActivity().getSupportFragmentManager().beginTransaction()
+                if (visible==true)
+                    getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, new NetworkErrorFragment()).addToBackStack(null).commit();
                 Toast.makeText(getContext(), "Please Check your Network Connection", Toast.LENGTH_SHORT).show();
             }
@@ -504,6 +507,16 @@ public class BlogsList extends Fragment {
 
             }
         });
+    }
+    @Override
+    public void onResume(){
+        visible=true;
+        super.onResume();
+    }
+    @Override
+    public void onPause(){
+        visible=false;
+        super.onPause();
     }
 
 }

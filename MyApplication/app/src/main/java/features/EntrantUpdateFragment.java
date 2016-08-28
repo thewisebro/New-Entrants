@@ -293,6 +293,14 @@ public class EntrantUpdateFragment extends Fragment {
         }
         else
             state.setBackgroundDrawable(null);
+        if (branch.getSelectedItemPosition()==0){
+            branch.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+            Toast.makeText(getContext(), "Select a Branch", Toast.LENGTH_SHORT).show();
+            flag=false;
+        }
+        else
+            branch.setBackgroundDrawable(null);
         return flag;
     }
+
 }
